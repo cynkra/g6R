@@ -10,6 +10,11 @@ server <- function(input, output, session) {
   output$graph <- renderG6({
     g6("plop")
   })
+
+  observe({
+    print(input[["graph-selected_node"]])
+    print(input[["graph-selected_edge"]])
+  })
 }
 
 shinyApp(ui, server)
