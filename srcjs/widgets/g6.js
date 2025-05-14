@@ -136,25 +136,33 @@ HTMLWidgets.widget({
                 if (targetType !== 'node') {
                   graph.removeEdgeData([edge.id]);
                 } else {
-                  const targetNodePorts = graph.getNodeData(edge.target).style.ports.map((port) => {
-                    return port.key
-                  })
-                  const reservedPorts = graph.getEdgeData().map((el) => {
-                    if (el.target === edge.target) {
-                      return el.style.targetPort
+
+                  // If target node has ports, we assign the edge to a port
+                  if (graph.getNodeData(edge.target).style.ports !== undefined) {
+                    const targetNodePorts = graph.getNodeData(edge.target).style.ports.map((port) => {
+                      return port.key
+                    })
+                    const reservedPorts = graph.getEdgeData().map((el) => {
+                      if (el.target === edge.target) {
+                        return el.style.targetPort
+                      }
+                    })
+                    const availablePorts = targetNodePorts.filter(x => !reservedPorts.includes(x))
+                    if (availablePorts.length) {
+                      // Reserve the first available port
+                      graph.updateEdgeData([{ id: edge.id, style: { targetPort: availablePorts[0] } }])
+
                     }
-                  })
-                  const availablePorts = targetNodePorts.filter(x => !reservedPorts.includes(x))
-                  if (availablePorts.length) {
-                    // Reserve the first available port
-                    graph.updateEdgeData([{ id: edge.id, style: { targetPort: availablePorts[0] } }])
-                    graph.updateBehavior({
-                      key: 'create-edge', // Specify the behavior to update
-                      enable: false,
-                    });
-                    // Re-enable drag elements
-                    graph.updateBehavior({ key: 'drag-element', enable: true });
                   }
+
+                  // Then we reset the behaviors so there is no conflict
+                  graph.updateBehavior({
+                    key: 'create-edge', // Specify the behavior to update
+                    enable: false,
+                  });
+                  // Re-enable drag elements
+                  graph.updateBehavior({ key: 'drag-element', enable: true });
+
                 }
               }
             },
