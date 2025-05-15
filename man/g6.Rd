@@ -4,7 +4,17 @@
 \alias{g6}
 \title{G6 htmlwidget instance}
 \usage{
-g6(message, width = NULL, height = NULL, elementId = NULL)
+g6(
+  nodes = NULL,
+  edges = NULL,
+  combos = NULL,
+  options = g6_options(),
+  behaviors = g6_behaviors(),
+  plugins = g6_plugins(),
+  width = NULL,
+  height = NULL,
+  elementId = NULL
+)
 }
 \description{
 Creates an htmlwidget on top of G6.

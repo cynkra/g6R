@@ -5,10 +5,29 @@
 #' @import htmlwidgets
 #'
 #' @export
-g6 <- function(message, width = NULL, height = NULL, elementId = NULL) {
+g6 <- function(
+  nodes = NULL,
+  edges = NULL,
+  combos = NULL,
+  options = g6_options(),
+  behaviors = g6_behaviors(),
+  plugins = g6_plugins(),
+  width = NULL,
+  height = NULL,
+  elementId = NULL
+) {
   # forward options using x
-  x = list(
-    message = message
+  x <- c(
+    data = list(
+      nodes = nodes,
+      edges = edges,
+      combos = combos
+    ),
+    behaviors = behaviors,
+    plugins = plugins,
+    options,
+    width = width,
+    height = height
   )
 
   # create widget
