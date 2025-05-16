@@ -56,7 +56,7 @@
 #'
 #' # Create a more customized set of behaviors
 #' behaviors <- g6_behaviors(
-#'   drag_canvas(enableOptimize = TRUE),
+#'   drag_canvas(),
 #'   zoom_canvas(sensitivity = 1.5),
 #'   hover_activate(state = "highlight"),
 #'   fix_element_size(

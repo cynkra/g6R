@@ -8,7 +8,7 @@ ui <- page_fluid(
 
 server <- function(input, output, session) {
   output$graph <- renderG6({
-    g6("plop")
+    g6()
   })
 
   observe({
