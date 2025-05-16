@@ -1,3 +1,1444 @@
 g6_plugins <- function(...) {
   list(...)
 }
+
+#' Configure Background Plugin for G6
+#'
+#' Creates a configuration object for the background plugin in G6.
+#' This plugin adds a customizable background to the graph canvas.
+#'
+#' @param key Unique identifier for updates (string, default: NULL)
+#' @param width Background width (string, default: "100%")
+#' @param height Background height (string, default: "100%")
+#' @param backgroundColor Background color (string, default: NULL)
+#' @param backgroundImage Background image URL (string, default: NULL)
+#' @param backgroundSize Background size (string, default: "cover")
+#' @param backgroundPosition Background position (string, default: NULL)
+#' @param backgroundRepeat Background repeat (string, default: NULL)
+#' @param opacity Background opacity (string, default: NULL)
+#' @param transition Transition animation (string, default: "background 0.5s")
+#' @param zIndex Stacking order (string, default: "-1")
+#'
+#' @return A list with the configuration settings for the background plugin
+#' @export
+#'
+#' @examples
+#' # Basic background color
+#' bg <- background(backgroundColor = "#f0f0f0")
+#'
+#' # Background with image
+#' bg <- background(
+#'   backgroundImage = "https://example.com/background.jpg",
+#'   backgroundSize = "contain",
+#'   backgroundRepeat = "no-repeat",
+#'   backgroundPosition = "center"
+#' )
+#'
+#' # Semi-transparent background with transition
+#' bg <- background(
+#'   backgroundColor = "#000000",
+#'   opacity = "0.3",
+#'   transition = "all 1s ease-in-out"
+#' )
+background <- function(
+  key = NULL,
+  width = "100%",
+  height = "100%",
+  backgroundColor = NULL,
+  backgroundImage = NULL,
+  backgroundSize = "cover",
+  backgroundPosition = NULL,
+  backgroundRepeat = NULL,
+  opacity = NULL,
+  transition = "background 0.5s",
+  zIndex = "-1"
+) {
+  # Create the configuration list with required type
+  arg_names <- names(formals())
+  # Create list of argument values
+  config <- mget(arg_names)
+  config$type <- "background"
+  # Drop NULL elements
+  dropNulls(config)
+}
+
+#' Configure Bubble Sets Plugin for G6
+#'
+#' Creates a configuration object for the bubble-sets plugin in G6.
+#' This plugin creates bubble-like contours around groups of specified elements.
+#'
+#' @param key Unique identifier for updates (string, default: NULL)
+#' @param members Member elements, including nodes and edges (character vector, required)
+#' @param avoidMembers Elements to avoid when drawing contours (character vector, default: NULL)
+#' @param label Whether to display labels (boolean, default: TRUE)
+#' @param labelPlacement Label position (string, default: "bottom")
+#' @param labelBackground Whether to display background (boolean, default: FALSE)
+#' @param labelPadding Label padding (numeric or numeric vector, default: 0)
+#' @param labelCloseToPath Whether the label is close to the contour (boolean, default: TRUE)
+#' @param labelAutoRotate Whether the label rotates with the contour (boolean, default: TRUE)
+#' @param labelOffsetX Label x-axis offset (numeric, default: 0)
+#' @param labelOffsetY Label y-axis offset (numeric, default: 0)
+#' @param labelMaxWidth Maximum width of the text (numeric, default: NULL)
+#' @param maxRoutingIterations Maximum iterations for path calculation (numeric, default: 100)
+#' @param maxMarchingIterations Maximum iterations for contour calculation (numeric, default: 20)
+#' @param pixelGroup Number of pixels per potential area group (numeric, default: 4)
+#' @param edgeR0 Edge radius parameter R0 (numeric, default: NULL)
+#' @param edgeR1 Edge radius parameter R1 (numeric, default: NULL)
+#' @param nodeR0 Node radius parameter R0 (numeric, default: NULL)
+#' @param nodeR1 Node radius parameter R1 (numeric, default: NULL)
+#' @param morphBuffer Morph buffer size (numeric, default: NULL)
+#' @param threshold Threshold (numeric, default: NULL)
+#' @param memberInfluenceFactor Member influence factor (numeric, default: NULL)
+#' @param edgeInfluenceFactor Edge influence factor (numeric, default: NULL)
+#' @param nonMemberInfluenceFactor Non-member influence factor (numeric, default: NULL)
+#' @param virtualEdges Whether to use virtual edges (boolean, default: NULL)
+#'
+#' @return A list with the configuration settings for the bubble-sets plugin
+#' @export
+#'
+#' @examples
+#' # Basic bubble set around specific nodes
+#' bubble <- g6_bubble_sets(
+#'   members = c("node1", "node2", "node3"),
+#'   label = TRUE
+#' )
+#'
+#' # More customized bubble set
+#' bubble <- g6_bubble_sets(
+#'   key = "team-a",
+#'   members = c("node1", "node2", "node3", "edge1", "edge2"),
+#'   avoidMembers = c("node4", "node5"),
+#'   labelPlacement = "top",
+#'   labelBackground = TRUE,
+#'   labelPadding = c(4, 2),
+#'   maxRoutingIterations = 150
+#' )
+#'
+#' # Bubble set with advanced parameters
+#' bubble <- g6_bubble_sets(
+#'   members = c("node1", "node2", "node3"),
+#'   pixelGroup = 6,
+#'   edgeR0 = 10,
+#'   nodeR0 = 5,
+#'   memberInfluenceFactor = 0.8,
+#'   edgeInfluenceFactor = 0.5,
+#'   nonMemberInfluenceFactor = 0.3,
+#'   virtualEdges = TRUE
+#' )
+bubble_sets <- function(
+  members,
+  key = "bubble-sets",
+  avoidMembers = NULL,
+  label = TRUE,
+  labelPlacement = c("bottom", "left", "right", "top", "center"),
+  labelBackground = FALSE,
+  labelPadding = 0,
+  labelCloseToPath = TRUE,
+  labelAutoRotate = TRUE,
+  labelOffsetX = 0,
+  labelOffsetY = 0,
+  labelMaxWidth = NULL,
+  maxRoutingIterations = 100,
+  maxMarchingIterations = 20,
+  pixelGroup = 4,
+  edgeR0 = NULL,
+  edgeR1 = NULL,
+  nodeR0 = NULL,
+  nodeR1 = NULL,
+  morphBuffer = NULL,
+  threshold = NULL,
+  memberInfluenceFactor = NULL,
+  edgeInfluenceFactor = NULL,
+  nonMemberInfluenceFactor = NULL,
+  virtualEdges = NULL
+) {
+  # TBD: validate members to it validate real node ids who exist.
+  if (label) {
+    labelPlacement <- match.arg(labelPlacement)
+  }
+  # Check for required parameters
+  if (missing(members) || is.null(members) || length(members) == 0) {
+    stop("'members' is required and must contain at least one element ID")
+  }
+
+  # Get argument names
+  arg_names <- names(formals())
+
+  # Create list of argument values
+  config <- mget(arg_names)
+
+  # Add required type property (not a function parameter)
+  config$type <- "bubble-sets"
+
+  # Remove null values
+  dropNulls(config)
+}
+
+#' Configure Context Menu Behavior
+#'
+#' Creates a configuration object for the context-menu behavior in G6.
+#' This allows users to display a context menu when right-clicking or clicking on graph elements.
+#'
+#' @param key Unique identifier for the behavior, used for subsequent operations (string, default: "context-menu")
+#' @param className Additional class name for the menu DOM (string, default: "g6-contextmenu")
+#' @param trigger How to trigger the menu: "contextmenu" for right-click, "click" for click (string, default: "contextmenu")
+#' @param offset Offset of the menu display in X and Y directions (numeric vector, default: c(4, 4))
+#' @param onClick Callback method triggered after menu item is clicked (JS function, default: NULL)
+#' @param getItems Returns the list of menu items, supports Promise (JS function, default: NULL)
+#' @param getContent Returns the content of the menu, supports Promise (JS function, default: NULL)
+#' @param loadingContent Menu content used when getContent returns a Promise (string or HTML element, default: NULL)
+#' @param enable Whether the context menu is available (boolean or JS function, default: TRUE)
+#'
+#' @return A list with the configuration settings
+#' @export
+#'
+#' @examples
+#' # Basic configuration
+#' config <- context_menu()
+#'
+#' # Custom configuration with JavaScript functions
+#' config <- context_menu(
+#'   key = "my-context-menu",
+#'   className = "my-context-menu",
+#'   trigger = "click",
+#'   offset = c(10, 10),
+#'   getItems = htmlwidgets::JS("(event) => {
+#'     const type = event.itemType;
+#'     const isNode = type === 'node';
+#'     return [
+#'       { key: 'delete', text: 'Delete' },
+#'       { key: 'edit', text: 'Edit' },
+#'       { key: 'details', text: 'View Details', disabled: !isNode }
+#'     ];
+#'   }"),
+#'   onClick = htmlwidgets::JS("(value, target, current) => {
+#'     if (value === 'delete') {
+#'       // do stuff
+#'   }")
+#' )
+context_menu <- function(
+  key = "context-menu",
+  className = "g6-contextmenu",
+  trigger = "contextmenu",
+  offset = c(4, 4),
+  onClick = NULL,
+  getItems = NULL,
+  getContent = NULL,
+  loadingContent = NULL,
+  enable = TRUE
+) {
+  # Validate inputs
+  if (!is.character(className)) {
+    stop("'className' should be a string")
+  }
+
+  valid_triggers <- c("contextmenu", "click")
+  if (!trigger %in% valid_triggers) {
+    stop("'trigger' should be one of 'contextmenu' or 'click'")
+  }
+
+  if (!is.numeric(offset) || length(offset) != 2) {
+    stop("'offset' should be a numeric vector of length 2")
+  }
+
+  # Validate JS functions (no conversion)
+  if (!is.null(onClick) && !is_js(onClick)) {
+    stop(
+      "'onClick' must be a JavaScript function wrapped with htmlwidgets::JS()"
+    )
+  }
+
+  if (!is.null(getItems) && !is_js(getItems)) {
+    stop(
+      "'getItems' must be a JavaScript function wrapped with htmlwidgets::JS()"
+    )
+  }
+
+  if (!is.null(getContent) && !is_js(getContent)) {
+    stop(
+      "'getContent' must be a JavaScript function wrapped with htmlwidgets::JS()"
+    )
+  }
+
+  if (!is.logical(enable) && !is_js(enable)) {
+    stop(
+      "'enable' must be a boolean or a JavaScript function wrapped with htmlwidgets::JS()"
+    )
+  }
+
+  if (
+    !is.null(loadingContent) &&
+      !is.character(loadingContent) &&
+      !is_js(loadingContent)
+  ) {
+    stop("'loadingContent' must be a string or JavaScript expression")
+  }
+
+  # Get all function argument names
+  arg_names <- names(formals())
+
+  # Create list of argument values
+  config <- mget(arg_names)
+
+  # Set the type internally (not a function parameter)
+  config$type <- "context-menu"
+
+  # Remove NULL values
+  dropNulls(config)
+}
+
+#' Configure Edge Bundling Plugin
+#'
+#' Creates a configuration object for the edge-bundling plugin in G6.
+#' This plugin automatically bundles similar edges together to reduce visual clutter.
+#'
+#' @param key Unique identifier for the plugin (string, default: NULL)
+#' @param bundleThreshold Edge compatibility threshold, determines which edges should be bundled together (number, default: 0.6)
+#' @param cycles Number of simulation cycles (number, default: 6)
+#' @param divisions Initial number of cut points (number, default: 1)
+#' @param divRate Growth rate of cut points (number, default: 2)
+#' @param iterations Number of iterations executed in the first cycle (number, default: 90)
+#' @param iterRate Iteration decrement rate (number, default: 2/3)
+#' @param K Edge strength, affects attraction and repulsion between edges (number, default: 0.1)
+#' @param lambda Initial step size (number, default: 0.1)
+#'
+#' @return A list with the configuration settings
+#' @export
+#'
+#' @examples
+#' # Basic configuration
+#' config <- edge_bundling()
+#'
+#' # Custom configuration
+#' config <- edge_bundling(
+#'   key = "my-edge-bundling",
+#'   bundleThreshold = 0.8,
+#'   cycles = 8,
+#'   K = 0.2
+#' )
+edge_bundling <- function(
+  key = "edge-bundling",
+  bundleThreshold = 0.6,
+  cycles = 6,
+  divisions = 1,
+  divRate = 2,
+  iterations = 90,
+  iterRate = 2 / 3,
+  K = 0.1,
+  lambda = 0.1
+) {
+  # Validate inputs
+  if (
+    !is.numeric(bundleThreshold) || bundleThreshold < 0 || bundleThreshold > 1
+  ) {
+    stop("'bundleThreshold' must be a number between 0 and 1")
+  }
+
+  if (!is.numeric(cycles) || cycles <= 0) {
+    stop("'cycles' must be a positive number")
+  }
+
+  if (!is.numeric(divisions) || divisions <= 0) {
+    stop("'divisions' must be a positive number")
+  }
+
+  if (!is.numeric(divRate) || divRate <= 0) {
+    stop("'divRate' must be a positive number")
+  }
+
+  if (!is.numeric(iterations) || iterations <= 0) {
+    stop("'iterations' must be a positive number")
+  }
+
+  if (!is.numeric(iterRate) || iterRate <= 0) {
+    stop("'iterRate' must be a positive number")
+  }
+
+  if (!is.numeric(K) || K <= 0) {
+    stop("'K' must be a positive number")
+  }
+
+  if (!is.numeric(lambda) || lambda <= 0) {
+    stop("'lambda' must be a positive number")
+  }
+
+  # Get all function argument names
+  arg_names <- names(formals())
+
+  # Create list of argument values
+  config <- mget(arg_names)
+
+  # Set the type internally (not a function parameter)
+  config$type <- "edge-bundling"
+
+  # Remove NULL values
+  dropNulls(config)
+}
+
+#' Configure Edge Filter Lens Plugin
+#'
+#' Creates a configuration object for the edge-filter-lens plugin in G6.
+#' This plugin creates a lens that filters and displays edges within a specific area.
+#'
+#' @param key Unique identifier for the plugin (string, default: NULL)
+#' @param trigger Method to move the lens: "pointermove", "click", or "drag" (string, default: "pointermove")
+#' @param r Radius of the lens (number, default: 60)
+#' @param maxR Maximum radius of the lens (number, default: NULL - half of the smaller canvas dimension)
+#' @param minR Minimum radius of the lens (number, default: 0)
+#' @param scaleRBy Method to scale the lens radius (string, default: "wheel")
+#' @param nodeType Edge display condition: "both", "source", "target", or "either" (string, default: "both")
+#' @param filter Filter out elements that are never displayed in the lens (JS function, default: NULL)
+#' @param style Style of the lens (list, default: NULL)
+#' @param nodeStyle Style of nodes in the lens (list or JS function, default: list(label = FALSE))
+#' @param edgeStyle Style of edges in the lens (list or JS function, default: list(label = TRUE))
+#' @param preventDefault Whether to prevent default events (boolean, default: TRUE)
+#'
+#' @return A list with the configuration settings
+#' @export
+#'
+#' @examples
+#' # Basic configuration
+#' config <- edge_filter_lens()
+#'
+#' # Custom configuration
+#' config <- edge_filter_lens(
+#'   key = "my-edge-lens",
+#'   trigger = "drag",
+#'   r = 100,
+#'   nodeType = "either",
+#'   style = list(
+#'     fill = "rgba(200, 200, 200, 0.3)",
+#'     stroke = "#999",
+#'     lineWidth = 2
+#'   ),
+#'   filter = htmlwidgets::JS("function(id, type) {
+#'     // Only display edges connected to specific nodes
+#'     if (type === 'edge') {
+#'       const edge = graph.getEdgeData(id);
+#'       return edge.source === 'node1' || edge.target === 'node1';
+#'     }
+#'     return true;
+#'   }")
+#' )
+edge_filter_lens <- function(
+  key = "edge-filter-lens",
+  trigger = c("pointermove", "click", "drag"),
+  r = 60,
+  maxR = NULL, # TBD check the default
+  minR = 0,
+  scaleRBy = "wheel",
+  nodeType = c("both", "source", "target", "either"),
+  filter = NULL,
+  style = NULL,
+  nodeStyle = list(label = FALSE),
+  edgeStyle = list(label = TRUE),
+  preventDefault = TRUE
+) {
+  # Validate inputs
+  trigger <- match.arg(trigger)
+
+  if (!is.numeric(r) || r < 0) {
+    stop("'r' must be a non-negative number")
+  }
+
+  if (!is.null(maxR) && (!is.numeric(maxR) || maxR < r)) {
+    stop("'maxR' must be a number greater than or equal to 'r'")
+  }
+
+  if (!is.numeric(minR) || minR < 0 || minR > r) {
+    stop("'minR' must be a non-negative number less than or equal to 'r'")
+  }
+
+  if (!is.character(scaleRBy) || scaleRBy != "wheel") {
+    stop("'scaleRBy' must be 'wheel'")
+  }
+
+  nodeType <- match.arg(nodeType)
+
+  if (!is.null(filter) && !is_js(filter)) {
+    stop(
+      "'filter' must be a JavaScript function wrapped with htmlwidgets::JS()"
+    )
+  }
+
+  if (!is.null(style) && !is.list(style)) {
+    stop("'style' must be a list")
+  }
+
+  if (!is.null(nodeStyle) && !is.list(nodeStyle)) {
+    stop(
+      "'nodeStyle' must be a list"
+    )
+  }
+
+  if (!is.null(edgeStyle) && !is.list(edgeStyle)) {
+    stop(
+      "'edgeStyle' must be a list"
+    )
+  }
+
+  if (!is.logical(preventDefault)) {
+    stop("'preventDefault' must be a boolean value")
+  }
+
+  # Get all function argument names
+  arg_names <- names(formals())
+
+  # Create list of argument values
+  config <- mget(arg_names)
+
+  # Set the type internally (not a function parameter)
+  config$type <- "edge-filter-lens"
+
+  # Remove NULL values
+  dropNulls(config)
+}
+
+#' Configure Fish Eye Plugin
+#'
+#' Creates a configuration object for the fisheye plugin in G6.
+#' This plugin creates a fisheye lens effect that magnifies elements within a specific area.
+#'
+#' @param key Unique identifier for the plugin (string, default: NULL)
+#' @param trigger Method to move the fisheye: "pointermove", "click", or "drag" (string, default: "pointermove")
+#' @param r Radius of the fisheye (number, default: 120)
+#' @param maxR Maximum adjustable radius of the fisheye (number, default: NULL - half of the smaller canvas dimension)
+#' @param minR Minimum adjustable radius of the fisheye (number, default: 0)
+#' @param d Distortion factor (number, default: 1.5)
+#' @param maxD Maximum adjustable distortion factor (number, default: 5)
+#' @param minD Minimum adjustable distortion factor (number, default: 0)
+#' @param scaleRBy Method to adjust the fisheye radius: "wheel" or "drag" (string, default: NULL)
+#' @param scaleDBy Method to adjust the fisheye distortion factor: "wheel" or "drag" (string, default: NULL)
+#' @param showDPercent Whether to show the distortion factor value in the fisheye (boolean, default: TRUE)
+#' @param style Style of the fisheye (list, default: NULL)
+#' @param nodeStyle Style of nodes in the fisheye (list or JS function, default: list(label = TRUE))
+#' @param preventDefault Whether to prevent default events (boolean, default: TRUE)
+#'
+#' @return A list with the configuration settings
+#' @export
+#'
+#' @examples
+#' # Basic configuration
+#' config <- fish_eye()
+#'
+#' # Custom configuration
+#' config <- fish_eye(
+#'   key = "my-fisheye",
+#'   trigger = "drag",
+#'   r = 200,
+#'   d = 2.5,
+#'   scaleRBy = "wheel",
+#'   scaleDBy = "drag",
+#'   style = list(
+#'     stroke = "#1890ff",
+#'     fill = "rgba(24, 144, 255, 0.1)",
+#'     lineWidth = 2
+#'   ),
+#'   nodeStyle = htmlwidgets::JS("function(datum) {
+#'     return {
+#'       label: true,
+#'       labelCfg: {
+#'         style: {
+#'           fill: '#003a8c',
+#'           fontSize: 14
+#'         }
+#'       }
+#'     };
+#'   }")
+#' )
+fish_eye <- function(
+  key = "fish-eye",
+  trigger = c("pointermove", "click", "drag"),
+  r = 120,
+  maxR = NULL,
+  minR = 0,
+  d = 1.5,
+  maxD = 5,
+  minD = 0,
+  scaleRBy = NULL,
+  scaleDBy = NULL,
+  showDPercent = TRUE,
+  style = NULL,
+  nodeStyle = list(label = TRUE),
+  preventDefault = TRUE
+) {
+  # Validate inputs
+  trigger <- match.arg(trigger)
+
+  if (!is.numeric(r) || r < 0) {
+    stop("'r' must be a non-negative number")
+  }
+
+  if (!is.null(maxR) && (!is.numeric(maxR) || maxR < r)) {
+    stop("'maxR' must be a number greater than or equal to 'r'")
+  }
+
+  if (!is.numeric(minR) || minR < 0 || minR > r) {
+    stop("'minR' must be a non-negative number less than or equal to 'r'")
+  }
+
+  if (!is.numeric(d) || d < 0) {
+    stop("'d' must be a non-negative number")
+  }
+
+  if (!is.numeric(maxD) || maxD < d) {
+    stop("'maxD' must be a number greater than or equal to 'd'")
+  }
+
+  if (!is.numeric(minD) || minD < 0 || minD > d) {
+    stop("'minD' must be a non-negative number less than or equal to 'd'")
+  }
+
+  valid_scale_methods <- c("wheel", "drag")
+  if (!is.null(scaleRBy) && !scaleRBy %in% valid_scale_methods) {
+    stop("'scaleRBy' must be one of 'wheel' or 'drag'")
+  }
+
+  if (!is.null(scaleDBy) && !scaleDBy %in% valid_scale_methods) {
+    stop("'scaleDBy' must be one of 'wheel' or 'drag'")
+  }
+
+  if (!is.logical(showDPercent)) {
+    stop("'showDPercent' must be a boolean value")
+  }
+
+  if (!is.null(style) && !is.list(style)) {
+    stop("'style' must be a list")
+  }
+
+  if (!is.null(nodeStyle) && !is.list(nodeStyle)) {
+    stop(
+      "'nodeStyle' must be a list."
+    )
+  }
+
+  if (!is.logical(preventDefault)) {
+    stop("'preventDefault' must be a boolean value")
+  }
+
+  # Get all function argument names
+  arg_names <- names(formals())
+
+  # Create list of argument values
+  config <- mget(arg_names)
+
+  # Set the type internally (not a function parameter)
+  config$type <- "fisheye"
+
+  # Remove NULL values
+  dropNulls(config)
+}
+
+#' Configure Fullscreen Plugin
+#'
+#' Creates a configuration object for the fullscreen plugin in G6.
+#' This plugin enables fullscreen mode for the graph.
+#'
+#' @param key Unique identifier for the plugin (string, default: NULL)
+#' @param autoFit Whether to auto-fit the canvas size to the screen when in fullscreen mode (boolean, default: TRUE)
+#' @param trigger Methods to trigger fullscreen, e.g., list(request = "button", exit = "escape") (list, default: NULL)
+#' @param onEnter Callback function after entering fullscreen mode (JS function, default: NULL)
+#' @param onExit Callback function after exiting fullscreen mode (JS function, default: NULL)
+#'
+#' @return A list with the configuration settings
+#' @export
+#'
+#' @examples
+#' # Basic configuration
+#' config <- fullscreen()
+#'
+#' # Custom configuration
+#' config <- fullscreen(
+#'   key = "my-fullscreen",
+#'   autoFit = TRUE,
+#'   trigger = list(
+#'     request = "F",
+#'     exit = "Esc"
+#'   ),
+#'   onEnter = htmlwidgets::JS("function() {
+#'     console.log('Entered fullscreen mode');
+#'   }"),
+#'   onExit = htmlwidgets::JS("function() {
+#'     console.log('Exited fullscreen mode');
+#'   }")
+#' )
+fullscreen <- function(
+  key = "fullscreen",
+  autoFit = TRUE,
+  trigger = NULL,
+  onEnter = NULL,
+  onExit = NULL
+) {
+  # Validate inputs
+  if (!is.logical(autoFit)) {
+    stop("'autoFit' must be a boolean value")
+  }
+
+  if (!is.null(trigger) && !is.list(trigger)) {
+    stop("'trigger' must be a list with 'request' and/or 'exit' properties")
+  }
+
+  if (!is.null(trigger)) {
+    if (!is.null(trigger$request) && !is.character(trigger$request)) {
+      stop("'trigger$request' must be a string")
+    }
+    if (!is.null(trigger$exit) && !is.character(trigger$exit)) {
+      stop("'trigger$exit' must be a string")
+    }
+  }
+
+  if (!is.null(onEnter) && !is_js(onEnter)) {
+    stop(
+      "'onEnter' must be a JavaScript function wrapped with htmlwidgets::JS()"
+    )
+  }
+
+  if (!is.null(onExit) && !is_js(onExit)) {
+    stop(
+      "'onExit' must be a JavaScript function wrapped with htmlwidgets::JS()"
+    )
+  }
+
+  # Get all function argument names
+  arg_names <- names(formals())
+
+  # Create list of argument values
+  config <- mget(arg_names)
+
+  # Set the type internally (not a function parameter)
+  config$type <- "fullscreen"
+
+  # Remove NULL values
+  dropNulls(config)
+}
+
+#' Configure Grid Line Plugin
+#'
+#' Creates a configuration object for the grid-line plugin in G6.
+#' This plugin adds a background grid to the graph canvas.
+#'
+#' @param key Unique identifier for the plugin (string, default: NULL)
+#' @param border Whether to display the border (boolean, default: TRUE)
+#' @param borderLineWidth Border line width (number, default: 1)
+#' @param borderStroke Border color (string, default: "#eee")
+#' @param borderStyle Border style (string, default: "solid")
+#' @param follow Whether the grid follows canvas movements (boolean or list, default: FALSE)
+#' @param lineWidth Grid line width (number or string, default: 1)
+#' @param size Grid unit size in pixels (number, default: 20)
+#' @param stroke Grid line color (string, default: "#eee")
+#'
+#' @return A list with the configuration settings
+#' @export
+#'
+#' @examples
+#' # Basic configuration
+#' config <- grid_line()
+#'
+#' # Custom configuration
+#' config <- grid_line(
+#'   key = "my-grid",
+#'   border = TRUE,
+#'   borderLineWidth = 2,
+#'   borderStroke = "#ccc",
+#'   borderStyle = "dashed",
+#'   follow = list(
+#'     translate = TRUE,
+#'     zoom = FALSE
+#'   ),
+#'   lineWidth = 0.5,
+#'   size = 30,
+#'   stroke = "#e0e0e0"
+#' )
+grid_line <- function(
+  key = "grid-line",
+  border = TRUE,
+  borderLineWidth = 1,
+  borderStroke = "#eee",
+  borderStyle = "solid",
+  follow = FALSE,
+  lineWidth = 1,
+  size = 20,
+  stroke = "#eee"
+) {
+  # Validate inputs
+  if (!is.logical(border)) {
+    stop("'border' must be a boolean value")
+  }
+
+  if (!is.numeric(borderLineWidth) || borderLineWidth < 0) {
+    stop("'borderLineWidth' must be a non-negative number")
+  }
+
+  if (!is.character(borderStroke)) {
+    stop("'borderStroke' must be a string representing a color")
+  }
+
+  valid_border_styles <- c(
+    "solid",
+    "dashed",
+    "dotted",
+    "double",
+    "groove",
+    "ridge",
+    "inset",
+    "outset",
+    "none",
+    "hidden"
+  )
+  if (!is.character(borderStyle) || !borderStyle %in% valid_border_styles) {
+    stop("'borderStyle' must be a valid CSS border style")
+  }
+
+  if (!is.logical(follow) && !is.list(follow)) {
+    stop(
+      "'follow' must be a boolean or a list with 'translate' and/or 'zoom' properties"
+    )
+  }
+
+  if (is.list(follow)) {
+    if (!is.null(follow$translate) && !is.logical(follow$translate)) {
+      stop("'follow$translate' must be a boolean")
+    }
+    if (!is.null(follow$zoom) && !is.logical(follow$zoom)) {
+      stop("'follow$zoom' must be a boolean")
+    }
+  }
+
+  if (!is.numeric(lineWidth) && !is.character(lineWidth)) {
+    stop("'lineWidth' must be a number or string")
+  }
+
+  if (is.numeric(lineWidth) && lineWidth < 0) {
+    stop("'lineWidth' as a number must be non-negative")
+  }
+
+  if (!is.numeric(size) || size <= 0) {
+    stop("'size' must be a positive number")
+  }
+
+  if (!is.character(stroke)) {
+    stop("'stroke' must be a string representing a color")
+  }
+
+  # Get all function argument names
+  arg_names <- names(formals())
+
+  # Create list of argument values
+  config <- mget(arg_names)
+
+  # Set the type internally (not a function parameter)
+  config$type <- "grid-line"
+
+  # Remove NULL values
+  dropNulls(config)
+}
+
+#' Configure History Plugin
+#'
+#' Creates a configuration object for the history plugin in G6.
+#' This plugin enables undo/redo functionality for graph operations.
+#'
+#' @param key Unique identifier for the plugin (string, default: NULL)
+#' @param afterAddCommand Callback function called after a command is added to the undo/redo queue (JS function, default: NULL)
+#' @param beforeAddCommand Callback function called before a command is added to the undo/redo queue (JS function, default: NULL)
+#' @param executeCommand Callback function called when executing a command (JS function, default: NULL)
+#' @param stackSize Maximum length of history records to be recorded, 0 means unlimited (number, default: 0)
+#'
+#' @return A list with the configuration settings
+#' @export
+#'
+#' @examples
+#' # Basic configuration
+#' config <- history()
+#'
+#' # Custom configuration
+#' config <- history(
+#'   key = "my-history",
+#'   stackSize = 50,
+#'   beforeAddCommand = htmlwidgets::JS("function(cmd, revert) {
+#'     console.log('Before adding command:', cmd);
+#'     // Only allow certain operations to be recorded
+#'     return cmd.method !== 'update';
+#'   }"),
+#'   afterAddCommand = htmlwidgets::JS("function(cmd, revert) {
+#'     console.log('Command added to ' + (revert ? 'undo' : 'redo') + ' stack');
+#'   }"),
+#'   executeCommand = htmlwidgets::JS("function(cmd) {
+#'     console.log('Executing command:', cmd);
+#'   }")
+#' )
+history <- function(
+  key = "history",
+  afterAddCommand = NULL,
+  beforeAddCommand = NULL,
+  executeCommand = NULL,
+  stackSize = 0
+) {
+  # Validate inputs
+  if (!is.null(afterAddCommand) && !is_js(afterAddCommand)) {
+    stop(
+      "'afterAddCommand' must be a JavaScript function wrapped with htmlwidgets::JS()"
+    )
+  }
+
+  if (!is.null(beforeAddCommand) && !is_js(beforeAddCommand)) {
+    stop(
+      "'beforeAddCommand' must be a JavaScript function wrapped with htmlwidgets::JS()"
+    )
+  }
+
+  if (!is.null(executeCommand) && !is_js(executeCommand)) {
+    stop(
+      "'executeCommand' must be a JavaScript function wrapped with htmlwidgets::JS()"
+    )
+  }
+
+  if (
+    !is.numeric(stackSize) || stackSize < 0 || stackSize != round(stackSize)
+  ) {
+    stop("'stackSize' must be a non-negative integer")
+  }
+
+  # Get all function argument names
+  arg_names <- names(formals())
+
+  # Create list of argument values
+  config <- mget(arg_names)
+
+  # Set the type internally (not a function parameter)
+  config$type <- "history"
+
+  # Remove NULL values
+  dropNulls(config)
+}
+
+#' Configure Hull Plugin
+#'
+#' Creates a configuration object for the hull plugin in G6.
+#' This plugin creates a hull (convex or concave) that surrounds specified graph elements.
+#'
+#' @param key Unique identifier for the plugin (string, default: NULL)
+#' @param members Elements within the hull, including nodes and edges (character vector, required)
+#' @param concavity Concavity parameter, larger values create less concave hulls (number, default: Infinity)
+#' @param corner Corner type: "rounded", "smooth", or "sharp" (string, default: "rounded")
+#' @param padding Padding around the elements (number, default: 10)
+#' @param label Whether to display the label (boolean, default: TRUE)
+#' @param labelPlacement Label position: "left", "right", "top", "bottom", or "center" (string, default: "bottom")
+#' @param labelBackground Whether to display the background (boolean, default: FALSE)
+#' @param labelPadding Label padding (number or numeric vector, default: 0)
+#' @param labelCloseToPath Whether the label is close to the hull (boolean, default: TRUE)
+#' @param labelAutoRotate Whether the label rotates with the hull, effective only when closeToPath is true (boolean, default: TRUE)
+#' @param labelOffsetX X-axis offset (number, default: 0)
+#' @param labelOffsetY Y-axis offset (number, default: 0)
+#' @param labelMaxWidth Maximum width of the text, exceeding will be ellipsized (number, default: 0)
+#'
+#' @return A list with the configuration settings
+#' @export
+#'
+#' @examples
+#' # Basic configuration
+#' config <- hull(members = c("node1", "node2", "node3"))
+#'
+#' # Custom configuration for a cluster
+#' config <- hull(
+#'   key = "cluster-hull",
+#'   members = c("node1", "node2", "node3", "node4"),
+#'   concavity = 0.8,
+#'   corner = "smooth",
+#'   padding = 15,
+#'   label = TRUE,
+#'   labelPlacement = "top",
+#'   labelBackground = TRUE,
+#'   labelPadding = c(4, 8),
+#'   labelMaxWidth = 100
+#' )
+hull <- function(
+  members,
+  key = "hull",
+  concavity = Inf,
+  corner = c("rounded", "smooth", "sharp"),
+  padding = 10,
+  label = TRUE,
+  labelPlacement = c("bottom", "left", "right", "top", "center"),
+  labelBackground = FALSE,
+  labelPadding = 0,
+  labelCloseToPath = TRUE,
+  labelAutoRotate = TRUE,
+  labelOffsetX = 0,
+  labelOffsetY = 0,
+  labelMaxWidth = 0
+) {
+  # Validate inputs
+  if (!is.character(members) || length(members) == 0) {
+    stop("'members' must be a non-empty character vector")
+  }
+
+  if (!is.numeric(concavity) || concavity <= 0) {
+    stop("'concavity' must be a positive number or Infinity")
+  }
+
+  corner <- match.arg(corner)
+
+  if (!is.numeric(padding) || padding < 0) {
+    stop("'padding' must be a non-negative number")
+  }
+
+  if (!is.logical(label)) {
+    stop("'label' must be a boolean value")
+  }
+
+  labelPlacement <- match.arg(labelPlacement)
+
+  if (!is.logical(labelBackground)) {
+    stop("'labelBackground' must be a boolean value")
+  }
+
+  # Check if labelPadding is a number or numeric vector
+  if (!is.numeric(labelPadding)) {
+    stop("'labelPadding' must be a number or numeric vector")
+  }
+
+  if (!is.logical(labelCloseToPath)) {
+    stop("'labelCloseToPath' must be a boolean value")
+  }
+
+  if (!is.logical(labelAutoRotate)) {
+    stop("'labelAutoRotate' must be a boolean value")
+  }
+
+  if (!is.numeric(labelOffsetX)) {
+    stop("'labelOffsetX' must be a number")
+  }
+
+  if (!is.numeric(labelOffsetY)) {
+    stop("'labelOffsetY' must be a number")
+  }
+
+  if (!is.numeric(labelMaxWidth) || labelMaxWidth < 0) {
+    stop("'labelMaxWidth' must be a non-negative number")
+  }
+
+  # Get all function argument names
+  arg_names <- names(formals())
+
+  # Create list of argument values
+  config <- mget(arg_names)
+
+  # Set the type internally (not a function parameter)
+  config$type <- "hull"
+
+  # Remove NULL values
+  dropNulls(config)
+}
+
+#' Configure Legend Plugin
+#'
+#' Creates a configuration object for the legend plugin in G6.
+#' This plugin adds a legend to the graph, allowing users to identify and interact with
+#' different categories of elements.
+#'
+#' @param key Unique identifier for the plugin (string, default: NULL)
+#' @param trigger How legend items trigger highlighting: "hover" or "click" (string, default: "hover")
+#' @param position Relative position of the legend on the canvas (string, default: "bottom")
+#' @param container Container to which the legend is mounted (HTML element or string, default: NULL)
+#' @param className Legend canvas class name (string, default: NULL)
+#' @param containerStyle Style of the legend container (list or JS object, default: NULL)
+#' @param nodeField Node classification identifier (string or JS function, default: NULL)
+#' @param edgeField Edge classification identifier (string or JS function, default: NULL)
+#' @param comboField Combo classification identifier (string or JS function, default: NULL)
+#' @param orientation Layout direction: "horizontal" or "vertical" (string, default: "horizontal")
+#' @param layout Layout method: "flex" or "grid" (string, default: "flex")
+#' @param showTitle Whether to display the title (boolean, default: FALSE)
+#' @param titleText Title content (string, default: "")
+#' @param x Relative horizontal position (number, default: NULL)
+#' @param y Relative vertical position (number, default: NULL)
+#' @param width Width of the legend (number, default: 240)
+#' @param height Height of the legend (number, default: 160)
+#' @param itemSpacing Spacing between text and marker (number, default: 4)
+#' @param rowPadding Spacing between rows (number, default: 10)
+#' @param colPadding Spacing between columns (number, default: 10)
+#' @param itemMarkerSize Size of the legend item marker (number, default: 16)
+#' @param itemLabelFontSize Font size of the legend item text (number, default: 16)
+#' @param gridCol Maximum number of columns for grid layout (number, default: NULL)
+#' @param gridRow Maximum number of rows for grid layout (number, default: NULL)
+#'
+#' @return A list with the configuration settings
+#' @export
+#'
+#' @examples
+#' # Basic configuration for node categories
+#' config <- legend(
+#'   nodeField = "category"
+#' )
+#'
+#' # Advanced configuration
+#' config <- legend(
+#'   key = "my-legend",
+#'   position = "top-right",
+#'   nodeField = "type",
+#'   edgeField = "relation",
+#'   orientation = "vertical",
+#'   layout = "grid",
+#'   showTitle = TRUE,
+#'   titleText = "Graph Elements",
+#'   width = 300,
+#'   height = 200,
+#'   gridCol = 2,
+#'   containerStyle = list(
+#'     background = "#f9f9f9",
+#'     border = "1px solid #ddd",
+#'     borderRadius = "4px",
+#'     padding = "8px"
+#'   )
+#' )
+#'
+#' # Using a function for classification
+#' config <- legend(
+#'   nodeField = htmlwidgets::JS("function(item) {
+#'     return item.data.importance > 0.5 ? 'Important' : 'Regular';
+#'   }")
+#' )
+legend <- function(
+  key = "legend",
+  trigger = c("hover", "click"),
+  position = c(
+    "bottom",
+    "top",
+    "left",
+    "right",
+    "top-left",
+    "top-right",
+    "bottom-left",
+    "bottom-right"
+  ),
+  container = NULL,
+  className = NULL,
+  containerStyle = NULL,
+  nodeField = NULL,
+  edgeField = NULL,
+  comboField = NULL,
+  orientation = c("horizontal", "vertical"),
+  layout = c("flex", "grid"),
+  showTitle = FALSE,
+  titleText = "",
+  x = NULL,
+  y = NULL,
+  width = 240,
+  height = 160,
+  itemSpacing = 4,
+  rowPadding = 10,
+  colPadding = 10,
+  itemMarkerSize = 16,
+  itemLabelFontSize = 16,
+  gridCol = NULL,
+  gridRow = NULL
+) {
+  # Validate inputs
+  trigger <- match.arg(trigger)
+
+  position <- match.arg(position)
+
+  if (
+    !is.null(container) &&
+      !is.character(container) &&
+      !inherits(container, "JS_EVAL")
+  ) {
+    stop(
+      "'container' must be a string selector or HTMLElement reference wrapped with htmlwidgets::JS()"
+    )
+  }
+
+  if (!is.null(className) && !is.character(className)) {
+    stop("'className' must be a string")
+  }
+
+  if (
+    !is.null(containerStyle) &&
+      !is.list(containerStyle) &&
+      !inherits(containerStyle, "JS_EVAL")
+  ) {
+    stop(
+      "'containerStyle' must be a list or a JavaScript object wrapped with htmlwidgets::JS()"
+    )
+  }
+
+  if (
+    !is.null(nodeField) &&
+      !is.character(nodeField) &&
+      !is_js(nodeField)
+  ) {
+    stop(
+      "'nodeField' must be a string or a JavaScript function wrapped with htmlwidgets::JS()"
+    )
+  }
+
+  if (
+    !is.null(edgeField) &&
+      !is.character(edgeField) &&
+      !is_js(edgeField)
+  ) {
+    stop(
+      "'edgeField' must be a string or a JavaScript function wrapped with htmlwidgets::JS()"
+    )
+  }
+
+  if (
+    !is.null(comboField) &&
+      !is.character(comboField) &&
+      !is_js(comboField)
+  ) {
+    stop(
+      "'comboField' must be a string or a JavaScript function wrapped with htmlwidgets::JS()"
+    )
+  }
+
+  orientation <- match.arg(orientation)
+
+  layout <- match.arg(layout)
+
+  if (!is.logical(showTitle)) {
+    stop("'showTitle' must be a boolean value")
+  }
+
+  if (!is.character(titleText)) {
+    stop("'titleText' must be a string")
+  }
+
+  if (!is.null(x) && (!is.numeric(x) || length(x) != 1)) {
+    stop("'x' must be a single numeric value")
+  }
+
+  if (!is.null(y) && (!is.numeric(y) || length(y) != 1)) {
+    stop("'y' must be a single numeric value")
+  }
+
+  if (!is.numeric(width) || width <= 0) {
+    stop("'width' must be a positive number")
+  }
+
+  if (!is.numeric(height) || height <= 0) {
+    stop("'height' must be a positive number")
+  }
+
+  if (!is.numeric(itemSpacing) || itemSpacing < 0) {
+    stop("'itemSpacing' must be a non-negative number")
+  }
+
+  if (!is.numeric(rowPadding) || rowPadding < 0) {
+    stop("'rowPadding' must be a non-negative number")
+  }
+
+  if (!is.numeric(colPadding) || colPadding < 0) {
+    stop("'colPadding' must be a non-negative number")
+  }
+
+  if (!is.numeric(itemMarkerSize) || itemMarkerSize <= 0) {
+    stop("'itemMarkerSize' must be a positive number")
+  }
+
+  if (!is.numeric(itemLabelFontSize) || itemLabelFontSize <= 0) {
+    stop("'itemLabelFontSize' must be a positive number")
+  }
+
+  if (
+    !is.null(gridCol) &&
+      (!is.numeric(gridCol) || gridCol <= 0 || gridCol != as.integer(gridCol))
+  ) {
+    stop("'gridCol' must be a positive integer")
+  }
+
+  if (
+    !is.null(gridRow) &&
+      (!is.numeric(gridRow) || gridRow <= 0 || gridRow != as.integer(gridRow))
+  ) {
+    stop("'gridRow' must be a positive integer")
+  }
+
+  # Get all function argument names
+  arg_names <- names(formals())
+
+  # Create list of argument values
+  config <- mget(arg_names)
+
+  # Set the type internally (not a function parameter)
+  config$type <- "legend"
+
+  # Remove NULL values
+  dropNulls(config)
+}
+
+#' Configure Minimap Plugin
+#'
+#' Creates a configuration object for the minimap plugin in G6.
+#' This plugin adds a minimap/thumbnail view of the entire graph.
+#'
+#' @param key Unique identifier for the plugin (string, default: NULL)
+#' @param className Class name of the thumbnail canvas (string, default: NULL)
+#' @param container Container to which the thumbnail is mounted (HTML element or string, default: NULL)
+#' @param containerStyle Style of the thumbnail container (list or JS object, default: NULL)
+#' @param delay Delay update time in milliseconds for performance optimization (number, default: 128)
+#' @param filter Function to filter elements to display in minimap (JS function, default: NULL)
+#' @param maskStyle Style of the mask (list or JS object, default: NULL)
+#' @param padding Padding around the minimap (number or numeric vector, default: 10)
+#' @param position Position of the thumbnail relative to the canvas (string or numeric vector, default: "right-bottom")
+#' @param renderer Custom renderer (JS object, default: NULL)
+#' @param shape Method for generating element thumbnails (string or JS function, default: "key")
+#' @param size Width and height of the minimap [width, height] (numeric vector, default: c(240, 160))
+#'
+#' @return A list with the configuration settings
+#' @export
+#'
+#' @examples
+#' # Basic configuration
+#' config <- minimap()
+#'
+#' # Custom configuration
+#' config <- minimap(
+#'   key = "my-minimap",
+#'   position = "left-top",
+#'   size = c(200, 150),
+#'   padding = 15,
+#'   containerStyle = list(
+#'     border = "1px solid #ddd",
+#'     borderRadius = "4px",
+#'     boxShadow = "0 0 8px rgba(0,0,0,0.1)"
+#'   ),
+#'   maskStyle = list(
+#'     stroke = "#1890ff",
+#'     strokeWidth = 2,
+#'     fill = "rgba(24, 144, 255, 0.1)"
+#'   )
+#' )
+#'
+#' # With custom filtering function
+#' config <- minimap(
+#'   filter = htmlwidgets::JS("function(id, elementType) {
+#'     // Only show nodes and important edges in the minimap
+#'     if (elementType === 'node') return true;
+#'     if (elementType === 'edge') {
+#'       // Assuming edges have an 'important' attribute
+#'       const edge = graph.findById(id);
+#'       return edge.getModel().important === true;
+#'     }
+#'     return false;
+#'   }")
+#' )
+minimap <- function(
+  key = "minimap",
+  className = NULL,
+  container = NULL,
+  containerStyle = NULL,
+  delay = 128,
+  filter = NULL,
+  maskStyle = NULL,
+  padding = 10,
+  position = "right-bottom",
+  renderer = NULL,
+  shape = "key",
+  size = c(240, 160)
+) {
+  # Validate inputs
+  if (!is.null(className) && !is.character(className)) {
+    stop("'className' must be a string")
+  }
+
+  if (
+    !is.null(container) &&
+      !is.character(container) &&
+      !is_js(container)
+  ) {
+    stop(
+      "'container' must be a string selector or HTMLElement reference wrapped with htmlwidgets::JS()"
+    )
+  }
+
+  if (
+    !is.null(containerStyle) &&
+      !is.list(containerStyle) &&
+      !is_js(containerStyle)
+  ) {
+    stop(
+      "'containerStyle' must be a list or a JavaScript object wrapped with htmlwidgets::JS()"
+    )
+  }
+
+  if (!is.numeric(delay) || delay < 0) {
+    stop("'delay' must be a non-negative number")
+  }
+
+  if (!is.null(filter) && !is_js(filter)) {
+    stop(
+      "'filter' must be a JavaScript function wrapped with htmlwidgets::JS()"
+    )
+  }
+
+  if (
+    !is.null(maskStyle) &&
+      !is.list(maskStyle) &&
+      !is_js(maskStyle)
+  ) {
+    stop(
+      "'maskStyle' must be a list or a JavaScript object wrapped with htmlwidgets::JS()"
+    )
+  }
+
+  # Check if padding is a number or numeric vector
+  if (!is.numeric(padding)) {
+    stop("'padding' must be a number or numeric vector")
+  }
+
+  valid_positions <- c(
+    "left",
+    "right",
+    "top",
+    "bottom",
+    "left-top",
+    "left-bottom",
+    "right-top",
+    "right-bottom",
+    "top-left",
+    "top-right",
+    "bottom-left",
+    "bottom-right",
+    "center"
+  )
+  if (!is.character(position) && !is.numeric(position)) {
+    stop("'position' must be a string or numeric vector [x, y]")
+  }
+
+  if (is.character(position) && !position %in% valid_positions) {
+    stop("'position' as string must be one of the valid position values")
+  }
+
+  if (is.numeric(position) && length(position) != 2) {
+    stop("'position' as numeric vector must have exactly 2 elements [x, y]")
+  }
+
+  if (!is.null(renderer) && !is_js(renderer)) {
+    stop(
+      "'renderer' must be a JavaScript object wrapped with htmlwidgets::JS()"
+    )
+  }
+
+  if (!is.character(shape) && !is_js(shape)) {
+    stop(
+      "'shape' must be a string or a JavaScript function wrapped with htmlwidgets::JS()"
+    )
+  }
+
+  if (!is.numeric(size) || length(size) != 2 || any(size <= 0)) {
+    stop("'size' must be a numeric vector of length 2 with positive values")
+  }
+
+  # Get all function argument names
+  arg_names <- names(formals())
+
+  # Create list of argument values
+  config <- mget(arg_names)
+
+  # Set the type internally (not a function parameter)
+  config$type <- "minimap"
+
+  # Remove NULL values
+  dropNulls(config)
+}
