@@ -58,14 +58,4 @@ options <- edge_options(
     endArrow = TRUE
   )
 )
-
-# Edge with animation effects
-options <- edge_options(
-  type = "polyline",
-  style = edge_style_options(stroke = "#333333"),
-  animation = animation_config(
-    duration = 300,
-    easing = "ease-in-out"
-  )
-)
 }

@@ -1,10 +1,128 @@
+#' Configure Global Options for G6 Graph
+#'
+#' @description
+#' Sets up the global configuration options for a G6 graph including node, edge and
+#' combo styles, layout, canvas, animation, and interactive behavior settings.
+#'
+#' @details
+#' The `g6_options` function provides a comprehensive configuration interface for G6 graphs.
+#' It allows you to control all aspects of graph rendering and behavior, from styling of
+#' individual elements to global visualization settings.
+#'
+#' @param node Node configuration. Controls the default appearance and behavior of nodes.
+#'   Created with \code{node_options()}. Default: Default node options.
+#'
+#' @param edge Edge configuration. Controls the default appearance and behavior of edges.
+#'   Created with \code{edge_options()}. Default: Default edge options.
+#'
+#' @param combo Combo configuration. Controls the default appearance and behavior of combo nodes.
+#'   Created with \code{combo_options()}. Default: Default combo options.
+#'
+#' @param autoFit Automatically fit the graph content to the canvas.
+#'   Created with \code{auto_fit_config()}. Default: Default auto-fit settings.
+#'
+#' @param canvas Canvas configuration for the graph rendering surface.
+#'   Created with \code{canvas_config()}. Default: Default canvas settings.
+#'
+#' @param animation Global animation configuration for graph transitions.
+#'   Created with \code{animation_config()}. Default: Default animation settings.
+#'
+#' @param autoResize Whether the graph should automatically resize when the window size changes.
+#'   Default: FALSE.
+#'
+#' @param background Background color of the graph. If not specified, the background will be transparent.
+#'   Default: NULL.
+#'
+#' @param cursor Default mouse cursor style when hovering over the graph.
+#'   Options include: "default", "pointer", "move", etc.
+#'   Default: "default".
+#'
+#' @param devicePixelRatio Device pixel ratio for rendering on high-DPI displays. If NULL,
+#'   the browser's default device pixel ratio will be used.
+#'   Default: NULL.
+#'
+#' @param renderer Rendering engine to use. Options: "canvas", "svg", "webgl", or "webgpu".
+#'   Default: NULL (G6 will choose the appropriate renderer).
+#'
+#' @param padding Padding around the graph content in pixels. Can be a single number for equal padding
+#'   on all sides or a vector of four numbers [top, right, bottom, left].
+#'   Default: NULL.
+#'
+#' @param rotation Rotation angle of the entire graph in degrees.
+#'   Default: 0.
+#'
+#' @param x X-coordinate of the graph's center relative to the container.
+#'   Default: NULL (will use container center).
+#'
+#' @param y Y-coordinate of the graph's center relative to the container.
+#'   Default: NULL (will use container center).
+#'
+#' @param zoom Initial zoom level of the graph. 1 represents 100% (original size).
+#'   Default: 1.
+#'
+#' @param zoomRange Minimum and maximum allowed zoom levels, specified as a vector
+#'   with two elements: c(min_zoom, max_zoom).
+#'   Default: c(0.01, 10).
+#'
+#' @param theme Color theme for the graph. Options: "light" or "dark".
+#'   Default: "light".
+#' @param ... Other configuration parameters.
+#'
+#' @return A list containing all specified G6 graph configuration options.
+#'
+#' @examples
+#' # Basic usage with defaults
+#' opts <- g6_options()
+#'
+#' # Customize node and edge styles
+#' opts <- g6_options(
+#'   node = node_options(
+#'     type = "circle",
+#'     style = node_style_options(
+#'       fill = "#1783FF",
+#'       stroke = "#0066CC"
+#'     )
+#'   ),
+#'   edge = edge_options(
+#'     type = "cubic",
+#'     style = edge_style_options(
+#'       stroke = "#999999",
+#'       lineWidth = 1.5
+#'     )
+#'   )
+#' )
+#'
+#' # Configure graph with dark theme, auto-resize, and custom background
+#' opts <- g6_options(
+#'   theme = "dark",
+#'   autoResize = TRUE,
+#'   background = "#222222",
+#'   padding = 20,
+#'   zoom = 0.8,
+#'   zoomRange = c(0.5, 2)
+#' )
+#'
+#' # Configure with custom animations
+#' opts <- g6_options(
+#'   animation = animation_config(
+#'     duration = 500,
+#'     easing = "easeCubic"
+#'   ),
+#'   autoFit = auto_fit_config(
+#'     padding = 50,
+#'     type = "view"
+#'   )
+#' )
+#' @export
 g6_options <- function(
   node = node_options(),
   edge = edge_options(),
+  combo = combo_options(),
   autoFit = auto_fit_config(),
+  canvas = canvas_config(),
+  animation = animation_config(),
   autoResize = FALSE,
   background = NULL,
-  canvas = canvas_config(),
   cursor = valid_cursors,
   devicePixelRatio = NULL,
   renderer = NULL,
@@ -14,14 +132,19 @@ g6_options <- function(
   y = NULL,
   zoom = 1,
   zoomRange = c(0.01, 10),
-  animation = animation_config(),
-  theme = c("light", "dark")
+  theme = c("light", "dark"),
+  ...
 ) {
+  theme <- match.arg(theme)
+  cursor <- match.arg(cursor)
+
   arg_names <- names(formals())
-  # Create list of argument values
+  arg_names <- arg_names[arg_names != "..."]
+  # Get values of only the named parameters
   config <- mget(arg_names)
+
   # Drop NULL elements
-  dropNulls(config)
+  dropNulls(c(config, list(...)))
 }
 
 #' Create Auto-Fit Configuration for G6 Graphs
@@ -116,16 +239,14 @@ auto_fit_config <- function(
 
   # Create the main structure
   list(
-    autoFit = list(
-      type = type,
-      options = list(
-        when = when,
-        direction = direction
-      ),
-      animation = list(
-        duration = duration,
-        easing = easing
-      )
+    type = type,
+    options = list(
+      when = when,
+      direction = direction
+    ),
+    animation = list(
+      duration = duration,
+      easing = easing
     )
   )
 }
@@ -432,16 +553,6 @@ animation_config <- function(
 #'     lineWidth = 2
 #'   )
 #' )
-#'
-#' # Node with animation effects
-#' options <- node_options(
-#'   type = "diamond",
-#'   style = node_style_options(fill = "#FF6B6B"),
-#'   animation = animation_config(
-#'     duration = 300,
-#'     easing = "ease-in-out"
-#'   )
-#' )
 node_options <- function(
   type = c(
     "circle",
@@ -688,7 +799,6 @@ node_style_options <- function(
   dropNulls(c(config, list(...)))
 }
 
-#### TO CHECK
 #' Create Edge Options Configuration for G6 Graphs
 #'
 #' @description
@@ -734,16 +844,6 @@ node_style_options <- function(
 #'     stroke = "#1783FF",
 #'     lineWidth = 2,
 #'     endArrow = TRUE
-#'   )
-#' )
-#'
-#' # Edge with animation effects
-#' options <- edge_options(
-#'   type = "polyline",
-#'   style = edge_style_options(stroke = "#333333"),
-#'   animation = animation_config(
-#'     duration = 300,
-#'     easing = "ease-in-out"
 #'   )
 #' )
 edge_options <- function(
@@ -957,4 +1057,106 @@ edge_style_options <- function(
 
   # Drop NULL elements
   dropNulls(c(config, list(...)))
+}
+
+#' Create Combo Options Configuration for G6 Graphs
+#'
+#' @description
+#' Configures the general options for combos in a G6 graph. These settings control
+#' the type, style, state, palette, and animation of combos.
+#'
+#' @details
+#' Combo options allow defining how combos (node groupings) appear and behave in a G6 graph.
+#' This includes selecting combo types, setting styles, configuring state-based appearances,
+#' defining color palettes, and specifying animation effects.
+#'
+#' @param type Combo type. Can be a built-in combo type name or a custom combo name.
+#'   Built-in types include "circle", "rect", "polygon", etc. Default: "circle".
+#'
+#' @param style Combo style configuration. Controls the appearance of combos including color,
+#'   size, border, etc.
+#'   Default: NULL.
+#'
+#' @param state Defines the style of the combo in different states, such as hover, selected,
+#'   disabled, etc. Should be a list mapping state names to style configurations.
+#'   Default: NULL.
+#'
+#' @param palette Defines the color palette of the combo, used to map colors based on different data.
+#'   Default: NULL.
+#'
+#' @param animation Defines the animation effect of the combo. Can be created with
+#'   \code{animation_config()}.
+#'   Default: NULL.
+#'
+#' @return A list containing combo options configuration that can be passed to a G6 graph
+#'
+#' @export
+#'
+#' @examples
+#' # Basic combo options with default circle type
+#' options <- combo_options()
+#'
+#' # Rectangle combo with custom style
+#' options <- combo_options(
+#'   type = "rect",
+#'   style = list(
+#'     fill = "#F6F6F6",
+#'     stroke = "#CCCCCC",
+#'     lineWidth = 1
+#'   )
+#' )
+combo_options <- function(
+  type = "circle",
+  style = NULL,
+  state = NULL,
+  palette = NULL,
+  animation = NULL
+) {
+  # Validate type parameter
+  if (!is.character(type) || length(type) != 1) {
+    stop("'type' must be a single string value")
+  }
+
+  # Validate style parameter
+  if (!is.null(style) && !is.list(style)) {
+    stop(
+      "'style' must be a list, preferably created with combo_style_options()"
+    )
+  }
+
+  # Validate state parameter
+  if (!is.null(state)) {
+    if (!is.list(state)) {
+      stop("'state' must be a list mapping state names to style configurations")
+    }
+    for (state_name in names(state)) {
+      if (!is.list(state[[state_name]])) {
+        stop(sprintf(
+          "State '%s' must be a list of style properties",
+          state_name
+        ))
+      }
+    }
+  }
+
+  # Validate palette parameter
+  if (!is.null(palette) && !is.list(palette)) {
+    stop("'palette' must be a list defining color mappings")
+  }
+
+  # Validate animation parameter
+  if (!is.null(animation) && !is.list(animation)) {
+    stop(
+      "'animation' must be a list, preferably created with animation_config()"
+    )
+  }
+
+  # Get all argument names
+  arg_names <- names(formals())
+
+  # Create list of argument values
+  config <- mget(arg_names)
+
+  # Drop NULL elements
+  dropNulls(config)
 }

@@ -1,9 +1,137 @@
-#' G6 htmlwidget instance
+#' Create a G6 Graph Visualization
 #'
-#' Creates an htmlwidget on top of G6.
+#' @description
+#' Creates an interactive graph visualization using the G6 graph visualization library.
+#' This function is the main entry point for creating G6 graph visualizations in R.
 #'
-#' @import htmlwidgets
+#' @details
+#' The `g6` function creates a G6 graph as an htmlwidget that can be used in R Markdown,
+#' Shiny applications, or rendered to HTML. It takes graph data in the form of nodes, edges,
+#' and optional combo groupings, along with various configuration options for customizing
+#' the appearance and behavior of the graph.
 #'
+#' @section Data Structure:
+#'
+#' \subsection{Nodes}
+#' The `nodes` parameter should be a data frame or list of nodes with at least an `id` field
+#' for each node. Additional fields can include:
+#' \itemize{
+#'   \item \code{id} (required): Unique identifier for the node.
+#'   \item \code{type}: Node type (e.g., "circle", "rect", "diamond").
+#'   \item \code{data}: Custom data associated with the node.
+#'   \item \code{style}: List of style attributes (color, size, etc.).
+#'   \item \code{states}: String. Initial states for the node, such as selected, active, hover, etc.
+#'   \item \code{combo}: ID of the combo this node belongs to.
+#' }
+#'
+#' Example node:
+#' \preformatted{
+#' {
+#'   "id": "node-1",
+#'   "type": "circle",
+#'   "data": { "name": "alice", "role": "Admin" },
+#'   "style": { "x": 100, "y": 200, "size": 32, "fill": "violet" },
+#'   "states": ["selected"],
+#'   "combo": null
+#' }
+#' }
+#'
+#' \subsection{Edges}
+#' The `edges` parameter should be a data frame or list of edges with at least `source` and
+#' `target` fields identifying the connected nodes. Additional fields can include:
+#' \itemize{
+#'   \item \code{source} (required): ID of the source node.
+#'   \item \code{target} (required): ID of the target node.
+#'   \item \code{id}: Unique identifier for the edge.
+#'   \item \code{type}: Edge type (e.g., "line", "cubic", "arc").
+#'   \item \code{data}: Custom data associated with the edge.
+#'   \item \code{style}: List of style attributes (color, width, etc.).
+#'   \item \code{states}: String. Initial states for the edge.
+#' }
+#'
+#' Example edge:
+#' \preformatted{
+#' {
+#'   "source": "node1",
+#'   "target": "node2",
+#'   "type": "cubic",
+#'   "style": { "stroke": "#999", "lineWidth": 2 }
+#' }
+#' }
+#'
+#' \subsection{Combos}
+#' The `combos` parameter is used for grouping nodes and can be a data frame or list with
+#' combo definitions. Fields include:
+#' \itemize{
+#'   \item \code{id} (required): Unique identifier for the combo.
+#'   \item \code{type}: String: Combo type. It can be the type of built-in Combo, or the custom Combo.
+#'   \item \code{data}: Custom data associated with the combo.
+#'   \item \code{style}: List of style attributes.
+#'   \item \code{states}: String. Initial states for the combo.
+#'   \item \code{combo}: String. Parent combo ID. If there is no parent combo, it is null.
+#' }
+#'
+#' Example combo:
+#' \preformatted{
+#' {
+#'   "id": "combo1",
+#'   "type": "circle",
+#'   "data": { "groupName": "Group A" },
+#'   "style": { "fill": "lightblue", "stroke": "blue", "collapsed": true },
+#'   "states": [],
+#'   "combo": null
+#' }
+#' }
+#'
+#' Nodes are assigned to combos by setting their `combo` field to the ID of the combo.
+#'
+#' @param nodes A data frame or list of nodes in the graph. Each node should have at least
+#'   an "id" field. See 'Data Structure' section for more details.
+#'   Default: NULL.
+#'
+#' @param edges A data frame or list of edges in the graph. Each edge should have "source"
+#'   and "target" fields identifying the connected nodes. See 'Data Structure' section
+#'   for more details.
+#'   Default: NULL.
+#'
+#' @param combos A data frame or list of combo groups in the graph. Each combo should have
+#'   at least an "id" field. Nodes can be assigned to combos using their "combo" field.
+#'   See 'Data Structure' section for more details.
+#'   Default: NULL.
+#'
+#' @param options Graph configuration options created with \code{g6_options()}.
+#'   Default: Default options from g6_options().
+#'
+#' @param behaviors Graph interactions and behaviors created with \code{g6_behaviors()}.
+#'   Default: Default behaviors from g6_behaviors().
+#'
+#' @param plugins List of plugins to enhance the graph functionality, created with \code{g6_plugins()}.
+#'   Default: Default plugins from g6_plugins().
+#'
+#' @param width Width of the graph container in pixels or as a valid CSS unit.
+#'   Default: NULL (automatic sizing).
+#'
+#' @param height Height of the graph container in pixels or as a valid CSS unit.
+#'   Default: NULL (automatic sizing).
+#'
+#' @param elementId A unique ID for the graph HTML element.
+#'   Default: NULL (automatically generated).
+#'
+#' @return An htmlwidget object that can be printed, included in R Markdown documents,
+#'   or used in Shiny applications.
+#'
+#' @examples
+#' # Create a simple graph with two nodes and one edge
+#' nodes <- data.frame(
+#'   id = c("node1", "node2")
+#' )
+#'
+#' edges <- data.frame(
+#'   source = "node1",
+#'   target = "node2"
+#' )
+#'
+#' g6(nodes = nodes, edges = edges)
 #' @export
 g6 <- function(
   nodes = NULL,
@@ -16,19 +144,35 @@ g6 <- function(
   height = NULL,
   elementId = NULL
 ) {
-  # forward options using x
-  x <- c(
-    data = list(
-      nodes = nodes,
-      edges = edges,
-      combos = combos
-    ),
+  # Convert data frames to lists of records
+  if (inherits(nodes, "data.frame"))
+    nodes <- unname(split(nodes, seq(nrow(nodes))))
+  if (inherits(edges, "data.frame"))
+    edges <- unname(split(edges, seq(nrow(edges))))
+  if (inherits(combos, "data.frame"))
+    combos <- unname(split(combos, seq(nrow(combos))))
+
+  # Create data object
+  data <- dropNulls(list(
+    nodes = nodes,
+    edges = edges,
+    combos = combos
+  ))
+
+  # Build properly named list of parameters to pass to widget
+  x <- dropNulls(list(
+    data = data,
     behaviors = behaviors,
-    plugins = plugins,
-    options,
-    width = width,
-    height = height
-  )
+    plugins = plugins
+  ))
+
+  # Properly merge options as a named list
+  if (length(options) > 0) {
+    x <- c(x, options)
+  }
+
+  # Remove browser() call that was likely for debugging
+  # browser()
 
   # create widget
   htmlwidgets::createWidget(

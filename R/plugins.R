@@ -107,7 +107,9 @@
 #'   )
 #' )
 g6_plugins <- function(...) {
-  list(...)
+  plugins <- list(...)
+  if (!length(plugins)) return(NULL)
+  plugins
 }
 
 #' Configure Background Plugin for G6

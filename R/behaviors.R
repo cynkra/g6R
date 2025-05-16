@@ -70,7 +70,7 @@
 g6_behaviors <- function(...) {
   # Maybe todo: provide more infra to define behaviors and validate them
   # structure(class = "behavior"), validate_behavior ...
-  list(
+  behaviors <- list(
     #auto_adapt_label(),
     #brush_select(),
     #click_select(),
@@ -88,6 +88,8 @@ g6_behaviors <- function(...) {
     #zoom_canvas(),
     ...
   )
+  if (!length(behaviors)) return(NULL)
+  behaviors
 }
 
 #' @keywords internal

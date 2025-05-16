@@ -58,14 +58,4 @@ options <- node_options(
     lineWidth = 2
   )
 )
-
-# Node with animation effects
-options <- node_options(
-  type = "diamond",
-  style = node_style_options(fill = "#FF6B6B"),
-  animation = animation_config(
-    duration = 300,
-    easing = "ease-in-out"
-  )
-)
 }

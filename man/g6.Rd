@@ -2,7 +2,7 @@
 % Please edit documentation in R/g6.R
 \name{g6}
 \alias{g6}
-\title{G6 htmlwidget instance}
+\title{Create a G6 Graph Visualization}
 \usage{
 g6(
   nodes = NULL,
@@ -16,6 +16,140 @@ g6(
   elementId = NULL
 )
 }
+\arguments{
+\item{nodes}{A data frame or list of nodes in the graph. Each node should have at least
+an "id" field. See 'Data Structure' section for more details.
+Default: NULL.}
+
+\item{edges}{A data frame or list of edges in the graph. Each edge should have "source"
+and "target" fields identifying the connected nodes. See 'Data Structure' section
+for more details.
+Default: NULL.}
+
+\item{combos}{A data frame or list of combo groups in the graph. Each combo should have
+at least an "id" field. Nodes can be assigned to combos using their "combo" field.
+See 'Data Structure' section for more details.
+Default: NULL.}
+
+\item{options}{Graph configuration options created with \code{g6_options()}.
+Default: Default options from g6_options().}
+
+\item{behaviors}{Graph interactions and behaviors created with \code{g6_behaviors()}.
+Default: Default behaviors from g6_behaviors().}
+
+\item{plugins}{List of plugins to enhance the graph functionality, created with \code{g6_plugins()}.
+Default: Default plugins from g6_plugins().}
+
+\item{width}{Width of the graph container in pixels or as a valid CSS unit.
+Default: NULL (automatic sizing).}
+
+\item{height}{Height of the graph container in pixels or as a valid CSS unit.
+Default: NULL (automatic sizing).}
+
+\item{elementId}{A unique ID for the graph HTML element.
+Default: NULL (automatically generated).}
+}
+\value{
+An htmlwidget object that can be printed, included in R Markdown documents,
+or used in Shiny applications.
+}
 \description{
-Creates an htmlwidget on top of G6.
+Creates an interactive graph visualization using the G6 graph visualization library.
+This function is the main entry point for creating G6 graph visualizations in R.
+}
+\details{
+The \code{g6} function creates a G6 graph as an htmlwidget that can be used in R Markdown,
+Shiny applications, or rendered to HTML. It takes graph data in the form of nodes, edges,
+and optional combo groupings, along with various configuration options for customizing
+the appearance and behavior of the graph.
+}
+\section{Data Structure}{
+
+
+\subsection{Nodes}
+The \code{nodes} parameter should be a data frame or list of nodes with at least an \code{id} field
+for each node. Additional fields can include:
+\itemize{
+\item \code{id} (required): Unique identifier for the node.
+\item \code{type}: Node type (e.g., "circle", "rect", "diamond").
+\item \code{data}: Custom data associated with the node.
+\item \code{style}: List of style attributes (color, size, etc.).
+\item \code{states}: String. Initial states for the node, such as selected, active, hover, etc.
+\item \code{combo}: ID of the combo this node belongs to.
+}
+
+Example node:
+\preformatted{
+{
+  "id": "node-1",
+  "type": "circle",
+  "data": { "name": "alice", "role": "Admin" },
+  "style": { "x": 100, "y": 200, "size": 32, "fill": "violet" },
+  "states": ["selected"],
+  "combo": null
+}
+}
+
+\subsection{Edges}
+The \code{edges} parameter should be a data frame or list of edges with at least \code{source} and
+\code{target} fields identifying the connected nodes. Additional fields can include:
+\itemize{
+\item \code{source} (required): ID of the source node.
+\item \code{target} (required): ID of the target node.
+\item \code{id}: Unique identifier for the edge.
+\item \code{type}: Edge type (e.g., "line", "cubic", "arc").
+\item \code{data}: Custom data associated with the edge.
+\item \code{style}: List of style attributes (color, width, etc.).
+\item \code{states}: String. Initial states for the edge.
+}
+
+Example edge:
+\preformatted{
+{
+  "source": "node1",
+  "target": "node2",
+  "type": "cubic",
+  "style": { "stroke": "#999", "lineWidth": 2 }
+}
+}
+
+\subsection{Combos}
+The \code{combos} parameter is used for grouping nodes and can be a data frame or list with
+combo definitions. Fields include:
+\itemize{
+\item \code{id} (required): Unique identifier for the combo.
+\item \code{type}: String: Combo type. It can be the type of built-in Combo, or the custom Combo.
+\item \code{data}: Custom data associated with the combo.
+\item \code{style}: List of style attributes.
+\item \code{states}: String. Initial states for the combo.
+\item \code{combo}: String. Parent combo ID. If there is no parent combo, it is null.
+}
+
+Example combo:
+\preformatted{
+{
+  "id": "combo1",
+  "type": "circle",
+  "data": { "groupName": "Group A" },
+  "style": { "fill": "lightblue", "stroke": "blue", "collapsed": true },
+  "states": [],
+  "combo": null
+}
+}
+
+Nodes are assigned to combos by setting their \code{combo} field to the ID of the combo.
+}
+
+\examples{
+# Create a simple graph with two nodes and one edge
+nodes <- data.frame(
+  id = c("node1", "node2")
+)
+
+edges <- data.frame(
+  source = "node1",
+  target = "node2"
+)
+
+g6(nodes = nodes, edges = edges)
 }
