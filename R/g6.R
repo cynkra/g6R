@@ -99,6 +99,9 @@
 #'   See 'Data Structure' section for more details.
 #'   Default: NULL.
 #'
+#' @param layout A list providing the layout options. Default to force.
+#' See more at \url{https://g6.antv.antgroup.com/en/manual/layout/overview}
+#'
 #' @param options Graph configuration options created with \code{g6_options()}.
 #'   Default: Default options from g6_options().
 #'
@@ -137,7 +140,8 @@ g6 <- function(
   nodes = NULL,
   edges = NULL,
   combos = NULL,
-  options = g6_options(),
+  layout = list(type = "force"),
+  options = NULL,
   behaviors = g6_behaviors(),
   plugins = g6_plugins(),
   width = NULL,
@@ -145,12 +149,9 @@ g6 <- function(
   elementId = NULL
 ) {
   # Convert data frames to lists of records
-  if (inherits(nodes, "data.frame"))
-    nodes <- unname(split(nodes, seq(nrow(nodes))))
-  if (inherits(edges, "data.frame"))
-    edges <- unname(split(edges, seq(nrow(edges))))
-  if (inherits(combos, "data.frame"))
-    combos <- unname(split(combos, seq(nrow(combos))))
+  if (inherits(nodes, "data.frame")) nodes <- split(nodes, seq(nrow(nodes)))
+  if (inherits(edges, "data.frame")) edges <- split(edges, seq(nrow(edges)))
+  if (inherits(combos, "data.frame")) combos <- split(combos, seq(nrow(combos)))
 
   # Create data object
   data <- dropNulls(list(
@@ -163,7 +164,8 @@ g6 <- function(
   x <- dropNulls(list(
     data = data,
     behaviors = behaviors,
-    plugins = plugins
+    plugins = plugins,
+    layout = layout
   ))
 
   # Properly merge options as a named list

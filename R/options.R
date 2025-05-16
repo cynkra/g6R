@@ -132,7 +132,7 @@ g6_options <- function(
   y = NULL,
   zoom = 1,
   zoomRange = c(0.01, 10),
-  theme = c("light", "dark"),
+  theme = c("light", "dark", "blue", "yellow"),
   ...
 ) {
   theme <- match.arg(theme)
@@ -736,7 +736,7 @@ node_style_options <- function(
 
   # Validate specific enum values
   lineCap <- match.arg(lineCap)
-  lineJoint <- match.arg(lineJoin)
+  lineJoin <- match.arg(lineJoin)
   shadowType <- match.arg(shadowType)
   visibility <- match.arg(visibility)
 

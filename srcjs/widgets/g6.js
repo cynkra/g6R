@@ -47,6 +47,8 @@ HTMLWidgets.widget({
         }
 
         graph.render();
+        graph.setTheme(config.theme);
+        graph.draw();
 
       },
       getWidget: function () {

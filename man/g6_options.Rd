@@ -22,7 +22,7 @@ g6_options(
   y = NULL,
   zoom = 1,
   zoomRange = c(0.01, 10),
-  theme = c("light", "dark"),
+  theme = c("light", "dark", "blue", "yellow"),
   ...
 )
 }

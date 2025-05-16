@@ -8,7 +8,8 @@ g6(
   nodes = NULL,
   edges = NULL,
   combos = NULL,
-  options = g6_options(),
+  layout = list(type = "force"),
+  options = NULL,
   behaviors = g6_behaviors(),
   plugins = g6_plugins(),
   width = NULL,
@@ -30,6 +31,9 @@ Default: NULL.}
 at least an "id" field. Nodes can be assigned to combos using their "combo" field.
 See 'Data Structure' section for more details.
 Default: NULL.}
+
+\item{layout}{A list providing the layout options. Default to force.
+See more at \url{https://g6.antv.antgroup.com/en/manual/layout/overview}}
 
 \item{options}{Graph configuration options created with \code{g6_options()}.
 Default: Default options from g6_options().}
