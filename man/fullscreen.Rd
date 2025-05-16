@@ -42,10 +42,10 @@ config <- fullscreen(
     request = "F",
     exit = "Esc"
   ),
-  onEnter = htmlwidgets::JS("function() {
+  onEnter = htmlwidgets::JS("() => {
     console.log('Entered fullscreen mode');
   }"),
-  onExit = htmlwidgets::JS("function() {
+  onExit = htmlwidgets::JS("() => {
     console.log('Exited fullscreen mode');
   }")
 )

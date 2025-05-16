@@ -1,3 +1,111 @@
+#' Create a List of G6 Plugins
+#'
+#' @description
+#' Combines multiple G6 plugins into a list that can be passed to a G6 graph configuration.
+#' G6 plugins extend the functionality of the base graph visualization with additional features.
+#'
+#' @details
+#' G6 plugins provide extended functionality beyond the core graph visualization capabilities.
+#' Plugins are divided into several categories:
+#'
+#' \subsection{Visual Style Enhancement}{
+#'   \itemize{
+#'     \item \strong{Grid Line (grid-line):} Displays grid reference lines on the canvas
+#'     \item \strong{Background (background):} Adds background images or colors to the canvas
+#'     \item \strong{Watermark (watermark):} Adds a watermark to the canvas to protect copyright
+#'     \item \strong{Hull (hull):} Creates an outline for a specified set of nodes
+#'     \item \strong{Bubble Sets (bubble-sets):} Creates smooth bubble-like element outlines
+#'     \item \strong{Snapline (snapline):} Displays alignment reference lines when dragging elements
+#'   }
+#' }
+#'
+#' \subsection{Navigation and Overview}{
+#'   \itemize{
+#'     \item \strong{Minimap (minimap):} Displays a thumbnail preview of the graph, supporting navigation
+#'     \item \strong{Fullscreen (fullscreen):} Supports full-screen display and exit for charts
+#'     \item \strong{Timebar (timebar):} Provides filtering and playback control for temporal data
+#'   }
+#' }
+#'
+#' \subsection{Interactive Controls}{
+#'   \itemize{
+#'     \item \strong{Toolbar (toolbar):} Provides a collection of common operation buttons
+#'     \item \strong{Context Menu (contextmenu):} Displays a menu of selectable operations on right-click
+#'     \item \strong{Tooltip (tooltip):} Displays detailed information about elements on hover
+#'     \item \strong{Legend (legend):} Displays categories and corresponding style descriptions of chart data
+#'   }
+#' }
+#'
+#' \subsection{Data Exploration}{
+#'   \itemize{
+#'     \item \strong{Fisheye (fisheye):} Provides a focus + context exploration experience
+#'     \item \strong{Edge Filter Lens (edge-filter-lens):} Filters and displays edges within a specified area
+#'     \item \strong{Edge Bundling (edge-bundling):} Bundles edges with similar paths together to reduce visual clutter
+#'   }
+#' }
+#'
+#' \subsection{Advanced Features}{
+#'   \itemize{
+#'     \item \strong{History (history):} Supports undo/redo operations
+#'     \item \strong{Camera Setting (camera-setting):} Configures camera parameters in a 3D scene
+#'   }
+#' }
+#'
+#' @param ... G6 plugin configuration objects created with plugin-specific functions
+#' @note You can also build your own plugins as described at
+#' \url{https://g6.antv.antgroup.com/en/manual/plugin/custom-plugin}.
+#'
+#' @return A list of G6 plugin configurations that can be passed to a G6 graph
+#'
+#' @export
+#'
+#' @examples
+#' # Create a configuration with multiple plugins
+#' plugins <- g6_plugins(
+#'   minimap(),
+#'   grid_line(),
+#'   tooltip(
+#'     getContent = htmlwidgets::JS("(e, items) => {
+#'       return `<div>${items[0].id}</div>`;
+#'     }")
+#'   )
+#' )
+#'
+#' # Add a context menu and toolbar
+#' plugins <- g6_plugins(
+#'   context_menu(
+#'     key = "my-context-menu",
+#'     className = "my-context-menu",
+#'     trigger = "click",
+#'     offset = c(10, 10),
+#'     getItems = htmlwidgets::JS("(event) => {
+#'       const type = event.itemType;
+#'       const isNode = type === 'node';
+#'       return [
+#'         { key: 'delete', text: 'Delete' },
+#'         { key: 'edit', text: 'Edit' },
+#'         { key: 'details', text: 'View Details', disabled: !isNode }
+#'       ];
+#'     }"),
+#'     onClick = htmlwidgets::JS("(value, target, current) => {
+#'       if (value === 'delete') {
+#'         // do stuff
+#'     }")
+#'   ),
+#'   toolbar(
+#'     position = "top-right",
+#'     getItems = htmlwidgets::JS("() => [
+#'       { id: 'zoom-in', value: 'zoom-in' },
+#'       { id: 'zoom-out', value: 'zoom-out' },
+#'       { id: 'fit', value: 'fit' }
+#'     ]"),
+#'     onClick = htmlwidgets::JS("(value) => {
+#'       if (value === 'zoom-in') graph.zoomTo(1.1);
+#'       else if (value === 'zoom-out') graph.zoomTo(0.9);
+#'       else if (value === 'fit') graph.fitView();
+#'     }")
+#'   )
+#' )
 g6_plugins <- function(...) {
   list(...)
 }
@@ -67,8 +175,8 @@ background <- function(
 #' Creates a configuration object for the bubble-sets plugin in G6.
 #' This plugin creates bubble-like contours around groups of specified elements.
 #'
-#' @param key Unique identifier for updates (string, default: NULL)
 #' @param members Member elements, including nodes and edges (character vector, required)
+#' @param key Unique identifier for updates (string, default: NULL)
 #' @param avoidMembers Elements to avoid when drawing contours (character vector, default: NULL)
 #' @param label Whether to display labels (boolean, default: TRUE)
 #' @param labelPlacement Label position (string, default: "bottom")
@@ -411,7 +519,7 @@ edge_bundling <- function(
 #'     stroke = "#999",
 #'     lineWidth = 2
 #'   ),
-#'   filter = htmlwidgets::JS("function(id, type) {
+#'   filter = htmlwidgets::JS("(id, type) => {
 #'     // Only display edges connected to specific nodes
 #'     if (type === 'edge') {
 #'       const edge = graph.getEdgeData(id);
@@ -534,7 +642,7 @@ edge_filter_lens <- function(
 #'     fill = "rgba(24, 144, 255, 0.1)",
 #'     lineWidth = 2
 #'   ),
-#'   nodeStyle = htmlwidgets::JS("function(datum) {
+#'   nodeStyle = htmlwidgets::JS("(datum) => {
 #'     return {
 #'       label: true,
 #'       labelCfg: {
@@ -655,10 +763,10 @@ fish_eye <- function(
 #'     request = "F",
 #'     exit = "Esc"
 #'   ),
-#'   onEnter = htmlwidgets::JS("function() {
+#'   onEnter = htmlwidgets::JS("() => {
 #'     console.log('Entered fullscreen mode');
 #'   }"),
-#'   onExit = htmlwidgets::JS("function() {
+#'   onExit = htmlwidgets::JS("() => {
 #'     console.log('Exited fullscreen mode');
 #'   }")
 #' )
@@ -917,8 +1025,8 @@ history <- function(
 #' Creates a configuration object for the hull plugin in G6.
 #' This plugin creates a hull (convex or concave) that surrounds specified graph elements.
 #'
-#' @param key Unique identifier for the plugin (string, default: NULL)
 #' @param members Elements within the hull, including nodes and edges (character vector, required)
+#' @param key Unique identifier for the plugin (string, default: NULL)
 #' @param concavity Concavity parameter, larger values create less concave hulls (number, default: Infinity)
 #' @param corner Corner type: "rounded", "smooth", or "sharp" (string, default: "rounded")
 #' @param padding Padding around the elements (number, default: 10)
@@ -1094,7 +1202,7 @@ hull <- function(
 #'
 #' # Using a function for classification
 #' config <- legend(
-#'   nodeField = htmlwidgets::JS("function(item) {
+#'   nodeField = htmlwidgets::JS("(item) => {
 #'     return item.data.importance > 0.5 ? 'Important' : 'Regular';
 #'   }")
 #' )
@@ -1312,7 +1420,7 @@ legend <- function(
 #'
 #' # With custom filtering function
 #' config <- minimap(
-#'   filter = htmlwidgets::JS("function(id, elementType) {
+#'   filter = htmlwidgets::JS("(id, elementType) => {
 #'     // Only show nodes and important edges in the minimap
 #'     if (elementType === 'node') return true;
 #'     if (elementType === 'edge') {
@@ -1438,6 +1546,735 @@ minimap <- function(
 
   # Set the type internally (not a function parameter)
   config$type <- "minimap"
+
+  # Remove NULL values
+  dropNulls(config)
+}
+
+#' Configure Snapline Plugin
+#'
+#' Creates a configuration object for the snapline plugin in G6.
+#' This plugin provides alignment guidelines when moving nodes.
+#'
+#' @param key Unique identifier for the plugin (string, default: NULL)
+#' @param tolerance The alignment accuracy in pixels (number, default: 5)
+#' @param offset The extension distance of the snapline (number, default: 20)
+#' @param autoSnap Whether to enable automatic snapping (boolean, default: TRUE)
+#' @param shape Specifies which shape to use as reference: "key" or a function (string or JS function, default: "key")
+#' @param verticalLineStyle Vertical snapline style (list or JS object, default: list(stroke = "#1783FF"))
+#' @param horizontalLineStyle Horizontal snapline style (list or JS object, default: list(stroke = "#1783FF"))
+#' @param filter Function to filter nodes that don't participate in alignment (JS function, default: NULL)
+#'
+#' @return A list with the configuration settings
+#' @export
+#'
+#' @examples
+#' # Basic configuration
+#' config <- snapline()
+#'
+#' # Custom configuration
+#' config <- snapline(
+#'   key = "my-snapline",
+#'   tolerance = 8,
+#'   offset = 30,
+#'   verticalLineStyle = list(
+#'     stroke = "#f00",
+#'     strokeWidth = 1.5,
+#'     lineDash = c(5, 2)
+#'   ),
+#'   horizontalLineStyle = list(
+#'     stroke = "#00f",
+#'     strokeWidth = 1.5,
+#'     lineDash = c(5, 2)
+#'   )
+#' )
+#'
+#' # With custom filter function
+#' config <- snapline(
+#'   filter = htmlwidgets::JS("(node) => {
+#'     // Only allow regular nodes to participate in alignment
+#'     // Exclude special nodes like 'start' or 'end'
+#'     const model = node.getModel();
+#'     return model.type !== 'start' && model.type !== 'end';
+#'   }")
+#' )
+snapline <- function(
+  key = "snapline",
+  tolerance = 5,
+  offset = 20,
+  autoSnap = TRUE,
+  shape = "key",
+  verticalLineStyle = list(stroke = "#1783FF"),
+  horizontalLineStyle = list(stroke = "#1783FF"),
+  filter = NULL
+) {
+  # Validate inputs
+  if (!is.numeric(tolerance) || tolerance < 0) {
+    stop("'tolerance' must be a non-negative number")
+  }
+
+  if (!is.numeric(offset) || offset < 0) {
+    stop("'offset' must be a non-negative number")
+  }
+
+  if (!is.logical(autoSnap)) {
+    stop("'autoSnap' must be a boolean value")
+  }
+
+  if (!is.character(shape) && !is_js(shape)) {
+    stop(
+      "'shape' must be a string or a JavaScript function wrapped with htmlwidgets::JS()"
+    )
+  }
+
+  if (is.character(shape) && shape != "key") {
+    stop("'shape' as string must be 'key'")
+  }
+
+  if (!is.null(verticalLineStyle) && !is.list(verticalLineStyle)) {
+    stop(
+      "'verticalLineStyle' must be a list"
+    )
+  }
+
+  if (!is.null(horizontalLineStyle) && !is.list(horizontalLineStyle)) {
+    stop(
+      "'horizontalLineStyle' must be a list"
+    )
+  }
+
+  if (!is.null(filter) && !is_js(filter)) {
+    stop(
+      "'filter' must be a JavaScript function wrapped with htmlwidgets::JS()"
+    )
+  }
+
+  # Get all function argument names
+  arg_names <- names(formals())
+
+  # Create list of argument values
+  config <- mget(arg_names)
+
+  # Set the type internally (not a function parameter)
+  config$type <- "snapline"
+
+  # Remove NULL values
+  dropNulls(config)
+}
+
+#' Configure Timebar Plugin
+#'
+#' Creates a configuration object for the timebar plugin in G6.
+#' This plugin adds a timeline or chart-based control for time-related data visualization.
+#'
+#' @param data Time data, either a vector of timestamps or a list of objects with time and value (required)
+#' @param key Unique identifier for the plugin (string, default: NULL)
+#' @param className Additional class name for the timebar DOM (string, default: "g6-timebar")
+#' @param x X position, will be ignored if position is set (number, default: NULL)
+#' @param y Y position, will be ignored if position is set (number, default: NULL)
+#' @param width Timebar width (number, default: 450)
+#' @param height Timebar height (number, default: 60)
+#' @param position Timebar position: "bottom" or "top" (string, default: "bottom")
+#' @param padding Padding around the timebar (number or numeric vector, default: 10)
+#' @param timebarType Display type: "time" or "chart" (string, default: "time")
+#' @param elementTypes Filter element types: vector of "node", "edge", and/or "combo" (character vector, default: c("node"))
+#' @param mode Control element filtering method: "modify" or "visibility" (string, default: "modify")
+#' @param values Current time value (number, vector of two numbers, Date, or vector of two Dates, default: NULL)
+#' @param loop Whether to loop playback (boolean, default: FALSE)
+#' @param getTime Method to get element time (JS function, default: NULL)
+#' @param labelFormatter Custom time formatting in chart mode (JS function, default: NULL)
+#' @param onChange Callback when time interval changes (JS function, default: NULL)
+#' @param onReset Callback when reset (JS function, default: NULL)
+#' @param onSpeedChange Callback when playback speed changes (JS function, default: NULL)
+#' @param onPlay Callback when playback starts (JS function, default: NULL)
+#' @param onPause Callback when paused (JS function, default: NULL)
+#' @param onBackward Callback when moving backward (JS function, default: NULL)
+#' @param onForward Callback when moving forward (JS function, default: NULL)
+#'
+#' @return A list with the configuration settings
+#' @export
+#'
+#' @examples
+#' # Basic timebar with array of timestamps
+#' config <- timebar(
+#'   data = c(1609459200000, 1609545600000, 1609632000000)  # Jan 1-3, 2021 in milliseconds
+#' )
+#'
+#' # Chart-type timebar with time-value pairs
+#' config <- timebar(
+#'   data = list(
+#'     list(time = 1609459200000, value = 10),
+#'     list(time = 1609545600000, value = 25),
+#'     list(time = 1609632000000, value = 15)
+#'   ),
+#'   timebarType = "chart",
+#'   width = 600,
+#'   height = 100,
+#'   position = "top"
+#' )
+#'
+#' # With custom callbacks
+#' config <- timebar(
+#'   data = c(1609459200000, 1609545600000, 1609632000000),
+#'   onChange = htmlwidgets::JS("(values) => {
+#'     console.log('Time changed:', values);
+#'   }"),
+#'   onPlay = htmlwidgets::JS("() => {
+#'     console.log('Playback started');
+#'   }")
+#' )
+#'
+#' # With custom time getter function for elements
+#' config <- timebar(
+#'   data = c(1609459200000, 1609545600000, 1609632000000),
+#'   getTime = htmlwidgets::JS("(datum) => {
+#'     return datum.created_at; // Get time from created_at property
+#'   }")
+#' )
+timebar <- function(
+  data,
+  key = "timebar",
+  className = "g6-timebar",
+  x = NULL,
+  y = NULL,
+  width = 450,
+  height = 60,
+  position = c("bottom", "top"),
+  padding = 10,
+  timebarType = c("time", "chart"),
+  elementTypes = c("node", "edge", "combo"),
+  mode = c("modify", "visibility"),
+  values = NULL,
+  loop = FALSE,
+  getTime = NULL,
+  labelFormatter = NULL,
+  onChange = NULL,
+  onReset = NULL,
+  onSpeedChange = NULL,
+  onPlay = NULL,
+  onPause = NULL,
+  onBackward = NULL,
+  onForward = NULL
+) {
+  # Validate inputs
+  if (!is.null(x) && !is.numeric(x)) {
+    stop("'x' must be a number")
+  }
+
+  if (!is.null(y) && !is.numeric(y)) {
+    stop("'y' must be a number")
+  }
+
+  if (!is.numeric(width) || width <= 0) {
+    stop("'width' must be a positive number")
+  }
+
+  if (!is.numeric(height) || height <= 0) {
+    stop("'height' must be a positive number")
+  }
+
+  position <- match.arg(position)
+
+  if (
+    !is.numeric(padding) &&
+      !is.null(padding) &&
+      !is.vector(padding, mode = "numeric")
+  ) {
+    stop("'padding' must be a number or a numeric vector")
+  }
+
+  # Check if data is a numeric vector or a list of objects with time and value properties
+  if (!is.numeric(data) && !is.list(data)) {
+    stop(
+      "'data' must be either a numeric vector or a list of objects with time and value properties"
+    )
+  }
+
+  timebarType <- match.arg(timebarType)
+  elementTypes <- match.arg(elementTypes)
+  mode <- match.arg(mode)
+
+  if (
+    !is.null(values) &&
+      !is.numeric(values) &&
+      !inherits(values, "Date") &&
+      !(is.vector(values) &&
+        length(values) == 2 &&
+        (all(sapply(values, is.numeric)) ||
+          all(sapply(values, function(x) inherits(x, "Date")))))
+  ) {
+    stop("'values' must be a number, a Date, or a vector of two numbers/Dates")
+  }
+
+  if (!is.logical(loop)) {
+    stop("'loop' must be a boolean value")
+  }
+
+  callback_params <- c(
+    "getTime",
+    "labelFormatter",
+    "onChange",
+    "onReset",
+    "onSpeedChange",
+    "onPlay",
+    "onPause",
+    "onBackward",
+    "onForward"
+  )
+
+  for (param in callback_params) {
+    param_value <- get(param)
+    if (!is.null(param_value) && !is_js(param_value)) {
+      stop(paste0(
+        "'",
+        param,
+        "' must be a JavaScript function wrapped with htmlwidgets::JS()"
+      ))
+    }
+  }
+
+  # Get all function argument names
+  arg_names <- names(formals())
+
+  # Create list of argument values
+  config <- mget(arg_names)
+
+  # Set the type internally (not a function parameter)
+  config$type <- "timebar"
+
+  # Remove NULL values
+  dropNulls(config)
+}
+
+#' Configure Toolbar Plugin
+#'
+#' Creates a configuration object for the toolbar plugin in G6.
+#' This plugin adds a customizable toolbar with items for graph operations.
+#'
+#' @param getItems Function that returns the list of toolbar items (JS function, required)
+#' @param key Unique identifier for the plugin (string, default: NULL)
+#' @param className Additional CSS class name for the toolbar DOM element (string, default: NULL)
+#' @param position Toolbar position relative to the canvas (string, default: "top-left")
+#' @param style Custom style for the toolbar DOM element (list or JS object, default: NULL)
+#' @param onClick Callback function after a toolbar item is clicked (JS function, default: NULL)
+#'
+#' @return A list with the configuration settings
+#' @export
+#'
+#' @examples
+#' # Basic toolbar with zoom controls
+#' config <- toolbar(
+#'   position = "top-right",
+#'   getItems = htmlwidgets::JS("() => [
+#'     { id: 'zoom-in', value: 'zoom-in' },
+#'     { id: 'zoom-out', value: 'zoom-out' },
+#'     { id: 'undo', value: 'undo' },
+#'     { id: 'redo', value: 'redo' },
+#'     { id: 'auto-fit', value: 'fit' }
+#'   ]"),
+#'   onClick = htmlwidgets::JS("(value) => {
+#'     // redo, undo need to be used with the history plugin
+#'     const history = graph.getPluginInstance('history');
+#'     switch (value) {
+#'       case 'zoom-in':
+#'         graph.zoomTo(1.1);
+#'         break;
+#'       case 'zoom-out':
+#'         graph.zoomTo(0.9);
+#'         break;
+#'       case 'undo':
+#'         history?.undo();
+#'         break;
+#'       case 'redo':
+#'         history?.redo();
+#'         break;
+#'       case 'fit':
+#'         graph.fitView();
+#'         break;
+#'       default:
+#'         break;
+#'     }
+#'   }")
+#' )
+toolbar <- function(
+  getItems,
+  key = "toolbar",
+  className = NULL,
+  position = c(
+    "top-left",
+    "top",
+    "top-right",
+    "right",
+    "bottom-right",
+    "bottom",
+    "bottom-left",
+    "left"
+  ),
+  style = NULL,
+  onClick = NULL
+) {
+  # Check if required parameter is provided
+  if (!is.null(className) && !is.character(className)) {
+    stop("'className' must be a string")
+  }
+
+  position <- match.arg(position)
+
+  if (!is.null(style) && !is.list(style)) {
+    stop("'style' must be a list")
+  }
+
+  if (!is_js(getItems)) {
+    stop(
+      "'getItems' must be a JavaScript function wrapped with htmlwidgets::JS()"
+    )
+  }
+
+  if (!is.null(onClick) && !is_js(onClick)) {
+    stop(
+      "'onClick' must be a JavaScript function wrapped with htmlwidgets::JS()"
+    )
+  }
+
+  # Get all function argument names
+  arg_names <- names(formals())
+
+  # Create list of argument values
+  config <- mget(arg_names)
+
+  # Set the type internally (not a function parameter)
+  config$type <- "toolbar"
+
+  # Remove NULL values
+  dropNulls(config)
+}
+
+#' Configure Tooltip Plugin
+#'
+#' Creates a configuration object for the tooltip plugin in G6.
+#' This plugin displays tooltips when interacting with graph elements.
+#'
+#' @param key Unique identifier for the plugin (string, default: NULL)
+#' @param position Tooltip position relative to the element (string, default: "top-right")
+#' @param enable Whether the plugin is enabled (boolean or function, default: TRUE)
+#' @param getContent Function to generate custom tooltip content (JS function, default: NULL)
+#' @param onOpenChange Callback for tooltip show/hide events (JS function, default: NULL)
+#' @param trigger Trigger behavior: "hover" or "click" (string, default: "hover")
+#' @param container Custom rendering container for tooltip (string or HTML element, default: NULL)
+#' @param offset Offset distance as a vector of two numbers [x, y] (numeric vector, default: c(10, 10))
+#' @param enterable Whether the pointer can enter the tooltip (boolean, default: FALSE)
+#' @param title Title for the tooltip (string, default: NULL)
+#' @param style Custom style for the tooltip (list or JS object, default: list(".tooltip" = list(visibility = "hidden")))
+#'
+#' @return A list with the configuration settings
+#' @export
+#'
+#' @examples
+#' # Basic tooltip
+#' config <- tooltip()
+#'
+#' # Tooltip with custom position and content
+#' config <- tooltip(
+#'   position = "bottom",
+#'   getContent = htmlwidgets::JS("(event, items) => {
+#'     let result = `<h4>Custom Content</h4>`;
+#'     items.forEach((item) => {
+#'       result += `<p>Type: ${item.data.description}</p>`;
+#'     });
+#'     return result;
+#'   }")
+#' )
+#'
+#' # Click-triggered tooltip with custom style
+#' config <- tooltip(
+#'   trigger = "click",
+#'   position = "bottom-left",
+#'   offset = c(15, 20),
+#'   style = list(
+#'     ".tooltip" = list(
+#'       backgroundColor = "#fff",
+#'       border = "1px solid #ccc",
+#'       borderRadius = "4px",
+#'       boxShadow = "0 2px 6px rgba(0,0,0,0.1)",
+#'       padding = "10px",
+#'       maxWidth = "300px"
+#'     )
+#'   )
+#' )
+#'
+#' # Conditional tooltip based on node type
+#' config <- tooltip(
+#'   enable = htmlwidgets::JS("(event, items) => {
+#'     // Only show tooltip for nodes with type 'important'
+#'     const item = items[0];
+#'     return item.type === 'important';
+#'   }"),
+#'   enterable = TRUE,
+#'   onOpenChange = htmlwidgets::JS("(open) => {
+#'     console.log('Tooltip visibility changed:', open);
+#'   }")
+#' )
+tooltip <- function(
+  key = "tooltip",
+  position = c(
+    "top-right",
+    "top",
+    "bottom",
+    "left",
+    "right",
+    "top-left",
+    "bottom-left",
+    "bottom-right"
+  ),
+  enable = TRUE,
+  getContent = NULL,
+  onOpenChange = NULL,
+  trigger = c("hover", "click"),
+  container = NULL,
+  offset = c(10, 10),
+  enterable = FALSE,
+  title = NULL,
+  style = list(".tooltip" = list(visibility = "hidden"))
+) {
+  position <- match.arg(position)
+
+  if (!is.logical(enable) && !is_js(enable)) {
+    stop("'enable' must be a boolean or a JavaScript function")
+  }
+
+  if (!is.null(getContent) && !is_js(getContent)) {
+    stop("'getContent' must be a JavaScript function")
+  }
+
+  if (!is.null(onOpenChange) && !is_js(onOpenChange)) {
+    stop("'onOpenChange' must be a JavaScript function")
+  }
+
+  trigger <- match.arg(trigger)
+
+  if (!is.null(container) && !is.character(container)) {
+    stop("'container' must be a string selector or an HTML element")
+  }
+
+  if (!is.numeric(offset) || length(offset) != 2) {
+    stop("'offset' must be a numeric vector of length 2 [x, y]")
+  }
+
+  if (!is.logical(enterable)) {
+    stop("'enterable' must be a boolean value")
+  }
+
+  if (!is.null(title) && !is.character(title)) {
+    stop("'title' must be a string")
+  }
+
+  if (!is.null(style) && !is.list(style)) {
+    stop("'style' must be a list")
+  }
+
+  # Get all function argument names
+  arg_names <- names(formals())
+
+  # Create list of argument values
+  config <- mget(arg_names)
+
+  # Set the type internally (not a function parameter)
+  config$type <- "tooltip"
+
+  # Remove NULL values
+  dropNulls(config)
+}
+
+#' Configure Watermark Plugin
+#'
+#' Creates a configuration object for the watermark plugin in G6.
+#' This plugin adds a watermark to the graph canvas.
+#'
+#' @param key Unique identifier for the plugin (string, default: NULL)
+#' @param width Width of a single watermark (number, default: 200)
+#' @param height Height of a single watermark (number, default: 100)
+#' @param opacity Opacity of the watermark (number, default: 0.2)
+#' @param rotate Rotation angle of the watermark in radians (number, default: pi/12)
+#' @param imageURL Image watermark URL, higher priority than text watermark (string, default: NULL)
+#' @param text Watermark text content (string, default: NULL)
+#' @param textFill Color of the text watermark (string, default: "#000")
+#' @param textFontSize Font size of the text watermark (number, default: 16)
+#' @param textFontFamily Font of the text watermark (string, default: NULL)
+#' @param textFontWeight Font weight of the text watermark (string, default: NULL)
+#' @param textFontVariant Font variant of the text watermark (string, default: NULL)
+#' @param textAlign Text alignment of the watermark (string, default: "center")
+#' @param textBaseline Baseline alignment of the text watermark (string, default: "middle")
+#' @param backgroundRepeat Repeat mode of the watermark (string, default: "repeat")
+#' @param backgroundAttachment Background attachment behavior of the watermark (string, default: NULL)
+#' @param backgroundBlendMode Background blend mode of the watermark (string, default: NULL)
+#' @param backgroundClip Background clip of the watermark (string, default: NULL)
+#' @param backgroundColor Background color of the watermark (string, default: NULL)
+#' @param backgroundImage Background image of the watermark (string, default: NULL)
+#' @param backgroundOrigin Background origin of the watermark (string, default: NULL)
+#' @param backgroundPosition Background position of the watermark (string, default: NULL)
+#' @param backgroundPositionX Horizontal position of the watermark background (string, default: NULL)
+#' @param backgroundPositionY Vertical position of the watermark background (string, default: NULL)
+#' @param backgroundSize Background size of the watermark (string, default: NULL)
+#'
+#' @return A list with the configuration settings
+#' @export
+#'
+#' @examples
+#' # Basic text watermark
+#' config <- watermark(
+#'   text = "G6 Graph",
+#'   opacity = 0.1
+#' )
+#'
+#' # Image watermark
+#' config <- watermark(
+#'   imageURL = "https://gw.alipayobjects.com/os/s/prod/antv/assets/image/logo-with-text-73b8a.svg",
+#'   width = 150,
+#'   height = 75,
+#'   opacity = 0.15,
+#'   rotate = 0
+#' )
+#'
+#' # Customized text watermark
+#' config <- watermark(
+#'   text = "CONFIDENTIAL",
+#'   textFill = "#ff0000",
+#'   textFontSize = 24,
+#'   textFontWeight = "bold",
+#'   opacity = 0.08,
+#'   rotate = pi/6,
+#'   backgroundRepeat = "repeat-x"
+#' )
+#'
+#' # Watermark with background styling
+#' config <- watermark(
+#'   text = "Draft Document",
+#'   textFill = "#333",
+#'   backgroundColor = "#f9f9f9",
+#'   backgroundClip = "content-box",
+#'   backgroundSize = "cover"
+#' )
+watermark <- function(
+  key = "watermark",
+  width = 200,
+  height = 100,
+  opacity = 0.2,
+  rotate = pi / 12,
+  imageURL = NULL,
+  text = NULL,
+  textFill = "#000",
+  textFontSize = 16,
+  textFontFamily = NULL,
+  textFontWeight = NULL,
+  textFontVariant = NULL,
+  textAlign = c("center", "end", "left", "right", "start"),
+  textBaseline = c(
+    "alphabetic",
+    "bottom",
+    "hanging",
+    "ideographic",
+    "middle",
+    "top"
+  ),
+  backgroundRepeat = "repeat",
+  backgroundAttachment = NULL,
+  backgroundBlendMode = NULL,
+  backgroundClip = NULL,
+  backgroundColor = NULL,
+  backgroundImage = NULL,
+  backgroundOrigin = NULL,
+  backgroundPosition = NULL,
+  backgroundPositionX = NULL,
+  backgroundPositionY = NULL,
+  backgroundSize = NULL
+) {
+  # Validate inputs
+  if (!is.numeric(width) || width <= 0) {
+    stop("'width' must be a positive number")
+  }
+
+  if (!is.numeric(height) || height <= 0) {
+    stop("'height' must be a positive number")
+  }
+
+  if (!is.numeric(opacity) || opacity < 0 || opacity > 1) {
+    stop("'opacity' must be a number between 0 and 1")
+  }
+
+  if (!is.numeric(rotate)) {
+    stop("'rotate' must be a number (angle in radians)")
+  }
+
+  if (!is.null(imageURL) && !is.character(imageURL)) {
+    stop("'imageURL' must be a string")
+  }
+
+  if (!is.null(text) && !is.character(text)) {
+    stop("'text' must be a string")
+  }
+
+  if (is.null(imageURL) && is.null(text)) {
+    warning(
+      "Neither 'imageURL' nor 'text' is provided; watermark may not be visible"
+    )
+  }
+
+  if (!is.character(textFill)) {
+    stop("'textFill' must be a string (color value)")
+  }
+
+  if (!is.numeric(textFontSize) || textFontSize <= 0) {
+    stop("'textFontSize' must be a positive number")
+  }
+
+  if (!is.null(textFontFamily) && !is.character(textFontFamily)) {
+    stop("'textFontFamily' must be a string")
+  }
+
+  if (!is.null(textFontWeight) && !is.character(textFontWeight)) {
+    stop("'textFontWeight' must be a string")
+  }
+
+  if (!is.null(textFontVariant) && !is.character(textFontVariant)) {
+    stop("'textFontVariant' must be a string")
+  }
+
+  textAlign <- match.arg(textAlign)
+  textBaseline <- match.arg(textBaseline)
+
+  if (!is.character(backgroundRepeat)) {
+    stop("'backgroundRepeat' must be a string")
+  }
+
+  # Check background properties are strings if provided
+  bg_props <- c(
+    "backgroundAttachment",
+    "backgroundBlendMode",
+    "backgroundClip",
+    "backgroundColor",
+    "backgroundImage",
+    "backgroundOrigin",
+    "backgroundPosition",
+    "backgroundPositionX",
+    "backgroundPositionY",
+    "backgroundSize"
+  )
+
+  for (prop in bg_props) {
+    value <- get(prop)
+    if (!is.null(value) && !is.character(value)) {
+      stop(paste0("'", prop, "' must be a string"))
+    }
+  }
+
+  # Get all function argument names
+  arg_names <- names(formals())
+
+  # Create list of argument values
+  config <- mget(arg_names)
+
+  # Set the type internally (not a function parameter)
+  config$type <- "watermark"
 
   # Remove NULL values
   dropNulls(config)

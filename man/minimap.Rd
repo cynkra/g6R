@@ -75,7 +75,7 @@ config <- minimap(
 
 # With custom filtering function
 config <- minimap(
-  filter = htmlwidgets::JS("function(id, elementType) {
+  filter = htmlwidgets::JS("(id, elementType) => {
     // Only show nodes and important edges in the minimap
     if (elementType === 'node') return true;
     if (elementType === 'edge') {

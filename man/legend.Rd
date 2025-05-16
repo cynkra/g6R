@@ -118,7 +118,7 @@ config <- legend(
 
 # Using a function for classification
 config <- legend(
-  nodeField = htmlwidgets::JS("function(item) {
+  nodeField = htmlwidgets::JS("(item) => {
     return item.data.importance > 0.5 ? 'Important' : 'Regular';
   }")
 )

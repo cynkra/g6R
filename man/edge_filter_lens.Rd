@@ -66,7 +66,7 @@ config <- edge_filter_lens(
     stroke = "#999",
     lineWidth = 2
   ),
-  filter = htmlwidgets::JS("function(id, type) {
+  filter = htmlwidgets::JS("(id, type) => {
     // Only display edges connected to specific nodes
     if (type === 'edge') {
       const edge = graph.getEdgeData(id);
