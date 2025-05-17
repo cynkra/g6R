@@ -149,9 +149,21 @@ g6 <- function(
   elementId = NULL
 ) {
   # Convert data frames to lists of records
-  if (inherits(nodes, "data.frame")) nodes <- split(nodes, seq(nrow(nodes)))
-  if (inherits(edges, "data.frame")) edges <- split(edges, seq(nrow(edges)))
-  if (inherits(combos, "data.frame")) combos <- split(combos, seq(nrow(combos)))
+  if (inherits(nodes, "data.frame")) {
+    nodes <- lapply(seq_len(nrow(nodes)), \(i) {
+      setNames(as.list(nodes[i, ]), colnames(nodes))
+    })
+  }
+  if (inherits(edges, "data.frame")) {
+    edges <- lapply(seq_len(nrow(edges)), \(i) {
+      setNames(as.list(edges[i, ]), colnames(edges))
+    })
+  }
+  if (inherits(combos, "data.frame")) {
+    combos <- lapply(seq_len(nrow(combos)), \(i) {
+      setNames(as.list(combos[i, ]), colnames(combos))
+    })
+  }
 
   # Create data object
   data <- dropNulls(list(
