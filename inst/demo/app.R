@@ -86,6 +86,11 @@ ui <- page_fluid(
     actionButton("update_node", "Update node 1"),
     actionButton("update_edge", "Update edge 1"),
     actionButton("update_combo", "Update combo 1")
+  ),
+  div(
+    class = "d-flex align-items-center",
+    actionButton("canvas_resize", "Resize canvas"),
+    actionButton("focus", "Focus node 1")
   )
 )
 
@@ -95,7 +100,7 @@ server <- function(input, output, session) {
       nodes,
       edges,
       combos,
-      options = list(theme = "dark"),
+      options = list(canvas = canvas_config(background = "#fff")),
       behaviors = g6_behaviors(
         zoom_canvas(),
         drag_element(),
@@ -172,9 +177,19 @@ server <- function(input, output, session) {
       g6_update_combos(list(list(id = "combo1", type = "circle")))
   })
 
+  observeEvent(input$canvas_resize, {
+    g6_proxy("graph") |>
+      g6_canvas_resize(1000, 1000)
+  })
+
+  observeEvent(input$focus, {
+    g6_proxy("graph") |>
+      g6_focus_element("node1", animation = list(duration = 2000))
+  })
+
   observe({
-    print(input[["graph-selected_node"]])
-    print(input[["graph-selected_edge"]])
+    print(input[["graph-selected_node"]]$id)
+    print(input[["graph-selected_edge"]]$id)
   })
 }
 

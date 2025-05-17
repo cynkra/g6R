@@ -300,3 +300,77 @@ g6_update_edges <- function(graph, edges) {
 g6_update_combos <- function(graph, combos) {
   g6_update(graph, combos, type = "Combo")
 }
+
+#' Resize the canvas of a g6 graph via proxy
+#'
+#' This function changes the size of the canvas of an existing g6 graph instance
+#' using a proxy object. This allows updating the graph dimensions without completely
+#' re-rendering it.
+#'
+#' @param graph A g6_proxy object created with \code{\link{g6_proxy}}.
+#' @param width Numeric value specifying the new width of the canvas in pixels.
+#' @param height Numeric value specifying the new height of the canvas in pixels.
+#'
+#' @return The g6_proxy object (invisibly), allowing for method chaining.
+#'
+#' @details
+#' This function can only be used with a g6_proxy object within a Shiny application.
+#' It will not work with regular g6 objects outside of Shiny.
+#'
+#' See \url{https://g6.antv.antgroup.com/en/api/canvas#graphsetsizewidth-height} for more details.
+#'
+#' @seealso \code{\link{g6_proxy}}
+#' @export
+g6_canvas_resize <- function(graph, width, height) {
+  if (!any(class(graph) %in% "g6_proxy")) {
+    stop(
+      "Can't use g6_canvas_resize with g6 object. Only within shiny and using g6_proxy"
+    )
+  }
+
+  graph$session$sendCustomMessage(
+    sprintf("%s_g6-canvas-resize", graph$id),
+    list(width = width, height = height)
+  )
+  graph
+}
+
+#' Focus on specific elements in a g6 graph via proxy
+#'
+#' This function focuses on one or more elements (nodes/edges) in an existing g6 graph instance
+#' using a proxy object. It highlights the specified elements and can optionally
+#' animate the view to focus on them.
+#'
+#' @param graph A g6_proxy object created with \code{\link{g6_proxy}}.
+#' @param ids Character vector containing the IDs of the elements (nodes/edges) to focus on.
+#' @param animation Optional list containing animation configuration parameters for the focus action.
+#'   Common parameters include:
+#'   \itemize{
+#'     \item \code{duration}: Duration of the animation in milliseconds.
+#'     \item \code{easing}: Animation easing function name (e.g., "ease-in", "ease-out").
+#'   }
+#'   If NULL, no animation will be applied.
+#'
+#' @return The g6_proxy object (invisibly), allowing for method chaining.
+#'
+#' @details
+#' This function can only be used with a g6_proxy object within a Shiny application.
+#' It will not work with regular g6 objects outside of Shiny.
+#'
+#' See \url{https://g6.antv.antgroup.com/en/api/element#graphfocuselementid-animation} for more details.
+#'
+#' @seealso \code{\link{g6_proxy}}
+#' @export
+g6_focus_element <- function(graph, ids, animation = NULL) {
+  if (!any(class(graph) %in% "g6_proxy")) {
+    stop(
+      "Can't use g6_focus_element with g6 object. Only within shiny and using g6_proxy"
+    )
+  }
+
+  graph$session$sendCustomMessage(
+    sprintf("%s_g6-focus-element", graph$id),
+    list(ids = ids, animation = animation)
+  )
+  graph
+}

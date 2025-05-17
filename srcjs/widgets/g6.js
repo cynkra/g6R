@@ -58,11 +58,31 @@ HTMLWidgets.widget({
               Shiny.notifications.show({ html: error, type: 'error' })
             }
           })
+
+          // Canvas resize
+          Shiny.addCustomMessageHandler(el.id + '_g6-canvas-resize', (m) => {
+            try {
+              graph.setSize(m.width, m.height);
+            } catch (error) {
+              Shiny.notifications.show({ html: error, type: 'error' })
+            }
+          })
+
+          // Focus element
+          Shiny.addCustomMessageHandler(el.id + '_g6-focus-element', (m) => {
+            try {
+              if (m.animation !== undefined) {
+                graph.focusElement(m.ids, m.animation);
+              } else {
+                graph.focusElement(m.ids);
+              }
+            } catch (error) {
+              Shiny.notifications.show({ html: error, type: 'error' })
+            }
+          })
         }
 
         graph.render();
-        // TBD: theme does not work yet
-        graph.setTheme(config.theme);
         graph.draw();
 
       },
