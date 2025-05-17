@@ -44,9 +44,42 @@ HTMLWidgets.widget({
             // Modify node state
             Shiny.setInputValue(el.id + '-selected_edge', edgeData);
           })
+
+          // Add nodes
+          Shiny.addCustomMessageHandler(el.id + '_g6-add-nodes', (m) => {
+            try {
+              graph.addNodeData(m);
+              graph.draw();
+            } catch (error) {
+              Shiny.notifications.show({ html: error, type: 'error' })
+            }
+          })
+
+          // Remove nodes
           Shiny.addCustomMessageHandler(el.id + '_g6-remove-nodes', (m) => {
             try {
               graph.removeNodeData(m);
+              graph.draw();
+            } catch (error) {
+              Shiny.notifications.show({ html: error, type: 'error' })
+            }
+          })
+
+          // Remove edges
+          Shiny.addCustomMessageHandler(el.id + '_g6-remove-edges', (m) => {
+            try {
+              graph.removeEdgeData(m);
+              graph.draw();
+            } catch (error) {
+              Shiny.notifications.show({ html: error, type: 'error' })
+            }
+          })
+
+          // Remove combos
+          Shiny.addCustomMessageHandler(el.id + '_g6-remove-combos', (m) => {
+            try {
+              // TBD: check if nodes data are also updated
+              graph.removeComboData(m);
               graph.draw();
             } catch (error) {
               Shiny.notifications.show({ html: error, type: 'error' })

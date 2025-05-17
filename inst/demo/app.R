@@ -74,7 +74,16 @@ combos <- list(
 
 ui <- page_fluid(
   g6Output("graph"),
-  actionButton("remove", "Remove nodes")
+  div(
+    class = "d-flex align-items-center",
+    actionButton("remove_node", "Remove node 1"),
+    actionButton("remove_edge", "Remove edge"),
+    actionButton("remove_combo", "Remove combo 1")
+  ),
+  div(
+    class = "d-flex align-items-center",
+    actionButton("add_node", "Add node")
+  )
 )
 
 server <- function(input, output, session) {
@@ -95,9 +104,29 @@ server <- function(input, output, session) {
       )
     )
   })
-  observeEvent(input$remove, {
+
+  observeEvent(input$remove_node, {
     g6_proxy("graph") |>
       g6_remove_nodes("node1")
+  })
+
+  observeEvent(input$remove_edge, {
+    g6_proxy("graph") |>
+      g6_remove_edges("node1-node2")
+  })
+
+  observeEvent(input$remove_combo, {
+    g6_proxy("graph") |>
+      g6_remove_combos("combo1")
+  })
+
+  observeEvent(input$add_node, {
+    g6_proxy("graph") |>
+      g6_add_nodes(
+        data.frame(
+          id = c("node3", "node4")
+        )
+      )
   })
 
   observe({
