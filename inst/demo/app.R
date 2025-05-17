@@ -147,6 +147,34 @@ server <- function(input, output, session) {
               return result;
             }"
           )
+        ),
+        toolbar(
+          onClick = JS(
+            "(value, target) => {
+              // Accessing the widget is more complex when 
+              // the plugin isn't defined from the JS core
+              const graph = HTMLWidgets.find(`#${target.closest('.g6').id}`).getWidget();
+                switch (value) {
+                  case 'delete':
+                    const selectedNodes = graph.getElementDataByState('node', 'selected').map((node) => {
+                      return node.id
+                    });
+                    graph.removeNodeData(selectedNodes);
+                    break;
+                  default:
+                    break;
+                }
+                // Important: redraw;
+                graph.draw();
+              }"
+          ),
+          getItems = JS(
+            "() => {
+                return [
+                  { id: 'delete', value: 'delete' },
+                ];
+              }"
+          )
         )
       )
     )
