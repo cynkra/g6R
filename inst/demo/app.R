@@ -93,6 +93,11 @@ ui <- page_fluid(
     actionButton("focus", "Focus node 1"),
     actionButton("show", "Show node 1"),
     actionButton("hide", "Hide node 1")
+  ),
+  div(
+    class = "d-flex align-items-center",
+    actionButton("expand", "Expand combo 1"),
+    actionButton("collapse", "Collapse combo 1")
   )
 )
 
@@ -197,6 +202,16 @@ server <- function(input, output, session) {
   observeEvent(input$hide, {
     g6_proxy("graph") |>
       g6_hide_elements("node1")
+  })
+
+  observeEvent(input$expand, {
+    g6_proxy("graph") |>
+      g6_expand_combo("combo1")
+  })
+
+  observeEvent(input$collapse, {
+    g6_proxy("graph") |>
+      g6_collapse_combo("combo1")
   })
 
   observe({

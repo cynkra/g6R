@@ -71,10 +71,19 @@ HTMLWidgets.widget({
           // Focus/hide/show element
           Shiny.addCustomMessageHandler(el.id + '_g6-element-action', (m) => {
             try {
-              if (m.animation !== undefined) {
-                graph[`${m.action}Element`](m.ids, m.animation);
+              graph[`${m.action}Element`](m.ids, m.animation);
+            } catch (error) {
+              Shiny.notifications.show({ html: error, type: 'error' })
+            }
+          })
+
+          // Combo actions
+          Shiny.addCustomMessageHandler(el.id + '_g6-combo-action', (m) => {
+            try {
+              if (m.options === null) {
+                graph[`${m.action}Element`](m.id);
               } else {
-                graph[`${m.action}Element`](m.ids);
+                graph[`${m.action}Element`](m.id, m.options);
               }
             } catch (error) {
               Shiny.notifications.show({ html: error, type: 'error' })

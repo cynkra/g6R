@@ -339,7 +339,7 @@ g6_canvas_resize <- function(graph, width, height) {
 g6_element_action <- function(graph, ids, animation = NULL, action) {
   if (!any(class(graph) %in% "g6_proxy")) {
     stop(
-      "Can't use g6_focus_element with g6 object. Only within shiny and using g6_proxy"
+      "Can't use g6_*_element with g6 object. Only within shiny and using g6_proxy"
     )
   }
 
@@ -386,4 +386,27 @@ g6_hide_elements <- function(graph, ids, animation = NULL) {
 
 g6_show_elements <- function(graph, ids, animation = NULL) {
   g6_element_action(graph, ids, animation, action = "show")
+}
+
+#' @keywords internal
+g6_combo_action <- function(graph, id, options = NULL, action) {
+  if (!any(class(graph) %in% "g6_proxy")) {
+    stop(
+      "Can't use g6_*_combo with g6 object. Use only within shiny and using g6_proxy"
+    )
+  }
+
+  graph$session$sendCustomMessage(
+    sprintf("%s_g6-combo-action", graph$id),
+    list(id = id, options = options, action = action)
+  )
+  graph
+}
+
+g6_collapse_combo <- function(graph, id, options = NULL) {
+  g6_combo_action(graph, id, options, action = "collapse")
+}
+
+g6_expand_combo <- function(graph, id, options = NULL) {
+  g6_combo_action(graph, id, options, action = "expand")
 }
