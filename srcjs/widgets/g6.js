@@ -45,73 +45,15 @@ HTMLWidgets.widget({
             Shiny.setInputValue(el.id + '-selected_edge', edgeData);
           })
 
-          // Add nodes
-          Shiny.addCustomMessageHandler(el.id + '_g6-add-nodes', (m) => {
-            try {
-              graph.addNodeData(m);
-              graph.draw();
-            } catch (error) {
-              Shiny.notifications.show({ html: error, type: 'error' })
-            }
-          })
-
-          // Add edges
-          Shiny.addCustomMessageHandler(el.id + '_g6-add-edges', (m) => {
-            try {
-              graph.addEdgeData(m);
-              graph.draw();
-            } catch (error) {
-              Shiny.notifications.show({ html: error, type: 'error' })
-            }
-          })
-
-          // Add combos
-          Shiny.addCustomMessageHandler(el.id + '_g6-add-combos', (m) => {
-            try {
-              graph.addComboData(m);
-              graph.draw();
-            } catch (error) {
-              Shiny.notifications.show({ html: error, type: 'error' })
-            }
-          })
-
-          // Remove nodes
-          Shiny.addCustomMessageHandler(el.id + '_g6-remove-nodes', (m) => {
-            try {
-              graph.removeNodeData(m);
-              graph.draw();
-            } catch (error) {
-              Shiny.notifications.show({ html: error, type: 'error' })
-            }
-          })
-
-          // Remove edges
-          Shiny.addCustomMessageHandler(el.id + '_g6-remove-edges', (m) => {
-            try {
-              graph.removeEdgeData(m);
-              graph.draw();
-            } catch (error) {
-              Shiny.notifications.show({ html: error, type: 'error' })
-            }
-          })
-
-          // Remove combos
-          Shiny.addCustomMessageHandler(el.id + '_g6-remove-combos', (m) => {
+          // Update/remove/add nodes or combo or edges
+          Shiny.addCustomMessageHandler(el.id + '_g6-data', (m) => {
             try {
               // TBD: check if nodes data are also updated
-              graph.removeComboData(m);
+              graph[`${m.action}${m.type}Data`](m.el);
               graph.draw();
-            } catch (error) {
-              Shiny.notifications.show({ html: error, type: 'error' })
-            }
-          })
-
-          // Update nodes
-          Shiny.addCustomMessageHandler(el.id + '_g6-update-nodes', (m) => {
-            try {
-              // TBD: check if nodes data are also updated
-              graph.updateNodeData(m);
-              graph.draw();
+              if (m.action !== 'update') {
+                graph.layout();
+              }
             } catch (error) {
               Shiny.notifications.show({ html: error, type: 'error' })
             }

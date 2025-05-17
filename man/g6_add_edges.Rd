@@ -26,8 +26,7 @@ re-rendering it.
 This function can only be used with a g6_proxy object within a Shiny application.
 It will not work with regular g6 objects outside of Shiny.
 
-If a node with the same ID already exists, it will not be added again.
-See \url{https://g6.antv.antgroup.com/en/api/data#graphaddnodedata} for more details.
+See \url{https://g6.antv.antgroup.com/en/api/data#graphaddedgedata} for more details.
 }
 \seealso{
 \code{\link{g6_proxy}}, \code{\link{g6_remove_edges}}

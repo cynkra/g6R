@@ -83,7 +83,9 @@ ui <- page_fluid(
   div(
     class = "d-flex align-items-center",
     actionButton("add_node", "Add node and connect"),
-    actionButton("update_node", "Update node 1")
+    actionButton("update_node", "Update node 1"),
+    actionButton("update_edge", "Update edge 1"),
+    actionButton("update_combo", "Update combo 1")
   )
 )
 
@@ -155,6 +157,19 @@ server <- function(input, output, session) {
   observeEvent(input$update_node, {
     g6_proxy("graph") |>
       g6_update_nodes(list(list(id = "node1", type = "star")))
+  })
+
+  observeEvent(input$update_edge, {
+    g6_proxy("graph") |>
+      g6_update_edges(list(list(
+        id = "node1-node2",
+        style = list(stroke = "#1783F", lineWidth = 2)
+      )))
+  })
+
+  observeEvent(input$update_combo, {
+    g6_proxy("graph") |>
+      g6_update_combos(list(list(id = "combo1", type = "circle")))
   })
 
   observe({

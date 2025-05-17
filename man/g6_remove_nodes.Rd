@@ -24,8 +24,6 @@ re-rendering it. When a node is removed, its connected edges are also removed.
 This function can only be used with a g6_proxy object within a Shiny application.
 It will not work with regular g6 objects outside of Shiny.
 
-Under the hood, this function uses the G6 removeNode method, which
-removes the specified node and all its related edges from the graph.
 See \url{https://g6.antv.antgroup.com/en/api/data#graphremovenodedata} for more details.
 }
 \seealso{
