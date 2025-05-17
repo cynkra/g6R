@@ -73,12 +73,31 @@ combos <- list(
 )
 
 ui <- page_fluid(
-  g6Output("graph")
+  g6Output("graph"),
+  actionButton("remove", "Remove nodes")
 )
 
 server <- function(input, output, session) {
   output$graph <- renderG6({
-    g6(nodes, edges, combos, options = list(theme = "dark"))
+    g6(
+      nodes,
+      edges,
+      combos,
+      options = list(theme = "dark"),
+      behaviors = g6_behaviors(
+        zoom_canvas(),
+        drag_element(),
+        click_select(multiple = TRUE),
+        brush_select(immediately = TRUE)
+      ),
+      plugins = g6_plugins(
+        minimap()
+      )
+    )
+  })
+  observeEvent(input$remove, {
+    g6_proxy("graph") |>
+      g6_remove_nodes("node1")
   })
 
   observe({

@@ -44,6 +44,14 @@ HTMLWidgets.widget({
             // Modify node state
             Shiny.setInputValue(el.id + '-selected_edge', edgeData);
           })
+          Shiny.addCustomMessageHandler(el.id + '_g6-remove-nodes', (m) => {
+            try {
+              graph.removeNodeData(m);
+              graph.draw();
+            } catch (error) {
+              Shiny.notifications.show({ html: error, type: 'error' })
+            }
+          })
         }
 
         graph.render();
