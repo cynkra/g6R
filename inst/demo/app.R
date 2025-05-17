@@ -82,7 +82,8 @@ ui <- page_fluid(
   ),
   div(
     class = "d-flex align-items-center",
-    actionButton("add_node", "Add node")
+    actionButton("add_node", "Add node and connect"),
+    actionButton("update_node", "Update node 1")
   )
 )
 
@@ -97,7 +98,17 @@ server <- function(input, output, session) {
         zoom_canvas(),
         drag_element(),
         click_select(multiple = TRUE),
-        brush_select(immediately = TRUE)
+        brush_select(immediately = TRUE),
+        collapse_expand(),
+        drag_canvas(
+          trigger = list(
+            up = c("ArrowUp"),
+            down = c("ArrowDown"),
+            left = c("ArrowLeft"),
+            right = c("ArrowRight")
+          ),
+          animation = list(duration = 100)
+        )
       ),
       plugins = g6_plugins(
         minimap()
@@ -122,11 +133,28 @@ server <- function(input, output, session) {
 
   observeEvent(input$add_node, {
     g6_proxy("graph") |>
+      g6_add_combos(
+        data.frame(
+          id = "combo2"
+        )
+      ) |>
       g6_add_nodes(
         data.frame(
-          id = c("node3", "node4")
+          id = c("node3", "node4"),
+          combo = c("combo2", "combo2")
+        )
+      ) |>
+      g6_add_edges(
+        data.frame(
+          source = "node3",
+          target = "node4"
         )
       )
+  })
+
+  observeEvent(input$update_node, {
+    g6_proxy("graph") |>
+      g6_update_nodes(list(list(id = "node1", type = "star")))
   })
 
   observe({

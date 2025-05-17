@@ -55,6 +55,26 @@ HTMLWidgets.widget({
             }
           })
 
+          // Add edges
+          Shiny.addCustomMessageHandler(el.id + '_g6-add-edges', (m) => {
+            try {
+              graph.addEdgeData(m);
+              graph.draw();
+            } catch (error) {
+              Shiny.notifications.show({ html: error, type: 'error' })
+            }
+          })
+
+          // Add combos
+          Shiny.addCustomMessageHandler(el.id + '_g6-add-combos', (m) => {
+            try {
+              graph.addComboData(m);
+              graph.draw();
+            } catch (error) {
+              Shiny.notifications.show({ html: error, type: 'error' })
+            }
+          })
+
           // Remove nodes
           Shiny.addCustomMessageHandler(el.id + '_g6-remove-nodes', (m) => {
             try {
@@ -85,9 +105,21 @@ HTMLWidgets.widget({
               Shiny.notifications.show({ html: error, type: 'error' })
             }
           })
+
+          // Update nodes
+          Shiny.addCustomMessageHandler(el.id + '_g6-update-nodes', (m) => {
+            try {
+              // TBD: check if nodes data are also updated
+              graph.updateNodeData(m);
+              graph.draw();
+            } catch (error) {
+              Shiny.notifications.show({ html: error, type: 'error' })
+            }
+          })
         }
 
         graph.render();
+        // TBD: theme does not work yet
         graph.setTheme(config.theme);
         graph.draw();
 

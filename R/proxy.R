@@ -56,7 +56,7 @@ g6_proxy <- function(id, session = shiny::getDefaultReactiveDomain()) {
 g6_add_nodes <- function(graph, nodes) {
   if (!any(class(graph) %in% "g6_proxy")) {
     stop(
-      "Can't use g6_remove_nodes with g6 object. Only within shiny & using g6_proxy"
+      "Can't use g6_add_nodes with g6 object. Only within shiny & using g6_proxy"
     )
   }
 
@@ -67,6 +67,86 @@ g6_add_nodes <- function(graph, nodes) {
   }
 
   graph$session$sendCustomMessage(sprintf("%s_g6-add-nodes", graph$id), nodes)
+  graph
+}
+
+#' Add edges to a g6 graph via proxy
+#'
+#' This function adds one or more edges to an existing g6 graph instance
+#' using a proxy object. This allows updating the graph without completely
+#' re-rendering it.
+#'
+#' @param graph A g6_proxy object created with \code{\link{g6_proxy}}.
+#' @param edges A data frame or list specifying the edges to be added.
+#'   If a data frame is provided, each row will be converted to an edge.
+#'   Each edge should have at least an 'id' field, and may include other attributes
+#'   such as 'label', 'style', 'x', 'y', etc. based on G6 edge specifications.
+#'
+#' @return The g6_proxy object (invisibly), allowing for method chaining.
+#'
+#' @details
+#' This function can only be used with a g6_proxy object within a Shiny application.
+#' It will not work with regular g6 objects outside of Shiny.
+#'
+#' If a node with the same ID already exists, it will not be added again.
+#' See \url{https://g6.antv.antgroup.com/en/api/data#graphaddnodedata} for more details.
+#'
+#' @seealso \code{\link{g6_proxy}}, \code{\link{g6_remove_edges}}
+#' @export
+g6_add_edges <- function(graph, edges) {
+  if (!any(class(graph) %in% "g6_proxy")) {
+    stop(
+      "Can't use g6_add_edges with g6 object. Only within shiny & using g6_proxy"
+    )
+  }
+
+  if (inherits(edges, "data.frame")) {
+    edges <- lapply(seq_len(nrow(edges)), \(i) {
+      setNames(as.list(edges[i, ]), colnames(edges))
+    })
+  }
+
+  graph$session$sendCustomMessage(sprintf("%s_g6-add-edges", graph$id), edges)
+  graph
+}
+
+#' Add combos to a g6 graph via proxy
+#'
+#' This function adds one or more combos to an existing g6 graph instance
+#' using a proxy object. This allows updating the graph without completely
+#' re-rendering it.
+#'
+#' @param graph A g6_proxy object created with \code{\link{g6_proxy}}.
+#' @param combos A data frame or list specifying the combos to be added.
+#'   If a data frame is provided, each row will be converted to an combo.
+#'   Each combo should have at least an 'id' field, and may include other attributes
+#'   such as 'label', 'style', 'x', 'y', etc. based on G6 combo specifications.
+#'
+#' @return The g6_proxy object (invisibly), allowing for method chaining.
+#'
+#' @details
+#' This function can only be used with a g6_proxy object within a Shiny application.
+#' It will not work with regular g6 objects outside of Shiny.
+#'
+#' If a node with the same ID already exists, it will not be added again.
+#' See \url{https://g6.antv.antgroup.com/en/api/data#graphaddnodedata} for more details.
+#'
+#' @seealso \code{\link{g6_proxy}}, \code{\link{g6_remove_combos}}
+#' @export
+g6_add_combos <- function(graph, combos) {
+  if (!any(class(graph) %in% "g6_proxy")) {
+    stop(
+      "Can't use g6_add_combos with g6 object. Only within shiny & using g6_proxy"
+    )
+  }
+
+  if (inherits(combos, "data.frame")) {
+    combos <- lapply(seq_len(nrow(combos)), \(i) {
+      setNames(as.list(combos[i, ]), colnames(combos))
+    })
+  }
+
+  graph$session$sendCustomMessage(sprintf("%s_g6-add-combos", graph$id), combos)
   graph
 }
 
@@ -184,5 +264,48 @@ g6_remove_combos <- function(graph, ids) {
   }
 
   graph$session$sendCustomMessage(sprintf("%s_g6-remove-combos", graph$id), ids)
+  graph
+}
+
+#' Update nodes to a g6 graph via proxy
+#'
+#' This function updates one or more nodes to an existing g6 graph instance
+#' using a proxy object. This allows updating the graph without completely
+#' re-rendering it.
+#'
+#' @param graph A g6_proxy object created with \code{\link{g6_proxy}}.
+#' @param nodes A data frame or list specifying the nodes to be updated.
+#'   If a data frame is provided, each row will be converted to a node.
+#'   Each node should have at least an 'id' field, and may include other attributes
+#'   such as 'label', 'style', 'x', 'y', etc. based on G6 node specifications.
+#'
+#' @return The g6_proxy object (invisibly), allowing for method chaining.
+#'
+#' @details
+#' This function can only be used with a g6_proxy object within a Shiny application.
+#' It will not work with regular g6 objects outside of Shiny.
+#'
+#' If a node with the same ID already exists, it will not be added again.
+#' See \url{https://g6.antv.antgroup.com/en/api/data#graphaddnodedata} for more details.
+#'
+#' @seealso \code{\link{g6_proxy}}, \code{\link{g6_remove_nodes}}
+#' @export
+g6_update_nodes <- function(graph, nodes) {
+  if (!any(class(graph) %in% "g6_proxy")) {
+    stop(
+      "Can't use g6_add_nodes with g6 object. Only within shiny & using g6_proxy"
+    )
+  }
+
+  if (inherits(nodes, "data.frame")) {
+    nodes <- lapply(seq_len(nrow(nodes)), \(i) {
+      setNames(as.list(nodes[i, ]), colnames(nodes))
+    })
+  }
+
+  graph$session$sendCustomMessage(
+    sprintf("%s_g6-update-nodes", graph$id),
+    nodes
+  )
   graph
 }
