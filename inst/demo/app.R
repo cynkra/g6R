@@ -97,7 +97,13 @@ ui <- page_fluid(
   div(
     class = "d-flex align-items-center",
     actionButton("expand", "Expand combo 1"),
-    actionButton("collapse", "Collapse combo 1")
+    actionButton("collapse", "Collapse combo 1"),
+    actionButton("set_options", "Set options")
+  ),
+  div(
+    class = "d-flex align-items-center",
+    actionButton("update_plugin", "Update minimap"),
+    actionButton("update_behavior", "Disable zoom canvas")
   )
 )
 
@@ -107,7 +113,9 @@ server <- function(input, output, session) {
       nodes,
       edges,
       combos,
-      options = list(canvas = canvas_config(background = "#fff")),
+      options = list(
+        edge = list(style = list(endArrow = TRUE))
+      ),
       behaviors = g6_behaviors(
         zoom_canvas(),
         drag_element(),
@@ -125,7 +133,21 @@ server <- function(input, output, session) {
         )
       ),
       plugins = g6_plugins(
-        minimap()
+        minimap(),
+        tooltip(
+          enable = JS(
+            "(e) => e.targetType === 'node';"
+          ),
+          getContent = JS(
+            "(e, items) => {
+              let result = `<h4>Custom Content</h4>`;
+              items.forEach((item) => {
+                result += `<p>Type: ${item.data.description}</p>`;
+              });
+              return result;
+            }"
+          )
+        )
       )
     )
   })
@@ -212,6 +234,45 @@ server <- function(input, output, session) {
   observeEvent(input$collapse, {
     g6_proxy("graph") |>
       g6_collapse_combo("combo1")
+  })
+
+  observeEvent(input$set_options, {
+    g6_proxy("graph") |>
+      g6_set_options(
+        list(
+          node = list(
+            style = list(
+              fill = '#91d5ff',
+              stroke = '#40a9ff',
+              lineWidth = 1,
+              radius = 10
+            )
+          ),
+          edge = list(
+            style = list(
+              stroke = '#91d5ff',
+              lineWidth = 2,
+              endArrow = TRUE
+            )
+          )
+        )
+      )
+  })
+
+  observeEvent(input$update_plugin, {
+    g6_proxy("graph") |>
+      g6_update_plugin(
+        key = "minimap",
+        position = "right-top"
+      )
+  })
+
+  observeEvent(input$update_behavior, {
+    g6_proxy("graph") |>
+      g6_update_behavior(
+        key = "zoom-canvas",
+        enable = FALSE
+      )
   })
 
   observe({

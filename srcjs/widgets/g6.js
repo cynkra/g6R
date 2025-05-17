@@ -89,6 +89,34 @@ HTMLWidgets.widget({
               Shiny.notifications.show({ html: error, type: 'error' })
             }
           })
+
+          // Set options
+          Shiny.addCustomMessageHandler(el.id + '_g6-set-options', (m) => {
+            try {
+              graph.setOptions(m);
+              graph.draw();
+            } catch (error) {
+              Shiny.notifications.show({ html: error, type: 'error' })
+            }
+          })
+
+          // Update plugin
+          Shiny.addCustomMessageHandler(el.id + '_g6-update-plugin', (m) => {
+            try {
+              graph.updatePlugin(m);
+            } catch (error) {
+              Shiny.notifications.show({ html: error, type: 'error' })
+            }
+          })
+
+          // Update behavior
+          Shiny.addCustomMessageHandler(el.id + '_g6-update-behavior', (m) => {
+            try {
+              graph.updateBehavior(m);
+            } catch (error) {
+              Shiny.notifications.show({ html: error, type: 'error' })
+            }
+          })
         }
 
         graph.render();

@@ -10,10 +10,10 @@ brush_select(
   enable = JS("(e) => {\\n      return true\\n    }"),
   enableElements = c("node", "edge", "combo"),
   immediately = FALSE,
-  mode = "default",
+  mode = c("default", "union", "intersect", "diff"),
   onSelect = NULL,
   state = "selected",
-  style = list(),
+  style = NULL,
   trigger = "shift"
 )
 }

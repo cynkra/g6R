@@ -10,11 +10,11 @@ click_select(
   degree = 0,
   enable = TRUE,
   multiple = FALSE,
-  state = "selected",
-  neighborState = "selected",
+  state = c("selected", "active", "inactive", "disabled", "highlight"),
+  neighborState = c("selected", "active", "inactive", "disabled", "highlight"),
   unselectedState = NULL,
   onClick = NULL,
-  trigger = c("shift")
+  trigger = "shift"
 )
 }
 \arguments{

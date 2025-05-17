@@ -16,7 +16,7 @@ tooltip(
   offset = c(10, 10),
   enterable = FALSE,
   title = NULL,
-  style = list(.tooltip = list(visibility = "hidden"))
+  style = NULL
 )
 }
 \arguments{

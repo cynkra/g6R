@@ -410,3 +410,42 @@ g6_collapse_combo <- function(graph, id, options = NULL) {
 g6_expand_combo <- function(graph, id, options = NULL) {
   g6_combo_action(graph, id, options, action = "expand")
 }
+
+g6_set_options <- function(graph, ...) {
+  if (!any(class(graph) %in% "g6_proxy")) {
+    stop(
+      "Can't use g6_*_combo with g6 object. Use only within shiny and using g6_proxy"
+    )
+  }
+  graph$session$sendCustomMessage(
+    sprintf("%s_g6-set-options", graph$id),
+    list(...)
+  )
+  graph
+}
+
+g6_update_plugin <- function(graph, key, ...) {
+  if (!any(class(graph) %in% "g6_proxy")) {
+    stop(
+      "Can't use g6_update_plugin with g6 object. Use only within shiny and using g6_proxy"
+    )
+  }
+  graph$session$sendCustomMessage(
+    sprintf("%s_g6-update-plugin", graph$id),
+    list(key = key, ...)
+  )
+  graph
+}
+
+g6_update_behavior <- function(graph, key, ...) {
+  if (!any(class(graph) %in% "g6_proxy")) {
+    stop(
+      "Can't use g6_update_behavior with g6 object. Use only within shiny and using g6_proxy"
+    )
+  }
+  graph$session$sendCustomMessage(
+    sprintf("%s_g6-update-behavior", graph$id),
+    list(key = key, ...)
+  )
+  graph
+}

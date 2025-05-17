@@ -237,10 +237,10 @@ brush_select <- function(
   ),
   enableElements = c("node", "edge", "combo"),
   immediately = FALSE,
-  mode = "default",
+  mode = c("default", "union", "intersect", "diff"),
   onSelect = NULL,
   state = "selected",
-  style = list(),
+  style = NULL,
   trigger = "shift"
 ) {
   # Validate inputs
@@ -261,12 +261,7 @@ brush_select <- function(
     stop("'immediately' should be a boolean value")
   }
 
-  valid_modes <- c("union", "intersect", "diff", "default")
-  if (!mode %in% valid_modes) {
-    stop(
-      "'mode' should be one of 'union', 'intersect', 'diff', or 'default'"
-    )
-  }
+  mode <- match.arg(mode)
 
   if (!is.null(onSelect) && !is_js(onSelect)) {
     stop("'onSelect' should be a JS function")
@@ -354,11 +349,11 @@ click_select <- function(
   degree = 0,
   enable = TRUE,
   multiple = FALSE,
-  state = "selected",
-  neighborState = "selected",
+  state = c("selected", "active", "inactive", "disabled", "highlight"),
+  neighborState = c("selected", "active", "inactive", "disabled", "highlight"),
   unselectedState = NULL,
   onClick = NULL,
-  trigger = c("shift")
+  trigger = "shift"
 ) {
   # Validate inputs
   valid_states <- c("selected", "active", "inactive", "disabled", "highlight")
@@ -379,23 +374,8 @@ click_select <- function(
     stop("'multiple' should be a boolean value")
   }
 
-  if (
-    !is.character(state) || (length(state) == 1 && !state %in% valid_states)
-  ) {
-    stop(
-      "'state' should be one of 'selected', 'active', 'inactive', 'disabled', 'highlight', or a custom string"
-    )
-  }
-
-  if (
-    !is.null(neighborState) &&
-      (!is.character(neighborState) ||
-        (length(neighborState) == 1 && !neighborState %in% valid_states))
-  ) {
-    stop(
-      "'neighborState' should be one of 'selected', 'active', 'inactive', 'disabled', 'highlight', or a custom string"
-    )
-  }
+  state <- match.arg(state)
+  neighborState <- match.arg(neighborState)
 
   if (
     !is.null(unselectedState) &&
@@ -421,7 +401,7 @@ click_select <- function(
     multiple = multiple,
     state = state,
     neighborState = neighborState,
-    trigger = trigger
+    trigger = list(trigger)
   )
 
   # Add optional parameters if provided
