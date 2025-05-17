@@ -185,9 +185,6 @@ g6 <- function(
     x <- c(x, options)
   }
 
-  # Remove browser() call that was likely for debugging
-  # browser()
-
   # create widget
   htmlwidgets::createWidget(
     name = "g6",
