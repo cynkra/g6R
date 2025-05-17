@@ -339,6 +339,7 @@ server <- function(input, output, session) {
   observe({
     print(input[["graph-selected_node"]]$id)
     print(input[["graph-selected_edge"]]$id)
+    print(input[["graph-selected_combo"]]$id)
   })
 }
 

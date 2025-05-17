@@ -1,5 +1,5 @@
 import 'widgets';
-import { EdgeEvent, Graph, GraphEvent, NodeEvent } from '@antv/g6';
+import { ComboEvent, EdgeEvent, Graph, GraphEvent, NodeEvent } from '@antv/g6';
 
 HTMLWidgets.widget({
 
@@ -32,17 +32,26 @@ HTMLWidgets.widget({
             const { target } = e; // Get the ID of the clicked node
             // Get node data
             const nodeData = graph.getNodeData(target.id);
-            // Modify node state
+            // Register shiny input
             Shiny.setInputValue(el.id + '-selected_node', nodeData);
           })
 
           graph.on(EdgeEvent.CLICK, (e) => {
             // TBD set shiny input with el.id namespace
-            const { target } = e; // Get the ID of the clicked node
-            // Get node data
+            const { target } = e; // Get the ID of the clicked edge
+            // Get edge data
             const edgeData = graph.getEdgeData(target.id);
-            // Modify node state
+            // Register shiny input
             Shiny.setInputValue(el.id + '-selected_edge', edgeData);
+          })
+
+          graph.on(ComboEvent.CLICK, (e) => {
+            // TBD set shiny input with el.id namespace
+            const { target } = e; // Get the ID of the clicked combo
+            // Get combo data
+            const comboData = graph.getComboData(target.id);
+            // Register shiny input
+            Shiny.setInputValue(el.id + '-selected_combo', comboData);
           })
 
           // Update/remove/add nodes or combo or edges
