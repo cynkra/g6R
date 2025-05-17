@@ -327,7 +327,7 @@ bubble_sets <- function(
 #'   }")
 #' )
 context_menu <- function(
-  key = "context-menu",
+  key = "contextmenu",
   className = "g6-contextmenu",
   trigger = "contextmenu",
   offset = c(4, 4),
@@ -391,7 +391,7 @@ context_menu <- function(
   config <- mget(arg_names)
 
   # Set the type internally (not a function parameter)
-  config$type <- "context-menu"
+  config$type <- "contextmenu"
 
   # Remove NULL values
   dropNulls(config)

@@ -175,6 +175,39 @@ server <- function(input, output, session) {
                 ];
               }"
           )
+        ),
+        context_menu(
+          enable = JS(
+            "(e) => {
+                return e.targetType === 'node'
+              }"
+          ),
+          getItems = JS(
+            "() => {
+                return [
+                  { name: 'Create edge', value: 'create_edge' },
+                  { name: 'Remove node', value: 'remove_node' }
+                ];
+              }"
+          ),
+          onClick = JS(
+            "(value, target, current) => {
+                const graph = HTMLWidgets.find(`#${target.closest('.g6').id}`).getWidget();
+                if (value === 'create_edge') {
+                  graph.updateBehavior({
+                    key: 'create-edge', // Specify the behavior to update
+                    enable: true,
+                  });
+                  // Select node
+                  graph.setElementState(current.id, 'selected');
+                  // Disable drag node as it is incompatible with edge creation
+                  graph.updateBehavior({ key: 'drag-element', enable: false });
+                } else if (value === 'remove_node') {
+                  graph.removeNodeData([current.id]);
+                  graph.draw();
+                }
+              }"
+          )
         )
       )
     )
