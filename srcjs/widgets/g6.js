@@ -68,13 +68,13 @@ HTMLWidgets.widget({
             }
           })
 
-          // Focus element
-          Shiny.addCustomMessageHandler(el.id + '_g6-focus-element', (m) => {
+          // Focus/hide/show element
+          Shiny.addCustomMessageHandler(el.id + '_g6-element-action', (m) => {
             try {
               if (m.animation !== undefined) {
-                graph.focusElement(m.ids, m.animation);
+                graph[`${m.action}Element`](m.ids, m.animation);
               } else {
-                graph.focusElement(m.ids);
+                graph[`${m.action}Element`](m.ids);
               }
             } catch (error) {
               Shiny.notifications.show({ html: error, type: 'error' })

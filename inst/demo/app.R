@@ -90,7 +90,9 @@ ui <- page_fluid(
   div(
     class = "d-flex align-items-center",
     actionButton("canvas_resize", "Resize canvas"),
-    actionButton("focus", "Focus node 1")
+    actionButton("focus", "Focus node 1"),
+    actionButton("show", "Show node 1"),
+    actionButton("hide", "Hide node 1")
   )
 )
 
@@ -184,7 +186,17 @@ server <- function(input, output, session) {
 
   observeEvent(input$focus, {
     g6_proxy("graph") |>
-      g6_focus_element("node1", animation = list(duration = 2000))
+      g6_focus_elements("node1", animation = list(duration = 2000))
+  })
+
+  observeEvent(input$show, {
+    g6_proxy("graph") |>
+      g6_show_elements("node1")
+  })
+
+  observeEvent(input$hide, {
+    g6_proxy("graph") |>
+      g6_hide_elements("node1")
   })
 
   observe({

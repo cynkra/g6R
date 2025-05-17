@@ -335,6 +335,21 @@ g6_canvas_resize <- function(graph, width, height) {
   graph
 }
 
+#' @keywords internal
+g6_element_action <- function(graph, ids, animation = NULL, action) {
+  if (!any(class(graph) %in% "g6_proxy")) {
+    stop(
+      "Can't use g6_focus_element with g6 object. Only within shiny and using g6_proxy"
+    )
+  }
+
+  graph$session$sendCustomMessage(
+    sprintf("%s_g6-element-action", graph$id),
+    list(ids = ids, animation = animation, action = action)
+  )
+  graph
+}
+
 #' Focus on specific elements in a g6 graph via proxy
 #'
 #' This function focuses on one or more elements (nodes/edges) in an existing g6 graph instance
@@ -361,16 +376,14 @@ g6_canvas_resize <- function(graph, width, height) {
 #'
 #' @seealso \code{\link{g6_proxy}}
 #' @export
-g6_focus_element <- function(graph, ids, animation = NULL) {
-  if (!any(class(graph) %in% "g6_proxy")) {
-    stop(
-      "Can't use g6_focus_element with g6 object. Only within shiny and using g6_proxy"
-    )
-  }
+g6_focus_elements <- function(graph, ids, animation = NULL) {
+  g6_element_action(graph, ids, animation, action = "focus")
+}
 
-  graph$session$sendCustomMessage(
-    sprintf("%s_g6-focus-element", graph$id),
-    list(ids = ids, animation = animation)
-  )
-  graph
+g6_hide_elements <- function(graph, ids, animation = NULL) {
+  g6_element_action(graph, ids, animation, action = "hide")
+}
+
+g6_show_elements <- function(graph, ids, animation = NULL) {
+  g6_element_action(graph, ids, animation, action = "show")
 }
