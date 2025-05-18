@@ -8,7 +8,7 @@ drag_element_force(
   key = "drag-element-force",
   fixed = FALSE,
   enable =
-    htmlwidgets::JS("(event) => { return event.targetType === 'node' || event.targetType === 'combo'; }"),
+    htmlwidgets::JS("(event) => { \\n      return event.targetType === 'node' || event.targetType === 'combo';\\n    }"),
   state = "selected",
   hideEdge = "none",
   cursor = NULL

@@ -4,9 +4,11 @@
 \alias{g6_plugins}
 \title{Create a List of G6 Plugins}
 \usage{
-g6_plugins(...)
+g6_plugins(graph, ...)
 }
 \arguments{
+\item{graph}{G6 graph instance.}
+
 \item{...}{G6 plugin configuration objects created with plugin-specific functions}
 }
 \value{

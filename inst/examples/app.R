@@ -60,10 +60,39 @@ nodes <- list(
       badgeFontSize = 7 # Badge font size
     ),
     combo = "combo1"
-  )
+  ) #,
+  #list(
+  #  id = "nodehtml",
+  #  type = "html",
+  #  style = list(
+  #    size = c(240, 80),
+  #    dx = -120,
+  #    dy = -40,
+  #    innerHTML = JS(
+  #      '(d) => {
+  #      //console.log(d);
+  #      return `<div class="card" style="width: 18rem;">
+  #        <div class="card-header">
+  #          Featured
+  #        </div>
+  #        <div class="card-body">
+  #          <h5 class="card-title">Special title treatment</h5>
+  #          <p class="card-text">With supporting text below as a natural lead-in to //additional content.</p>
+  #          <a href="#" class="btn btn-primary">Go somewhere</a>
+  #        </div>
+  #        <div class="card-footer text-body-secondary">
+  #          2 days ago
+  #        </div>
+  #      </div>`;
+  #    }'
+  #    )
+  #  )
+  #)
 )
 
-edges <- list(list(source = "node1", target = "node2"))
+edges <- list(
+  list(source = "node1", target = "node2")
+)
 combos <- list(
   list(
     id = "combo1",
@@ -83,7 +112,7 @@ ui <- page_fluid(
   div(
     class = "d-flex align-items-center",
     actionButton("add_node", "Add node and connect"),
-    actionButton("update_node", "Update node 1"),
+    actionButton("update_node", "Update node 1 and node 2"),
     actionButton("update_edge", "Update edge 1"),
     actionButton("update_combo", "Update combo 1")
   ),
@@ -112,11 +141,17 @@ server <- function(input, output, session) {
     g6(
       nodes,
       edges,
-      combos,
-      options = list(
-        edge = list(style = list(endArrow = TRUE))
-      ),
-      behaviors = g6_behaviors(
+      combos
+    ) |>
+      g6_options(
+        edge = edge_options(
+          style = list(
+            endArrow = TRUE
+          )
+        )
+      ) |>
+      g6_layout() |>
+      g6_behaviors(
         zoom_canvas(),
         drag_element(),
         click_select(multiple = TRUE),
@@ -131,8 +166,8 @@ server <- function(input, output, session) {
           ),
           animation = list(duration = 100)
         )
-      ),
-      plugins = g6_plugins(
+      ) |>
+      g6_plugins(
         minimap(),
         tooltip(
           enable = JS(
@@ -140,77 +175,76 @@ server <- function(input, output, session) {
           ),
           getContent = JS(
             "(e, items) => {
-              let result = `<h4>Custom Content</h4>`;
-              items.forEach((item) => {
-                result += `<p>Type: ${item.data.description}</p>`;
-              });
-              return result;
-            }"
+                let result = `<h4>Custom Content</h4>`;
+                items.forEach((item) => {
+                  result += `<p>Type: ${item.data.description}</p>`;
+                });
+                return result;
+              }"
           )
         ),
         toolbar(
           onClick = JS(
             "(value, target) => {
-              // Accessing the widget is more complex when 
-              // the plugin isn't defined from the JS core
-              const graph = HTMLWidgets.find(`#${target.closest('.g6').id}`).getWidget();
-                switch (value) {
-                  case 'delete':
-                    const selectedNodes = graph.getElementDataByState('node', 'selected').map((node) => {
-                      return node.id
-                    });
-                    graph.removeNodeData(selectedNodes);
-                    break;
-                  default:
-                    break;
-                }
-                // Important: redraw;
-                graph.draw();
-              }"
+                // Accessing the widget is more complex when 
+                // the plugin isn't defined from the JS core
+                const graph = HTMLWidgets.find(`#${target.closest('.g6').id}`).getWidget();
+                  switch (value) {
+                    case 'delete':
+                      const selectedNodes = graph.getElementDataByState('node', 'selected').map((node) => {
+                        return node.id
+                      });
+                      graph.removeNodeData(selectedNodes);
+                      break;
+                    default:
+                      break;
+                  }
+                  // Important: redraw;
+                  graph.draw();
+                }"
           ),
           getItems = JS(
             "() => {
-                return [
-                  { id: 'delete', value: 'delete' },
-                ];
-              }"
+                  return [
+                    { id: 'delete', value: 'delete' },
+                  ];
+                }"
           )
         ),
         context_menu(
           enable = JS(
             "(e) => {
-                return e.targetType === 'node'
-              }"
+                  return e.targetType === 'node'
+                }"
           ),
           getItems = JS(
             "() => {
-                return [
-                  { name: 'Create edge', value: 'create_edge' },
-                  { name: 'Remove node', value: 'remove_node' }
-                ];
-              }"
+                  return [
+                    { name: 'Create edge', value: 'create_edge' },
+                    { name: 'Remove node', value: 'remove_node' }
+                  ];
+                }"
           ),
           onClick = JS(
             "(value, target, current) => {
-                const graph = HTMLWidgets.find(`#${target.closest('.g6').id}`).getWidget();
-                if (value === 'create_edge') {
-                  graph.updateBehavior({
-                    key: 'create-edge', // Specify the behavior to update
-                    enable: true,
-                  });
-                  // Select node
-                  graph.setElementState(current.id, 'selected');
-                  // Disable drag node as it is incompatible with edge creation
-                  graph.updateBehavior({ key: 'drag-element', enable: false });
-                } else if (value === 'remove_node') {
-                  graph.removeNodeData([current.id]);
-                  graph.draw();
-                }
-              }"
+                  const graph = HTMLWidgets.find(`#${target.closest('.g6').id}`).getWidget();
+                  if (value === 'create_edge') {
+                    graph.updateBehavior({
+                      key: 'create-edge', // Specify the behavior to update
+                      enable: true,
+                    });
+                    // Select node
+                    graph.setElementState(current.id, 'selected');
+                    // Disable drag node as it is incompatible with edge creation
+                    graph.updateBehavior({ key: 'drag-element', enable: false });
+                  } else if (value === 'remove_node') {
+                    graph.removeNodeData([current.id]);
+                    graph.draw();
+                  }
+                }"
           )
         )
       )
-    )
   })
 
   observeEvent(input$remove_node, {
@@ -251,7 +285,15 @@ server <- function(input, output, session) {
 
   observeEvent(input$update_node, {
     g6_proxy("graph") |>
-      g6_update_nodes(list(list(id = "node1", type = "star")))
+      g6_update_nodes(
+        list(
+          list(
+            id = "node1",
+            type = "star"
+          ),
+          list(id = "node2", states = list("selected"))
+        )
+      )
   })
 
   observeEvent(input$update_edge, {

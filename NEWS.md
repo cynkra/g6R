@@ -1,3 +1,3 @@
-# shinyG6 (development version)
+# shinyG6 0.0.0.9000
 
 * Initial CRAN submission.

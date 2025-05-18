@@ -5,7 +5,7 @@
 \title{Configure Context Menu Behavior}
 \usage{
 context_menu(
-  key = "context-menu",
+  key = "contextmenu",
   className = "g6-contextmenu",
   trigger = "contextmenu",
   offset = c(4, 4),

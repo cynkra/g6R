@@ -92,13 +92,13 @@ This plugin creates bubble-like contours around groups of specified elements.
 }
 \examples{
 # Basic bubble set around specific nodes
-bubble <- g6_bubble_sets(
+bubble <- bubble_sets(
   members = c("node1", "node2", "node3"),
   label = TRUE
 )
 
 # More customized bubble set
-bubble <- g6_bubble_sets(
+bubble <- bubble_sets(
   key = "team-a",
   members = c("node1", "node2", "node3", "edge1", "edge2"),
   avoidMembers = c("node4", "node5"),
@@ -109,7 +109,7 @@ bubble <- g6_bubble_sets(
 )
 
 # Bubble set with advanced parameters
-bubble <- g6_bubble_sets(
+bubble <- bubble_sets(
   members = c("node1", "node2", "node3"),
   pixelGroup = 6,
   edgeR0 = 10,

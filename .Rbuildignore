@@ -9,3 +9,5 @@
 ^webpack\.common\.js$
 ^\.github$
 ^README\.Rmd$
+^LICENSE\.md$
+^air\.toml$

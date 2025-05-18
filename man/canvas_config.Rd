@@ -66,15 +66,6 @@ config <- canvas_config(
   height = 600
 )
 
-# High-DPI canvas with custom background
-config <- canvas_config(
-  container = document.getElementById("graph-container"),
-  width = 1200,
-  height = 800,
-  devicePixelRatio = 2,
-  background = "#f0f0f0"
-)
-
 # Canvas with multi-layer rendering enabled
 config <- canvas_config(
   container = "#graph-container",

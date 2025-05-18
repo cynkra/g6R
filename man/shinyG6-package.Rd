@@ -4,9 +4,9 @@
 \name{shinyG6-package}
 \alias{shinyG6}
 \alias{shinyG6-package}
-\title{shinyG6: What the Package Does (One Line, Title Case)}
+\title{shinyG6: Graph Visualisation Engine Widget for R and 'shiny' Apps}
 \description{
-What the package does (one paragraph).
+Create stunning network experiences powered by the G6 graph visualisation engine JavaScript library \url{https://g6.antv.antgroup.com/en}. In 'shiny' mode, modify your graph directly from the server function to dynamically interact nodes and edges. Select you favorite layout among 20 choices. 15 behaviors are available such as interactive edge creation, collapse-expand and brush select. 17 plugins designed to improve the user experience such as a minimap, toolbars and grid lines.
 }
 \seealso{
 Useful links:
@@ -17,7 +17,7 @@ Useful links:
 
 }
 \author{
-\strong{Maintainer}: First Last \email{first.last@example.com} (\href{https://orcid.org/YOUR-ORCID-ID}{ORCID})
+\strong{Maintainer}: David Granjon \email{dgranjon@ymail.com}
 
 }
 \keyword{internal}

@@ -4,9 +4,11 @@
 \alias{g6_behaviors}
 \title{Create G6 Graph Behaviors Configuration}
 \usage{
-g6_behaviors(...)
+g6_behaviors(graph, ...)
 }
 \arguments{
+\item{graph}{A g6 graph instance.}
+
 \item{...}{Behavior configuration objects created by behavior-specific functions.
 These can include any of the following behaviors:
 

@@ -4,6 +4,7 @@
 #' This function collects and combines multiple behavior configurations
 #' into a list that can be passed to graph initialization functions.
 #'
+#' @param graph A g6 graph instance.
 #' @param ... Behavior configuration objects created by behavior-specific functions.
 #'   These can include any of the following behaviors:
 #'
@@ -67,29 +68,14 @@
 #' )
 #'
 #' @export
-g6_behaviors <- function(...) {
+g6_behaviors <- function(graph, ...) {
   # Maybe todo: provide more infra to define behaviors and validate them
   # structure(class = "behavior"), validate_behavior ...
-  behaviors <- list(
-    #auto_adapt_label(),
-    #brush_select(),
-    #click_select(),
-    #collapse_expand(),
-    #create_edge(),
-    #drag_canvas(),
-    #drag_element(),
-    #drag_element_force(),
-    #fix_element_size(),
-    #focus_element(),
-    #hover_activate(),
-    #lasso_select(),
-    #optimize_viewport_transform(),
-    #scroll_canvas(),
-    #zoom_canvas(),
-    ...
-  )
-  if (!length(behaviors)) return(NULL)
-  behaviors
+  behaviors <- list(...)
+  if (length(behaviors)) {
+    graph$x$behaviors <- behaviors
+  }
+  graph
 }
 
 #' @keywords internal
@@ -795,7 +781,9 @@ drag_element_force <- function(
   key = "drag-element-force",
   fixed = FALSE,
   enable = htmlwidgets::JS(
-    "(event) => { return event.targetType === 'node' || event.targetType === 'combo'; }"
+    "(event) => { 
+      return event.targetType === 'node' || event.targetType === 'combo';
+    }"
   ),
   state = "selected",
   hideEdge = "none",

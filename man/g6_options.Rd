@@ -5,12 +5,13 @@
 \title{Configure Global Options for G6 Graph}
 \usage{
 g6_options(
+  graph,
   node = node_options(),
   edge = edge_options(),
   combo = combo_options(),
   autoFit = auto_fit_config(),
   canvas = canvas_config(),
-  animation = animation_config(),
+  animation = FALSE,
   autoResize = FALSE,
   background = NULL,
   cursor = valid_cursors,
@@ -27,6 +28,8 @@ g6_options(
 )
 }
 \arguments{
+\item{graph}{g6 graph instance.}
+
 \item{node}{Node configuration. Controls the default appearance and behavior of nodes.
 Created with \code{node_options()}. Default: Default node options.}
 
@@ -43,7 +46,7 @@ Created with \code{auto_fit_config()}. Default: Default auto-fit settings.}
 Created with \code{canvas_config()}. Default: Default canvas settings.}
 
 \item{animation}{Global animation configuration for graph transitions.
-Created with \code{animation_config()}. Default: Default animation settings.}
+Created with \code{animation_config()}. Default: Default to FALSE.}
 
 \item{autoResize}{Whether the graph should automatically resize when the window size changes.
 Default: FALSE.}
@@ -63,7 +66,7 @@ Default: NULL.}
 Default: NULL (G6 will choose the appropriate renderer).}
 
 \item{padding}{Padding around the graph content in pixels. Can be a single number for equal padding
-on all sides or a vector of four numbers \link{top, right, bottom, left}.
+on all sides or a vector of four numbers \code{[top, right, bottom, left]}.
 Default: NULL.}
 
 \item{rotation}{Rotation angle of the entire graph in degrees.

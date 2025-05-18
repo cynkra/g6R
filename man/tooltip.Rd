@@ -34,7 +34,7 @@ tooltip(
 
 \item{container}{Custom rendering container for tooltip (string or HTML element, default: NULL)}
 
-\item{offset}{Offset distance as a vector of two numbers \link{x, y} (numeric vector, default: c(10, 10))}
+\item{offset}{Offset distance as a vector of two numbers \code{[x, y]} (numeric vector, default: c(10, 10))}
 
 \item{enterable}{Whether the pointer can enter the tooltip (boolean, default: FALSE)}
 

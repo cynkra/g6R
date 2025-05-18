@@ -27,10 +27,10 @@ node_style_options(
   transform = NULL,
   transformOrigin = NULL,
   visibility = c("visible", "hidden"),
-  x = 0,
-  y = 0,
-  z = 0,
-  zIndex = 0,
+  x = NULL,
+  y = NULL,
+  z = NULL,
+  zIndex = NULL,
   ...
 )
 }
@@ -70,7 +70,7 @@ the interactive area to make "thin lines" easier to interact with. Default: 0.}
 \item{shadowType}{Node shadow type. Options: "inner", "outer". Default: "outer".}
 
 \item{size}{Node size. Can be a single number for equal width/height or a vector
-of two numbers \link{width, height}. Default: 32.}
+of two numbers \code{[width, height]}. Default: 32.}
 
 \item{stroke}{Node stroke (border) color. Default: "#000".}
 

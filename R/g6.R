@@ -10,9 +10,7 @@
 #' and optional combo groupings, along with various configuration options for customizing
 #' the appearance and behavior of the graph.
 #'
-#' @section Data Structure:
-#'
-#' \subsection{Nodes}
+#' \subsection{Nodes}{
 #' The `nodes` parameter should be a data frame or list of nodes with at least an `id` field
 #' for each node. Additional fields can include:
 #' \itemize{
@@ -22,21 +20,9 @@
 #'   \item \code{style}: List of style attributes (color, size, etc.).
 #'   \item \code{states}: String. Initial states for the node, such as selected, active, hover, etc.
 #'   \item \code{combo}: ID of the combo this node belongs to.
-#' }
+#' }}
 #'
-#' Example node:
-#' \preformatted{
-#' {
-#'   "id": "node-1",
-#'   "type": "circle",
-#'   "data": { "name": "alice", "role": "Admin" },
-#'   "style": { "x": 100, "y": 200, "size": 32, "fill": "violet" },
-#'   "states": ["selected"],
-#'   "combo": null
-#' }
-#' }
-#'
-#' \subsection{Edges}
+#' \subsection{Edges}{
 #' The `edges` parameter should be a data frame or list of edges with at least `source` and
 #' `target` fields identifying the connected nodes. Additional fields can include:
 #' \itemize{
@@ -47,19 +33,10 @@
 #'   \item \code{data}: Custom data associated with the edge.
 #'   \item \code{style}: List of style attributes (color, width, etc.).
 #'   \item \code{states}: String. Initial states for the edge.
-#' }
+#' }}
 #'
-#' Example edge:
-#' \preformatted{
-#' {
-#'   "source": "node1",
-#'   "target": "node2",
-#'   "type": "cubic",
-#'   "style": { "stroke": "#999", "lineWidth": 2 }
-#' }
-#' }
 #'
-#' \subsection{Combos}
+#' \subsection{Combos}{
 #' The `combos` parameter is used for grouping nodes and can be a data frame or list with
 #' combo definitions. Fields include:
 #' \itemize{
@@ -69,19 +46,7 @@
 #'   \item \code{style}: List of style attributes.
 #'   \item \code{states}: String. Initial states for the combo.
 #'   \item \code{combo}: String. Parent combo ID. If there is no parent combo, it is null.
-#' }
-#'
-#' Example combo:
-#' \preformatted{
-#' {
-#'   "id": "combo1",
-#'   "type": "circle",
-#'   "data": { "groupName": "Group A" },
-#'   "style": { "fill": "lightblue", "stroke": "blue", "collapsed": true },
-#'   "states": [],
-#'   "combo": null
-#' }
-#' }
+#' }}
 #'
 #' Nodes are assigned to combos by setting their `combo` field to the ID of the combo.
 #'
@@ -98,18 +63,6 @@
 #'   at least an "id" field. Nodes can be assigned to combos using their "combo" field.
 #'   See 'Data Structure' section for more details.
 #'   Default: NULL.
-#'
-#' @param layout A list providing the layout options. Default to force.
-#' See more at \url{https://g6.antv.antgroup.com/en/manual/layout/overview}
-#'
-#' @param options Graph configuration options created with \code{g6_options()}.
-#'   Default: Default options from g6_options().
-#'
-#' @param behaviors Graph interactions and behaviors created with \code{g6_behaviors()}.
-#'   Default: Default behaviors from g6_behaviors().
-#'
-#' @param plugins List of plugins to enhance the graph functionality, created with \code{g6_plugins()}.
-#'   Default: Default plugins from g6_plugins().
 #'
 #' @param width Width of the graph container in pixels or as a valid CSS unit.
 #'   Default: NULL (automatic sizing).
@@ -140,10 +93,6 @@ g6 <- function(
   nodes = NULL,
   edges = NULL,
   combos = NULL,
-  layout = list(type = "force"),
-  options = NULL,
-  behaviors = g6_behaviors(),
-  plugins = g6_plugins(),
   width = NULL,
   height = NULL,
   elementId = NULL
@@ -165,25 +114,16 @@ g6 <- function(
     })
   }
 
-  # Create data object
-  data <- dropNulls(list(
-    nodes = nodes,
-    edges = edges,
-    combos = combos
-  ))
-
   # Build properly named list of parameters to pass to widget
-  x <- dropNulls(list(
-    data = data,
-    behaviors = behaviors,
-    plugins = plugins,
-    layout = layout
-  ))
-
-  # Properly merge options as a named list
-  if (length(options) > 0) {
-    x <- c(x, options)
-  }
+  x <- list(
+    data = dropNulls(
+      list(
+        nodes = nodes,
+        edges = edges,
+        combos = combos
+      )
+    )
+  )
 
   # create widget
   htmlwidgets::createWidget(

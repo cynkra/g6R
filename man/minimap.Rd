@@ -42,7 +42,7 @@ minimap(
 
 \item{shape}{Method for generating element thumbnails (string or JS function, default: "key")}
 
-\item{size}{Width and height of the minimap \link{width, height} (numeric vector, default: c(240, 160))}
+\item{size}{Width and height of the minimap \code{[width, height]} (numeric vector, default: c(240, 160))}
 }
 \value{
 A list with the configuration settings

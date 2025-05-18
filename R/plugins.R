@@ -51,6 +51,7 @@
 #'   }
 #' }
 #'
+#' @param graph G6 graph instance.
 #' @param ... G6 plugin configuration objects created with plugin-specific functions
 #' @note You can also build your own plugins as described at
 #' \url{https://g6.antv.antgroup.com/en/manual/plugin/custom-plugin}.
@@ -106,10 +107,12 @@
 #'     }")
 #'   )
 #' )
-g6_plugins <- function(...) {
+g6_plugins <- function(graph, ...) {
   plugins <- list(...)
-  if (!length(plugins)) return(NULL)
-  plugins
+  if (length(plugins)) {
+    graph$x$plugins <- plugins
+  }
+  graph
 }
 
 #' Configure Background Plugin for G6
@@ -208,13 +211,13 @@ background <- function(
 #'
 #' @examples
 #' # Basic bubble set around specific nodes
-#' bubble <- g6_bubble_sets(
+#' bubble <- bubble_sets(
 #'   members = c("node1", "node2", "node3"),
 #'   label = TRUE
 #' )
 #'
 #' # More customized bubble set
-#' bubble <- g6_bubble_sets(
+#' bubble <- bubble_sets(
 #'   key = "team-a",
 #'   members = c("node1", "node2", "node3", "edge1", "edge2"),
 #'   avoidMembers = c("node4", "node5"),
@@ -225,7 +228,7 @@ background <- function(
 #' )
 #'
 #' # Bubble set with advanced parameters
-#' bubble <- g6_bubble_sets(
+#' bubble <- bubble_sets(
 #'   members = c("node1", "node2", "node3"),
 #'   pixelGroup = 6,
 #'   edgeR0 = 10,
@@ -1393,7 +1396,7 @@ legend <- function(
 #' @param position Position of the thumbnail relative to the canvas (string or numeric vector, default: "right-bottom")
 #' @param renderer Custom renderer (JS object, default: NULL)
 #' @param shape Method for generating element thumbnails (string or JS function, default: "key")
-#' @param size Width and height of the minimap [width, height] (numeric vector, default: c(240, 160))
+#' @param size Width and height of the minimap \code{[width, height]} (numeric vector, default: c(240, 160))
 #'
 #' @return A list with the configuration settings
 #' @export
@@ -1963,7 +1966,7 @@ toolbar <- function(
 #' @param onOpenChange Callback for tooltip show/hide events (JS function, default: NULL)
 #' @param trigger Trigger behavior: "hover" or "click" (string, default: "hover")
 #' @param container Custom rendering container for tooltip (string or HTML element, default: NULL)
-#' @param offset Offset distance as a vector of two numbers [x, y] (numeric vector, default: c(10, 10))
+#' @param offset Offset distance as a vector of two numbers \code{[x, y]} (numeric vector, default: c(10, 10))
 #' @param enterable Whether the pointer can enter the tooltip (boolean, default: FALSE)
 #' @param title Title for the tooltip (string, default: NULL)
 #' @param style Custom style for the tooltip (list or JS object, default: list(".tooltip" = list(visibility = "hidden")))

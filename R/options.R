@@ -9,6 +9,7 @@
 #' It allows you to control all aspects of graph rendering and behavior, from styling of
 #' individual elements to global visualization settings.
 #'
+#' @param graph g6 graph instance.
 #' @param node Node configuration. Controls the default appearance and behavior of nodes.
 #'   Created with \code{node_options()}. Default: Default node options.
 #'
@@ -25,7 +26,7 @@
 #'   Created with \code{canvas_config()}. Default: Default canvas settings.
 #'
 #' @param animation Global animation configuration for graph transitions.
-#'   Created with \code{animation_config()}. Default: Default animation settings.
+#'   Created with \code{animation_config()}. Default: Default to FALSE.
 #'
 #' @param autoResize Whether the graph should automatically resize when the window size changes.
 #'   Default: FALSE.
@@ -45,7 +46,7 @@
 #'   Default: NULL (G6 will choose the appropriate renderer).
 #'
 #' @param padding Padding around the graph content in pixels. Can be a single number for equal padding
-#'   on all sides or a vector of four numbers [top, right, bottom, left].
+#'   on all sides or a vector of four numbers \code{[top, right, bottom, left]}.
 #'   Default: NULL.
 #'
 #' @param rotation Rotation angle of the entire graph in degrees.
@@ -115,12 +116,13 @@
 #' )
 #' @export
 g6_options <- function(
+  graph,
   node = node_options(),
   edge = edge_options(),
   combo = combo_options(),
   autoFit = auto_fit_config(),
   canvas = canvas_config(),
-  animation = animation_config(),
+  animation = FALSE,
   autoResize = FALSE,
   background = NULL,
   cursor = valid_cursors,
@@ -135,16 +137,21 @@ g6_options <- function(
   theme = c("light", "dark", "blue", "yellow"),
   ...
 ) {
+  if (!inherits(graph, "g6")) {
+    stop("g6_options must be called on a g6 instance")
+  }
+
   theme <- match.arg(theme)
   cursor <- match.arg(cursor)
 
   arg_names <- names(formals())
-  arg_names <- arg_names[arg_names != "..."]
+  arg_names <- arg_names[!(arg_names %in% c("...", "graph"))]
   # Get values of only the named parameters
   config <- mget(arg_names)
 
   # Drop NULL elements
-  dropNulls(c(config, list(...)))
+  graph$x <- c(graph$x, dropNulls(c(config, list(...))))
+  graph
 }
 
 #' Create Auto-Fit Configuration for G6 Graphs
@@ -302,15 +309,6 @@ auto_fit_config <- function(
 #'   container = "#graph-container",
 #'   width = 800,
 #'   height = 600
-#' )
-#'
-#' # High-DPI canvas with custom background
-#' config <- canvas_config(
-#'   container = document.getElementById("graph-container"),
-#'   width = 1200,
-#'   height = 800,
-#'   devicePixelRatio = 2,
-#'   background = "#f0f0f0"
 #' )
 #'
 #' # Canvas with multi-layer rendering enabled
@@ -626,7 +624,7 @@ node_options <- function(
 #' @param shadowType Node shadow type. Options: "inner", "outer". Default: "outer".
 #'
 #' @param size Node size. Can be a single number for equal width/height or a vector
-#'   of two numbers [width, height]. Default: 32.
+#'   of two numbers \code{[width, height]}. Default: 32.
 #'
 #' @param stroke Node stroke (border) color. Default: "#000".
 #'
@@ -702,10 +700,10 @@ node_style_options <- function(
   transform = NULL,
   transformOrigin = NULL,
   visibility = c("visible", "hidden"),
-  x = 0,
-  y = 0,
-  z = 0,
-  zIndex = 0,
+  x = NULL,
+  y = NULL,
+  z = NULL,
+  zIndex = NULL,
   ...
 ) {
   # Validate boolean parameters
