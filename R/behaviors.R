@@ -73,6 +73,14 @@ g6_behaviors <- function(graph, ...) {
   # structure(class = "behavior"), validate_behavior ...
   behaviors <- list(...)
   if (length(behaviors)) {
+    # Allow to pass behavior as text
+    behaviors <- lapply(behaviors, function(behavior) {
+      if (!is.list(behavior)) {
+        behavior <- list(type = behavior)
+      } else {
+        behavior
+      }
+    })
     graph$x$behaviors <- behaviors
   }
   graph

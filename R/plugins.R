@@ -110,6 +110,14 @@
 g6_plugins <- function(graph, ...) {
   plugins <- list(...)
   if (length(plugins)) {
+    # Allow to pass plugin as text
+    plugins <- lapply(plugins, function(plugin) {
+      if (!is.list(plugin)) {
+        plugin <- list(type = plugin)
+      } else {
+        plugin
+      }
+    })
     graph$x$plugins <- plugins
   }
   graph
