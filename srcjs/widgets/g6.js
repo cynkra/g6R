@@ -142,7 +142,12 @@ HTMLWidgets.widget({
           // Append plugin
           Shiny.addCustomMessageHandler(el.id + "_g6-add-plugin", (m) => {
             try {
-              graph.setPlugins((currentPlugins) => [...currentPlugins, m]);
+              graph.setPlugins((currentPlugins) => {
+                m.map((newPlugin) => {
+                  currentPlugins.push(newPlugin)
+                })
+                return currentPlugins
+              });
             } catch (error) {
               Shiny.notifications.show({ html: error, type: 'error' })
             }

@@ -26,6 +26,7 @@ if (length(duplicated_id)) {
 }
 
 ui <- page_fluid(
+  actionButton("add_hull", "Add hull"),
   g6Output("graph", height = "100vh")
 )
 
@@ -89,8 +90,7 @@ server <- function(input, output, session) {
       )
   })
 
-  observeEvent(TRUE, {
-    browser()
+  observeEvent(input$add_hull, {
     g6_proxy("graph") |>
       g6_add_plugin(
         hull(
