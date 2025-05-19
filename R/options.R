@@ -117,12 +117,12 @@
 #' @export
 g6_options <- function(
   graph,
-  node = node_options(),
+  node = NULL,
   edge = edge_options(),
-  combo = combo_options(),
+  combo = NULL,
   autoFit = auto_fit_config(),
   canvas = canvas_config(),
-  animation = FALSE,
+  animation = TRUE,
   autoResize = FALSE,
   background = NULL,
   cursor = valid_cursors,

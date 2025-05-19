@@ -60,34 +60,7 @@ nodes <- list(
       badgeFontSize = 7 # Badge font size
     ),
     combo = "combo1"
-  ) #,
-  #list(
-  #  id = "nodehtml",
-  #  type = "html",
-  #  style = list(
-  #    size = c(240, 80),
-  #    dx = -120,
-  #    dy = -40,
-  #    innerHTML = JS(
-  #      '(d) => {
-  #      //console.log(d);
-  #      return `<div class="card" style="width: 18rem;">
-  #        <div class="card-header">
-  #          Featured
-  #        </div>
-  #        <div class="card-body">
-  #          <h5 class="card-title">Special title treatment</h5>
-  #          <p class="card-text">With supporting text below as a natural lead-in to //additional content.</p>
-  #          <a href="#" class="btn btn-primary">Go somewhere</a>
-  #        </div>
-  #        <div class="card-footer text-body-secondary">
-  #          2 days ago
-  #        </div>
-  #      </div>`;
-  #    }'
-  #    )
-  #  )
-  #)
+  )
 )
 
 edges <- list(

@@ -14,7 +14,7 @@
 #' The `nodes` parameter should be a data frame or list of nodes with at least an `id` field
 #' for each node. Additional fields can include:
 #' \itemize{
-#'   \item \code{id} (required): Unique identifier for the node.
+#'   \item \code{id} (required): Unique identifier for the node. Must be a character.
 #'   \item \code{type}: Node type (e.g., "circle", "rect", "diamond").
 #'   \item \code{data}: Custom data associated with the node.
 #'   \item \code{style}: List of style attributes (color, size, etc.).
@@ -26,8 +26,8 @@
 #' The `edges` parameter should be a data frame or list of edges with at least `source` and
 #' `target` fields identifying the connected nodes. Additional fields can include:
 #' \itemize{
-#'   \item \code{source} (required): ID of the source node.
-#'   \item \code{target} (required): ID of the target node.
+#'   \item \code{source} (required): ID of the source node. Must be a character.
+#'   \item \code{target} (required): ID of the target node. Must be a character.
 #'   \item \code{id}: Unique identifier for the edge.
 #'   \item \code{type}: Edge type (e.g., "line", "cubic", "arc").
 #'   \item \code{data}: Custom data associated with the edge.
@@ -40,7 +40,7 @@
 #' The `combos` parameter is used for grouping nodes and can be a data frame or list with
 #' combo definitions. Fields include:
 #' \itemize{
-#'   \item \code{id} (required): Unique identifier for the combo.
+#'   \item \code{id} (required): Unique identifier for the combo. Must be a character.
 #'   \item \code{type}: String: Combo type. It can be the type of built-in Combo, or the custom Combo.
 #'   \item \code{data}: Custom data associated with the combo.
 #'   \item \code{style}: List of style attributes.
@@ -93,25 +93,22 @@ g6 <- function(
   nodes = NULL,
   edges = NULL,
   combos = NULL,
-  width = NULL,
+  width = "100%",
   height = NULL,
   elementId = NULL
 ) {
   # Convert data frames to lists of records
   if (inherits(nodes, "data.frame")) {
-    nodes <- lapply(seq_len(nrow(nodes)), \(i) {
-      setNames(as.list(nodes[i, ]), colnames(nodes))
-    })
+    nodes <- unname(split(nodes, seq(nrow(nodes))))
+    nodes <- lapply(nodes, function(node) as.list(node))
   }
   if (inherits(edges, "data.frame")) {
-    edges <- lapply(seq_len(nrow(edges)), \(i) {
-      setNames(as.list(edges[i, ]), colnames(edges))
-    })
+    edges <- unname(split(edges, seq(nrow(edges))))
+    edges <- lapply(edges, function(edge) as.list(edge))
   }
   if (inherits(combos, "data.frame")) {
-    combos <- lapply(seq_len(nrow(combos)), \(i) {
-      setNames(as.list(combos[i, ]), colnames(combos))
-    })
+    combos <- unname(split(combos, seq(nrow(combos))))
+    combos <- lapply(combos, function(combo) as.list(combo))
   }
 
   # Build properly named list of parameters to pass to widget

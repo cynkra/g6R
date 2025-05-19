@@ -8,7 +8,7 @@ g6(
   nodes = NULL,
   edges = NULL,
   combos = NULL,
-  width = NULL,
+  width = "100\%",
   height = NULL,
   elementId = NULL
 )
@@ -55,7 +55,7 @@ the appearance and behavior of the graph.
 The \code{nodes} parameter should be a data frame or list of nodes with at least an \code{id} field
 for each node. Additional fields can include:
 \itemize{
-\item \code{id} (required): Unique identifier for the node.
+\item \code{id} (required): Unique identifier for the node. Must be a character.
 \item \code{type}: Node type (e.g., "circle", "rect", "diamond").
 \item \code{data}: Custom data associated with the node.
 \item \code{style}: List of style attributes (color, size, etc.).
@@ -67,8 +67,8 @@ for each node. Additional fields can include:
 The \code{edges} parameter should be a data frame or list of edges with at least \code{source} and
 \code{target} fields identifying the connected nodes. Additional fields can include:
 \itemize{
-\item \code{source} (required): ID of the source node.
-\item \code{target} (required): ID of the target node.
+\item \code{source} (required): ID of the source node. Must be a character.
+\item \code{target} (required): ID of the target node. Must be a character.
 \item \code{id}: Unique identifier for the edge.
 \item \code{type}: Edge type (e.g., "line", "cubic", "arc").
 \item \code{data}: Custom data associated with the edge.
@@ -80,7 +80,7 @@ The \code{edges} parameter should be a data frame or list of edges with at least
 The \code{combos} parameter is used for grouping nodes and can be a data frame or list with
 combo definitions. Fields include:
 \itemize{
-\item \code{id} (required): Unique identifier for the combo.
+\item \code{id} (required): Unique identifier for the combo. Must be a character.
 \item \code{type}: String: Combo type. It can be the type of built-in Combo, or the custom Combo.
 \item \code{data}: Custom data associated with the combo.
 \item \code{style}: List of style attributes.
