@@ -1,33 +1,104 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# shinyG6
+# g6R
 
 <!-- badges: start -->
 
-[![R-CMD-check](https://github.com/cynkra/shinyG6/actions/workflows/R-CMD-check.yaml/badge.svghttps://github.com/cynkra/shinyG6/actions/workflows/R-CMD-check.yaml/badge.svghttps://github.com/cynkra/shinyG6/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/cynkra/shinyG6/actions/workflows/R-CMD-check.yaml)
+[![R-CMD-check](https://github.com/cynkra/g6R/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/cynkra/g6R/actions/workflows/R-CMD-check.yaml)
 [![Lifecycle:
 experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
 <!-- badges: end -->
 
-`{shinyG6}` provides R bindings to the G6 graph
+`{g6R}` provides R bindings to the G6 graph
 [library](https://g6.antv.antgroup.com/en).
+
+<p style="text-align: center;">
+
+<img src="./man/figures/hex.png" style="width:50.0%" />
+</p>
 
 ## Installation
 
-You can install the development version of shinyG6 from
+You can install the development version of `{g6R}` from
 [GitHub](https://github.com/) with:
 
 ``` r
 # install.packages("pak")
-pak::pak("cynkra/shinyG6")
+pak::pak("cynkra/g6R")
 ```
 
 ## Example
 
-This is a basic example which shows you how to solve a common problem:
+To create a `g6` graph:
 
 ``` r
-library(shiny)
-shinyAppDir(system.file("demo", package = "shinyG6"))
+library(g6R)
+nodes <- data.frame(
+  id = as.character(1:10),
+  label = as.character(1:10)
+)
+
+# Generate random edges
+edges <- data.frame(
+  source = c(2, 6, 7),
+  target = c(1, 3, 9)
+)
+
+g6(nodes, edges) |>
+  g6_options(
+    node = list(
+      style = list(
+        labelBackground = TRUE,
+        labelBackgroundFill = '#FFB6C1',
+        labelBackgroundRadius = 4,
+        labelFontFamily = 'Arial',
+        labelPadding = c(0, 4),
+        labelText = JS(
+          "(d) => {
+              return d.id
+            }"
+        )
+      )
+    )
+  ) |>
+  g6_layout(
+    #layout = list(
+    #  type = "force-atlas2",
+    #  preventOverlap = TRUE,
+    #  r = 20,
+    #  center = c(250, 250)
+    #),
+    layout = list(
+      type = "d3-force",
+      link = list(
+        distance = 100,
+        strength = 2
+      ),
+      collide = list(radius = 40)
+    )
+  ) |>
+  g6_behaviors(
+    "zoom-canvas",
+    drag_element_force(fixed = TRUE),
+    click_select(
+      multiple = TRUE,
+      onClick = JS(
+        "(e) => {
+            console.log(e);
+          }"
+      )
+    ),
+    brush_select(
+      onSelect = JS(
+        "(states) => {
+            return console.log(states);
+          }"
+      )
+    )
+  ) |>
+  g6_plugins(
+    "minimap",
+    "tooltip"
+  )
 ```

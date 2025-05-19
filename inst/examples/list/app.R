@@ -1,6 +1,6 @@
 library(shiny)
 library(bslib)
-library(shinyG6)
+library(g6R)
 
 nodes <- list(
   list(

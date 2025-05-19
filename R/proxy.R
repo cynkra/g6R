@@ -380,10 +380,55 @@ g6_focus_elements <- function(graph, ids, animation = NULL) {
   g6_element_action(graph, ids, animation, action = "focus")
 }
 
+#' Hide elements in a g6 graph
+#'
+#' This function hides specified elements (nodes, edges, or combos) in a g6 graph.
+#' Hidden elements are removed from view but remain in the graph data structure.
+#'
+#' @param graph A g6 graph object or a g6_proxy object for Shiny applications.
+#' @param ids Character vector specifying the IDs of elements to hide.
+#'   Can include node IDs, edge IDs, or combo IDs.
+#' @param animation Boolean to toggle animation.
+#'
+#' @return The modified g6 graph or g6_proxy object, allowing for method chaining.
+#'
+#' @details
+#' When elements are hidden, they are removed from the visual display but still exist
+#' in the underlying data structure. This means they can be shown again later using
+#' \code{\link{g6_show_elements}} without having to recreate them.
+#'
+#' Hidden elements will not participate in layout calculations, which may cause other
+#' elements to reposition.
+#'
+#' @seealso
+#' \code{\link{g6_show_elements}}
+#' @export
 g6_hide_elements <- function(graph, ids, animation = NULL) {
   g6_element_action(graph, ids, animation, action = "hide")
 }
 
+#' Show previously hidden elements in a g6 graph
+#'
+#' This function displays previously hidden elements (nodes, edges, or combos) in a g6 graph.
+#' This restores visibility to elements that were hidden using \code{\link{g6_hide_elements}}.
+#'
+#' @param graph A g6 graph object or a g6_proxy object for Shiny applications.
+#' @param ids Character vector specifying the IDs of elements to show.
+#'   Can include node IDs, edge IDs, or combo IDs.
+#' @param animation Boolean to toggle animation.
+#'
+#' @return The modified g6 graph or g6_proxy object, allowing for method chaining.
+#'
+#' @details
+#' This function makes previously hidden elements visible again. Elements must exist
+#' in the graph's data structure (i.e., they must have been hidden rather than removed).
+#'
+#' When elements are shown again, the graph may recalculate layout positions, which
+#' can cause other elements to reposition.
+#'
+#' @seealso
+#' \code{\link{g6_hide_elements}}
+#' @export
 g6_show_elements <- function(graph, ids, animation = NULL) {
   g6_element_action(graph, ids, animation, action = "show")
 }
@@ -403,14 +448,84 @@ g6_combo_action <- function(graph, id, options = NULL, action) {
   graph
 }
 
+#' Collapse a combo element in a g6 graph
+#'
+#' This function collapses a specified combo (a group of nodes) in a g6 graph,
+#' hiding its member nodes and edges while maintaining the combo itself visible.
+#' This is useful for simplifying complex graphs with multiple hierarchical groups.
+#'
+#' @param graph A g6 graph object or a g6_proxy object for Shiny applications.
+#' @param id Character string specifying the ID of the combo to collapse.
+#' @param options List containing optional configuration parameters for the collapse action:
+#'   \itemize{
+#'     \item \code{animate}: Logical value indicating whether to animate the collapsing process. Default is \code{TRUE}.
+#'     \item \code{aling}: Logical value to ensure the position of expanded/collapsed nodes remains unchanged.
+#'   }
+#'
+#' @return The modified g6 graph or g6_proxy object, allowing for method chaining.
+#'
+#' @details
+#' When a combo is collapsed, its member nodes and edges are hidden from view
+#' while the combo itself remains visible, typically shown as a single node.
+#' This helps to reduce visual complexity in large graphs with hierarchical groupings.
+#'
+#' To expand a collapsed combo, use the \code{\link{g6_expand_combo}} function.
+#'
+#' @seealso \code{\link{g6_expand_combo}}
+#' @references \url{https://g6.antv.antgroup.com/en/api/element#graphcollapseelementid-options}
+#' @export
 g6_collapse_combo <- function(graph, id, options = NULL) {
   g6_combo_action(graph, id, options, action = "collapse")
 }
 
+#' Expand a combo element in a g6 graph
+#'
+#' This function expands a specified combo (a group of nodes) in a g6 graph,
+#' making its member nodes and edges visible. This is useful for revealing
+#' detailed structure within hierarchical groups that were previously collapsed.
+#'
+#' @inheritParams g6_collapse_combo
+#'
+#' @return The modified g6 graph or g6_proxy object, allowing for method chaining.
+#'
+#' @details
+#' When a combo is expanded, its member nodes and edges become visible in the graph,
+#' revealing the internal structure of the group. This operation is the opposite of
+#' collapsing a combo.
+#'
+#' Expanding a combo is particularly useful in interactive graph exploration where
+#' users may want to drill down into specific parts of a graph hierarchy.
+#'
+#' To collapse an expanded combo, use the \code{\link{g6_collapse_combo}} function.
+#'
+#' @seealso \code{\link{g6_collapse_combo}}
+#' @references \url{https://g6.antv.antgroup.com/en/api/element#graphexpandelementid-options}
+#' @export
 g6_expand_combo <- function(graph, id, options = NULL) {
   g6_combo_action(graph, id, options, action = "expand")
 }
 
+#' Set options for a g6 graph via proxy
+#'
+#' This function allows updating various configuration options of an existing g6 graph
+#' instance using a proxy object within a Shiny application.
+#'
+#' @param graph A g6_proxy object created with \code{\link{g6_proxy}}.
+#' @param ... Named arguments representing the options to update and their new values.
+#'   These can include any valid g6 graph options such as fitView, animate, modes, etc.
+#'
+#' @return The g6_proxy object (invisibly), allowing for method chaining.
+#'
+#' @details
+#' This function can only be used with a g6_proxy object within a Shiny application.
+#' It will not work with regular g6 objects outside of Shiny.
+#'
+#' The function allows updating various graph options dynamically without having to
+#' re-render the entire graph. This is useful for changing behavior, appearance,
+#' or interaction modes in response to user input.
+#'
+#' @seealso \code{\link{g6_proxy}}
+#' @export
 g6_set_options <- function(graph, ...) {
   if (!any(class(graph) %in% "g6_proxy")) {
     stop(
@@ -424,6 +539,28 @@ g6_set_options <- function(graph, ...) {
   graph
 }
 
+#' Update a plugin in a g6 graph via proxy
+#'
+#' This function allows updating the configuration of an existing plugin in a g6 graph
+#' instance using a proxy object within a Shiny application.
+#'
+#' @param graph A g6_proxy object created with \code{\link{g6_proxy}}.
+#' @param key Character string identifying the plugin to update.
+#' @param ... Named arguments representing the plugin configuration options to update
+#'   and their new values.
+#'
+#' @return The g6_proxy object (invisibly), allowing for method chaining.
+#'
+#' @details
+#' This function can only be used with a g6_proxy object within a Shiny application.
+#' It will not work with regular g6 objects outside of Shiny.
+#'
+#' The function allows dynamically updating the configuration of an existing plugin
+#' without having to reinitialize it. This is useful for changing plugin behavior
+#' or appearance in response to user interactions.
+#'
+#' @seealso \code{\link{g6_proxy}}, \code{\link{g6_add_plugin}}
+#' @export
 g6_update_plugin <- function(graph, key, ...) {
   if (!any(class(graph) %in% "g6_proxy")) {
     stop(
@@ -437,6 +574,62 @@ g6_update_plugin <- function(graph, key, ...) {
   graph
 }
 
+#' Add a plugin to a g6 graph via proxy
+#'
+#' This function adds one or more plugins to an existing g6 graph instance
+#' using a proxy object within a Shiny application.
+#'
+#' @param graph A g6_proxy object created with \code{\link{g6_proxy}}.
+#' @param ... Named arguments where each name is a plugin type and each value is a
+#'   list of configuration options for that plugin.
+#'
+#' @return The g6_proxy object (invisibly), allowing for method chaining.
+#'
+#' @details
+#' This function can only be used with a g6_proxy object within a Shiny application.
+#' It will not work with regular g6 objects outside of Shiny.
+#'
+#' G6 plugins extend the functionality of the graph visualization with features like
+#' minimaps, toolbar controls, contextual menus, and more. This function allows adding
+#' these plugins dynamically after the graph has been initialized.
+#'
+#' @seealso \code{\link{g6_proxy}}, \code{\link{g6_update_plugin}}
+#' @export
+g6_add_plugin <- function(graph, ...) {
+  if (!any(class(graph) %in% "g6_proxy")) {
+    stop(
+      "Can't use g6_add_plugin with g6 object. Use only within shiny and using g6_proxy"
+    )
+  }
+  graph$session$sendCustomMessage(
+    sprintf("%s_g6-add-plugin", graph$id),
+    list(...)
+  )
+  graph
+}
+
+#' Update a behavior in a g6 graph via proxy
+#'
+#' This function allows updating the configuration of an existing behavior in a g6 graph
+#' instance using a proxy object within a Shiny application.
+#'
+#' @param graph A g6_proxy object created with \code{\link{g6_proxy}}.
+#' @param key Character string identifying the behavior to update.
+#' @param ... Named arguments representing the behavior configuration options to update
+#'   and their new values.
+#'
+#' @return The g6_proxy object (invisibly), allowing for method chaining.
+#'
+#' @details
+#' This function can only be used with a g6_proxy object within a Shiny application.
+#' It will not work with regular g6 objects outside of Shiny.
+#'
+#' Behaviors in G6 define how the graph responds to user interactions like dragging,
+#' zooming, clicking, etc. This function allows dynamically updating the configuration
+#' of these behaviors without having to reinitialize the graph.
+#'
+#' @seealso \code{\link{g6_proxy}}
+#' @export
 g6_update_behavior <- function(graph, key, ...) {
   if (!any(class(graph) %in% "g6_proxy")) {
     stop(

@@ -1,4 +1,4 @@
-^shinyG6\.Rproj$
+^g6R\.Rproj$
 ^\.Rproj\.user$
 ^srcjs$
 ^node_modules$
@@ -11,3 +11,6 @@
 ^README\.Rmd$
 ^LICENSE\.md$
 ^air\.toml$
+^_pkgdown\.yml$
+^docs$
+^pkgdown$

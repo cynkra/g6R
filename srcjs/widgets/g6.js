@@ -1,5 +1,5 @@
 import 'widgets';
-import { ComboEvent, EdgeEvent, Graph, GraphEvent, NodeEvent } from '@antv/g6';
+import { CanvasEvent, ComboEvent, EdgeEvent, Graph, GraphEvent, NodeEvent } from '@antv/g6';
 
 HTMLWidgets.widget({
 
@@ -32,9 +32,22 @@ HTMLWidgets.widget({
             const { target } = e; // Get the ID of the clicked node
             // Get node data
             const nodeData = graph.getNodeData(target.id);
-            // Register shiny input
-            Shiny.setInputValue(el.id + '-selected_node', nodeData);
+            // TBD: need to find a way to know that multiple selection is TRUE ...
+            if (Shiny.shinyapp.$inputValues[`${el.id}-selected_node`] == undefined) {
+              Shiny.setInputValue(el.id + '-selected_node', [target.id]);
+            } else {
+              Shiny.setInputValue(el.id + '-selected_node', [Shiny.shinyapp.$inputValues[`${el.id}-selected_node`], target.id])
+            }
+
           })
+
+          // When click on canvas and target isn't node or edge or combo
+          // we have to reset the Shiny selected-node or edge or combo
+          graph.on(CanvasEvent.CLICK, (e) => {
+            Shiny.setInputValue(el.id + '-selected_node', null);
+            Shiny.setInputValue(el.id + '-selected_edge', null);
+            Shiny.setInputValue(el.id + '-selected_combo', null);
+          });
 
           graph.on(EdgeEvent.CLICK, (e) => {
             // TBD set shiny input with el.id namespace
@@ -42,7 +55,11 @@ HTMLWidgets.widget({
             // Get edge data
             const edgeData = graph.getEdgeData(target.id);
             // Register shiny input
-            Shiny.setInputValue(el.id + '-selected_edge', edgeData);
+            if (Shiny.shinyapp.$inputValues[`${el.id}-selected_edge`] == undefined) {
+              Shiny.setInputValue(el.id + '-selected_edge', [target.id]);
+            } else {
+              Shiny.setInputValue(el.id + '-selected_edge', [Shiny.shinyapp.$inputValues[`${el.id}-selected_edge`], target.id])
+            }
           })
 
           graph.on(ComboEvent.CLICK, (e) => {
@@ -51,7 +68,11 @@ HTMLWidgets.widget({
             // Get combo data
             const comboData = graph.getComboData(target.id);
             // Register shiny input
-            Shiny.setInputValue(el.id + '-selected_combo', comboData);
+            if (Shiny.shinyapp.$inputValues[`${el.id}-selected_combo`] == undefined) {
+              Shiny.setInputValue(el.id + '-selected_combo', [target.id]);
+            } else {
+              Shiny.setInputValue(el.id + '-selected_combo', [Shiny.shinyapp.$inputValues[`${el.id}-selected_combo`], target.id])
+            }
           })
 
           // Update/remove/add nodes or combo or edges
@@ -117,6 +138,15 @@ HTMLWidgets.widget({
               Shiny.notifications.show({ html: error, type: 'error' })
             }
           })
+
+          // Append plugin
+          Shiny.addCustomMessageHandler(el.id + "_g6-add-plugin", (m) => {
+            try {
+              graph.setPlugins((currentPlugins) => [...currentPlugins, m]);
+            } catch (error) {
+              Shiny.notifications.show({ html: error, type: 'error' })
+            }
+          });
 
           // Update behavior
           Shiny.addCustomMessageHandler(el.id + '_g6-update-behavior', (m) => {

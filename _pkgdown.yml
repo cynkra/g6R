@@ -1,0 +1,150 @@
+url: https://cynkra.github.io/g6R/
+template:
+  bootstrap: 5
+
+reference:
+- title: Initialize
+- subtitle: g6
+  desc: Initialize a g6 network
+  contents:
+  - g6
+- subtitle: Shiny
+  desc: Render g6 instance in a Shiny app
+  contents:
+  - g6_output
+  - render_g6
+
+- title: Proxy
+  desc: Update a g6 instance from the server function of a Shiny app
+- subtitle: Setup
+  desc: Setup a g6 proxy
+  contents:
+  - g6_proxy
+- subtitle: Add elements
+  desc: Add elements to a g6 instance
+  contents:
+  - g6_add_nodes
+  - g6_add_edges
+  - g6_add_combos
+  - g6_add_plugin
+- subtitle: Remove elements
+  desc: Remove elements from a g6 instance
+  contents:
+  - g6_remove_nodes
+  - g6_remove_edges
+  - g6_remove_combos
+- subtitle: Update elements
+  desc: Update elements from a g6 instance
+  contents:
+  - g6_update_nodes
+  - g6_update_edges
+  - g6_update_combos
+- subtitle: Canvas
+  desc: canvas util function
+  contents:
+  - g6_canvas_resize
+- subtitle: Elements actions
+  desc: elements actions
+  contents:
+  - g6_focus_elements
+  - g6_hide_elements
+  - g6_show_elements
+  - g6_collapse_combo
+  - g6_expand_combo
+- subtitle: Others
+  desc: Others
+  contents:
+  - g6_add_plugin
+  - g6_set_options
+  - g6_update_plugin
+  - g6_update_behavior
+
+- title: Layout
+  desc: Graph layout
+  contents:
+  - g6_layout
+
+- title: Options
+  desc: g6 options
+  contents:
+  - g6_options
+  - node_options
+  - node_style_options
+  - edge_options
+  - edge_style_options
+  - combo_options
+  - auto_fit_config
+  - canvas_config
+  - animation_config
+
+- title: Behaviors
+  desc: Container for behavior elements
+  contents:
+  - g6_behaviors
+- subtitle: Navigation behaviors
+  desc: Navigation behaviors
+  contents:
+  - drag_canvas
+  - optimize_viewport_transform
+  - scroll_canvas
+  - zoom_canvas
+- subtitle: Selection behaviors
+  desc: Selection behaviors
+  contents:
+  - brush_select
+  - click_select
+  - lasso_select
+- subtitle: Editing behaviors
+  desc: Editing behaviors
+  contents:
+  - create_edge
+  - drag_element
+  - drag_element_force
+- subtitle: Data Exploration behaviors
+  desc: Data Exploration behaviors
+  contents:
+  - collapse_expand
+  - focus_element
+  - hover_activate
+- subtitle: Visual Optimization behaviors
+  desc: Visual Optimization behaviors
+  contents:
+  - auto_adapt_label
+  - fix_element_size
+
+- title: Plugins
+  desc: Container for plugin elements
+  contents:
+  - g6_plugins
+- subtitle: Visual Style Enhancement
+  desc: Enrich the graph style
+  contents:
+  - background
+  - bubble_sets
+  - grid_line
+  - hull
+  - snapline
+  - watermark
+- subtitle: Navigation and Overview
+  desc: Navigation and Overview
+  contents:
+  - fullscreen
+  - minimap
+  - timebar
+- subtitle: Interactive Controls
+  desc: Interactive Controls
+  contents:
+  - context_menu
+  - legend
+  - toolbar
+  - tooltip
+- subtitle: Data Exploration
+  desc: Data Exploration
+  contents:
+  - edge_bundling
+  - edge_filter_lens
+  - fish_eye
+- subtitle: Advanced Features
+  desc: Advanced Features
+  contents:
+  - history

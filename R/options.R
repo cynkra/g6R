@@ -380,9 +380,9 @@ canvas_config <- function(
   # Get all argument names
   arg_names <- names(formals())
   # Create list of argument values
-  config <- mget(arg_names)
+  config <- dropNulls(mget(arg_names))
   # Drop NULL elements
-  dropNulls(config)
+  if (!length(config)) NULL
 }
 
 #' Create Animation Configuration for G6 Graphs

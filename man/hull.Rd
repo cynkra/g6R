@@ -11,6 +11,7 @@ hull(
   corner = c("rounded", "smooth", "sharp"),
   padding = 10,
   label = TRUE,
+  labelText = NULL,
   labelPlacement = c("bottom", "left", "right", "top", "center"),
   labelBackground = FALSE,
   labelPadding = 0,
@@ -33,6 +34,8 @@ hull(
 \item{padding}{Padding around the elements (number, default: 10)}
 
 \item{label}{Whether to display the label (boolean, default: TRUE)}
+
+\item{labelText}{Label text content. Default to NULL.}
 
 \item{labelPlacement}{Label position: "left", "right", "top", "bottom", or "center" (string, default: "bottom")}
 

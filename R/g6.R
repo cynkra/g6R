@@ -128,7 +128,7 @@ g6 <- function(
     x,
     width = width,
     height = height,
-    package = "shinyG6",
+    package = "g6R",
     elementId = elementId
   )
 }
@@ -156,9 +156,14 @@ g6Output <- function(outputId, width = "100%", height = "400px") {
     "g6",
     width,
     height,
-    package = "shinyG6"
+    package = "g6R"
   )
 }
+
+#' Alias to \link{g6Output}
+#' @export
+#' @rdname g6-shiny
+g6_output <- g6Output
 
 #' @rdname g6-shiny
 #' @export
@@ -168,3 +173,8 @@ renderG6 <- function(expr, env = parent.frame(), quoted = FALSE) {
   } # force quoted
   htmlwidgets::shinyRenderWidget(expr, g6Output, env, quoted = TRUE)
 }
+
+#' Alias to \link{renderG6}
+#' @export
+#' @rdname g6-shiny
+render_g6 <- renderG6

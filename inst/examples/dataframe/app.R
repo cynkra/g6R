@@ -1,6 +1,6 @@
 library(shiny)
 library(bslib)
-library(shinyG6)
+library(g6R)
 
 nodes <- data.frame(
   id = as.character(1:100),
@@ -68,7 +68,7 @@ server <- function(input, output, session) {
         "zoom-canvas",
         drag_element_force(fixed = TRUE),
         click_select(
-          multiple = TRUE,
+          #multiple = TRUE,
           onClick = JS(
             "(e) => {
             console.log(e);
@@ -89,9 +89,23 @@ server <- function(input, output, session) {
       )
   })
 
+  observeEvent(TRUE, {
+    browser()
+    g6_proxy("graph") |>
+      g6_add_plugin(
+        hull(
+          members = sample(nodes$id, 10),
+          labelText = "hull-a",
+          labelPlacement = "top",
+          labelBackground = TRUE,
+          labelPadding = 5
+        )
+      )
+  })
+
   observe({
-    print(input[["graph-selected_node"]]$id)
-    print(input[["graph-selected_edge"]]$id)
+    print(input[["graph-selected_node"]])
+    print(input[["graph-selected_edge"]])
   })
 }
 

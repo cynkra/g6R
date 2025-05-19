@@ -1,6 +1,6 @@
 # MIT License
 
-Copyright (c) 2025 shinyG6 authors
+Copyright (c) 2025 g6R authors
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal

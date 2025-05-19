@@ -5,3 +5,5 @@
 .DS_Store
 .quarto
 node_modules
+docs
+inst/doc

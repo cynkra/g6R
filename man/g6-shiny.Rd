@@ -3,12 +3,18 @@
 \name{g6-shiny}
 \alias{g6-shiny}
 \alias{g6Output}
+\alias{g6_output}
 \alias{renderG6}
+\alias{render_g6}
 \title{Shiny bindings for g6}
 \usage{
 g6Output(outputId, width = "100\%", height = "400px")
 
+g6_output(outputId, width = "100\%", height = "400px")
+
 renderG6(expr, env = parent.frame(), quoted = FALSE)
+
+render_g6(expr, env = parent.frame(), quoted = FALSE)
 }
 \arguments{
 \item{outputId}{output variable to read from}

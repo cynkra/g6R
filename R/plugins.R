@@ -1044,6 +1044,7 @@ history <- function(
 #' @param corner Corner type: "rounded", "smooth", or "sharp" (string, default: "rounded")
 #' @param padding Padding around the elements (number, default: 10)
 #' @param label Whether to display the label (boolean, default: TRUE)
+#' @param labelText Label text content. Default to NULL.
 #' @param labelPlacement Label position: "left", "right", "top", "bottom", or "center" (string, default: "bottom")
 #' @param labelBackground Whether to display the background (boolean, default: FALSE)
 #' @param labelPadding Label padding (number or numeric vector, default: 0)
@@ -1080,6 +1081,7 @@ hull <- function(
   corner = c("rounded", "smooth", "sharp"),
   padding = 10,
   label = TRUE,
+  labelText = NULL,
   labelPlacement = c("bottom", "left", "right", "top", "center"),
   labelBackground = FALSE,
   labelPadding = 0,

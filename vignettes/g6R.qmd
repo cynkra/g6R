@@ -1,0 +1,168 @@
+---
+title: "g6R"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{g6R}
+  %\VignetteEngine{quarto::html}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup, message=FALSE}
+library(g6R)
+```
+
+## Graph data
+
+To setup a `{g6R}` graph, you first have to define __node__, __edges__ and __combos__ (collection of nodes), like so:
+
+```{r}
+nodes <- data.frame(id = as.character(1:10))
+nodes$label <- nodes$id
+```
+
+Importantly __id__ have to be character.
+
+You could also pass these elements as __list__, which will be faster than the dataframe approach since under the hood, `{g6R}` has to send list to JavaScript:
+
+```r
+nodes <- lapply(as.character(seq_len(10)), function(i) {
+  list(id = i, label = i)
+})
+```
+
+We then define some random edges:
+
+```{r}
+# Set a seed for reproducibility
+set.seed(123)
+
+# Define the number of edges to create (e.g., 200 random connections)
+num_edges <- 5
+
+# Generate random edges
+edges <- data.frame(
+  source = sample(nodes$id, num_edges, replace = TRUE),
+  target = sample(nodes$id, num_edges, replace = TRUE)
+)
+
+edges$id <- paste0(edges$source, edges$target)
+duplicated_id <- which(duplicated(edges$id) == TRUE)
+if (length(duplicated_id)) {
+  edges <- edges[-duplicated_id, ]
+}
+```
+
+## Initialise the graph
+
+We leverage `g6` to create an __instance__ of our network:
+
+```{r}
+g6(nodes, edges, width = 200, height = 200)
+```
+
+As you can see, the nodes don't render well yet. Let's add it some layout.
+
+## Layout
+
+`g6_layout()` allows to pass any supported [layout](https://g6.antv.antgroup.com/en/manual/layout/overview). For this example, we select the `d3-force`:
+
+```{r}
+g <- g6(nodes, edges) |>
+  g6_layout(
+    layout = list(
+      type = "d3-force",
+      link = list(
+        distance = 100,
+        strength = 2
+      ),
+      collide = list(radius = 40)
+    )
+  )
+g
+```
+
+That's better! We could go further by displaying nodes __label__.
+
+## Tweak options
+
+`g6_options()` is your to go tool when it comes to change the style of the graph element such as nodes. Properties are selected from the [documentation](https://g6.antv.antgroup.com/en/manual/element/node/build-in/base-node#main-graphic-style):
+
+```{r}
+g <- g |>
+  g6_options(
+    node = list(
+      style = list(
+        labelBackground = TRUE,
+        labelBackgroundFill = '#FFB6C1',
+        labelBackgroundRadius = 4,
+        labelFontFamily = 'Arial',
+        labelPadding = c(0, 4),
+        labelText = JS(
+          "(d) => {
+              return d.id
+            }"
+        )
+      )
+    )
+  )
+g
+```
+
+## Plugins
+
+Plugins allowing users to improve the user experience by adding graphical components to the canvas like __minimaps__ or __tooltips__.
+We can pass them inside `g6_plugins` either as a character string with a reference to the plugin name or using the correponding function to pass more configuration options:
+
+```r
+# Use defaults
+g6_plugins("minimap")
+
+# Custom options
+g6_plugins(
+  minimap(size = c(100, 100))
+)
+```
+
+```{r}
+g <- g |>
+  g6_plugins(minimap(size = c(100, 100)))
+g
+```
+
+## Behaviors
+
+Behaviors correspond to interactions between users and the graph elements, such as dragging the nodes and selecting nodes. Be mindful that not all behaviors are compatible: dragging canvas and canvas elements would require to specify different triggers for each behavior.
+With `{g6R}` behaviors can be added with `g6_behaviors`, like plugins:
+
+```{r}
+g <- g |>
+  g6_behaviors(
+    "zoom-canvas",
+    drag_element_force(fixed = TRUE),
+    click_select(
+      multiple = TRUE,
+      onClick = JS(
+        "(e) => {
+            console.log(e);
+          }"
+      )
+    ),
+    brush_select(
+      onSelect = JS(
+        "(states) => {
+            return console.log(states);
+          }"
+      )
+    )
+  )
+g
+```
+
+Notice that we can pass __callback__ functions from R to JavaScript. This is useful in combination with Shiny to set custom inputs, for instance.

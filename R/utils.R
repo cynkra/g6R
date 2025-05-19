@@ -2,6 +2,7 @@ dropNulls <- function(x) {
   x[!vapply(x, is.null, FUN.VALUE = logical(1))]
 }
 
+#' @export
 JS <- function(...) {
   x <- c(...)
   if (is.null(x)) return()
