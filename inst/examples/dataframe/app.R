@@ -79,7 +79,8 @@ server <- function(input, output, session) {
         brush_select(
           onSelect = JS(
             "(states) => {
-            return console.log(states);
+            console.log(states);
+            return states;
           }"
           )
         )
