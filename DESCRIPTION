@@ -2,7 +2,10 @@ Package: g6R
 Title: Graph Visualisation Engine Widget for R and 'shiny' Apps
 Version: 0.0.0.9000
 Authors@R: 
-    person("David", "Granjon", , "dgranjon@ymail.com", role = c("aut", "cre"))
+    c(
+        person("David", "Granjon", , "dgranjon@ymail.com", role = c("aut", "cre")),
+        person(family = "Bristol Myers Squibb", role = "fnd")
+    )
 Description: Create stunning network experiences powered by the G6 graph visualisation engine 
     JavaScript library <https://g6.antv.antgroup.com/en>. In 'shiny' mode, modify your 
     graph directly from the server function to dynamically interact nodes and edges. 
