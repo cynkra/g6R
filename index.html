@@ -76,8 +76,8 @@
 <span></span>
 <span><span class="co"># Generate random edges</span></span>
 <span><span class="va">edges</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span>
-<span>  source <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2</span>, <span class="fl">6</span>, <span class="fl">7</span><span class="op">)</span>,</span>
-<span>  target <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">3</span>, <span class="fl">9</span><span class="op">)</span></span>
+<span>  source <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"2"</span>, <span class="st">"6"</span>, <span class="st">"7"</span><span class="op">)</span>,</span>
+<span>  target <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"1"</span>, <span class="st">"3"</span>, <span class="st">"9"</span><span class="op">)</span></span>
 <span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="reference/g6.html">g6</a></span><span class="op">(</span><span class="va">nodes</span>, <span class="va">edges</span><span class="op">)</span> <span class="op">|&gt;</span></span>
@@ -98,12 +98,6 @@
 <span>    <span class="op">)</span></span>
 <span>  <span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="reference/g6_layout.html">g6_layout</a></span><span class="op">(</span></span>
-<span>    <span class="co">#layout = list(</span></span>
-<span>    <span class="co">#  type = "force-atlas2",</span></span>
-<span>    <span class="co">#  preventOverlap = TRUE,</span></span>
-<span>    <span class="co">#  r = 20,</span></span>
-<span>    <span class="co">#  center = c(250, 250)</span></span>
-<span>    <span class="co">#),</span></span>
 <span>    layout <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
 <span>      type <span class="op">=</span> <span class="st">"d3-force"</span>,</span>
 <span>      link <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
@@ -127,7 +121,7 @@
 <span>    <span class="fu"><a href="reference/brush_select.html">brush_select</a></span><span class="op">(</span></span>
 <span>      onSelect <span class="op">=</span> <span class="fu">JS</span><span class="op">(</span></span>
 <span>        <span class="st">"(states) =&gt; {</span></span>
-<span><span class="st">            return console.log(states);</span></span>
+<span><span class="st">            return states;</span></span>
 <span><span class="st">          }"</span></span>
 <span>      <span class="op">)</span></span>
 <span>    <span class="op">)</span></span>
