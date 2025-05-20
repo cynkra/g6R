@@ -45,14 +45,15 @@ This plugin adds a customizable toolbar with items for graph operations.</p>
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">toolbar</span><span class="op">(</span></span>
 <span>  getItems <span class="op">=</span></span>
-<span>    <span class="fu">JS</span><span class="op">(</span><span class="st">"( ) =&gt; [   \n        { id : 'zoom-in' , value : 'zoom-in' } ,  \n        { id : 'zoom-out' , value : 'zoom-out' } ,   \n        { id : 'auto-fit' , value : 'auto-fit' } ,\n        { id: 'delete', value: 'delete' }  \n      ]"</span><span class="op">)</span>,</span>
+<span>    <span class="fu">JS</span><span class="op">(</span><span class="st">"( ) =&gt; [   \n        { id : 'zoom-in' , value : 'zoom-in' } ,  \n        { id : 'zoom-out' , value : 'zoom-out' } ,   \n        { id : 'auto-fit' , value : 'auto-fit' } ,\n        { id: 'delete', value: 'delete' }, \n        { id: 'request-fullscreen', value: 'request-fullscreen' },\n        { id: 'exit-fullscreen', value: 'exit-fullscreen' },\n      ]"</span><span class="op">)</span>,</span>
 <span>  key <span class="op">=</span> <span class="st">"toolbar"</span>,</span>
 <span>  className <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  position <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"top-left"</span>, <span class="st">"top"</span>, <span class="st">"top-right"</span>, <span class="st">"right"</span>, <span class="st">"bottom-right"</span>, <span class="st">"bottom"</span>,</span>
 <span>    <span class="st">"bottom-left"</span>, <span class="st">"left"</span><span class="op">)</span>,</span>
 <span>  style <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  onClick <span class="op">=</span></span>
-<span>    <span class="fu">JS</span><span class="op">(</span><span class="st">"( value, target, current ) =&gt; {   \n        // Handle button click events\n      const graph = HTMLWidgets.find(`#${target.closest('.g6').id}`).getWidget();\n        if ( value === 'zoom-in' ) {   \n          graph.zoomTo ( 1.1 ) ;\n        } else if ( value === 'zoom-out' ) {     \n          graph.zoomTo ( 0.9 ) ;\n        } else if ( value === 'auto-fit' ) {     \n          graph.fitView ( ) ;\n        } else if (value === 'delete') {\n          const selectedNodes = graph.getElementDataByState('node', 'selected').map((node) =&gt; {\n            return node.id\n          });\n          graph.removeNodeData(selectedNodes);\n          graph.draw();\n        }\n      }\n    "</span><span class="op">)</span></span>
+<span>    <span class="fu">JS</span><span class="op">(</span><span class="st">"( value, target, current ) =&gt; {   \n        // Handle button click events\n      const graph = HTMLWidgets.find(`#${target.closest('.g6').id}`).getWidget();\n      const fullScreen = graph.getPluginInstance('fullscreen');\n        if ( value === 'zoom-in' ) {   \n          graph.zoomTo ( 1.1 ) ;\n        } else if ( value === 'zoom-out' ) {     \n          graph.zoomTo ( 0.9 ) ;\n        } else if ( value === 'auto-fit' ) {     \n          graph.fitView ( ) ;\n        } else if (value === 'delete') {\n          const selectedNodes = graph.getElementDataByState('node', 'selected').map((node) =&gt; {\n            return node.id\n          });\n          graph.removeNodeData(selectedNodes);\n          graph.draw();\n        } else if (value === 'request-fullscreen') {\n          if (fullScreen !== undefined) {\n            fullScreen.request();\n          }\n        } else if (value === 'exit-fullscreen') {\n          if (fullScreen !== undefined) {\n            fullScreen.exit();\n          }\n        }\n      }\n    "</span><span class="op">)</span>,</span>
+<span>  <span class="va">...</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -82,6 +83,10 @@ This plugin adds a customizable toolbar with items for graph operations.</p>
 
 <dt id="arg-onclick">onClick<a class="anchor" aria-label="anchor" href="#arg-onclick"></a></dt>
 <dd><p>Callback function after a toolbar item is clicked (JS function, default: NULL)</p></dd>
+
+
+<dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>
+<dd><p>Extra parameters. See <a href="https://g6.antv.antgroup.com/manual/plugin/build-in/toolbar" class="external-link">https://g6.antv.antgroup.com/manual/plugin/build-in/toolbar</a>.</p></dd>
 
 </dl></div>
     <div class="section level2">

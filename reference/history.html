@@ -48,7 +48,8 @@ This plugin enables undo/redo functionality for graph operations.</p>
 <span>  afterAddCommand <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  beforeAddCommand <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  executeCommand <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  stackSize <span class="op">=</span> <span class="fl">0</span></span>
+<span>  stackSize <span class="op">=</span> <span class="fl">0</span>,</span>
+<span>  <span class="va">...</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -74,6 +75,10 @@ This plugin enables undo/redo functionality for graph operations.</p>
 
 <dt id="arg-stacksize">stackSize<a class="anchor" aria-label="anchor" href="#arg-stacksize"></a></dt>
 <dd><p>Maximum length of history records to be recorded, 0 means unlimited (number, default: 0)</p></dd>
+
+
+<dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>
+<dd><p>Extra parameters. See <a href="https://g6.antv.antgroup.com/manual/plugin/build-in/history" class="external-link">https://g6.antv.antgroup.com/manual/plugin/build-in/history</a>.</p></dd>
 
 </dl></div>
     <div class="section level2">
