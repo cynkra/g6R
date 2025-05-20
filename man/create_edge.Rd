@@ -10,7 +10,8 @@ create_edge(
   enable = TRUE,
   onCreate = NULL,
   onFinish = NULL,
-  style = NULL
+  style = NULL,
+  ...
 )
 }
 \arguments{
@@ -25,6 +26,8 @@ create_edge(
 \item{onFinish}{Callback function for successfully creating an edge (function, default: NULL)}
 
 \item{style}{Style of the newly created edge (list, default: NULL)}
+
+\item{...}{Extra parameters. See \url{https://g6.antv.antgroup.com/manual/behavior/build-in/create-edge}.}
 }
 \value{
 A list with the configuration settings

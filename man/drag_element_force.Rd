@@ -8,10 +8,11 @@ drag_element_force(
   key = "drag-element-force",
   fixed = FALSE,
   enable =
-    htmlwidgets::JS("(event) => { \\n      return event.targetType === 'node' || event.targetType === 'combo';\\n    }"),
+    JS("(event) => { \\n      return event.targetType === 'node' || event.targetType === 'combo';\\n    }"),
   state = "selected",
-  hideEdge = "none",
-  cursor = NULL
+  hideEdge = c("none", "out", "in", "both", "all"),
+  cursor = NULL,
+  ...
 )
 }
 \arguments{
@@ -26,6 +27,8 @@ drag_element_force(
 \item{hideEdge}{Controls the display state of edges during dragging: "none", "out", "in", "both", or "all" (string, default: "none")}
 
 \item{cursor}{Customize the mouse style during dragging (list, default: NULL)}
+
+\item{...}{Extra parameters. See \url{https://g6.antv.antgroup.com/manual/behavior/build-in/drag-element-force}.}
 }
 \value{
 A list with the configuration settings
@@ -42,7 +45,7 @@ config <- drag_element_force()
 config <- drag_element_force(
   key = "my-custom-drag-force",
   fixed = TRUE,
-  enable = htmlwidgets::JS("(event) => { return event.targetType === 'node'; }"),
+  enable = JS("(event) => { return event.targetType === 'node'; }"),
   hideEdge = "both",
   cursor = list(
     default = "default",

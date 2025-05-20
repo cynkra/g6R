@@ -41,15 +41,15 @@ config <- history()
 config <- history(
   key = "my-history",
   stackSize = 50,
-  beforeAddCommand = htmlwidgets::JS("function(cmd, revert) {
+  beforeAddCommand = JS("function(cmd, revert) {
     console.log('Before adding command:', cmd);
     // Only allow certain operations to be recorded
     return cmd.method !== 'update';
   }"),
-  afterAddCommand = htmlwidgets::JS("function(cmd, revert) {
+  afterAddCommand = JS("function(cmd, revert) {
     console.log('Command added to ' + (revert ? 'undo' : 'redo') + ' stack');
   }"),
-  executeCommand = htmlwidgets::JS("function(cmd) {
+  executeCommand = JS("function(cmd) {
     console.log('Executing command:', cmd);
   }")
 )

@@ -7,7 +7,8 @@
 focus_element(
   key = "focus-element",
   animation = list(duration = 500, easing = "ease-in"),
-  enable = TRUE
+  enable = TRUE,
+  ...
 )
 }
 \arguments{
@@ -16,6 +17,8 @@ focus_element(
 \item{animation}{Focus animation settings (list, default: list with duration 500ms and easing "ease-in")}
 
 \item{enable}{Whether to enable the focus feature (boolean or JS function, default: TRUE)}
+
+\item{...}{Extra parameters. See \url{https://g6.antv.antgroup.com/manual/behavior/build-in/focus-element}.}
 }
 \value{
 A list with the configuration settings
@@ -32,6 +35,6 @@ config <- focus_element()
 config <- focus_element(
   key = "my-focus-behavior",
   animation = list(duration = 1000, easing = "ease-out"),
-  enable = htmlwidgets::JS("(event) => event.targetType === 'node'")
+  enable = JS("(event) => event.targetType === 'node'")
 )
 }

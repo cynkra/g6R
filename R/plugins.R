@@ -66,7 +66,7 @@
 #'   minimap(),
 #'   grid_line(),
 #'   tooltip(
-#'     getContent = htmlwidgets::JS("(e, items) => {
+#'     getContent = JS("(e, items) => {
 #'       return `<div>${items[0].id}</div>`;
 #'     }")
 #'   )
@@ -79,7 +79,7 @@
 #'     className = "my-context-menu",
 #'     trigger = "click",
 #'     offset = c(10, 10),
-#'     getItems = htmlwidgets::JS("(event) => {
+#'     getItems = JS("(event) => {
 #'       const type = event.itemType;
 #'       const isNode = type === 'node';
 #'       return [
@@ -88,19 +88,19 @@
 #'         { key: 'details', text: 'View Details', disabled: !isNode }
 #'       ];
 #'     }"),
-#'     onClick = htmlwidgets::JS("(value, target, current) => {
+#'     onClick = JS("(value, target, current) => {
 #'       if (value === 'delete') {
 #'         // do stuff
 #'     }")
 #'   ),
 #'   toolbar(
 #'     position = "top-right",
-#'     getItems = htmlwidgets::JS("() => [
+#'     getItems = JS("() => [
 #'       { id: 'zoom-in', value: 'zoom-in' },
 #'       { id: 'zoom-out', value: 'zoom-out' },
 #'       { id: 'fit', value: 'fit' }
 #'     ]"),
-#'     onClick = htmlwidgets::JS("(value) => {
+#'     onClick = JS("(value) => {
 #'       if (value === 'zoom-in') graph.zoomTo(1.1);
 #'       else if (value === 'zoom-out') graph.zoomTo(0.9);
 #'       else if (value === 'fit') graph.fitView();
@@ -328,7 +328,7 @@ bubble_sets <- function(
 #'   className = "my-context-menu",
 #'   trigger = "click",
 #'   offset = c(10, 10),
-#'   getItems = htmlwidgets::JS("(event) => {
+#'   getItems = JS("(event) => {
 #'     const type = event.itemType;
 #'     const isNode = type === 'node';
 #'     return [
@@ -337,7 +337,7 @@ bubble_sets <- function(
 #'       { key: 'details', text: 'View Details', disabled: !isNode }
 #'     ];
 #'   }"),
-#'   onClick = htmlwidgets::JS("(value, target, current) => {
+#'   onClick = JS("(value, target, current) => {
 #'     if (value === 'delete') {
 #'       // do stuff
 #'   }")
@@ -371,25 +371,25 @@ context_menu <- function(
   # Validate JS functions (no conversion)
   if (!is.null(onClick) && !is_js(onClick)) {
     stop(
-      "'onClick' must be a JavaScript function wrapped with htmlwidgets::JS()"
+      "'onClick' must be a JavaScript function wrapped with JS()"
     )
   }
 
   if (!is.null(getItems) && !is_js(getItems)) {
     stop(
-      "'getItems' must be a JavaScript function wrapped with htmlwidgets::JS()"
+      "'getItems' must be a JavaScript function wrapped with JS()"
     )
   }
 
   if (!is.null(getContent) && !is_js(getContent)) {
     stop(
-      "'getContent' must be a JavaScript function wrapped with htmlwidgets::JS()"
+      "'getContent' must be a JavaScript function wrapped with JS()"
     )
   }
 
   if (!is.logical(enable) && !is_js(enable)) {
     stop(
-      "'enable' must be a boolean or a JavaScript function wrapped with htmlwidgets::JS()"
+      "'enable' must be a boolean or a JavaScript function wrapped with JS()"
     )
   }
 
@@ -537,7 +537,7 @@ edge_bundling <- function(
 #'     stroke = "#999",
 #'     lineWidth = 2
 #'   ),
-#'   filter = htmlwidgets::JS("(id, type) => {
+#'   filter = JS("(id, type) => {
 #'     // Only display edges connected to specific nodes
 #'     if (type === 'edge') {
 #'       const edge = graph.getEdgeData(id);
@@ -584,7 +584,7 @@ edge_filter_lens <- function(
 
   if (!is.null(filter) && !is_js(filter)) {
     stop(
-      "'filter' must be a JavaScript function wrapped with htmlwidgets::JS()"
+      "'filter' must be a JavaScript function wrapped with JS()"
     )
   }
 
@@ -660,7 +660,7 @@ edge_filter_lens <- function(
 #'     fill = "rgba(24, 144, 255, 0.1)",
 #'     lineWidth = 2
 #'   ),
-#'   nodeStyle = htmlwidgets::JS("(datum) => {
+#'   nodeStyle = JS("(datum) => {
 #'     return {
 #'       label: true,
 #'       labelCfg: {
@@ -780,10 +780,10 @@ fish_eye <- function(
 #'     request = "F",
 #'     exit = "Esc"
 #'   ),
-#'   onEnter = htmlwidgets::JS("() => {
+#'   onEnter = JS("() => {
 #'     console.log('Entered fullscreen mode');
 #'   }"),
-#'   onExit = htmlwidgets::JS("() => {
+#'   onExit = JS("() => {
 #'     console.log('Exited fullscreen mode');
 #'   }")
 #' )
@@ -815,13 +815,13 @@ fullscreen <- function(
 
   if (!is.null(onEnter) && !is_js(onEnter)) {
     stop(
-      "'onEnter' must be a JavaScript function wrapped with htmlwidgets::JS()"
+      "'onEnter' must be a JavaScript function wrapped with JS()"
     )
   }
 
   if (!is.null(onExit) && !is_js(onExit)) {
     stop(
-      "'onExit' must be a JavaScript function wrapped with htmlwidgets::JS()"
+      "'onExit' must be a JavaScript function wrapped with JS()"
     )
   }
 
@@ -978,15 +978,15 @@ grid_line <- function(
 #' config <- history(
 #'   key = "my-history",
 #'   stackSize = 50,
-#'   beforeAddCommand = htmlwidgets::JS("function(cmd, revert) {
+#'   beforeAddCommand = JS("function(cmd, revert) {
 #'     console.log('Before adding command:', cmd);
 #'     // Only allow certain operations to be recorded
 #'     return cmd.method !== 'update';
 #'   }"),
-#'   afterAddCommand = htmlwidgets::JS("function(cmd, revert) {
+#'   afterAddCommand = JS("function(cmd, revert) {
 #'     console.log('Command added to ' + (revert ? 'undo' : 'redo') + ' stack');
 #'   }"),
-#'   executeCommand = htmlwidgets::JS("function(cmd) {
+#'   executeCommand = JS("function(cmd) {
 #'     console.log('Executing command:', cmd);
 #'   }")
 #' )
@@ -1001,19 +1001,19 @@ history <- function(
   # Validate inputs
   if (!is.null(afterAddCommand) && !is_js(afterAddCommand)) {
     stop(
-      "'afterAddCommand' must be a JavaScript function wrapped with htmlwidgets::JS()"
+      "'afterAddCommand' must be a JavaScript function wrapped with JS()"
     )
   }
 
   if (!is.null(beforeAddCommand) && !is_js(beforeAddCommand)) {
     stop(
-      "'beforeAddCommand' must be a JavaScript function wrapped with htmlwidgets::JS()"
+      "'beforeAddCommand' must be a JavaScript function wrapped with JS()"
     )
   }
 
   if (!is.null(executeCommand) && !is_js(executeCommand)) {
     stop(
-      "'executeCommand' must be a JavaScript function wrapped with htmlwidgets::JS()"
+      "'executeCommand' must be a JavaScript function wrapped with JS()"
     )
   }
 
@@ -1217,7 +1217,7 @@ hull <- function(
 #'
 #' # Using a function for classification
 #' config <- legend(
-#'   nodeField = htmlwidgets::JS("(item) => {
+#'   nodeField = JS("(item) => {
 #'     return item.data.importance > 0.5 ? 'Important' : 'Regular';
 #'   }")
 #' )
@@ -1268,7 +1268,7 @@ legend <- function(
       !inherits(container, "JS_EVAL")
   ) {
     stop(
-      "'container' must be a string selector or HTMLElement reference wrapped with htmlwidgets::JS()"
+      "'container' must be a string selector or HTMLElement reference wrapped with JS()"
     )
   }
 
@@ -1282,7 +1282,7 @@ legend <- function(
       !inherits(containerStyle, "JS_EVAL")
   ) {
     stop(
-      "'containerStyle' must be a list or a JavaScript object wrapped with htmlwidgets::JS()"
+      "'containerStyle' must be a list or a JavaScript object wrapped with JS()"
     )
   }
 
@@ -1292,7 +1292,7 @@ legend <- function(
       !is_js(nodeField)
   ) {
     stop(
-      "'nodeField' must be a string or a JavaScript function wrapped with htmlwidgets::JS()"
+      "'nodeField' must be a string or a JavaScript function wrapped with JS()"
     )
   }
 
@@ -1302,7 +1302,7 @@ legend <- function(
       !is_js(edgeField)
   ) {
     stop(
-      "'edgeField' must be a string or a JavaScript function wrapped with htmlwidgets::JS()"
+      "'edgeField' must be a string or a JavaScript function wrapped with JS()"
     )
   }
 
@@ -1312,7 +1312,7 @@ legend <- function(
       !is_js(comboField)
   ) {
     stop(
-      "'comboField' must be a string or a JavaScript function wrapped with htmlwidgets::JS()"
+      "'comboField' must be a string or a JavaScript function wrapped with JS()"
     )
   }
 
@@ -1435,7 +1435,7 @@ legend <- function(
 #'
 #' # With custom filtering function
 #' config <- minimap(
-#'   filter = htmlwidgets::JS("(id, elementType) => {
+#'   filter = JS("(id, elementType) => {
 #'     // Only show nodes and important edges in the minimap
 #'     if (elementType === 'node') return true;
 #'     if (elementType === 'edge') {
@@ -1472,7 +1472,7 @@ minimap <- function(
       !is_js(container)
   ) {
     stop(
-      "'container' must be a string selector or HTMLElement reference wrapped with htmlwidgets::JS()"
+      "'container' must be a string selector or HTMLElement reference wrapped with JS()"
     )
   }
 
@@ -1482,7 +1482,7 @@ minimap <- function(
       !is_js(containerStyle)
   ) {
     stop(
-      "'containerStyle' must be a list or a JavaScript object wrapped with htmlwidgets::JS()"
+      "'containerStyle' must be a list or a JavaScript object wrapped with JS()"
     )
   }
 
@@ -1492,7 +1492,7 @@ minimap <- function(
 
   if (!is.null(filter) && !is_js(filter)) {
     stop(
-      "'filter' must be a JavaScript function wrapped with htmlwidgets::JS()"
+      "'filter' must be a JavaScript function wrapped with JS()"
     )
   }
 
@@ -1502,7 +1502,7 @@ minimap <- function(
       !is_js(maskStyle)
   ) {
     stop(
-      "'maskStyle' must be a list or a JavaScript object wrapped with htmlwidgets::JS()"
+      "'maskStyle' must be a list or a JavaScript object wrapped with JS()"
     )
   }
 
@@ -1540,13 +1540,13 @@ minimap <- function(
 
   if (!is.null(renderer) && !is_js(renderer)) {
     stop(
-      "'renderer' must be a JavaScript object wrapped with htmlwidgets::JS()"
+      "'renderer' must be a JavaScript object wrapped with JS()"
     )
   }
 
   if (!is.character(shape) && !is_js(shape)) {
     stop(
-      "'shape' must be a string or a JavaScript function wrapped with htmlwidgets::JS()"
+      "'shape' must be a string or a JavaScript function wrapped with JS()"
     )
   }
 
@@ -1606,7 +1606,7 @@ minimap <- function(
 #'
 #' # With custom filter function
 #' config <- snapline(
-#'   filter = htmlwidgets::JS("(node) => {
+#'   filter = JS("(node) => {
 #'     // Only allow regular nodes to participate in alignment
 #'     // Exclude special nodes like 'start' or 'end'
 #'     const model = node.getModel();
@@ -1639,7 +1639,7 @@ snapline <- function(
 
   if (!is.character(shape) && !is_js(shape)) {
     stop(
-      "'shape' must be a string or a JavaScript function wrapped with htmlwidgets::JS()"
+      "'shape' must be a string or a JavaScript function wrapped with JS()"
     )
   }
 
@@ -1661,7 +1661,7 @@ snapline <- function(
 
   if (!is.null(filter) && !is_js(filter)) {
     stop(
-      "'filter' must be a JavaScript function wrapped with htmlwidgets::JS()"
+      "'filter' must be a JavaScript function wrapped with JS()"
     )
   }
 
@@ -1731,10 +1731,10 @@ snapline <- function(
 #' # With custom callbacks
 #' config <- timebar(
 #'   data = c(1609459200000, 1609545600000, 1609632000000),
-#'   onChange = htmlwidgets::JS("(values) => {
+#'   onChange = JS("(values) => {
 #'     console.log('Time changed:', values);
 #'   }"),
-#'   onPlay = htmlwidgets::JS("() => {
+#'   onPlay = JS("() => {
 #'     console.log('Playback started');
 #'   }")
 #' )
@@ -1742,7 +1742,7 @@ snapline <- function(
 #' # With custom time getter function for elements
 #' config <- timebar(
 #'   data = c(1609459200000, 1609545600000, 1609632000000),
-#'   getTime = htmlwidgets::JS("(datum) => {
+#'   getTime = JS("(datum) => {
 #'     return datum.created_at; // Get time from created_at property
 #'   }")
 #' )
@@ -1844,7 +1844,7 @@ timebar <- function(
       stop(paste0(
         "'",
         param,
-        "' must be a JavaScript function wrapped with htmlwidgets::JS()"
+        "' must be a JavaScript function wrapped with JS()"
       ))
     }
   }
@@ -1880,14 +1880,14 @@ timebar <- function(
 #' # Basic toolbar with zoom controls
 #' config <- toolbar(
 #'   position = "top-right",
-#'   getItems = htmlwidgets::JS("() => [
+#'   getItems = JS("() => [
 #'     { id: 'zoom-in', value: 'zoom-in' },
 #'     { id: 'zoom-out', value: 'zoom-out' },
 #'     { id: 'undo', value: 'undo' },
 #'     { id: 'redo', value: 'redo' },
 #'     { id: 'auto-fit', value: 'fit' }
 #'   ]"),
-#'   onClick = htmlwidgets::JS("(value) => {
+#'   onClick = JS("(value) => {
 #'     // redo, undo need to be used with the history plugin
 #'     const history = graph.getPluginInstance('history');
 #'     switch (value) {
@@ -1980,13 +1980,13 @@ toolbar <- function(
 
   if (!is_js(getItems)) {
     stop(
-      "'getItems' must be a JavaScript function wrapped with htmlwidgets::JS()"
+      "'getItems' must be a JavaScript function wrapped with JS()"
     )
   }
 
   if (!is.null(onClick) && !is_js(onClick)) {
     stop(
-      "'onClick' must be a JavaScript function wrapped with htmlwidgets::JS()"
+      "'onClick' must be a JavaScript function wrapped with JS()"
     )
   }
 
@@ -2029,7 +2029,7 @@ toolbar <- function(
 #' # Tooltip with custom position and content
 #' config <- tooltip(
 #'   position = "bottom",
-#'   getContent = htmlwidgets::JS("(event, items) => {
+#'   getContent = JS("(event, items) => {
 #'     let result = `<h4>Custom Content</h4>`;
 #'     items.forEach((item) => {
 #'       result += `<p>Type: ${item.data.description}</p>`;
@@ -2057,13 +2057,13 @@ toolbar <- function(
 #'
 #' # Conditional tooltip based on node type
 #' config <- tooltip(
-#'   enable = htmlwidgets::JS("(event, items) => {
+#'   enable = JS("(event, items) => {
 #'     // Only show tooltip for nodes with type 'important'
 #'     const item = items[0];
 #'     return item.type === 'important';
 #'   }"),
 #'   enterable = TRUE,
-#'   onOpenChange = htmlwidgets::JS("(open) => {
+#'   onOpenChange = JS("(open) => {
 #'     console.log('Tooltip visibility changed:', open);
 #'   }")
 #' )

@@ -10,11 +10,12 @@ lasso_select(
   enable = TRUE,
   enableElements = c("node", "combo", "edge"),
   immediately = FALSE,
-  mode = "default",
+  mode = c("default", "union", "intersect", "diff"),
   onSelect = NULL,
   state = "selected",
   style = NULL,
-  trigger = c("shift")
+  trigger = c("shift"),
+  ...
 )
 }
 \arguments{
@@ -37,6 +38,8 @@ lasso_select(
 \item{style}{Style of the lasso during selection (list, default: NULL)}
 
 \item{trigger}{Press this shortcut key along with mouse click to select (character vector, default: c("shift"))}
+
+\item{...}{Extra parameters. See \url{https://g6.antv.antgroup.com/manual/behavior/build-in/lasso-select}.}
 }
 \value{
 A list with the configuration settings

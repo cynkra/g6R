@@ -11,7 +11,8 @@ collapse_expand(
   trigger = "dblclick",
   onCollapse = NULL,
   onExpand = NULL,
-  align = TRUE
+  align = TRUE,
+  ...
 )
 }
 \arguments{
@@ -28,6 +29,8 @@ collapse_expand(
 \item{onExpand}{Callback function when expand is completed (function, default: NULL)}
 
 \item{align}{Align with the target element to avoid view offset (boolean, default: TRUE)}
+
+\item{...}{Extra parameters. See \url{https://g6.antv.antgroup.com/manual/behavior/build-in/collapse-expand}.}
 }
 \value{
 A list with the configuration settings

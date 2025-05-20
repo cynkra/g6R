@@ -6,13 +6,14 @@
 \usage{
 auto_adapt_label(
   key = "auto-adapt-label",
-  enable = JS("(e) => {\\n      return true\\n    }"),
+  enable = TRUE,
   throttle = 100,
   padding = 0,
   sort = NULL,
   sortNode = list(type = "degree"),
   sortEdge = NULL,
-  sortCombo = NULL
+  sortCombo = NULL,
+  ...
 )
 }
 \arguments{
@@ -31,6 +32,8 @@ auto_adapt_label(
 \item{sortEdge}{Sorting rule specifically for edge labels (list, default: NULL)}
 
 \item{sortCombo}{Sorting rule specifically for combo labels (list, default: NULL)}
+
+\item{...}{Extra parameters. See \url{https://g6.antv.antgroup.com/manual/behavior/build-in/auto-adapt-label}.}
 }
 \value{
 A list with the configuration settings for the auto-adapt-label behavior
@@ -72,6 +75,6 @@ config <- auto_adapt_label(
 
 # Using a custom enable function
 config <- auto_adapt_label(
-  enable = htmlwidgets::JS("(e) => e.targetType === 'node'")
+  enable = JS("(e) => e.targetType === 'node'")
 )
 }

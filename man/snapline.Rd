@@ -65,7 +65,7 @@ config <- snapline(
 
 # With custom filter function
 config <- snapline(
-  filter = htmlwidgets::JS("(node) => {
+  filter = JS("(node) => {
     // Only allow regular nodes to participate in alignment
     // Exclude special nodes like 'start' or 'end'
     const model = node.getModel();

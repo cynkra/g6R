@@ -10,12 +10,13 @@ fix_element_size(
   reset = FALSE,
   state = "",
   node = NULL,
-  nodeFilter = htmlwidgets::JS("() => true"),
+  nodeFilter = JS("() => true"),
   edge = list(list(shape = "key", fields = c("lineWidth")), list(shape = "halo", fields =
     c("lineWidth")), list(shape = "label", fields = c("fontSize"))),
-  edgeFilter = htmlwidgets::JS("() => true"),
+  edgeFilter = JS("() => true"),
   combo = NULL,
-  comboFilter = htmlwidgets::JS("() => true")
+  comboFilter = JS("() => true"),
+  ...
 )
 }
 \arguments{
@@ -38,6 +39,8 @@ fix_element_size(
 \item{combo}{Combo configuration item(s) to define which attributes maintain fixed size (list or array of lists, default: NULL)}
 
 \item{comboFilter}{Combo filter to determine which combos maintain fixed size (JS function, default: returns TRUE for all combos)}
+
+\item{...}{Extra parameters. See \url{https://g6.antv.antgroup.com/manual/behavior/build-in/fix-element-size}.}
 }
 \value{
 A list with the configuration settings
@@ -59,8 +62,8 @@ config <- fix_element_size(
     list(shape = "circle", fields = c("r", "lineWidth")),
     list(shape = "label", fields = c("fontSize"))
   ),
-  nodeFilter = htmlwidgets::JS("(node) => node.type === 'important'"),
+  nodeFilter = JS("(node) => node.type === 'important'"),
   edge = list(shape = "line", fields = c("lineWidth", "lineDash")),
-  edgeFilter = htmlwidgets::JS("(edge) => edge.weight > 5")
+  edgeFilter = JS("(edge) => edge.weight > 5")
 )
 }

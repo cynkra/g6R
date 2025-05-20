@@ -75,7 +75,7 @@ plugins <- g6_plugins(
   minimap(),
   grid_line(),
   tooltip(
-    getContent = htmlwidgets::JS("(e, items) => {
+    getContent = JS("(e, items) => {
       return `<div>${items[0].id}</div>`;
     }")
   )
@@ -88,7 +88,7 @@ plugins <- g6_plugins(
     className = "my-context-menu",
     trigger = "click",
     offset = c(10, 10),
-    getItems = htmlwidgets::JS("(event) => {
+    getItems = JS("(event) => {
       const type = event.itemType;
       const isNode = type === 'node';
       return [
@@ -97,19 +97,19 @@ plugins <- g6_plugins(
         { key: 'details', text: 'View Details', disabled: !isNode }
       ];
     }"),
-    onClick = htmlwidgets::JS("(value, target, current) => {
+    onClick = JS("(value, target, current) => {
       if (value === 'delete') {
         // do stuff
     }")
   ),
   toolbar(
     position = "top-right",
-    getItems = htmlwidgets::JS("() => [
+    getItems = JS("() => [
       { id: 'zoom-in', value: 'zoom-in' },
       { id: 'zoom-out', value: 'zoom-out' },
       { id: 'fit', value: 'fit' }
     ]"),
-    onClick = htmlwidgets::JS("(value) => {
+    onClick = JS("(value) => {
       if (value === 'zoom-in') graph.zoomTo(1.1);
       else if (value === 'zoom-out') graph.zoomTo(0.9);
       else if (value === 'fit') graph.fitView();

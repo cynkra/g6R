@@ -59,7 +59,7 @@ config <- tooltip()
 # Tooltip with custom position and content
 config <- tooltip(
   position = "bottom",
-  getContent = htmlwidgets::JS("(event, items) => {
+  getContent = JS("(event, items) => {
     let result = `<h4>Custom Content</h4>`;
     items.forEach((item) => {
       result += `<p>Type: ${item.data.description}</p>`;
@@ -87,13 +87,13 @@ config <- tooltip(
 
 # Conditional tooltip based on node type
 config <- tooltip(
-  enable = htmlwidgets::JS("(event, items) => {
+  enable = JS("(event, items) => {
     // Only show tooltip for nodes with type 'important'
     const item = items[0];
     return item.type === 'important';
   }"),
   enterable = TRUE,
-  onOpenChange = htmlwidgets::JS("(open) => {
+  onOpenChange = JS("(open) => {
     console.log('Tooltip visibility changed:', open);
   }")
 )

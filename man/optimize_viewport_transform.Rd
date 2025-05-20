@@ -8,7 +8,8 @@ optimize_viewport_transform(
   key = "optimize-viewport-transform",
   enable = TRUE,
   debounce = 200,
-  shapes = htmlwidgets::JS("(type) => type === 'node'")
+  shapes = JS("(type) => type === 'node'"),
+  ...
 )
 }
 \arguments{
@@ -19,6 +20,8 @@ optimize_viewport_transform(
 \item{debounce}{How long after the operation ends to restore the visibility of all elements in milliseconds (number, default: 200)}
 
 \item{shapes}{Function to specify which graphical elements should remain visible during canvas operations (JS function, default: returns TRUE for nodes)}
+
+\item{...}{Extra parameters. See \url{https://g6.antv.antgroup.com/manual/behavior/build-in/optimize-viewport-transform}.}
 }
 \value{
 A list with the configuration settings
@@ -36,11 +39,11 @@ config <- optimize_viewport_transform()
 config <- optimize_viewport_transform(
   key = "my-optimize-transform",
   debounce = 500,
-  shapes = htmlwidgets::JS("(type) => type === 'node' || type === 'edge'")
+  shapes = JS("(type) => type === 'node' || type === 'edge'")
 )
 
 # With conditional enabling
 config <- optimize_viewport_transform(
-  enable = htmlwidgets::JS("(event) => event.getCurrentTransform().zoom < 0.5")
+  enable = JS("(event) => event.getCurrentTransform().zoom < 0.5")
 )
 }

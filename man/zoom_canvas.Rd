@@ -12,7 +12,8 @@ zoom_canvas(
   onFinish = NULL,
   preventDefault = TRUE,
   sensitivity = 1,
-  trigger = NULL
+  trigger = NULL,
+  ...
 )
 }
 \arguments{
@@ -31,6 +32,8 @@ zoom_canvas(
 \item{sensitivity}{Zoom sensitivity, the larger the value, the faster the zoom (numeric, default: 1)}
 
 \item{trigger}{How to trigger zooming, supports mouse wheel and keyboard shortcuts (list, default: NULL)}
+
+\item{...}{Extra parameters. See \url{https://g6.antv.antgroup.com/manual/behavior/build-in/zoom-canvas}.}
 }
 \value{
 A list with the configuration settings
@@ -54,12 +57,12 @@ config <- zoom_canvas(
 
 # With keyboard triggers and callback
 config <- zoom_canvas(
-  enable = htmlwidgets::JS("(event) => !event.altKey"),
+  enable = JS("(event) => !event.altKey"),
   trigger = list(
     zoomIn = "+",
     zoomOut = "-",
     reset = "0"
   ),
-  onFinish = htmlwidgets::JS("() => { console.log('Zooming finished'); }")
+  onFinish = JS("() => { console.log('Zooming finished'); }")
 )
 }

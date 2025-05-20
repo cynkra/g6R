@@ -77,7 +77,7 @@ config <- fish_eye(
     fill = "rgba(24, 144, 255, 0.1)",
     lineWidth = 2
   ),
-  nodeStyle = htmlwidgets::JS("(datum) => {
+  nodeStyle = JS("(datum) => {
     return {
       label: true,
       labelCfg: {

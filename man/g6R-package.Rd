@@ -20,5 +20,10 @@ Useful links:
 \author{
 \strong{Maintainer}: David Granjon \email{dgranjon@ymail.com}
 
+Other contributors:
+\itemize{
+  \item  Bristol Myers Squibb [funder]
+}
+
 }
 \keyword{internal}

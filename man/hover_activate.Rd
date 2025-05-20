@@ -9,11 +9,12 @@ hover_activate(
   animation = TRUE,
   enable = TRUE,
   degree = 0,
-  direction = "both",
+  direction = c("both", "in", "out"),
   state = "active",
   inactiveState = NULL,
   onHover = NULL,
-  onHoverEnd = NULL
+  onHoverEnd = NULL,
+  ...
 )
 }
 \arguments{
@@ -34,6 +35,8 @@ hover_activate(
 \item{onHover}{Callback when element is hovered (JS function, default: NULL)}
 
 \item{onHoverEnd}{Callback when hover ends (JS function, default: NULL)}
+
+\item{...}{Extra parameters. See \url{https://g6.antv.antgroup.com/manual/behavior/build-in/hover-activate}.}
 }
 \value{
 A list with the configuration settings
@@ -54,6 +57,6 @@ config <- hover_activate(
   direction = "out",
   state = "highlight",
   inactiveState = "inactive",
-  onHover = htmlwidgets::JS("(event) => { console.log('Hover on:', event.target.id); }")
+  onHover = JS("(event) => { console.log('Hover on:', event.target.id); }")
 )
 }

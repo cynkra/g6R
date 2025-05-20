@@ -12,9 +12,10 @@ brush_select(
   immediately = FALSE,
   mode = c("default", "union", "intersect", "diff"),
   onSelect = NULL,
-  state = "selected",
+  state = c("selected", "active", "inactive", "disabled", "highlight"),
   style = NULL,
-  trigger = "shift"
+  trigger = "shift",
+  ...
 )
 }
 \arguments{
@@ -38,6 +39,8 @@ brush_select(
 See \url{https://g6.antv.antgroup.com/en/manual/behavior/build-in/brush-select#style}.}
 
 \item{trigger}{Shortcut keys for selection (character vector)}
+
+\item{...}{Extra parameters. See \url{https://g6.antv.antgroup.com/manual/behavior/build-in/brush-select}.}
 }
 \value{
 A list with the configuration settings

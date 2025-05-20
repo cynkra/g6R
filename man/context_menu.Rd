@@ -55,7 +55,7 @@ config <- context_menu(
   className = "my-context-menu",
   trigger = "click",
   offset = c(10, 10),
-  getItems = htmlwidgets::JS("(event) => {
+  getItems = JS("(event) => {
     const type = event.itemType;
     const isNode = type === 'node';
     return [
@@ -64,7 +64,7 @@ config <- context_menu(
       { key: 'details', text: 'View Details', disabled: !isNode }
     ];
   }"),
-  onClick = htmlwidgets::JS("(value, target, current) => {
+  onClick = JS("(value, target, current) => {
     if (value === 'delete') {
       // do stuff
   }")

@@ -109,10 +109,10 @@ config <- timebar(
 # With custom callbacks
 config <- timebar(
   data = c(1609459200000, 1609545600000, 1609632000000),
-  onChange = htmlwidgets::JS("(values) => {
+  onChange = JS("(values) => {
     console.log('Time changed:', values);
   }"),
-  onPlay = htmlwidgets::JS("() => {
+  onPlay = JS("() => {
     console.log('Playback started');
   }")
 )
@@ -120,7 +120,7 @@ config <- timebar(
 # With custom time getter function for elements
 config <- timebar(
   data = c(1609459200000, 1609545600000, 1609632000000),
-  getTime = htmlwidgets::JS("(datum) => {
+  getTime = JS("(datum) => {
     return datum.created_at; // Get time from created_at property
   }")
 )

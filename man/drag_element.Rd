@@ -9,10 +9,11 @@ drag_element(
   enable = TRUE,
   animation = TRUE,
   state = "selected",
-  dropEffect = "move",
-  hideEdge = "none",
+  dropEffect = c("move", "link", "none"),
+  hideEdge = c("none", "out", "in", "both", "all"),
   shadow = FALSE,
-  cursor = NULL
+  cursor = NULL,
+  ...
 )
 }
 \arguments{
@@ -31,6 +32,8 @@ drag_element(
 \item{shadow}{Whether to enable ghost nodes (boolean, default: FALSE)}
 
 \item{cursor}{Customize the mouse style during dragging (list, default: NULL)}
+
+\item{...}{Extra parameters. See \url{https://g6.antv.antgroup.com/manual/behavior/build-in/drag-element}.}
 }
 \value{
 A list with the configuration settings

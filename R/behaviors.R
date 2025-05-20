@@ -103,6 +103,7 @@ valid_states <- c("selected", "active", "inactive", "disabled", "highlight")
 #' @param sortNode Sorting rule specifically for node labels (list, default: list(type = "degree"))
 #' @param sortEdge Sorting rule specifically for edge labels (list, default: NULL)
 #' @param sortCombo Sorting rule specifically for combo labels (list, default: NULL)
+#' @param ... Extra parameters. See \url{https://g6.antv.antgroup.com/manual/behavior/build-in/auto-adapt-label}.
 #'
 #' @details
 #' The auto-adapt-label behavior helps prevent label overlap by automatically adjusting
@@ -139,49 +140,88 @@ valid_states <- c("selected", "active", "inactive", "disabled", "highlight")
 #'
 #' # Using a custom enable function
 #' config <- auto_adapt_label(
-#'   enable = htmlwidgets::JS("(e) => e.targetType === 'node'")
+#'   enable = JS("(e) => e.targetType === 'node'")
 #' )
 auto_adapt_label <- function(
   key = "auto-adapt-label",
-  enable = JS(
-    "(e) => {
-      return true
-    }"
-  ),
+  enable = TRUE,
   throttle = 100,
   padding = 0,
   sort = NULL,
   sortNode = list(type = "degree"),
   sortEdge = NULL,
-  sortCombo = NULL
+  sortCombo = NULL,
+  ...
 ) {
-  # Create the configuration list
-  config <- list(
-    type = "auto-adapt-label",
-    key = key,
-    enable = enable,
-    throttle = throttle,
-    padding = padding
-  )
-
-  # Add optional parameters if provided
-  if (!is.null(sort)) {
-    config$sort <- sort
+  if (!is.logical(enable) && !is_js(enable)) {
+    stop(
+      "'enable' must be a logical value or a JavaScript function wrapped by JS()"
+    )
   }
 
-  if (!is.null(sortNode) && is.null(sort)) {
-    config$sortNode <- sortNode
+  # 'throttle' should be a positive number
+  if (!is.numeric(throttle) || length(throttle) != 1 || throttle < 0) {
+    stop("'throttle' must be a single non-negative numeric value")
   }
 
-  if (!is.null(sortEdge) && is.null(sort)) {
-    config$sortEdge <- sortEdge
+  # 'padding' can be a single number or an array of numbers
+  if (!is.numeric(padding)) {
+    stop("'padding' must be a numeric value or a numeric vector")
   }
 
-  if (!is.null(sortCombo) && is.null(sort)) {
-    config$sortCombo <- sortCombo
+  # 'sort' is a custom sorting function or NULL
+  if (!is.null(sort) && !is_js(sort)) {
+    stop(
+      "'sort' must be NULL or a JavaScript function wrapped by JS() that compares two elements"
+    )
   }
 
-  config
+  # 'sortNode' can be a list with configuration options or a function
+  if (!is.null(sortNode) && !is.list(sortNode) && !is_js(sortNode)) {
+    stop(
+      "'sortNode' must be NULL, a list with configuration options, or a comparison JavaScript function wrapped by JS()"
+    )
+  }
+
+  # If sortNode is a list and has a type field, validate it's one of the expected values
+  if (is.list(sortNode) && !is.null(sortNode$type)) {
+    valid_types <- c(
+      "degree",
+      "betweenness",
+      "closeness",
+      "eigenvector",
+      "pagerank"
+    )
+    if (!(sortNode$type %in% valid_types)) {
+      stop(
+        "'sortNode$type' must be one of: ",
+        paste(valid_types, collapse = ", ")
+      )
+    }
+  }
+
+  # 'sortEdge' can be a function or NULL
+  if (!is.null(sortEdge) && !is_js(sortEdge)) {
+    stop(
+      "'sortEdge' must be NULL or a JavaScript function wrapped by JS() that compares two edges"
+    )
+  }
+
+  # 'sortCombo' can be a function or NULL
+  if (!is.null(sortCombo) && !is_js(sortCombo)) {
+    stop(
+      "'sortCombo' must be NULL or a JavaScript function wrapped by JS() that compares two combos"
+    )
+  }
+
+  arg_names <- names(formals())
+  arg_names <- arg_names[arg_names != "..."]
+  # Get values of only the named parameters
+  config <- mget(arg_names)
+  config$type <- "auto-adapt-label"
+
+  # Drop NULL elements
+  dropNulls(c(config, list(...)))
 }
 
 #' Configure Brush Selection Interaction
@@ -200,6 +240,7 @@ auto_adapt_label <- function(
 #' @param style Style specification for the selection box (list).
 #' See \url{https://g6.antv.antgroup.com/en/manual/behavior/build-in/brush-select#style}.
 #' @param trigger Shortcut keys for selection (character vector)
+#' @param ... Extra parameters. See \url{https://g6.antv.antgroup.com/manual/behavior/build-in/brush-select}.
 #'
 #' @return A list with the configuration settings
 #' @export
@@ -233,9 +274,10 @@ brush_select <- function(
   immediately = FALSE,
   mode = c("default", "union", "intersect", "diff"),
   onSelect = NULL,
-  state = "selected",
+  state = c("selected", "active", "inactive", "disabled", "highlight"),
   style = NULL,
-  trigger = "shift"
+  trigger = "shift",
+  ...
 ) {
   # Validate inputs
   if (!is.logical(animation)) {
@@ -243,12 +285,15 @@ brush_select <- function(
   }
 
   if (!is.logical(enable) && !is_js(enable)) {
-    stop("'enable' should be a boolean or JS function")
+    stop("'enable' should be a boolean or JS() function")
   }
 
-  valid_elements <- c("node", "combo", "edge")
+  valid_elements <- c("node", "edge", "combo")
   if (!all(enableElements %in% valid_elements)) {
-    stop("'enableElements' should contain only 'node', 'combo', or 'edge'")
+    stop(
+      "'enableElements' should only contain: ",
+      paste(valid_elements, collapse = ", ")
+    )
   }
 
   if (!is.logical(immediately)) {
@@ -261,47 +306,16 @@ brush_select <- function(
     stop("'onSelect' should be a JS function")
   }
 
-  if (
-    !is.character(state) || (length(state) == 1 && !state %in% valid_states)
-  ) {
-    stop(
-      "'state' should be one of 'selected', 'active', 'inactive', 'disabled', 'highlight', or a custom string"
-    )
-  }
+  state <- match.arg(state)
 
-  # Create the configuration list
-  config <- list(
-    type = "brush-select",
-    key = key,
-    animation = animation,
-    enable = enable,
-    enableElements = enableElements,
-    immediately = immediately,
-    mode = mode,
-    state = state
-  )
+  arg_names <- names(formals())
+  arg_names <- arg_names[arg_names != "..."]
+  # Get values of only the named parameters
+  config <- mget(arg_names)
+  config$type <- "brush-select"
 
-  # Add optional parameters if provided
-  if (!is.null(onSelect)) {
-    config$onSelect <- onSelect
-  }
-
-  if (!is.null(style)) {
-    config$style <- style
-  }
-
-  if (!is.null(trigger)) {
-    # Check if trigger contains 'drag' which conflicts with drag-canvas
-    if (trigger == "drag") {
-      warning(
-        "Setting trigger to include 'drag' will cause the drag-canvas behavior to fail. 
-        The two cannot be configured simultaneously."
-      )
-    }
-    config$trigger <- trigger
-  }
-
-  config
+  # Drop NULL elements
+  dropNulls(c(config, list(...)))
 }
 
 #' Configure Click Select Behavior
@@ -319,6 +333,7 @@ brush_select <- function(
 #' @param unselectedState The state applied to all other elements (string, default: NULL)
 #' @param onClick Callback when an element is clicked (function, default: NULL)
 #' @param trigger Keys for multi-selection (character vector, default: c("shift"))
+#' @param ... Extra parameters. See \url{https://g6.antv.antgroup.com/manual/behavior/build-in/click-select}.
 #'
 #' @return A list with the configuration settings
 #' @export
@@ -347,11 +362,10 @@ click_select <- function(
   neighborState = c("selected", "active", "inactive", "disabled", "highlight"),
   unselectedState = NULL,
   onClick = NULL,
-  trigger = "shift"
+  trigger = "shift",
+  ...
 ) {
   # Validate inputs
-  valid_states <- c("selected", "active", "inactive", "disabled", "highlight")
-
   if (!is.logical(animation)) {
     stop("'animation' should be a boolean value")
   }
@@ -386,28 +400,15 @@ click_select <- function(
   }
 
   # Create the configuration list with internal type parameter
-  config <- list(
-    type = "click-select", # Now set internally
-    key = key,
-    animation = animation,
-    degree = degree,
-    enable = enable,
-    multiple = multiple,
-    state = state,
-    neighborState = neighborState,
-    trigger = list(trigger)
-  )
+  arg_names <- names(formals())
+  arg_names <- arg_names[arg_names != "..."]
+  # Get values of only the named parameters
+  config <- mget(arg_names)
+  config$trigger <- list(config$trigger)
+  config$type <- "click-select"
 
-  # Add optional parameters if provided
-  if (!is.null(unselectedState)) {
-    config$unselectedState <- unselectedState
-  }
-
-  if (!is.null(onClick)) {
-    config$onClick <- onClick
-  }
-
-  config
+  # Drop NULL elements
+  dropNulls(c(config, list(...)))
 }
 
 #' Configure Collapse Expand Behavior
@@ -422,6 +423,7 @@ click_select <- function(
 #' @param onCollapse Callback function when collapse is completed (function, default: NULL)
 #' @param onExpand Callback function when expand is completed (function, default: NULL)
 #' @param align Align with the target element to avoid view offset (boolean, default: TRUE)
+#' @param ... Extra parameters. See \url{https://g6.antv.antgroup.com/manual/behavior/build-in/collapse-expand}.
 #'
 #' @return A list with the configuration settings
 #' @export
@@ -436,7 +438,8 @@ collapse_expand <- function(
   trigger = "dblclick",
   onCollapse = NULL,
   onExpand = NULL,
-  align = TRUE
+  align = TRUE,
+  ...
 ) {
   # Validate inputs
   if (!is.logical(animation)) {
@@ -464,25 +467,14 @@ collapse_expand <- function(
   }
 
   # Create the configuration list with internal type parameter
-  config <- list(
-    type = "collapse-expand", # Set internally
-    key = key,
-    animation = animation,
-    enable = enable,
-    trigger = trigger,
-    align = align
-  )
+  arg_names <- names(formals())
+  arg_names <- arg_names[arg_names != "..."]
+  # Get values of only the named parameters
+  config <- mget(arg_names)
+  config$type <- "collapse-expand"
 
-  # Add optional callback functions if provided
-  if (!is.null(onCollapse)) {
-    config$onCollapse <- onCollapse
-  }
-
-  if (!is.null(onExpand)) {
-    config$onExpand <- onExpand
-  }
-
-  config
+  # Drop NULL elements
+  dropNulls(c(config, list(...)))
 }
 
 #' Configure Create Edge Behavior
@@ -496,6 +488,7 @@ collapse_expand <- function(
 #' @param onCreate Callback function for creating an edge, returns edge data (function, default: NULL)
 #' @param onFinish Callback function for successfully creating an edge (function, default: NULL)
 #' @param style Style of the newly created edge (list, default: NULL)
+#' @param ... Extra parameters. See \url{https://g6.antv.antgroup.com/manual/behavior/build-in/create-edge}.
 #'
 #' @return A list with the configuration settings
 #' @export
@@ -509,7 +502,8 @@ create_edge <- function(
   enable = TRUE,
   onCreate = NULL,
   onFinish = NULL,
-  style = NULL
+  style = NULL,
+  ...
 ) {
   # Validate inputs
   if (!trigger %in% c("click", "drag")) {
@@ -533,27 +527,14 @@ create_edge <- function(
   }
 
   # Create the configuration list with internal type parameter
-  config <- list(
-    type = "create-edge", # Set internally
-    key = key,
-    trigger = trigger,
-    enable = enable
-  )
+  arg_names <- names(formals())
+  arg_names <- arg_names[arg_names != "..."]
+  # Get values of only the named parameters
+  config <- mget(arg_names)
+  config$type <- "create-edge"
 
-  # Add optional parameters if provided
-  if (!is.null(onCreate)) {
-    config$onCreate <- onCreate
-  }
-
-  if (!is.null(onFinish)) {
-    config$onFinish <- onFinish
-  }
-
-  if (!is.null(style)) {
-    config$style <- style
-  }
-
-  config
+  # Drop NULL elements
+  dropNulls(c(config, list(...)))
 }
 
 #' Configure Drag Canvas Behavior
@@ -569,6 +550,7 @@ create_edge <- function(
 #' @param sensitivity Distance to trigger a single keyboard movement (number, default: 10)
 #' @param trigger Keyboard keys to trigger dragging (list, default: NULL)
 #' @param onFinish Callback function when dragging is completed (function, default: NULL)
+#' @param ... Extra parameters. See \url{https://g6.antv.antgroup.com/manual/behavior/build-in/drag-canvas}.
 #'
 #' @return A list with the configuration settings
 #' @export
@@ -594,11 +576,12 @@ drag_canvas <- function(
   key = "drag-canvas",
   enable = TRUE,
   animation = NULL,
-  direction = "both",
+  direction = c("both", "x", "y"),
   range = Inf,
   sensitivity = 10,
   trigger = NULL,
-  onFinish = NULL
+  onFinish = NULL,
+  ...
 ) {
   # Validate inputs
   if (!is.logical(enable) && !is_js(enable)) {
@@ -609,9 +592,7 @@ drag_canvas <- function(
     stop("'animation' should be a list of animation configuration options")
   }
 
-  if (!direction %in% c("x", "y", "both")) {
-    stop("'direction' should be one of 'x', 'y', or 'both'")
-  }
+  direction <- match.arg(direction)
 
   if (!is.numeric(range) && !is.infinite(range)) {
     stop("'range' should be a number, numeric vector, or Inf")
@@ -630,29 +611,14 @@ drag_canvas <- function(
   }
 
   # Create the configuration list with internal type parameter
-  config <- list(
-    type = "drag-canvas", # Set internally
-    key = key,
-    enable = enable,
-    direction = direction,
-    range = range,
-    sensitivity = sensitivity
-  )
+  arg_names <- names(formals())
+  arg_names <- arg_names[arg_names != "..."]
+  # Get values of only the named parameters
+  config <- mget(arg_names)
+  config$type <- "drag-canvas"
 
-  # Add optional parameters if provided
-  if (!is.null(animation)) {
-    config$animation <- animation
-  }
-
-  if (!is.null(trigger)) {
-    config$trigger <- trigger
-  }
-
-  if (!is.null(onFinish)) {
-    config$onFinish <- onFinish
-  }
-
-  config
+  # Drop NULL elements
+  dropNulls(c(config, list(...)))
 }
 
 #' Configure Drag Element Behavior
@@ -668,6 +634,7 @@ drag_canvas <- function(
 #' @param hideEdge Controls the display state of edges during dragging: "none", "out", "in", "both", or "all" (string, default: "none")
 #' @param shadow Whether to enable ghost nodes (boolean, default: FALSE)
 #' @param cursor Customize the mouse style during dragging (list, default: NULL)
+#' @param ... Extra parameters. See \url{https://g6.antv.antgroup.com/manual/behavior/build-in/drag-element}.
 #'
 #' @return A list with the configuration settings
 #' @export
@@ -699,10 +666,11 @@ drag_element <- function(
   enable = TRUE,
   animation = TRUE,
   state = "selected",
-  dropEffect = "move",
-  hideEdge = "none",
+  dropEffect = c("move", "link", "none"),
+  hideEdge = c("none", "out", "in", "both", "all"),
   shadow = FALSE,
-  cursor = NULL
+  cursor = NULL,
+  ...
 ) {
   # Validate inputs
   if (!is.logical(enable) && !is_js(enable)) {
@@ -717,15 +685,8 @@ drag_element <- function(
     stop("'state' should be a string")
   }
 
-  valid_drop_effects <- c("link", "move", "none")
-  if (!dropEffect %in% valid_drop_effects) {
-    stop("'dropEffect' should be one of 'link', 'move', or 'none'")
-  }
-
-  valid_hide_edge_options <- c("none", "out", "in", "both", "all")
-  if (!hideEdge %in% valid_hide_edge_options) {
-    stop("'hideEdge' should be one of 'none', 'out', 'in', 'both', or 'all'")
-  }
+  dropEffect <- match.arg(dropEffect)
+  hideEdge <- match.arg(hideEdge)
 
   if (!is.logical(shadow)) {
     stop("'shadow' should be a boolean value")
@@ -736,22 +697,14 @@ drag_element <- function(
   }
 
   # Create the configuration list with internal type parameter
-  config <- list(
-    type = "drag-element", # Set internally
-    key = key,
-    animation = animation,
-    state = state,
-    dropEffect = dropEffect,
-    hideEdge = hideEdge,
-    shadow = shadow,
-    enable = enable
-  )
+  arg_names <- names(formals())
+  arg_names <- arg_names[arg_names != "..."]
+  # Get values of only the named parameters
+  config <- mget(arg_names)
+  config$type <- "drag-element"
 
-  if (!is.null(cursor)) {
-    config$cursor <- cursor
-  }
-
-  config
+  # Drop NULL elements
+  dropNulls(c(config, list(...)))
 }
 
 #' Configure Drag Element Force Behavior
@@ -765,6 +718,7 @@ drag_element <- function(
 #' @param state Identifier for the selected state of nodes (string, default: "selected")
 #' @param hideEdge Controls the display state of edges during dragging: "none", "out", "in", "both", or "all" (string, default: "none")
 #' @param cursor Customize the mouse style during dragging (list, default: NULL)
+#' @param ... Extra parameters. See \url{https://g6.antv.antgroup.com/manual/behavior/build-in/drag-element-force}.
 #'
 #' @return A list with the configuration settings
 #' @export
@@ -777,7 +731,7 @@ drag_element <- function(
 #' config <- drag_element_force(
 #'   key = "my-custom-drag-force",
 #'   fixed = TRUE,
-#'   enable = htmlwidgets::JS("(event) => { return event.targetType === 'node'; }"),
+#'   enable = JS("(event) => { return event.targetType === 'node'; }"),
 #'   hideEdge = "both",
 #'   cursor = list(
 #'     default = "default",
@@ -788,14 +742,15 @@ drag_element <- function(
 drag_element_force <- function(
   key = "drag-element-force",
   fixed = FALSE,
-  enable = htmlwidgets::JS(
+  enable = JS(
     "(event) => { 
       return event.targetType === 'node' || event.targetType === 'combo';
     }"
   ),
   state = "selected",
-  hideEdge = "none",
-  cursor = NULL
+  hideEdge = c("none", "out", "in", "both", "all"),
+  cursor = NULL,
+  ...
 ) {
   # Validate inputs
   if (!is.logical(fixed)) {
@@ -804,7 +759,7 @@ drag_element_force <- function(
 
   if (!is.logical(enable) && !is_js(enable)) {
     stop(
-      "'enable' should be a boolean or a JavaScript function wrapped with htmlwidgets::JS()"
+      "'enable' should be a boolean or a JavaScript function wrapped with JS()"
     )
   }
 
@@ -812,31 +767,21 @@ drag_element_force <- function(
     stop("'state' should be a string")
   }
 
-  valid_hide_edge_options <- c("none", "out", "in", "both", "all")
-  if (!hideEdge %in% valid_hide_edge_options) {
-    stop("'hideEdge' should be one of 'none', 'out', 'in', 'both', or 'all'")
-  }
+  hideEdge <- match.arg(hideEdge)
 
   if (!is.null(cursor) && !is.list(cursor)) {
     stop("'cursor' should be a list of cursor style configurations")
   }
 
   # Create the configuration list with internal type parameter
-  config <- list(
-    type = "drag-element-force", # Set internally
-    key = key, # User-configurable with default
-    fixed = fixed,
-    state = state,
-    hideEdge = hideEdge,
-    enable = enable
-  )
+  arg_names <- names(formals())
+  arg_names <- arg_names[arg_names != "..."]
+  # Get values of only the named parameters
+  config <- mget(arg_names)
+  config$type <- "drag-element-force"
 
-  # Add optional parameters if provided
-  if (!is.null(cursor)) {
-    config$cursor <- cursor
-  }
-
-  config
+  # Drop NULL elements
+  dropNulls(c(config, list(...)))
 }
 
 #' Configure Fix Element Size Behavior
@@ -854,6 +799,7 @@ drag_element_force <- function(
 #' @param edgeFilter Edge filter to determine which edges maintain fixed size (JS function, default: returns TRUE for all edges)
 #' @param combo Combo configuration item(s) to define which attributes maintain fixed size (list or array of lists, default: NULL)
 #' @param comboFilter Combo filter to determine which combos maintain fixed size (JS function, default: returns TRUE for all combos)
+#' @param ... Extra parameters. See \url{https://g6.antv.antgroup.com/manual/behavior/build-in/fix-element-size}.
 #'
 #' @return A list with the configuration settings
 #' @export
@@ -871,9 +817,9 @@ drag_element_force <- function(
 #'     list(shape = "circle", fields = c("r", "lineWidth")),
 #'     list(shape = "label", fields = c("fontSize"))
 #'   ),
-#'   nodeFilter = htmlwidgets::JS("(node) => node.type === 'important'"),
+#'   nodeFilter = JS("(node) => node.type === 'important'"),
 #'   edge = list(shape = "line", fields = c("lineWidth", "lineDash")),
-#'   edgeFilter = htmlwidgets::JS("(edge) => edge.weight > 5")
+#'   edgeFilter = JS("(edge) => edge.weight > 5")
 #' )
 fix_element_size <- function(
   key = "fix-element-size",
@@ -881,20 +827,21 @@ fix_element_size <- function(
   reset = FALSE,
   state = "",
   node = NULL,
-  nodeFilter = htmlwidgets::JS("() => true"),
+  nodeFilter = JS("() => true"),
   edge = list(
     list(shape = "key", fields = c("lineWidth")),
     list(shape = "halo", fields = c("lineWidth")),
     list(shape = "label", fields = c("fontSize"))
   ),
-  edgeFilter = htmlwidgets::JS("() => true"),
+  edgeFilter = JS("() => true"),
   combo = NULL,
-  comboFilter = htmlwidgets::JS("() => true")
+  comboFilter = JS("() => true"),
+  ...
 ) {
   # Validate inputs
   if (!is.logical(enable) && !is_js(enable)) {
     stop(
-      "'enable' should be a boolean or a JavaScript function wrapped with htmlwidgets::JS()"
+      "'enable' should be a boolean or a JavaScript function wrapped with JS()"
     )
   }
 
@@ -914,7 +861,7 @@ fix_element_size <- function(
   # Validate node filter
   if (!is_js(nodeFilter)) {
     stop(
-      "'nodeFilter' should be a JavaScript function wrapped with htmlwidgets::JS()"
+      "'nodeFilter' should be a JavaScript function wrapped with JS()"
     )
   }
 
@@ -926,7 +873,7 @@ fix_element_size <- function(
   # Validate edge filter
   if (!is_js(edgeFilter)) {
     stop(
-      "'edgeFilter' should be a JavaScript function wrapped with htmlwidgets::JS()"
+      "'edgeFilter' should be a JavaScript function wrapped with JS()"
     )
   }
 
@@ -938,36 +885,19 @@ fix_element_size <- function(
   # Validate combo filter
   if (!is_js(comboFilter)) {
     stop(
-      "'comboFilter' should be a JavaScript function wrapped with htmlwidgets::JS()"
+      "'comboFilter' should be a JavaScript function wrapped with JS()"
     )
   }
 
   # Create the configuration list with internal type parameter
-  config <- list(
-    type = "fix-element-size", # Set internally
-    key = key, # User-configurable with default
-    enable = enable,
-    reset = reset,
-    state = state,
-    nodeFilter = nodeFilter,
-    edgeFilter = edgeFilter,
-    comboFilter = comboFilter
-  )
+  arg_names <- names(formals())
+  arg_names <- arg_names[arg_names != "..."]
+  # Get values of only the named parameters
+  config <- mget(arg_names)
+  config$type <- "fix-element-size"
 
-  # Add optional configuration parameters if provided
-  if (!is.null(node)) {
-    config$node <- node
-  }
-
-  if (!is.null(edge)) {
-    config$edge <- edge
-  }
-
-  if (!is.null(combo)) {
-    config$combo <- combo
-  }
-
-  config
+  # Drop NULL elements
+  dropNulls(c(config, list(...)))
 }
 
 #' Configure Focus Element Behavior
@@ -978,6 +908,7 @@ fix_element_size <- function(
 #' @param key Unique identifier for the behavior, used for subsequent operations (string, default: "focus-element")
 #' @param animation Focus animation settings (list, default: list with duration 500ms and easing "ease-in")
 #' @param enable Whether to enable the focus feature (boolean or JS function, default: TRUE)
+#' @param ... Extra parameters. See \url{https://g6.antv.antgroup.com/manual/behavior/build-in/focus-element}.
 #'
 #' @return A list with the configuration settings
 #' @export
@@ -990,12 +921,13 @@ fix_element_size <- function(
 #' config <- focus_element(
 #'   key = "my-focus-behavior",
 #'   animation = list(duration = 1000, easing = "ease-out"),
-#'   enable = htmlwidgets::JS("(event) => event.targetType === 'node'")
+#'   enable = JS("(event) => event.targetType === 'node'")
 #' )
 focus_element <- function(
   key = "focus-element",
   animation = list(duration = 500, easing = "ease-in"),
-  enable = TRUE
+  enable = TRUE,
+  ...
 ) {
   # Validate inputs
   if (!is.list(animation)) {
@@ -1026,17 +958,18 @@ focus_element <- function(
 
   if (!is.logical(enable) && !is_js(enable)) {
     stop(
-      "'enable' should be a boolean or a JavaScript function wrapped with htmlwidgets::JS()"
+      "'enable' should be a boolean or a JavaScript function wrapped with JS()"
     )
   }
 
-  # Create the configuration list with internal type parameter
-  list(
-    type = "focus-element", # Set internally
-    key = key, # User-configurable with default
-    animation = animation,
-    enable = enable
-  )
+  arg_names <- names(formals())
+  arg_names <- arg_names[arg_names != "..."]
+  # Get values of only the named parameters
+  config <- mget(arg_names)
+  config$type <- "focus-element"
+
+  # Drop NULL elements
+  dropNulls(c(config, list(...)))
 }
 
 #' Configure Hover Activate Behavior
@@ -1053,6 +986,7 @@ focus_element <- function(
 #' @param inactiveState State of inactive elements (string, default: NULL)
 #' @param onHover Callback when element is hovered (JS function, default: NULL)
 #' @param onHoverEnd Callback when hover ends (JS function, default: NULL)
+#' @param ... Extra parameters. See \url{https://g6.antv.antgroup.com/manual/behavior/build-in/hover-activate}.
 #'
 #' @return A list with the configuration settings
 #' @export
@@ -1069,18 +1003,19 @@ focus_element <- function(
 #'   direction = "out",
 #'   state = "highlight",
 #'   inactiveState = "inactive",
-#'   onHover = htmlwidgets::JS("(event) => { console.log('Hover on:', event.target.id); }")
+#'   onHover = JS("(event) => { console.log('Hover on:', event.target.id); }")
 #' )
 hover_activate <- function(
   key = "hover-activate",
   animation = TRUE,
   enable = TRUE,
   degree = 0,
-  direction = "both",
+  direction = c("both", "in", "out"),
   state = "active",
   inactiveState = NULL,
   onHover = NULL,
-  onHoverEnd = NULL
+  onHoverEnd = NULL,
+  ...
 ) {
   # Validate inputs
   if (!is.logical(animation)) {
@@ -1089,23 +1024,17 @@ hover_activate <- function(
 
   if (!is.logical(enable) && !is_js(enable)) {
     stop(
-      "'enable' should be a boolean or a JavaScript function wrapped with htmlwidgets::JS()"
+      "'enable' should be a boolean or a JavaScript function wrapped with JS()"
     )
   }
 
   if (!is.numeric(degree) && !is_js(degree)) {
     stop(
-      "'degree' should be a number or a JavaScript function wrapped with htmlwidgets::JS()"
+      "'degree' should be a number or a JavaScript function wrapped with JS()"
     )
   }
 
-  valid_directions <- c("both", "in", "out")
-  if (!direction %in% valid_directions) {
-    stop(
-      "'direction' should be one of: ",
-      paste(valid_directions, collapse = ", ")
-    )
-  }
+  direction <- match.arg(direction)
 
   if (!is.character(state)) {
     stop("'state' should be a string")
@@ -1117,41 +1046,25 @@ hover_activate <- function(
 
   if (!is.null(onHover) && !is_js(onHover)) {
     stop(
-      "'onHover' should be a JavaScript function wrapped with htmlwidgets::JS()"
+      "'onHover' should be a JavaScript function wrapped with JS()"
     )
   }
 
   if (!is.null(onHoverEnd) && !is_js(onHoverEnd)) {
     stop(
-      "'onHoverEnd' should be a JavaScript function wrapped with htmlwidgets::JS()"
+      "'onHoverEnd' should be a JavaScript function wrapped with JS()"
     )
   }
 
   # Create the configuration list with internal type parameter
-  config <- list(
-    type = "hover-activate", # Set internally
-    key = key, # User-configurable with default
-    animation = animation,
-    enable = enable,
-    degree = degree,
-    direction = direction,
-    state = state
-  )
+  arg_names <- names(formals())
+  arg_names <- arg_names[arg_names != "..."]
+  # Get values of only the named parameters
+  config <- mget(arg_names)
+  config$type <- "hover-activate"
 
-  # Add optional parameters if provided
-  if (!is.null(inactiveState)) {
-    config$inactiveState <- inactiveState
-  }
-
-  if (!is.null(onHover)) {
-    config$onHover <- onHover
-  }
-
-  if (!is.null(onHoverEnd)) {
-    config$onHoverEnd <- onHoverEnd
-  }
-
-  config
+  # Drop NULL elements
+  dropNulls(c(config, list(...)))
 }
 
 #' Configure Lasso Select Behavior
@@ -1169,6 +1082,7 @@ hover_activate <- function(
 #' @param state State to switch to when selected (string, default: "selected")
 #' @param style Style of the lasso during selection (list, default: NULL)
 #' @param trigger Press this shortcut key along with mouse click to select (character vector, default: c("shift"))
+#' @param ... Extra parameters. See \url{https://g6.antv.antgroup.com/manual/behavior/build-in/lasso-select}.
 #'
 #' @return A list with the configuration settings
 #' @export
@@ -1197,11 +1111,12 @@ lasso_select <- function(
   enable = TRUE,
   enableElements = c("node", "combo", "edge"),
   immediately = FALSE,
-  mode = "default",
+  mode = c("default", "union", "intersect", "diff"),
   onSelect = NULL,
   state = "selected",
   style = NULL,
-  trigger = c("shift")
+  trigger = c("shift"),
+  ...
 ) {
   # Validate inputs
   if (!is.character(key)) {
@@ -1214,7 +1129,7 @@ lasso_select <- function(
 
   if (!is.logical(enable) && !is_js(enable)) {
     stop(
-      "'enable' should be a boolean or a JavaScript function wrapped with htmlwidgets::JS()"
+      "'enable' should be a boolean or a JavaScript function wrapped with JS()"
     )
   }
 
@@ -1230,14 +1145,11 @@ lasso_select <- function(
     stop("'immediately' should be a boolean value")
   }
 
-  valid_modes <- c("union", "intersect", "diff", "default")
-  if (!mode %in% valid_modes) {
-    stop("'mode' should be one of: ", paste(valid_modes, collapse = ", "))
-  }
+  mode <- match.arg(mode)
 
   if (!is.null(onSelect) && !is_js(onSelect)) {
     stop(
-      "'onSelect' should be a JavaScript function wrapped with htmlwidgets::JS()"
+      "'onSelect' should be a JavaScript function wrapped with JS()"
     )
   }
 
@@ -1249,37 +1161,15 @@ lasso_select <- function(
     stop("'style' should be a list of style properties")
   }
 
-  valid_triggers <- c("control", "shift", "alt", "meta")
-  if (!all(trigger %in% valid_triggers)) {
-    warning(
-      "Some 'trigger' values may not be standard. Valid options include: ",
-      paste(valid_triggers, collapse = ", ")
-    )
-  }
-
   # Create the configuration list with internal type parameter
-  config <- list(
-    type = "lasso-select", # Set internally
-    key = key, # User-configurable with default
-    animation = animation,
-    enable = enable,
-    enableElements = enableElements,
-    immediately = immediately,
-    mode = mode,
-    state = state,
-    trigger = trigger
-  )
+  arg_names <- names(formals())
+  arg_names <- arg_names[arg_names != "..."]
+  # Get values of only the named parameters
+  config <- mget(arg_names)
+  config$type <- "lasso-select"
 
-  # Add optional parameters if provided
-  if (!is.null(onSelect)) {
-    config$onSelect <- onSelect
-  }
-
-  if (!is.null(style)) {
-    config$style <- style
-  }
-
-  config
+  # Drop NULL elements
+  dropNulls(c(config, list(...)))
 }
 
 #' Configure Optimize Viewport Transform Behavior
@@ -1292,6 +1182,7 @@ lasso_select <- function(
 #' @param enable Whether to enable this behavior (boolean or JS function, default: TRUE)
 #' @param debounce How long after the operation ends to restore the visibility of all elements in milliseconds (number, default: 200)
 #' @param shapes Function to specify which graphical elements should remain visible during canvas operations (JS function, default: returns TRUE for nodes)
+#' @param ... Extra parameters. See \url{https://g6.antv.antgroup.com/manual/behavior/build-in/optimize-viewport-transform}.
 #'
 #' @return A list with the configuration settings
 #' @export
@@ -1304,23 +1195,24 @@ lasso_select <- function(
 #' config <- optimize_viewport_transform(
 #'   key = "my-optimize-transform",
 #'   debounce = 500,
-#'   shapes = htmlwidgets::JS("(type) => type === 'node' || type === 'edge'")
+#'   shapes = JS("(type) => type === 'node' || type === 'edge'")
 #' )
 #'
 #' # With conditional enabling
 #' config <- optimize_viewport_transform(
-#'   enable = htmlwidgets::JS("(event) => event.getCurrentTransform().zoom < 0.5")
+#'   enable = JS("(event) => event.getCurrentTransform().zoom < 0.5")
 #' )
 optimize_viewport_transform <- function(
   key = "optimize-viewport-transform",
   enable = TRUE,
   debounce = 200,
-  shapes = htmlwidgets::JS("(type) => type === 'node'")
+  shapes = JS("(type) => type === 'node'"),
+  ...
 ) {
   # Validate inputs
   if (!is.logical(enable) && !is_js(enable)) {
     stop(
-      "'enable' should be a boolean or a JavaScript function wrapped with htmlwidgets::JS()"
+      "'enable' should be a boolean or a JavaScript function wrapped with JS()"
     )
   }
 
@@ -1330,20 +1222,19 @@ optimize_viewport_transform <- function(
 
   if (!is_js(shapes)) {
     stop(
-      "'shapes' should be a JavaScript function wrapped with htmlwidgets::JS()"
+      "'shapes' should be a JavaScript function wrapped with JS()"
     )
   }
 
   # Create the configuration list with internal type parameter
-  config <- list(
-    type = "optimize-viewport-transform", # Set internally
-    key = key, # User-configurable with default
-    enable = enable,
-    debounce = debounce,
-    shapes = shapes
-  )
+  arg_names <- names(formals())
+  arg_names <- arg_names[arg_names != "..."]
+  # Get values of only the named parameters
+  config <- mget(arg_names)
+  config$type <- "optimize-viewport-transform"
 
-  config
+  # Drop NULL elements
+  dropNulls(c(config, list(...)))
 }
 
 #' Configure Scroll Canvas Behavior
@@ -1359,6 +1250,7 @@ optimize_viewport_transform <- function(
 #' @param trigger Keyboard shortcuts to trigger scrolling (list, default: NULL)
 #' @param onFinish Callback function when scrolling is finished (JS function, default: NULL)
 #' @param preventDefault Whether to prevent the browser's default event (boolean, default: TRUE)
+#' @param ... Extra parameters. See \url{https://g6.antv.antgroup.com/manual/behavior/build-in/scroll-canvas}.
 #'
 #' @return A list with the configuration settings
 #' @export
@@ -1378,14 +1270,14 @@ optimize_viewport_transform <- function(
 #'
 #' # With keyboard triggers and callback
 #' config <- scroll_canvas(
-#'   enable = htmlwidgets::JS("(event) => !event.altKey"),
+#'   enable = JS("(event) => !event.altKey"),
 #'   trigger = list(
 #'     up = "w",
 #'     down = "s",
 #'     left = "a",
 #'     right = "d"
 #'   ),
-#'   onFinish = htmlwidgets::JS("() => { console.log('Scrolling finished'); }")
+#'   onFinish = JS("() => { console.log('Scrolling finished'); }")
 #' )
 scroll_canvas <- function(
   key = "scroll-canvas",
@@ -1395,12 +1287,13 @@ scroll_canvas <- function(
   sensitivity = 1,
   trigger = NULL,
   onFinish = NULL,
-  preventDefault = TRUE
+  preventDefault = TRUE,
+  ...
 ) {
   # Validate inputs
   if (!is.logical(enable) && !is_js(enable)) {
     stop(
-      "'enable' should be a boolean or a JavaScript function wrapped with htmlwidgets::JS()"
+      "'enable' should be a boolean or a JavaScript function wrapped with JS()"
     )
   }
 
@@ -1423,7 +1316,7 @@ scroll_canvas <- function(
 
   if (!is.null(onFinish) && !is_js(onFinish)) {
     stop(
-      "'onFinish' should be a JavaScript function wrapped with htmlwidgets::JS()"
+      "'onFinish' should be a JavaScript function wrapped with JS()"
     )
   }
 
@@ -1432,29 +1325,14 @@ scroll_canvas <- function(
   }
 
   # Create the configuration list with internal type parameter
-  config <- list(
-    type = "scroll-canvas", # Set internally
-    key = key, # User-configurable with default
-    enable = enable,
-    range = range,
-    sensitivity = sensitivity,
-    preventDefault = preventDefault
-  )
+  arg_names <- names(formals())
+  arg_names <- arg_names[arg_names != "..."]
+  # Get values of only the named parameters
+  config <- mget(arg_names)
+  config$type <- "scroll-canvas"
 
-  # Add optional parameters if provided
-  if (!is.null(direction)) {
-    config$direction <- direction
-  }
-
-  if (!is.null(trigger)) {
-    config$trigger <- trigger
-  }
-
-  if (!is.null(onFinish)) {
-    config$onFinish <- onFinish
-  }
-
-  config
+  # Drop NULL elements
+  dropNulls(c(config, list(...)))
 }
 
 #' Configure Zoom Canvas Behavior
@@ -1470,6 +1348,7 @@ scroll_canvas <- function(
 #' @param preventDefault Whether to prevent the browser's default event (boolean, default: TRUE)
 #' @param sensitivity Zoom sensitivity, the larger the value, the faster the zoom (numeric, default: 1)
 #' @param trigger How to trigger zooming, supports mouse wheel and keyboard shortcuts (list, default: NULL)
+#' @param ... Extra parameters. See \url{https://g6.antv.antgroup.com/manual/behavior/build-in/zoom-canvas}.
 #'
 #' @return A list with the configuration settings
 #' @export
@@ -1489,13 +1368,13 @@ scroll_canvas <- function(
 #'
 #' # With keyboard triggers and callback
 #' config <- zoom_canvas(
-#'   enable = htmlwidgets::JS("(event) => !event.altKey"),
+#'   enable = JS("(event) => !event.altKey"),
 #'   trigger = list(
 #'     zoomIn = "+",
 #'     zoomOut = "-",
 #'     reset = "0"
 #'   ),
-#'   onFinish = htmlwidgets::JS("() => { console.log('Zooming finished'); }")
+#'   onFinish = JS("() => { console.log('Zooming finished'); }")
 #' )
 zoom_canvas <- function(
   key = "zoom-canvas",
@@ -1505,7 +1384,8 @@ zoom_canvas <- function(
   onFinish = NULL,
   preventDefault = TRUE,
   sensitivity = 1,
-  trigger = NULL
+  trigger = NULL,
+  ...
 ) {
   # Validate inputs
   if (!is.character(key)) {
@@ -1524,7 +1404,7 @@ zoom_canvas <- function(
 
   if (!is.logical(enable) && !is_js(enable)) {
     stop(
-      "'enable' should be a boolean or a JavaScript function wrapped with htmlwidgets::JS()"
+      "'enable' should be a boolean or a JavaScript function wrapped with JS()"
     )
   }
 
@@ -1536,7 +1416,7 @@ zoom_canvas <- function(
 
   if (!is.null(onFinish) && !is_js(onFinish)) {
     stop(
-      "'onFinish' should be a JavaScript function wrapped with htmlwidgets::JS()"
+      "'onFinish' should be a JavaScript function wrapped with JS()"
     )
   }
 
@@ -1553,27 +1433,12 @@ zoom_canvas <- function(
   }
 
   # Create the configuration list with internal type parameter
-  config <- list(
-    type = "zoom-canvas", # Set internally
-    key = key, # User-configurable with default
-    animation = animation,
-    enable = enable,
-    preventDefault = preventDefault,
-    sensitivity = sensitivity
-  )
+  arg_names <- names(formals())
+  arg_names <- arg_names[arg_names != "..."]
+  # Get values of only the named parameters
+  config <- mget(arg_names)
+  config$type <- "zoom-canvas"
 
-  # Add optional parameters if provided
-  if (!is.null(origin)) {
-    config$origin <- origin
-  }
-
-  if (!is.null(onFinish)) {
-    config$onFinish <- onFinish
-  }
-
-  if (!is.null(trigger)) {
-    config$trigger <- trigger
-  }
-
-  config
+  # Drop NULL elements
+  dropNulls(c(config, list(...)))
 }

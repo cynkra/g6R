@@ -14,7 +14,8 @@ click_select(
   neighborState = c("selected", "active", "inactive", "disabled", "highlight"),
   unselectedState = NULL,
   onClick = NULL,
-  trigger = "shift"
+  trigger = "shift",
+  ...
 )
 }
 \arguments{
@@ -37,6 +38,8 @@ click_select(
 \item{onClick}{Callback when an element is clicked (function, default: NULL)}
 
 \item{trigger}{Keys for multi-selection (character vector, default: c("shift"))}
+
+\item{...}{Extra parameters. See \url{https://g6.antv.antgroup.com/manual/behavior/build-in/click-select}.}
 }
 \value{
 A list with the configuration settings

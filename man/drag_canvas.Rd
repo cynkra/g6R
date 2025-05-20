@@ -8,11 +8,12 @@ drag_canvas(
   key = "drag-canvas",
   enable = TRUE,
   animation = NULL,
-  direction = "both",
+  direction = c("both", "x", "y"),
   range = Inf,
   sensitivity = 10,
   trigger = NULL,
-  onFinish = NULL
+  onFinish = NULL,
+  ...
 )
 }
 \arguments{
@@ -31,6 +32,8 @@ drag_canvas(
 \item{trigger}{Keyboard keys to trigger dragging (list, default: NULL)}
 
 \item{onFinish}{Callback function when dragging is completed (function, default: NULL)}
+
+\item{...}{Extra parameters. See \url{https://g6.antv.antgroup.com/manual/behavior/build-in/drag-canvas}.}
 }
 \value{
 A list with the configuration settings

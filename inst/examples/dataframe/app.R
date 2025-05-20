@@ -69,7 +69,6 @@ server <- function(input, output, session) {
         "zoom-canvas",
         drag_element_force(fixed = TRUE),
         click_select(
-          #multiple = TRUE,
           onClick = JS(
             "(e) => {
             console.log(e);

@@ -12,7 +12,8 @@ scroll_canvas(
   sensitivity = 1,
   trigger = NULL,
   onFinish = NULL,
-  preventDefault = TRUE
+  preventDefault = TRUE,
+  ...
 )
 }
 \arguments{
@@ -31,6 +32,8 @@ scroll_canvas(
 \item{onFinish}{Callback function when scrolling is finished (JS function, default: NULL)}
 
 \item{preventDefault}{Whether to prevent the browser's default event (boolean, default: TRUE)}
+
+\item{...}{Extra parameters. See \url{https://g6.antv.antgroup.com/manual/behavior/build-in/scroll-canvas}.}
 }
 \value{
 A list with the configuration settings
@@ -54,13 +57,13 @@ config <- scroll_canvas(
 
 # With keyboard triggers and callback
 config <- scroll_canvas(
-  enable = htmlwidgets::JS("(event) => !event.altKey"),
+  enable = JS("(event) => !event.altKey"),
   trigger = list(
     up = "w",
     down = "s",
     left = "a",
     right = "d"
   ),
-  onFinish = htmlwidgets::JS("() => { console.log('Scrolling finished'); }")
+  onFinish = JS("() => { console.log('Scrolling finished'); }")
 )
 }
