@@ -51,9 +51,10 @@ This function configures how elements are selected when using a brush selection 
 <span>  immediately <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  mode <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"default"</span>, <span class="st">"union"</span>, <span class="st">"intersect"</span>, <span class="st">"diff"</span><span class="op">)</span>,</span>
 <span>  onSelect <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  state <span class="op">=</span> <span class="st">"selected"</span>,</span>
+<span>  state <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"selected"</span>, <span class="st">"active"</span>, <span class="st">"inactive"</span>, <span class="st">"disabled"</span>, <span class="st">"highlight"</span><span class="op">)</span>,</span>
 <span>  style <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  trigger <span class="op">=</span> <span class="st">"shift"</span></span>
+<span>  trigger <span class="op">=</span> <span class="st">"shift"</span>,</span>
+<span>  <span class="va">...</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -100,6 +101,10 @@ See <a href="https://g6.antv.antgroup.com/en/manual/behavior/build-in/brush-sele
 
 <dt id="arg-trigger">trigger<a class="anchor" aria-label="anchor" href="#arg-trigger"></a></dt>
 <dd><p>Shortcut keys for selection (character vector)</p></dd>
+
+
+<dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>
+<dd><p>Extra parameters. See <a href="https://g6.antv.antgroup.com/manual/behavior/build-in/brush-select" class="external-link">https://g6.antv.antgroup.com/manual/behavior/build-in/brush-select</a>.</p></dd>
 
 </dl></div>
     <div class="section level2">

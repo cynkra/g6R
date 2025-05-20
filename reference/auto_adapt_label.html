@@ -48,13 +48,14 @@ improve readability in the graph visualization.</p>
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">auto_adapt_label</span><span class="op">(</span></span>
 <span>  key <span class="op">=</span> <span class="st">"auto-adapt-label"</span>,</span>
-<span>  enable <span class="op">=</span> <span class="fu">JS</span><span class="op">(</span><span class="st">"(e) =&gt; {\n      return true\n    }"</span><span class="op">)</span>,</span>
+<span>  enable <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  throttle <span class="op">=</span> <span class="fl">100</span>,</span>
 <span>  padding <span class="op">=</span> <span class="fl">0</span>,</span>
 <span>  sort <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  sortNode <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>type <span class="op">=</span> <span class="st">"degree"</span><span class="op">)</span>,</span>
 <span>  sortEdge <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  sortCombo <span class="op">=</span> <span class="cn">NULL</span></span>
+<span>  sortCombo <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  <span class="va">...</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -93,6 +94,10 @@ improve readability in the graph visualization.</p>
 <dt id="arg-sortcombo">sortCombo<a class="anchor" aria-label="anchor" href="#arg-sortcombo"></a></dt>
 <dd><p>Sorting rule specifically for combo labels (list, default: NULL)</p></dd>
 
+
+<dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>
+<dd><p>Extra parameters. See <a href="https://g6.antv.antgroup.com/manual/behavior/build-in/auto-adapt-label" class="external-link">https://g6.antv.antgroup.com/manual/behavior/build-in/auto-adapt-label</a>.</p></dd>
+
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
@@ -126,10 +131,11 @@ not enough space to display all of them.</p>
 <span class="r-in"><span>  sortEdge <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>type <span class="op">=</span> <span class="st">"property"</span>, field <span class="op">=</span> <span class="st">"weight"</span>, order <span class="op">=</span> <span class="st">"desc"</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>  sortCombo <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>type <span class="op">=</span> <span class="st">"degree"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in auto_adapt_label(sortNode = list(type = "property", field = "importance",     order = "desc"), sortEdge = list(type = "property", field = "weight",     order = "desc"), sortCombo = list(type = "degree")):</span> 'sortNode$type' must be one of: degree, betweenness, closeness, eigenvector, pagerank</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Using a custom enable function</span></span></span>
 <span class="r-in"><span><span class="va">config</span> <span class="op">&lt;-</span> <span class="fu">auto_adapt_label</span><span class="op">(</span></span></span>
-<span class="r-in"><span>  enable <span class="op">=</span> <span class="fu">htmlwidgets</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/htmlwidgets/man/JS.html" class="external-link">JS</a></span><span class="op">(</span><span class="st">"(e) =&gt; e.targetType === 'node'"</span><span class="op">)</span></span></span>
+<span class="r-in"><span>  enable <span class="op">=</span> <span class="fu">JS</span><span class="op">(</span><span class="st">"(e) =&gt; e.targetType === 'node'"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
 </code></pre></div>
     </div>
