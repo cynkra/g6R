@@ -18,7 +18,8 @@ fish_eye(
   showDPercent = TRUE,
   style = NULL,
   nodeStyle = list(label = TRUE),
-  preventDefault = TRUE
+  preventDefault = TRUE,
+  ...
 )
 }
 \arguments{
@@ -49,6 +50,8 @@ fish_eye(
 \item{nodeStyle}{Style of nodes in the fisheye (list or JS function, default: list(label = TRUE))}
 
 \item{preventDefault}{Whether to prevent default events (boolean, default: TRUE)}
+
+\item{...}{Extra parameters. See \url{https://g6.antv.antgroup.com/manual/plugin/build-in/fisheye}.}
 }
 \value{
 A list with the configuration settings

@@ -13,7 +13,8 @@ context_menu(
   getItems = NULL,
   getContent = NULL,
   loadingContent = NULL,
-  enable = TRUE
+  enable = TRUE,
+  ...
 )
 }
 \arguments{
@@ -34,6 +35,8 @@ context_menu(
 \item{loadingContent}{Menu content used when getContent returns a Promise (string or HTML element, default: NULL)}
 
 \item{enable}{Whether the context menu is available (boolean or JS function, default: TRUE)}
+
+\item{...}{Extra parameters. See \url{https://g6.antv.antgroup.com/manual/plugin/build-in/contextmenu}}
 }
 \value{
 A list with the configuration settings

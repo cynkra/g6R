@@ -29,7 +29,8 @@ legend(
   itemMarkerSize = 16,
   itemLabelFontSize = 16,
   gridCol = NULL,
-  gridRow = NULL
+  gridRow = NULL,
+  ...
 )
 }
 \arguments{
@@ -80,6 +81,8 @@ legend(
 \item{gridCol}{Maximum number of columns for grid layout (number, default: NULL)}
 
 \item{gridRow}{Maximum number of rows for grid layout (number, default: NULL)}
+
+\item{...}{Extra parameters. See \url{https://g6.antv.antgroup.com/manual/plugin/build-in/legend}.}
 }
 \value{
 A list with the configuration settings

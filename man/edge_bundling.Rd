@@ -13,7 +13,8 @@ edge_bundling(
   iterations = 90,
   iterRate = 2/3,
   K = 0.1,
-  lambda = 0.1
+  lambda = 0.1,
+  ...
 )
 }
 \arguments{
@@ -34,6 +35,8 @@ edge_bundling(
 \item{K}{Edge strength, affects attraction and repulsion between edges (number, default: 0.1)}
 
 \item{lambda}{Initial step size (number, default: 0.1)}
+
+\item{...}{Extra parameters. See \url{https://g6.antv.antgroup.com/manual/plugin/build-in/edge-bundling}.}
 }
 \value{
 A list with the configuration settings

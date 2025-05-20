@@ -6,14 +6,15 @@
 \usage{
 toolbar(
   getItems =
-    JS("( ) => [   \\n        { id : 'zoom-in' , value : 'zoom-in' } ,  \\n        { id : 'zoom-out' , value : 'zoom-out' } ,   \\n        { id : 'auto-fit' , value : 'auto-fit' } ,\\n        { id: 'delete', value: 'delete' }  \\n      ]"),
+    JS("( ) => [   \\n        { id : 'zoom-in' , value : 'zoom-in' } ,  \\n        { id : 'zoom-out' , value : 'zoom-out' } ,   \\n        { id : 'auto-fit' , value : 'auto-fit' } ,\\n        { id: 'delete', value: 'delete' }, \\n        { id: 'request-fullscreen', value: 'request-fullscreen' },\\n        { id: 'exit-fullscreen', value: 'exit-fullscreen' },\\n      ]"),
   key = "toolbar",
   className = NULL,
   position = c("top-left", "top", "top-right", "right", "bottom-right", "bottom",
     "bottom-left", "left"),
   style = NULL,
   onClick =
-    JS("( value, target, current ) => {   \\n        // Handle button click events\\n      const graph = HTMLWidgets.find(`#${target.closest('.g6').id}`).getWidget();\\n        if ( value === 'zoom-in' ) {   \\n          graph.zoomTo ( 1.1 ) ;\\n        } else if ( value === 'zoom-out' ) {     \\n          graph.zoomTo ( 0.9 ) ;\\n        } else if ( value === 'auto-fit' ) {     \\n          graph.fitView ( ) ;\\n        } else if (value === 'delete') {\\n          const selectedNodes = graph.getElementDataByState('node', 'selected').map((node) => {\\n            return node.id\\n          });\\n          graph.removeNodeData(selectedNodes);\\n          graph.draw();\\n        }\\n      }\\n    ")
+    JS("( value, target, current ) => {   \\n        // Handle button click events\\n      const graph = HTMLWidgets.find(`#${target.closest('.g6').id}`).getWidget();\\n      const fullScreen = graph.getPluginInstance('fullscreen');\\n        if ( value === 'zoom-in' ) {   \\n          graph.zoomTo ( 1.1 ) ;\\n        } else if ( value === 'zoom-out' ) {     \\n          graph.zoomTo ( 0.9 ) ;\\n        } else if ( value === 'auto-fit' ) {     \\n          graph.fitView ( ) ;\\n        } else if (value === 'delete') {\\n          const selectedNodes = graph.getElementDataByState('node', 'selected').map((node) => {\\n            return node.id\\n          });\\n          graph.removeNodeData(selectedNodes);\\n          graph.draw();\\n        } else if (value === 'request-fullscreen') {\\n          if (fullScreen !== undefined) {\\n            fullScreen.request();\\n          }\\n        } else if (value === 'exit-fullscreen') {\\n          if (fullScreen !== undefined) {\\n            fullScreen.exit();\\n          }\\n        }\\n      }\\n    "),
+  ...
 )
 }
 \arguments{
@@ -28,6 +29,8 @@ toolbar(
 \item{style}{Custom style for the toolbar DOM element (list or JS object, default: NULL)}
 
 \item{onClick}{Callback function after a toolbar item is clicked (JS function, default: NULL)}
+
+\item{...}{Extra parameters. See \url{https://g6.antv.antgroup.com/manual/plugin/build-in/toolbar}.}
 }
 \value{
 A list with the configuration settings

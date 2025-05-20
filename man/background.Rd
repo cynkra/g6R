@@ -15,7 +15,8 @@ background(
   backgroundRepeat = NULL,
   opacity = NULL,
   transition = "background 0.5s",
-  zIndex = "-1"
+  zIndex = "-1",
+  ...
 )
 }
 \arguments{
@@ -40,6 +41,8 @@ background(
 \item{transition}{Transition animation (string, default: "background 0.5s")}
 
 \item{zIndex}{Stacking order (string, default: "-1")}
+
+\item{...}{Extra parameters. See \url{https://g6.antv.antgroup.com/manual/plugin/build-in/background}.}
 }
 \value{
 A list with the configuration settings for the background plugin

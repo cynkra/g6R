@@ -95,6 +95,8 @@ server <- function(input, output, session) {
     g6_proxy("graph") |>
       g6_add_plugin(
         hull(
+          fill = "#F08F56",
+          stroke = "#F08F56",
           members = sample(nodes$id, 10),
           labelText = "hull-a",
           labelPlacement = "top",

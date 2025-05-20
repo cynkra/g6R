@@ -16,7 +16,8 @@ edge_filter_lens(
   style = NULL,
   nodeStyle = list(label = FALSE),
   edgeStyle = list(label = TRUE),
-  preventDefault = TRUE
+  preventDefault = TRUE,
+  ...
 )
 }
 \arguments{
@@ -43,6 +44,8 @@ edge_filter_lens(
 \item{edgeStyle}{Style of edges in the lens (list or JS function, default: list(label = TRUE))}
 
 \item{preventDefault}{Whether to prevent default events (boolean, default: TRUE)}
+
+\item{...}{Extra parameters. See \url{https://g6.antv.antgroup.com/manual/plugin/build-in/edge-filter-lens}.}
 }
 \value{
 A list with the configuration settings

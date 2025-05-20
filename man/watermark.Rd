@@ -29,7 +29,8 @@ watermark(
   backgroundPosition = NULL,
   backgroundPositionX = NULL,
   backgroundPositionY = NULL,
-  backgroundSize = NULL
+  backgroundSize = NULL,
+  ...
 )
 }
 \arguments{
@@ -82,6 +83,8 @@ watermark(
 \item{backgroundPositionY}{Vertical position of the watermark background (string, default: NULL)}
 
 \item{backgroundSize}{Background size of the watermark (string, default: NULL)}
+
+\item{...}{Extra parameters. See \url{https://g6.antv.antgroup.com/manual/plugin/build-in/watermark}.}
 }
 \value{
 A list with the configuration settings

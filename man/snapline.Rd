@@ -12,7 +12,8 @@ snapline(
   shape = "key",
   verticalLineStyle = list(stroke = "#1783FF"),
   horizontalLineStyle = list(stroke = "#1783FF"),
-  filter = NULL
+  filter = NULL,
+  ...
 )
 }
 \arguments{
@@ -31,6 +32,8 @@ snapline(
 \item{horizontalLineStyle}{Horizontal snapline style (list or JS object, default: list(stroke = "#1783FF"))}
 
 \item{filter}{Function to filter nodes that don't participate in alignment (JS function, default: NULL)}
+
+\item{...}{Extra parameters. See \url{https://g6.antv.antgroup.com/manual/plugin/build-in/snapline}.}
 }
 \value{
 A list with the configuration settings

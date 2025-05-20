@@ -9,7 +9,8 @@ fullscreen(
   autoFit = TRUE,
   trigger = NULL,
   onEnter = NULL,
-  onExit = NULL
+  onExit = NULL,
+  ...
 )
 }
 \arguments{
@@ -22,6 +23,8 @@ fullscreen(
 \item{onEnter}{Callback function after entering fullscreen mode (JS function, default: NULL)}
 
 \item{onExit}{Callback function after exiting fullscreen mode (JS function, default: NULL)}
+
+\item{...}{Extra parameters. See \url{https://g6.antv.antgroup.com/manual/plugin/build-in/fullscreen}.}
 }
 \value{
 A list with the configuration settings

@@ -139,6 +139,7 @@ g6_plugins <- function(graph, ...) {
 #' @param opacity Background opacity (string, default: NULL)
 #' @param transition Transition animation (string, default: "background 0.5s")
 #' @param zIndex Stacking order (string, default: "-1")
+#' @param ... Extra parameters. See \url{https://g6.antv.antgroup.com/manual/plugin/build-in/background}.
 #'
 #' @return A list with the configuration settings for the background plugin
 #' @export
@@ -172,15 +173,18 @@ background <- function(
   backgroundRepeat = NULL,
   opacity = NULL,
   transition = "background 0.5s",
-  zIndex = "-1"
+  zIndex = "-1",
+  ...
 ) {
   # Create the configuration list with required type
   arg_names <- names(formals())
-  # Create list of argument values
+  arg_names <- arg_names[arg_names != "..."]
+  # Get values of only the named parameters
   config <- mget(arg_names)
   config$type <- "background"
+
   # Drop NULL elements
-  dropNulls(config)
+  dropNulls(c(config, list(...)))
 }
 
 #' Configure Bubble Sets Plugin for G6
@@ -213,6 +217,7 @@ background <- function(
 #' @param edgeInfluenceFactor Edge influence factor (numeric, default: NULL)
 #' @param nonMemberInfluenceFactor Non-member influence factor (numeric, default: NULL)
 #' @param virtualEdges Whether to use virtual edges (boolean, default: NULL)
+#' @param ... Extra parameters. See \url{https://g6.antv.antgroup.com/manual/plugin/build-in/bubble-sets}.
 #'
 #' @return A list with the configuration settings for the bubble-sets plugin
 #' @export
@@ -271,7 +276,8 @@ bubble_sets <- function(
   memberInfluenceFactor = NULL,
   edgeInfluenceFactor = NULL,
   nonMemberInfluenceFactor = NULL,
-  virtualEdges = NULL
+  virtualEdges = NULL,
+  ...
 ) {
   # TBD: validate members to it validate real node ids who exist.
   if (label) {
@@ -284,15 +290,13 @@ bubble_sets <- function(
 
   # Get argument names
   arg_names <- names(formals())
-
-  # Create list of argument values
+  arg_names <- arg_names[arg_names != "..."]
+  # Get values of only the named parameters
   config <- mget(arg_names)
-
-  # Add required type property (not a function parameter)
   config$type <- "bubble-sets"
 
-  # Remove null values
-  dropNulls(config)
+  # Drop NULL elements
+  dropNulls(c(config, list(...)))
 }
 
 #' Configure Context Menu Behavior
@@ -309,6 +313,7 @@ bubble_sets <- function(
 #' @param getContent Returns the content of the menu, supports Promise (JS function, default: NULL)
 #' @param loadingContent Menu content used when getContent returns a Promise (string or HTML element, default: NULL)
 #' @param enable Whether the context menu is available (boolean or JS function, default: TRUE)
+#' @param ... Extra parameters. See \url{https://g6.antv.antgroup.com/manual/plugin/build-in/contextmenu}
 #'
 #' @return A list with the configuration settings
 #' @export
@@ -346,7 +351,8 @@ context_menu <- function(
   getItems = NULL,
   getContent = NULL,
   loadingContent = NULL,
-  enable = TRUE
+  enable = TRUE,
+  ...
 ) {
   # Validate inputs
   if (!is.character(className)) {
@@ -397,15 +403,13 @@ context_menu <- function(
 
   # Get all function argument names
   arg_names <- names(formals())
-
-  # Create list of argument values
+  arg_names <- arg_names[arg_names != "..."]
+  # Get values of only the named parameters
   config <- mget(arg_names)
-
-  # Set the type internally (not a function parameter)
   config$type <- "contextmenu"
 
-  # Remove NULL values
-  dropNulls(config)
+  # Drop NULL elements
+  dropNulls(c(config, list(...)))
 }
 
 #' Configure Edge Bundling Plugin
@@ -422,6 +426,7 @@ context_menu <- function(
 #' @param iterRate Iteration decrement rate (number, default: 2/3)
 #' @param K Edge strength, affects attraction and repulsion between edges (number, default: 0.1)
 #' @param lambda Initial step size (number, default: 0.1)
+#' @param ... Extra parameters. See \url{https://g6.antv.antgroup.com/manual/plugin/build-in/edge-bundling}.
 #'
 #' @return A list with the configuration settings
 #' @export
@@ -446,7 +451,8 @@ edge_bundling <- function(
   iterations = 90,
   iterRate = 2 / 3,
   K = 0.1,
-  lambda = 0.1
+  lambda = 0.1,
+  ...
 ) {
   # Validate inputs
   if (
@@ -485,15 +491,13 @@ edge_bundling <- function(
 
   # Get all function argument names
   arg_names <- names(formals())
-
-  # Create list of argument values
+  arg_names <- arg_names[arg_names != "..."]
+  # Get values of only the named parameters
   config <- mget(arg_names)
-
-  # Set the type internally (not a function parameter)
   config$type <- "edge-bundling"
 
-  # Remove NULL values
-  dropNulls(config)
+  # Drop NULL elements
+  dropNulls(c(config, list(...)))
 }
 
 #' Configure Edge Filter Lens Plugin
@@ -513,6 +517,7 @@ edge_bundling <- function(
 #' @param nodeStyle Style of nodes in the lens (list or JS function, default: list(label = FALSE))
 #' @param edgeStyle Style of edges in the lens (list or JS function, default: list(label = TRUE))
 #' @param preventDefault Whether to prevent default events (boolean, default: TRUE)
+#' @param ... Extra parameters. See \url{https://g6.antv.antgroup.com/manual/plugin/build-in/edge-filter-lens}.
 #'
 #' @return A list with the configuration settings
 #' @export
@@ -553,7 +558,8 @@ edge_filter_lens <- function(
   style = NULL,
   nodeStyle = list(label = FALSE),
   edgeStyle = list(label = TRUE),
-  preventDefault = TRUE
+  preventDefault = TRUE,
+  ...
 ) {
   # Validate inputs
   trigger <- match.arg(trigger)
@@ -604,15 +610,13 @@ edge_filter_lens <- function(
 
   # Get all function argument names
   arg_names <- names(formals())
-
-  # Create list of argument values
+  arg_names <- arg_names[arg_names != "..."]
+  # Get values of only the named parameters
   config <- mget(arg_names)
-
-  # Set the type internally (not a function parameter)
   config$type <- "edge-filter-lens"
 
-  # Remove NULL values
-  dropNulls(config)
+  # Drop NULL elements
+  dropNulls(c(config, list(...)))
 }
 
 #' Configure Fish Eye Plugin
@@ -634,6 +638,7 @@ edge_filter_lens <- function(
 #' @param style Style of the fisheye (list, default: NULL)
 #' @param nodeStyle Style of nodes in the fisheye (list or JS function, default: list(label = TRUE))
 #' @param preventDefault Whether to prevent default events (boolean, default: TRUE)
+#' @param ... Extra parameters. See \url{https://g6.antv.antgroup.com/manual/plugin/build-in/fisheye}.
 #'
 #' @return A list with the configuration settings
 #' @export
@@ -681,7 +686,8 @@ fish_eye <- function(
   showDPercent = TRUE,
   style = NULL,
   nodeStyle = list(label = TRUE),
-  preventDefault = TRUE
+  preventDefault = TRUE,
+  ...
 ) {
   # Validate inputs
   trigger <- match.arg(trigger)
@@ -737,17 +743,14 @@ fish_eye <- function(
     stop("'preventDefault' must be a boolean value")
   }
 
-  # Get all function argument names
   arg_names <- names(formals())
-
-  # Create list of argument values
+  arg_names <- arg_names[arg_names != "..."]
+  # Get values of only the named parameters
   config <- mget(arg_names)
-
-  # Set the type internally (not a function parameter)
   config$type <- "fisheye"
 
-  # Remove NULL values
-  dropNulls(config)
+  # Drop NULL elements
+  dropNulls(c(config, list(...)))
 }
 
 #' Configure Fullscreen Plugin
@@ -760,6 +763,7 @@ fish_eye <- function(
 #' @param trigger Methods to trigger fullscreen, e.g., list(request = "button", exit = "escape") (list, default: NULL)
 #' @param onEnter Callback function after entering fullscreen mode (JS function, default: NULL)
 #' @param onExit Callback function after exiting fullscreen mode (JS function, default: NULL)
+#' @param ... Extra parameters. See \url{https://g6.antv.antgroup.com/manual/plugin/build-in/fullscreen}.
 #'
 #' @return A list with the configuration settings
 #' @export
@@ -788,7 +792,8 @@ fullscreen <- function(
   autoFit = TRUE,
   trigger = NULL,
   onEnter = NULL,
-  onExit = NULL
+  onExit = NULL,
+  ...
 ) {
   # Validate inputs
   if (!is.logical(autoFit)) {
@@ -820,17 +825,14 @@ fullscreen <- function(
     )
   }
 
-  # Get all function argument names
   arg_names <- names(formals())
-
-  # Create list of argument values
+  arg_names <- arg_names[arg_names != "..."]
+  # Get values of only the named parameters
   config <- mget(arg_names)
-
-  # Set the type internally (not a function parameter)
   config$type <- "fullscreen"
 
-  # Remove NULL values
-  dropNulls(config)
+  # Drop NULL elements
+  dropNulls(c(config, list(...)))
 }
 
 #' Configure Grid Line Plugin
@@ -847,6 +849,7 @@ fullscreen <- function(
 #' @param lineWidth Grid line width (number or string, default: 1)
 #' @param size Grid unit size in pixels (number, default: 20)
 #' @param stroke Grid line color (string, default: "#eee")
+#' @param ... Extra parameters. See \url{https://g6.antv.antgroup.com/manual/plugin/build-in/grid-line}.
 #'
 #' @return A list with the configuration settings
 #' @export
@@ -879,7 +882,8 @@ grid_line <- function(
   follow = FALSE,
   lineWidth = 1,
   size = 20,
-  stroke = "#eee"
+  stroke = "#eee",
+  ...
 ) {
   # Validate inputs
   if (!is.logical(border)) {
@@ -941,17 +945,14 @@ grid_line <- function(
     stop("'stroke' must be a string representing a color")
   }
 
-  # Get all function argument names
   arg_names <- names(formals())
-
-  # Create list of argument values
+  arg_names <- arg_names[arg_names != "..."]
+  # Get values of only the named parameters
   config <- mget(arg_names)
-
-  # Set the type internally (not a function parameter)
   config$type <- "grid-line"
 
-  # Remove NULL values
-  dropNulls(config)
+  # Drop NULL elements
+  dropNulls(c(config, list(...)))
 }
 
 #' Configure History Plugin
@@ -964,6 +965,7 @@ grid_line <- function(
 #' @param beforeAddCommand Callback function called before a command is added to the undo/redo queue (JS function, default: NULL)
 #' @param executeCommand Callback function called when executing a command (JS function, default: NULL)
 #' @param stackSize Maximum length of history records to be recorded, 0 means unlimited (number, default: 0)
+#' @param ... Extra parameters. See \url{https://g6.antv.antgroup.com/manual/plugin/build-in/history}.
 #'
 #' @return A list with the configuration settings
 #' @export
@@ -993,7 +995,8 @@ history <- function(
   afterAddCommand = NULL,
   beforeAddCommand = NULL,
   executeCommand = NULL,
-  stackSize = 0
+  stackSize = 0,
+  ...
 ) {
   # Validate inputs
   if (!is.null(afterAddCommand) && !is_js(afterAddCommand)) {
@@ -1020,17 +1023,14 @@ history <- function(
     stop("'stackSize' must be a non-negative integer")
   }
 
-  # Get all function argument names
   arg_names <- names(formals())
-
-  # Create list of argument values
+  arg_names <- arg_names[arg_names != "..."]
+  # Get values of only the named parameters
   config <- mget(arg_names)
-
-  # Set the type internally (not a function parameter)
   config$type <- "history"
 
-  # Remove NULL values
-  dropNulls(config)
+  # Drop NULL elements
+  dropNulls(c(config, list(...)))
 }
 
 #' Configure Hull Plugin
@@ -1053,6 +1053,7 @@ history <- function(
 #' @param labelOffsetX X-axis offset (number, default: 0)
 #' @param labelOffsetY Y-axis offset (number, default: 0)
 #' @param labelMaxWidth Maximum width of the text, exceeding will be ellipsized (number, default: 0)
+#' @param ... Other options. See \url{https://g6.antv.antgroup.com/manual/plugin/build-in/hull}.
 #'
 #' @return A list with the configuration settings
 #' @export
@@ -1089,7 +1090,8 @@ hull <- function(
   labelAutoRotate = TRUE,
   labelOffsetX = 0,
   labelOffsetY = 0,
-  labelMaxWidth = 0
+  labelMaxWidth = 0,
+  ...
 ) {
   # Validate inputs
   if (!is.character(members) || length(members) == 0) {
@@ -1141,17 +1143,14 @@ hull <- function(
     stop("'labelMaxWidth' must be a non-negative number")
   }
 
-  # Get all function argument names
   arg_names <- names(formals())
-
-  # Create list of argument values
+  arg_names <- arg_names[arg_names != "..."]
+  # Get values of only the named parameters
   config <- mget(arg_names)
-
-  # Set the type internally (not a function parameter)
   config$type <- "hull"
 
-  # Remove NULL values
-  dropNulls(config)
+  # Drop NULL elements
+  dropNulls(c(config, list(...)))
 }
 
 #' Configure Legend Plugin
@@ -1184,6 +1183,7 @@ hull <- function(
 #' @param itemLabelFontSize Font size of the legend item text (number, default: 16)
 #' @param gridCol Maximum number of columns for grid layout (number, default: NULL)
 #' @param gridRow Maximum number of rows for grid layout (number, default: NULL)
+#' @param ... Extra parameters. See \url{https://g6.antv.antgroup.com/manual/plugin/build-in/legend}.
 #'
 #' @return A list with the configuration settings
 #' @export
@@ -1254,7 +1254,8 @@ legend <- function(
   itemMarkerSize = 16,
   itemLabelFontSize = 16,
   gridCol = NULL,
-  gridRow = NULL
+  gridRow = NULL,
+  ...
 ) {
   # Validate inputs
   trigger <- match.arg(trigger)
@@ -1379,15 +1380,13 @@ legend <- function(
 
   # Get all function argument names
   arg_names <- names(formals())
-
-  # Create list of argument values
+  arg_names <- arg_names[arg_names != "..."]
+  # Get values of only the named parameters
   config <- mget(arg_names)
-
-  # Set the type internally (not a function parameter)
   config$type <- "legend"
 
-  # Remove NULL values
-  dropNulls(config)
+  # Drop NULL elements
+  dropNulls(c(config, list(...)))
 }
 
 #' Configure Minimap Plugin
@@ -1407,6 +1406,7 @@ legend <- function(
 #' @param renderer Custom renderer (JS object, default: NULL)
 #' @param shape Method for generating element thumbnails (string or JS function, default: "key")
 #' @param size Width and height of the minimap \code{[width, height]} (numeric vector, default: c(240, 160))
+#' @param ... Extra parameters. See \url{https://g6.antv.antgroup.com/manual/plugin/build-in/minimap}.
 #'
 #' @return A list with the configuration settings
 #' @export
@@ -1458,7 +1458,8 @@ minimap <- function(
   position = "right-bottom",
   renderer = NULL,
   shape = "key",
-  size = c(240, 160)
+  size = c(240, 160),
+  ...
 ) {
   # Validate inputs
   if (!is.null(className) && !is.character(className)) {
@@ -1555,15 +1556,13 @@ minimap <- function(
 
   # Get all function argument names
   arg_names <- names(formals())
-
-  # Create list of argument values
+  arg_names <- arg_names[arg_names != "..."]
+  # Get values of only the named parameters
   config <- mget(arg_names)
-
-  # Set the type internally (not a function parameter)
   config$type <- "minimap"
 
-  # Remove NULL values
-  dropNulls(config)
+  # Drop NULL elements
+  dropNulls(c(config, list(...)))
 }
 
 #' Configure Snapline Plugin
@@ -1579,6 +1578,7 @@ minimap <- function(
 #' @param verticalLineStyle Vertical snapline style (list or JS object, default: list(stroke = "#1783FF"))
 #' @param horizontalLineStyle Horizontal snapline style (list or JS object, default: list(stroke = "#1783FF"))
 #' @param filter Function to filter nodes that don't participate in alignment (JS function, default: NULL)
+#' @param ... Extra parameters. See \url{https://g6.antv.antgroup.com/manual/plugin/build-in/snapline}.
 #'
 #' @return A list with the configuration settings
 #' @export
@@ -1621,7 +1621,8 @@ snapline <- function(
   shape = "key",
   verticalLineStyle = list(stroke = "#1783FF"),
   horizontalLineStyle = list(stroke = "#1783FF"),
-  filter = NULL
+  filter = NULL,
+  ...
 ) {
   # Validate inputs
   if (!is.numeric(tolerance) || tolerance < 0) {
@@ -1666,15 +1667,13 @@ snapline <- function(
 
   # Get all function argument names
   arg_names <- names(formals())
-
-  # Create list of argument values
+  arg_names <- arg_names[arg_names != "..."]
+  # Get values of only the named parameters
   config <- mget(arg_names)
-
-  # Set the type internally (not a function parameter)
   config$type <- "snapline"
 
-  # Remove NULL values
-  dropNulls(config)
+  # Drop NULL elements
+  dropNulls(c(config, list(...)))
 }
 
 #' Configure Timebar Plugin
@@ -1705,6 +1704,7 @@ snapline <- function(
 #' @param onPause Callback when paused (JS function, default: NULL)
 #' @param onBackward Callback when moving backward (JS function, default: NULL)
 #' @param onForward Callback when moving forward (JS function, default: NULL)
+#' @param ... Extra parameters. See \url{https://g6.antv.antgroup.com/manual/plugin/build-in/timebar}.
 #'
 #' @return A list with the configuration settings
 #' @export
@@ -1769,7 +1769,8 @@ timebar <- function(
   onPlay = NULL,
   onPause = NULL,
   onBackward = NULL,
-  onForward = NULL
+  onForward = NULL,
+  ...
 ) {
   # Validate inputs
   if (!is.null(x) && !is.numeric(x)) {
@@ -1850,15 +1851,13 @@ timebar <- function(
 
   # Get all function argument names
   arg_names <- names(formals())
-
-  # Create list of argument values
+  arg_names <- arg_names[arg_names != "..."]
+  # Get values of only the named parameters
   config <- mget(arg_names)
-
-  # Set the type internally (not a function parameter)
   config$type <- "timebar"
 
-  # Remove NULL values
-  dropNulls(config)
+  # Drop NULL elements
+  dropNulls(c(config, list(...)))
 }
 
 #' Configure Toolbar Plugin
@@ -1872,6 +1871,7 @@ timebar <- function(
 #' @param position Toolbar position relative to the canvas (string, default: "top-left")
 #' @param style Custom style for the toolbar DOM element (list or JS object, default: NULL)
 #' @param onClick Callback function after a toolbar item is clicked (JS function, default: NULL)
+#' @param ... Extra parameters. See \url{https://g6.antv.antgroup.com/manual/plugin/build-in/toolbar}.
 #'
 #' @return A list with the configuration settings
 #' @export
@@ -1917,7 +1917,9 @@ toolbar <- function(
         { id : 'zoom-in' , value : 'zoom-in' } ,  
         { id : 'zoom-out' , value : 'zoom-out' } ,   
         { id : 'auto-fit' , value : 'auto-fit' } ,
-        { id: 'delete', value: 'delete' }  
+        { id: 'delete', value: 'delete' }, 
+        { id: 'request-fullscreen', value: 'request-fullscreen' },
+        { id: 'exit-fullscreen', value: 'exit-fullscreen' },
       ]"
   ),
   key = "toolbar",
@@ -1937,10 +1939,12 @@ toolbar <- function(
     "( value, target, current ) => {   
         // Handle button click events
       const graph = HTMLWidgets.find(`#${target.closest('.g6').id}`).getWidget();
+      const fullScreen = graph.getPluginInstance('fullscreen');
+      const zoomLevel = graph.getZoom();
         if ( value === 'zoom-in' ) {   
-          graph.zoomTo ( 1.1 ) ;
+          graph.zoomTo (graph.getZoom() + 0.1);
         } else if ( value === 'zoom-out' ) {     
-          graph.zoomTo ( 0.9 ) ;
+          graph.zoomTo (graph.getZoom() - 0.1);
         } else if ( value === 'auto-fit' ) {     
           graph.fitView ( ) ;
         } else if (value === 'delete') {
@@ -1949,10 +1953,19 @@ toolbar <- function(
           });
           graph.removeNodeData(selectedNodes);
           graph.draw();
+        } else if (value === 'request-fullscreen') {
+          if (fullScreen !== undefined) {
+            fullScreen.request();
+          }
+        } else if (value === 'exit-fullscreen') {
+          if (fullScreen !== undefined) {
+            fullScreen.exit();
+          }
         }
       }
     "
-  )
+  ),
+  ...
 ) {
   # Check if required parameter is provided
   if (!is.null(className) && !is.character(className)) {
@@ -1979,15 +1992,13 @@ toolbar <- function(
 
   # Get all function argument names
   arg_names <- names(formals())
-
-  # Create list of argument values
+  arg_names <- arg_names[arg_names != "..."]
+  # Get values of only the named parameters
   config <- mget(arg_names)
-
-  # Set the type internally (not a function parameter)
   config$type <- "toolbar"
 
-  # Remove NULL values
-  dropNulls(config)
+  # Drop NULL elements
+  dropNulls(c(config, list(...)))
 }
 
 #' Configure Tooltip Plugin
@@ -2006,6 +2017,7 @@ toolbar <- function(
 #' @param enterable Whether the pointer can enter the tooltip (boolean, default: FALSE)
 #' @param title Title for the tooltip (string, default: NULL)
 #' @param style Custom style for the tooltip (list or JS object, default: list(".tooltip" = list(visibility = "hidden")))
+#' @param ... Extra parameters. See \url{https://g6.antv.antgroup.com/manual/plugin/build-in/tooltip}.
 #'
 #' @return A list with the configuration settings
 #' @export
@@ -2075,7 +2087,8 @@ tooltip <- function(
   offset = c(10, 10),
   enterable = FALSE,
   title = NULL,
-  style = NULL
+  style = NULL,
+  ...
 ) {
   position <- match.arg(position)
 
@@ -2115,15 +2128,13 @@ tooltip <- function(
 
   # Get all function argument names
   arg_names <- names(formals())
-
-  # Create list of argument values
+  arg_names <- arg_names[arg_names != "..."]
+  # Get values of only the named parameters
   config <- mget(arg_names)
-
-  # Set the type internally (not a function parameter)
   config$type <- "tooltip"
 
-  # Remove NULL values
-  dropNulls(config)
+  # Drop NULL elements
+  dropNulls(c(config, list(...)))
 }
 
 #' Configure Watermark Plugin
@@ -2156,6 +2167,7 @@ tooltip <- function(
 #' @param backgroundPositionX Horizontal position of the watermark background (string, default: NULL)
 #' @param backgroundPositionY Vertical position of the watermark background (string, default: NULL)
 #' @param backgroundSize Background size of the watermark (string, default: NULL)
+#' @param ... Extra parameters. See \url{https://g6.antv.antgroup.com/manual/plugin/build-in/watermark}.
 #'
 #' @return A list with the configuration settings
 #' @export
@@ -2227,7 +2239,8 @@ watermark <- function(
   backgroundPosition = NULL,
   backgroundPositionX = NULL,
   backgroundPositionY = NULL,
-  backgroundSize = NULL
+  backgroundSize = NULL,
+  ...
 ) {
   # Validate inputs
   if (!is.numeric(width) || width <= 0) {
@@ -2310,13 +2323,11 @@ watermark <- function(
 
   # Get all function argument names
   arg_names <- names(formals())
-
-  # Create list of argument values
+  arg_names <- arg_names[arg_names != "..."]
+  # Get values of only the named parameters
   config <- mget(arg_names)
-
-  # Set the type internally (not a function parameter)
   config$type <- "watermark"
 
-  # Remove NULL values
-  dropNulls(config)
+  # Drop NULL elements
+  dropNulls(c(config, list(...)))
 }

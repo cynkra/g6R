@@ -16,7 +16,8 @@ tooltip(
   offset = c(10, 10),
   enterable = FALSE,
   title = NULL,
-  style = NULL
+  style = NULL,
+  ...
 )
 }
 \arguments{
@@ -41,6 +42,8 @@ tooltip(
 \item{title}{Title for the tooltip (string, default: NULL)}
 
 \item{style}{Custom style for the tooltip (list or JS object, default: list(".tooltip" = list(visibility = "hidden")))}
+
+\item{...}{Extra parameters. See \url{https://g6.antv.antgroup.com/manual/plugin/build-in/tooltip}.}
 }
 \value{
 A list with the configuration settings

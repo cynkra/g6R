@@ -150,6 +150,7 @@ server <- function(input, output, session) {
       ) |>
       g6_plugins(
         minimap(),
+        fullscreen(),
         g6R::tooltip(
           title = "Tooltip",
           enable = JS(

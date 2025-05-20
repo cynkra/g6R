@@ -13,7 +13,8 @@ grid_line(
   follow = FALSE,
   lineWidth = 1,
   size = 20,
-  stroke = "#eee"
+  stroke = "#eee",
+  ...
 )
 }
 \arguments{
@@ -34,6 +35,8 @@ grid_line(
 \item{size}{Grid unit size in pixels (number, default: 20)}
 
 \item{stroke}{Grid line color (string, default: "#eee")}
+
+\item{...}{Extra parameters. See \url{https://g6.antv.antgroup.com/manual/plugin/build-in/grid-line}.}
 }
 \value{
 A list with the configuration settings

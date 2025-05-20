@@ -9,7 +9,8 @@ history(
   afterAddCommand = NULL,
   beforeAddCommand = NULL,
   executeCommand = NULL,
-  stackSize = 0
+  stackSize = 0,
+  ...
 )
 }
 \arguments{
@@ -22,6 +23,8 @@ history(
 \item{executeCommand}{Callback function called when executing a command (JS function, default: NULL)}
 
 \item{stackSize}{Maximum length of history records to be recorded, 0 means unlimited (number, default: 0)}
+
+\item{...}{Extra parameters. See \url{https://g6.antv.antgroup.com/manual/plugin/build-in/history}.}
 }
 \value{
 A list with the configuration settings

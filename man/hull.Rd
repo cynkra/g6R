@@ -19,7 +19,8 @@ hull(
   labelAutoRotate = TRUE,
   labelOffsetX = 0,
   labelOffsetY = 0,
-  labelMaxWidth = 0
+  labelMaxWidth = 0,
+  ...
 )
 }
 \arguments{
@@ -52,6 +53,8 @@ hull(
 \item{labelOffsetY}{Y-axis offset (number, default: 0)}
 
 \item{labelMaxWidth}{Maximum width of the text, exceeding will be ellipsized (number, default: 0)}
+
+\item{...}{Other options. See \url{https://g6.antv.antgroup.com/manual/plugin/build-in/hull}.}
 }
 \value{
 A list with the configuration settings

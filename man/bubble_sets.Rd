@@ -29,7 +29,8 @@ bubble_sets(
   memberInfluenceFactor = NULL,
   edgeInfluenceFactor = NULL,
   nonMemberInfluenceFactor = NULL,
-  virtualEdges = NULL
+  virtualEdges = NULL,
+  ...
 )
 }
 \arguments{
@@ -82,6 +83,8 @@ bubble_sets(
 \item{nonMemberInfluenceFactor}{Non-member influence factor (numeric, default: NULL)}
 
 \item{virtualEdges}{Whether to use virtual edges (boolean, default: NULL)}
+
+\item{...}{Extra parameters. See \url{https://g6.antv.antgroup.com/manual/plugin/build-in/bubble-sets}.}
 }
 \value{
 A list with the configuration settings for the bubble-sets plugin

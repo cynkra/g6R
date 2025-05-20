@@ -27,7 +27,8 @@ timebar(
   onPlay = NULL,
   onPause = NULL,
   onBackward = NULL,
-  onForward = NULL
+  onForward = NULL,
+  ...
 )
 }
 \arguments{
@@ -76,6 +77,8 @@ timebar(
 \item{onBackward}{Callback when moving backward (JS function, default: NULL)}
 
 \item{onForward}{Callback when moving forward (JS function, default: NULL)}
+
+\item{...}{Extra parameters. See \url{https://g6.antv.antgroup.com/manual/plugin/build-in/timebar}.}
 }
 \value{
 A list with the configuration settings

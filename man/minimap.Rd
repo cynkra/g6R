@@ -16,7 +16,8 @@ minimap(
   position = "right-bottom",
   renderer = NULL,
   shape = "key",
-  size = c(240, 160)
+  size = c(240, 160),
+  ...
 )
 }
 \arguments{
@@ -43,6 +44,8 @@ minimap(
 \item{shape}{Method for generating element thumbnails (string or JS function, default: "key")}
 
 \item{size}{Width and height of the minimap \code{[width, height]} (numeric vector, default: c(240, 160))}
+
+\item{...}{Extra parameters. See \url{https://g6.antv.antgroup.com/manual/plugin/build-in/minimap}.}
 }
 \value{
 A list with the configuration settings
