@@ -157,7 +157,7 @@ g <- g |>
     brush_select(
       onSelect = JS(
         "(states) => {
-            return console.log(states);
+            return states;
           }"
       )
     )
