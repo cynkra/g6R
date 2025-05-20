@@ -41,8 +41,8 @@ nodes <- data.frame(
 
 # Generate random edges
 edges <- data.frame(
-  source = c(2, 6, 7),
-  target = c(1, 3, 9)
+  source = c("2", "6", "7"),
+  target = c("1", "3", "9")
 )
 
 g6(nodes, edges) |>
@@ -63,12 +63,6 @@ g6(nodes, edges) |>
     )
   ) |>
   g6_layout(
-    #layout = list(
-    #  type = "force-atlas2",
-    #  preventOverlap = TRUE,
-    #  r = 20,
-    #  center = c(250, 250)
-    #),
     layout = list(
       type = "d3-force",
       link = list(
@@ -92,7 +86,7 @@ g6(nodes, edges) |>
     brush_select(
       onSelect = JS(
         "(states) => {
-            return console.log(states);
+            return states;
           }"
       )
     )
