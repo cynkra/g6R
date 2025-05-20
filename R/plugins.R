@@ -1912,7 +1912,14 @@ timebar <- function(
 #'   }")
 #' )
 toolbar <- function(
-  getItems,
+  getItems = JS(
+    "( ) => [   
+        { id : 'zoom-in' , value : 'zoom-in' } ,  
+        { id : 'zoom-out' , value : 'zoom-out' } ,   
+        { id : 'auto-fit' , value : 'auto-fit' } ,
+        { id: 'delete', value: 'delete' }  
+      ]"
+  ),
   key = "toolbar",
   className = NULL,
   position = c(
@@ -1926,7 +1933,26 @@ toolbar <- function(
     "left"
   ),
   style = NULL,
-  onClick = NULL
+  onClick = JS(
+    "( value, target, current ) => {   
+        // Handle button click events
+      const graph = HTMLWidgets.find(`#${target.closest('.g6').id}`).getWidget();
+        if ( value === 'zoom-in' ) {   
+          graph.zoomTo ( 1.1 ) ;
+        } else if ( value === 'zoom-out' ) {     
+          graph.zoomTo ( 0.9 ) ;
+        } else if ( value === 'auto-fit' ) {     
+          graph.fitView ( ) ;
+        } else if (value === 'delete') {
+          const selectedNodes = graph.getElementDataByState('node', 'selected').map((node) => {
+            return node.id
+          });
+          graph.removeNodeData(selectedNodes);
+          graph.draw();
+        }
+      }
+    "
+  )
 ) {
   # Check if required parameter is provided
   if (!is.null(className) && !is.character(className)) {

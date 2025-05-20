@@ -5,13 +5,15 @@
 \title{Configure Toolbar Plugin}
 \usage{
 toolbar(
-  getItems,
+  getItems =
+    JS("( ) => [   \\n        { id : 'zoom-in' , value : 'zoom-in' } ,  \\n        { id : 'zoom-out' , value : 'zoom-out' } ,   \\n        { id : 'auto-fit' , value : 'auto-fit' } ,\\n        { id: 'delete', value: 'delete' }  \\n      ]"),
   key = "toolbar",
   className = NULL,
   position = c("top-left", "top", "top-right", "right", "bottom-right", "bottom",
     "bottom-left", "left"),
   style = NULL,
-  onClick = NULL
+  onClick =
+    JS("( value, target, current ) => {   \\n        // Handle button click events\\n      const graph = HTMLWidgets.find(`#${target.closest('.g6').id}`).getWidget();\\n        if ( value === 'zoom-in' ) {   \\n          graph.zoomTo ( 1.1 ) ;\\n        } else if ( value === 'zoom-out' ) {     \\n          graph.zoomTo ( 0.9 ) ;\\n        } else if ( value === 'auto-fit' ) {     \\n          graph.fitView ( ) ;\\n        } else if (value === 'delete') {\\n          const selectedNodes = graph.getElementDataByState('node', 'selected').map((node) => {\\n            return node.id\\n          });\\n          graph.removeNodeData(selectedNodes);\\n          graph.draw();\\n        }\\n      }\\n    ")
 )
 }
 \arguments{
