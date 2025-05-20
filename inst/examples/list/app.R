@@ -76,6 +76,7 @@ combos <- list(
 
 ui <- page_fluid(
   g6Output("graph"),
+  verbatimTextOutput("selected_elements"),
   div(
     class = "d-flex align-items-center",
     actionButton("remove_node", "Remove node 1"),
@@ -127,7 +128,14 @@ server <- function(input, output, session) {
       g6_behaviors(
         zoom_canvas(),
         drag_element(),
-        click_select(multiple = TRUE),
+        click_select(
+          multiple = TRUE,
+          onClick = JS(
+            "(e) => {
+              console.log(e);  
+            }"
+          )
+        ),
         brush_select(immediately = TRUE),
         collapse_expand(),
         drag_canvas(
@@ -142,48 +150,29 @@ server <- function(input, output, session) {
       ) |>
       g6_plugins(
         minimap(),
-        tooltip(
+        g6R::tooltip(
+          title = "Tooltip",
           enable = JS(
-            "(e) => e.targetType === 'node';"
+            "(e) => { return e.targetType === 'node';}"
           ),
-          getContent = JS(
-            "(e, items) => {
-                let result = `<h4>Custom Content</h4>`;
-                items.forEach((item) => {
-                  result += `<p>Type: ${item.data.description}</p>`;
-                });
-                return result;
-              }"
-          )
-        ),
-        toolbar(
-          onClick = JS(
-            "(value, target) => {
-                // Accessing the widget is more complex when 
-                // the plugin isn't defined from the JS core
-                const graph = HTMLWidgets.find(`#${target.closest('.g6').id}`).getWidget();
-                  switch (value) {
-                    case 'delete':
-                      const selectedNodes = graph.getElementDataByState('node', 'selected').map((node) => {
-                        return node.id
-                      });
-                      graph.removeNodeData(selectedNodes);
-                      break;
-                    default:
-                      break;
-                  }
-                  // Important: redraw;
-                  graph.draw();
-                }"
+          #getContent = JS(
+          #  "(e, items) => {
+          #      let result = `<h4>Custom Content</h4>`;
+          #      items.forEach((item) => {
+          #        console.log(item.id);
+          #        result += `<p>Type: ${item.id}</p>`;
+          #      });
+          #      return result;
+          #    }"
+          #),
+          onOpenChange = JS(
+            "( open ) => {   
+            console.log(open);
+          }"
           ),
-          getItems = JS(
-            "() => {
-                  return [
-                    { id: 'delete', value: 'delete' },
-                  ];
-                }"
-          )
+          trigger = "click"
         ),
+        toolbar(),
         context_menu(
           enable = JS(
             "(e) => {
@@ -351,10 +340,12 @@ server <- function(input, output, session) {
       )
   })
 
-  observe({
-    print(input[["graph-selected_node"]]$id)
-    print(input[["graph-selected_edge"]]$id)
-    print(input[["graph-selected_combo"]]$id)
+  output$selected_elements <- renderPrint({
+    list(
+      node = input[["graph-selected_node"]],
+      edge = input[["graph-selected_edge"]],
+      combo = input[["graph-selected_combo"]]
+    )
   })
 }
 
