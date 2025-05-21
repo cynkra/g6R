@@ -110,9 +110,7 @@
 g6_plugins <- function(graph, ...) {
   plugins <- list(...)
   if (length(plugins)) {
-    # Allow to pass plugin as text
-    plugins <- lapply(plugins, validate_plugin)
-    graph$x$plugins <- plugins
+    graph$x$plugins <- lapply(plugins, validate_plugin)
   }
   graph
 }
@@ -140,6 +138,7 @@ valid_plugins <- c(
 
 #' @keywords internal
 validate_plugin <- function(x) {
+  # Allow to pass plugin as text
   if (!is.list(x)) x <- list(type = x)
 
   if (!(x[["type"]] %in% valid_plugins)) {
