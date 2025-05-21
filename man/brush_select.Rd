@@ -8,10 +8,11 @@ brush_select(
   key = "brush-select",
   animation = FALSE,
   enable = JS("(e) => {\\n      return true\\n    }"),
-  enableElements = c("node", "edge", "combo"),
+  enableElements = "node",
   immediately = FALSE,
   mode = c("default", "union", "intersect", "diff"),
-  onSelect = NULL,
+  onSelect =
+    JS("(states) => {\\n      const selectedNodes = Object.getOwnPropertyNames(states);\\n      Shiny.setInputValue('graph-selected_node', selectedNodes, {priority: 'event'});\\n      return states;\\n    }"),
   state = c("selected", "active", "inactive", "disabled", "highlight"),
   style = NULL,
   trigger = "shift",
@@ -25,13 +26,14 @@ brush_select(
 
 \item{enable}{Whether to enable brush select functionality (boolean or function, default: TRUE)}
 
-\item{enableElements}{Types of elements that can be selected (character vector, default: c("node", "combo", "edge"))}
+\item{enableElements}{Types of elements that can be selected (character vector, default: "node").
+Can be \code{c("node", "edge", "combo")}.}
 
 \item{immediately}{Whether to select immediately in default mode (boolean, default: FALSE)}
 
 \item{mode}{Selection mode: "union", "intersect", "diff", or "default" (string, default: "default")}
 
-\item{onSelect}{Callback for selected element state (function)}
+\item{onSelect}{Callback for selected element state (JS function)}
 
 \item{state}{State to switch to when selected (string, default: "selected")}
 

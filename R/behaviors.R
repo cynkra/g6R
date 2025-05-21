@@ -256,10 +256,11 @@ auto_adapt_label <- function(
 #' @param key Behavior unique identifier. Useful to modify this behavior from JS side.
 #' @param animation Whether to enable animation (boolean, default: FALSE)
 #' @param enable Whether to enable brush select functionality (boolean or function, default: TRUE)
-#' @param enableElements Types of elements that can be selected (character vector, default: c("node", "combo", "edge"))
+#' @param enableElements Types of elements that can be selected (character vector, default: "node").
+#' Can be \code{c("node", "edge", "combo")}.
 #' @param immediately Whether to select immediately in default mode (boolean, default: FALSE)
 #' @param mode Selection mode: "union", "intersect", "diff", or "default" (string, default: "default")
-#' @param onSelect Callback for selected element state (function)
+#' @param onSelect Callback for selected element state (JS function)
 #' @param state State to switch to when selected (string, default: "selected")
 #' @param style Style specification for the selection box (list).
 #' See \url{https://g6.antv.antgroup.com/en/manual/behavior/build-in/brush-select#style}.
@@ -294,10 +295,16 @@ brush_select <- function(
       return true
     }"
   ),
-  enableElements = c("node", "edge", "combo"),
+  enableElements = "node",
   immediately = FALSE,
   mode = c("default", "union", "intersect", "diff"),
-  onSelect = NULL,
+  onSelect = JS(
+    "(states) => {
+      const selectedNodes = Object.getOwnPropertyNames(states);
+      Shiny.setInputValue('graph-selected_node', selectedNodes, {priority: 'event'});
+      return states;
+    }"
+  ),
   state = c("selected", "active", "inactive", "disabled", "highlight"),
   style = NULL,
   trigger = "shift",
@@ -337,6 +344,9 @@ brush_select <- function(
   # Get values of only the named parameters
   config <- mget(arg_names)
   config$type <- "brush-select"
+  if (length(enableElements) == 1) {
+    config$enableElements <- list(config$enableElements)
+  }
 
   # Drop NULL elements
   dropNulls(c(config, list(...)))

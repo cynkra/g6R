@@ -6,9 +6,10 @@ import {
   Graph,
   NodeEvent,
   ExtensionCategory,
-  register
+  register,
+  GraphEvent
 } from '@antv/g6';
-import { setClickEvents } from '../modules/events';
+import { setClickEvents, setGraphEvents } from '../modules/events';
 import { registerShinyHandlers } from '../modules/handlers';
 import { AntLine, FlyMarkerCubic, CircleComboWithExtraButton } from '../modules/extensions';
 
@@ -51,8 +52,18 @@ HTMLWidgets.widget({
             EdgeEvent.CLICK,
             ComboEvent.CLICK
           ]
-
           setClickEvents(clickEvents, graph, el);
+
+          // Is this enough? :)
+          const graphEvents = [
+            GraphEvent.AFTER_ELEMENT_CREATE,
+            GraphEvent.AFTER_ELEMENT_DESTROY,
+            GraphEvent.AFTER_DRAW,
+            GraphEvent.AFTER_LAYOUT,
+            GraphEvent.AFTER_ANIMATE,
+            GraphEvent.AFTER_RENDER
+          ]
+          setGraphEvents(graphEvents, graph, el);
 
           // When click on canvas and target isn't node or edge or combo
           // we have to reset the Shiny selected-node or edge or combo

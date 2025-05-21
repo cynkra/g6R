@@ -27,7 +27,8 @@ if (length(duplicated_id)) {
 
 ui <- page_fluid(
   actionButton("add_hull", "Add hull"),
-  g6Output("graph", height = "100vh")
+  verbatimTextOutput("state"),
+  g6Output("graph", height = "100vh"),
 )
 
 server <- function(input, output, session) {
@@ -56,21 +57,19 @@ server <- function(input, output, session) {
         "zoom-canvas",
         drag_element_force(fixed = TRUE),
         click_select(
+          multiple = TRUE,
           onClick = JS(
             "(e) => {
-            //console.log(e);
+            console.log(e);
           }"
           )
         ),
-        brush_select(
-          onSelect = JS(
-            "(states) => {
-            console.log(states);
-            return states;
-          }"
-          )
-        ),
-        create_edge()
+        brush_select(),
+        create_edge() #,
+        # TBD: fixme ->
+        # when enabled this breaks the click-select because
+        # the state is changed when a node is hovered.
+        #hover_activate()
       ) |>
       g6_plugins(
         "minimap",
@@ -94,9 +93,20 @@ server <- function(input, output, session) {
       )
   })
 
-  observe({
-    print(input[["graph-selected_node"]])
-    print(input[["graph-selected_edge"]])
+  observeEvent(req(input[["graph-initialized"]]), {
+    print("Graph initialized")
+  })
+
+  observeEvent(req(input[["graph-state"]]), {
+    print("Graph changed")
+  })
+
+  output$state <- renderPrint({
+    list(
+      node = input[["graph-selected_node"]],
+      edge = input[["graph-selected_edge"]],
+      combo = input[["graph-selected_combo"]]
+    )
   })
 }
 

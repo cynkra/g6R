@@ -1,8 +1,6 @@
 import { getBehavior } from "./utils";
 import {
-  ComboEvent,
-  EdgeEvent,
-  NodeEvent
+  GraphEvent
 } from '@antv/g6';
 
 const setClickEvents = (events, graph, el) => {
@@ -11,26 +9,8 @@ const setClickEvents = (events, graph, el) => {
   for (let event of events) {
     graph.on(event, (e) => {
       const inputName = `${el.id}-selected_${e.targetType}`;
-
-      let getFunc;
-      switch (event) {
-        case NodeEvent.CLICK:
-          getFunc = graph.getNodeData;
-          break;
-        case EdgeEvent.CLICK:
-          getFunc = graph.getEdgeData;
-          break;
-        case ComboEvent.CLICK:
-          getFunc = graph.getEdgeData;
-          break;
-        default:
-          break;
-      }
-
       // TBD set shiny input with el.id namespace
       const { target } = e; // Get the ID of the clicked node
-      // Get node data
-      const nodeData = graph.getNodeData(target.id);
       const clickSelect = getBehavior(graph.getBehaviors(), "click-select");
       const isMultiple = clickSelect[0].multiple;
 
@@ -63,4 +43,18 @@ const setClickEvents = (events, graph, el) => {
   }
 }
 
-export { setClickEvents };
+const setGraphEvents = (events, graph, el) => {
+  for (let event of events) {
+    graph.on(event, (e) => {
+      // Set an input to set that the graph is rendered
+      if (event === GraphEvent.AFTER_RENDER) {
+        Shiny.setInputValue(el.id + '-initialized', true);
+      }
+      // Update the state any time there is a change.
+      // Useful to serialise and restore
+      Shiny.setInputValue(el.id + '-state', graph.getData())
+    })
+  }
+}
+
+export { setClickEvents, setGraphEvents };
