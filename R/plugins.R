@@ -111,16 +111,45 @@ g6_plugins <- function(graph, ...) {
   plugins <- list(...)
   if (length(plugins)) {
     # Allow to pass plugin as text
-    plugins <- lapply(plugins, function(plugin) {
-      if (!is.list(plugin)) {
-        plugin <- list(type = plugin)
-      } else {
-        plugin
-      }
-    })
+    plugins <- lapply(plugins, validate_plugin)
     graph$x$plugins <- plugins
   }
   graph
+}
+
+#' @keywords internal
+valid_plugins <- c(
+  "background",
+  "bubble-sets",
+  "contextmenu",
+  "edge-bundling",
+  "edge-filter-lens",
+  "fisheye",
+  "fullscreen",
+  "grid-line",
+  "history",
+  "hull",
+  "legend",
+  "minimap",
+  "snapline",
+  "timebar",
+  "toolbar",
+  "tooltip",
+  "watermark"
+)
+
+#' @keywords internal
+validate_plugin <- function(x) {
+  if (!is.list(x)) x <- list(type = x)
+
+  if (!(x[["type"]] %in% valid_plugins)) {
+    stop(sprintf(
+      "Plugin '%s' is not a valid plugin. Valid plugins are: %s.",
+      x[["type"]],
+      paste(valid_plugins, collapse = ", ")
+    ))
+  }
+  x
 }
 
 #' Configure Background Plugin for G6
