@@ -133,8 +133,7 @@ g6_plugins(
 ```{r}
 g <- g |>
   g6_plugins(
-    minimap(size = c(100, 100)),
-    "tooltip"
+    minimap(size = c(100, 100))
   )
 g
 ```

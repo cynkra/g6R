@@ -484,11 +484,19 @@ collapse_expand <- function(
 #'
 #' @param key Behavior unique identifier. Useful to modify this behavior from JS side.
 #' @param trigger The way to trigger edge creation: "click" or "drag" (string, default: "drag")
-#' @param enable Whether to enable this behavior (boolean or function, default: TRUE)
+#' @param enable Whether to enable this behavior (boolean or function, default: FALSE).
+#' Our default implementation works in parallel with the \link{context_menu} plugin which is
+#' responsible for activating the edge behavior when edge creation is selected.
 #' @param onCreate Callback function for creating an edge, returns edge data (function, default: NULL)
-#' @param onFinish Callback function for successfully creating an edge (function, default: NULL)
+#' @param onFinish Callback function for successfully creating an edge (function).
+#' By default, we provide an internal implementation that disables the edge mode when the edge
+#' creation is succesful so that it does not conflict with other drag behaviors.
 #' @param style Style of the newly created edge (list, default: NULL)
+#' @param notify Whether to show a feedback message in the ui.
 #' @param ... Extra parameters. See \url{https://g6.antv.antgroup.com/manual/behavior/build-in/create-edge}.
+#'
+#' @note \link{create_edge}, \link{drag_element} and \link{drag_element_force} are incompatible by default,
+#' as there triggers are the same. You can change the trigger to workaround this.
 #'
 #' @return A list with the configuration settings
 #' @export
@@ -499,10 +507,11 @@ collapse_expand <- function(
 create_edge <- function(
   key = "create-edge",
   trigger = "drag",
-  enable = TRUE,
+  enable = FALSE,
   onCreate = NULL,
   onFinish = NULL,
   style = NULL,
+  notify = FALSE,
   ...
 ) {
   # Validate inputs
@@ -532,6 +541,54 @@ create_edge <- function(
   # Get values of only the named parameters
   config <- mget(arg_names)
   config$type <- "create-edge"
+
+  # Provide default
+  if (is.null(config$onFinish)) {
+    # We can't access the graph instance from within this JS
+    # code as it is create oustide the widget factory
+    output_id <- shiny::getCurrentOutputInfo()[["name"]]
+    # TBD: this won't work in htmlwidget without shiny ...
+    config$onFinish <- JS(
+      sprintf(
+        "(edge) => {
+          const notify = %s;
+          const graph = HTMLWidgets.find('#%s').getWidget();
+          const targetType = graph.getElementType(edge.target);
+          // Avoid to create edges in combos. If so, we remove it
+          if (targetType !== 'node') {
+            graph.removeEdgeData([edge.id]);
+            if (notify) {
+              Shiny.notifications.show(
+                { 
+                  html: 'Edge can only created bewteen 2 nodes',
+                  type: 'error' 
+                }
+              )
+            }
+          } else {
+            // Then we reset the behaviors so there is no conflict
+            graph.updateBehavior({
+              key: 'create-edge', // Specify the behavior to update
+              enable: false,
+            });
+            // Re-enable drag element bahaviors
+            graph.updateBehavior({ key: 'drag-element', enable: true });
+            graph.updateBehavior({ key: 'drag-element-force', enable: true });
+            if (notify) {
+              Shiny.notifications.show(
+                { 
+                  html: 'Edge successfuly created',
+                  type: 'success' 
+                }
+              )
+            }
+          }
+        }",
+        as.numeric(notify),
+        output_id
+      )
+    )
+  }
 
   # Drop NULL elements
   dropNulls(c(config, list(...)))

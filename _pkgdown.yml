@@ -63,6 +63,8 @@ reference:
   desc: Graph layout
   contents:
   - g6_layout
+  - circular_layout
+  - d3_force_layout
 
 - title: Options
   desc: g6 options

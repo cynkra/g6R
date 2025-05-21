@@ -9,9 +9,9 @@ g6_layout(graph, layout = list(type = "force"))
 \arguments{
 \item{graph}{A g6 graph object created with \code{g6()}.}
 
-\item{layout}{A list specifying the layout algorithm and its configuration parameters.
-At minimum, this list should contain a \code{type} element specifying the layout algorithm.
-Additional parameters depend on the layout type chosen. Default is \code{list(type = "force")}.}
+\item{layout}{An existing layout function like \link{circular_layout}.
+At minimum, this can be a list that should contain a \code{type} element specifying the layout algorithm.
+Additional parameters depend on the layout type chosen, for instance \code{list(type = "force")}.}
 }
 \value{
 The modified g6 graph object with the specified layout, allowing for method chaining.

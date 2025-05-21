@@ -308,7 +308,8 @@ bubble_sets <- function(
 #' @param className Additional class name for the menu DOM (string, default: "g6-contextmenu")
 #' @param trigger How to trigger the menu: "contextmenu" for right-click, "click" for click (string, default: "contextmenu")
 #' @param offset Offset of the menu display in X and Y directions (numeric vector, default: c(4, 4))
-#' @param onClick Callback method triggered after menu item is clicked (JS function, default: NULL)
+#' @param onClick Callback method triggered after menu item is clicked (JS function). Our default allows
+#' to create edge or either remove the current node.
 #' @param getItems Returns the list of menu items, supports Promise (JS function, default: NULL)
 #' @param getContent Returns the content of the menu, supports Promise (JS function, default: NULL)
 #' @param loadingContent Menu content used when getContent returns a Promise (string or HTML element, default: NULL)
@@ -347,11 +348,38 @@ context_menu <- function(
   className = "g6-contextmenu",
   trigger = "contextmenu",
   offset = c(4, 4),
-  onClick = NULL,
-  getItems = NULL,
+  onClick = JS(
+    "(value, target, current) => {
+      const graph = HTMLWidgets.find(`#${target.closest('.g6').id}`).getWidget();
+      if (current.id === undefined) return;
+      if (value === 'create_edge') {
+        graph.updateBehavior({
+          key: 'create-edge', // Specify the behavior to update
+          enable: true,
+        });
+        // Select node
+        graph.setElementState(current.id, 'selected');
+        // Disable drag node as it is incompatible with edge creation
+        graph.updateBehavior({ key: 'drag-element', enable: false });
+        graph.updateBehavior({ key: 'drag-element-force', enable: false });
+      } else if (value === 'remove_node') {
+        graph.removeNodeData([current.id]);
+        graph.draw();
+      }
+    }
+    "
+  ),
+  getItems = JS(
+    "() => {
+      return [
+        { name: 'Create edge', value: 'create_edge' },
+        { name: 'Remove node', value: 'remove_node' }
+      ];
+    }"
+  ),
   getContent = NULL,
   loadingContent = NULL,
-  enable = TRUE,
+  enable = JS("(e) => e.targetType === 'node'"),
   ...
 ) {
   # Validate inputs

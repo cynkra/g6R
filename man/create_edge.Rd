@@ -7,10 +7,11 @@
 create_edge(
   key = "create-edge",
   trigger = "drag",
-  enable = TRUE,
+  enable = FALSE,
   onCreate = NULL,
   onFinish = NULL,
   style = NULL,
+  notify = FALSE,
   ...
 )
 }
@@ -19,13 +20,19 @@ create_edge(
 
 \item{trigger}{The way to trigger edge creation: "click" or "drag" (string, default: "drag")}
 
-\item{enable}{Whether to enable this behavior (boolean or function, default: TRUE)}
+\item{enable}{Whether to enable this behavior (boolean or function, default: FALSE).
+Our default implementation works in parallel with the \link{context_menu} plugin which is
+responsible for activating the edge behavior when edge creation is selected.}
 
 \item{onCreate}{Callback function for creating an edge, returns edge data (function, default: NULL)}
 
-\item{onFinish}{Callback function for successfully creating an edge (function, default: NULL)}
+\item{onFinish}{Callback function for successfully creating an edge (function).
+By default, we provide an internal implementation that disables the edge mode when the edge
+creation is succesful so that it does not conflict with other drag behaviors.}
 
 \item{style}{Style of the newly created edge (list, default: NULL)}
+
+\item{notify}{Whether to show a feedback message in the ui.}
 
 \item{...}{Extra parameters. See \url{https://g6.antv.antgroup.com/manual/behavior/build-in/create-edge}.}
 }
@@ -35,6 +42,10 @@ A list with the configuration settings
 \description{
 Creates a configuration object for the create-edge behavior in G6.
 This allows users to create edges between nodes by clicking or dragging.
+}
+\note{
+\link{create_edge}, \link{drag_element} and \link{drag_element_force} are incompatible by default,
+as there triggers are the same. You can change the trigger to workaround this.
 }
 \examples{
 # Basic configuration

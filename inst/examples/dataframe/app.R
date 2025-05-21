@@ -50,20 +50,7 @@ server <- function(input, output, session) {
         )
       ) |>
       g6_layout(
-        #layout = list(
-        #  type = "force-atlas2",
-        #  preventOverlap = TRUE,
-        #  r = 20,
-        #  center = c(250, 250)
-        #),
-        layout = list(
-          type = "d3-force",
-          link = list(
-            distance = 100,
-            strength = 2
-          ),
-          collide = list(radius = 40)
-        )
+        layout = d3_force_layout()
       ) |>
       g6_behaviors(
         "zoom-canvas",
@@ -71,7 +58,7 @@ server <- function(input, output, session) {
         click_select(
           onClick = JS(
             "(e) => {
-            console.log(e);
+            //console.log(e);
           }"
           )
         ),
@@ -82,11 +69,13 @@ server <- function(input, output, session) {
             return states;
           }"
           )
-        )
+        ),
+        create_edge()
       ) |>
       g6_plugins(
         "minimap",
-        "tooltip"
+        "tooltip",
+        context_menu()
       )
   })
 

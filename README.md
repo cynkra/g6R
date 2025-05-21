@@ -62,16 +62,7 @@ g6(nodes, edges) |>
       )
     )
   ) |>
-  g6_layout(
-    layout = list(
-      type = "d3-force",
-      link = list(
-        distance = 100,
-        strength = 2
-      ),
-      collide = list(radius = 40)
-    )
-  ) |>
+  g6_layout(d3_force_layout()) |>
   g6_behaviors(
     "zoom-canvas",
     drag_element_force(fixed = TRUE),
@@ -89,10 +80,12 @@ g6(nodes, edges) |>
             return states;
           }"
       )
-    )
+    ),
+    create_edge()
   ) |>
   g6_plugins(
     "minimap",
-    "tooltip"
+    "tooltip",
+    context_menu()
   )
 ```

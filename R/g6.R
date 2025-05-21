@@ -122,6 +122,11 @@ g6 <- function(
     )
   )
 
+  # In case we need it ...
+  hookFunc <- function(widget) {
+    # TBD
+  }
+
   # create widget
   htmlwidgets::createWidget(
     name = "g6",
@@ -129,7 +134,8 @@ g6 <- function(
     width = width,
     height = height,
     package = "g6R",
-    elementId = elementId
+    elementId = elementId,
+    preRenderHook = NULL
   )
 }
 
