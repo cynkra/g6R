@@ -69,21 +69,45 @@
 #'
 #' @export
 g6_behaviors <- function(graph, ...) {
-  # Maybe todo: provide more infra to define behaviors and validate them
-  # structure(class = "behavior"), validate_behavior ...
   behaviors <- list(...)
   if (length(behaviors)) {
-    # Allow to pass behavior as text
-    behaviors <- lapply(behaviors, function(behavior) {
-      if (!is.list(behavior)) {
-        behavior <- list(type = behavior)
-      } else {
-        behavior
-      }
-    })
-    graph$x$behaviors <- behaviors
+    graph$x$behaviors <- lapply(behaviors, validate_behavior)
   }
   graph
+}
+
+#' @keywords internal
+valid_behaviors <- c(
+  "auto-adapt-label",
+  "brush-select",
+  "click-select",
+  "collapse-expand",
+  "create-edge",
+  "drag-canvas",
+  "drag-element",
+  "drag-element-force",
+  "fix-element-size",
+  "focus-element",
+  "hover-activate",
+  "lasso-select",
+  "optimize-viewport-transform",
+  "scroll-canvas",
+  "zoom-canvas"
+)
+
+#' @keywords internal
+validate_behavior <- function(x) {
+  # Allow to pass behavior as text
+  if (!is.list(x)) x <- list(type = x)
+
+  if (!(x[["type"]] %in% valid_behaviors)) {
+    stop(sprintf(
+      "Behavior '%s' is not a valid behavior. Valid behaviors are: %s.",
+      x[["type"]],
+      paste(valid_behaviors, collapse = ", ")
+    ))
+  }
+  x
 }
 
 #' @keywords internal
