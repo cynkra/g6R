@@ -147,13 +147,7 @@ g <- g |>
           }"
       )
     ),
-    brush_select(
-      onSelect = JS(
-        "(states) => {
-            return states;
-          }"
-      )
-    )
+    brush_select()
   )
 g
 ```
