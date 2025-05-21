@@ -124,7 +124,7 @@ server <- function(input, output, session) {
           )
         )
       ) |>
-      g6_layout() |>
+      g6_layout(antv_dagre_layout()) |>
       g6_behaviors(
         zoom_canvas(),
         drag_element(),

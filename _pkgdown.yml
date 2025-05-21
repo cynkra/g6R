@@ -65,6 +65,7 @@ reference:
   - g6_layout
   - circular_layout
   - d3_force_layout
+  - antv_dagre_layout
 
 - title: Options
   desc: g6 options

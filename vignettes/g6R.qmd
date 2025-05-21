@@ -71,20 +71,11 @@ As you can see, the nodes don't render well yet. Let's add it some layout.
 
 ## Layout
 
-`g6_layout()` allows to pass any supported [layout](https://g6.antv.antgroup.com/en/manual/layout/overview). For this example, we select the `d3-force`:
+`g6_layout()` allows to pass any supported [layout](https://g6.antv.antgroup.com/en/manual/layout/overview). For this example, we select the `d3_force_layout()`:
 
 ```{r}
 g <- g6(nodes, edges) |>
-  g6_layout(
-    layout = list(
-      type = "d3-force",
-      link = list(
-        distance = 100,
-        strength = 2
-      ),
-      collide = list(radius = 40)
-    )
-  )
+  g6_layout(d3_force_layout())
 g
 ```
 

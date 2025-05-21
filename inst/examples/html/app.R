@@ -87,11 +87,7 @@ server <- function(input, output, session) {
         )
       ) |>
       g6_layout(
-        #layout = list(
-        #  type = "force"
-        #)
-        layout = list(
-          type = 'antv-dagre',
+        antv_dagre_layout(
           ranksep = 500,
           nodesep = 100,
           sortByCombo = TRUE,

@@ -2,6 +2,7 @@
 
 export(JS)
 export(animation_config)
+export(antv_dagre_layout)
 export(auto_adapt_label)
 export(auto_fit_config)
 export(background)
