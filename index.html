@@ -97,16 +97,7 @@
 <span>      <span class="op">)</span></span>
 <span>    <span class="op">)</span></span>
 <span>  <span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="reference/g6_layout.html">g6_layout</a></span><span class="op">(</span></span>
-<span>    layout <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
-<span>      type <span class="op">=</span> <span class="st">"d3-force"</span>,</span>
-<span>      link <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
-<span>        distance <span class="op">=</span> <span class="fl">100</span>,</span>
-<span>        strength <span class="op">=</span> <span class="fl">2</span></span>
-<span>      <span class="op">)</span>,</span>
-<span>      collide <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>radius <span class="op">=</span> <span class="fl">40</span><span class="op">)</span></span>
-<span>    <span class="op">)</span></span>
-<span>  <span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="reference/g6_layout.html">g6_layout</a></span><span class="op">(</span><span class="fu"><a href="reference/d3_force_layout.html">d3_force_layout</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="reference/g6_behaviors.html">g6_behaviors</a></span><span class="op">(</span></span>
 <span>    <span class="st">"zoom-canvas"</span>,</span>
 <span>    <span class="fu"><a href="reference/drag_element_force.html">drag_element_force</a></span><span class="op">(</span>fixed <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>,</span>
@@ -124,11 +115,13 @@
 <span><span class="st">            return states;</span></span>
 <span><span class="st">          }"</span></span>
 <span>      <span class="op">)</span></span>
-<span>    <span class="op">)</span></span>
+<span>    <span class="op">)</span>,</span>
+<span>    <span class="fu"><a href="reference/create_edge.html">create_edge</a></span><span class="op">(</span><span class="op">)</span></span>
 <span>  <span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="reference/g6_plugins.html">g6_plugins</a></span><span class="op">(</span></span>
 <span>    <span class="st">"minimap"</span>,</span>
-<span>    <span class="st">"tooltip"</span></span>
+<span>    <span class="st">"tooltip"</span>,</span>
+<span>    <span class="fu"><a href="reference/context_menu.html">context_menu</a></span><span class="op">(</span><span class="op">)</span></span>
 <span>  <span class="op">)</span></span></code></pre></div>
 </div>
 </div>

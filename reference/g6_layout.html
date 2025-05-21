@@ -34,7 +34,7 @@ G6 provides various layout algorithms such as 'force', 'radial', 'circular', 'gr
   <main id="main" class="col-md-9"><div class="page-header">
 
       <h1>Set the layout algorithm for a g6 graph</h1>
-      <small class="dont-index">Source: <a href="https://github.com/cynkra/g6R/blob/main/R/layout.R" class="external-link"><code>R/layout.R</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/cynkra/g6R/blob/main/R/layouts.R" class="external-link"><code>R/layouts.R</code></a></small>
       <div class="d-none name"><code>g6_layout.Rd</code></div>
     </div>
 
@@ -58,9 +58,9 @@ G6 provides various layout algorithms such as 'force', 'radial', 'circular', 'gr
 
 
 <dt id="arg-layout">layout<a class="anchor" aria-label="anchor" href="#arg-layout"></a></dt>
-<dd><p>A list specifying the layout algorithm and its configuration parameters.
-At minimum, this list should contain a <code>type</code> element specifying the layout algorithm.
-Additional parameters depend on the layout type chosen. Default is <code>list(type = "force")</code>.</p></dd>
+<dd><p>An existing layout function like <a href="circular_layout.html">circular_layout</a>.
+At minimum, this can be a list that should contain a <code>type</code> element specifying the layout algorithm.
+Additional parameters depend on the layout type chosen, for instance <code>list(type = "force")</code>.</p></dd>
 
 </dl></div>
     <div class="section level2">

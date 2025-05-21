@@ -48,11 +48,13 @@ This allows users to display a context menu when right-clicking or clicking on g
 <span>  className <span class="op">=</span> <span class="st">"g6-contextmenu"</span>,</span>
 <span>  trigger <span class="op">=</span> <span class="st">"contextmenu"</span>,</span>
 <span>  offset <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">4</span>, <span class="fl">4</span><span class="op">)</span>,</span>
-<span>  onClick <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  getItems <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  onClick <span class="op">=</span></span>
+<span>    <span class="fu">JS</span><span class="op">(</span><span class="st">"(value, target, current) =&gt; {\n      const graph = HTMLWidgets.find(`#${target.closest('.g6').id}`).getWidget();\n      if (current.id === undefined) return;\n      if (value === 'create_edge') {\n        graph.updateBehavior({\n          key: 'create-edge', // Specify the behavior to update\n          enable: true,\n        });\n        // Select node\n        graph.setElementState(current.id, 'selected');\n        // Disable drag node as it is incompatible with edge creation\n        graph.updateBehavior({ key: 'drag-element', enable: false });\n        graph.updateBehavior({ key: 'drag-element-force', enable: false });\n      } else if (value === 'remove_node') {\n        graph.removeNodeData([current.id]);\n        graph.draw();\n      }\n    }\n    "</span><span class="op">)</span>,</span>
+<span>  getItems <span class="op">=</span></span>
+<span>    <span class="fu">JS</span><span class="op">(</span><span class="st">"() =&gt; {\n      return [\n        { name: 'Create edge', value: 'create_edge' },\n        { name: 'Remove node', value: 'remove_node' }\n      ];\n    }"</span><span class="op">)</span>,</span>
 <span>  getContent <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  loadingContent <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  enable <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  enable <span class="op">=</span> <span class="fu">JS</span><span class="op">(</span><span class="st">"(e) =&gt; e.targetType === 'node'"</span><span class="op">)</span>,</span>
 <span>  <span class="va">...</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
@@ -78,7 +80,8 @@ This allows users to display a context menu when right-clicking or clicking on g
 
 
 <dt id="arg-onclick">onClick<a class="anchor" aria-label="anchor" href="#arg-onclick"></a></dt>
-<dd><p>Callback method triggered after menu item is clicked (JS function, default: NULL)</p></dd>
+<dd><p>Callback method triggered after menu item is clicked (JS function). Our default allows
+to create edge or either remove the current node.</p></dd>
 
 
 <dt id="arg-getitems">getItems<a class="anchor" aria-label="anchor" href="#arg-getitems"></a></dt>
