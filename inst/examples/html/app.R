@@ -33,6 +33,7 @@ combos <- data.frame(
 )
 
 ui <- page_fluid(
+  input_dark_mode(),
   actionButton("add_hull", "Add hull"),
   g6Output("graph", height = "100vh")
 )
@@ -42,7 +43,8 @@ server <- function(input, output, session) {
     g6(nodes, edges, combos) |>
       g6_options(
         combo = list(
-          type = "rect",
+          animation = FALSE,
+          type = "circle-combo-with-extra-button",
           style = list(
             labelText = JS(
               "(d) => {
@@ -52,10 +54,10 @@ server <- function(input, output, session) {
           )
         ),
         edge = list(
-          type = "cubic-horizontal",
+          type = "fly-marker-cubic",
           endArrow = TRUE,
           zIndex = 100,
-          style = list(targetPort = "port-1")
+          style = list(targetPort = "port-1", lineDash = c(5, 5))
         ),
         node = list(
           type = "html",
@@ -85,15 +87,22 @@ server <- function(input, output, session) {
         )
       ) |>
       g6_layout(
+        #layout = list(
+        #  type = "force"
+        #)
         layout = list(
-          type = "force"
+          type = 'antv-dagre',
+          ranksep = 500,
+          nodesep = 100,
+          sortByCombo = TRUE,
+          controlPoints = TRUE
         )
       ) |>
       g6_behaviors(
         "zoom-canvas",
         drag_element(),
         click_select(
-          #multiple = TRUE,
+          multiple = TRUE,
           onClick = JS(
             "(e) => {
             console.log(e);

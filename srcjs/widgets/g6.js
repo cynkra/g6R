@@ -4,11 +4,20 @@ import {
   ComboEvent,
   EdgeEvent,
   Graph,
-  GraphEvent,
-  NodeEvent
+  NodeEvent,
+  ExtensionCategory,
+  register
 } from '@antv/g6';
 import { setClickEvents } from '../modules/events';
 import { registerShinyHandlers } from '../modules/handlers';
+import { AntLine, FlyMarkerCubic, CircleComboWithExtraButton } from '../modules/extensions';
+
+// Ant lines
+register(ExtensionCategory.EDGE, 'ant-line', AntLine);
+// Animated lines
+register(ExtensionCategory.EDGE, 'fly-marker-cubic', FlyMarkerCubic);
+// Circle combo
+register(ExtensionCategory.COMBO, 'circle-combo-with-extra-button', CircleComboWithExtraButton);
 
 HTMLWidgets.widget({
 
@@ -57,7 +66,6 @@ HTMLWidgets.widget({
         }
 
         graph.render();
-        graph.draw();
 
       },
       getWidget: function () {

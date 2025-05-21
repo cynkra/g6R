@@ -19,6 +19,8 @@
     "webpack-merge": "^6.0.1"
   },
   "dependencies": {
+    "@antv/g": "^6.1.24",
+    "@antv/g-svg": "^2.0.38",
     "@antv/g6": "^5.0.45"
   }
 }
