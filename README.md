@@ -74,13 +74,7 @@ g6(nodes, edges) |>
           }"
       )
     ),
-    brush_select(
-      onSelect = JS(
-        "(states) => {
-            return states;
-          }"
-      )
-    ),
+    brush_select(),
     create_edge()
   ) |>
   g6_plugins(
