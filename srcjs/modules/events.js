@@ -46,6 +46,7 @@ const setClickEvents = (events, graph, el) => {
 const setGraphEvents = (events, graph, el) => {
   for (let event of events) {
     graph.on(event, (e) => {
+      graph.fitCenter();
       // Set an input to set that the graph is rendered
       if (event === GraphEvent.AFTER_RENDER) {
         Shiny.setInputValue(el.id + '-initialized', true);

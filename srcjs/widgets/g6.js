@@ -78,13 +78,17 @@ HTMLWidgets.widget({
 
         graph.render();
 
+        window.addEventListener('resize', () => {
+          this.resize();
+        })
+
       },
       getWidget: function () {
         return graph
       },
       resize: function (width, height) {
-
         // TODO: code to re-render the widget with a new size
+        graph.resize();
 
       }
 
