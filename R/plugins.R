@@ -2080,10 +2080,10 @@ toolbar <- function(
 #'
 #' @examples
 #' # Basic tooltip
-#' config <- tooltip()
+#' config <- tooltips()
 #'
 #' # Tooltip with custom position and content
-#' config <- tooltip(
+#' config <- tooltips(
 #'   position = "bottom",
 #'   getContent = JS("(event, items) => {
 #'     let result = `<h4>Custom Content</h4>`;
@@ -2095,7 +2095,7 @@ toolbar <- function(
 #' )
 #'
 #' # Click-triggered tooltip with custom style
-#' config <- tooltip(
+#' config <- tooltips(
 #'   trigger = "click",
 #'   position = "bottom-left",
 #'   offset = c(15, 20),
@@ -2112,7 +2112,7 @@ toolbar <- function(
 #' )
 #'
 #' # Conditional tooltip based on node type
-#' config <- tooltip(
+#' config <- tooltips(
 #'   enable = JS("(event, items) => {
 #'     // Only show tooltip for nodes with type 'important'
 #'     const item = items[0];
@@ -2123,7 +2123,7 @@ toolbar <- function(
 #'     console.log('Tooltip visibility changed:', open);
 #'   }")
 #' )
-tooltip <- function(
+tooltips <- function(
   key = "tooltip",
   position = c(
     "top-right",

@@ -4,7 +4,7 @@
 \alias{g6_layout}
 \title{Set the layout algorithm for a g6 graph}
 \usage{
-g6_layout(graph, layout = list(type = "force"))
+g6_layout(graph, layout = d3_force_layout())
 }
 \arguments{
 \item{graph}{A g6 graph object created with \code{g6()}.}

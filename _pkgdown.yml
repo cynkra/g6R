@@ -140,7 +140,7 @@ reference:
   - context_menu
   - legend
   - toolbar
-  - tooltip
+  - tooltips
 - subtitle: Data Exploration
   desc: Data Exploration
   contents:

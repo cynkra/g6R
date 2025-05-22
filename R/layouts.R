@@ -33,15 +33,46 @@
 #'
 #' @seealso \code{\link{g6}}
 #' @export
-g6_layout <- function(graph, layout = list(type = "force")) {
+g6_layout <- function(graph, layout = d3_force_layout()) {
   graph$x$layout <- validate_layout(layout)
   graph
 }
 
 #' @keywords internal
+valid_layouts <- c(
+  # N = 20
+  "antv-dagre",
+  "circular",
+  "combo-combined",
+  "concentric",
+  "d3-force",
+  "d3-force-3d",
+  "dagre",
+  "fishbone",
+  "force",
+  "force-atlas2",
+  "fruchterman",
+  "grid",
+  "mds",
+  "radial",
+  "random",
+  "snake",
+  "compact-box",
+  "dendrogram",
+  "mindmap",
+  "indented"
+)
+
+#' @keywords internal
 validate_layout <- function(x) {
-  if (!inherits(x, "g6-layout")) {
-    stop("Current layout is not a valid")
+  if (!(x[["type"]] %in% valid_layouts)) {
+    stop(
+      sprintf(
+        "Current layout '%s' is not a valid. Valid layouts are: %s.",
+        x[["type"]],
+        paste(valid_layouts, collapse = ", ")
+      )
+    )
   }
   x
 }
@@ -213,7 +244,7 @@ antv_dagre_layout <- function(
   config <- list(type = "antv-dagre")
 
   # Merge with named parameters and additional parameters
-  structure(c(config, named_params, extra_params), class = "g6-layout")
+  c(config, named_params, extra_params)
 }
 
 #' Generate G6 D3 Force layout configuration
@@ -350,7 +381,7 @@ d3_force_layout <- function(
   # Add type parameter (internal)
   config <- list(type = "d3-force")
   # Merge with named parameters and additional parameters
-  structure(c(config, named_params, extra_params), class = "g6-layout")
+  c(config, named_params, extra_params)
 }
 
 #' Generate G6 AntV circular layout configuration
@@ -485,5 +516,5 @@ circular_layout <- function(
   # Add type parameter (internal)
   config <- list(type = "circular")
   # Merge with named parameters and additional parameters
-  structure(c(config, named_params, extra_params), class = "g6-layout")
+  c(config, named_params, extra_params)
 }
