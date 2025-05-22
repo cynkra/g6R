@@ -107,6 +107,10 @@ ui <- page_fluid(
     class = "d-flex align-items-center",
     actionButton("update_plugin", "Update minimap"),
     actionButton("update_behavior", "Disable zoom canvas")
+  ),
+  div(
+    class = "d-flex align-items-center",
+    actionButton("set_nodes", "Set nodes state")
   )
 )
 
@@ -151,7 +155,7 @@ server <- function(input, output, session) {
       g6_plugins(
         minimap(),
         fullscreen(),
-        g6R::tooltip(
+        tooltips(
           title = "Tooltip",
           enable = JS(
             "(e) => { return e.targetType === 'node';}"
@@ -208,6 +212,11 @@ server <- function(input, output, session) {
           )
         )
       )
+  })
+
+  observeEvent(input$set_nodes, {
+    g6_proxy("graph") |>
+      g6_set_nodes(list(node1 = "selected", node2 = "disabled"))
   })
 
   observeEvent(input$remove_node, {

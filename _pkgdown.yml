@@ -39,6 +39,12 @@ reference:
   - g6_update_nodes
   - g6_update_edges
   - g6_update_combos
+- subtitle: Select elements
+  desc: Select elements state from a g6 instance
+  contents:
+  - g6_set_nodes
+  - g6_set_edges
+  - g6_set_combos  
 - subtitle: Canvas
   desc: canvas util function
   contents:

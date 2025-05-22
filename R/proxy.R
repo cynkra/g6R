@@ -72,6 +72,50 @@ g6_update <- function(graph, el, type) {
   g6_data(graph, el, action = "update", type = type)
 }
 
+#' @keywords internal
+g6_set <- function(graph, el, type) {
+  g6_data(graph, el, action = "set", type = type)
+}
+
+#' Set the state of nodes/edges/combos in a g6 graph via proxy
+#'
+#' This function sets the state of one or more nodes/edges/combos to an existing g6 graph instance
+#' using a proxy object. This allows updating the graph without completely
+#' re-rendering it. Valid states are "selected", "active", "inactive", "disabled", or "highlight".
+#'
+#' @param graph A g6_proxy object created with \code{\link{g6_proxy}}.
+#' @param nodes A key value pair list with the node id and its state.
+#' @param edges A key value pair list with the edge id and its state.
+#' @param combos A key value pair list with the combo id and its state.
+#'
+#' @return The g6_proxy object (invisibly), allowing for method chaining.
+#'
+#' @details
+#' This function can only be used with a g6_proxy object within a Shiny application.
+#' It will not work with regular g6 objects outside of Shiny.
+#'
+#' If a node with the same ID already exists, it will not be added again.
+#' See \url{https://g6.antv.antgroup.com/en/api/element#graphsetelementstateid-state-options} for more details.
+#'
+#' @seealso \code{\link{g6_proxy}}
+#' @rdname g6-set
+#' @export
+g6_set_nodes <- function(graph, nodes) {
+  g6_set(graph, nodes, type = "Node")
+}
+
+#' @rdname g6-set
+#' @export
+g6_set_edges <- function(graph, edges) {
+  g6_set(graph, edges, type = "Edge")
+}
+
+#' @rdname g6-set
+#' @export
+g6_set_combos <- function(graph, combos) {
+  g6_set(graph, combos, type = "Combo")
+}
+
 #' Add nodes to a g6 graph via proxy
 #'
 #' This function adds one or more nodes to an existing g6 graph instance

@@ -3,10 +3,23 @@ const registerShinyHandlers = (graph, el) => {
   Shiny.addCustomMessageHandler(el.id + '_g6-data', (m) => {
     try {
       // TBD: check if nodes data are also updated
-      graph[`${m.action}${m.type}Data`](m.el);
-      graph.draw();
-      if (m.action !== 'update') {
-        graph.layout();
+      // In case of selection, we have to update the related Shiny input
+      if (m.action == 'set') {
+        graph.setElementState(m.el);
+        // TBD only filter selected elements
+        const selected = Object.getOwnPropertyNames(m.el).map((key) => {
+          if (m.el[key] === 'selected') return key;
+        });
+        if (selected.length > 0) {
+          const inputId = `${el.id}-selected_${m.type.toLowerCase()}`;
+          Shiny.setInputValue(inputId, selected);
+        }
+      } else {
+        graph[`${m.action}${m.type}Data`](m.el);
+        graph.draw();
+        if (m.action !== 'update') {
+          graph.layout();
+        }
       }
     } catch (error) {
       Shiny.notifications.show({ html: error, type: 'error' })
