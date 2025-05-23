@@ -15,7 +15,14 @@ const registerShinyHandlers = (graph, el) => {
           Shiny.setInputValue(inputId, selected);
         }
       } else {
-        graph[`${m.action}${m.type}Data`](m.el);
+        // store in case we need to get the state
+        const res = graph[`${m.action}${m.type}Data`](m.el);
+        if (m.action === 'get') {
+          res.map((r) => {
+            Shiny.setInputValue(`${el.id}-${r.id}-state`, r);
+          });
+          return;
+        }
         graph.draw();
         if (m.action !== 'update') {
           graph.layout();

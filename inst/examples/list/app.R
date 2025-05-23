@@ -128,7 +128,7 @@ server <- function(input, output, session) {
           )
         )
       ) |>
-      g6_layout(antv_dagre_layout()) |>
+      g6_layout(d3_force_layout()) |>
       g6_behaviors(
         zoom_canvas(),
         drag_element(),
@@ -350,11 +350,16 @@ server <- function(input, output, session) {
       )
   })
 
+  observeEvent(req(input[["graph-initialized"]]), {
+    g6_proxy("graph") |> g6_get_nodes(c("node1", "node2"))
+  })
+
   output$selected_elements <- renderPrint({
     list(
       node = input[["graph-selected_node"]],
       edge = input[["graph-selected_edge"]],
-      combo = input[["graph-selected_combo"]]
+      combo = input[["graph-selected_combo"]],
+      node2_state = input[["graph-node2-state"]]$combo
     )
   })
 }

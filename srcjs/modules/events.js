@@ -46,7 +46,11 @@ const setClickEvents = (events, graph, el) => {
 const setGraphEvents = (events, graph, el) => {
   for (let event of events) {
     graph.on(event, (e) => {
-      graph.fitCenter();
+      // add/remove node should trigger fit to center
+      // to avoid going out of bounds
+      // TBD: causing some buif performance issues when animation is TRUE
+      //graph.fitCenter();
+
       // Set an input to set that the graph is rendered
       if (event === GraphEvent.AFTER_RENDER) {
         Shiny.setInputValue(el.id + '-initialized', true);
