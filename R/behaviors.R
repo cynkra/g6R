@@ -1200,10 +1200,16 @@ lasso_select <- function(
   key = "lasso-select",
   animation = FALSE,
   enable = TRUE,
-  enableElements = c("node", "combo", "edge"),
+  enableElements = "node",
   immediately = FALSE,
   mode = c("default", "union", "intersect", "diff"),
-  onSelect = NULL,
+  onSelect = JS(
+    "(states) => {
+      const selectedNodes = Object.getOwnPropertyNames(states);
+      Shiny.setInputValue('graph-selected_node', selectedNodes, {priority: 'event'});
+      return states;
+    }"
+  ),
   state = "selected",
   style = NULL,
   trigger = c("shift"),
@@ -1258,6 +1264,9 @@ lasso_select <- function(
   # Get values of only the named parameters
   config <- mget(arg_names)
   config$type <- "lasso-select"
+  if (length(enableElements) == 1) {
+    config$enableElements <- list(config$enableElements)
+  }
 
   # Drop NULL elements
   dropNulls(c(config, list(...)))

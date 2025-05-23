@@ -8,10 +8,11 @@ lasso_select(
   key = "lasso-select",
   animation = FALSE,
   enable = TRUE,
-  enableElements = c("node", "combo", "edge"),
+  enableElements = "node",
   immediately = FALSE,
   mode = c("default", "union", "intersect", "diff"),
-  onSelect = NULL,
+  onSelect =
+    JS("(states) => {\\n      const selectedNodes = Object.getOwnPropertyNames(states);\\n      Shiny.setInputValue('graph-selected_node', selectedNodes, {priority: 'event'});\\n      return states;\\n    }"),
   state = "selected",
   style = NULL,
   trigger = c("shift"),
