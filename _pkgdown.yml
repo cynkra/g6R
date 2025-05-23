@@ -75,9 +75,12 @@ reference:
   desc: Graph layout
   contents:
   - g6_layout
-  - circular_layout
-  - d3_force_layout
   - antv_dagre_layout
+  - circular_layout
+  - compact_box_layout
+  - concentric_layout
+  - d3_force_layout
+  - dagre_layout
 
 - title: Options
   desc: g6 options
