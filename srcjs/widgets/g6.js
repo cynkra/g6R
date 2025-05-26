@@ -61,7 +61,9 @@ HTMLWidgets.widget({
             GraphEvent.AFTER_DRAW,
             GraphEvent.AFTER_LAYOUT,
             GraphEvent.AFTER_ANIMATE,
-            GraphEvent.AFTER_RENDER
+            GraphEvent.AFTER_RENDER,
+            ComboEvent.DROP,
+            CanvasEvent.DROP
           ]
           setGraphEvents(graphEvents, graph, el);
 
