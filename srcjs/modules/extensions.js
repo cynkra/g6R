@@ -18,7 +18,7 @@ class AntLine extends Line {
 
 class FlyMarkerCubic extends CubicHorizontal {
   getMarkerStyle(attributes) {
-    return { r: 5, fill: '#c3d5f9', offsetPath: this.shapeMap.key, ...subStyleProps(attributes, 'marker') };
+    return { r: 5, fill: '#000', offsetPath: this.shapeMap.key, ...subStyleProps(attributes, 'marker') };
   }
 
   onCreate() {
