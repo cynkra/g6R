@@ -16,8 +16,12 @@ const registerShinyHandlers = (graph, el) => {
         }
       } else {
         // store in case we need to get the state
-        const res = graph[`${m.action}${m.type}Data`](m.el);
+        let res = graph[`${m.action}${m.type}Data`](m.el);
         if (m.action === 'get') {
+          if (res === undefined) return;
+          if (!Array.isArray(res)) {
+            res = [res];
+          }
           res.map((r) => {
             Shiny.setInputValue(`${el.id}-${r.id}-state`, r);
           });
