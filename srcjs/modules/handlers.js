@@ -46,6 +46,15 @@ const registerShinyHandlers = (graph, el) => {
     }
   })
 
+  // Fit center
+  Shiny.addCustomMessageHandler(el.id + '_g6-fit-center', (m) => {
+    try {
+      graph.fitCenter(m);
+    } catch (error) {
+      Shiny.notifications.show({ html: error, type: 'error' })
+    }
+  })
+
   // Focus/hide/show element
   Shiny.addCustomMessageHandler(el.id + '_g6-element-action', (m) => {
     try {

@@ -55,6 +55,7 @@ reference:
   desc: canvas util function
   contents:
   - g6_canvas_resize
+  - g6_fit_center
 - subtitle: Elements actions
   desc: elements actions
   contents:

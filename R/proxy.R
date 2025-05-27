@@ -330,6 +330,49 @@ g6_canvas_resize <- function(graph, width, height) {
   graph
 }
 
+#' Center graph
+#'
+#' This function pans the graph to the center of the viewport
+#'
+#' @param graph A g6_proxy object created with \code{\link{g6_proxy}}.
+#' @param animation Optional list containing animation configuration parameters for the focus action.
+#'   Common parameters include:
+#'   \itemize{
+#'     \item \code{duration}: Duration of the animation in milliseconds.
+#'     \item \code{easing}: Animation easing function name (e.g., "ease-in", "ease-out").
+#'   }
+#'   If NULL, no animation will be applied.
+#'
+#' @return The g6_proxy object (invisibly), allowing for method chaining.
+#'
+#' @details
+#' This function can only be used with a g6_proxy object within a Shiny application.
+#' It will not work with regular g6 objects outside of Shiny.
+#'
+#' See \url{https://g6.antv.antgroup.com/en/api/viewport#graphfitcenteranimation} for more details.
+#'
+#' @seealso \code{\link{g6_proxy}}
+#' @export
+g6_fit_center <- function(graph, animation = NULL) {
+  if (!any(class(graph) %in% "g6_proxy")) {
+    stop(
+      "Can't use g6_fit_center with g6 object. Only within shiny and using g6_proxy"
+    )
+  }
+
+  if (!is.null(animation)) {
+    stopifnot(is.list(animation))
+  }
+
+  if (is.null(animation)) animation <- list()
+
+  graph$session$sendCustomMessage(
+    sprintf("%s_g6-fit-center", graph$id),
+    animation
+  )
+  graph
+}
+
 #' @keywords internal
 g6_element_action <- function(graph, ids, animation = NULL, action) {
   if (!any(class(graph) %in% "g6_proxy")) {
