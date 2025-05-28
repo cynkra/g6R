@@ -50,7 +50,9 @@ re-rendering it. Valid states are "selected", "active", "inactive", "disabled", 
 <span></span>
 <span><span class="fu">g6_set_edges</span><span class="op">(</span><span class="va">graph</span>, <span class="va">edges</span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu">g6_set_combos</span><span class="op">(</span><span class="va">graph</span>, <span class="va">combos</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu">g6_set_combos</span><span class="op">(</span><span class="va">graph</span>, <span class="va">combos</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">g6_set_data</span><span class="op">(</span><span class="va">graph</span>, <span class="va">data</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -72,6 +74,10 @@ re-rendering it. Valid states are "selected", "active", "inactive", "disabled", 
 <dt id="arg-combos">combos<a class="anchor" aria-label="anchor" href="#arg-combos"></a></dt>
 <dd><p>A key value pair list with the combo id and its state.</p></dd>
 
+
+<dt id="arg-data">data<a class="anchor" aria-label="anchor" href="#arg-data"></a></dt>
+<dd><p>A nested list containing all nodes, edges and combo data.</p></dd>
+
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
@@ -79,7 +85,8 @@ re-rendering it. Valid states are "selected", "active", "inactive", "disabled", 
     </div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
-    <p>This function can only be used with a g6_proxy object within a Shiny application.
+    <p>g6_set_data allows to set all graph data at once (nodes, edges and combos).</p>
+<p>This function can only be used with a g6_proxy object within a Shiny application.
 It will not work with regular g6 objects outside of Shiny.</p>
 <p>If a node with the same ID already exists, it will not be added again.
 See <a href="https://g6.antv.antgroup.com/en/api/element#graphsetelementstateid-state-options" class="external-link">https://g6.antv.antgroup.com/en/api/element#graphsetelementstateid-state-options</a> for more details.</p>
