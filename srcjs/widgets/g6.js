@@ -13,6 +13,20 @@ import { setClickEvents, setGraphEvents } from '../modules/events';
 import { registerShinyHandlers } from '../modules/handlers';
 import { AntLine, FlyMarkerCubic, CircleComboWithExtraButton } from '../modules/extensions';
 
+// This is to be able to use custom fontawesome icons
+// See: https://docs.fontawesome.com/web/add-icons/svg-symbols
+const iconURLs = [
+  '//cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/js/fontawesome.min.js',
+  '//cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/js/solid.min.js'
+]
+
+iconURLs.map((url) => {
+  let iconFont = document.createElement('script');
+  iconFont.src = url; // Replace with your iconfont script address   
+  document.head.appendChild(iconFont);
+})
+
+
 // Ant lines
 register(ExtensionCategory.EDGE, 'ant-line', AntLine);
 // Animated lines

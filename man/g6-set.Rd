@@ -4,6 +4,7 @@
 \alias{g6_set_nodes}
 \alias{g6_set_edges}
 \alias{g6_set_combos}
+\alias{g6_set_data}
 \title{Set the state of nodes/edges/combos in a g6 graph via proxy}
 \usage{
 g6_set_nodes(graph, nodes)
@@ -11,6 +12,8 @@ g6_set_nodes(graph, nodes)
 g6_set_edges(graph, edges)
 
 g6_set_combos(graph, combos)
+
+g6_set_data(graph, data)
 }
 \arguments{
 \item{graph}{A g6_proxy object created with \code{\link{g6_proxy}}.}
@@ -20,6 +23,8 @@ g6_set_combos(graph, combos)
 \item{edges}{A key value pair list with the edge id and its state.}
 
 \item{combos}{A key value pair list with the combo id and its state.}
+
+\item{data}{A nested list containing all nodes, edges and combo data.}
 }
 \value{
 The g6_proxy object (invisibly), allowing for method chaining.
@@ -30,6 +35,8 @@ using a proxy object. This allows updating the graph without completely
 re-rendering it. Valid states are "selected", "active", "inactive", "disabled", or "highlight".
 }
 \details{
+\link{g6_set_data} allows to set all graph data at once (nodes, edges and combos).
+
 This function can only be used with a g6_proxy object within a Shiny application.
 It will not work with regular g6 objects outside of Shiny.
 
