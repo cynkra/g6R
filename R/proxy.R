@@ -202,6 +202,7 @@ g6_set_data <- function(graph, data) {
 #' @param nodes, edges, combos A data frame or list specifying the elements to be added.
 #'   Elements structure must be compliant with specifications listed at
 #' \url{https://g6.antv.antgroup.com/manual/element/overview}
+#' @param data A nested list possibly containing nodes, edges and combo data.
 #'
 #' @return The g6_proxy object (invisibly), allowing for method chaining.
 #'
@@ -231,6 +232,22 @@ g6_add_edges <- function(graph, edges) {
 #' @export
 g6_add_combos <- function(graph, combos) {
   g6_add(graph, combos, type = "Combo")
+}
+
+#' @rdname g6-add
+#' @export
+g6_add_data <- function(graph, data) {
+  if (!any(class(graph) %in% "g6_proxy")) {
+    stop(
+      "Can't use g6_update_* with g6 object. Only within shiny and using g6_proxy"
+    )
+  }
+
+  graph$session$sendCustomMessage(
+    sprintf("%s_g6-data", graph$id),
+    list(data = data, action = "add", type = "Data")
+  )
+  graph
 }
 
 #' Remove nodes/edge/combos from a g6 graph via proxy

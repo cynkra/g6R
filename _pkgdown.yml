@@ -25,6 +25,7 @@ reference:
   contents:
   - g6_add_nodes
   - g6_add_edges
+  - g6_add_data
   - g6_add_combos
   - g6_add_plugin
 - subtitle: Remove elements
@@ -50,7 +51,8 @@ reference:
   contents:
   - g6_set_nodes
   - g6_set_edges
-  - g6_set_combos  
+  - g6_set_combos
+  - g6_set_data
 - subtitle: Canvas
   desc: canvas util function
   contents:

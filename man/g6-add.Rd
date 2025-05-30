@@ -4,6 +4,7 @@
 \alias{g6_add_nodes}
 \alias{g6_add_edges}
 \alias{g6_add_combos}
+\alias{g6_add_data}
 \title{Add nodes/edges/combos to a g6 graph via proxy}
 \usage{
 g6_add_nodes(graph, nodes)
@@ -11,6 +12,8 @@ g6_add_nodes(graph, nodes)
 g6_add_edges(graph, edges)
 
 g6_add_combos(graph, combos)
+
+g6_add_data(graph, data)
 }
 \arguments{
 \item{graph}{A g6_proxy object created with \code{\link{g6_proxy}}.}
@@ -18,6 +21,8 @@ g6_add_combos(graph, combos)
 \item{nodes, }{edges, combos A data frame or list specifying the elements to be added.
 Elements structure must be compliant with specifications listed at
 \url{https://g6.antv.antgroup.com/manual/element/overview}}
+
+\item{data}{A nested list possibly containing nodes, edges and combo data.}
 }
 \value{
 The g6_proxy object (invisibly), allowing for method chaining.
