@@ -12,12 +12,16 @@ g6_igraph <- function(
   }
   igraph::V(graph)$id <- as.character(seq_len(igraph::vcount(graph)))
 
-  nodes <- igraph::as_data_frame(graph, what = "vertices")
+  nodes_df <- igraph::as_data_frame(graph, what = "vertices")
+  nodes <- style_from_df(nodes_df, node_style_options)
 
-  edges <- as.data.frame(igraph::as_edgelist(graph, names = FALSE))
-  names(edges)[1:2] <- c("source", "target")
-  edges$source <- as.character(edges$source)
-  edges$target <- as.character(edges$target)
+  # TODO: find better solution
+  names <- igraph::V(graph)$name
+  V(graph)$name <- V(graph)$id
+  edges_df <- igraph::as_data_frame(graph, what = "edges")
+  names(edges_df)[1:2] <- c("source", "target")
+  edges <- style_from_df(edges_df, edge_style_options)
+  V(graph)$name <- names
 
   g6(
     nodes = nodes,
@@ -27,4 +31,19 @@ g6_igraph <- function(
     height = height,
     elementId = elementId
   )
+}
+
+style_from_df <- function(df, style_fn) {
+  style_args <- names(formals(style_fn))
+  style_args <- style_args[style_args != "..."]
+
+  items <- unname(split(df, seq(nrow(df))))
+  items <- lapply(items, function(row) {
+    item <- as.list(row)
+    style_inputs <- item[names(item) %in% style_args]
+    style <- do.call(style_fn, style_inputs)
+    item$style <- style
+    return(item)
+  })
+  items
 }
