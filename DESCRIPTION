@@ -27,4 +27,4 @@ Suggests:
     rmarkdown,
     quarto,
     igraph
-VignetteBuilder: quarto
+VignetteBuilder: quarto, knitr
