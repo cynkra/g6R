@@ -4,7 +4,16 @@ const registerShinyHandlers = (graph, el) => {
     try {
       // TBD: check if nodes data are also updated
       // In case of selection, we have to update the related Shiny input
+
+      // Replace/update/add graph data
+      if (m.type === "Data") {
+        graph[`${m.action}Data`](m.data);
+        graph.render();
+        return;
+      }
+
       if (m.action == 'set') {
+        // Set state
         graph.setElementState(m.el);
         // TBD only filter selected elements
         const selected = Object.getOwnPropertyNames(m.el).map((key) => {
