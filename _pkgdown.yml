@@ -18,65 +18,65 @@ reference:
     contents:
       - g6_igraph
 
-- title: Proxy
-  desc: Update a g6 instance from the server function of a Shiny app
-- subtitle: Setup
-  desc: Setup a g6 proxy
-  contents:
-  - g6_proxy
-- subtitle: Add elements
-  desc: Add elements to a g6 instance
-  contents:
-  - g6_add_nodes
-  - g6_add_edges
-  - g6_add_data
-  - g6_add_combos
-  - g6_add_plugin
-- subtitle: Remove elements
-  desc: Remove elements from a g6 instance
-  contents:
-  - g6_remove_nodes
-  - g6_remove_edges
-  - g6_remove_combos
-- subtitle: Update elements
-  desc: Update elements from a g6 instance
-  contents:
-  - g6_update_nodes
-  - g6_update_edges
-  - g6_update_combos
-- subtitle: Get elements
-  desc: Get elements state from a g6 instance
-  contents:
-  - g6_get_nodes
-  - g6_get_edges
-  - g6_get_combos  
-- subtitle: Select elements
-  desc: Select elements state from a g6 instance
-  contents:
-  - g6_set_nodes
-  - g6_set_edges
-  - g6_set_combos
-  - g6_set_data
-- subtitle: Canvas
-  desc: canvas util function
-  contents:
-  - g6_canvas_resize
-  - g6_fit_center
-- subtitle: Elements actions
-  desc: elements actions
-  contents:
-  - g6_focus_elements
-  - g6_hide_elements
-  - g6_show_elements
-  - g6_collapse_combo
-  - g6_expand_combo
-- subtitle: Others
-  desc: Others
-  contents:
-  - g6_add_plugin
-  - g6_set_options
-  - g6_update_plugin
-  - g6_update_behavior
+  - title: Proxy
+    desc: Update a g6 instance from the server function of a Shiny app
+  - subtitle: Setup
+    desc: Setup a g6 proxy
+    contents:
+      - g6_proxy
+  - subtitle: Add elements
+    desc: Add elements to a g6 instance
+    contents:
+      - g6_add_nodes
+      - g6_add_edges
+      - g6_add_data
+      - g6_add_combos
+      - g6_add_plugin
+  - subtitle: Remove elements
+    desc: Remove elements from a g6 instance
+    contents:
+      - g6_remove_nodes
+      - g6_remove_edges
+      - g6_remove_combos
+  - subtitle: Update elements
+    desc: Update elements from a g6 instance
+    contents:
+      - g6_update_nodes
+      - g6_update_edges
+      - g6_update_combos
+  - subtitle: Get elements
+    desc: Get elements state from a g6 instance
+    contents:
+      - g6_get_nodes
+      - g6_get_edges
+      - g6_get_combos
+  - subtitle: Select elements
+    desc: Select elements state from a g6 instance
+    contents:
+      - g6_set_nodes
+      - g6_set_edges
+      - g6_set_combos
+      - g6_set_data
+  - subtitle: Canvas
+    desc: canvas util function
+    contents:
+      - g6_canvas_resize
+      - g6_fit_center
+  - subtitle: Elements actions
+    desc: elements actions
+    contents:
+      - g6_focus_elements
+      - g6_hide_elements
+      - g6_show_elements
+      - g6_collapse_combo
+      - g6_expand_combo
+  - subtitle: Others
+    desc: Others
+    contents:
+      - g6_add_plugin
+      - g6_set_options
+      - g6_update_plugin
+      - g6_update_behavior
 
   - title: Layout
     desc: Graph layout
