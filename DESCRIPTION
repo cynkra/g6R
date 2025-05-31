@@ -25,5 +25,6 @@ Imports:
 Suggests: 
     knitr,
     rmarkdown,
-    quarto
-VignetteBuilder: quarto
+    quarto,
+    igraph
+VignetteBuilder: quarto, knitr
