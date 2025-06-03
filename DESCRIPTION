@@ -28,3 +28,6 @@ Suggests:
     quarto,
     igraph
 VignetteBuilder: quarto, knitr
+Depends: 
+    R (>= 3.5)
+LazyData: true
