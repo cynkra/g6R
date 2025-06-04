@@ -33,3 +33,20 @@
 #' }
 #' @source \url{https://assets.antv.antgroup.com/g6/radial.json}
 "radial"
+
+
+#' Example tree graph
+#'
+#' The graph contains a classification of algorithm categories
+#'
+#' @docType data
+#'
+#' @usage data(tree)
+#'
+#' @format A list with 2 data frames:
+#' \describe{
+#'   \item{nodes}{data frame with 31 rows for the nodes.}
+#'   \item{edges}{data frame with 30 rows for the edges.}
+#' }
+#' @source \url{https://gw.alipayobjects.com/os/antvdemo/assets/data/algorithm-category.json}
+"tree"
