@@ -29,7 +29,7 @@ edge_style_options(
   transform = NULL,
   transformOrigin = NULL,
   visibility = c("visible", "hidden"),
-  zIndex = 1,
+  zIndex = -10000,
   ...
 )
 }

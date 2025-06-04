@@ -1023,7 +1023,7 @@ edge_style_options <- function(
   transform = NULL,
   transformOrigin = NULL,
   visibility = c("visible", "hidden"),
-  zIndex = 1,
+  zIndex = -1e4,
   ...
 ) {
   # Validate parameters
