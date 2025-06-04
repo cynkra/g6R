@@ -58,3 +58,9 @@ edges$target <- match(edges$target, nodes$label)
 
 tree <- list(nodes = nodes, edges = edges)
 usethis::use_data(tree, overwrite = TRUE)
+
+
+dag <- jsonlite::fromJSON(
+  "https://gw.alipayobjects.com/os/antvdemo/assets/data/algorithm-category.json"
+)
+usethis::use_data(dag, overwrite = TRUE)
