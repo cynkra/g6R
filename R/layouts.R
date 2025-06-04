@@ -957,7 +957,7 @@ force_atlas2_layout <- function(
     stop("'mode' must be one of 'normal' or 'linlog'")
   }
 
-  if (!is.null(nodeSize) && !is.numeric(nodeSize) && !is.function(nodeSize)) {
+  if (!is.null(nodeSize) && !is.numeric(nodeSize) && !is_js(nodeSize)) {
     stop("'nodeSize' must be a numeric value, a function, or NULL")
   }
 
@@ -1195,23 +1195,13 @@ radial_layout <- function(
 #' @return A list containing the configuration for G6 dendrogram layout with class "g6-layout"
 #' @export
 dendrogram_layout <- function(
-  direction = "LR",
+  direction = c("LR", "RL", "TB", "BT", "H", "V"),
   nodeSep = 20,
   rankSep = 200,
   radial = FALSE,
   ...
 ) {
-  valid_directions <- c("LR", "RL", "TB", "BT", "H", "V")
-  if (
-    !is.character(direction) ||
-      length(direction) != 1 ||
-      !(direction %in% valid_directions)
-  ) {
-    stop(sprintf(
-      "'direction' must be one of %s",
-      paste(shQuote(valid_directions), collapse = ", ")
-    ))
-  }
+  directions <- match.arg(direction)
 
   if (!is.numeric(nodeSep) || length(nodeSep) != 1 || nodeSep < 0) {
     stop("'nodeSep' must be a single non-negative number")
