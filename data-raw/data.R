@@ -11,3 +11,7 @@ names(edges)[1:2] <- c("source", "target")
 lesmis <- list(nodes = nodes, edges = edges)
 
 usethis::use_data(lesmis, overwrite = TRUE)
+
+
+radial <- jsonlite::fromJSON("https://assets.antv.antgroup.com/g6/radial.json")
+usethis::use_data(radial, overwrite = TRUE)

@@ -18,3 +18,18 @@
 #' }
 #' @source \url{https://networks.skewed.de/net/lesmis}
 "lesmis"
+
+
+#' Example Network for radial layouts
+#'
+#' @docType data
+#'
+#' @usage data(radial)
+#'
+#' @format A list with 2 data frames:
+#' \describe{
+#'   \item{nodes}{data frame with 34 rows for the nodes.}
+#'   \item{edges}{data frame with 58 rows for the edges.}
+#' }
+#' @source \url{https://assets.antv.antgroup.com/g6/radial.json}
+"radial"
