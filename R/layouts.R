@@ -77,6 +77,26 @@ validate_layout <- function(x) {
   x
 }
 
+# Generic layout constructor that inspects its caller
+build_layout <- function(type, ...) {
+  # Which function called build_layout?
+  caller_fun <- sys.function(sys.parent())
+  caller_env <- parent.frame()
+
+  #Get formal argument names from caller function
+  caller_formals <- setdiff(names(formals(caller_fun)), "...")
+
+  named_params <- mget(
+    caller_formals,
+    envir = caller_env,
+    ifnotfound = list(NULL)
+  )
+
+  named_params <- dropNulls(named_params)
+  extra_params <- list(...)
+  c(list(type = type), named_params, extra_params)
+}
+
 #' Generate G6 AntV Dagre layout configuration
 #'
 #' This function creates a configuration list for G6 AntV Dagre layout
@@ -229,22 +249,7 @@ antv_dagre_layout <- function(
   if (!is.null(focusNode) && radial == FALSE) {
     warning("focusNode is only effective when radial is TRUE")
   }
-
-  # Use dropNulls function to remove NULL elements
-  # Assuming dropNulls is defined elsewhere in your package
-  named_params <- dropNulls(mget(
-    setdiff(names(formals()), "..."),
-    environment()
-  ))
-
-  # Collect additional parameters from ellipsis
-  extra_params <- list(...)
-
-  # Add type parameter (internal)
-  config <- list(type = "antv-dagre")
-
-  # Merge with named parameters and additional parameters
-  c(config, named_params, extra_params)
+  build_layout("antv-dagre", ...)
 }
 
 #' Generate G6 AntV circular layout configuration
@@ -369,17 +374,7 @@ circular_layout <- function(
     stop("height must be a positive numeric value")
   }
 
-  # Get all named parameters as a list
-  named_params <- dropNulls(mget(
-    setdiff(names(formals()), "..."),
-    environment()
-  ))
-  # Collect additional parameters from ellipsis
-  extra_params <- list(...)
-  # Add type parameter (internal)
-  config <- list(type = "circular")
-  # Merge with named parameters and additional parameters
-  c(config, named_params, extra_params)
+  build_layout("circular", ...)
 }
 
 #' Generate G6 AntV Compact Box layout configuration
@@ -476,22 +471,7 @@ compact_box_layout <- function(
     stop("radial must be a logical value (TRUE or FALSE)")
   }
 
-  # Get all named parameters as a list
-  # Use dropNulls function to remove NULL elements
-  # Assuming dropNulls is defined elsewhere in your package
-  named_params <- dropNulls(mget(
-    setdiff(names(formals()), "..."),
-    environment()
-  ))
-
-  # Collect additional parameters from ellipsis
-  extra_params <- list(...)
-
-  # Add type parameter (internal)
-  config <- list(type = "compact-box")
-
-  # Merge with named parameters and additional parameters
-  c(config, named_params, extra_params)
+  build_layout("compact-box", ...)
 }
 
 #' Generate G6 D3 Force layout configuration
@@ -618,17 +598,7 @@ d3_force_layout <- function(
       }
     }
   }
-
-  named_params <- dropNulls(mget(
-    setdiff(names(formals()), "..."),
-    environment()
-  ))
-  # Collect additional parameters from ellipsis
-  extra_params <- list(...)
-  # Add type parameter (internal)
-  config <- list(type = "d3-force")
-  # Merge with named parameters and additional parameters
-  c(config, named_params, extra_params)
+  build_layout("d3-force", ...)
 }
 
 #' Generate G6 AntV Concentric layout configuration
@@ -797,23 +767,7 @@ concentric_layout <- function(
       stop("sweep must be a number")
     }
   }
-
-  # Get all named parameters as a list
-  # Use dropNulls function to remove NULL elements
-  # Assuming dropNulls is defined elsewhere in your package
-  named_params <- dropNulls(mget(
-    setdiff(names(formals()), "..."),
-    environment()
-  ))
-
-  # Collect additional parameters from ellipsis
-  extra_params <- list(...)
-
-  # Add type parameter (internal)
-  config <- list(type = "concentric")
-
-  # Merge with named parameters and additional parameters
-  c(config, named_params, extra_params)
+  build_layout("concentric", ...)
 }
 
 #' Generate G6 AntV Dagre layout configuration
@@ -909,23 +863,7 @@ dagre_layout <- function(
   if (!is.logical(controlPoints)) {
     stop("controlPoints must be a logical value (TRUE or FALSE)")
   }
-
-  # Get all named parameters as a list
-  # Use dropNulls function to remove NULL elements
-  # Assuming dropNulls is defined elsewhere in your package
-  named_params <- dropNulls(mget(
-    setdiff(names(formals()), "..."),
-    environment()
-  ))
-
-  # Collect additional parameters from ellipsis
-  extra_params <- list(...)
-
-  # Add type parameter (internal)
-  config <- list(type = "dagre")
-
-  # Merge with named parameters and additional parameters
-  c(config, named_params, extra_params)
+  build_layout("dagre", ...)
 }
 
 
@@ -1046,16 +984,7 @@ force_atlas2_layout <- function(
       stop("'center' must be a numeric vector of length 2 or NULL")
     }
   }
-
-  named_params <- dropNulls(mget(
-    setdiff(names(formals()), "..."),
-    environment()
-  ))
-  # Collect additional parameters from ellipsis
-  extra_params <- list(...)
-  # Add type parameter (internal)
-  config <- list(type = "force-atlas2")
-  c(config, named_params, extra_params)
+  build_layout("force-atlas2", ...)
 }
 
 #' Generate G6 Fruchterman layout configuration
@@ -1111,16 +1040,7 @@ fruchterman_layout <- function(
   if (!is.numeric(speed) || length(speed) != 1 || speed < 0) {
     stop("'speed' must be a single non-negative number")
   }
-
-  named_params <- dropNulls(mget(
-    setdiff(names(formals()), "..."),
-    environment()
-  ))
-  # Collect additional parameters from ellipsis
-  extra_params <- list(...)
-  # Add type parameter (internal)
-  config <- list(type = "fruchterman")
-  c(config, named_params, extra_params)
+  build_layout("fruchterman", ...)
 }
 
 #' Generate G6 Radial layout configuration
@@ -1257,14 +1177,7 @@ radial_layout <- function(
     stop("'strictRadial' must be a logical value")
   }
 
-  named_params <- dropNulls(mget(
-    setdiff(names(formals()), "..."),
-    environment()
-  ))
-
-  extra_params <- list(...)
-  config <- list(type = "radial")
-  c(config, named_params, extra_params)
+  build_layout("radial", ...)
 }
 
 #' Generate G6 Dendrogram layout configuration
@@ -1311,13 +1224,5 @@ dendrogram_layout <- function(
   if (!is.logical(radial) || length(radial) != 1) {
     stop("'radial' must be a logical value")
   }
-
-  named_params <- dropNulls(mget(
-    setdiff(names(formals()), "..."),
-    environment()
-  ))
-
-  extra_params <- list(...)
-  config <- list(type = "dendrogram")
-  c(config, named_params, extra_params)
+  build_layout("dendrogram", ...)
 }
