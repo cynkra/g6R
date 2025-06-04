@@ -43,7 +43,7 @@ g6(lesmis$nodes, lesmis$edges) |>
 The Force Atlas2 layout might need some parameter tweaking to get the best results. 
 ```{r}
 g6(lesmis$nodes, lesmis$edges) |>
-  g6_layout(force_atlas2_layout(preventOverlap = TRUE, kr = 20, )) |>
+  g6_layout(force_atlas2_layout(preventOverlap = TRUE, kr = 20)) |>
   g6_options(autoFit = "view", autoResize = TRUE)
 
 ```
