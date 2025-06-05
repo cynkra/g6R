@@ -77,27 +77,32 @@ for efficiently laying out trees and hierarchical structures.</p>
 <dd><p>Function to set the nodes to be arranged on the left/right side
 of the root node. If not set, the algorithm automatically assigns the nodes
 to the left/right side. Note: This parameter is only effective when the layout
-direction is "H". Function format: function(node)  return "left" or "right"</p></dd>
+direction is "H". Function format: <code>function(node) { return "left" or "right" }</code></p></dd>
 
 
 <dt id="arg-getid">getId<a class="anchor" aria-label="anchor" href="#arg-getid"></a></dt>
-<dd><p>Callback function for generating node IDs. Function format: function(node)  return string</p></dd>
+<dd><p>Callback function for generating node IDs.
+Function format: <code>function(node) { return string }</code></p></dd>
 
 
 <dt id="arg-getwidth">getWidth<a class="anchor" aria-label="anchor" href="#arg-getwidth"></a></dt>
-<dd><p>Function to calculate the width of each node. Function format: function(node)  return number</p></dd>
+<dd><p>Function to calculate the width of each node.
+Function format: <code>function(node) { return number }</code></p></dd>
 
 
 <dt id="arg-getheight">getHeight<a class="anchor" aria-label="anchor" href="#arg-getheight"></a></dt>
-<dd><p>Function to calculate the height of each node. Function format: function(node)  return number</p></dd>
+<dd><p>Function to calculate the height of each node.
+Function format: <code>function(node) { return number }</code></p></dd>
 
 
 <dt id="arg-gethgap">getHGap<a class="anchor" aria-label="anchor" href="#arg-gethgap"></a></dt>
-<dd><p>Function to calculate the horizontal gap for each node. Function format: function(node)  return number</p></dd>
+<dd><p>Function to calculate the horizontal gap for each node.
+Function format: <code>function(node) { return number }</code></p></dd>
 
 
 <dt id="arg-getvgap">getVGap<a class="anchor" aria-label="anchor" href="#arg-getvgap"></a></dt>
-<dd><p>Function to calculate the vertical gap for each node. Function format: function(node)  return number</p></dd>
+<dd><p>Function to calculate the vertical gap for each node.
+Function format: <code>function(node) { return number }</code></p></dd>
 
 
 <dt id="arg-radial">radial<a class="anchor" aria-label="anchor" href="#arg-radial"></a></dt>
@@ -120,13 +125,8 @@ direction is "H". Function format: function(node)  return "left" or "right"</p><
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Vertical compact box layout</span></span></span>
 <span class="r-in"><span><span class="va">box_config</span> <span class="op">&lt;-</span> <span class="fu">compact_box_layout</span><span class="op">(</span></span></span>
-<span class="r-in"><span>  direction <span class="op">=</span> <span class="st">"TB"</span>,</span></span>
-<span class="r-in"><span>  getHGap <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">node</span><span class="op">)</span> <span class="op">{</span></span></span>
-<span class="r-in"><span>    <span class="kw">if</span><span class="op">(</span><span class="va">node</span><span class="op">$</span><span class="va">depth</span> <span class="op">==</span> <span class="fl">1</span><span class="op">)</span> <span class="kw"><a href="https://rdrr.io/r/base/function.html" class="external-link">return</a></span><span class="op">(</span><span class="fl">80</span><span class="op">)</span></span></span>
-<span class="r-in"><span>    <span class="kw">else</span> <span class="kw"><a href="https://rdrr.io/r/base/function.html" class="external-link">return</a></span><span class="op">(</span><span class="fl">40</span><span class="op">)</span></span></span>
-<span class="r-in"><span>  <span class="op">}</span></span></span>
+<span class="r-in"><span>  direction <span class="op">=</span> <span class="st">"TB"</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in compact_box_layout(direction = "TB", getHGap = function(node) {    if (node$depth == 1)         return(80)    else return(40)}):</span> getHGap must be a JS function that returns a number</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Radial layout</span></span></span>
 <span class="r-in"><span><span class="va">box_config</span> <span class="op">&lt;-</span> <span class="fu">compact_box_layout</span><span class="op">(</span></span></span>
@@ -139,7 +139,7 @@ direction is "H". Function format: function(node)  return "left" or "right"</p><
 
 
     <footer><div class="pkgdown-footer-left">
-  <p>Developed by David Granjon, Bristol Myers Squibb.</p>
+  <p>Developed by David Granjon, David Schoch, cynkra GmbH, Bristol Myers Squibb.</p>
 </div>
 
 <div class="pkgdown-footer-right">

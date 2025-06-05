@@ -51,8 +51,7 @@ This allows users to drag nodes and combos with force-directed layout interactio
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">drag_element_force</span><span class="op">(</span></span>
 <span>  key <span class="op">=</span> <span class="st">"drag-element-force"</span>,</span>
 <span>  fixed <span class="op">=</span> <span class="cn">FALSE</span>,</span>
-<span>  enable <span class="op">=</span></span>
-<span>    <span class="fu">JS</span><span class="op">(</span><span class="st">"(event) =&gt; { \n      return event.targetType === 'node' || event.targetType === 'combo';\n    }"</span><span class="op">)</span>,</span>
+<span>  enable <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  state <span class="op">=</span> <span class="st">"selected"</span>,</span>
 <span>  hideEdge <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"none"</span>, <span class="st">"out"</span>, <span class="st">"in"</span>, <span class="st">"both"</span>, <span class="st">"all"</span><span class="op">)</span>,</span>
 <span>  cursor <span class="op">=</span> <span class="cn">NULL</span>,</span>
@@ -106,7 +105,7 @@ This allows users to drag nodes and combos with force-directed layout interactio
 <span class="r-in"><span><span class="va">config</span> <span class="op">&lt;-</span> <span class="fu">drag_element_force</span><span class="op">(</span></span></span>
 <span class="r-in"><span>  key <span class="op">=</span> <span class="st">"my-custom-drag-force"</span>,</span></span>
 <span class="r-in"><span>  fixed <span class="op">=</span> <span class="cn">TRUE</span>,</span></span>
-<span class="r-in"><span>  enable <span class="op">=</span> <span class="fu">JS</span><span class="op">(</span><span class="st">"(event) =&gt; { return event.targetType === 'node'; }"</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>  enable <span class="op">=</span> <span class="fu"><a href="JS.html">JS</a></span><span class="op">(</span><span class="st">"(event) =&gt; { return event.targetType === 'node'; }"</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>  hideEdge <span class="op">=</span> <span class="st">"both"</span>,</span></span>
 <span class="r-in"><span>  cursor <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span></span>
 <span class="r-in"><span>    default <span class="op">=</span> <span class="st">"default"</span>,</span></span>
@@ -121,7 +120,7 @@ This allows users to drag nodes and combos with force-directed layout interactio
 
 
     <footer><div class="pkgdown-footer-left">
-  <p>Developed by David Granjon, Bristol Myers Squibb.</p>
+  <p>Developed by David Granjon, David Schoch, cynkra GmbH, Bristol Myers Squibb.</p>
 </div>
 
 <div class="pkgdown-footer-right">

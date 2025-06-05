@@ -204,10 +204,10 @@ This plugin adds a timeline or chart-based control for time-related data visuali
 <span class="r-in"><span><span class="co"># With custom callbacks</span></span></span>
 <span class="r-in"><span><span class="va">config</span> <span class="op">&lt;-</span> <span class="fu">timebar</span><span class="op">(</span></span></span>
 <span class="r-in"><span>  data <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1609459200000</span>, <span class="fl">1609545600000</span>, <span class="fl">1609632000000</span><span class="op">)</span>,</span></span>
-<span class="r-in"><span>  onChange <span class="op">=</span> <span class="fu">JS</span><span class="op">(</span><span class="st">"(values) =&gt; {</span></span></span>
+<span class="r-in"><span>  onChange <span class="op">=</span> <span class="fu"><a href="JS.html">JS</a></span><span class="op">(</span><span class="st">"(values) =&gt; {</span></span></span>
 <span class="r-in"><span><span class="st">    console.log('Time changed:', values);</span></span></span>
 <span class="r-in"><span><span class="st">  }"</span><span class="op">)</span>,</span></span>
-<span class="r-in"><span>  onPlay <span class="op">=</span> <span class="fu">JS</span><span class="op">(</span><span class="st">"() =&gt; {</span></span></span>
+<span class="r-in"><span>  onPlay <span class="op">=</span> <span class="fu"><a href="JS.html">JS</a></span><span class="op">(</span><span class="st">"() =&gt; {</span></span></span>
 <span class="r-in"><span><span class="st">    console.log('Playback started');</span></span></span>
 <span class="r-in"><span><span class="st">  }"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
@@ -215,7 +215,7 @@ This plugin adds a timeline or chart-based control for time-related data visuali
 <span class="r-in"><span><span class="co"># With custom time getter function for elements</span></span></span>
 <span class="r-in"><span><span class="va">config</span> <span class="op">&lt;-</span> <span class="fu">timebar</span><span class="op">(</span></span></span>
 <span class="r-in"><span>  data <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1609459200000</span>, <span class="fl">1609545600000</span>, <span class="fl">1609632000000</span><span class="op">)</span>,</span></span>
-<span class="r-in"><span>  getTime <span class="op">=</span> <span class="fu">JS</span><span class="op">(</span><span class="st">"(datum) =&gt; {</span></span></span>
+<span class="r-in"><span>  getTime <span class="op">=</span> <span class="fu"><a href="JS.html">JS</a></span><span class="op">(</span><span class="st">"(datum) =&gt; {</span></span></span>
 <span class="r-in"><span><span class="st">    return datum.created_at; // Get time from created_at property</span></span></span>
 <span class="r-in"><span><span class="st">  }"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
@@ -226,7 +226,7 @@ This plugin adds a timeline or chart-based control for time-related data visuali
 
 
     <footer><div class="pkgdown-footer-left">
-  <p>Developed by David Granjon, Bristol Myers Squibb.</p>
+  <p>Developed by David Granjon, David Schoch, cynkra GmbH, Bristol Myers Squibb.</p>
 </div>
 
 <div class="pkgdown-footer-right">

@@ -100,15 +100,15 @@ This plugin enables undo/redo functionality for graph operations.</p>
 <span class="r-in"><span><span class="va">config</span> <span class="op">&lt;-</span> <span class="fu">history</span><span class="op">(</span></span></span>
 <span class="r-in"><span>  key <span class="op">=</span> <span class="st">"my-history"</span>,</span></span>
 <span class="r-in"><span>  stackSize <span class="op">=</span> <span class="fl">50</span>,</span></span>
-<span class="r-in"><span>  beforeAddCommand <span class="op">=</span> <span class="fu">JS</span><span class="op">(</span><span class="st">"function(cmd, revert) {</span></span></span>
+<span class="r-in"><span>  beforeAddCommand <span class="op">=</span> <span class="fu"><a href="JS.html">JS</a></span><span class="op">(</span><span class="st">"function(cmd, revert) {</span></span></span>
 <span class="r-in"><span><span class="st">    console.log('Before adding command:', cmd);</span></span></span>
 <span class="r-in"><span><span class="st">    // Only allow certain operations to be recorded</span></span></span>
 <span class="r-in"><span><span class="st">    return cmd.method !== 'update';</span></span></span>
 <span class="r-in"><span><span class="st">  }"</span><span class="op">)</span>,</span></span>
-<span class="r-in"><span>  afterAddCommand <span class="op">=</span> <span class="fu">JS</span><span class="op">(</span><span class="st">"function(cmd, revert) {</span></span></span>
+<span class="r-in"><span>  afterAddCommand <span class="op">=</span> <span class="fu"><a href="JS.html">JS</a></span><span class="op">(</span><span class="st">"function(cmd, revert) {</span></span></span>
 <span class="r-in"><span><span class="st">    console.log('Command added to ' + (revert ? 'undo' : 'redo') + ' stack');</span></span></span>
 <span class="r-in"><span><span class="st">  }"</span><span class="op">)</span>,</span></span>
-<span class="r-in"><span>  executeCommand <span class="op">=</span> <span class="fu">JS</span><span class="op">(</span><span class="st">"function(cmd) {</span></span></span>
+<span class="r-in"><span>  executeCommand <span class="op">=</span> <span class="fu"><a href="JS.html">JS</a></span><span class="op">(</span><span class="st">"function(cmd) {</span></span></span>
 <span class="r-in"><span><span class="st">    console.log('Executing command:', cmd);</span></span></span>
 <span class="r-in"><span><span class="st">  }"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
@@ -119,7 +119,7 @@ This plugin enables undo/redo functionality for graph operations.</p>
 
 
     <footer><div class="pkgdown-footer-left">
-  <p>Developed by David Granjon, Bristol Myers Squibb.</p>
+  <p>Developed by David Granjon, David Schoch, cynkra GmbH, Bristol Myers Squibb.</p>
 </div>
 
 <div class="pkgdown-footer-right">

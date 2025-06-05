@@ -142,7 +142,7 @@ This plugin creates a lens that filters and displays edges within a specific are
 <span class="r-in"><span>    stroke <span class="op">=</span> <span class="st">"#999"</span>,</span></span>
 <span class="r-in"><span>    lineWidth <span class="op">=</span> <span class="fl">2</span></span></span>
 <span class="r-in"><span>  <span class="op">)</span>,</span></span>
-<span class="r-in"><span>  filter <span class="op">=</span> <span class="fu">JS</span><span class="op">(</span><span class="st">"(id, type) =&gt; {</span></span></span>
+<span class="r-in"><span>  filter <span class="op">=</span> <span class="fu"><a href="JS.html">JS</a></span><span class="op">(</span><span class="st">"(id, type) =&gt; {</span></span></span>
 <span class="r-in"><span><span class="st">    // Only display edges connected to specific nodes</span></span></span>
 <span class="r-in"><span><span class="st">    if (type === 'edge') {</span></span></span>
 <span class="r-in"><span><span class="st">      const edge = graph.getEdgeData(id);</span></span></span>
@@ -158,7 +158,7 @@ This plugin creates a lens that filters and displays edges within a specific are
 
 
     <footer><div class="pkgdown-footer-left">
-  <p>Developed by David Granjon, Bristol Myers Squibb.</p>
+  <p>Developed by David Granjon, David Schoch, cynkra GmbH, Bristol Myers Squibb.</p>
 </div>
 
 <div class="pkgdown-footer-right">

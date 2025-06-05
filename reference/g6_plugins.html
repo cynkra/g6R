@@ -127,13 +127,12 @@ Plugins are divided into several categories:</p>
 <span class="r-in"><span><span class="va">plugins</span> <span class="op">&lt;-</span> <span class="fu">g6_plugins</span><span class="op">(</span></span></span>
 <span class="r-in"><span>  <span class="fu"><a href="minimap.html">minimap</a></span><span class="op">(</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>  <span class="fu"><a href="grid_line.html">grid_line</a></span><span class="op">(</span><span class="op">)</span>,</span></span>
-<span class="r-in"><span>  <span class="fu">tooltip</span><span class="op">(</span></span></span>
-<span class="r-in"><span>    getContent <span class="op">=</span> <span class="fu">JS</span><span class="op">(</span><span class="st">"(e, items) =&gt; {</span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="tooltips.html">tooltips</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>    getContent <span class="op">=</span> <span class="fu"><a href="JS.html">JS</a></span><span class="op">(</span><span class="st">"(e, items) =&gt; {</span></span></span>
 <span class="r-in"><span><span class="st">      return `&lt;div&gt;${items[0].id}&lt;/div&gt;`;</span></span></span>
 <span class="r-in"><span><span class="st">    }"</span><span class="op">)</span></span></span>
 <span class="r-in"><span>  <span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in tooltip(getContent = JS("(e, items) =&gt; {\n      return `&lt;div&gt;${items[0].id}&lt;/div&gt;`;\n    }")):</span> could not find function "tooltip"</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Add a context menu and toolbar</span></span></span>
 <span class="r-in"><span><span class="va">plugins</span> <span class="op">&lt;-</span> <span class="fu">g6_plugins</span><span class="op">(</span></span></span>
@@ -142,7 +141,7 @@ Plugins are divided into several categories:</p>
 <span class="r-in"><span>    className <span class="op">=</span> <span class="st">"my-context-menu"</span>,</span></span>
 <span class="r-in"><span>    trigger <span class="op">=</span> <span class="st">"click"</span>,</span></span>
 <span class="r-in"><span>    offset <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">10</span>, <span class="fl">10</span><span class="op">)</span>,</span></span>
-<span class="r-in"><span>    getItems <span class="op">=</span> <span class="fu">JS</span><span class="op">(</span><span class="st">"(event) =&gt; {</span></span></span>
+<span class="r-in"><span>    getItems <span class="op">=</span> <span class="fu"><a href="JS.html">JS</a></span><span class="op">(</span><span class="st">"(event) =&gt; {</span></span></span>
 <span class="r-in"><span><span class="st">      const type = event.itemType;</span></span></span>
 <span class="r-in"><span><span class="st">      const isNode = type === 'node';</span></span></span>
 <span class="r-in"><span><span class="st">      return [</span></span></span>
@@ -151,19 +150,19 @@ Plugins are divided into several categories:</p>
 <span class="r-in"><span><span class="st">        { key: 'details', text: 'View Details', disabled: !isNode }</span></span></span>
 <span class="r-in"><span><span class="st">      ];</span></span></span>
 <span class="r-in"><span><span class="st">    }"</span><span class="op">)</span>,</span></span>
-<span class="r-in"><span>    onClick <span class="op">=</span> <span class="fu">JS</span><span class="op">(</span><span class="st">"(value, target, current) =&gt; {</span></span></span>
+<span class="r-in"><span>    onClick <span class="op">=</span> <span class="fu"><a href="JS.html">JS</a></span><span class="op">(</span><span class="st">"(value, target, current) =&gt; {</span></span></span>
 <span class="r-in"><span><span class="st">      if (value === 'delete') {</span></span></span>
 <span class="r-in"><span><span class="st">        // do stuff</span></span></span>
 <span class="r-in"><span><span class="st">    }"</span><span class="op">)</span></span></span>
 <span class="r-in"><span>  <span class="op">)</span>,</span></span>
 <span class="r-in"><span>  <span class="fu"><a href="toolbar.html">toolbar</a></span><span class="op">(</span></span></span>
 <span class="r-in"><span>    position <span class="op">=</span> <span class="st">"top-right"</span>,</span></span>
-<span class="r-in"><span>    getItems <span class="op">=</span> <span class="fu">JS</span><span class="op">(</span><span class="st">"() =&gt; [</span></span></span>
+<span class="r-in"><span>    getItems <span class="op">=</span> <span class="fu"><a href="JS.html">JS</a></span><span class="op">(</span><span class="st">"() =&gt; [</span></span></span>
 <span class="r-in"><span><span class="st">      { id: 'zoom-in', value: 'zoom-in' },</span></span></span>
 <span class="r-in"><span><span class="st">      { id: 'zoom-out', value: 'zoom-out' },</span></span></span>
 <span class="r-in"><span><span class="st">      { id: 'fit', value: 'fit' }</span></span></span>
 <span class="r-in"><span><span class="st">    ]"</span><span class="op">)</span>,</span></span>
-<span class="r-in"><span>    onClick <span class="op">=</span> <span class="fu">JS</span><span class="op">(</span><span class="st">"(value) =&gt; {</span></span></span>
+<span class="r-in"><span>    onClick <span class="op">=</span> <span class="fu"><a href="JS.html">JS</a></span><span class="op">(</span><span class="st">"(value) =&gt; {</span></span></span>
 <span class="r-in"><span><span class="st">      if (value === 'zoom-in') graph.zoomTo(1.1);</span></span></span>
 <span class="r-in"><span><span class="st">      else if (value === 'zoom-out') graph.zoomTo(0.9);</span></span></span>
 <span class="r-in"><span><span class="st">      else if (value === 'fit') graph.fitView();</span></span></span>
@@ -177,7 +176,7 @@ Plugins are divided into several categories:</p>
 
 
     <footer><div class="pkgdown-footer-left">
-  <p>Developed by David Granjon, Bristol Myers Squibb.</p>
+  <p>Developed by David Granjon, David Schoch, cynkra GmbH, Bristol Myers Squibb.</p>
 </div>
 
 <div class="pkgdown-footer-right">

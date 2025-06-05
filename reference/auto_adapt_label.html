@@ -130,17 +130,10 @@ not enough space to display all of them.</p>
 <span class="r-in"><span>  padding <span class="op">=</span> <span class="fl">5</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># Custom configuration with specific sorting rules</span></span></span>
-<span class="r-in"><span><span class="va">config</span> <span class="op">&lt;-</span> <span class="fu">auto_adapt_label</span><span class="op">(</span></span></span>
-<span class="r-in"><span>  sortNode <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>type <span class="op">=</span> <span class="st">"property"</span>, field <span class="op">=</span> <span class="st">"importance"</span>, order <span class="op">=</span> <span class="st">"desc"</span><span class="op">)</span>,</span></span>
-<span class="r-in"><span>  sortEdge <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>type <span class="op">=</span> <span class="st">"property"</span>, field <span class="op">=</span> <span class="st">"weight"</span>, order <span class="op">=</span> <span class="st">"desc"</span><span class="op">)</span>,</span></span>
-<span class="r-in"><span>  sortCombo <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>type <span class="op">=</span> <span class="st">"degree"</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="op">)</span></span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in auto_adapt_label(sortNode = list(type = "property", field = "importance",     order = "desc"), sortEdge = list(type = "property", field = "weight",     order = "desc"), sortCombo = list(type = "degree")):</span> 'sortNode$type' must be one of: degree, betweenness, closeness, eigenvector, pagerank</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Using a custom enable function</span></span></span>
 <span class="r-in"><span><span class="va">config</span> <span class="op">&lt;-</span> <span class="fu">auto_adapt_label</span><span class="op">(</span></span></span>
-<span class="r-in"><span>  enable <span class="op">=</span> <span class="fu">JS</span><span class="op">(</span><span class="st">"(e) =&gt; e.targetType === 'node'"</span><span class="op">)</span></span></span>
+<span class="r-in"><span>  enable <span class="op">=</span> <span class="fu"><a href="JS.html">JS</a></span><span class="op">(</span><span class="st">"(e) =&gt; e.targetType === 'node'"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
 </code></pre></div>
     </div>
@@ -149,7 +142,7 @@ not enough space to display all of them.</p>
 
 
     <footer><div class="pkgdown-footer-left">
-  <p>Developed by David Granjon, Bristol Myers Squibb.</p>
+  <p>Developed by David Granjon, David Schoch, cynkra GmbH, Bristol Myers Squibb.</p>
 </div>
 
 <div class="pkgdown-footer-right">

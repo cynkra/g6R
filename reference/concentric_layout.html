@@ -73,7 +73,7 @@ concentric circles based on a centrality measure.</p>
 
 
 <dl><dt id="arg-center">center<a class="anchor" aria-label="anchor" href="#arg-center"></a></dt>
-<dd><p>The center position of the circular layout x, y or x, y, z.
+<dd><p>The center position of the circular layout <code>[x, y]</code> or <code>[x, y, z]</code>.
 By default, it's the center position of the current container.</p></dd>
 
 
@@ -108,7 +108,7 @@ maxValue is the degree of the node with the largest degree among all nodes.</p><
 
 <dt id="arg-nodesize">nodeSize<a class="anchor" aria-label="anchor" href="#arg-nodesize"></a></dt>
 <dd><p>Node size (diameter). Used to prevent collision detection when nodes overlap.
-Can be a number, a 2-element vector width, height, or a function that returns a number.</p></dd>
+Can be a number, a 2-element vector <code>[width, height]</code>, or a function that returns a number.</p></dd>
 
 
 <dt id="arg-nodespacing">nodeSpacing<a class="anchor" aria-label="anchor" href="#arg-nodespacing"></a></dt>
@@ -129,7 +129,7 @@ in the layout, can node overlap collision detection be performed.</p></dd>
 
 <dt id="arg-sweep">sweep<a class="anchor" aria-label="anchor" href="#arg-sweep"></a></dt>
 <dd><p>If the radian difference between the first and last nodes in the same layer
-is undefined, it will be set to 2 * Math.PI * (1 - 1 / |level.nodes|), where level.nodes
+is undefined, it will be set to <code>2 * Math.PI * (1 - 1 / |level.nodes|)</code>, where level.nodes
 is the number of nodes in each layer calculated by the algorithm, and |level.nodes| is
 the number of nodes in the layer.</p></dd>
 
@@ -172,7 +172,7 @@ the number of nodes in the layer.</p></dd>
 
 
     <footer><div class="pkgdown-footer-left">
-  <p>Developed by David Granjon, Bristol Myers Squibb.</p>
+  <p>Developed by David Granjon, David Schoch, cynkra GmbH, Bristol Myers Squibb.</p>
 </div>
 
 <div class="pkgdown-footer-right">

@@ -54,12 +54,12 @@ This allows maintaining fixed visual sizes for elements during zoom operations.<
 <span>  reset <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  state <span class="op">=</span> <span class="st">""</span>,</span>
 <span>  node <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  nodeFilter <span class="op">=</span> <span class="fu">JS</span><span class="op">(</span><span class="st">"() =&gt; true"</span><span class="op">)</span>,</span>
+<span>  nodeFilter <span class="op">=</span> <span class="fu"><a href="JS.html">JS</a></span><span class="op">(</span><span class="st">"() =&gt; true"</span><span class="op">)</span>,</span>
 <span>  edge <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>shape <span class="op">=</span> <span class="st">"key"</span>, fields <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"lineWidth"</span><span class="op">)</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>shape <span class="op">=</span> <span class="st">"halo"</span>, fields <span class="op">=</span></span>
 <span>    <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"lineWidth"</span><span class="op">)</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>shape <span class="op">=</span> <span class="st">"label"</span>, fields <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"fontSize"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>,</span>
-<span>  edgeFilter <span class="op">=</span> <span class="fu">JS</span><span class="op">(</span><span class="st">"() =&gt; true"</span><span class="op">)</span>,</span>
+<span>  edgeFilter <span class="op">=</span> <span class="fu"><a href="JS.html">JS</a></span><span class="op">(</span><span class="st">"() =&gt; true"</span><span class="op">)</span>,</span>
 <span>  combo <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  comboFilter <span class="op">=</span> <span class="fu">JS</span><span class="op">(</span><span class="st">"() =&gt; true"</span><span class="op">)</span>,</span>
+<span>  comboFilter <span class="op">=</span> <span class="fu"><a href="JS.html">JS</a></span><span class="op">(</span><span class="st">"() =&gt; true"</span><span class="op">)</span>,</span>
 <span>  <span class="va">...</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
@@ -131,9 +131,9 @@ This allows maintaining fixed visual sizes for elements during zoom operations.<
 <span class="r-in"><span>    <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>shape <span class="op">=</span> <span class="st">"circle"</span>, fields <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"r"</span>, <span class="st">"lineWidth"</span><span class="op">)</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>    <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>shape <span class="op">=</span> <span class="st">"label"</span>, fields <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"fontSize"</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span>  <span class="op">)</span>,</span></span>
-<span class="r-in"><span>  nodeFilter <span class="op">=</span> <span class="fu">JS</span><span class="op">(</span><span class="st">"(node) =&gt; node.type === 'important'"</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>  nodeFilter <span class="op">=</span> <span class="fu"><a href="JS.html">JS</a></span><span class="op">(</span><span class="st">"(node) =&gt; node.type === 'important'"</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>  edge <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>shape <span class="op">=</span> <span class="st">"line"</span>, fields <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"lineWidth"</span>, <span class="st">"lineDash"</span><span class="op">)</span><span class="op">)</span>,</span></span>
-<span class="r-in"><span>  edgeFilter <span class="op">=</span> <span class="fu">JS</span><span class="op">(</span><span class="st">"(edge) =&gt; edge.weight &gt; 5"</span><span class="op">)</span></span></span>
+<span class="r-in"><span>  edgeFilter <span class="op">=</span> <span class="fu"><a href="JS.html">JS</a></span><span class="op">(</span><span class="st">"(edge) =&gt; edge.weight &gt; 5"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
 </code></pre></div>
     </div>
@@ -142,7 +142,7 @@ This allows maintaining fixed visual sizes for elements during zoom operations.<
 
 
     <footer><div class="pkgdown-footer-left">
-  <p>Developed by David Granjon, Bristol Myers Squibb.</p>
+  <p>Developed by David Granjon, David Schoch, cynkra GmbH, Bristol Myers Squibb.</p>
 </div>
 
 <div class="pkgdown-footer-right">

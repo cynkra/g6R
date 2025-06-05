@@ -76,7 +76,9 @@ with all available options as parameters.</p>
 
 
 <dt id="arg-dissuadehubs">dissuadeHubs<a class="anchor" aria-label="anchor" href="#arg-dissuadehubs"></a></dt>
-<dd><p>Logical. Whether to enable hub mode. If TRUE, nodes with higher in-degree are more likely to be placed at the center than those with high out-degree. Defaults to FALSE.</p></dd>
+<dd><p>Logical. Whether to enable hub mode.
+If TRUE, nodes with higher in-degree are more likely to be placed at the center
+than those with high out-degree. Defaults to FALSE.</p></dd>
 
 
 <dt id="arg-height">height<a class="anchor" aria-label="anchor" href="#arg-height"></a></dt>
@@ -84,11 +86,13 @@ with all available options as parameters.</p>
 
 
 <dt id="arg-kg">kg<a class="anchor" aria-label="anchor" href="#arg-kg"></a></dt>
-<dd><p>Numeric. Gravity coefficient. The larger the value, the more concentrated the layout is at the center. Defaults to 1.</p></dd>
+<dd><p>Numeric. Gravity coefficient. The larger the value,
+the more concentrated the layout is at the center. Defaults to 1.</p></dd>
 
 
 <dt id="arg-kr">kr<a class="anchor" aria-label="anchor" href="#arg-kr"></a></dt>
-<dd><p>Numeric. Repulsion coefficient. Adjusts the compactness of the layout. The larger the value, the looser the layout. Defaults to 5.</p></dd>
+<dd><p>Numeric. Repulsion coefficient. Adjusts the compactness of the layout.
+The larger the value, the looser the layout. Defaults to 5.</p></dd>
 
 
 <dt id="arg-ks">ks<a class="anchor" aria-label="anchor" href="#arg-ks"></a></dt>
@@ -100,19 +104,27 @@ with all available options as parameters.</p>
 
 
 <dt id="arg-mode">mode<a class="anchor" aria-label="anchor" href="#arg-mode"></a></dt>
-<dd><p>Character. Clustering mode. Options are "normal" or "linlog". In "linlog" mode, clusters are more compact. Defaults to "normal".</p></dd>
+<dd><p>Character. Clustering mode.
+Options are "normal" or "linlog". In "linlog" mode, clusters are more compact.
+Defaults to "normal".</p></dd>
 
 
 <dt id="arg-nodesize">nodeSize<a class="anchor" aria-label="anchor" href="#arg-nodesize"></a></dt>
-<dd><p>Numeric or function. Node size (diameter). Used for repulsion calculation when preventOverlap is enabled. If not set, uses data.size in node data.</p></dd>
+<dd><p>Numeric or function. Node size (diameter).
+Used for repulsion calculation when preventOverlap is enabled.</p>
+<p>If not set, uses data.size in node data.</p></dd>
 
 
 <dt id="arg-preventoverlap">preventOverlap<a class="anchor" aria-label="anchor" href="#arg-preventoverlap"></a></dt>
-<dd><p>Logical. Whether to prevent node overlap. When enabled, layout considers node size to avoid overlap. Node size is specified by <code>nodeSize</code> or <code>data.size</code> in node data. Defaults to FALSE.</p></dd>
+<dd><p>Logical. Whether to prevent node overlap.
+When enabled, layout considers node size to avoid overlap.
+Node size is specified by <code>nodeSize</code> or <code>data.size</code> in node data. Defaults to FALSE.</p></dd>
 
 
 <dt id="arg-prune">prune<a class="anchor" aria-label="anchor" href="#arg-prune"></a></dt>
-<dd><p>Logical. Whether to enable auto-pruning. By default, enabled if node count &gt; 100. Pruning speeds up convergence but may reduce layout quality. Set to FALSE to disable auto-activation.</p></dd>
+<dd><p>Logical. Whether to enable auto-pruning.
+By default, enabled if node count &gt; 100. Pruning speeds up
+convergence but may reduce layout quality. Set to FALSE to disable auto-activation.</p></dd>
 
 
 <dt id="arg-tao">tao<a class="anchor" aria-label="anchor" href="#arg-tao"></a></dt>
@@ -124,7 +136,9 @@ with all available options as parameters.</p>
 
 
 <dt id="arg-center">center<a class="anchor" aria-label="anchor" href="#arg-center"></a></dt>
-<dd><p>Numeric vector of length 2. Layout center in the form <code>[x, y]</code>. Each node is attracted to this point, with gravity controlled by <code>kg</code>. If not set, uses canvas center.</p></dd>
+<dd><p>Numeric vector of length 2. Layout center in the form <code>[x, y]</code>.
+Each node is attracted to this point, with gravity controlled by <code>kg</code>.
+If not set, uses canvas center.</p></dd>
 
 
 <dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>
@@ -158,7 +172,7 @@ See <a href="https://g6.antv.antgroup.com/manual/layout/build-in/force-atlas2-la
 
 
     <footer><div class="pkgdown-footer-left">
-  <p>Developed by David Granjon, Bristol Myers Squibb.</p>
+  <p>Developed by David Granjon, David Schoch, cynkra GmbH, Bristol Myers Squibb.</p>
 </div>
 
 <div class="pkgdown-footer-right">

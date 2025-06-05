@@ -192,11 +192,11 @@ individual elements to global visualization settings.</p>
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># Basic usage with defaults</span></span></span>
-<span class="r-in"><span><span class="va">opts</span> <span class="op">&lt;-</span> <span class="fu">g6_options</span><span class="op">(</span><span class="op">)</span></span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in g6_options():</span> argument "graph" is missing, with no default</span>
+<span class="r-in"><span><span class="va">opts</span> <span class="op">&lt;-</span> <span class="fu">g6_options</span><span class="op">(</span><span class="fu"><a href="g6.html">g6</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Customize node and edge styles</span></span></span>
 <span class="r-in"><span><span class="va">opts</span> <span class="op">&lt;-</span> <span class="fu">g6_options</span><span class="op">(</span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="g6.html">g6</a></span><span class="op">(</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>  node <span class="op">=</span> <span class="fu"><a href="node_options.html">node_options</a></span><span class="op">(</span></span></span>
 <span class="r-in"><span>    type <span class="op">=</span> <span class="st">"circle"</span>,</span></span>
 <span class="r-in"><span>    style <span class="op">=</span> <span class="fu"><a href="node_style_options.html">node_style_options</a></span><span class="op">(</span></span></span>
@@ -212,10 +212,10 @@ individual elements to global visualization settings.</p>
 <span class="r-in"><span>    <span class="op">)</span></span></span>
 <span class="r-in"><span>  <span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in g6_options(node = node_options(type = "circle", style = node_style_options(fill = "#1783FF",     stroke = "#0066CC")), edge = edge_options(type = "cubic",     style = edge_style_options(stroke = "#999999", lineWidth = 1.5))):</span> argument "graph" is missing, with no default</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Configure graph with dark theme, auto-resize, and custom background</span></span></span>
 <span class="r-in"><span><span class="va">opts</span> <span class="op">&lt;-</span> <span class="fu">g6_options</span><span class="op">(</span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="g6.html">g6</a></span><span class="op">(</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>  theme <span class="op">=</span> <span class="st">"dark"</span>,</span></span>
 <span class="r-in"><span>  autoResize <span class="op">=</span> <span class="cn">TRUE</span>,</span></span>
 <span class="r-in"><span>  background <span class="op">=</span> <span class="st">"#222222"</span>,</span></span>
@@ -223,20 +223,16 @@ individual elements to global visualization settings.</p>
 <span class="r-in"><span>  zoom <span class="op">=</span> <span class="fl">0.8</span>,</span></span>
 <span class="r-in"><span>  zoomRange <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.5</span>, <span class="fl">2</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in g6_options(theme = "dark", autoResize = TRUE, background = "#222222",     padding = 20, zoom = 0.8, zoomRange = c(0.5, 2)):</span> argument "graph" is missing, with no default</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Configure with custom animations</span></span></span>
 <span class="r-in"><span><span class="va">opts</span> <span class="op">&lt;-</span> <span class="fu">g6_options</span><span class="op">(</span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="g6.html">g6</a></span><span class="op">(</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>  animation <span class="op">=</span> <span class="fu"><a href="animation_config.html">animation_config</a></span><span class="op">(</span></span></span>
 <span class="r-in"><span>    duration <span class="op">=</span> <span class="fl">500</span>,</span></span>
 <span class="r-in"><span>    easing <span class="op">=</span> <span class="st">"easeCubic"</span></span></span>
 <span class="r-in"><span>  <span class="op">)</span>,</span></span>
-<span class="r-in"><span>  autoFit <span class="op">=</span> <span class="fu"><a href="auto_fit_config.html">auto_fit_config</a></span><span class="op">(</span></span></span>
-<span class="r-in"><span>    padding <span class="op">=</span> <span class="fl">50</span>,</span></span>
-<span class="r-in"><span>    type <span class="op">=</span> <span class="st">"view"</span></span></span>
-<span class="r-in"><span>  <span class="op">)</span></span></span>
+<span class="r-in"><span>  autoFit <span class="op">=</span> <span class="fu"><a href="auto_fit_config.html">auto_fit_config</a></span><span class="op">(</span>duration <span class="op">=</span> <span class="fl">300</span>, easing <span class="op">=</span> <span class="st">"ease-out"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in g6_options(animation = animation_config(duration = 500, easing = "easeCubic"),     autoFit = auto_fit_config(padding = 50, type = "view")):</span> argument "graph" is missing, with no default</span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
@@ -244,7 +240,7 @@ individual elements to global visualization settings.</p>
 
 
     <footer><div class="pkgdown-footer-left">
-  <p>Developed by David Granjon, Bristol Myers Squibb.</p>
+  <p>Developed by David Granjon, David Schoch, cynkra GmbH, Bristol Myers Squibb.</p>
 </div>
 
 <div class="pkgdown-footer-right">
