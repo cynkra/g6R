@@ -99,17 +99,23 @@ g6 <- function(
 ) {
   # Convert data frames to lists of records
   if (inherits(nodes, "data.frame")) {
-    nodes <- unname(split(nodes, seq(nrow(nodes))))
-    nodes <- lapply(nodes, function(node) as.list(node))
+    nodes <- df_to_list(nodes)
+  } else {
+    nodes <- convert_id_to_chr(nodes)
   }
   if (inherits(edges, "data.frame")) {
-    edges <- unname(split(edges, seq(nrow(edges))))
-    edges <- lapply(edges, function(edge) as.list(edge))
+    edges <- df_to_list(edges)
+  } else {
+    edges <- convert_id_to_chr(edges)
   }
   if (inherits(combos, "data.frame")) {
-    combos <- unname(split(combos, seq(nrow(combos))))
-    combos <- lapply(combos, function(combo) as.list(combo))
+    combos <- df_to_list(combos)
+  } else {
+    combos <- convert_id_to_chr(combos)
   }
+
+  # Check that all ids are unique
+  ensure_unique_ids(get_ids())
 
   # Build properly named list of parameters to pass to widget
   x <- list(
