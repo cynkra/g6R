@@ -11,6 +11,11 @@ get_ids <- function() {
 }
 
 #' @keywords internal
+reset_ids <- function() {
+  assign("ids", NULL, envir = g6_globals)
+}
+
+#' @keywords internal
 add_id_to_globals <- function(id) {
   assign(
     "ids",
@@ -47,6 +52,7 @@ convert_id_to_chr <- function(lst) {
 ensure_unique_ids <- function(ids) {
   duplicated <- any(duplicated(ids))
   if (duplicated) {
+    reset_ids()
     stop("Some nodes, edges or combos ids are duplicated.")
   }
 }

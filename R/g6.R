@@ -128,9 +128,11 @@ g6 <- function(
     )
   )
 
-  # In case we need it ...
+  # Cleanup global ids for the next time the function is
+  # called
   hookFunc <- function(widget) {
-    # TBD
+    reset_ids()
+    return(widget)
   }
 
   # create widget
@@ -141,7 +143,7 @@ g6 <- function(
     height = height,
     package = "g6R",
     elementId = elementId,
-    preRenderHook = NULL
+    preRenderHook = hookFunc
   )
 }
 

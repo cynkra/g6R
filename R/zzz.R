@@ -1,4 +1,4 @@
 .onLoad <- function(libname, pkgname) {
-  assign("ids", NULL, envir = g6_globals)
+  reset_ids()
   invisible(NULL)
 } # nocov end
