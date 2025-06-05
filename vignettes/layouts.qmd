@@ -1,0 +1,180 @@
+---
+title: "layouts"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{layouts}
+  %\VignetteEngine{quarto::html}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+library(g6R)
+data(lesmis)
+data(radial)
+data(tree)
+data(dag)
+```
+
+A graph layout is the algorithmic process of positioning nodes and edges in a visual space to reveal the structure of a graph. The goal is to enhance readability by minimizing edge crossings, evenly distributing nodes, and highlighting key patterns or clusters. Different layout strategies, like force-directed or hierarchical, serve various use cases and aesthetic preferences.
+
+G6 provides a variety of layout algorithms, allowing users to choose the appropriate one based on their needs. The exhaustive list can be found in the [docs of G6](https://g6.antv.antgroup.com/en/manual/layout/overview). `g6R` currently does not expose all of them but the most commonly used ones. 
+
+```{r}
+grep("_layout$", ls("package:g6R"), value = TRUE)
+```
+
+## Force directed layouts
+
+G6 implements several force-directed layouts, which simulate physical forces to position nodes. The `d3_force_layout()` function is a wrapper around the [D3 force layout algorithm](g6.antv.antgroup.com/en/manual/layout/build-in/d3-force-layout) and `force_atlas_layout()` is a wrapper around the [Force Atlas2 layout algorithm](https://g6.antv.antgroup.com/en/manual/layout/build-in/force-atlas2-layout). Both layouts are commonly used for visualizing networks where the later is particularly suited for large networks.
+
+The D3 force layout has quite sensible defaults.
+```{r}
+g6(lesmis$nodes, lesmis$edges) |>
+  g6_layout(d3_force_layout())
+```
+
+The Force Atlas2 layout might need some parameter tweaking to get the best results. 
+```{r}
+g6(lesmis$nodes, lesmis$edges) |>
+  g6_layout(force_atlas2_layout(preventOverlap = TRUE, kr = 20)) |>
+  g6_options(autoFit = "view", autoResize = TRUE)
+
+```
+
+For more on `g6_options()`, see the [options vignette](options.qmd).
+
+The [Fruchterman layout](https://g6.antv.antgroup.com/en/manual/layout/build-in/fruchterman-layout) is another force-directed layout that is particularly useful for smaller graphs. It positions nodes based on attractive and repulsive forces, creating a balanced distribution.
+
+```{r}
+g6(radial$nodes, radial$edges) |>
+  g6_layout(fruchterman_layout())
+```
+
+## Circular layouts
+
+Circular layouts arrange nodes in a circular pattern, which can be useful for highlighting relationships in cyclic or radial structures. G6 provides several circular layout algorithms. Exposed in `g6R` are `circular_layout()`, `radial_layout()`, and `concentric_layout()`.
+
+THe `circular_layout()` function arranges nodes in a circle. This has a very limited use case but can be useful for small graphs.
+
+```{r}
+g6(radial$nodes, radial$edges) |>
+  g6_layout(circular_layout())
+```
+
+The `radial_layout()` function arranges nodes in a radial pattern, which is useful for hierarchical structures. It positions nodes around a central node, making it easier to visualize hierarchical relationships.
+
+```{r}
+g6(radial$nodes, radial$edges) |>
+  g6_layout(radial_layout()) |>
+  g6_options(
+    node = list(
+      style = list(
+        labelFill = '#fff',
+        labelPlacement = "center",
+        labelText = JS(
+          "(d) => {
+              return d.id
+            }"
+        )
+      )
+    )
+  )
+```
+
+For more on node styles, see the [nodes vignette](nodes.qmd).
+
+The focus node can be set to any node in the graph. The `focusNode` parameter is used to specify the central node around which the radial layout is arranged. 
+```{r}
+g6(radial$nodes, radial$edges) |>
+  g6_layout(radial_layout(focusNode = "22")) |>
+  g6_options(
+    node = list(
+      style = list(
+        labelFill = '#fff',
+        labelPlacement = "center",
+        labelText = JS(
+          "(d) => {
+              return d.id
+            }"
+        )
+      )
+    )
+  )
+```
+
+The `concentric_layout()` function arranges nodes in concentric circles, based on their degree or other attributes. This layout is useful for visualizing the structure of networks with varying node importance or connectivity.
+The `sortBy` parameter can be used to sort nodes by degree, or any other existing node attribute.
+```{r}
+g6(lesmis$nodes, lesmis$edges) |>
+  g6_layout(concentric_layout(sortBy = "degree", preventOverlap = TRUE))
+```
+
+## Tree layouts
+
+The package also implements layouts for trees. The `dendrogram_layout()` function is a wrapper around the [Dendrogram layout algorithm](https://g6.antv.antgroup.com/en/manual/layout/build-in/dendrogram-layout).
+
+```{r}
+g6(tree$nodes, tree$edges) |>
+  g6_layout(dendrogram_layout(nodeSep = 36, rankSep = 250)) |>
+  g6_options(edge = list(type = "cubic-horizontal"), autoFit = "view")
+```
+
+More on edge styles can be found in the [edges vignette](edges.qmd).
+
+The direction of the dendrogram can be changed using the `direction` parameter. The default is "LR" (left to right), but it can for example also be set to "TB" (top to bottom).
+```{r}
+g6(tree$nodes, tree$edges) |>
+  g6_layout(dendrogram_layout(nodeSep = 36, rankSep = 250, direction = "TB")) |>
+  g6_options(edge = list(type = "cubic-horizontal"), autoFit = "view")
+```
+
+The `compact_box_layout()` function is a wrapper around the [Compact Box layout algorithm](https://g6.antv.antgroup.com/en/manual/layout/build-in/compact-box-layout). It can be used to create compact visualizations of trees.
+```{r}
+g6(tree$nodes, tree$edges) |>
+  g6_layout(compact_box_layout(
+    getHeight = JS(
+      "function getHeight() {
+          return 32;
+        }"
+    ),
+    getWidth = JS(
+      "function getWidth() {
+          return 32;
+        }"
+    ),
+    getVGap = JS(
+      "function getVGap() {
+          return 10;
+        }"
+    ),
+    getHGap = JS(
+      "function getHGap() {
+          return 100;
+        }"
+    )
+  )) |>
+  g6_options(edge = list(type = "cubic-horizontal"), autoFit = "view")
+```
+
+## Manual layout
+
+Sometimes, you might want to manually specify the positions of nodes in a graph. 
+The most straightforward way to do this is to add the coordinates to the nodes data frame and use the `g6_options()` function to set the node styles accordingly.
+```{r}
+g6(lesmis$nodes, lesmis$edges) |>
+  g6_options(
+    node = list(
+      style = list(
+        x = JS("(d) => {return 500*d.x}"),
+        y = JS("(d) => {return 500*d.y}")
+      )
+    )
+  )
+```

@@ -29,5 +29,5 @@ Suggests:
     igraph
 VignetteBuilder: quarto, knitr
 Depends: 
-    R (>= 3.5)
+    R (>= 4.1.0)
 LazyData: true

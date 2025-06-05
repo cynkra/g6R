@@ -77,6 +77,26 @@ validate_layout <- function(x) {
   x
 }
 
+# Generic layout constructor that inspects its caller
+build_layout <- function(type, ...) {
+  # Which function called build_layout?
+  caller_fun <- sys.function(sys.parent())
+  caller_env <- parent.frame()
+
+  #Get formal argument names from caller function
+  caller_formals <- setdiff(names(formals(caller_fun)), "...")
+
+  named_params <- mget(
+    caller_formals,
+    envir = caller_env,
+    ifnotfound = list(NULL)
+  )
+
+  named_params <- dropNulls(named_params)
+  extra_params <- list(...)
+  c(list(type = type), named_params, extra_params)
+}
+
 #' Generate G6 AntV Dagre layout configuration
 #'
 #' This function creates a configuration list for G6 AntV Dagre layout
@@ -229,22 +249,7 @@ antv_dagre_layout <- function(
   if (!is.null(focusNode) && radial == FALSE) {
     warning("focusNode is only effective when radial is TRUE")
   }
-
-  # Use dropNulls function to remove NULL elements
-  # Assuming dropNulls is defined elsewhere in your package
-  named_params <- dropNulls(mget(
-    setdiff(names(formals()), "..."),
-    environment()
-  ))
-
-  # Collect additional parameters from ellipsis
-  extra_params <- list(...)
-
-  # Add type parameter (internal)
-  config <- list(type = "antv-dagre")
-
-  # Merge with named parameters and additional parameters
-  c(config, named_params, extra_params)
+  build_layout("antv-dagre", ...)
 }
 
 #' Generate G6 AntV circular layout configuration
@@ -369,17 +374,7 @@ circular_layout <- function(
     stop("height must be a positive numeric value")
   }
 
-  # Get all named parameters as a list
-  named_params <- dropNulls(mget(
-    setdiff(names(formals()), "..."),
-    environment()
-  ))
-  # Collect additional parameters from ellipsis
-  extra_params <- list(...)
-  # Add type parameter (internal)
-  config <- list(type = "circular")
-  # Merge with named parameters and additional parameters
-  c(config, named_params, extra_params)
+  build_layout("circular", ...)
 }
 
 #' Generate G6 AntV Compact Box layout configuration
@@ -476,22 +471,7 @@ compact_box_layout <- function(
     stop("radial must be a logical value (TRUE or FALSE)")
   }
 
-  # Get all named parameters as a list
-  # Use dropNulls function to remove NULL elements
-  # Assuming dropNulls is defined elsewhere in your package
-  named_params <- dropNulls(mget(
-    setdiff(names(formals()), "..."),
-    environment()
-  ))
-
-  # Collect additional parameters from ellipsis
-  extra_params <- list(...)
-
-  # Add type parameter (internal)
-  config <- list(type = "compact-box")
-
-  # Merge with named parameters and additional parameters
-  c(config, named_params, extra_params)
+  build_layout("compact-box", ...)
 }
 
 #' Generate G6 D3 Force layout configuration
@@ -618,17 +598,7 @@ d3_force_layout <- function(
       }
     }
   }
-
-  named_params <- dropNulls(mget(
-    setdiff(names(formals()), "..."),
-    environment()
-  ))
-  # Collect additional parameters from ellipsis
-  extra_params <- list(...)
-  # Add type parameter (internal)
-  config <- list(type = "d3-force")
-  # Merge with named parameters and additional parameters
-  c(config, named_params, extra_params)
+  build_layout("d3-force", ...)
 }
 
 #' Generate G6 AntV Concentric layout configuration
@@ -797,23 +767,7 @@ concentric_layout <- function(
       stop("sweep must be a number")
     }
   }
-
-  # Get all named parameters as a list
-  # Use dropNulls function to remove NULL elements
-  # Assuming dropNulls is defined elsewhere in your package
-  named_params <- dropNulls(mget(
-    setdiff(names(formals()), "..."),
-    environment()
-  ))
-
-  # Collect additional parameters from ellipsis
-  extra_params <- list(...)
-
-  # Add type parameter (internal)
-  config <- list(type = "concentric")
-
-  # Merge with named parameters and additional parameters
-  c(config, named_params, extra_params)
+  build_layout("concentric", ...)
 }
 
 #' Generate G6 AntV Dagre layout configuration
@@ -909,21 +863,356 @@ dagre_layout <- function(
   if (!is.logical(controlPoints)) {
     stop("controlPoints must be a logical value (TRUE or FALSE)")
   }
+  build_layout("dagre", ...)
+}
 
-  # Get all named parameters as a list
-  # Use dropNulls function to remove NULL elements
-  # Assuming dropNulls is defined elsewhere in your package
-  named_params <- dropNulls(mget(
-    setdiff(names(formals()), "..."),
-    environment()
-  ))
 
-  # Collect additional parameters from ellipsis
-  extra_params <- list(...)
+#' Generate G6 Force Atlas2 layout configuration
+#'
+#' This function creates a configuration list for G6 Force Atlas2 layout
+#' with all available options as parameters.
+#'
+#' @param barnesHut Logical. Whether to enable quadtree acceleration. When enabled, improves performance for large graphs but may affect layout quality. By default, enabled if node count > 250.
+#' @param dissuadeHubs Logical. Whether to enable hub mode. If TRUE, nodes with higher in-degree are more likely to be placed at the center than those with high out-degree. Defaults to FALSE.
+#' @param height Numeric. Layout height. Defaults to container height.
+#' @param kg Numeric. Gravity coefficient. The larger the value, the more concentrated the layout is at the center. Defaults to 1.
+#' @param kr Numeric. Repulsion coefficient. Adjusts the compactness of the layout. The larger the value, the looser the layout. Defaults to 5.
+#' @param ks Numeric. Controls the speed of node movement during iteration. Defaults to 0.1.
+#' @param ksmax Numeric. Maximum node movement speed during iteration. Defaults to 10.
+#' @param mode Character. Clustering mode. Options are "normal" or "linlog". In "linlog" mode, clusters are more compact. Defaults to "normal".
+#' @param nodeSize Numeric or function. Node size (diameter). Used for repulsion calculation when preventOverlap is enabled. If not set, uses data.size in node data.
+#' @param preventOverlap Logical. Whether to prevent node overlap. When enabled, layout considers node size to avoid overlap. Node size is specified by \code{nodeSize} or \code{data.size} in node data. Defaults to FALSE.
+#' @param prune Logical. Whether to enable auto-pruning. By default, enabled if node count > 100. Pruning speeds up convergence but may reduce layout quality. Set to FALSE to disable auto-activation.
+#' @param tao Numeric. Tolerance for stopping oscillation when layout is near convergence. Defaults to 0.1.
+#' @param width Numeric. Layout width. Defaults to container width.
+#' @param center Numeric vector of length 2. Layout center in the form \code{[x, y]}. Each node is attracted to this point, with gravity controlled by \code{kg}. If not set, uses canvas center.
+#' @param ... Additional parameters to pass to the layout.
+#' See \url{https://g6.antv.antgroup.com/manual/layout/build-in/force-atlas2-layout}.
+#'
+#' @return A list containing the configuration for G6 force atlas2 with class "g6-layout"
+#' @export
+#'
+#' @examples
+#' \dontrun{
+#'  g6(lesmis$nodes, lesmis$edges) |>
+#'    g6_layout(force_atlas2_layout(
+#'      kr = 20,
+#'      preventOverlap = TRUE,
+#'      center = c(250, 250))) |>
+#'    g6_options(autoResize = TRUE) |>
+#'    g6_behaviors(
+#'      "zoom-canvas",
+#'      drag_element()
+#'    )
+#'}
+force_atlas2_layout <- function(
+  barnesHut = NULL,
+  dissuadeHubs = FALSE,
+  height = NULL,
+  kg = 1,
+  kr = 5,
+  ks = 0.1,
+  ksmax = 10,
+  mode = "normal",
+  nodeSize = NULL,
+  preventOverlap = FALSE,
+  prune = NULL,
+  tao = 0.1,
+  width = NULL,
+  center = NULL,
+  ...
+) {
+  if (!is.null(barnesHut) && !is.logical(barnesHut)) {
+    stop("'barnesHut' must be NULL or logical (TRUE/FALSE)")
+  }
 
-  # Add type parameter (internal)
-  config <- list(type = "dagre")
+  if (!is.logical(dissuadeHubs)) {
+    stop("'dissuadeHubs' must be logical (TRUE/FALSE)")
+  }
 
-  # Merge with named parameters and additional parameters
-  c(config, named_params, extra_params)
+  if (
+    !is.null(height) &&
+      (!is.numeric(height) || length(height) != 1 || height < 0)
+  ) {
+    stop("'height' must be a single non-negative number or NULL")
+  }
+
+  if (!is.numeric(kg) || length(kg) != 1 || kg < 0) {
+    stop("'kg' must be a single non-negative number")
+  }
+
+  if (!is.numeric(kr) || length(kr) != 1 || kr < 0) {
+    stop("'kr' must be a single non-negative number")
+  }
+
+  if (!is.numeric(ks) || length(ks) != 1 || ks < 0) {
+    stop("'ks' must be a single non-negative number")
+  }
+
+  if (!is.numeric(ksmax) || length(ksmax) != 1 || ksmax < 0) {
+    stop("'ksmax' must be a single non-negative number")
+  }
+
+  if (!is.character(mode) || !(mode %in% c("normal", "linlog"))) {
+    stop("'mode' must be one of 'normal' or 'linlog'")
+  }
+
+  if (!is.null(nodeSize) && !is.numeric(nodeSize) && !is_js(nodeSize)) {
+    stop("'nodeSize' must be a numeric value, a function, or NULL")
+  }
+
+  if (!is.logical(preventOverlap)) {
+    stop("'preventOverlap' must be logical (TRUE/FALSE)")
+  }
+
+  if (!is.null(prune) && !is.logical(prune)) {
+    stop("'prune' must be logical (TRUE/FALSE) or NULL")
+  }
+
+  if (!is.numeric(tao) || length(tao) != 1 || tao < 0) {
+    stop("'tao' must be a single non-negative number")
+  }
+
+  if (
+    !is.null(width) && (!is.numeric(width) || length(width) != 1 || width < 0)
+  ) {
+    stop("'width' must be a single non-negative number or NULL")
+  }
+
+  if (!is.null(center)) {
+    if (!is.numeric(center) || length(center) != 2) {
+      stop("'center' must be a numeric vector of length 2 or NULL")
+    }
+  }
+  build_layout("force-atlas2", ...)
+}
+
+#' Generate G6 Fruchterman layout configuration
+#'
+#' This function creates a configuration list for G6 Fruchterman layout
+#' with all available options as parameters.
+#' @param height Numeric. Layout height. Defaults to container height.
+#' @param width Numeric. Layout width. Defaults to container width.
+#' @param gravity Numeric. Central force attracting nodes to the center. Larger values make the layout more compact. Defaults to 10.
+#' @param speed Numeric. Node movement speed per iteration. Higher values may cause oscillation. Defaults to 5.
+#' @param ... Additional parameters to pass to the layout.
+#' See \url{https://g6.antv.antgroup.com/en/manual/layout/build-in/fruchterman-layout}.
+#'
+#' @return A list containing the configuration for G6 fruchterman with class "g6-layout"
+#' @export
+#' @examples
+#' \dontrun{
+#' g6(lesmis$nodes, lesmis$edges) |>
+#'  g6_layout(fruchterman_layout(
+#'    gravity = 5,
+#'    speed = 5
+#'  )) |>
+#'  g6_behaviors(
+#'    "zoom-canvas",
+#'    drag_element()
+#'  )
+#' }
+#'
+fruchterman_layout <- function(
+  height = NULL,
+  width = NULL,
+  gravity = 10,
+  speed = 5,
+  ...
+) {
+  if (
+    !is.null(height) &&
+      (!is.numeric(height) || length(height) != 1 || height < 0)
+  ) {
+    stop("'height' must be a single non-negative number or NULL")
+  }
+
+  if (
+    !is.null(width) && (!is.numeric(width) || length(width) != 1 || width < 0)
+  ) {
+    stop("'width' must be a single non-negative number or NULL")
+  }
+
+  if (!is.numeric(gravity) || length(gravity) != 1 || gravity < 0) {
+    stop("'gravity' must be a single non-negative number")
+  }
+
+  if (!is.numeric(speed) || length(speed) != 1 || speed < 0) {
+    stop("'speed' must be a single non-negative number")
+  }
+  build_layout("fruchterman", ...)
+}
+
+#' Generate G6 Radial layout configuration
+#'
+#' This function creates a configuration list for G6 Radial layout
+#' with all available options as parameters.
+#'
+#' @param center Numeric vector of length 2. Center coordinates.
+#' @param focusNode Character, list (Node), or NULL. Radiating center node. Defaults to NULL.
+#' @param height Numeric. Canvas height.
+#' @param width Numeric. Canvas width.
+#' @param nodeSize Numeric. Node size (diameter).
+#' @param nodeSpacing Numeric or function. Minimum node spacing (effective when preventing overlap). Defaults to 10.
+#' @param linkDistance Numeric. Edge length. Defaults to 50.
+#' @param unitRadius Numeric or NULL. Radius per circle. Defaults to 100.
+#' @param maxIteration Numeric. Maximum number of iterations. Defaults to 1000.
+#' @param maxPreventOverlapIteration Numeric. Max iterations for overlap prevention. Defaults to 200.
+#' @param preventOverlap Logical. Whether to prevent node overlap. Defaults to FALSE.
+#' @param sortBy Character. Field for sorting nodes in the same layer.
+#' @param sortStrength Numeric. Sorting strength for nodes in the same layer. Defaults to 10.
+#' @param strictRadial Logical. Strictly place nodes in the same layer on the same ring. Defaults to TRUE.
+#' @param ... Additional parameters to pass to the layout.
+#' See \url{https://g6.antv.antgroup.com/en/manual/layout/build-in/radial-layout}.
+#'
+#' @return A list containing the configuration for G6 radial layout with class "g6-layout"
+#' @export
+#' @examples
+#' \dontrun{
+#' radial <- jsonlite::fromJSON("https://assets.antv.antgroup.com/g6/radial.json")
+#' g6(radial$nodes, radial$edges) |>
+#'   g6_layout(radial_layout(
+#'     unitRadius = 100,
+#'     linkDistance = 200
+#'   )) |>
+#'   g6_behaviors(
+#'     "zoom-canvas",
+#'     drag_element()
+#'   )
+#' }
+#'
+radial_layout <- function(
+  center = NULL,
+  focusNode = NULL,
+  height = NULL,
+  width = NULL,
+  nodeSize = NULL,
+  nodeSpacing = 10,
+  linkDistance = 50,
+  unitRadius = 100,
+  maxIteration = 1000,
+  maxPreventOverlapIteration = 200,
+  preventOverlap = FALSE,
+  sortBy = NULL,
+  sortStrength = 10,
+  strictRadial = TRUE,
+  ...
+) {
+  if (!is.null(center)) {
+    if (!is.numeric(center) || length(center) != 2) {
+      stop("'center' must be a numeric vector of length 2 or NULL")
+    }
+  }
+
+  if (!is.null(focusNode) && !(is.character(focusNode) || is.list(focusNode))) {
+    stop("'focusNode' must be a character string, a list (Node), or NULL")
+  }
+
+  if (
+    !is.null(height) &&
+      (!is.numeric(height) || length(height) != 1 || height < 0)
+  ) {
+    stop("'height' must be a single non-negative number or NULL")
+  }
+
+  if (
+    !is.null(width) && (!is.numeric(width) || length(width) != 1 || width < 0)
+  ) {
+    stop("'width' must be a single non-negative number or NULL")
+  }
+
+  if (
+    !is.null(nodeSize) &&
+      (!is.numeric(nodeSize) || length(nodeSize) != 1 || nodeSize < 0)
+  ) {
+    stop("'nodeSize' must be a single non-negative number or NULL")
+  }
+
+  if (!is.numeric(nodeSpacing) && !is.function(nodeSpacing)) {
+    stop("'nodeSpacing' must be a number or a function")
+  }
+
+  if (
+    !is.numeric(linkDistance) || length(linkDistance) != 1 || linkDistance < 0
+  ) {
+    stop("'linkDistance' must be a single non-negative number")
+  }
+
+  if (
+    !is.null(unitRadius) &&
+      (!is.numeric(unitRadius) || length(unitRadius) != 1 || unitRadius < 0)
+  ) {
+    stop("'unitRadius' must be a single non-negative number or NULL")
+  }
+
+  if (
+    !is.numeric(maxIteration) || length(maxIteration) != 1 || maxIteration < 1
+  ) {
+    stop("'maxIteration' must be a positive number")
+  }
+
+  if (
+    !is.numeric(maxPreventOverlapIteration) ||
+      length(maxPreventOverlapIteration) != 1 ||
+      maxPreventOverlapIteration < 1
+  ) {
+    stop("'maxPreventOverlapIteration' must be a positive number")
+  }
+
+  if (!is.logical(preventOverlap) || length(preventOverlap) != 1) {
+    stop("'preventOverlap' must be a logical value")
+  }
+
+  if (!is.null(sortBy) && (!is.character(sortBy) || length(sortBy) != 1)) {
+    stop("'sortBy' must be a character string or NULL")
+  }
+
+  if (
+    !is.numeric(sortStrength) || length(sortStrength) != 1 || sortStrength < 0
+  ) {
+    stop("'sortStrength' must be a single non-negative number")
+  }
+
+  if (!is.logical(strictRadial) || length(strictRadial) != 1) {
+    stop("'strictRadial' must be a logical value")
+  }
+
+  build_layout("radial", ...)
+}
+
+#' Generate G6 Dendrogram layout configuration
+#'
+#' This function creates a configuration list for G6 Dendrogram layout
+#' with all available options as parameters.
+#'
+#' @param direction Character. Layout direction. Options: "LR", "RL", "TB", "BT", "H", "V". Defaults to "LR".
+#' @param nodeSep Numeric. Node spacing, distance between nodes on the same level. Defaults to 20.
+#' @param rankSep Numeric. Rank spacing, distance between different levels. Defaults to 200.
+#' @param radial Logical. Whether to enable radial layout. Defaults to FALSE.
+#' @param ... Additional parameters to pass to the layout.
+#' See \url{https://g6.antv.antgroup.com/en/manual/layout/build-in/dendrogram-layout}.
+#'
+#' @return A list containing the configuration for G6 dendrogram layout with class "g6-layout"
+#' @export
+dendrogram_layout <- function(
+  direction = c("LR", "RL", "TB", "BT", "H", "V"),
+  nodeSep = 20,
+  rankSep = 200,
+  radial = FALSE,
+  ...
+) {
+  directions <- match.arg(direction)
+
+  if (!is.numeric(nodeSep) || length(nodeSep) != 1 || nodeSep < 0) {
+    stop("'nodeSep' must be a single non-negative number")
+  }
+
+  if (!is.numeric(rankSep) || length(rankSep) != 1 || rankSep < 0) {
+    stop("'rankSep' must be a single non-negative number")
+  }
+
+  if (!is.logical(radial) || length(radial) != 1) {
+    stop("'radial' must be a logical value")
+  }
+  build_layout("dendrogram", ...)
 }

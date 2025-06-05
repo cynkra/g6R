@@ -21,7 +21,7 @@ library(g6R)
 library(igraph)
 ```
 
-g6r supports igraph objects via the function `g6_igraph()`. Instead of a nodes and edges data frame, it accepts an igraph object as input.
+`g6R` supports igraph objects via the function `g6_igraph()`. Instead of a nodes and edges data frame, it accepts an igraph object as input.
 ```{r}
 kite <- make_graph("Krackhardt kite")
 g6_igraph(kite) |>
