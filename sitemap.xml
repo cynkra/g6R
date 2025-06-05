@@ -5,6 +5,7 @@
 <url><loc>https://cynkra.github.io/g6R/articles/g6R.html</loc></url>
 <url><loc>https://cynkra.github.io/g6R/articles/igraph.html</loc></url>
 <url><loc>https://cynkra.github.io/g6R/articles/index.html</loc></url>
+<url><loc>https://cynkra.github.io/g6R/articles/layouts.html</loc></url>
 <url><loc>https://cynkra.github.io/g6R/authors.html</loc></url>
 <url><loc>https://cynkra.github.io/g6R/index.html</loc></url>
 <url><loc>https://cynkra.github.io/g6R/news/index.html</loc></url>
@@ -25,7 +26,9 @@
 <url><loc>https://cynkra.github.io/g6R/reference/context_menu.html</loc></url>
 <url><loc>https://cynkra.github.io/g6R/reference/create_edge.html</loc></url>
 <url><loc>https://cynkra.github.io/g6R/reference/d3_force_layout.html</loc></url>
+<url><loc>https://cynkra.github.io/g6R/reference/dag.html</loc></url>
 <url><loc>https://cynkra.github.io/g6R/reference/dagre_layout.html</loc></url>
+<url><loc>https://cynkra.github.io/g6R/reference/dendrogram_layout.html</loc></url>
 <url><loc>https://cynkra.github.io/g6R/reference/drag_canvas.html</loc></url>
 <url><loc>https://cynkra.github.io/g6R/reference/drag_element.html</loc></url>
 <url><loc>https://cynkra.github.io/g6R/reference/drag_element_force.html</loc></url>
@@ -36,6 +39,8 @@
 <url><loc>https://cynkra.github.io/g6R/reference/fish_eye.html</loc></url>
 <url><loc>https://cynkra.github.io/g6R/reference/fix_element_size.html</loc></url>
 <url><loc>https://cynkra.github.io/g6R/reference/focus_element.html</loc></url>
+<url><loc>https://cynkra.github.io/g6R/reference/force_atlas2_layout.html</loc></url>
+<url><loc>https://cynkra.github.io/g6R/reference/fruchterman_layout.html</loc></url>
 <url><loc>https://cynkra.github.io/g6R/reference/fullscreen.html</loc></url>
 <url><loc>https://cynkra.github.io/g6R/reference/g6-add.html</loc></url>
 <url><loc>https://cynkra.github.io/g6R/reference/g6-combo-action.html</loc></url>
@@ -67,15 +72,19 @@
 <url><loc>https://cynkra.github.io/g6R/reference/index.html</loc></url>
 <url><loc>https://cynkra.github.io/g6R/reference/lasso_select.html</loc></url>
 <url><loc>https://cynkra.github.io/g6R/reference/legend.html</loc></url>
+<url><loc>https://cynkra.github.io/g6R/reference/lesmis.html</loc></url>
 <url><loc>https://cynkra.github.io/g6R/reference/minimap.html</loc></url>
 <url><loc>https://cynkra.github.io/g6R/reference/node_options.html</loc></url>
 <url><loc>https://cynkra.github.io/g6R/reference/node_style_options.html</loc></url>
 <url><loc>https://cynkra.github.io/g6R/reference/optimize_viewport_transform.html</loc></url>
+<url><loc>https://cynkra.github.io/g6R/reference/radial.html</loc></url>
+<url><loc>https://cynkra.github.io/g6R/reference/radial_layout.html</loc></url>
 <url><loc>https://cynkra.github.io/g6R/reference/scroll_canvas.html</loc></url>
 <url><loc>https://cynkra.github.io/g6R/reference/snapline.html</loc></url>
 <url><loc>https://cynkra.github.io/g6R/reference/timebar.html</loc></url>
 <url><loc>https://cynkra.github.io/g6R/reference/toolbar.html</loc></url>
 <url><loc>https://cynkra.github.io/g6R/reference/tooltips.html</loc></url>
+<url><loc>https://cynkra.github.io/g6R/reference/tree.html</loc></url>
 <url><loc>https://cynkra.github.io/g6R/reference/watermark.html</loc></url>
 <url><loc>https://cynkra.github.io/g6R/reference/zoom_canvas.html</loc></url>
 </urlset>
