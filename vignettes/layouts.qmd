@@ -37,7 +37,8 @@ G6 implements several force-directed layouts, which simulate physical forces to 
 The D3 force layout has quite sensible defaults.
 ```{r}
 g6(lesmis$nodes, lesmis$edges) |>
-  g6_layout(d3_force_layout())
+  g6_layout(d3_force_layout()) |>
+  g6_options(autoFit = "view", autoResize = TRUE)
 ```
 
 The Force Atlas2 layout might need some parameter tweaking to get the best results. 
@@ -54,7 +55,8 @@ The [Fruchterman layout](https://g6.antv.antgroup.com/en/manual/layout/build-in/
 
 ```{r}
 g6(radial$nodes, radial$edges) |>
-  g6_layout(fruchterman_layout())
+  g6_layout(fruchterman_layout()) |>
+  g6_options(autoFit = "view", autoResize = TRUE)
 ```
 
 ## Circular layouts
@@ -65,7 +67,8 @@ THe `circular_layout()` function arranges nodes in a circle. This has a very lim
 
 ```{r}
 g6(radial$nodes, radial$edges) |>
-  g6_layout(circular_layout())
+  g6_layout(circular_layout()) |>
+  g6_options(autoFit = "view", autoResize = TRUE)
 ```
 
 The `radial_layout()` function arranges nodes in a radial pattern, which is useful for hierarchical structures. It positions nodes around a central node, making it easier to visualize hierarchical relationships.
@@ -74,6 +77,7 @@ The `radial_layout()` function arranges nodes in a radial pattern, which is usef
 g6(radial$nodes, radial$edges) |>
   g6_layout(radial_layout()) |>
   g6_options(
+    autoFit = "view", autoResize = TRUE,
     node = list(
       style = list(
         labelFill = '#fff',
@@ -95,6 +99,7 @@ The focus node can be set to any node in the graph. The `focusNode` parameter is
 g6(radial$nodes, radial$edges) |>
   g6_layout(radial_layout(focusNode = "22")) |>
   g6_options(
+    autoFit = "view", autoResize = TRUE,
     node = list(
       style = list(
         labelFill = '#fff',
@@ -113,7 +118,8 @@ The `concentric_layout()` function arranges nodes in concentric circles, based o
 The `sortBy` parameter can be used to sort nodes by degree, or any other existing node attribute.
 ```{r}
 g6(lesmis$nodes, lesmis$edges) |>
-  g6_layout(concentric_layout(sortBy = "degree", preventOverlap = TRUE))
+  g6_layout(concentric_layout(sortBy = "degree", preventOverlap = TRUE)) |>
+  g6_options(autoFit = "view", autoResize = TRUE)
 ```
 
 ## Tree layouts
@@ -122,7 +128,7 @@ The package also implements layouts for trees. The `dendrogram_layout()` functio
 
 ```{r}
 g6(tree$nodes, tree$edges) |>
-  g6_layout(dendrogram_layout(nodeSep = 36, rankSep = 250)) |>
+  g6_layout(dendrogram_layout(nodeSep = 36, rankSep = 250, direction = "LR")) |>
   g6_options(edge = list(type = "cubic-horizontal"), autoFit = "view")
 ```
 
@@ -170,6 +176,7 @@ The most straightforward way to do this is to add the coordinates to the nodes d
 ```{r}
 g6(lesmis$nodes, lesmis$edges) |>
   g6_options(
+    autoFit = "View",
     node = list(
       style = list(
         x = JS("(d) => {return 500*d.x}"),
