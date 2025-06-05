@@ -15,7 +15,7 @@ g6_update_combos(graph, combos)
 \arguments{
 \item{graph}{A g6_proxy object created with \code{\link{g6_proxy}}.}
 
-\item{nodes, }{edges, combos A data frame or list specifying
+\item{nodes, edges, combos}{A data frame or list specifying
 the nodes/edges/combos to be updated. All elements have to be of the same type,
 you can't mix nodes with edges.}
 }

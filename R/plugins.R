@@ -65,7 +65,7 @@
 #' plugins <- g6_plugins(
 #'   minimap(),
 #'   grid_line(),
-#'   tooltip(
+#'   tooltips(
 #'     getContent = JS("(e, items) => {
 #'       return `<div>${items[0].id}</div>`;
 #'     }")
@@ -376,35 +376,8 @@ context_menu <- function(
   className = "g6-contextmenu",
   trigger = "contextmenu",
   offset = c(4, 4),
-  onClick = JS(
-    "(value, target, current) => {
-      const graph = HTMLWidgets.find(`#${target.closest('.g6').id}`).getWidget();
-      if (current.id === undefined) return;
-      if (value === 'create_edge') {
-        graph.updateBehavior({
-          key: 'create-edge', // Specify the behavior to update
-          enable: true,
-        });
-        // Select node
-        graph.setElementState(current.id, 'selected');
-        // Disable drag node as it is incompatible with edge creation
-        graph.updateBehavior({ key: 'drag-element', enable: false });
-        graph.updateBehavior({ key: 'drag-element-force', enable: false });
-      } else if (value === 'remove_node') {
-        graph.removeNodeData([current.id]);
-        graph.draw();
-      }
-    }
-    "
-  ),
-  getItems = JS(
-    "() => {
-      return [
-        { name: 'Create edge', value: 'create_edge' },
-        { name: 'Remove node', value: 'remove_node' }
-      ];
-    }"
-  ),
+  onClick = NULL,
+  getItems = NULL,
   getContent = NULL,
   loadingContent = NULL,
   enable = JS("(e) => e.targetType === 'node'"),
@@ -463,6 +436,44 @@ context_menu <- function(
   # Get values of only the named parameters
   config <- mget(arg_names)
   config$type <- "contextmenu"
+
+  # Provide default for onSelect for Shiny context
+  if (is.null(config$onClick)) {
+    config$onClick <- JS(
+      "(value, target, current) => {
+        const graph = HTMLWidgets
+          .find(`#${target.closest('.g6').id}`)
+          .getWidget();
+        if (current.id === undefined) return;
+        if (value === 'create_edge') {
+          graph.updateBehavior({
+            key: 'create-edge', // Specify the behavior to update
+            enable: true,
+          });
+          // Select node
+          graph.setElementState(current.id, 'selected');
+          // Disable drag node as it is incompatible with edge creation
+          graph.updateBehavior({ key: 'drag-element', enable: false });
+          graph.updateBehavior({ key: 'drag-element-force', enable: false });
+        } else if (value === 'remove_node') {
+          graph.removeNodeData([current.id]);
+          graph.draw();
+        }
+      }
+    "
+    )
+  }
+
+  if (is.null(config$getItems)) {
+    config$getItems <- JS(
+      "() => {
+        return [
+          { name: 'Create edge', value: 'create_edge' },
+          { name: 'Remove node', value: 'remove_node' }
+        ];
+      }"
+    )
+  }
 
   # Drop NULL elements
   dropNulls(c(config, list(...)))
@@ -789,9 +800,9 @@ fish_eye <- function(
     stop("'style' must be a list")
   }
 
-  if (!is.null(nodeStyle) && !is.list(nodeStyle)) {
+  if (!is.null(nodeStyle) && !is.list(nodeStyle) && !is_js(nodeStyle)) {
     stop(
-      "'nodeStyle' must be a list."
+      "'nodeStyle' must be a list or a JS function returning style properties."
     )
   }
 
@@ -1968,16 +1979,7 @@ timebar <- function(
 #'   }")
 #' )
 toolbar <- function(
-  getItems = JS(
-    "( ) => [   
-        { id : 'zoom-in' , value : 'zoom-in' } ,  
-        { id : 'zoom-out' , value : 'zoom-out' } ,   
-        { id : 'auto-fit' , value : 'auto-fit' } ,
-        { id: 'delete', value: 'delete' }, 
-        { id: 'request-fullscreen', value: 'request-fullscreen' },
-        { id: 'exit-fullscreen', value: 'exit-fullscreen' },
-      ]"
-  ),
+  getItems = NULL,
   key = "toolbar",
   className = NULL,
   position = c(
@@ -1991,36 +1993,7 @@ toolbar <- function(
     "left"
   ),
   style = NULL,
-  onClick = JS(
-    "( value, target, current ) => {   
-        // Handle button click events
-      const graph = HTMLWidgets.find(`#${target.closest('.g6').id}`).getWidget();
-      const fullScreen = graph.getPluginInstance('fullscreen');
-      const zoomLevel = graph.getZoom();
-        if ( value === 'zoom-in' ) {   
-          graph.zoomTo (graph.getZoom() + 0.1);
-        } else if ( value === 'zoom-out' ) {     
-          graph.zoomTo (graph.getZoom() - 0.1);
-        } else if ( value === 'auto-fit' ) {     
-          graph.fitView ( ) ;
-        } else if (value === 'delete') {
-          const selectedNodes = graph.getElementDataByState('node', 'selected').map((node) => {
-            return node.id
-          });
-          graph.removeNodeData(selectedNodes);
-          graph.draw();
-        } else if (value === 'request-fullscreen') {
-          if (fullScreen !== undefined) {
-            fullScreen.request();
-          }
-        } else if (value === 'exit-fullscreen') {
-          if (fullScreen !== undefined) {
-            fullScreen.exit();
-          }
-        }
-      }
-    "
-  ),
+  onClick = NULL,
   ...
 ) {
   # Check if required parameter is provided
@@ -2034,7 +2007,7 @@ toolbar <- function(
     stop("'style' must be a list")
   }
 
-  if (!is_js(getItems)) {
+  if (!is.null(getItems) && !is_js(getItems)) {
     stop(
       "'getItems' must be a JavaScript function wrapped with JS()"
     )
@@ -2052,6 +2025,58 @@ toolbar <- function(
   # Get values of only the named parameters
   config <- mget(arg_names)
   config$type <- "toolbar"
+
+  # Default
+  if (is.null(config$getItems)) {
+    config$getItems <- JS(
+      "( ) => [
+        { id : 'zoom-in' , value : 'zoom-in' },
+        { id : 'zoom-out' , value : 'zoom-out' },
+        { id : 'auto-fit' , value : 'auto-fit' },
+        { id: 'delete', value: 'delete' },
+        { id: 'request-fullscreen', value: 'request-fullscreen' },
+        { id: 'exit-fullscreen', value: 'exit-fullscreen' },
+      ]"
+    )
+  }
+
+  if (is.null(config$onClick)) {
+    config$onClick <- JS(
+      "( value, target, current ) => {   
+        // Handle button click events
+        const graph = HTMLWidgets
+          .find(`#${target.closest('.g6').id}`)
+          .getWidget();
+        const fullScreen = graph.getPluginInstance('fullscreen');
+        const zoomLevel = graph.getZoom();
+        if ( value === 'zoom-in' ) {   
+          graph.zoomTo (graph.getZoom() + 0.25);
+        } else if ( value === 'zoom-out' ) {     
+          graph.zoomTo (graph.getZoom() - 0.25);
+        } else if ( value === 'auto-fit' ) {     
+          graph.fitView ( ) ;
+        } else if (value === 'delete') {
+          const selectedNodes = graph
+            .getElementDataByState('node', 'selected')
+            .map((node) => {
+              return node.id
+            }
+          );
+          graph.removeNodeData(selectedNodes);
+          graph.draw();
+        } else if (value === 'request-fullscreen') {
+          if (fullScreen !== undefined) {
+            fullScreen.request();
+          }
+        } else if (value === 'exit-fullscreen') {
+          if (fullScreen !== undefined) {
+            fullScreen.exit();
+          }
+        }
+      }
+    "
+    )
+  }
 
   # Drop NULL elements
   dropNulls(c(config, list(...)))

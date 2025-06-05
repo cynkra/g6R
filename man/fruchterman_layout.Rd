@@ -11,7 +11,8 @@ fruchterman_layout(height = NULL, width = NULL, gravity = 10, speed = 5, ...)
 
 \item{width}{Numeric. Layout width. Defaults to container width.}
 
-\item{gravity}{Numeric. Central force attracting nodes to the center. Larger values make the layout more compact. Defaults to 10.}
+\item{gravity}{Numeric. Central force attracting nodes to the center.
+Larger values make the layout more compact. Defaults to 10.}
 
 \item{speed}{Numeric. Node movement speed per iteration. Higher values may cause oscillation. Defaults to 5.}
 

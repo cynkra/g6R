@@ -117,9 +117,10 @@ build_layout <- function(type, ...) {
 #' @param ranker Algorithm for assigning ranks to nodes: "network-simplex", "tight-tree",
 #'   or "longest-path"
 #' @param nodeSize Node size for collision detection. Can be a single number (same width/height),
-#'   an array [width, height], or a function that returns either
+#'   an array \code{[width, height]}, or a function that returns either
 #' @param controlPoints Whether to retain edge control points
-#' @param begin Alignment position of the upper left corner of the layout. Can be [x, y] or [x, y, z]
+#' @param begin Alignment position of the upper left corner of the layout.
+#' Can be \code{[x, y]} or \code{[x, y, z]}
 #' @param sortByCombo Whether to sort nodes on the same layer by parentId to prevent combo overlap
 #' @param edgeLabelSpace Whether to leave space for edge labels
 #' @param nodeOrder Reference array of node order on the same layer, containing node id values
@@ -388,12 +389,17 @@ circular_layout <- function(
 #' @param getSide Function to set the nodes to be arranged on the left/right side
 #'   of the root node. If not set, the algorithm automatically assigns the nodes
 #'   to the left/right side. Note: This parameter is only effective when the layout
-#'   direction is "H". Function format: function(node) { return "left" or "right" }
-#' @param getId Callback function for generating node IDs. Function format: function(node) { return string }
-#' @param getWidth Function to calculate the width of each node. Function format: function(node) { return number }
-#' @param getHeight Function to calculate the height of each node. Function format: function(node) { return number }
-#' @param getHGap Function to calculate the horizontal gap for each node. Function format: function(node) { return number }
-#' @param getVGap Function to calculate the vertical gap for each node. Function format: function(node) { return number }
+#'   direction is "H". Function format: \code{function(node) { return "left" or "right" }}
+#' @param getId Callback function for generating node IDs.
+#' Function format: \code{function(node) { return string }}
+#' @param getWidth Function to calculate the width of each node.
+#' Function format: \code{function(node) { return number }}
+#' @param getHeight Function to calculate the height of each node.
+#' Function format: \code{function(node) { return number }}
+#' @param getHGap Function to calculate the horizontal gap for each node.
+#' Function format: \code{function(node) { return number }}
+#' @param getVGap Function to calculate the vertical gap for each node.
+#' Function format: \code{function(node) { return number }}
 #' @param radial Whether to enable radial layout
 #' @param ... Additional parameters to pass to the layout
 #'
@@ -406,11 +412,7 @@ circular_layout <- function(
 #'
 #' # Vertical compact box layout
 #' box_config <- compact_box_layout(
-#'   direction = "TB",
-#'   getHGap = function(node) {
-#'     if(node$depth == 1) return(80)
-#'     else return(40)
-#'   }
+#'   direction = "TB"
 #' )
 #'
 #' # Radial layout
@@ -607,7 +609,7 @@ d3_force_layout <- function(
 #' with all available options as parameters. The Concentric layout places nodes in
 #' concentric circles based on a centrality measure.
 #'
-#' @param center The center position of the circular layout [x, y] or [x, y, z].
+#' @param center The center position of the circular layout \code{[x, y]} or \code{[x, y, z]}.
 #'   By default, it's the center position of the current container.
 #' @param clockwise Whether nodes are arranged in clockwise order
 #' @param equidistant Whether the distances between rings are equal
@@ -621,7 +623,7 @@ d3_force_layout <- function(
 #'   attribute value of the sorting basis. For example, if sortBy is 'degree', then
 #'   maxValue is the degree of the node with the largest degree among all nodes.
 #' @param nodeSize Node size (diameter). Used to prevent collision detection when nodes overlap.
-#'   Can be a number, a 2-element vector [width, height], or a function that returns a number.
+#'   Can be a number, a 2-element vector \code{[width, height]}, or a function that returns a number.
 #' @param nodeSpacing Minimum distance between rings, used to adjust the radius.
 #'   Can be a number, a vector of numbers, or a function that returns a number.
 #' @param preventOverlap Whether to prevent node overlap. Must be coordinated with the nodeSize
@@ -630,7 +632,7 @@ d3_force_layout <- function(
 #'   in the layout, can node overlap collision detection be performed.
 #' @param startAngle The arc at which to start layout of nodes (in radians)
 #' @param sweep If the radian difference between the first and last nodes in the same layer
-#'   is undefined, it will be set to 2 * Math.PI * (1 - 1 / |level.nodes|), where level.nodes
+#'   is undefined, it will be set to \code{2 * Math.PI * (1 - 1 / |level.nodes|)}, where level.nodes
 #'   is the number of nodes in each layer calculated by the algorithm, and |level.nodes| is
 #'   the number of nodes in the layer.
 #' @param ... Additional parameters to pass to the layout
@@ -789,7 +791,7 @@ concentric_layout <- function(
 #'   simplex algorithm), "tight-tree" (the compact tree algorithm), or "longest-path"
 #'   (the longest path algorithm)
 #' @param nodeSize G6 custom attribute to specify the node size uniformly or for each node.
-#'   Can be a single number (same width/height), an array [width, height],
+#'   Can be a single number (same width/height), an array \code{[width, height]},
 #'   or a function that returns either.
 #' @param controlPoints Whether to keep the control points of the edge
 #' @param ... Additional parameters to pass to the layout
@@ -873,19 +875,34 @@ dagre_layout <- function(
 #' with all available options as parameters.
 #'
 #' @param barnesHut Logical. Whether to enable quadtree acceleration. When enabled, improves performance for large graphs but may affect layout quality. By default, enabled if node count > 250.
-#' @param dissuadeHubs Logical. Whether to enable hub mode. If TRUE, nodes with higher in-degree are more likely to be placed at the center than those with high out-degree. Defaults to FALSE.
+#' @param dissuadeHubs Logical. Whether to enable hub mode.
+#' If TRUE, nodes with higher in-degree are more likely to be placed at the center
+#' than those with high out-degree. Defaults to FALSE.
 #' @param height Numeric. Layout height. Defaults to container height.
-#' @param kg Numeric. Gravity coefficient. The larger the value, the more concentrated the layout is at the center. Defaults to 1.
-#' @param kr Numeric. Repulsion coefficient. Adjusts the compactness of the layout. The larger the value, the looser the layout. Defaults to 5.
+#' @param kg Numeric. Gravity coefficient. The larger the value,
+#' the more concentrated the layout is at the center. Defaults to 1.
+#' @param kr Numeric. Repulsion coefficient. Adjusts the compactness of the layout.
+#' The larger the value, the looser the layout. Defaults to 5.
 #' @param ks Numeric. Controls the speed of node movement during iteration. Defaults to 0.1.
 #' @param ksmax Numeric. Maximum node movement speed during iteration. Defaults to 10.
-#' @param mode Character. Clustering mode. Options are "normal" or "linlog". In "linlog" mode, clusters are more compact. Defaults to "normal".
-#' @param nodeSize Numeric or function. Node size (diameter). Used for repulsion calculation when preventOverlap is enabled. If not set, uses data.size in node data.
-#' @param preventOverlap Logical. Whether to prevent node overlap. When enabled, layout considers node size to avoid overlap. Node size is specified by \code{nodeSize} or \code{data.size} in node data. Defaults to FALSE.
-#' @param prune Logical. Whether to enable auto-pruning. By default, enabled if node count > 100. Pruning speeds up convergence but may reduce layout quality. Set to FALSE to disable auto-activation.
+#' @param mode Character. Clustering mode.
+#' Options are "normal" or "linlog". In "linlog" mode, clusters are more compact.
+#' Defaults to "normal".
+#' @param nodeSize Numeric or function. Node size (diameter).
+#' Used for repulsion calculation when preventOverlap is enabled.
+#'
+#' If not set, uses data.size in node data.
+#' @param preventOverlap Logical. Whether to prevent node overlap.
+#' When enabled, layout considers node size to avoid overlap.
+#' Node size is specified by \code{nodeSize} or \code{data.size} in node data. Defaults to FALSE.
+#' @param prune Logical. Whether to enable auto-pruning.
+#' By default, enabled if node count > 100. Pruning speeds up
+#' convergence but may reduce layout quality. Set to FALSE to disable auto-activation.
 #' @param tao Numeric. Tolerance for stopping oscillation when layout is near convergence. Defaults to 0.1.
 #' @param width Numeric. Layout width. Defaults to container width.
-#' @param center Numeric vector of length 2. Layout center in the form \code{[x, y]}. Each node is attracted to this point, with gravity controlled by \code{kg}. If not set, uses canvas center.
+#' @param center Numeric vector of length 2. Layout center in the form \code{[x, y]}.
+#' Each node is attracted to this point, with gravity controlled by \code{kg}.
+#' If not set, uses canvas center.
 #' @param ... Additional parameters to pass to the layout.
 #' See \url{https://g6.antv.antgroup.com/manual/layout/build-in/force-atlas2-layout}.
 #'
@@ -993,7 +1010,8 @@ force_atlas2_layout <- function(
 #' with all available options as parameters.
 #' @param height Numeric. Layout height. Defaults to container height.
 #' @param width Numeric. Layout width. Defaults to container width.
-#' @param gravity Numeric. Central force attracting nodes to the center. Larger values make the layout more compact. Defaults to 10.
+#' @param gravity Numeric. Central force attracting nodes to the center.
+#' Larger values make the layout more compact. Defaults to 10.
 #' @param speed Numeric. Node movement speed per iteration. Higher values may cause oscillation. Defaults to 5.
 #' @param ... Additional parameters to pass to the layout.
 #' See \url{https://g6.antv.antgroup.com/en/manual/layout/build-in/fruchterman-layout}.

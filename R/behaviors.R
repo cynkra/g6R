@@ -155,12 +155,6 @@ valid_states <- c("selected", "active", "inactive", "disabled", "highlight")
 #'   padding = 5
 #' )
 #'
-#' # Custom configuration with specific sorting rules
-#' config <- auto_adapt_label(
-#'   sortNode = list(type = "property", field = "importance", order = "desc"),
-#'   sortEdge = list(type = "property", field = "weight", order = "desc"),
-#'   sortCombo = list(type = "degree")
-#' )
 #'
 #' # Using a custom enable function
 #' config <- auto_adapt_label(
@@ -298,13 +292,7 @@ brush_select <- function(
   enableElements = "node",
   immediately = FALSE,
   mode = c("default", "union", "intersect", "diff"),
-  onSelect = JS(
-    "(states) => {
-      const selectedNodes = Object.getOwnPropertyNames(states);
-      Shiny.setInputValue('graph-selected_node', selectedNodes, {priority: 'event'});
-      return states;
-    }"
-  ),
+  onSelect = NULL,
   state = c("selected", "active", "inactive", "disabled", "highlight"),
   style = NULL,
   trigger = "shift",
@@ -346,6 +334,28 @@ brush_select <- function(
   config$type <- "brush-select"
   if (length(enableElements) == 1) {
     config$enableElements <- list(config$enableElements)
+  }
+
+  # We can't access the graph instance from within this JS
+  # code as it is create oustide the widget factory
+  output_id <- shiny::getCurrentOutputInfo()[["name"]]
+
+  # Provide default for onSelect for Shiny context
+  if (is.null(config$onSelect) && !is.null(output_id)) {
+    config$onSelect <- JS(
+      sprintf(
+        "(states) => {
+          const selectedNodes = Object.getOwnPropertyNames(states);
+          Shiny.setInputValue(
+            '%s-selected_node',
+            selectedNodes,
+            {priority: 'event'}
+          );
+          return states;
+        }",
+        output_id
+      )
+    )
   }
 
   # Drop NULL elements
@@ -425,7 +435,8 @@ click_select <- function(
         (length(unselectedState) == 1 && !unselectedState %in% valid_states))
   ) {
     stop(
-      "'unselectedState' should be one of 'selected', 'active', 'inactive', 'disabled', 'highlight', or a custom string"
+      "'unselectedState' should be one of 'selected', 'active', 'inactive', 
+      'disabled', 'highlight', or a custom string"
     )
   }
 
@@ -576,12 +587,12 @@ create_edge <- function(
   config <- mget(arg_names)
   config$type <- "create-edge"
 
-  # Provide default
-  if (is.null(config$onFinish)) {
-    # We can't access the graph instance from within this JS
-    # code as it is create oustide the widget factory
-    output_id <- shiny::getCurrentOutputInfo()[["name"]]
-    # TBD: this won't work in htmlwidget without shiny ...
+  # We can't access the graph instance from within this JS
+  # code as it is create oustide the widget factory
+  output_id <- shiny::getCurrentOutputInfo()[["name"]]
+
+  # Provide default in Shiny context only
+  if (is.null(config$onFinish) && !is.null(output_id)) {
     config$onFinish <- JS(
       sprintf(
         "(edge) => {
@@ -833,11 +844,7 @@ drag_element <- function(
 drag_element_force <- function(
   key = "drag-element-force",
   fixed = FALSE,
-  enable = JS(
-    "(event) => { 
-      return event.targetType === 'node' || event.targetType === 'combo';
-    }"
-  ),
+  enable = NULL,
   state = "selected",
   hideEdge = c("none", "out", "in", "both", "all"),
   cursor = NULL,
@@ -846,6 +853,15 @@ drag_element_force <- function(
   # Validate inputs
   if (!is.logical(fixed)) {
     stop("'fixed' should be a boolean value")
+  }
+
+  # Enable default
+  if (is.null(enable)) {
+    enable <- JS(
+      "(event) => {
+        return event.targetType === 'node' || event.targetType === 'combo';
+      }"
+    )
   }
 
   if (!is.logical(enable) && !is_js(enable)) {
@@ -1203,13 +1219,7 @@ lasso_select <- function(
   enableElements = "node",
   immediately = FALSE,
   mode = c("default", "union", "intersect", "diff"),
-  onSelect = JS(
-    "(states) => {
-      const selectedNodes = Object.getOwnPropertyNames(states);
-      Shiny.setInputValue('graph-selected_node', selectedNodes, {priority: 'event'});
-      return states;
-    }"
-  ),
+  onSelect = NULL,
   state = "selected",
   style = NULL,
   trigger = c("shift"),
@@ -1266,6 +1276,26 @@ lasso_select <- function(
   config$type <- "lasso-select"
   if (length(enableElements) == 1) {
     config$enableElements <- list(config$enableElements)
+  }
+
+  # Recover output id in Shiny context
+  output_id <- shiny::getCurrentOutputInfo()[["name"]]
+
+  if (is.null(config$onSelect) && !is.null(output_id)) {
+    config$onSelect <- JS(
+      sprintf(
+        "(states) => {
+          const selectedNodes = Object.getOwnPropertyNames(states);
+          Shiny.setInputValue(
+            'graph-selected_node',
+            selectedNodes,
+            {priority: 'event'}
+          );
+          return states;
+        }",
+        output_id
+      )
+    )
   }
 
   # Drop NULL elements

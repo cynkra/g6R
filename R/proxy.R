@@ -89,7 +89,7 @@ g6_get <- function(graph, el, type) {
 #' using a proxy object.
 #'
 #' @param graph A g6_proxy object created with \code{\link{g6_proxy}}.
-#' @param nodes, edges. combos A string or character vector.
+#' @param nodes,edges,combos A string or character vector.
 #'
 #' @return The g6_proxy object (invisibly), allowing for method chaining.
 #'
@@ -199,7 +199,7 @@ g6_set_data <- function(graph, data) {
 #' re-rendering it.
 #'
 #' @param graph A g6_proxy object created with \code{\link{g6_proxy}}.
-#' @param nodes, edges, combos A data frame or list specifying the elements to be added.
+#' @param nodes,edges,combos A data frame or list specifying the elements to be added.
 #'   Elements structure must be compliant with specifications listed at
 #' \url{https://g6.antv.antgroup.com/manual/element/overview}
 #' @param data A nested list possibly containing nodes, edges and combo data.
@@ -299,7 +299,7 @@ g6_remove_combos <- function(graph, ids) {
 #' re-rendering it.
 #'
 #' @param graph A g6_proxy object created with \code{\link{g6_proxy}}.
-#' @param nodes, edges, combos A data frame or list specifying
+#' @param nodes,edges,combos A data frame or list specifying
 #' the nodes/edges/combos to be updated. All elements have to be of the same type,
 #' you can't mix nodes with edges.
 #'

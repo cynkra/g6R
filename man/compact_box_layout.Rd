@@ -23,17 +23,22 @@ compact_box_layout(
 \item{getSide}{Function to set the nodes to be arranged on the left/right side
 of the root node. If not set, the algorithm automatically assigns the nodes
 to the left/right side. Note: This parameter is only effective when the layout
-direction is "H". Function format: function(node) { return "left" or "right" }}
+direction is "H". Function format: \code{function(node) { return "left" or "right" }}}
 
-\item{getId}{Callback function for generating node IDs. Function format: function(node) { return string }}
+\item{getId}{Callback function for generating node IDs.
+Function format: \code{function(node) { return string }}}
 
-\item{getWidth}{Function to calculate the width of each node. Function format: function(node) { return number }}
+\item{getWidth}{Function to calculate the width of each node.
+Function format: \code{function(node) { return number }}}
 
-\item{getHeight}{Function to calculate the height of each node. Function format: function(node) { return number }}
+\item{getHeight}{Function to calculate the height of each node.
+Function format: \code{function(node) { return number }}}
 
-\item{getHGap}{Function to calculate the horizontal gap for each node. Function format: function(node) { return number }}
+\item{getHGap}{Function to calculate the horizontal gap for each node.
+Function format: \code{function(node) { return number }}}
 
-\item{getVGap}{Function to calculate the vertical gap for each node. Function format: function(node) { return number }}
+\item{getVGap}{Function to calculate the vertical gap for each node.
+Function format: \code{function(node) { return number }}}
 
 \item{radial}{Whether to enable radial layout}
 
@@ -53,11 +58,7 @@ box_config <- compact_box_layout()
 
 # Vertical compact box layout
 box_config <- compact_box_layout(
-  direction = "TB",
-  getHGap = function(node) {
-    if(node$depth == 1) return(80)
-    else return(40)
-  }
+  direction = "TB"
 )
 
 # Radial layout

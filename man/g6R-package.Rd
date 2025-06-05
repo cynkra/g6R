@@ -20,8 +20,14 @@ Useful links:
 \author{
 \strong{Maintainer}: David Granjon \email{dgranjon@ymail.com}
 
+Authors:
+\itemize{
+  \item David Schoch \email{david@schochastics.net}
+}
+
 Other contributors:
 \itemize{
+  \item  cynkra GmbH [funder]
   \item  Bristol Myers Squibb [funder]
 }
 

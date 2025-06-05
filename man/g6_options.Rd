@@ -104,10 +104,11 @@ individual elements to global visualization settings.
 }
 \examples{
 # Basic usage with defaults
-opts <- g6_options()
+opts <- g6_options(g6())
 
 # Customize node and edge styles
 opts <- g6_options(
+  g6(),
   node = node_options(
     type = "circle",
     style = node_style_options(
@@ -126,6 +127,7 @@ opts <- g6_options(
 
 # Configure graph with dark theme, auto-resize, and custom background
 opts <- g6_options(
+  g6(),
   theme = "dark",
   autoResize = TRUE,
   background = "#222222",
@@ -136,13 +138,11 @@ opts <- g6_options(
 
 # Configure with custom animations
 opts <- g6_options(
+  g6(),
   animation = animation_config(
     duration = 500,
     easing = "easeCubic"
   ),
-  autoFit = auto_fit_config(
-    padding = 50,
-    type = "view"
-  )
+  autoFit = auto_fit_config(duration = 300, easing = "ease-out")
 )
 }

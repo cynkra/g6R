@@ -55,9 +55,12 @@ server <- function(input, output, session) {
         ),
         edge = list(
           type = "fly-marker-cubic",
-          endArrow = TRUE,
           zIndex = 100,
-          style = list(targetPort = "port-1", lineDash = c(5, 5))
+          style = list(
+            endArrow = TRUE,
+            targetPort = "port-1",
+            lineDash = c(5, 5)
+          )
         ),
         node = list(
           type = "html",
@@ -77,11 +80,23 @@ server <- function(input, output, session) {
             }"
             ),
             innerHTML = JS(
-              "(d) => {
+              '(d) => {
           return `
-              <div style=\"width: 10rem;\"class=\"card bslib-card bslib-mb-spacing html-fill-item html-fill-container\" data-bslib-card-init data-require-bs-caller=\"card()\" data-require-bs-version=\"5\">\n  <div class=\"card-header\">This is the header</div>\n  <div class=\"card-body bslib-gap-spacing html-fill-item html-fill-container\" style=\"margin-top:auto;margin-bottom:auto;flex:1 1 auto;\">\n    <p>This is the body.</p>\n    <p>This is still the body.</p>\n  </div>\n  <div class=\"card-footer\">This is the footer</div>\n  <script data-bslib-card-init>bslib.Card.initializeAllCards();</script>\n</div>
+                <div style="width: 13rem; user-select: none;" class="card bslib-card bslib-mb-spacing html-fill-item html-fill-container" data-bslib-card-init data-require-bs-caller="card()" data-require-bs-version="5">
+  <div class="card-body bslib-gap-spacing html-fill-item html-fill-container" style="margin-top:auto;margin-bottom:auto;flex:1 1 auto; user-select: none; width = 13rem">
+    <div class="form-group shiny-input-container" data-require-bs-version="5" data-require-bs-caller="input_switch()">
+      <div class="bslib-input-switch form-switch form-check">
+        <input id="${d.id}" class="form-check-input" type="checkbox" role="switch"/>
+        <label class="form-check-label" for="${d.id}">
+          <span>Add to dashboard</span>
+        </label>
+      </div>
+    </div>
+  </div>
+  <script data-bslib-card-init>bslib.Card.initializeAllCards();</script>
+</div>
           `
-            }"
+            }'
             )
           )
         )
@@ -97,22 +112,8 @@ server <- function(input, output, session) {
       g6_behaviors(
         "zoom-canvas",
         drag_element(),
-        click_select(
-          multiple = TRUE,
-          onClick = JS(
-            "(e) => {
-            console.log(e);
-          }"
-          )
-        ),
-        brush_select(
-          onSelect = JS(
-            "(states) => {
-            console.log(states);
-            return states;
-          }"
-          )
-        ),
+        click_select(multiple = TRUE),
+        brush_select(),
         "collapse-expand"
       ) |>
       g6_plugins(

@@ -5,15 +5,13 @@
 \title{Configure Toolbar Plugin}
 \usage{
 toolbar(
-  getItems =
-    JS("( ) => [   \\n        { id : 'zoom-in' , value : 'zoom-in' } ,  \\n        { id : 'zoom-out' , value : 'zoom-out' } ,   \\n        { id : 'auto-fit' , value : 'auto-fit' } ,\\n        { id: 'delete', value: 'delete' }, \\n        { id: 'request-fullscreen', value: 'request-fullscreen' },\\n        { id: 'exit-fullscreen', value: 'exit-fullscreen' },\\n      ]"),
+  getItems = NULL,
   key = "toolbar",
   className = NULL,
   position = c("top-left", "top", "top-right", "right", "bottom-right", "bottom",
     "bottom-left", "left"),
   style = NULL,
-  onClick =
-    JS("( value, target, current ) => {   \\n        // Handle button click events\\n      const graph = HTMLWidgets.find(`#${target.closest('.g6').id}`).getWidget();\\n      const fullScreen = graph.getPluginInstance('fullscreen');\\n      const zoomLevel = graph.getZoom();\\n        if ( value === 'zoom-in' ) {   \\n          graph.zoomTo (graph.getZoom() + 0.1);\\n        } else if ( value === 'zoom-out' ) {     \\n          graph.zoomTo (graph.getZoom() - 0.1);\\n        } else if ( value === 'auto-fit' ) {     \\n          graph.fitView ( ) ;\\n        } else if (value === 'delete') {\\n          const selectedNodes = graph.getElementDataByState('node', 'selected').map((node) => {\\n            return node.id\\n          });\\n          graph.removeNodeData(selectedNodes);\\n          graph.draw();\\n        } else if (value === 'request-fullscreen') {\\n          if (fullScreen !== undefined) {\\n            fullScreen.request();\\n          }\\n        } else if (value === 'exit-fullscreen') {\\n          if (fullScreen !== undefined) {\\n            fullScreen.exit();\\n          }\\n        }\\n      }\\n    "),
+  onClick = NULL,
   ...
 )
 }

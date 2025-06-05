@@ -21,7 +21,7 @@ concentric_layout(
 )
 }
 \arguments{
-\item{center}{The center position of the circular layout \link{x, y} or \link{x, y, z}.
+\item{center}{The center position of the circular layout \code{[x, y]} or \code{[x, y, z]}.
 By default, it's the center position of the current container.}
 
 \item{clockwise}{Whether nodes are arranged in clockwise order}
@@ -42,7 +42,7 @@ attribute value of the sorting basis. For example, if sortBy is 'degree', then
 maxValue is the degree of the node with the largest degree among all nodes.}
 
 \item{nodeSize}{Node size (diameter). Used to prevent collision detection when nodes overlap.
-Can be a number, a 2-element vector \link{width, height}, or a function that returns a number.}
+Can be a number, a 2-element vector \code{[width, height]}, or a function that returns a number.}
 
 \item{nodeSpacing}{Minimum distance between rings, used to adjust the radius.
 Can be a number, a vector of numbers, or a function that returns a number.}
@@ -55,7 +55,7 @@ in the layout, can node overlap collision detection be performed.}
 \item{startAngle}{The arc at which to start layout of nodes (in radians)}
 
 \item{sweep}{If the radian difference between the first and last nodes in the same layer
-is undefined, it will be set to 2 * Math.PI * (1 - 1 / |level.nodes|), where level.nodes
+is undefined, it will be set to \code{2 * Math.PI * (1 - 1 / |level.nodes|)}, where level.nodes
 is the number of nodes in each layer calculated by the algorithm, and |level.nodes| is
 the number of nodes in the layer.}
 
