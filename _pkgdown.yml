@@ -88,6 +88,10 @@ reference:
       - concentric_layout
       - d3_force_layout
       - dagre_layout
+      - dendrogram_layout
+      - force_atlas2_layout
+      - fruchterman_layout
+      - radial_layout
 
   - title: Options
     desc: g6 options
@@ -173,3 +177,11 @@ reference:
     desc: Advanced Features
     contents:
       - history
+
+  - title: Example Data
+    desc: Example Data
+    contents:
+      - dag
+      - lesmis
+      - radial
+      - tree
