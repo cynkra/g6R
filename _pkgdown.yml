@@ -173,3 +173,8 @@ reference:
     desc: Advanced Features
     contents:
       - history
+
+  - title: Miscellaneous
+    desc: Utils function
+    contents:
+      - JS
