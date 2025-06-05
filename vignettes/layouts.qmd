@@ -176,7 +176,6 @@ The most straightforward way to do this is to add the coordinates to the nodes d
 ```{r}
 g6(lesmis$nodes, lesmis$edges) |>
   g6_options(
-    autoFit = "View",
     node = list(
       style = list(
         x = JS("(d) => {return 500*d.x}"),
