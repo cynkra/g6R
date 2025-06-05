@@ -178,6 +178,11 @@ reference:
     contents:
       - history
 
+  - title: Miscellaneous
+    desc: Utils function
+    contents:
+      - JS
+
   - title: Example Data
     desc: Example Data
     contents:

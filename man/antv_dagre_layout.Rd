@@ -47,11 +47,12 @@ that returns a number. Has higher priority than ranksep}
 or "longest-path"}
 
 \item{nodeSize}{Node size for collision detection. Can be a single number (same width/height),
-an array \link{width, height}, or a function that returns either}
+an array \code{[width, height]}, or a function that returns either}
 
 \item{controlPoints}{Whether to retain edge control points}
 
-\item{begin}{Alignment position of the upper left corner of the layout. Can be \link{x, y} or \link{x, y, z}}
+\item{begin}{Alignment position of the upper left corner of the layout.
+Can be \code{[x, y]} or \code{[x, y, z]}}
 
 \item{sortByCombo}{Whether to sort nodes on the same layer by parentId to prevent combo overlap}
 

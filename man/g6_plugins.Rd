@@ -74,7 +74,7 @@ You can also build your own plugins as described at
 plugins <- g6_plugins(
   minimap(),
   grid_line(),
-  tooltip(
+  tooltips(
     getContent = JS("(e, items) => {
       return `<div>${items[0].id}</div>`;
     }")

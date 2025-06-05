@@ -35,6 +35,7 @@ server <- function(input, output, session) {
   output$graph <- renderG6({
     g6(nodes, edges) |>
       g6_options(
+        animation = FALSE,
         node = list(
           style = list(
             labelBackground = TRUE,
@@ -56,20 +57,9 @@ server <- function(input, output, session) {
       g6_behaviors(
         "zoom-canvas",
         drag_element_force(fixed = TRUE),
-        click_select(
-          multiple = TRUE,
-          onClick = JS(
-            "(e) => {
-            console.log(e);
-          }"
-          )
-        ),
+        click_select(multiple = TRUE),
         brush_select(),
-        create_edge() #,
-        # TBD: fixme ->
-        # when enabled this breaks the click-select because
-        # the state is changed when a node is hovered.
-        #hover_activate()
+        create_edge()
       ) |>
       g6_plugins(
         "minimap",

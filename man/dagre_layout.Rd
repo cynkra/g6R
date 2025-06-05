@@ -34,7 +34,7 @@ simplex algorithm), "tight-tree" (the compact tree algorithm), or "longest-path"
 (the longest path algorithm)}
 
 \item{nodeSize}{G6 custom attribute to specify the node size uniformly or for each node.
-Can be a single number (same width/height), an array \link{width, height},
+Can be a single number (same width/height), an array \code{[width, height]},
 or a function that returns either.}
 
 \item{controlPoints}{Whether to keep the control points of the edge}

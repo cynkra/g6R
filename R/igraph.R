@@ -45,15 +45,15 @@ g6_igraph <- function(
   nodes <- style_from_df(nodes_df, node_style_options)
 
   # TODO: find better solution
-  names <- igraph::V(graph)$name %||% V(graph)$id
-  V(graph)$name <- V(graph)$id
+  names <- igraph::V(graph)$name %||% igraph::V(graph)$id
+  igraph::V(graph)$name <- igraph::V(graph)$id
   edges_df <- igraph::as_data_frame(graph, what = "edges")
   names(edges_df)[1:2] <- c("source", "target")
   if (igraph::is_directed(graph)) {
     edges_df$endArrow <- TRUE
   }
   edges <- style_from_df(edges_df, edge_style_options)
-  V(graph)$name <- names
+  igraph::V(graph)$name <- names
 
   g6(
     nodes = nodes,
@@ -65,6 +65,7 @@ g6_igraph <- function(
   )
 }
 
+#' @keywords internal
 style_from_df <- function(df, style_fn) {
   formal_args <- names(formals(style_fn))
   has_dots <- "..." %in% formal_args
@@ -90,8 +91,9 @@ style_from_df <- function(df, style_fn) {
   items
 }
 
-#In igraph type is reserved for bipartite graphs, whereas in g6 it defines the
-#shape of the node
+#' @keywords internal
+#' @note In igraph type is reserved for bipartite graphs, whereas in g6 it defines the
+#' shape of the node
 shape2type <- function(nodes_df) {
   if ("shape" %in% names(nodes_df)) {
     if (!"type" %in% names(nodes_df)) {

@@ -15,7 +15,7 @@ g6_get_combos(graph, combos)
 \arguments{
 \item{graph}{A g6_proxy object created with \code{\link{g6_proxy}}.}
 
-\item{nodes, }{edges. combos A string or character vector.}
+\item{nodes, edges, combos}{A string or character vector.}
 }
 \value{
 The g6_proxy object (invisibly), allowing for method chaining.

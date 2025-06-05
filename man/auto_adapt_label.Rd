@@ -66,12 +66,6 @@ config <- auto_adapt_label(
   padding = 5
 )
 
-# Custom configuration with specific sorting rules
-config <- auto_adapt_label(
-  sortNode = list(type = "property", field = "importance", order = "desc"),
-  sortEdge = list(type = "property", field = "weight", order = "desc"),
-  sortCombo = list(type = "degree")
-)
 
 # Using a custom enable function
 config <- auto_adapt_label(

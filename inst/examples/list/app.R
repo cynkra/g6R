@@ -131,15 +131,8 @@ server <- function(input, output, session) {
       g6_layout(d3_force_layout()) |>
       g6_behaviors(
         zoom_canvas(),
-        drag_element(),
-        click_select(
-          multiple = TRUE,
-          onClick = JS(
-            "(e) => {
-              console.log(e);  
-            }"
-          )
-        ),
+        drag_element(dropEffect = "link"),
+        click_select(multiple = TRUE),
         brush_select(immediately = TRUE),
         collapse_expand(),
         drag_canvas(
@@ -155,62 +148,9 @@ server <- function(input, output, session) {
       g6_plugins(
         minimap(),
         fullscreen(),
-        tooltips(
-          title = "Tooltip",
-          enable = JS(
-            "(e) => { return e.targetType === 'node';}"
-          ),
-          #getContent = JS(
-          #  "(e, items) => {
-          #      let result = `<h4>Custom Content</h4>`;
-          #      items.forEach((item) => {
-          #        console.log(item.id);
-          #        result += `<p>Type: ${item.id}</p>`;
-          #      });
-          #      return result;
-          #    }"
-          #),
-          onOpenChange = JS(
-            "( open ) => {   
-            console.log(open);
-          }"
-          ),
-          trigger = "click"
-        ),
+        #tooltips()
         toolbar(),
-        context_menu(
-          enable = JS(
-            "(e) => {
-                  return e.targetType === 'node'
-                }"
-          ),
-          getItems = JS(
-            "() => {
-                  return [
-                    { name: 'Create edge', value: 'create_edge' },
-                    { name: 'Remove node', value: 'remove_node' }
-                  ];
-                }"
-          ),
-          onClick = JS(
-            "(value, target, current) => {
-                  const graph = HTMLWidgets.find(`#${target.closest('.g6').id}`).getWidget();
-                  if (value === 'create_edge') {
-                    graph.updateBehavior({
-                      key: 'create-edge', // Specify the behavior to update
-                      enable: true,
-                    });
-                    // Select node
-                    graph.setElementState(current.id, 'selected');
-                    // Disable drag node as it is incompatible with edge creation
-                    graph.updateBehavior({ key: 'drag-element', enable: false });
-                  } else if (value === 'remove_node') {
-                    graph.removeNodeData([current.id]);
-                    graph.draw();
-                  }
-                }"
-          )
-        )
+        context_menu()
       )
   })
 
@@ -350,16 +290,22 @@ server <- function(input, output, session) {
       )
   })
 
-  observeEvent(req(input[["graph-initialized"]]), {
-    g6_proxy("graph") |> g6_get_nodes(c("node1", "node2"))
-  })
+  observeEvent(
+    {
+      req(input[["graph-initialized"]])
+      input[["graph-state"]]
+    },
+    {
+      g6_proxy("graph") |> g6_get_nodes(c("node1", "node2"))
+    }
+  )
 
   output$selected_elements <- renderPrint({
     list(
       node = input[["graph-selected_node"]],
       edge = input[["graph-selected_edge"]],
       combo = input[["graph-selected_combo"]],
-      node2_state = input[["graph-node2-state"]]$combo
+      node2_combo = input[["graph-node2-state"]]$combo
     )
   })
 }

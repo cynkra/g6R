@@ -18,7 +18,7 @@ g6_add_data(graph, data)
 \arguments{
 \item{graph}{A g6_proxy object created with \code{\link{g6_proxy}}.}
 
-\item{nodes, }{edges, combos A data frame or list specifying the elements to be added.
+\item{nodes, edges, combos}{A data frame or list specifying the elements to be added.
 Elements structure must be compliant with specifications listed at
 \url{https://g6.antv.antgroup.com/manual/element/overview}}
 

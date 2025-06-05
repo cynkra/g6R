@@ -9,10 +9,8 @@ context_menu(
   className = "g6-contextmenu",
   trigger = "contextmenu",
   offset = c(4, 4),
-  onClick =
-    JS("(value, target, current) => {\\n      const graph = HTMLWidgets.find(`#${target.closest('.g6').id}`).getWidget();\\n      if (current.id === undefined) return;\\n      if (value === 'create_edge') {\\n        graph.updateBehavior({\\n          key: 'create-edge', // Specify the behavior to update\\n          enable: true,\\n        });\\n        // Select node\\n        graph.setElementState(current.id, 'selected');\\n        // Disable drag node as it is incompatible with edge creation\\n        graph.updateBehavior({ key: 'drag-element', enable: false });\\n        graph.updateBehavior({ key: 'drag-element-force', enable: false });\\n      } else if (value === 'remove_node') {\\n        graph.removeNodeData([current.id]);\\n        graph.draw();\\n      }\\n    }\\n    "),
-  getItems =
-    JS("() => {\\n      return [\\n        { name: 'Create edge', value: 'create_edge' },\\n        { name: 'Remove node', value: 'remove_node' }\\n      ];\\n    }"),
+  onClick = NULL,
+  getItems = NULL,
   getContent = NULL,
   loadingContent = NULL,
   enable = JS("(e) => e.targetType === 'node'"),

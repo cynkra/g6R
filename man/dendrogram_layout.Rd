@@ -5,7 +5,7 @@
 \title{Generate G6 Dendrogram layout configuration}
 \usage{
 dendrogram_layout(
-  direction = "LR",
+  direction = c("LR", "RL", "TB", "BT", "H", "V"),
   nodeSep = 20,
   rankSep = 200,
   radial = FALSE,

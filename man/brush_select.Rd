@@ -11,8 +11,7 @@ brush_select(
   enableElements = "node",
   immediately = FALSE,
   mode = c("default", "union", "intersect", "diff"),
-  onSelect =
-    JS("(states) => {\\n      const selectedNodes = Object.getOwnPropertyNames(states);\\n      Shiny.setInputValue('graph-selected_node', selectedNodes, {priority: 'event'});\\n      return states;\\n    }"),
+  onSelect = NULL,
   state = c("selected", "active", "inactive", "disabled", "highlight"),
   style = NULL,
   trigger = "shift",

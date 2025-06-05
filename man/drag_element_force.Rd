@@ -7,8 +7,7 @@
 drag_element_force(
   key = "drag-element-force",
   fixed = FALSE,
-  enable =
-    JS("(event) => { \\n      return event.targetType === 'node' || event.targetType === 'combo';\\n    }"),
+  enable = NULL,
   state = "selected",
   hideEdge = c("none", "out", "in", "both", "all"),
   cursor = NULL,
