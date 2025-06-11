@@ -89,6 +89,7 @@ const registerShinyHandlers = (graph, el) => {
   // Set options
   Shiny.addCustomMessageHandler(el.id + '_g6-set-options', (m) => {
     try {
+      // TBD: support JS wrapped options
       graph.setOptions(m);
       graph.draw();
     } catch (error) {
@@ -99,7 +100,11 @@ const registerShinyHandlers = (graph, el) => {
   // Update plugin
   Shiny.addCustomMessageHandler(el.id + '_g6-update-plugin', (m) => {
     try {
-      graph.updatePlugin(m);
+      // Transform each eval member into a function call
+      for (var i = 0; m.evals && i < m.evals.length; i++) {
+        window.HTMLWidgets.evaluateStringMember(m.opts, m.evals[i]);
+      }
+      graph.updatePlugin(m.opts);
     } catch (error) {
       Shiny.notifications.show({ html: error, type: 'error' })
     }
@@ -108,6 +113,7 @@ const registerShinyHandlers = (graph, el) => {
   // Append plugin
   Shiny.addCustomMessageHandler(el.id + "_g6-add-plugin", (m) => {
     try {
+      // TBD: support JS wrapped options
       graph.setPlugins((currentPlugins) => {
         m.map((newPlugin) => {
           currentPlugins.push(newPlugin)
@@ -122,7 +128,11 @@ const registerShinyHandlers = (graph, el) => {
   // Update behavior
   Shiny.addCustomMessageHandler(el.id + '_g6-update-behavior', (m) => {
     try {
-      graph.updateBehavior(m);
+      // Transform each eval member into a function call
+      for (var i = 0; m.evals && i < m.evals.length; i++) {
+        window.HTMLWidgets.evaluateStringMember(m.opts, m.evals[i]);
+      }
+      graph.updateBehavior(m.opts);
     } catch (error) {
       Shiny.notifications.show({ html: error, type: 'error' })
     }

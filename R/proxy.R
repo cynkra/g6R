@@ -566,6 +566,7 @@ g6_set_options <- function(graph, ...) {
       "Can't use g6_*_combo with g6 object. Use only within shiny and using g6_proxy"
     )
   }
+  # TBD: support JS wrapped options
   graph$session$sendCustomMessage(
     sprintf("%s_g6-set-options", graph$id),
     list(...)
@@ -601,9 +602,12 @@ g6_update_plugin <- function(graph, key, ...) {
       "Can't use g6_update_plugin with g6 object. Use only within shiny and using g6_proxy"
     )
   }
+  opts <- list(key = key, ...)
   graph$session$sendCustomMessage(
     sprintf("%s_g6-update-plugin", graph$id),
-    list(key = key, ...)
+    # Mark any element of options wrapped by htmlwidgets::JS
+    # so it can be evaluated on the JS side.
+    list(opts = opts, evals = JSEvals(opts))
   )
   graph
 }
@@ -635,6 +639,7 @@ g6_add_plugin <- function(graph, ...) {
       "Can't use g6_add_plugin with g6 object. Use only within shiny and using g6_proxy"
     )
   }
+  # TBD: support JS wrapped options
   graph$session$sendCustomMessage(
     sprintf("%s_g6-add-plugin", graph$id),
     list(...)
@@ -670,9 +675,12 @@ g6_update_behavior <- function(graph, key, ...) {
       "Can't use g6_update_behavior with g6 object. Use only within shiny and using g6_proxy"
     )
   }
+  opts <- list(key = key, ...)
   graph$session$sendCustomMessage(
     sprintf("%s_g6-update-behavior", graph$id),
-    list(key = key, ...)
+    # Mark any element of options wrapped by htmlwidgets::JS
+    # so it can be evaluated on the JS side.
+    list(opts = opts, evals = JSEvals(opts))
   )
   graph
 }
