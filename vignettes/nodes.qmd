@@ -1,0 +1,132 @@
+---
+title: "Nodes"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{g6R}
+  %\VignetteEngine{quarto::html}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup, message=FALSE}
+library(g6R)
+```
+
+## Introduction
+
+Nodes belong to the graph data. In `{g6R}`, nodes can be created from a __dataframe__ or a __list__ such as:
+
+```r
+nodes <- data.frame(id = as.character(1:2))
+nodes$label <- nodes$id
+
+# or
+nodes <- list(
+  list(id = "1", label = "Node 1"),
+  list(id = "2", label = "Node 2")
+)
+```
+
+While the former might be more convenient for simple cases, the latter provides more flexibility for advanced customization since some node properties have to be nested lists, for instance __style__ properties:
+
+```r
+nodes <- list(
+  list(
+    id = "1",
+    label = "Node 1",
+    style = list(fill = "#FF0000", fillOpacity = 0.5)
+  ),
+)
+```
+
+## Data properties
+
+`{g6R}` nodes are allowed to have the following properties:
+
+- `id`: a unique identifier for the node, required.
+- `type`: the type of the node.
+- `data`: custom data for the node that can be retrieved.
+- `style`: style properties. A comprehensive list is available [here](https://g6.antv.antgroup.com/en/manual/element/node/build-in/base-node#style).
+- `states`: initial [states](https://g6.antv.antgroup.com/en/manual/element/node/build-in/base-node#state).
+- `combo`: id of the [combo](https://g6.antv.antgroup.com/en/manual/element/combo/overview) the node belongs to. Combo are describes in another vignette (TBD link).
+- `children`: nodes ids for tree.
+
+![](figures/node.png){fig-align="center" width=50%}
+
+### Node type
+
+Builtin types are `circle`, `rect`, `ellipse`, `diamond`, `triangle`, `hexagon`, `star`, `donut`, `image`:
+
+```{r}
+#| echo: FALSE
+types <- c(
+  "circle",
+  "rect",
+  "ellipse",
+  "diamond",
+  "triangle",
+  "hexagon",
+  "star",
+  "donut",
+  "image"
+)
+nodes <- lapply(seq_along(types), \(i) {
+  node <- list(id = types[[i]], type = types[[i]])
+  if (types[[i]] == "image") {
+    node$style <- list(
+      src = "https://gw.alipayobjects.com/mdn/rms_6ae20b/afts/img/A*N4ZMS7gHsUIAAAAAAAAAAABkARQnAQ"
+    )
+  }
+  node
+})
+g6(nodes) |>
+  g6_layout(d3_force_layout()) |>
+  g6_options(
+    animation = FALSE,
+    node = list(
+      style = list(
+        labelText = JS(
+          "(d) => {
+              return d.id
+            }"
+        )
+      )
+    )
+  )
+```
+
+### HTML nodes
+
+There exists a last type which allows to create nodes with custom html. Importantly, you can't have html nodes with other type of nodes. The type applies at the global node option level as shown in the following. The node structure is created with the `innerHTML` property which has to be a JavaScript callback taking node data as parameter:
+
+```{r}
+nodes <- list(
+  list(id = "1", data = list(id = "1"))
+)
+g6(nodes, height = "200px") |>
+  g6_layout(d3_force_layout()) |>
+  g6_options(
+    animation = FALSE,
+    node = list(
+      type = "html",
+      style = list(
+        innerHTML = JS(
+          "(d) => {
+              return `
+                <div class=\"card\" style=\"width: 13rem;\">
+                    <div class=\"card-body\">
+                        This is node: ${d.id}
+                    </div>
+                </div>`;
+            }"
+        )
+      )
+    )
+  )
+```
