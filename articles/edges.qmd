@@ -1,0 +1,287 @@
+---
+title: "Edges"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{g6R}
+  %\VignetteEngine{quarto::html}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup, message=FALSE}
+library(shiny)
+library(g6R)
+```
+
+## Introduction
+
+Edges belong to the graph data. In `{g6R}`, edges can be created from a __dataframe__ or a __list__ such as:
+
+```r
+edges <- data.frame(
+  source = c(1, 2),
+  target = c(2, 3)
+)
+```
+
+While the former might be more convenient for simple cases, the latter provides more flexibility for advanced customization since some edge properties have to be nested lists, for instance __style__ properties:
+
+```r
+edges <- list(
+  list(
+    source = "1",
+    target = "2",
+    style = list(
+      ...
+    )
+  ),
+  list(
+    source = "2",
+    target = "3",
+    style = list(
+      ...
+    )
+  )
+)
+```
+
+## Data properties
+
+`{g6R}` edges are allowed to have the following properties:
+
+- `source`: the id of the source node, required.
+- `target`: the id of the target node, required.
+- `id`: a unique identifier for the edge (optional, if not passed it will be `<source>-<target>`).
+- `type`: the type of the edge.
+- `data`: custom data for the edge that can be retrieved.
+- `style`: style properties. A comprehensive list is available [here](https://g6.antv.antgroup.com/en/manual/element/edge/build-in/base-edge#style).
+- `states`: initial [states](https://g6.antv.antgroup.com/en/manual/element/edge/build-in/base-edge#state).
+
+### Edge types
+
+Builtin types are `line`, `polyline`, `quadratic`, `cubic`:
+
+```{r}
+types <- c(
+  "line",
+  "polyline",
+  "quadratic",
+  "cubic"
+)
+nodes <- data.frame(id = as.character(1:5))
+edges <- lapply(seq_along(types), \(i) {
+  list(
+    source = "1",
+    target = as.character(i + 1),
+    id = types[[i]],
+    type = types[[i]],
+    style = list(
+      labelText = types[[i]]
+    )
+  )
+})
+g6(nodes, edges) |>
+  g6_layout(d3_force_layout())
+
+```
+
+Special type `cubic-vertical` and `cubic-horizontal` are respectively used for vertical and horizontal [layouts](https://cynkra.github.io/g6R/articles/layouts.html#tree-layouts):
+
+```{r}
+g6(tree$nodes, tree$edges) |>
+  g6_layout(dendrogram_layout(nodeSep = 36, rankSep = 250, direction = "LR")) |>
+  g6_options(edge = list(type = "cubic-horizontal"), autoFit = "view")
+```
+  
+### Special types
+  
+`{g6R}` implements a custom type with animation, namely `fly-marker-cubic`. This type has been implemented with JavaScript code and registered in the `g6R` package. You may do the same for your own custom types.
+  
+```{r}
+nodes <- data.frame(id = c("1", "2"))
+edges <- list(
+  list(
+    source = "1",
+    target = "2",
+    type = "fly-marker-cubic"
+  )
+)
+g6(nodes, edges, height = "200px") |>
+  g6_layout(d3_force_layout())
+```
+
+### Styling edges
+
+The `g6` JavaScript library exposes a wide range of style properties for edges, which can be set in the `style` property of the edge data. We list below the most outstanding properties, but you can find a comprehensive list in the [documentation](https://g6.antv.antgroup.com/en/manual/element/edge/build-in/base-edge#style).
+
+![](figures/edges.png){fig-align="center" width=50%}
+
+#### Main graphic properties
+
+These properties are used to define the main graphic [style](https://g6.antv.antgroup.com/en/manual/element/edge/build-in/base-edge#main-graphic-style-key) of the edge, such as color, width, and line type. Like for nodes, these options may be set either at the global edge option level or at the individual edge level. Here is an example of how to set the color for a given edge:
+
+```{r}
+nodes <- data.frame(id = c("1", "2"))
+edges <- list(
+  list(
+    source = "1",
+    target = "2",
+    style = list(
+      stroke = "pink",
+      lineWidth = 10
+    )
+  )
+)
+g6(nodes, edges, height = "200px") |>
+  g6_layout(d3_force_layout())
+```
+
+#### Label styling
+
+Some common properties include label [styling](https://g6.antv.antgroup.com/en/manual/element/edge/build-in/base-edge#label-style):
+
+```{r}
+nodes <- data.frame(id = c("1", "2"))
+edges <- list(
+  list(
+    source = "1",
+    target = "2",
+    style = list(
+      labelText = "Edge Label", # Label text content
+      labelFill = "blue", # Label text color
+      labelOffsetY = 20, # Vertical offset of the label
+      labelFontSize = 14, # Label font size
+      labelPlacement = "center", # Position of the label relative to the edge,
+      labelBackground = TRUE, # Whether to display the label background
+      labelBackgroundFill = "yellow" # Background color of the label
+    )
+  )
+)
+g6(nodes, edges, height = "200px") |>
+  g6_layout(d3_force_layout())
+```
+
+#### Badges
+
+You can add [badges](https://g6.antv.antgroup.com/en/manual/element/edge/build-in/base-edge#badge-style) to edges using the `badge` property in the `style` list. Badges are small indicators that can display additional information, such as counts or statuses:
+
+```{r}
+nodes <- data.frame(id = c("1", "2"))
+edges <- list(
+  list(
+    source = "1",
+    target = "2",
+    style = list(
+      labelText = "Edge Label", # Label text content
+      labelFill = "blue", # Label text color
+      labelFontSize = 14, # Label font size
+      labelOffsetY = 20, # Vertical offset of the label
+      labelPlacement = "center", # Position of the label relative to the edge,
+      badgeText = "badge", # Edge badge text
+      badgeFill = "green", # Edge badge text color
+      badgeOffsetX = -40, # Edge badge offset in the x-axis direction
+      badgePlacement = "suffix", # Position of the badge relative to the edge
+      badgeBackground = TRUE # Enable edge badge background
+    )
+  )
+)
+g6(nodes, edges, height = "200px") |>
+  g6_layout(d3_force_layout())
+```
+
+#### Arrow styling
+
+End and start arrows can be styled too:
+
+```{r}
+nodes <- data.frame(id = c("1", "2"))
+edges <- list(
+  list(
+    source = "1",
+    target = "2",
+    style = list(
+      startArrow = TRUE, # Enable edge start arrow
+      startArrowFill = "yellow", # Edge start arrow fill color
+      startArrowType = "rect", # Edge start arrow type
+      endArrow = TRUE, # Enable edge end arrow
+      endArrowFill = "orange", # Edge end arrow fill color
+      endArrowType = "triangle" # Edge end arrow type
+    )
+  )
+)
+g6(nodes, edges, height = "200px") |>
+  g6_layout(d3_force_layout())
+```
+
+### States
+
+Edges can have different [states](https://g6.antv.antgroup.com/en/manual/element/edge/build-in/base-edge#state) that can be used to indicate different conditions or interactions. States can be set in the `states` property of the edge data:
+
+```{r}
+states <- c(
+  "default",
+  "selected",
+  "highlight",
+  "active",
+  "inactive",
+  "disabled"
+)
+nodes <- data.frame(id = as.character(1:7))
+edges <- lapply(seq_along(states), \(i) {
+  list(
+    source = "1",
+    target = as.character(i + 1),
+    states = list(states[[i]]),
+    style = list(
+      labelText = states[[i]]
+    )
+  )
+})
+g6(nodes, edges) |>
+  g6_layout(d3_force_layout())
+
+```
+
+### Color palette
+
+One can assign a color [palette](https://g6.antv.antgroup.com/en/manual/element/edge/build-in/base-edge#palette) for edges such that they may be grouped given a specific property. In the following, we use the "Les Misérables" dataset, which contains edges and a `value` column, for which we set a color palette. There are `length(unique(lesmis$edges$value))` color choices:
+```{r}
+edges <- unname(split(lesmis$edges, seq(nrow(lesmis$edges))))
+edges <- lapply(edges, function(edge) {
+  edge <- as.list(edge)
+  edge$data <- list(value = edge$value)
+  edge
+})
+g6(lesmis$nodes, edges) |>
+  g6_layout(d3_force_layout()) |>
+  g6_options(
+    animation = FALSE,
+    autoFit = "view",
+    autoResize = TRUE,
+    edge = list(
+      style = list(endArrow = TRUE),
+      palette = list(
+        type = "group", # use discret palette
+        field = "value", # The property to group edges by
+        color = "tableau"
+      )
+    )
+  )
+```
+
+
+## Update edges data
+
+These functions can only be used in a Shiny app context. They allow you to get or update the edges data in the graph after it has been created. The functions are:
+
+- `g6_add_edges()`: adds new edges to the graph.
+- `g6_update_edges()`: updates existing edges in the graph.
+- `g6_remove_edges()`: removes edges from the graph.
+- `g6_set_edges()`: set edges state.
+- `g6_get_edges()`: get edges data from the graph.
