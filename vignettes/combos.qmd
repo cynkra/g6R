@@ -1,0 +1,113 @@
+---
+title: "Combos"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{g6R}
+  %\VignetteEngine{quarto::html}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup, message=FALSE}
+library(shiny)
+library(g6R)
+```
+
+## Introduction
+
+Combos are a way to group nodes in a graph. They can be used to represent hierarchical structures or to visually organize nodes. In `{g6R}`, combos can be created from a __dataframe__ or a __list__ such as:
+
+```r
+combos <- data.frame(id = as.character(1:2))
+
+# or
+combos <- list(
+  list(id = "1", label = "Combo 1"),
+  list(id = "2", label = "Combo 2")
+)
+```
+
+## Data properties
+
+`{g6R}` combos are allowed to have the following properties:
+
+- `id`: a unique identifier for the combo, required.
+- `type`: the type of the combo.
+- `data`: custom data for the combo that can be retrieved.
+- `style`: style properties. A comprehensive list is available [here](https://g6.antv.antgroup.com/en/manual/element/combo/build-in/base-combo#style).
+- `states`: initial [states](https://g6.antv.antgroup.com/en/manual/element/combo/build-in/base-combo#state).
+- `combo`: id of the parent combo if any.
+
+### Combo types
+
+There are 2 main combo types, `circle` and `rect`:
+
+```{r}
+combos <- data.frame(
+  id = c("combo1", "combo2", "combo3"),
+  type = c("circle", "rect", "circle-combo-with-extra-button"),
+  combo = c("combo3", "combo3", NA)
+)
+nodes <- data.frame(
+  id = as.character(1:10),
+  combo = c(
+    "combo1",
+    "combo1",
+    "combo1",
+    "combo2",
+    "combo2",
+    "combo2",
+    "combo2",
+    "combo2",
+    "combo2",
+    "combo2"
+  )
+)
+
+g6(nodes, combos = combos) |>
+  g6_layout(antv_dagre_layout()) |>
+  g6_options(
+    animation = FALSE,
+    node = list(
+      style = list(
+        labelText = JS(
+          "(d) => {
+            return d.id
+          }"
+        )
+      )
+    ),
+    combo = list(
+      style = list(
+        lineWidth = 2,
+        labelText = JS(
+          "(d) => {
+            return d.id
+          }"
+        )
+      )
+    )
+  ) |>
+  g6_behaviors(
+    collapse_expand(),
+    drag_canvas(),
+    zoom_canvas(),
+    drag_element(dropEffect = "link")
+  )
+```
+
+By using `drag_element(dropEffect = "link")`, you can drag nodes into combos, which will automatically create a link between the node and the combo in the graph data. We provide more examples in the Shiny vignette (TBD).
+
+We implemented a custom type `circle-combo-with-extra-button`.
+
+### Styling combos
+
+The `g6` JavaScript library exposes a wide range of style properties for combos, which can be set in the `style` property of the combo data. We list below the most outstanding properties, but you can find a comprehensive list in the [documentation](https://g6.antv.antgroup.com/en/manual/element/combo/build-in/base-combo#style).
+
+![](figures/combo.png){fig-align="center" width=50%}
