@@ -59,6 +59,7 @@ edges <- list(
 - `target`: the id of the target node, required.
 - `id`: a unique identifier for the edge (optional, if not passed it will be `<source>-<target>`).
 - `type`: the type of the edge.
+- `data`: custom data for the edge that can be retrieved.
 - `style`: style properties. A comprehensive list is available [here](https://g6.antv.antgroup.com/en/manual/element/edge/build-in/base-edge#style).
 - `states`: initial [states](https://g6.antv.antgroup.com/en/manual/element/edge/build-in/base-edge#state).
 
@@ -246,6 +247,34 @@ g6(nodes, edges) |>
   g6_layout(d3_force_layout())
 
 ```
+
+### Color palette
+
+One can assign a color [palette](https://g6.antv.antgroup.com/en/manual/element/edge/build-in/base-edge#palette) for edges such that they may be grouped given a specific property. In the following, we use the "Les Misérables" dataset, which contains edges and a `value` column, for which we set a color palette. There are `length(unique(lesmis$edges$value))` color choices:
+```{r}
+edges <- unname(split(lesmis$edges, seq(nrow(lesmis$edges))))
+edges <- lapply(edges, function(edge) {
+  edge <- as.list(edge)
+  edge$data <- list(value = edge$value)
+  edge
+})
+g6(lesmis$nodes, edges) |>
+  g6_layout(d3_force_layout()) |>
+  g6_options(
+    animation = FALSE,
+    autoFit = "view",
+    autoResize = TRUE,
+    edge = list(
+      style = list(endArrow = TRUE),
+      palette = list(
+        type = "group", # use discret palette
+        field = "value", # The property to group edges by
+        color = "tableau"
+      )
+    )
+  )
+```
+
 
 ## Update edges data
 

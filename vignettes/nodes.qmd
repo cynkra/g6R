@@ -350,6 +350,10 @@ g6(nodes) |>
   )
 ```
 
+### Color palette
+
+TBD
+
 ## Update nodes data
 
 These functions can only be used in a Shiny app context. They allow you to get or update the nodes data in the graph after it has been created. The functions are:
