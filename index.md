@@ -1,0 +1,92 @@
+# g6R
+
+
+<!-- index.md is generated from index.qmd Please edit that file -->
+
+# g6R
+
+<!-- badges: start -->
+
+[![R-CMD-check](https://github.com/cynkra/g6R/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/cynkra/g6R/actions/workflows/R-CMD-check.yaml)
+[![Lifecycle:
+experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
+<!-- badges: end -->
+
+`{g6R}` provides R bindings to the G6 graph
+[library](https://g6.antv.antgroup.com/en).
+
+<p style="text-align: center;">
+<img src="./man/figures/hex.png" style="width:50.0%" />
+</p>
+
+``` r
+shinyAppDir(system.file("examples", "demo", package = "g6R"))
+```
+
+<iframe class="border border-5 rounded shadow-lg" src="https://shinylive.io/r/app/#h=0&amp;code=NobwRAdghgtgpmAXGKAHVA6ASmANGAYwHsIAXOMpMAdzgCMAnRRASwgGdSoAbbgCgA6YAOYA2LENwACBnFRF2UgLxShAC1KlU7RAHpdBAJ4QA1gygZhLUmoCudDCyK663IgTMZadLLqEBKMABfAF0gA" style="zoom: 0.75;" width="100%" height="1100px"></iframe>
+
+## Installation
+
+You can install the development version of `{g6R}` from
+[GitHub](https://github.com/) with:
+
+``` r
+# install.packages("pak")
+pak::pak("cynkra/g6R")
+```
+
+## Example
+
+To create a `g6` graph:
+
+``` r
+library(g6R)
+nodes <- data.frame(
+  id = as.character(1:10),
+  label = as.character(1:10)
+)
+
+# Generate random edges
+edges <- data.frame(
+  source = c("2", "6", "7"),
+  target = c("1", "3", "9")
+)
+
+g6(nodes, edges) |>
+  g6_options(
+    node = list(
+      style = list(
+        labelBackground = TRUE,
+        labelBackgroundFill = '#FFB6C1',
+        labelBackgroundRadius = 4,
+        labelFontFamily = 'Arial',
+        labelPadding = c(0, 4),
+        labelText = JS(
+          "(d) => {
+            return d.id
+        }"
+        )
+      )
+    )
+  ) |>
+  g6_layout(d3_force_layout()) |>
+  g6_behaviors(
+    "zoom-canvas",
+    drag_element_force(fixed = TRUE),
+    click_select(
+      multiple = TRUE,
+      onClick = JS(
+        "(e) => {
+            console.log(e);
+          }"
+      )
+    ),
+    brush_select(),
+    create_edge()
+  ) |>
+  g6_plugins(
+    "minimap",
+    "tooltip",
+    context_menu()
+  )
+```

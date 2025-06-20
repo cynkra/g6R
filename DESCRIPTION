@@ -28,7 +28,8 @@ Suggests:
     knitr,
     rmarkdown,
     quarto,
-    igraph
+    igraph,
+    roxy.shinylive
 VignetteBuilder: quarto, knitr
 Depends: 
     R (>= 4.1.0)
