@@ -55,16 +55,10 @@ combos <- data.frame(
   combo = c("combo3", "combo3", NA)
 )
 nodes <- data.frame(
-  id = as.character(1:10),
+  id = as.character(1:4),
   combo = c(
     "combo1",
     "combo1",
-    "combo1",
-    "combo2",
-    "combo2",
-    "combo2",
-    "combo2",
-    "combo2",
     "combo2",
     "combo2"
   )
@@ -95,16 +89,15 @@ g6(nodes, combos = combos) |>
     )
   ) |>
   g6_behaviors(
-    collapse_expand(),
-    drag_canvas(),
     zoom_canvas(),
+    collapse_expand(),
     drag_element(dropEffect = "link")
   )
 ```
 
 By using `drag_element(dropEffect = "link")`, you can drag nodes into combos, which will automatically create a link between the node and the combo in the graph data. We provide more examples in the Shiny vignette (TBD).
 
-We implemented a custom type `circle-combo-with-extra-button`.
+Like for the edges, we implemented a custom combo type `circle-combo-with-extra-button`, which adds a button to bottom of the combo. This button can be used to collapse or expand the combo.
 
 ### Styling combos
 
