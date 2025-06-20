@@ -206,6 +206,27 @@ The `g6` JavaScript library exposes a wide range of style properties for nodes, 
 
 ![](figures/node.png){fig-align="center" width=50%}
 
+#### Main graphic properties
+
+These properties are used to define the main graphic [style](https://g6.antv.antgroup.com/en/manual/element/node/build-in/base-node#main-graphic-style) of the node, such as color, width, and line type. They can be applied at the global node option level or at the individual node level. Here is an example of how to set the color for all nodes of the same graph:
+
+```{r}
+nodes <- data.frame(id = c("1", "2"))
+g6(nodes, height = "200px") |>
+  g6_layout(d3_force_layout()) |>
+  g6_options(
+    node = list(
+      style = list(
+        fill = "#FFB6C1", # Node fill color
+        fillOpacity = 0.5, # Node fill opacity
+        stroke = "#000", # Node border color
+        lineWidth = 2, # Node border width
+        radius = 10 # Node corner radius
+      )
+    )
+  )
+```
+
 #### Label styling
 
 Some common properties include label [styling](https://g6.antv.antgroup.com/en/manual/element/node/build-in/base-node#label-style):
@@ -329,9 +350,13 @@ g6(nodes) |>
   )
 ```
 
+### Color palette
+
+TBD
+
 ## Update nodes data
 
-These function can only be used in a Shiny app context. They allow you to get or update the nodes data in the graph after it has been created. The functions are:
+These functions can only be used in a Shiny app context. They allow you to get or update the nodes data in the graph after it has been created. The functions are:
 
 - `g6_add_nodes()`: adds new nodes to the graph.
 - `g6_update_nodes()`: updates existing nodes in the graph.
