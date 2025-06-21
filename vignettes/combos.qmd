@@ -104,3 +104,40 @@ Like for the edges, we implemented a custom combo type `circle-combo-with-extra-
 The `g6` JavaScript library exposes a wide range of style properties for combos, which can be set in the `style` property of the combo data. We list below the most outstanding properties, but you can find a comprehensive list in the [documentation](https://g6.antv.antgroup.com/en/manual/element/combo/build-in/base-combo#style).
 
 ![](figures/combo.png){fig-align="center" width=50%}
+
+### Color palette
+
+```{r}
+g6(poke$nodes, poke$edges, poke$combos) |>
+  g6_layout(combo_combined_layout(spacing = 50)) |>
+  g6_options(
+    animation = FALSE,
+    node = list(
+      style = list(
+        labelText = JS(
+          "(d) => {
+            return d.data.label
+          }"
+        )
+      )
+    ),
+    edge = list(
+      style = list(endArrow = TRUE)
+    ),
+    combo = list(
+      style = list(
+        fillOpacity = 0.5
+      ),
+      palette = list(
+        type = "group", # use discret palette
+        field = "family",
+        color = "spectral"
+      )
+    )
+  ) |>
+  g6_behaviors(
+    zoom_canvas(),
+    collapse_expand(),
+    drag_element()
+  )
+```
