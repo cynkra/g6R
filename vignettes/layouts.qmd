@@ -77,7 +77,8 @@ The `radial_layout()` function arranges nodes in a radial pattern, which is usef
 g6(radial$nodes, radial$edges) |>
   g6_layout(radial_layout()) |>
   g6_options(
-    autoFit = "view", autoResize = TRUE,
+    autoFit = "view",
+    autoResize = TRUE,
     node = list(
       style = list(
         labelFill = '#fff',
@@ -92,14 +93,15 @@ g6(radial$nodes, radial$edges) |>
   )
 ```
 
-For more on node styles, see the [nodes vignette](nodes.qmd).
+For more on node styles, see the [nodes vignette](nodes.html).
 
 The focus node can be set to any node in the graph. The `focusNode` parameter is used to specify the central node around which the radial layout is arranged. 
 ```{r}
 g6(radial$nodes, radial$edges) |>
   g6_layout(radial_layout(focusNode = "22")) |>
   g6_options(
-    autoFit = "view", autoResize = TRUE,
+    autoFit = "view",
+    autoResize = TRUE,
     node = list(
       style = list(
         labelFill = '#fff',
@@ -132,7 +134,7 @@ g6(tree$nodes, tree$edges) |>
   g6_options(edge = list(type = "cubic-horizontal"), autoFit = "view")
 ```
 
-More on edge styles can be found in the [edges vignette](edges.qmd).
+More on edge styles can be found in the [edges vignette](edges.html).
 
 The direction of the dendrogram can be changed using the `direction` parameter. The default is "LR" (left to right), but it can for example also be set to "TB" (top to bottom).
 ```{r}
