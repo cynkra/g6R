@@ -2,6 +2,7 @@
 <url><loc>https://cynkra.github.io/g6R/404.html</loc></url>
 <url><loc>https://cynkra.github.io/g6R/LICENSE-text.html</loc></url>
 <url><loc>https://cynkra.github.io/g6R/LICENSE.html</loc></url>
+<url><loc>https://cynkra.github.io/g6R/articles/combos.html</loc></url>
 <url><loc>https://cynkra.github.io/g6R/articles/edges.html</loc></url>
 <url><loc>https://cynkra.github.io/g6R/articles/g6R.html</loc></url>
 <url><loc>https://cynkra.github.io/g6R/articles/igraph.html</loc></url>
@@ -23,6 +24,7 @@
 <url><loc>https://cynkra.github.io/g6R/reference/circular_layout.html</loc></url>
 <url><loc>https://cynkra.github.io/g6R/reference/click_select.html</loc></url>
 <url><loc>https://cynkra.github.io/g6R/reference/collapse_expand.html</loc></url>
+<url><loc>https://cynkra.github.io/g6R/reference/combo_combined_layout.html</loc></url>
 <url><loc>https://cynkra.github.io/g6R/reference/combo_options.html</loc></url>
 <url><loc>https://cynkra.github.io/g6R/reference/compact_box_layout.html</loc></url>
 <url><loc>https://cynkra.github.io/g6R/reference/concentric_layout.html</loc></url>
@@ -80,6 +82,7 @@
 <url><loc>https://cynkra.github.io/g6R/reference/node_options.html</loc></url>
 <url><loc>https://cynkra.github.io/g6R/reference/node_style_options.html</loc></url>
 <url><loc>https://cynkra.github.io/g6R/reference/optimize_viewport_transform.html</loc></url>
+<url><loc>https://cynkra.github.io/g6R/reference/poke.html</loc></url>
 <url><loc>https://cynkra.github.io/g6R/reference/radial.html</loc></url>
 <url><loc>https://cynkra.github.io/g6R/reference/radial_layout.html</loc></url>
 <url><loc>https://cynkra.github.io/g6R/reference/scroll_canvas.html</loc></url>
