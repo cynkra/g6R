@@ -1234,3 +1234,136 @@ dendrogram_layout <- function(
   }
   build_layout("dendrogram", ...)
 }
+
+#' Create an AntV Combo Combined Layout
+#'
+#' Creates a combo combined layout configuration for G6 graphs. This layout
+#' algorithm combines different layout strategies for elements inside combos
+#' and the outermost layer, providing hierarchical organization of graph elements.
+#'
+#' @param center Layout center coordinates. A numeric vector of length 2 \code{[x, y]}.
+#'   If NULL, uses the graph center. Default is NULL.
+#' @param comboPadding Padding value inside the combo, used only for force
+#'   calculation, not for rendering. It is recommended to set the same value
+#'   as the visual padding. Can be a number, numeric vector, function, or
+#'   JS function. Default is 10.
+#' @param innerLayout Layout algorithm for elements inside the combo. Should be
+#'   a Layout object or function. If NULL, uses ConcentricLayout as default.
+#' @param nodeSize Node size (diameter), used for collision detection. If not
+#'   specified, it is calculated from the node's size property. Can be a number,
+#'   numeric vector, function, or JS function. Default is 10.
+#' @param outerLayout Layout algorithm for the outermost layer. Should be a
+#'   Layout object or function. If NULL, uses ForceLayout as default.
+#' @param spacing Minimum spacing between node/combo edges when preventNodeOverlap
+#'   or preventOverlap is true. Can be a number, function, or JS function for
+#'   different nodes. Default is NULL.
+#' @param treeKey Tree key identifier as a character string. Default is NULL.
+#' @param ... Additional parameters passed to the layout configuration.
+#'
+#' @return A layout configuration object for use with G6 graphs.
+#'
+#' @details
+#' The combo combined layout is particularly useful for graphs with hierarchical
+#' structures where you want different layout algorithms for different levels
+#' of the hierarchy. The inner layout handles elements within combos, while
+#' the outer layout manages the overall arrangement.
+#'
+#' @examples
+#' \dontrun{
+#' # Basic combo combined layout
+#' layout <- combo_combined_layout()
+#'
+#' # Custom configuration with specific center and padding
+#' layout <- combo_combined_layout(
+#'   comboPadding = 20,
+#'   nodeSize = 15,
+#'   spacing = 10
+#' )
+#' }
+#'
+#' @seealso \code{\link{antv_dagre_layout}} for dagre layout configuration
+#'
+#' @export
+combo_combined_layout <- function(
+  center = NULL,
+  comboPadding = 10,
+  innerLayout = NULL,
+  nodeSize = 10,
+  outerLayout = NULL,
+  spacing = NULL,
+  treeKey = NULL,
+  ...
+) {
+  # Validate center
+  if (!is.null(center)) {
+    if (!is.numeric(center) || length(center) != 2) {
+      stop("center must be a numeric vector with 2 elements [x, y]")
+    }
+  }
+
+  # Validate comboPadding
+  if (!is.null(comboPadding)) {
+    if (is.numeric(comboPadding)) {
+      if (is.vector(comboPadding) && length(comboPadding) > 1) {
+        # Allow numeric vector
+      } else if (length(comboPadding) == 1 && comboPadding < 0) {
+        stop("comboPadding must be a non-negative number")
+      }
+    } else if (!is_js(comboPadding)) {
+      stop(
+        "comboPadding must be a number, numeric vector, JS function, or JS function"
+      )
+    }
+  }
+
+  # Validate innerLayout
+  if (!is.null(innerLayout)) {
+    if (!is.list(innerLayout) && !is_js(innerLayout)) {
+      stop("innerLayout must be a Layout object or JS function")
+    }
+  }
+
+  # Validate nodeSize
+  if (!is.null(nodeSize)) {
+    if (is.numeric(nodeSize)) {
+      if (is.vector(nodeSize) && length(nodeSize) > 1) {
+        # Allow numeric vector
+      } else if (length(nodeSize) == 1 && nodeSize <= 0) {
+        stop("nodeSize must be a positive number")
+      }
+    } else if (!is_js(nodeSize)) {
+      stop(
+        "nodeSize must be a number, numeric vector, function, or JS function"
+      )
+    }
+  }
+
+  # Validate outerLayout
+  if (!is.null(outerLayout)) {
+    if (!is.list(outerLayout) && !is_js(outerLayout)) {
+      stop("outerLayout must be a Layout object or JS function")
+    }
+  }
+
+  # Validate spacing
+  if (!is.null(spacing)) {
+    if (is.numeric(spacing)) {
+      if (spacing < 0) {
+        stop("spacing must be a non-negative number")
+      }
+    } else if (is.function(spacing)) {
+      # Allow function
+    } else if (!is_js(spacing)) {
+      stop("spacing must be a number, function, or JS function")
+    }
+  }
+
+  # Validate treeKey
+  if (!is.null(treeKey)) {
+    if (!is.character(treeKey) || length(treeKey) != 1) {
+      stop("treeKey must be a single character string")
+    }
+  }
+
+  build_layout("combo-combined", ...)
+}

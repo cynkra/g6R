@@ -68,3 +68,21 @@
 #' }
 #' @source \url{https://gw.alipayobjects.com/os/antvdemo/assets/data/algorithm-category.json}
 "dag"
+
+#' Example pokemon data
+#'
+#' Pokemon evolution network to showcase combo features.
+#'
+#' @docType data
+#'
+#' @usage data(poke)
+#'
+#' @format A list with 3 nested lists:
+#' \describe{
+#'   \item{nodes}{list with 120 pokemon.}
+#'   \item{edges}{list with 69 connections.}
+#'   \item{combo}{list with 51 pokemon families.
+#'    A family contains all evolutions of a pokemon.}
+#' }
+#' @source \url{https://pokeapi.co/docs/v2}
+"poke"

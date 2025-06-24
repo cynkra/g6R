@@ -92,6 +92,7 @@ reference:
       - force_atlas2_layout
       - fruchterman_layout
       - radial_layout
+      - combo_combined_layout
 
   - title: Options
     desc: g6 options
@@ -190,3 +191,4 @@ reference:
       - lesmis
       - radial
       - tree
+      - poke
