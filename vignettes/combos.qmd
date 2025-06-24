@@ -89,6 +89,7 @@ g6(nodes, combos = combos) |>
     )
   ) |>
   g6_behaviors(
+    zoom_canvas(),
     collapse_expand(),
     drag_element(dropEffect = "link")
   )
@@ -125,6 +126,7 @@ g6(nodes, combos = combos, height = "200px") |>
     combo = list(
       style = list(
         lineWidth = 2,
+        labelPlacement = "top",
         labelText = JS(
           "(d) => {
             return d.id
@@ -207,6 +209,48 @@ g6(nodes, combos = combos, height = "200px") |>
   g6_behaviors(
     collapse_expand(),
     drag_element()
+  )
+```
+
+### States
+
+Combos can have different [states](https://g6.antv.antgroup.com/en/manual/element/combo/build-in/base-combo#state) that can be used to indicate different conditions or interactions. States can be set in the `states` property of the node data:
+
+```{r}
+states <- c(
+  "default",
+  "selected",
+  "highlight",
+  "active",
+  "inactive",
+  "disabled"
+)
+combos <- lapply(seq_along(states), \(i) {
+  list(
+    id = sprintf("combo-%s", i),
+    states = list(states[[i]]),
+    data = list(state = states[[i]])
+  )
+})
+nodes <- lapply(seq_along(states), \(i) {
+  list(
+    id = sprintf("node-%s", i),
+    combo = sprintf("combo-%s", i)
+  )
+})
+g6(nodes, combos = combos) |>
+  g6_layout(d3_force_layout()) |>
+  g6_options(
+    animation = FALSE,
+    combo = list(
+      style = list(
+        labelText = JS(
+          "(d) => {
+            return d.data.state
+          }"
+        )
+      )
+    )
   )
 ```
 
