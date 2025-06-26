@@ -98,21 +98,9 @@ g6 <- function(
   elementId = NULL
 ) {
   # Convert data frames to lists of records
-  if (inherits(nodes, "data.frame")) {
-    nodes <- df_to_list(nodes)
-  } else {
-    nodes <- convert_id_to_chr(nodes)
-  }
-  if (inherits(edges, "data.frame")) {
-    edges <- df_to_list(edges)
-  } else {
-    edges <- convert_id_to_chr(edges)
-  }
-  if (inherits(combos, "data.frame")) {
-    combos <- df_to_list(combos)
-  } else {
-    combos <- convert_id_to_chr(combos)
-  }
+  nodes <- process_g6_data(nodes, "node")
+  edges <- process_g6_data(edges, "edge")
+  combos <- process_g6_data(combos, "combo")
 
   # Check that all ids are unique
   ensure_unique_ids(get_ids())
