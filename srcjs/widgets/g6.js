@@ -13,11 +13,10 @@ import { setClickEvents, setGraphEvents } from '../modules/events';
 import { registerShinyHandlers } from '../modules/handlers';
 import { AntLine, FlyMarkerCubic, CircleComboWithExtraButton } from '../modules/extensions';
 
-// This is to be able to use custom fontawesome icons
-// See: https://docs.fontawesome.com/web/add-icons/svg-symbols
+// This is to be able to use custom icons: 
+// https://at.alicdn.com/t/project/2678727/caef142c-804a-4a2f-a914-ae82666a31ee.html?spm=a313x.7781069.1998910419.35
 const iconURLs = [
-  '//cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/js/fontawesome.min.js',
-  '//cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/js/solid.min.js'
+  '//at.alicdn.com/t/font_2678727_za4qjydwkkh.js'
 ]
 
 iconURLs.map((url) => {

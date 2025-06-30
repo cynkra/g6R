@@ -2,7 +2,7 @@
 title: "Combos"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{g6R}
+  %\VignetteIndexEntry{combos}
   %\VignetteEngine{quarto::html}
   %\VignetteEncoding{UTF-8}
 ---

@@ -2,7 +2,7 @@
 title: "Nodes"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{g6R}
+  %\VignetteIndexEntry{nodes}
   %\VignetteEngine{quarto::html}
   %\VignetteEncoding{UTF-8}
 ---

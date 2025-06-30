@@ -5,7 +5,7 @@
 #' 'concentric', 'dagre', and more. Each layout has its own set of configurable parameters.
 #'
 #' @param graph A g6 graph object created with \code{g6()}.
-#' @param layout An existing layout function like \link{circular_layout}.
+#' @param layout An existing layout function like \link{circular_layout} or a string like `circular-layout`.
 #'   At minimum, this can be a list that should contain a \code{type} element specifying the layout algorithm.
 #'   Additional parameters depend on the layout type chosen, for instance \code{list(type = "force")}.
 #'
@@ -34,47 +34,16 @@
 #' @seealso \code{\link{g6}}
 #' @export
 g6_layout <- function(graph, layout = d3_force_layout()) {
+  if (is.null(layout)) {
+    stop("layout must be specified.")
+  }
   graph$x$layout <- validate_layout(layout)
   graph
 }
 
 #' @keywords internal
-valid_layouts <- c(
-  # N = 20
-  "antv-dagre",
-  "circular",
-  "combo-combined",
-  "concentric",
-  "d3-force",
-  "d3-force-3d",
-  "dagre",
-  "fishbone",
-  "force",
-  "force-atlas2",
-  "fruchterman",
-  "grid",
-  "mds",
-  "radial",
-  "random",
-  "snake",
-  "compact-box",
-  "dendrogram",
-  "mindmap",
-  "indented"
-)
-
-#' @keywords internal
 validate_layout <- function(x) {
-  if (!(x[["type"]] %in% valid_layouts)) {
-    stop(
-      sprintf(
-        "Current layout '%s' is not a valid. Valid layouts are: %s.",
-        x[["type"]],
-        paste(valid_layouts, collapse = ", ")
-      )
-    )
-  }
-  x
+  validate_component(x, "layout")
 }
 
 # Generic layout constructor that inspects its caller
@@ -1367,3 +1336,28 @@ combo_combined_layout <- function(
 
   build_layout("combo-combined", ...)
 }
+
+#' @keywords internal
+valid_layouts <- c(
+  # N = 20
+  "antv-dagre" = antv_dagre_layout,
+  "circular" = circular_layout,
+  "combo-combined" = combo_combined_layout,
+  "concentric" = concentric_layout,
+  "d3-force" = d3_force_layout,
+  #"d3-force-3d" = d3_force_3d_layout,
+  #"dagre" = dagre_layout,
+  #"fishbone" = fishbone_layout,
+  #"force",
+  "force-atlas2" = force_atlas2_layout,
+  "fruchterman" = fruchterman_layout,
+  #"grid" = grid_layout,
+  #"mds" = mds_layout,
+  "radial" = radial_layout,
+  #"random",
+  #"snake",
+  "compact-box" = compact_box_layout,
+  "dendrogram" = dendrogram_layout #,
+  #"mindmap",
+  #"indented"
+)

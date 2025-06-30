@@ -2,7 +2,7 @@
 title: "Edges"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{g6R}
+  %\VignetteIndexEntry{edges}
   %\VignetteEngine{quarto::html}
   %\VignetteEncoding{UTF-8}
 ---

@@ -2,7 +2,7 @@
 title: "Behaviors"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{g6R}
+  %\VignetteIndexEntry{behaviors}
   %\VignetteEngine{quarto::html}
   %\VignetteEncoding{UTF-8}
 ---

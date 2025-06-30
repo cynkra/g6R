@@ -72,26 +72,15 @@ g6_behaviors <- function(graph, ...) {
   behaviors <- list(...)
   if (length(behaviors)) {
     graph$x$behaviors <- lapply(behaviors, validate_behavior)
+  } else {
+    stop("You must provide at least one behavior configuration.")
   }
   graph
 }
 
 #' @keywords internal
 validate_behavior <- function(x) {
-  # Allow to pass behavior as text
-  if (!is.list(x)) {
-    # Call with default values
-    x <- valid_behaviors[[x]]()
-  }
-
-  if (!(x[["type"]] %in% names(valid_behaviors))) {
-    stop(sprintf(
-      "Behavior '%s' is not a valid behavior. Valid behaviors are: %s.",
-      x[["type"]],
-      paste(names(valid_behaviors), collapse = ", ")
-    ))
-  }
-  x
+  validate_component(x, "behavior")
 }
 
 #' @keywords internal
