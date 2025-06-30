@@ -17,3 +17,5 @@
 ^data-raw$
 ^vignettes/\.quarto$
 ^vignettes/*_files$
+^index\.qmd$
+^index\.md$

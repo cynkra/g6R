@@ -111,26 +111,15 @@ g6_plugins <- function(graph, ...) {
   plugins <- list(...)
   if (length(plugins)) {
     graph$x$plugins <- lapply(plugins, validate_plugin)
+  } else {
+    stop("You must provide at least one plugin configuration.")
   }
   graph
 }
 
 #' @keywords internal
 validate_plugin <- function(x) {
-  # Allow to pass plugin as text
-  if (!is.list(x)) {
-    # Call function with defaults
-    x <- valid_plugins[[x]]()
-  }
-
-  if (!(x[["type"]] %in% names(valid_plugins))) {
-    stop(sprintf(
-      "Plugin '%s' is not a valid plugin. Valid plugins are: %s.",
-      x[["type"]],
-      paste(names(valid_plugins), collapse = ", ")
-    ))
-  }
-  x
+  validate_component(x, "plugin")
 }
 
 #' Configure Background Plugin for G6

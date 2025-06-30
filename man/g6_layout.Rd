@@ -9,7 +9,7 @@ g6_layout(graph, layout = d3_force_layout())
 \arguments{
 \item{graph}{A g6 graph object created with \code{g6()}.}
 
-\item{layout}{An existing layout function like \link{circular_layout}.
+\item{layout}{An existing layout function like \link{circular_layout} or a string like \code{circular-layout}.
 At minimum, this can be a list that should contain a \code{type} element specifying the layout algorithm.
 Additional parameters depend on the layout type chosen, for instance \code{list(type = "force")}.}
 }

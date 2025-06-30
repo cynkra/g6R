@@ -2,7 +2,7 @@
 title: "Plugins"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{g6R}
+  %\VignetteIndexEntry{plugins}
   %\VignetteEngine{quarto::html}
   %\VignetteEncoding{UTF-8}
 ---

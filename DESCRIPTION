@@ -29,8 +29,12 @@ Suggests:
     rmarkdown,
     quarto,
     igraph,
-    roxy.shinylive
+    roxy.shinylive,
+    testthat (>= 3.0.0),
+    stringr,
+    htmltools
 VignetteBuilder: quarto, knitr
 Depends: 
     R (>= 4.1.0)
 LazyData: true
+Config/testthat/edition: 3
