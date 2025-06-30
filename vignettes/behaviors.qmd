@@ -137,3 +137,13 @@ for (behavior in names(behaviors_data)) {
   cat("---\n\n")
 }
 ```
+
+## Dynamically interact with behaviors
+
+### Add
+
+TBD?
+
+### Update
+
+To update behavior from the server of a Shiny app, you can use the `g6_update_behavior()` function. This function allows you to modify the behaviors of an existing G6 graph.

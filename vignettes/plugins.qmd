@@ -381,3 +381,13 @@ g6(nodes, edges) |>
     history(stackSize = 100)
   )
 ```
+
+## Dynamically interact with plugins
+
+### Add
+
+To add a plugin dynamically from the server side of a Shiny app, you can use the `g6_add_plugin()` function. This function allows you to append new plugins to an existing G6 graph based on user interactions or other reactive data.
+
+### Update
+
+To update a plugin from the server side of a Shiny app, you can use the `g6_update_plugin()` function. This function allows you to modify the plugin's parameters dynamically based on user input or other reactive data.
