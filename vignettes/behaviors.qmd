@@ -40,6 +40,21 @@ behaviors_data <- list(
 # This is a dummy chart, just to make sure all E-charts'
 # JS dependency are loaded.
 g6(height = "1px")
+
+nodes_options <- list(
+  style = list(
+    labelBackground = TRUE,
+    labelBackgroundFill = "#FFB6C1",
+    labelBackgroundRadius = 4,
+    labelFontFamily = "Arial",
+    labelPadding = c(0, 4),
+    labelText = JS(
+      "(d) => {
+        return d.id
+      }"
+    )
+  )
+)
 ```
 
 ## Introduction
@@ -91,15 +106,7 @@ for (behavior in names(behaviors_data)) {
   g6_plot <- g6(nodes) |>
     g6_options(
       animation = FALSE,
-      node = list(
-        style = list(
-          labelText = JS(
-            "(d) => {
-              return d.id
-            }"
-          )
-        )
-      )
+      node = nodes_options
     ) |>
     g6_layout(d3_force_layout()) |>
     g6_behaviors(behavior)

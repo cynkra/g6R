@@ -49,8 +49,8 @@ nodes_options <- list(
     labelPadding = c(0, 4),
     labelText = JS(
       "(d) => {
-              return d.id
-            }"
+        return d.id
+      }"
     )
   )
 )
@@ -86,13 +86,7 @@ for (plugin in names(plugins_data)) {
     g6_behaviors("drag-element") |>
     g6_options(
       animation = FALSE,
-      node = nodes_options,
-      edges = list(
-        style = list(
-          stroke = "#666",
-          lineWidth = 2
-        )
-      )
+      node = nodes_options
     ) |>
     g6_plugins(plugin)
 
@@ -136,7 +130,7 @@ for (plugin in names(plugins_data)) {
 }
 ```
 
-## Background
+## Background Plugin
 
 Adds background images or colors to the canvas for visual enhancement and branding.
 
@@ -147,20 +141,14 @@ g6(nodes, edges) |>
   g6_behaviors("drag-element") |>
   g6_options(
     animation = FALSE,
-    node = nodes_options,
-    edges = list(
-      style = list(
-        stroke = "#666",
-        lineWidth = 2
-      )
-    )
+    node = nodes_options
   ) |>
   g6_plugins(
     background(backgroundColor = "#f0f2f5")
   )
 ```
 
-## Bubble sets
+## Bubble Sets Plugin
 
 Creates smooth bubble-like element outlines for enhanced visual grouping.
 
@@ -171,13 +159,7 @@ g6(nodes, edges) |>
   g6_behaviors("drag-element") |>
   g6_options(
     animation = FALSE,
-    node = nodes_options,
-    edges = list(
-      style = list(
-        stroke = "#666",
-        lineWidth = 2
-      )
-    )
+    node = nodes_options
   ) |>
   g6_plugins(
     bubble_sets(
@@ -211,7 +193,7 @@ g6(nodes, edges) |>
   )
 ```
 
-## Fullscreen
+## Fullscreen Plugin
 
 Supports full-screen display and exit for charts to maximize viewing area.
 
@@ -221,13 +203,7 @@ g6(nodes, edges) |>
   g6_behaviors("drag-element") |>
   g6_options(
     animation = FALSE,
-    nodes = nodes_options,
-    edges = list(
-      style = list(
-        stroke = "#666",
-        lineWidth = 2
-      )
-    )
+    nodes = nodes_options
   ) |>
   g6_plugins(
     toolbar(),
@@ -235,7 +211,7 @@ g6(nodes, edges) |>
   )
 ```
 
-## Hull
+## Hull Plugin
 
 Creates an outline for a specified set of nodes to visually group related elements.
 
@@ -246,13 +222,7 @@ g6(nodes, edges) |>
   g6_behaviors("drag-element") |>
   g6_options(
     animation = FALSE,
-    node = nodes_options,
-    edges = list(
-      style = list(
-        stroke = "#666",
-        lineWidth = 2
-      )
-    )
+    node = nodes_options
   ) |>
   g6_plugins(
     hull(
@@ -280,7 +250,7 @@ g6(nodes, edges) |>
   )
 ```
 
-## Legend
+## Legend Plugin
 
 Displays categories and corresponding style descriptions of chart data.
 
@@ -300,13 +270,7 @@ g6(custom_nodes, edges) |>
   g6_behaviors("drag-element") |>
   g6_options(
     animation = FALSE,
-    node = nodes_options,
-    edges = list(
-      style = list(
-        stroke = "#666",
-        lineWidth = 2
-      )
-    )
+    node = nodes_options
   ) |>
   g6_plugins(
     legend(
@@ -316,19 +280,24 @@ g6(custom_nodes, edges) |>
   )
 ```
 
-## Timebar
+## Timebar Plugin
 
 Provides filtering and playback control for temporal data visualization.
 
 ```{r}
-start_date <- as.POSIXct('2023-08-01', tz = 'UTC')
-dates <- seq(start_date, by = '1 days', length.out = 8)
-times <- as.numeric(dates) * 1000
+start_date <- as.POSIXct("2023-08-01", tz = "UTC")
+dates <- as.character(seq(start_date, by = "1 days", length.out = 3))
+times <- lapply(seq_along(dates), \(i) {
+  list(
+    value = i,
+    time = JS(sprintf("new Date('%s').getTime()", dates[i]))
+  )
+})
 
-custom_nodes <- lapply(1:8, \(i) {
+custom_nodes <- lapply(seq_along(times), \(i) {
   list(
     id = letters[i],
-    data = list(timestamp = times[[i]])
+    data = list(timestamp = JS(sprintf("new Date('%s').getTime()", dates[i])))
   )
 })
 # Create and render the G6 plot
@@ -337,27 +306,17 @@ g6(custom_nodes) |>
   g6_behaviors("drag-element") |>
   g6_options(
     animation = FALSE,
-    node = nodes_options,
-    edges = list(
-      style = list(
-        stroke = "#666",
-        lineWidth = 2
-      )
-    )
+    node = nodes_options
   ) |>
   g6_plugins(
     timebar(
-      data = lapply(seq_along(times), \(i) {
-        list(
-          value = i,
-          time = times[[i]]
-        )
-      }),
+      data = times,
+      height = 100
     )
   )
 ```
 
-## Watermark
+## Watermark Plugin
 
 Adds a watermark to the canvas to protect copyright and brand the visualization.
 
@@ -367,13 +326,7 @@ g6(nodes, edges) |>
   g6_behaviors("drag-element") |>
   g6_options(
     animation = FALSE,
-    node = nodes_options,
-    edges = list(
-      style = list(
-        stroke = "#666",
-        lineWidth = 2
-      )
-    )
+    node = nodes_options
   ) |>
   g6_plugins(
     watermark(
@@ -383,3 +336,7 @@ g6(nodes, edges) |>
     )
   )
 ```
+
+## History plugin
+
+TBD
