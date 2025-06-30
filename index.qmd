@@ -30,7 +30,7 @@ knitr::opts_chunk$set(
 </p>
 
 
-```{r update-node-demo, eval=FALSE, echo = TRUE}
+```{r g6R-demo, eval=FALSE, echo = TRUE}
 shinyAppDir(system.file("examples", "demo", package = "g6R"))
 ```
 
@@ -39,7 +39,7 @@ shinyAppDir(system.file("examples", "demo", package = "g6R"))
 code <- paste0(
   c(
     "webr::install(\"g6R\", repos = \"https://cynkra.github.io/blockr.webR/\")",
-    knitr::knit_code$get("demo")
+    knitr::knit_code$get("g6R-demo")
   ),
   collapse = "\n"
 )

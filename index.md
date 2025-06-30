@@ -23,7 +23,7 @@ experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](h
 shinyAppDir(system.file("examples", "demo", package = "g6R"))
 ```
 
-<iframe class="border border-5 rounded shadow-lg" src="https://shinylive.io/r/app/#h=0&amp;code=NobwRAdghgtgpmAXGKAHVA6ASmANGAYwHsIAXOMpMAdzgCMAnRRASwgGdSoAbbgCgA6YAOYA2LENwACBnFRF2UgLxShAC1KlU7RAHpdBAJ4QA1gygZhLUmoCudDCyK663IgTMZadLLqEBKMABfAF0gA" style="zoom: 0.75;" width="100%" height="1100px"></iframe>
+<iframe class="border border-5 rounded shadow-lg" src="https://shinylive.io/r/app/#h=0&amp;code=NobwRAdghgtgpmAXGKAHVA6ASmANGAYwHsIAXOMpMAdzgCMAnRRASwgGdSoAbbgCgA6YAOYA2LENwACBnFRF2UgLxShAC1KlU7RAHpdBAJ4QA1gygZhLUmoCudDCyK663IgTMZadLLqEBKAQ41NkMAQXQAERYGPnZDTjgYDAAzFm44QTA4AA9YVAz2SVUwABMkomLUKA8oYThlErEJMH9-MABfAF0gA" style="zoom: 0.75;" width="100%" height="1100px"></iframe>
 
 ## Installation
 
