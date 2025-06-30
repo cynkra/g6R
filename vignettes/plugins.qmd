@@ -280,7 +280,7 @@ g6(custom_nodes, edges) |>
   )
 ```
 
-## Timebar Plugin
+## Timebar Plugin (does not work yet ...)
 
 Provides filtering and playback control for temporal data visualization.
 
@@ -339,4 +339,45 @@ g6(nodes, edges) |>
 
 ## History plugin
 
-TBD
+The history plugin provides undo and redo functionality for graph modifications, allowing users to revert changes or reapply them. It works well with the `toolbar` plugin to provide a user interface for these actions:
+
+```{r}
+g6(nodes, edges) |>
+  g6_layout() |>
+  g6_behaviors("drag-element") |>
+  g6_options(
+    animation = FALSE,
+    node = nodes_options
+  ) |>
+  g6_plugins(
+    toolbar(
+      getItems = JS(
+        "() => [
+          { id: 'undo', value: 'undo' },
+          { id: 'redo', value: 'redo' },
+        ]"
+      ),
+      onClick = JS(
+        "(value, target, current) => {
+          // redo, undo need to be used with the history plugin
+          const graph = HTMLWidgets
+            .find(`#${target.closest('.g6').id}`)
+            .getWidget();
+          const history = graph.getPluginInstance('history');
+          switch (value) {
+            case 'undo':
+              history?.undo();
+              break;
+            case 'redo':
+              history?.redo();
+              break;
+            default:
+              break;
+          }
+        }"
+      )
+    ),
+    # Keep 100 events in memory
+    history(stackSize = 100)
+  )
+```

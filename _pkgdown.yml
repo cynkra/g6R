@@ -1,21 +1,17 @@
 url: https://cynkra.github.io/g6R/
 template:
   bootstrap: 5
+  light-switch: true
 
 navbar:
   structure:
-    left:  [get-started, data, behaviors, plugins, layout, others]
+    left:  [intro, elements, behaviors, plugins, layout, others]
     right: [search, reference, news, github, lightswitch]
   components:
     home: ~
 
-    get-started:
-      text: Get Started
-      menu:
-        - text: g6R
-          href: articles/g6R.html
-    data:
-      text: Data structures
+    elements:
+      text: Elements
       menu:
         - text: Nodes
           href: articles/nodes.html
