@@ -127,7 +127,7 @@ validate_plugin <- function(x) {
     stop(sprintf(
       "Plugin '%s' is not a valid plugin. Valid plugins are: %s.",
       x[["type"]],
-      paste(valid_plugins, collapse = ", ")
+      paste(names(valid_plugins), collapse = ", ")
     ))
   }
   x

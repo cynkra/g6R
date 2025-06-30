@@ -84,11 +84,11 @@ validate_behavior <- function(x) {
     x <- valid_behaviors[[x]]()
   }
 
-  if (!(x[["type"]] %in% valid_behaviors)) {
+  if (!(x[["type"]] %in% names(valid_behaviors))) {
     stop(sprintf(
       "Behavior '%s' is not a valid behavior. Valid behaviors are: %s.",
       x[["type"]],
-      paste(valid_behaviors, collapse = ", ")
+      paste(names(valid_behaviors), collapse = ", ")
     ))
   }
   x
