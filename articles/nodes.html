@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <title>Nodes • g6R</title>
-<script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<script src="../lightswitch.js"></script><script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
 <script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
 <link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
@@ -18,7 +18,7 @@
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
 
 
-    <nav class="navbar navbar-expand-lg fixed-top bg-light" data-bs-theme="light" aria-label="Site navigation"><div class="container">
+    <nav class="navbar navbar-expand-lg fixed-top " aria-label="Site navigation"><div class="container">
 
     <a class="navbar-brand me-2" href="../index.html">g6R</a>
 
@@ -32,24 +32,54 @@
     <div id="navbar" class="collapse navbar-collapse ms-3">
       <ul class="navbar-nav me-auto">
 <li class="nav-item"><a class="nav-link" href="../articles/g6R.html">Get started</a></li>
-<li class="nav-item"><a class="nav-link" href="../reference/index.html">Reference</a></li>
 <li class="active nav-item dropdown">
-  <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
-  <ul class="dropdown-menu" aria-labelledby="dropdown-articles">
-<li><a class="dropdown-item" href="../articles/combos.html">Combos</a></li>
+  <button class="nav-link dropdown-toggle" type="button" id="dropdown-elements" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Elements</button>
+  <ul class="dropdown-menu" aria-labelledby="dropdown-elements">
+<li><a class="dropdown-item" href="../articles/nodes.html">Nodes</a></li>
     <li><a class="dropdown-item" href="../articles/edges.html">Edges</a></li>
-    <li><a class="dropdown-item" href="../articles/igraph.html">igraph support</a></li>
-    <li><a class="dropdown-item" href="../articles/layouts.html">layouts</a></li>
-    <li><a class="dropdown-item" href="../articles/nodes.html">Nodes</a></li>
+    <li><a class="dropdown-item" href="../articles/combos.html">Combos</a></li>
   </ul>
 </li>
-<li class="nav-item"><a class="nav-link" href="../news/index.html">Changelog</a></li>
+<li class="nav-item dropdown">
+  <button class="nav-link dropdown-toggle" type="button" id="dropdown-behaviors" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Behaviors</button>
+  <ul class="dropdown-menu" aria-labelledby="dropdown-behaviors">
+<li><a class="dropdown-item" href="../articles/behaviors.html">Behaviors list</a></li>
+  </ul>
+</li>
+<li class="nav-item dropdown">
+  <button class="nav-link dropdown-toggle" type="button" id="dropdown-plugins" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Plugins</button>
+  <ul class="dropdown-menu" aria-labelledby="dropdown-plugins">
+<li><a class="dropdown-item" href="../articles/plugins.html">Plugins list</a></li>
+  </ul>
+</li>
+<li class="nav-item dropdown">
+  <button class="nav-link dropdown-toggle" type="button" id="dropdown-layout" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Layout</button>
+  <ul class="dropdown-menu" aria-labelledby="dropdown-layout">
+<li><a class="dropdown-item" href="../articles/layouts.html">Layouts list</a></li>
+  </ul>
+</li>
+<li class="nav-item dropdown">
+  <button class="nav-link dropdown-toggle" type="button" id="dropdown-others" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Others</button>
+  <ul class="dropdown-menu" aria-labelledby="dropdown-others">
+<li><a class="dropdown-item" href="../articles/igraph.html">igraph support</a></li>
+  </ul>
+</li>
       </ul>
 <ul class="navbar-nav">
 <li class="nav-item"><form class="form-inline" role="search">
  <input class="form-control" type="search" name="search-input" id="search-input" autocomplete="off" aria-label="Search site" placeholder="Search for" data-search-index="../search.json">
 </form></li>
+<li class="nav-item"><a class="nav-link" href="../reference/index.html">Reference</a></li>
+<li class="nav-item"><a class="nav-link" href="../news/index.html">Changelog</a></li>
 <li class="nav-item"><a class="external-link nav-link" href="https://github.com/cynkra/g6R/" aria-label="GitHub"><span class="fa fab fa-github fa-lg"></span></a></li>
+<li class="nav-item dropdown">
+  <button class="nav-link dropdown-toggle" type="button" id="dropdown-lightswitch" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true" aria-label="Light switch"><span class="fa fa-sun"></span></button>
+  <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdown-lightswitch">
+<li><button class="dropdown-item" data-bs-theme-value="light"><span class="fa fa-sun"></span> Light</button></li>
+    <li><button class="dropdown-item" data-bs-theme-value="dark"><span class="fa fa-moon"></span> Dark</button></li>
+    <li><button class="dropdown-item" data-bs-theme-value="auto"><span class="fa fa-adjust"></span> Auto</button></li>
+  </ul>
+</li>
       </ul>
 </div>
 
@@ -150,8 +180,8 @@
 <span>    <span class="op">)</span></span>
 <span>  <span class="op">)</span></span></code></pre></div>
 <div class="cell-output-display">
-<div id="htmlwidget-fdb952b3e564bb49cb7c" style="width:100%;height:480px;" class="g6 html-widget"></div>
-<script type="application/json" data-for="htmlwidget-fdb952b3e564bb49cb7c">{"x":{"data":{"nodes":[{"id":"circle","type":"circle"},{"id":"rect","type":"rect"},{"id":"ellipse","type":"ellipse"},{"id":"diamond","type":"diamond"},{"id":"triangle","type":"triangle"},{"id":"hexagon","type":"hexagon"},{"id":"star","type":"star"}]},"layout":{"type":"d3-force","link":{"distance":100,"strength":2},"collide":{"radius":40}},"node":{"style":{"labelText":"(d) => {\n            return d.id\n          }"}},"edge":{"type":"line","style":{"cursor":"default","fillRule":"nonzero","isBillboard":true,"lineDash":0,"lineDashOffset":0,"lineWidth":1,"opacity":1,"stroke":"#000","strokeOpacity":1,"visibility":"visible","zIndex":-10000}},"autoFit":{"type":"view","options":{"when":"overflow","direction":"x"},"animation":{"duration":1000,"easing":"ease-in-out"}},"animation":false,"autoResize":false,"cursor":"default","rotation":0,"zoom":1,"zoomRange":[0.01,10],"theme":"light"},"evals":["node.style.labelText"],"jsHooks":[]}</script>
+<div id="htmlwidget-f72ad6a2e91b72942f6a" style="width:100%;height:480px;" class="g6 html-widget"></div>
+<script type="application/json" data-for="htmlwidget-f72ad6a2e91b72942f6a">{"x":{"data":{"nodes":[{"id":"circle","type":"circle"},{"id":"rect","type":"rect"},{"id":"ellipse","type":"ellipse"},{"id":"diamond","type":"diamond"},{"id":"triangle","type":"triangle"},{"id":"hexagon","type":"hexagon"},{"id":"star","type":"star"}]},"layout":{"type":"d3-force","link":{"distance":100,"strength":2},"collide":{"radius":40}},"node":{"style":{"labelText":"(d) => {\n            return d.id\n          }"}},"edge":{"type":"line","style":{"cursor":"default","fillRule":"nonzero","isBillboard":true,"lineDash":0,"lineDashOffset":0,"lineWidth":1,"opacity":1,"stroke":"#000","strokeOpacity":1,"visibility":"visible","zIndex":-10000}},"autoFit":{"type":"view","options":{"when":"overflow","direction":"x"},"animation":{"duration":1000,"easing":"ease-in-out"}},"animation":false,"autoResize":false,"cursor":"default","rotation":0,"zoom":1,"zoomRange":[0.01,10],"theme":"light"},"evals":["node.style.labelText"],"jsHooks":[]}</script>
 </div>
 </div>
 </section><section class="level3"><h3 id="special-types">Special types<a class="anchor" aria-label="anchor" href="#special-types"></a>
@@ -185,8 +215,8 @@
 <span>    <span class="op">)</span></span>
 <span>  <span class="op">)</span></span></code></pre></div>
 <div class="cell-output-display">
-<div id="htmlwidget-7606589edd2c620b900c" style="width:100%;height:100px;" class="g6 html-widget"></div>
-<script type="application/json" data-for="htmlwidget-7606589edd2c620b900c">{"x":{"data":{"nodes":[{"id":"1","type":"image","style":{"src":"https://gw.alipayobjects.com/mdn/rms_6ae20b/afts/img/A*N4ZMS7gHsUIAAAAAAAAAAABkARQnAQ"}}]},"layout":{"type":"d3-force","link":{"distance":100,"strength":2},"collide":{"radius":40}},"node":{"style":{"labelText":"(d) => {\n            return d.id\n          }"}},"edge":{"type":"line","style":{"cursor":"default","fillRule":"nonzero","isBillboard":true,"lineDash":0,"lineDashOffset":0,"lineWidth":1,"opacity":1,"stroke":"#000","strokeOpacity":1,"visibility":"visible","zIndex":-10000}},"autoFit":{"type":"view","options":{"when":"overflow","direction":"x"},"animation":{"duration":1000,"easing":"ease-in-out"}},"animation":false,"autoResize":false,"cursor":"default","rotation":0,"zoom":1,"zoomRange":[0.01,10],"theme":"light"},"evals":["node.style.labelText"],"jsHooks":[]}</script>
+<div id="htmlwidget-a9172e275455477751e5" style="width:100%;height:100px;" class="g6 html-widget"></div>
+<script type="application/json" data-for="htmlwidget-a9172e275455477751e5">{"x":{"data":{"nodes":[{"id":"1","type":"image","style":{"src":"https://gw.alipayobjects.com/mdn/rms_6ae20b/afts/img/A*N4ZMS7gHsUIAAAAAAAAAAABkARQnAQ"}}]},"layout":{"type":"d3-force","link":{"distance":100,"strength":2},"collide":{"radius":40}},"node":{"style":{"labelText":"(d) => {\n            return d.id\n          }"}},"edge":{"type":"line","style":{"cursor":"default","fillRule":"nonzero","isBillboard":true,"lineDash":0,"lineDashOffset":0,"lineWidth":1,"opacity":1,"stroke":"#000","strokeOpacity":1,"visibility":"visible","zIndex":-10000}},"autoFit":{"type":"view","options":{"when":"overflow","direction":"x"},"animation":{"duration":1000,"easing":"ease-in-out"}},"animation":false,"autoResize":false,"cursor":"default","rotation":0,"zoom":1,"zoomRange":[0.01,10],"theme":"light"},"evals":["node.style.labelText"],"jsHooks":[]}</script>
 </div>
 </div>
 </section><section class="level4"><h4 id="html-nodes">HTML nodes<a class="anchor" aria-label="anchor" href="#html-nodes"></a>
@@ -219,8 +249,8 @@
 <span>    <span class="op">)</span></span>
 <span>  <span class="op">)</span></span></code></pre></div>
 <div class="cell-output-display">
-<div id="htmlwidget-d8443c4b0c16715bc543" style="width:100%;height:200px;" class="g6 html-widget"></div>
-<script type="application/json" data-for="htmlwidget-d8443c4b0c16715bc543">{"x":{"data":{"nodes":[{"id":"1"},{"id":"2"},{"id":"3"}]},"layout":{"type":"d3-force","link":{"distance":100,"strength":2},"collide":{"radius":40}},"node":{"type":"html","style":{"innerHTML":"(d) => {\n            return `\n              <div class=\"card\" style=\"width: 13rem;\">\n                <div class=\"card-body\">\n                  This is node: ${d.id}\n                <\/div>\n              <\/div>`;\n            }"}},"edge":{"type":"line","style":{"cursor":"default","fillRule":"nonzero","isBillboard":true,"lineDash":0,"lineDashOffset":0,"lineWidth":1,"opacity":1,"stroke":"#000","strokeOpacity":1,"visibility":"visible","zIndex":-10000}},"autoFit":{"type":"view","options":{"when":"overflow","direction":"x"},"animation":{"duration":1000,"easing":"ease-in-out"}},"animation":false,"autoResize":false,"cursor":"default","rotation":0,"zoom":1,"zoomRange":[0.01,10],"theme":"light"},"evals":["node.style.innerHTML"],"jsHooks":[]}</script>
+<div id="htmlwidget-24c327a6f82fb3e005d1" style="width:100%;height:200px;" class="g6 html-widget"></div>
+<script type="application/json" data-for="htmlwidget-24c327a6f82fb3e005d1">{"x":{"data":{"nodes":[{"id":"1"},{"id":"2"},{"id":"3"}]},"layout":{"type":"d3-force","link":{"distance":100,"strength":2},"collide":{"radius":40}},"node":{"type":"html","style":{"innerHTML":"(d) => {\n            return `\n              <div class=\"card\" style=\"width: 13rem;\">\n                <div class=\"card-body\">\n                  This is node: ${d.id}\n                <\/div>\n              <\/div>`;\n            }"}},"edge":{"type":"line","style":{"cursor":"default","fillRule":"nonzero","isBillboard":true,"lineDash":0,"lineDashOffset":0,"lineWidth":1,"opacity":1,"stroke":"#000","strokeOpacity":1,"visibility":"visible","zIndex":-10000}},"autoFit":{"type":"view","options":{"when":"overflow","direction":"x"},"animation":{"duration":1000,"easing":"ease-in-out"}},"animation":false,"autoResize":false,"cursor":"default","rotation":0,"zoom":1,"zoomRange":[0.01,10],"theme":"light"},"evals":["node.style.innerHTML"],"jsHooks":[]}</script>
 </div>
 </div>
 </section><section class="level4"><h4 id="donut">Donut<a class="anchor" aria-label="anchor" href="#donut"></a>
@@ -268,8 +298,8 @@
 <span>    <span class="op">)</span></span>
 <span>  <span class="op">)</span></span></code></pre></div>
 <div class="cell-output-display">
-<div id="htmlwidget-4ffc0ea0518ac78ed0d8" style="width:100%;height:200px;" class="g6 html-widget"></div>
-<script type="application/json" data-for="htmlwidget-4ffc0ea0518ac78ed0d8">{"x":{"data":{"nodes":[{"id":"1","index":0},{"id":"2","index":1}]},"layout":{"type":"d3-force","link":{"distance":100,"strength":2},"collide":{"radius":40}},"node":{"type":"donut","style":{"donuts":"(item) => {\n            const { index } = item;\n            if (index === 0) {\n              return [\n                  { value: 50, color: 'red' },\n                  { value: 150, color: 'green' },\n                  { value: 100, color: 'blue' },\n                ];\n            }\n            if (index === 1) {\n              return [\n                  { value: 100, color: 'yellow' },\n                  { value: 50, color: 'purple' },\n                  { value: 150, color: 'orange' },\n                ];\n            }\n          }"}},"edge":{"type":"line","style":{"cursor":"default","fillRule":"nonzero","isBillboard":true,"lineDash":0,"lineDashOffset":0,"lineWidth":1,"opacity":1,"stroke":"#000","strokeOpacity":1,"visibility":"visible","zIndex":-10000}},"autoFit":{"type":"view","options":{"when":"overflow","direction":"x"},"animation":{"duration":1000,"easing":"ease-in-out"}},"animation":false,"autoResize":false,"cursor":"default","rotation":0,"zoom":1,"zoomRange":[0.01,10],"theme":"light"},"evals":["node.style.donuts"],"jsHooks":[]}</script>
+<div id="htmlwidget-c3684dd213033d67d03e" style="width:100%;height:200px;" class="g6 html-widget"></div>
+<script type="application/json" data-for="htmlwidget-c3684dd213033d67d03e">{"x":{"data":{"nodes":[{"id":"1","index":0},{"id":"2","index":1}]},"layout":{"type":"d3-force","link":{"distance":100,"strength":2},"collide":{"radius":40}},"node":{"type":"donut","style":{"donuts":"(item) => {\n            const { index } = item;\n            if (index === 0) {\n              return [\n                  { value: 50, color: 'red' },\n                  { value: 150, color: 'green' },\n                  { value: 100, color: 'blue' },\n                ];\n            }\n            if (index === 1) {\n              return [\n                  { value: 100, color: 'yellow' },\n                  { value: 50, color: 'purple' },\n                  { value: 150, color: 'orange' },\n                ];\n            }\n          }"}},"edge":{"type":"line","style":{"cursor":"default","fillRule":"nonzero","isBillboard":true,"lineDash":0,"lineDashOffset":0,"lineWidth":1,"opacity":1,"stroke":"#000","strokeOpacity":1,"visibility":"visible","zIndex":-10000}},"autoFit":{"type":"view","options":{"when":"overflow","direction":"x"},"animation":{"duration":1000,"easing":"ease-in-out"}},"animation":false,"autoResize":false,"cursor":"default","rotation":0,"zoom":1,"zoomRange":[0.01,10],"theme":"light"},"evals":["node.style.donuts"],"jsHooks":[]}</script>
 </div>
 </div>
 </section></section><section class="level3"><h3 id="styling-nodes">Styling nodes<a class="anchor" aria-label="anchor" href="#styling-nodes"></a>
@@ -299,8 +329,8 @@
 <span>    <span class="op">)</span></span>
 <span>  <span class="op">)</span></span></code></pre></div>
 <div class="cell-output-display">
-<div id="htmlwidget-c9e294f94d7482d62f70" style="width:100%;height:200px;" class="g6 html-widget"></div>
-<script type="application/json" data-for="htmlwidget-c9e294f94d7482d62f70">{"x":{"data":{"nodes":[{"id":"1"},{"id":"2"}]},"layout":{"type":"d3-force","link":{"distance":100,"strength":2},"collide":{"radius":40}},"node":{"style":{"fill":"#FFB6C1","fillOpacity":0.5,"stroke":"#000","lineWidth":2,"radius":10}},"edge":{"type":"line","style":{"cursor":"default","fillRule":"nonzero","isBillboard":true,"lineDash":0,"lineDashOffset":0,"lineWidth":1,"opacity":1,"stroke":"#000","strokeOpacity":1,"visibility":"visible","zIndex":-10000}},"autoFit":{"type":"view","options":{"when":"overflow","direction":"x"},"animation":{"duration":1000,"easing":"ease-in-out"}},"animation":true,"autoResize":false,"cursor":"default","rotation":0,"zoom":1,"zoomRange":[0.01,10],"theme":"light"},"evals":[],"jsHooks":[]}</script>
+<div id="htmlwidget-96bec0c177ff89eb2cd1" style="width:100%;height:200px;" class="g6 html-widget"></div>
+<script type="application/json" data-for="htmlwidget-96bec0c177ff89eb2cd1">{"x":{"data":{"nodes":[{"id":"1"},{"id":"2"}]},"layout":{"type":"d3-force","link":{"distance":100,"strength":2},"collide":{"radius":40}},"node":{"style":{"fill":"#FFB6C1","fillOpacity":0.5,"stroke":"#000","lineWidth":2,"radius":10}},"edge":{"type":"line","style":{"cursor":"default","fillRule":"nonzero","isBillboard":true,"lineDash":0,"lineDashOffset":0,"lineWidth":1,"opacity":1,"stroke":"#000","strokeOpacity":1,"visibility":"visible","zIndex":-10000}},"autoFit":{"type":"view","options":{"when":"overflow","direction":"x"},"animation":{"duration":1000,"easing":"ease-in-out"}},"animation":true,"autoResize":false,"cursor":"default","rotation":0,"zoom":1,"zoomRange":[0.01,10],"theme":"light"},"evals":[],"jsHooks":[]}</script>
 </div>
 </div>
 </section><section class="level4"><h4 id="label-styling">Label styling<a class="anchor" aria-label="anchor" href="#label-styling"></a>
@@ -325,8 +355,8 @@
 <span><span class="fu"><a href="../reference/g6.html">g6</a></span><span class="op">(</span><span class="va">nodes</span>, height <span class="op">=</span> <span class="st">"200px"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="../reference/g6_layout.html">g6_layout</a></span><span class="op">(</span><span class="fu"><a href="../reference/d3_force_layout.html">d3_force_layout</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <div class="cell-output-display">
-<div id="htmlwidget-bc78b79c13296b37ac1a" style="width:100%;height:200px;" class="g6 html-widget"></div>
-<script type="application/json" data-for="htmlwidget-bc78b79c13296b37ac1a">{"x":{"data":{"nodes":[{"id":"1","style":{"label":true,"labelText":"Node Name","labelFill":"#000","labelFontSize":15,"labelFontWeight":"normal","labelPlacement":"bottom"}}]},"layout":{"type":"d3-force","link":{"distance":100,"strength":2},"collide":{"radius":40}}},"evals":[],"jsHooks":[]}</script>
+<div id="htmlwidget-48e94c5d7962351adf24" style="width:100%;height:200px;" class="g6 html-widget"></div>
+<script type="application/json" data-for="htmlwidget-48e94c5d7962351adf24">{"x":{"data":{"nodes":[{"id":"1","style":{"label":true,"labelText":"Node Name","labelFill":"#000","labelFontSize":15,"labelFontWeight":"normal","labelPlacement":"bottom"}}]},"layout":{"type":"d3-force","link":{"distance":100,"strength":2},"collide":{"radius":40}}},"evals":[],"jsHooks":[]}</script>
 </div>
 </div>
 </section><section class="level4"><h4 id="badges">Badges<a class="anchor" aria-label="anchor" href="#badges"></a>
@@ -353,8 +383,8 @@
 <span><span class="fu"><a href="../reference/g6.html">g6</a></span><span class="op">(</span><span class="va">nodes</span>, height <span class="op">=</span> <span class="st">"200px"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="../reference/g6_layout.html">g6_layout</a></span><span class="op">(</span><span class="fu"><a href="../reference/d3_force_layout.html">d3_force_layout</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <div class="cell-output-display">
-<div id="htmlwidget-7e6887e4b824e03b397a" style="width:100%;height:200px;" class="g6 html-widget"></div>
-<script type="application/json" data-for="htmlwidget-7e6887e4b824e03b397a">{"x":{"data":{"nodes":[{"id":"1","style":{"badge":true,"badges":[{"text":"A","placement":"right-top"},{"text":"Important","placement":"right"},{"text":"Notice","placement":"right-bottom"}],"badgePalette":["#7E92B5","#F4664A","#FFBE3A"],"badgeFontSize":7}}]},"layout":{"type":"d3-force","link":{"distance":100,"strength":2},"collide":{"radius":40}}},"evals":[],"jsHooks":[]}</script>
+<div id="htmlwidget-a7a7132f53de42342753" style="width:100%;height:200px;" class="g6 html-widget"></div>
+<script type="application/json" data-for="htmlwidget-a7a7132f53de42342753">{"x":{"data":{"nodes":[{"id":"1","style":{"badge":true,"badges":[{"text":"A","placement":"right-top"},{"text":"Important","placement":"right"},{"text":"Notice","placement":"right-bottom"}],"badgePalette":["#7E92B5","#F4664A","#FFBE3A"],"badgeFontSize":7}}]},"layout":{"type":"d3-force","link":{"distance":100,"strength":2},"collide":{"radius":40}}},"evals":[],"jsHooks":[]}</script>
 </div>
 </div>
 </section><section class="level4"><h4 id="ports">Ports<a class="anchor" aria-label="anchor" href="#ports"></a>
@@ -399,8 +429,8 @@
 <span><span class="fu"><a href="../reference/g6.html">g6</a></span><span class="op">(</span><span class="va">nodes</span>, height <span class="op">=</span> <span class="st">"200px"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="../reference/g6_layout.html">g6_layout</a></span><span class="op">(</span><span class="fu"><a href="../reference/d3_force_layout.html">d3_force_layout</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <div class="cell-output-display">
-<div id="htmlwidget-65ac1559917d0ac7f9f2" style="width:100%;height:200px;" class="g6 html-widget"></div>
-<script type="application/json" data-for="htmlwidget-65ac1559917d0ac7f9f2">{"x":{"data":{"nodes":[{"id":"node1","style":{"port":true,"ports":[{"key":"top","placement":[0.5,1],"fill":"#7E92B5"},{"key":"right","placement":[1,0.5],"fill":"#F4664A"},{"key":"bottom","placement":[0.5,0],"fill":"#FFBE3A"},{"key":"left","placement":[0,0.5],"fill":"#D580FF"}],"portR":3,"portLineWidth":1,"portStroke":"#fff"}}]},"layout":{"type":"d3-force","link":{"distance":100,"strength":2},"collide":{"radius":40}}},"evals":[],"jsHooks":[]}</script>
+<div id="htmlwidget-80258b9a46a977ad73ab" style="width:100%;height:200px;" class="g6 html-widget"></div>
+<script type="application/json" data-for="htmlwidget-80258b9a46a977ad73ab">{"x":{"data":{"nodes":[{"id":"node1","style":{"port":true,"ports":[{"key":"top","placement":[0.5,1],"fill":"#7E92B5"},{"key":"right","placement":[1,0.5],"fill":"#F4664A"},{"key":"bottom","placement":[0.5,0],"fill":"#FFBE3A"},{"key":"left","placement":[0,0.5],"fill":"#D580FF"}],"portR":3,"portLineWidth":1,"portStroke":"#fff"}}]},"layout":{"type":"d3-force","link":{"distance":100,"strength":2},"collide":{"radius":40}}},"evals":[],"jsHooks":[]}</script>
 </div>
 </div>
 </section></section><section class="level3"><h3 id="states">States<a class="anchor" aria-label="anchor" href="#states"></a>
@@ -434,8 +464,8 @@
 <span>    <span class="op">)</span></span>
 <span>  <span class="op">)</span></span></code></pre></div>
 <div class="cell-output-display">
-<div id="htmlwidget-054fb424fdeac1826093" style="width:100%;height:480px;" class="g6 html-widget"></div>
-<script type="application/json" data-for="htmlwidget-054fb424fdeac1826093">{"x":{"data":{"nodes":[{"id":1,"states":["default"],"data":{"state":"default"}},{"id":2,"states":["selected"],"data":{"state":"selected"}},{"id":3,"states":["highlight"],"data":{"state":"highlight"}},{"id":4,"states":["active"],"data":{"state":"active"}},{"id":5,"states":["inactive"],"data":{"state":"inactive"}},{"id":6,"states":["disabled"],"data":{"state":"disabled"}}]},"layout":{"type":"d3-force","link":{"distance":100,"strength":2},"collide":{"radius":40}},"node":{"style":{"labelText":"(d) => {\n            return d.data.state\n          }"}},"edge":{"type":"line","style":{"cursor":"default","fillRule":"nonzero","isBillboard":true,"lineDash":0,"lineDashOffset":0,"lineWidth":1,"opacity":1,"stroke":"#000","strokeOpacity":1,"visibility":"visible","zIndex":-10000}},"autoFit":{"type":"view","options":{"when":"overflow","direction":"x"},"animation":{"duration":1000,"easing":"ease-in-out"}},"animation":false,"autoResize":false,"cursor":"default","rotation":0,"zoom":1,"zoomRange":[0.01,10],"theme":"light"},"evals":["node.style.labelText"],"jsHooks":[]}</script>
+<div id="htmlwidget-e666e58981deed6d9ddb" style="width:100%;height:480px;" class="g6 html-widget"></div>
+<script type="application/json" data-for="htmlwidget-e666e58981deed6d9ddb">{"x":{"data":{"nodes":[{"id":1,"states":["default"],"data":{"state":"default"}},{"id":2,"states":["selected"],"data":{"state":"selected"}},{"id":3,"states":["highlight"],"data":{"state":"highlight"}},{"id":4,"states":["active"],"data":{"state":"active"}},{"id":5,"states":["inactive"],"data":{"state":"inactive"}},{"id":6,"states":["disabled"],"data":{"state":"disabled"}}]},"layout":{"type":"d3-force","link":{"distance":100,"strength":2},"collide":{"radius":40}},"node":{"style":{"labelText":"(d) => {\n            return d.data.state\n          }"}},"edge":{"type":"line","style":{"cursor":"default","fillRule":"nonzero","isBillboard":true,"lineDash":0,"lineDashOffset":0,"lineWidth":1,"opacity":1,"stroke":"#000","strokeOpacity":1,"visibility":"visible","zIndex":-10000}},"autoFit":{"type":"view","options":{"when":"overflow","direction":"x"},"animation":{"duration":1000,"easing":"ease-in-out"}},"animation":false,"autoResize":false,"cursor":"default","rotation":0,"zoom":1,"zoomRange":[0.01,10],"theme":"light"},"evals":["node.style.labelText"],"jsHooks":[]}</script>
 </div>
 </div>
 </section><section class="level3"><h3 id="color-palette">Color palette<a class="anchor" aria-label="anchor" href="#color-palette"></a>
