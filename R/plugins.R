@@ -116,32 +116,14 @@ g6_plugins <- function(graph, ...) {
 }
 
 #' @keywords internal
-valid_plugins <- c(
-  "background",
-  "bubble-sets",
-  "contextmenu",
-  "edge-bundling",
-  "edge-filter-lens",
-  "fisheye",
-  "fullscreen",
-  "grid-line",
-  "history",
-  "hull",
-  "legend",
-  "minimap",
-  "snapline",
-  "timebar",
-  "toolbar",
-  "tooltip",
-  "watermark"
-)
-
-#' @keywords internal
 validate_plugin <- function(x) {
   # Allow to pass plugin as text
-  if (!is.list(x)) x <- list(type = x)
+  if (!is.list(x)) {
+    # Call function with defaults
+    x <- valid_plugins[[x]]()
+  }
 
-  if (!(x[["type"]] %in% valid_plugins)) {
+  if (!(x[["type"]] %in% names(valid_plugins))) {
     stop(sprintf(
       "Plugin '%s' is not a valid plugin. Valid plugins are: %s.",
       x[["type"]],
@@ -2412,3 +2394,24 @@ watermark <- function(
   # Drop NULL elements
   dropNulls(c(config, list(...)))
 }
+
+#' @keywords internal
+valid_plugins <- c(
+  "background" = background,
+  "bubble-sets" = bubble_sets,
+  "contextmenu" = context_menu,
+  "edge-bundling" = edge_bundling,
+  "edge-filter-lens" = edge_filter_lens,
+  "fisheye" = fish_eye,
+  "fullscreen" = fullscreen,
+  "grid-line" = grid_line,
+  "history" = history,
+  "hull" = hull,
+  "legend" = legend,
+  "minimap" = minimap,
+  "snapline" = snapline,
+  "timebar" = timebar,
+  "toolbar" = toolbar,
+  "tooltip" = tooltips,
+  "watermark" = watermark
+)

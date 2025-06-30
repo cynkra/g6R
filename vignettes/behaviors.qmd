@@ -90,7 +90,8 @@ for (behavior in names(behaviors_data)) {
 
   g6_plot <- g6(nodes) |>
     g6_options(
-      nodes = list(
+      animation = FALSE,
+      node = list(
         style = list(
           labelText = JS(
             "(d) => {
