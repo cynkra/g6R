@@ -1,0 +1,393 @@
+---
+title: "Plugins"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{g6R}
+  %\VignetteEngine{quarto::html}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r, include = FALSE}
+library(shiny)
+library(g6R)
+
+plugins_data <- list(
+  "contextmenu" = "Displays a menu of selectable operations on right-click for context-sensitive actions.",
+  "edge-filter-lens" = "Filters and displays edges within a specified area for focused analysis.",
+  "fisheye" = "Provides a focus + context exploration experience with distortion effects.",
+  "grid-line" = "Displays grid reference lines on the canvas to help with element alignment and positioning.",
+  "minimap" = "Displays a thumbnail preview of the graph, supporting navigation in large graphs.",
+  "snapline" = "Displays alignment reference lines when dragging elements to ensure precise positioning.",
+  "toolbar" = "Provides a collection of common operation buttons for graph manipulation.",
+  "tooltip" = "Displays detailed information about elements on hover for enhanced interactivity. Doesn't work with Shiny yet due to a compatibility issue with Bootstrap tooltips class."
+)
+
+# This is a dummy chart, just to make sure all G6
+# JS dependencies are loaded.
+g6(height = "1px")
+
+nodes <- data.frame(id = letters[1:8])
+
+edges <- data.frame(
+  source = c("a", "b", "c", "e", "f", "g", "a", "d"),
+  target = c("b", "c", "d", "f", "g", "h", "e", "h")
+)
+
+nodes_options <- list(
+  style = list(
+    labelBackground = TRUE,
+    labelBackgroundFill = "#FFB6C1",
+    labelBackgroundRadius = 4,
+    labelFontFamily = "Arial",
+    labelPadding = c(0, 4),
+    labelText = JS(
+      "(d) => {
+        return d.id
+      }"
+    )
+  )
+)
+```
+
+## Introduction
+Plugins extend the functionality of G6 graphs by adding interactive features, UI components, and visual enhancements. They can be added to the graph using the `g6_plugins()` function. Similar to behaviors, there are 2 ways to add plugins to the graph - either by calling plugin names as strings or by passing plugin functions with specific configurations:
+
+```r
+# Defaults
+g6() |>
+  g6_plugins("minimap", "tooltip")
+
+# Fine tune parameters
+g6() |>
+  g6_plugins(
+    minimap(...),
+    tooltip_plugin(...)
+  )
+```
+
+```{r}
+#| results: asis
+#| echo: false
+for (plugin in names(plugins_data)) {
+  # Print the section header
+  cat("## ", gsub('-', ' ', stringr::str_to_title(plugin)), " Plugin\n\n")
+  cat(plugins_data[[plugin]], "\n\n")
+
+  # Create and render the G6 plot
+  g6_plot <- g6(nodes, edges) |>
+    g6_layout() |>
+    g6_behaviors("drag-element") |>
+    g6_options(
+      animation = FALSE,
+      node = nodes_options
+    ) |>
+    g6_plugins(plugin)
+
+  # Display the plot using Quarto's widget rendering
+  print(htmltools::tagList(g6_plot))
+
+  cat("\n\n::: {.callout-note collapse=\"true\"}\n")
+  cat("## View R Code\n\n")
+  cat("```r\n")
+  cat("nodes <- data.frame(\n")
+  cat("  id = letters[1:8]\n")
+  cat(")\n\n")
+  cat("edges <- data.frame(\n")
+  cat("  source = c(\"a\", \"b\", \"c\", \"e\", \"f\", \"g\", \"a\", \"d\"),\n")
+  cat("  target = c(\"b\", \"c\", \"d\", \"f\", \"g\", \"h\", \"e\", \"h\")\n")
+  cat(")\n\n")
+  cat("g6(nodes, edges) |>\n")
+  cat("  g6_options(\n")
+  cat("    nodes = list(\n")
+  cat("      style = list(\n")
+  cat("        labelText = JS(\n")
+  cat('          "(d) => {\n')
+  cat("            return d.id\n")
+  cat('          }"\n')
+  cat("        ),\n")
+  cat("        labelPlacement = \"center\",\n")
+  cat("        labelFontSize = 12\n")
+  cat("      )\n")
+  cat("    ),\n")
+  cat("    edges = list(\n")
+  cat("      style = list(\n")
+  cat("        stroke = \"#666\",\n")
+  cat("        lineWidth = 2\n")
+  cat("      )\n")
+  cat("    )\n")
+  cat("  ) |>\n")
+  cat("  g6_plugins(\"", plugin, "\")\n")
+  cat("```\n")
+  cat(":::\n\n")
+  cat("---\n\n")
+}
+```
+
+## Background Plugin
+
+Adds background images or colors to the canvas for visual enhancement and branding.
+
+```{r}
+# Create and render the G6 plot
+g6(nodes, edges) |>
+  g6_layout() |>
+  g6_behaviors("drag-element") |>
+  g6_options(
+    animation = FALSE,
+    node = nodes_options
+  ) |>
+  g6_plugins(
+    background(backgroundColor = "#f0f2f5")
+  )
+```
+
+## Bubble Sets Plugin
+
+Creates smooth bubble-like element outlines for enhanced visual grouping.
+
+```{r}
+# Create and render the G6 plot
+g6(nodes, edges) |>
+  g6_layout() |>
+  g6_behaviors("drag-element") |>
+  g6_options(
+    animation = FALSE,
+    node = nodes_options
+  ) |>
+  g6_plugins(
+    bubble_sets(
+      key = "bubble-set-1",
+      members = c("a", "b", "c", "d"),
+      label = TRUE,
+      labelText = "cluster 1",
+      fill = "#F08F56",
+      stroke = "#F08F56",
+      labelBackground = TRUE,
+      labelPlacement = "top",
+      labelFill = "#fff",
+      labelPadding = 2,
+      labelBackgroundFill = "#F08F56",
+      labelBackgroundRadius = 5
+    ),
+    bubble_sets(
+      key = "bubble-set-2",
+      members = c("e", "f", "g", "h"),
+      label = TRUE,
+      labelText = "cluster 2",
+      fill = "#D580FF",
+      stroke = "#D580FF",
+      labelBackground = TRUE,
+      labelPlacement = "top",
+      labelFill = "#fff",
+      labelPadding = 2,
+      labelBackgroundFill = "#D580FF",
+      labelBackgroundRadius = 5
+    )
+  )
+```
+
+## Fullscreen Plugin
+
+Supports full-screen display and exit for charts to maximize viewing area.
+
+```{r}
+g6(nodes, edges) |>
+  g6_layout() |>
+  g6_behaviors("drag-element") |>
+  g6_options(
+    animation = FALSE,
+    nodes = nodes_options
+  ) |>
+  g6_plugins(
+    toolbar(),
+    fullscreen()
+  )
+```
+
+## Hull Plugin
+
+Creates an outline for a specified set of nodes to visually group related elements.
+
+```{r}
+# Create and render the G6 plot
+g6(nodes, edges) |>
+  g6_layout() |>
+  g6_behaviors("drag-element") |>
+  g6_options(
+    animation = FALSE,
+    node = nodes_options
+  ) |>
+  g6_plugins(
+    hull(
+      key = "bubble-set-1",
+      members = c("a", "b", "c", "d"),
+      labelText = "cluster 1",
+      fill = "#F08F56",
+      stroke = "#F08F56",
+      labelFill = "#fff",
+      labelPadding = 2,
+      labelBackgroundFill = "#F08F56",
+      labelBackgroundRadius = 5
+    ),
+    hull(
+      key = "bubble-set-2",
+      members = c("e", "f", "g", "h"),
+      labelText = "cluster 2",
+      fill = "#D580FF",
+      stroke = "#D580FF",
+      labelFill = "#fff",
+      labelPadding = 2,
+      labelBackgroundFill = "#D580FF",
+      labelBackgroundRadius = 5
+    )
+  )
+```
+
+## Legend Plugin
+
+Displays categories and corresponding style descriptions of chart data.
+
+```{r}
+custom_nodes <- lapply(1:8, \(i) {
+  list(
+    id = letters[i],
+    style = list(
+      fill = ifelse(i <= 4, "#F08F56", "#D580FF")
+    ),
+    data = list(cluster = ifelse(i <= 4, "1", "2"))
+  )
+})
+# Create and render the G6 plot
+g6(custom_nodes, edges) |>
+  g6_layout() |>
+  g6_behaviors("drag-element") |>
+  g6_options(
+    animation = FALSE,
+    node = nodes_options
+  ) |>
+  g6_plugins(
+    legend(
+      position = "top-left",
+      nodeField = "cluster"
+    )
+  )
+```
+
+## Timebar Plugin (does not work yet ...)
+
+Provides filtering and playback control for temporal data visualization.
+
+```{r}
+start_date <- as.POSIXct("2023-08-01", tz = "UTC")
+dates <- as.character(seq(start_date, by = "1 days", length.out = 3))
+times <- lapply(seq_along(dates), \(i) {
+  list(
+    value = i,
+    time = JS(sprintf("new Date('%s').getTime()", dates[i]))
+  )
+})
+
+custom_nodes <- lapply(seq_along(times), \(i) {
+  list(
+    id = letters[i],
+    data = list(timestamp = JS(sprintf("new Date('%s').getTime()", dates[i])))
+  )
+})
+# Create and render the G6 plot
+g6(custom_nodes) |>
+  g6_layout() |>
+  g6_behaviors("drag-element") |>
+  g6_options(
+    animation = FALSE,
+    node = nodes_options
+  ) |>
+  g6_plugins(
+    timebar(
+      data = times,
+      height = 100
+    )
+  )
+```
+
+## Watermark Plugin
+
+Adds a watermark to the canvas to protect copyright and brand the visualization.
+
+```{r}
+g6(nodes, edges) |>
+  g6_layout() |>
+  g6_behaviors("drag-element") |>
+  g6_options(
+    animation = FALSE,
+    node = nodes_options
+  ) |>
+  g6_plugins(
+    watermark(
+      text = "G6 Graph",
+      opacity = 0.2,
+      rotate = pi / 12
+    )
+  )
+```
+
+## History plugin
+
+The history plugin provides undo and redo functionality for graph modifications, allowing users to revert changes or reapply them. It works well with the `toolbar` plugin to provide a user interface for these actions:
+
+```{r}
+g6(nodes, edges) |>
+  g6_layout() |>
+  g6_behaviors("drag-element") |>
+  g6_options(
+    animation = FALSE,
+    node = nodes_options
+  ) |>
+  g6_plugins(
+    toolbar(
+      getItems = JS(
+        "() => [
+          { id: 'undo', value: 'undo' },
+          { id: 'redo', value: 'redo' },
+        ]"
+      ),
+      onClick = JS(
+        "(value, target, current) => {
+          // redo, undo need to be used with the history plugin
+          const graph = HTMLWidgets
+            .find(`#${target.closest('.g6').id}`)
+            .getWidget();
+          const history = graph.getPluginInstance('history');
+          switch (value) {
+            case 'undo':
+              history?.undo();
+              break;
+            case 'redo':
+              history?.redo();
+              break;
+            default:
+              break;
+          }
+        }"
+      )
+    ),
+    # Keep 100 events in memory
+    history(stackSize = 100)
+  )
+```
+
+## Dynamically interact with plugins
+
+### Add
+
+To add a plugin dynamically from the server side of a Shiny app, you can use the `g6_add_plugin()` function. This function allows you to append new plugins to an existing G6 graph based on user interactions or other reactive data.
+
+### Update
+
+To update a plugin from the server side of a Shiny app, you can use the `g6_update_plugin()` function. This function allows you to modify the plugin's parameters dynamically based on user input or other reactive data.

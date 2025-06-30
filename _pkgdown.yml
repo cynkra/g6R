@@ -1,6 +1,44 @@
 url: https://cynkra.github.io/g6R/
 template:
   bootstrap: 5
+  light-switch: true
+
+navbar:
+  structure:
+    left:  [intro, elements, behaviors, plugins, layout, others]
+    right: [search, reference, news, github, lightswitch]
+  components:
+    home: ~
+
+    elements:
+      text: Elements
+      menu:
+        - text: Nodes
+          href: articles/nodes.html
+        - text: Edges
+          href: articles/edges.html
+        - text: Combos
+          href: articles/combos.html
+    behaviors:
+      text: Behaviors
+      menu:
+        - text: Behaviors list
+          href: articles/behaviors.html
+    plugins:
+      text: Plugins
+      menu:
+        - text: Plugins list
+          href: articles/plugins.html
+    layout:
+      text: Layout
+      menu:
+        - text: Layouts list
+          href: articles/layouts.html
+    others:
+      text: Others
+      menu:
+        - text: igraph support
+          href: articles/igraph.html
 
 reference:
   - title: Initialize

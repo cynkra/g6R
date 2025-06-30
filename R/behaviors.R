@@ -77,34 +77,18 @@ g6_behaviors <- function(graph, ...) {
 }
 
 #' @keywords internal
-valid_behaviors <- c(
-  "auto-adapt-label",
-  "brush-select",
-  "click-select",
-  "collapse-expand",
-  "create-edge",
-  "drag-canvas",
-  "drag-element",
-  "drag-element-force",
-  "fix-element-size",
-  "focus-element",
-  "hover-activate",
-  "lasso-select",
-  "optimize-viewport-transform",
-  "scroll-canvas",
-  "zoom-canvas"
-)
-
-#' @keywords internal
 validate_behavior <- function(x) {
   # Allow to pass behavior as text
-  if (!is.list(x)) x <- list(type = x)
+  if (!is.list(x)) {
+    # Call with default values
+    x <- valid_behaviors[[x]]()
+  }
 
-  if (!(x[["type"]] %in% valid_behaviors)) {
+  if (!(x[["type"]] %in% names(valid_behaviors))) {
     stop(sprintf(
       "Behavior '%s' is not a valid behavior. Valid behaviors are: %s.",
       x[["type"]],
-      paste(valid_behaviors, collapse = ", ")
+      paste(names(valid_behaviors), collapse = ", ")
     ))
   }
   x
@@ -1572,3 +1556,22 @@ zoom_canvas <- function(
   # Drop NULL elements
   dropNulls(c(config, list(...)))
 }
+
+#' @keywords internal
+valid_behaviors <- c(
+  "auto-adapt-label" = auto_adapt_label,
+  "brush-select" = brush_select,
+  "click-select" = click_select,
+  "collapse-expand" = collapse_expand,
+  "create-edge" = create_edge,
+  "drag-canvas" = drag_canvas,
+  "drag-element" = drag_element,
+  "drag-element-force" = drag_element_force,
+  "fix-element-size" = fix_element_size,
+  "focus-element" = focus_element,
+  "hover-activate" = hover_activate,
+  "lasso-select" = lasso_select,
+  "optimize-viewport-transform" = optimize_viewport_transform,
+  "scroll-canvas" = scroll_canvas,
+  "zoom-canvas" = zoom_canvas
+)

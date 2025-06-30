@@ -1,0 +1,149 @@
+---
+title: "Behaviors"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{g6R}
+  %\VignetteEngine{quarto::html}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup, message=FALSE, echo=FALSE}
+library(shiny)
+library(g6R)
+
+behaviors_data <- list(
+  "auto-adapt-label" = "Automatically adapts label positioning to avoid overlaps and improve readability.",
+  "brush-select" = "Enables rectangular brush selection for selecting multiple elements at once. By default, the selection is made by clicking on shift and draging the mouse over the canvas.",
+  "click-select" = "Allows selection of elements through mouse clicks. You can also select multiple elements by clicking on them while holding the shift key and enabling the option `multiple = TRUE`.",
+  "collapse-expand" = "Provides functionality to collapse and expand graph structures. This works in a combo context.",
+  "create-edge" = "Enables interactive creation of new edges between nodes. You can drag from one node to another to create an edge and also change
+  the trigger if you want to press another key to start the edge creation. Not that this may be incompatible with other behaviors such as `drag-canvas`.",
+  "drag-canvas" = "Allows dragging the entire canvas to pan the view. May be incompatible with other behaviors such as `create-edge` depending on the trigger key.",
+  "drag-element" = "Enables dragging individual elements to reposition them. May be incompatible with other behaviors such as `create-edge` depending on the trigger key.",
+  "drag-element-force" = "Combines element dragging with force simulation for dynamic positioning.",
+  "fix-element-size" = "Maintains fixed element sizes during transformations.",
+  "focus-element" = "Provides focusing capabilities to highlight specific elements.",
+  "hover-activate" = "Activates interactive features when hovering over elements.",
+  "lasso-select" = "Enables free-form lasso selection for selecting multiple elements. By default, the selection is made by clicking on shift and draging the mouse over the canvas.",
+  "optimize-viewport-transform" = "Optimizes viewport transformations for better performance.",
+  "scroll-canvas" = "Enables scrolling to navigate through large graphs.",
+  "zoom-canvas" = "Provides zooming functionality for the canvas view."
+)
+
+# This is a dummy chart, just to make sure all E-charts'
+# JS dependency are loaded.
+g6(height = "1px")
+
+nodes_options <- list(
+  style = list(
+    labelBackground = TRUE,
+    labelBackgroundFill = "#FFB6C1",
+    labelBackgroundRadius = 4,
+    labelFontFamily = "Arial",
+    labelPadding = c(0, 4),
+    labelText = JS(
+      "(d) => {
+        return d.id
+      }"
+    )
+  )
+)
+```
+
+## Introduction
+
+Behaviors are actions that can be applied to the graph, such as zooming, panning, or selecting nodes. They can be added to the graph using the `g6_behaviors()` function. There are 2 ways to add behaviors to the graph. Either calling behaviors name as a string, or passing behaviors functions. The latter is more convenient to have more control over the specific options:
+
+```r
+# Defaults
+g6() |>
+g6_behaviors("drag-canvas", "zoom-canvas")
+
+# Fine tune parameters
+g6() |>
+  g6_behaviors(
+    drag_canvas(
+      key = "drag-canvas", 
+      enable = TRUE,
+      animation = NULL, 
+      direction = c("both", "x", "y"),
+      range = Inf,
+      sensitivity = 10, 
+      trigger = NULL,
+      onFinish = NULL,
+      ... # extra options
+    ),
+    create_edge(
+      key = "create-edge",
+      trigger = "drag",
+      enable = FALSE, 
+      onCreate = NULL,
+      onFinish = NULL,
+      style = NULL,
+      notify = FALSE
+    )
+  )
+```
+
+```{r}
+#| results: asis
+#| echo: false
+for (behavior in names(behaviors_data)) {
+  # Print the section header
+  cat("## ", gsub('-', ' ', stringr::str_to_title(behavior)), " Behavior\n\n")
+  cat(behaviors_data[[behavior]], "\n\n")
+
+  # Create and render the G6 plot
+  nodes <- data.frame(id = letters[1:5])
+
+  g6_plot <- g6(nodes) |>
+    g6_options(
+      animation = FALSE,
+      node = nodes_options
+    ) |>
+    g6_layout(d3_force_layout()) |>
+    g6_behaviors(behavior)
+
+  # Display the plot using Quarto's widget rendering
+  print(htmltools::tagList(g6_plot))
+
+  cat("\n\n::: {.callout-note collapse=\"true\"}\n")
+  cat("## View R Code\n\n")
+  cat("```r\n")
+  cat("nodes <- data.frame(id = letters[1:5])\n\n")
+  cat("g6(nodes) |>\n")
+  cat("  g6_options(\n")
+  cat("    nodes = list(\n")
+  cat("      style = list(\n")
+  cat("        labelText = JS(\n")
+  cat('          "(d) => {\n')
+  cat("            return d.id\n")
+  cat('          }"\n')
+  cat("        )\n")
+  cat("      )\n")
+  cat("    )\n")
+  cat("  ) |>\n")
+  cat("  g6_layout(d3_force_layout()) |>\n")
+  cat("  g6_behaviors(\"", behavior, "\")\n")
+  cat("```\n")
+  cat(":::\n\n")
+  cat("---\n\n")
+}
+```
+
+## Dynamically interact with behaviors
+
+### Add
+
+TBD?
+
+### Update
+
+To update behavior from the server of a Shiny app, you can use the `g6_update_behavior()` function. This function allows you to modify the behaviors of an existing G6 graph.
