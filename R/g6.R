@@ -98,18 +98,12 @@ g6 <- function(
   elementId = NULL
 ) {
   # Convert data frames to lists of records
-  if (inherits(nodes, "data.frame")) {
-    nodes <- unname(split(nodes, seq(nrow(nodes))))
-    nodes <- lapply(nodes, function(node) as.list(node))
-  }
-  if (inherits(edges, "data.frame")) {
-    edges <- unname(split(edges, seq(nrow(edges))))
-    edges <- lapply(edges, function(edge) as.list(edge))
-  }
-  if (inherits(combos, "data.frame")) {
-    combos <- unname(split(combos, seq(nrow(combos))))
-    combos <- lapply(combos, function(combo) as.list(combo))
-  }
+  nodes <- process_g6_data(nodes, "node")
+  edges <- process_g6_data(edges, "edge")
+  combos <- process_g6_data(combos, "combo")
+
+  # Check that all ids are unique
+  ensure_unique_ids(get_ids())
 
   # Build properly named list of parameters to pass to widget
   x <- list(
@@ -122,9 +116,11 @@ g6 <- function(
     )
   )
 
-  # In case we need it ...
+  # Cleanup global ids for the next time the function is
+  # called
   hookFunc <- function(widget) {
-    # TBD
+    reset_ids()
+    return(widget)
   }
 
   # create widget
@@ -135,7 +131,7 @@ g6 <- function(
     height = height,
     package = "g6R",
     elementId = elementId,
-    preRenderHook = NULL
+    preRenderHook = hookFunc
   )
 }
 

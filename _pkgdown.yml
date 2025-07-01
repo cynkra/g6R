@@ -54,7 +54,16 @@ reference:
     desc: Render an igraph object as g6
     contents:
       - g6_igraph
-
+  - title: State
+    desc: Get the state of a g6 instance
+    contents:
+      - g6_state
+      - g6_nodes
+      - g6_nodes_ids
+      - g6_edges
+      - g6_edges_ids
+      - g6_combos
+      - g6_combos_ids
   - title: Proxy
     desc: Update a g6 instance from the server function of a Shiny app
   - subtitle: Setup

@@ -34,22 +34,43 @@ g6_proxy <- function(id, session = shiny::getDefaultReactiveDomain()) {
 g6_data <- function(graph, el, action, type) {
   if (!any(class(graph) %in% "g6_proxy")) {
     stop(
-      "Can't use g6_add_* with g6 object. Only within shiny and using g6_proxy"
+      "This function only works with a g6_proxy object."
     )
   }
+
+  reset_ids()
+
   if (action != "remove") {
-    if (inherits(el, "data.frame")) {
-      el <- lapply(seq_len(nrow(el)), \(i) {
-        setNames(as.list(el[i, ]), colnames(el))
-      })
+    # UPDATE/ADD
+    if (action != "get") {
+      attr(el, "type") <- tolower(type)
+      if (inherits(el, "data.frame")) {
+        el <- df_to_list(el)
+      } else {
+        if (action != "set") {
+          el <- convert_id_to_chr(el)
+        }
+        if (action == "update") {
+          ids <- unlist(lapply(el, `[[`, "id"))
+          check_if_in_graph(ids, graph)
+        }
+      }
+      # GET
+    } else {
+      el <- as.character(el)
     }
   } else {
+    # REMOVE
     if (!is.null(el)) {
       if (length(el) == 1) {
         el <- list(el)
       }
+      check_if_in_graph(unlist(el), graph)
     }
   }
+
+  # Check that all ids are unique
+  ensure_unique_ids(get_ids())
 
   graph$session$sendCustomMessage(
     sprintf("%s_g6-data", graph$id),
@@ -400,7 +421,9 @@ g6_fit_center <- function(graph, animation = NULL) {
     stopifnot(is.list(animation))
   }
 
-  if (is.null(animation)) animation <- list()
+  if (is.null(animation)) {
+    animation <- list()
+  }
 
   graph$session$sendCustomMessage(
     sprintf("%s_g6-fit-center", graph$id),
@@ -416,6 +439,9 @@ g6_element_action <- function(graph, ids, animation = NULL, action) {
       "Can't use g6_*_element with g6 object. Only within shiny and using g6_proxy"
     )
   }
+
+  # Target element that exists
+  check_if_in_graph(ids, graph)
 
   graph$session$sendCustomMessage(
     sprintf("%s_g6-element-action", graph$id),
@@ -496,6 +522,9 @@ g6_combo_action <- function(graph, id, options = NULL, action) {
       "Can't use g6_*_combo with g6 object. Use only within shiny and using g6_proxy"
     )
   }
+
+  # Target element that exists
+  check_if_in_graph(id, graph)
 
   graph$session$sendCustomMessage(
     sprintf("%s_g6-combo-action", graph$id),
