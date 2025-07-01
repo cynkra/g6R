@@ -69,6 +69,8 @@ This function is the main entry point for creating G6 graph visualizations in R.
 <span>  nodes <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  edges <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  combos <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  jsonUrl <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  iconsUrl <span class="op">=</span> <span class="st">"//at.alicdn.com/t/font_2678727_za4qjydwkkh.js"</span>,</span>
 <span>  width <span class="op">=</span> <span class="st">"100%"</span>,</span>
 <span>  height <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  elementId <span class="op">=</span> <span class="cn">NULL</span></span>
@@ -97,6 +99,18 @@ Default: NULL.</p></dd>
 at least an "id" field. Nodes can be assigned to combos using their "combo" field.
 See 'Data Structure' section for more details.
 Default: NULL.</p></dd>
+
+
+<dt id="arg-jsonurl">jsonUrl<a class="anchor" aria-label="anchor" href="#arg-jsonurl"></a></dt>
+<dd><p>An url pointing to a valid JSON containing the graph data in G6 format.
+See <a href="https://assets.antv.antgroup.com/g6/20000.json" class="external-link">https://assets.antv.antgroup.com/g6/20000.json</a> for
+an example. Can't be used at the same time as <code>nodes</code>, <code>edges</code>, and <code>combos</code>.</p></dd>
+
+
+<dt id="arg-iconsurl">iconsUrl<a class="anchor" aria-label="anchor" href="#arg-iconsurl"></a></dt>
+<dd><p>A URL pointing to a JavaScript file containing custom icons. Default provides
+reasonable set of icons from
+<a href="https://at.alicdn.com/t/project/2678727/caef142c-804a-4a2f-a914-ae82666a31ee.html?spm=a313x.7781069.1998910419.35" class="external-link">https://at.alicdn.com/t/project/2678727/caef142c-804a-4a2f-a914-ae82666a31ee.html?spm=a313x.7781069.1998910419.35</a>.</p></dd>
 
 
 <dt id="arg-width">width<a class="anchor" aria-label="anchor" href="#arg-width"></a></dt>
@@ -176,7 +190,7 @@ combo definitions. Fields include:</p><ul><li><p><code>id</code> (required): Uni
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu">g6</span><span class="op">(</span>nodes <span class="op">=</span> <span class="va">nodes</span>, edges <span class="op">=</span> <span class="va">edges</span><span class="op">)</span></span></span>
 <div id="htmlwidget-ac96cb3ee4656e2e9ec3" style="width:100%;height:432.632880098888px;" class="g6 html-widget"></div>
-<script type="application/json" data-for="htmlwidget-ac96cb3ee4656e2e9ec3">{"x":{"data":{"nodes":[{"id":"node1"},{"id":"node2"}],"edges":[{"source":"node1","target":"node2"}]}},"evals":[],"jsHooks":[]}</script></code></pre></div>
+<script type="application/json" data-for="htmlwidget-ac96cb3ee4656e2e9ec3">{"x":{"data":{"nodes":[{"id":"node1"},{"id":"node2"}],"edges":[{"source":"node1","target":"node2"}]},"jsonUrl":null,"iconsUrl":"//at.alicdn.com/t/font_2678727_za4qjydwkkh.js"},"evals":[],"jsHooks":[]}</script></code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside></div>
