@@ -19,3 +19,4 @@
 ^vignettes/*_files$
 ^index\.qmd$
 ^index\.md$
+^cran-comments\.md$

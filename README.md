@@ -8,6 +8,8 @@
 [![R-CMD-check](https://github.com/cynkra/g6R/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/cynkra/g6R/actions/workflows/R-CMD-check.yaml)
 [![Lifecycle:
 experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
+[![CRAN
+status](https://www.r-pkg.org/badges/version/g6R)](https://CRAN.R-project.org/package=g6R)
 <!-- badges: end -->
 
 `{g6R}` provides R bindings to the G6 graph

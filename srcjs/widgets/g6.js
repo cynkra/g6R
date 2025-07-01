@@ -1,29 +1,11 @@
 import 'widgets';
 import {
-  CanvasEvent,
-  ComboEvent,
-  EdgeEvent,
   Graph,
-  NodeEvent,
   ExtensionCategory,
-  register,
-  GraphEvent
+  register
 } from '@antv/g6';
-import { setClickEvents, setGraphEvents } from '../modules/events';
-import { registerShinyHandlers } from '../modules/handlers';
 import { AntLine, FlyMarkerCubic, CircleComboWithExtraButton } from '../modules/extensions';
-
-// This is to be able to use custom icons: 
-// https://at.alicdn.com/t/project/2678727/caef142c-804a-4a2f-a914-ae82666a31ee.html?spm=a313x.7781069.1998910419.35
-const iconURLs = [
-  '//at.alicdn.com/t/font_2678727_za4qjydwkkh.js'
-]
-
-iconURLs.map((url) => {
-  let iconFont = document.createElement('script');
-  iconFont.src = url; // Replace with your iconfont script address   
-  document.head.appendChild(iconFont);
-})
+import { setupGraph, setupIcons } from '../modules/utils';
 
 
 // Ant lines
@@ -52,50 +34,23 @@ HTMLWidgets.widget({
         let config = x;
         // Don't change the container
         config.container = el.id;
-        graph = new Graph(config);
 
-        //graph.on(GraphEvent.AFTER_ELEMENT_CREATE, (e) => {
-        //  console.log(e);
-        //});
+        // This is to be able to use custom icons.
+        setupIcons(config.iconsUrl);
 
-        if (HTMLWidgets.shinyMode) {
-
-          const clickEvents = [
-            NodeEvent.CLICK,
-            EdgeEvent.CLICK,
-            ComboEvent.CLICK
-          ]
-          setClickEvents(clickEvents, graph, el);
-
-          // Is this enough? :)
-          const graphEvents = [
-            GraphEvent.AFTER_ELEMENT_CREATE,
-            GraphEvent.AFTER_ELEMENT_DESTROY,
-            GraphEvent.AFTER_DRAW,
-            GraphEvent.AFTER_LAYOUT,
-            GraphEvent.AFTER_ANIMATE,
-            GraphEvent.AFTER_RENDER,
-            ComboEvent.DROP,
-            CanvasEvent.DROP
-          ]
-          setGraphEvents(graphEvents, graph, el);
-
-          // When click on canvas and target isn't node or edge or combo
-          // we have to reset the Shiny selected-node or edge or combo
-          graph.on(CanvasEvent.CLICK, (e) => {
-            Shiny.setInputValue(el.id + '-selected_node', null);
-            Shiny.setInputValue(el.id + '-selected_edge', null);
-            Shiny.setInputValue(el.id + '-selected_combo', null);
-          });
-
-          registerShinyHandlers(graph, el);
+        // Bypass R data processing an fetch JSON data from JS
+        if (config.jsonUrl !== null) {
+          fetch(x.jsonUrl)
+            .then((res) => res.json())
+            .then((data) => {
+              config.data = data;
+              graph = new Graph(config);
+              setupGraph(graph, el, this);
+            })
+        } else {
+          graph = new Graph(config);
+          setupGraph(graph, el, this);
         }
-
-        graph.render();
-
-        window.addEventListener('resize', () => {
-          this.resize();
-        })
 
       },
       getWidget: function () {

@@ -5,6 +5,15 @@ test_that("g6 function creates proper htmlwidget", {
   expect_s3_class(g, "g6")
   expect_length(g$x$data, 0)
 
+  expect_snapshot(error = TRUE, {
+    # Test with invalid input
+    g6(iconsUrl = NULL)
+    g6(
+      nodes = data.frame(),
+      jsonUrl = "https://assets.antv.antgroup.com/g6/cluster.json"
+    )
+  })
+
   # Test with data frames
   nodes_df <- data.frame(
     id = c("node1", "node2", "node3"),

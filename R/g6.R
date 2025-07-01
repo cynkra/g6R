@@ -64,6 +64,13 @@
 #'   See 'Data Structure' section for more details.
 #'   Default: NULL.
 #'
+#' @param jsonUrl An url pointing to a valid JSON containing the graph data in G6 format.
+#' See \url{https://assets.antv.antgroup.com/g6/20000.json} for
+#' an example. Can't be used at the same time as `nodes`, `edges`, and `combos`.
+#' @param iconsUrl A URL pointing to a JavaScript file containing custom icons. Default provides
+#' reasonable set of icons from
+#' \url{https://at.alicdn.com/t/project/2678727/caef142c-804a-4a2f-a914-ae82666a31ee.html?spm=a313x.7781069.1998910419.35}.
+#'
 #' @param width Width of the graph container in pixels or as a valid CSS unit.
 #'   Default: NULL (automatic sizing).
 #'
@@ -93,33 +100,52 @@ g6 <- function(
   nodes = NULL,
   edges = NULL,
   combos = NULL,
+  jsonUrl = NULL,
+  iconsUrl = "//at.alicdn.com/t/font_2678727_za4qjydwkkh.js",
   width = "100%",
   height = NULL,
   elementId = NULL
 ) {
-  # Convert data frames to lists of records
-  if (inherits(nodes, "data.frame")) {
-    nodes <- unname(split(nodes, seq(nrow(nodes))))
-    nodes <- lapply(nodes, function(node) as.list(node))
-  }
-  if (inherits(edges, "data.frame")) {
-    edges <- unname(split(edges, seq(nrow(edges))))
-    edges <- lapply(edges, function(edge) as.list(edge))
-  }
-  if (inherits(combos, "data.frame")) {
-    combos <- unname(split(combos, seq(nrow(combos))))
-    combos <- lapply(combos, function(combo) as.list(combo))
+  stopifnot(!is.null(iconsUrl))
+  if (
+    !is.null(jsonUrl) &&
+      (!is.null(nodes) || !is.null(edges) || !is.null(combos))
+  ) {
+    stop(
+      "Can't use jsonUrl` argument at the same time as `nodes`, `edges`, and `combos`."
+    )
   }
 
-  # Build properly named list of parameters to pass to widget
-  x <- list(
-    data = dropNulls(
+  dat <- NULL
+  if (is.null(jsonUrl)) {
+    # Convert data frames to lists of records
+    if (inherits(nodes, "data.frame")) {
+      nodes <- unname(split(nodes, seq(nrow(nodes))))
+      nodes <- lapply(nodes, function(node) as.list(node))
+    }
+    if (inherits(edges, "data.frame")) {
+      edges <- unname(split(edges, seq(nrow(edges))))
+      edges <- lapply(edges, function(edge) as.list(edge))
+    }
+    if (inherits(combos, "data.frame")) {
+      combos <- unname(split(combos, seq(nrow(combos))))
+      combos <- lapply(combos, function(combo) as.list(combo))
+    }
+
+    dat <- dropNulls(
       list(
         nodes = nodes,
         edges = edges,
         combos = combos
       )
     )
+  }
+
+  # Build properly named list of parameters to pass to widget
+  x <- list(
+    data = dat,
+    jsonUrl = jsonUrl,
+    iconsUrl = iconsUrl
   )
 
   # In case we need it ...

@@ -8,6 +8,8 @@ g6(
   nodes = NULL,
   edges = NULL,
   combos = NULL,
+  jsonUrl = NULL,
+  iconsUrl = "//at.alicdn.com/t/font_2678727_za4qjydwkkh.js",
   width = "100\%",
   height = NULL,
   elementId = NULL
@@ -27,6 +29,14 @@ Default: NULL.}
 at least an "id" field. Nodes can be assigned to combos using their "combo" field.
 See 'Data Structure' section for more details.
 Default: NULL.}
+
+\item{jsonUrl}{An url pointing to a valid JSON containing the graph data in G6 format.
+See \url{https://assets.antv.antgroup.com/g6/20000.json} for
+an example. Can't be used at the same time as \code{nodes}, \code{edges}, and \code{combos}.}
+
+\item{iconsUrl}{A URL pointing to a JavaScript file containing custom icons. Default provides
+reasonable set of icons from
+\url{https://at.alicdn.com/t/project/2678727/caef142c-804a-4a2f-a914-ae82666a31ee.html?spm=a313x.7781069.1998910419.35}.}
 
 \item{width}{Width of the graph container in pixels or as a valid CSS unit.
 Default: NULL (automatic sizing).}
