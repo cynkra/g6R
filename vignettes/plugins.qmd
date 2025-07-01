@@ -25,7 +25,7 @@ plugins_data <- list(
   "grid-line" = "Displays grid reference lines on the canvas to help with element alignment and positioning.",
   "minimap" = "Displays a thumbnail preview of the graph, supporting navigation in large graphs.",
   "snapline" = "Displays alignment reference lines when dragging elements to ensure precise positioning.",
-  "toolbar" = "Provides a collection of common operation buttons for graph manipulation.",
+  "toolbar" = "Provides a collection of common operation buttons for graph manipulation. If you wish to use custom icons, you can browse at https://at.alicdn.com/t/project/2678727/caef142c-804a-4a2f-a914-ae82666a31ee.html?spm=a313x.7781069.1998910419.35 and then pass the icon name as `icon-<NAME>` in the toolbar `getItems` parameter. See more [here](https://g6.antv.antgroup.com/en/manual/plugin/build-in/toolbar#custom-icons).",
   "tooltip" = "Displays detailed information about elements on hover for enhanced interactivity. Doesn't work with Shiny yet due to a compatibility issue with Bootstrap tooltips class."
 )
 
