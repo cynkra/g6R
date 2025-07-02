@@ -1,5 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 500">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 500" xmlns:bx="https://boxy-svg.com">
+  <defs>
+    <bx:export>
+      <bx:file format="png" background="#fff0" path="g6-layers.png"/>
+    </bx:export>
+  </defs>
   <g transform="matrix(0.690392, -0.460417, 0.934232, 0.725161, 13.4279, -37.4068)" style="transform-origin: 239.085px 165.975px;"/>
   <g transform="matrix(1.73121, 0, 0, 1.73121, -23.3145, -97.1045)">
     <rect x="70.131" y="159.883" width="108.434" height="66.197" style="stroke: rgb(0, 0, 0); fill: rgb(156, 78, 255); transform-box: fill-box; transform-origin: 50% 50%;" transform="matrix(0.905608, -0.424115, 1.10791, 0.585373, -25.111324, 48.832815)"/>
