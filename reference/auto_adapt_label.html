@@ -86,54 +86,49 @@ improve readability in the graph visualization.</p>
 
 
 <dl><dt id="arg-key">key<a class="anchor" aria-label="anchor" href="#arg-key"></a></dt>
-<dd><p>Unique identifier for the behavior (string, default: "auto-adapt-label")</p></dd>
+<dd><p>Unique identifier for the behavior (string, default: "auto-adapt-label").</p></dd>
 
 
 <dt id="arg-enable">enable<a class="anchor" aria-label="anchor" href="#arg-enable"></a></dt>
-<dd><p>Whether to enable this behavior (JS function, default: returns TRUE for all events)</p></dd>
+<dd><p>Whether to enable this behavior (JS function, default: returns TRUE for all events).</p></dd>
 
 
 <dt id="arg-throttle">throttle<a class="anchor" aria-label="anchor" href="#arg-throttle"></a></dt>
-<dd><p>Throttle time in milliseconds to optimize performance (numeric, default: 100)</p></dd>
+<dd><p>Throttle time in milliseconds to optimize performance (numeric, default: 100).</p></dd>
 
 
 <dt id="arg-padding">padding<a class="anchor" aria-label="anchor" href="#arg-padding"></a></dt>
-<dd><p>Padding space around labels in pixels (numeric, default: 0)</p></dd>
+<dd><p>Padding space around labels in pixels (numeric, default: 0).</p></dd>
 
 
 <dt id="arg-sort">sort<a class="anchor" aria-label="anchor" href="#arg-sort"></a></dt>
-<dd><p>Global sorting rule for all element types (list or JS function, default: NULL)</p></dd>
+<dd><p>Global sorting rule for all element types (list or JS function, default: NULL).</p></dd>
 
 
 <dt id="arg-sortnode">sortNode<a class="anchor" aria-label="anchor" href="#arg-sortnode"></a></dt>
-<dd><p>Sorting rule specifically for node labels (list, default: list(type = "degree"))</p></dd>
+<dd><p>Sorting rule specifically for node labels (list, default: list(type = "degree")).</p></dd>
 
 
 <dt id="arg-sortedge">sortEdge<a class="anchor" aria-label="anchor" href="#arg-sortedge"></a></dt>
-<dd><p>Sorting rule specifically for edge labels (list, default: NULL)</p></dd>
+<dd><p>Sorting rule specifically for edge labels (list, default: NULL).</p></dd>
 
 
 <dt id="arg-sortcombo">sortCombo<a class="anchor" aria-label="anchor" href="#arg-sortcombo"></a></dt>
-<dd><p>Sorting rule specifically for combo labels (list, default: NULL)</p></dd>
+<dd><p>Sorting rule specifically for combo labels (list, default: NULL).</p></dd>
 
 
 <dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>
-<dd><p>Extra parameters. See <a href="https://g6.antv.antgroup.com/manual/behavior/build-in/auto-adapt-label" class="external-link">https://g6.antv.antgroup.com/manual/behavior/build-in/auto-adapt-label</a>.</p></dd>
+<dd><p>Extra parameters. See <a href="https://g6.antv.antgroup.com/manual/behavior/build-in/auto-adapt-label" class="external-link">https://g6.antv.antgroup.com/manual/behavior/build-in/auto-adapt-label</a>.</p>
+<p>Sorting parameters determine which labels take priority when space is limited:</p><ul><li><p>When <code>sort</code> is provided, it applies to all element types and overrides type-specific settings</p></li>
+<li><p>Type-specific sorting (<code>sortNode</code>, <code>sortEdge</code>, <code>sortCombo</code>) only applies when <code>sort</code> is NULL</p></li>
+<li><p>The default sorting for nodes is by degree (higher degree nodes' labels are shown first)</p></li>
+</ul></dd>
 
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    <p>A list with the configuration settings for the auto-adapt-label behavior</p>
+    <p>A list with the configuration settings for the auto-adapt-label behavior.</p>
     </div>
-    <div class="section level2">
-    <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
-    <p>The auto-adapt-label behavior helps prevent label overlap by automatically adjusting
-label positions based on specified rules. It can selectively hide labels when there's
-not enough space to display all of them.</p>
-<p>Sorting parameters determine which labels take priority when space is limited:</p><ul><li><p>When <code>sort</code> is provided, it applies to all element types and overrides type-specific settings</p></li>
-<li><p>Type-specific sorting (<code>sortNode</code>, <code>sortEdge</code>, <code>sortCombo</code>) only applies when <code>sort</code> is NULL</p></li>
-<li><p>The default sorting for nodes is by degree (higher degree nodes' labels are shown first)</p></li>
-</ul></div>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>

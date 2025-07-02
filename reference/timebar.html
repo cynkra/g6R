@@ -98,95 +98,96 @@ This plugin adds a timeline or chart-based control for time-related data visuali
 
 
 <dl><dt id="arg-data">data<a class="anchor" aria-label="anchor" href="#arg-data"></a></dt>
-<dd><p>Time data, either a vector of timestamps or a list of objects with time and value (required)</p></dd>
+<dd><p>Time data, either a vector of timestamps or a list of objects with time and value (required).</p></dd>
 
 
 <dt id="arg-key">key<a class="anchor" aria-label="anchor" href="#arg-key"></a></dt>
-<dd><p>Unique identifier for the plugin (string, default: NULL)</p></dd>
+<dd><p>Unique identifier for the plugin (string, default: NULL).</p></dd>
 
 
 <dt id="arg-classname">className<a class="anchor" aria-label="anchor" href="#arg-classname"></a></dt>
-<dd><p>Additional class name for the timebar DOM (string, default: "g6-timebar")</p></dd>
+<dd><p>Additional class name for the timebar DOM (string, default: "g6-timebar").</p></dd>
 
 
 <dt id="arg-x">x<a class="anchor" aria-label="anchor" href="#arg-x"></a></dt>
-<dd><p>X position, will be ignored if position is set (number, default: NULL)</p></dd>
+<dd><p>X position, will be ignored if position is set (number, default: NULL).</p></dd>
 
 
 <dt id="arg-y">y<a class="anchor" aria-label="anchor" href="#arg-y"></a></dt>
-<dd><p>Y position, will be ignored if position is set (number, default: NULL)</p></dd>
+<dd><p>Y position, will be ignored if position is set (number, default: NULL).</p></dd>
 
 
 <dt id="arg-width">width<a class="anchor" aria-label="anchor" href="#arg-width"></a></dt>
-<dd><p>Timebar width (number, default: 450)</p></dd>
+<dd><p>Timebar width (number, default: 450).</p></dd>
 
 
 <dt id="arg-height">height<a class="anchor" aria-label="anchor" href="#arg-height"></a></dt>
-<dd><p>Timebar height (number, default: 60)</p></dd>
+<dd><p>Timebar height (number, default: 60).</p></dd>
 
 
 <dt id="arg-position">position<a class="anchor" aria-label="anchor" href="#arg-position"></a></dt>
-<dd><p>Timebar position: "bottom" or "top" (string, default: "bottom")</p></dd>
+<dd><p>Timebar position: "bottom" or "top" (string, default: "bottom").</p></dd>
 
 
 <dt id="arg-padding">padding<a class="anchor" aria-label="anchor" href="#arg-padding"></a></dt>
-<dd><p>Padding around the timebar (number or numeric vector, default: 10)</p></dd>
+<dd><p>Padding around the timebar (number or numeric vector, default: 10).</p></dd>
 
 
 <dt id="arg-timebartype">timebarType<a class="anchor" aria-label="anchor" href="#arg-timebartype"></a></dt>
-<dd><p>Display type: "time" or "chart" (string, default: "time")</p></dd>
+<dd><p>Display type: "time" or "chart" (string, default: "time").</p></dd>
 
 
 <dt id="arg-elementtypes">elementTypes<a class="anchor" aria-label="anchor" href="#arg-elementtypes"></a></dt>
-<dd><p>Filter element types: vector of "node", "edge", and/or "combo" (character vector, default: c("node"))</p></dd>
+<dd><p>Filter element types: vector of "node", "edge", and/or "combo"
+(character vector, default: c("node")).</p></dd>
 
 
 <dt id="arg-mode">mode<a class="anchor" aria-label="anchor" href="#arg-mode"></a></dt>
-<dd><p>Control element filtering method: "modify" or "visibility" (string, default: "modify")</p></dd>
+<dd><p>Control element filtering method: "modify" or "visibility" (string, default: "modify").</p></dd>
 
 
 <dt id="arg-values">values<a class="anchor" aria-label="anchor" href="#arg-values"></a></dt>
-<dd><p>Current time value (number, vector of two numbers, Date, or vector of two Dates, default: NULL)</p></dd>
+<dd><p>Current time value (number, vector of two numbers, Date, or vector of two Dates, default: NULL).</p></dd>
 
 
 <dt id="arg-loop">loop<a class="anchor" aria-label="anchor" href="#arg-loop"></a></dt>
-<dd><p>Whether to loop playback (boolean, default: FALSE)</p></dd>
+<dd><p>Whether to loop playback (boolean, default: FALSE).</p></dd>
 
 
 <dt id="arg-gettime">getTime<a class="anchor" aria-label="anchor" href="#arg-gettime"></a></dt>
-<dd><p>Method to get element time (JS function, default: NULL)</p></dd>
+<dd><p>Method to get element time (JS function, default: NULL).</p></dd>
 
 
 <dt id="arg-labelformatter">labelFormatter<a class="anchor" aria-label="anchor" href="#arg-labelformatter"></a></dt>
-<dd><p>Custom time formatting in chart mode (JS function, default: NULL)</p></dd>
+<dd><p>Custom time formatting in chart mode (JS function, default: NULL).</p></dd>
 
 
 <dt id="arg-onchange">onChange<a class="anchor" aria-label="anchor" href="#arg-onchange"></a></dt>
-<dd><p>Callback when time interval changes (JS function, default: NULL)</p></dd>
+<dd><p>Callback when time interval changes (JS function, default: NULL).</p></dd>
 
 
 <dt id="arg-onreset">onReset<a class="anchor" aria-label="anchor" href="#arg-onreset"></a></dt>
-<dd><p>Callback when reset (JS function, default: NULL)</p></dd>
+<dd><p>Callback when reset (JS function, default: NULL).</p></dd>
 
 
 <dt id="arg-onspeedchange">onSpeedChange<a class="anchor" aria-label="anchor" href="#arg-onspeedchange"></a></dt>
-<dd><p>Callback when playback speed changes (JS function, default: NULL)</p></dd>
+<dd><p>Callback when playback speed changes (JS function, default: NULL).</p></dd>
 
 
 <dt id="arg-onplay">onPlay<a class="anchor" aria-label="anchor" href="#arg-onplay"></a></dt>
-<dd><p>Callback when playback starts (JS function, default: NULL)</p></dd>
+<dd><p>Callback when playback starts (JS function, default: NULL).</p></dd>
 
 
 <dt id="arg-onpause">onPause<a class="anchor" aria-label="anchor" href="#arg-onpause"></a></dt>
-<dd><p>Callback when paused (JS function, default: NULL)</p></dd>
+<dd><p>Callback when paused (JS function, default: NULL).</p></dd>
 
 
 <dt id="arg-onbackward">onBackward<a class="anchor" aria-label="anchor" href="#arg-onbackward"></a></dt>
-<dd><p>Callback when moving backward (JS function, default: NULL)</p></dd>
+<dd><p>Callback when moving backward (JS function, default: NULL).</p></dd>
 
 
 <dt id="arg-onforward">onForward<a class="anchor" aria-label="anchor" href="#arg-onforward"></a></dt>
-<dd><p>Callback when moving forward (JS function, default: NULL)</p></dd>
+<dd><p>Callback when moving forward (JS function, default: NULL).</p></dd>
 
 
 <dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>
@@ -195,7 +196,7 @@ This plugin adds a timeline or chart-based control for time-related data visuali
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    <p>A list with the configuration settings</p>
+    <p>A list with the configuration settings for the timebar plugin.</p>
     </div>
 
     <div class="section level2">

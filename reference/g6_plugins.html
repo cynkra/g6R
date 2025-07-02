@@ -82,7 +82,7 @@ G6 plugins extend the functionality of the base graph visualization with additio
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    <p>A list of G6 plugin configurations that can be passed to a G6 graph</p>
+    <p>A list of G6 plugin configurations that can be passed to a G6 graph.</p>
     </div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
@@ -142,6 +142,7 @@ Plugins are divided into several categories:</p>
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># Create a configuration with multiple plugins</span></span></span>
 <span class="r-in"><span><span class="va">plugins</span> <span class="op">&lt;-</span> <span class="fu">g6_plugins</span><span class="op">(</span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="g6.html">g6</a></span><span class="op">(</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>  <span class="fu"><a href="minimap.html">minimap</a></span><span class="op">(</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>  <span class="fu"><a href="grid_line.html">grid_line</a></span><span class="op">(</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>  <span class="fu"><a href="tooltips.html">tooltips</a></span><span class="op">(</span></span></span>
@@ -153,6 +154,7 @@ Plugins are divided into several categories:</p>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Add a context menu and toolbar</span></span></span>
 <span class="r-in"><span><span class="va">plugins</span> <span class="op">&lt;-</span> <span class="fu">g6_plugins</span><span class="op">(</span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="g6.html">g6</a></span><span class="op">(</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>  <span class="fu"><a href="context_menu.html">context_menu</a></span><span class="op">(</span></span></span>
 <span class="r-in"><span>    key <span class="op">=</span> <span class="st">"my-context-menu"</span>,</span></span>
 <span class="r-in"><span>    className <span class="op">=</span> <span class="st">"my-context-menu"</span>,</span></span>
