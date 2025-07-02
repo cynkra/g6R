@@ -10,9 +10,7 @@
 <link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
 <script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
 <link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
-<script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><script src="nodes_files/libs/quarto-html/popper.min.js"></script><script src="nodes_files/libs/quarto-html/tippy.umd.min.js"></script><link href="nodes_files/libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="nodes_files/libs/quarto-html/light-border.css" rel="stylesheet">
-<script src="nodes_files/libs/htmlwidgets-1.6.4/htmlwidgets.js"></script><script src="nodes_files/libs/g6-binding-0.0.0.9000/g6.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Nodes">
+<script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Nodes">
 </head>
 <body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
@@ -22,7 +20,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">g6R</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.0.9000</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.1</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -77,32 +75,31 @@
 
 
   </div>
-</nav><div class="container template-quarto">
-<div class="row">
+</nav><div class="container template-article">
+
+
+
+<script src="nodes_files/htmlwidgets-1.6.4/htmlwidgets.js"></script><script src="nodes_files/g6-binding-0.0.1/g6.js"></script><div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
 
       <h1>Nodes</h1>
-
-
-
-
-      <small class="dont-index">Source: <a href="https://github.com/cynkra/g6R/blob/main/vignettes/nodes.qmd" class="external-link"><code>vignettes/nodes.qmd</code></a></small>
-      <div class="d-none name"><code></code></div>
+            
+      
+      <small class="dont-index">Source: <a href="https://github.com/cynkra/g6R/blob/main/vignettes/articles/nodes.Rmd" class="external-link"><code>vignettes/articles/nodes.Rmd</code></a></small>
+      <div class="d-none name"><code>nodes.Rmd</code></div>
     </div>
 
-
-
-
-
-
-    <div class="cell">
-<div class="sourceCode cell-code" id="cb1"><pre class="downlit sourceCode r">
+    
+    
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://shiny.posit.co/" class="external-link">shiny</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/cynkra/g6R" class="external-link">g6R</a></span><span class="op">)</span></span></code></pre></div>
-</div>
-<section class="level2"><h2 id="introduction">Introduction<a class="anchor" aria-label="anchor" href="#introduction"></a>
+<div class="section level2">
+<h2 id="introduction">Introduction<a class="anchor" aria-label="anchor" href="#introduction"></a>
 </h2>
-<p>Nodes belong to the graph data. In <a href="https://github.com/cynkra/g6R" class="external-link">g6R</a>, nodes can be created from a <strong>dataframe</strong> or a <strong>list</strong> such as:</p>
+<p>Nodes belong to the graph data. In <a href="https://github.com/cynkra/g6R" class="external-link">g6R</a>, nodes can be
+created from a <strong>dataframe</strong> or a <strong>list</strong>
+such as:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">nodes</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>id <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/character.html" class="external-link">as.character</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">2</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="va">nodes</span><span class="op">$</span><span class="va">label</span> <span class="op">&lt;-</span> <span class="va">nodes</span><span class="op">$</span><span class="va">id</span></span>
@@ -112,7 +109,10 @@
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>id <span class="op">=</span> <span class="st">"1"</span>, label <span class="op">=</span> <span class="st">"Node 1"</span><span class="op">)</span>,</span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>id <span class="op">=</span> <span class="st">"2"</span>, label <span class="op">=</span> <span class="st">"Node 2"</span><span class="op">)</span></span>
 <span><span class="op">)</span></span></code></pre></div>
-<p>While the former might be more convenient for simple cases, the latter provides more flexibility for advanced customization since some node properties have to be nested lists, for instance <strong>style</strong> properties:</p>
+<p>While the former might be more convenient for simple cases, the
+latter provides more flexibility for advanced customization since some
+node properties have to be nested lists, for instance
+<strong>style</strong> properties:</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">nodes</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
@@ -121,30 +121,39 @@
 <span>    style <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>fill <span class="op">=</span> <span class="st">"#FF0000"</span>, fillOpacity <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span></span>
 <span>  <span class="op">)</span>,</span>
 <span><span class="op">)</span></span></code></pre></div>
-</section><section class="level2"><h2 id="data-properties">Data properties<a class="anchor" aria-label="anchor" href="#data-properties"></a>
+</div>
+<div class="section level2">
+<h2 id="data-properties">Data properties<a class="anchor" aria-label="anchor" href="#data-properties"></a>
 </h2>
-<p><a href="https://github.com/cynkra/g6R" class="external-link">g6R</a> nodes are allowed to have the following properties:</p>
+<p><a href="https://github.com/cynkra/g6R" class="external-link">g6R</a> nodes are allowed to have the following
+properties:</p>
 <ul>
 <li>
 <code>id</code>: a unique identifier for the node, required.</li>
 <li>
 <code>type</code>: the type of the node.</li>
 <li>
-<code>data</code>: custom data for the node that can be retrieved.</li>
+<code>data</code>: custom data for the node that can be
+retrieved.</li>
 <li>
-<code>style</code>: style properties. A comprehensive list is available <a href="https://g6.antv.antgroup.com/en/manual/element/node/build-in/base-node#style" class="external-link">here</a>.</li>
+<code>style</code>: style properties. A comprehensive list is
+available <a href="https://g6.antv.antgroup.com/en/manual/element/node/build-in/base-node#style" class="external-link">here</a>.</li>
 <li>
 <code>states</code>: initial <a href="https://g6.antv.antgroup.com/en/manual/element/node/build-in/base-node#state" class="external-link">states</a>.</li>
 <li>
-<code>combo</code>: id of the <a href="https://g6.antv.antgroup.com/en/manual/element/combo/overview" class="external-link">combo</a> the node belongs to. Combo are describes in another vignette (TBD link).</li>
+<code>combo</code>: id of the <a href="https://g6.antv.antgroup.com/en/manual/element/combo/overview" class="external-link">combo</a>
+the node belongs to. Combo are describes in another vignette (TBD
+link).</li>
 <li>
 <code>children</code>: nodes ids for tree.</li>
 </ul>
-<section class="level3"><h3 id="node-type">Node type<a class="anchor" aria-label="anchor" href="#node-type"></a>
+<div class="section level3">
+<h3 id="node-type">Node type<a class="anchor" aria-label="anchor" href="#node-type"></a>
 </h3>
-<p>Builtin types are <code>circle</code>, <code>rect</code>, <code>ellipse</code>, <code>diamond</code>, <code>triangle</code>, <code>hexagon</code>, <code>star</code>, <code>donut</code>:</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb4"><pre class="downlit sourceCode r">
+<p>Builtin types are <code>circle</code>, <code>rect</code>,
+<code>ellipse</code>, <code>diamond</code>, <code>triangle</code>,
+<code>hexagon</code>, <code>star</code>, <code>donut</code>:</p>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">types</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span>
 <span>  <span class="st">"circle"</span>,</span>
 <span>  <span class="st">"rect"</span>,</span>
@@ -171,18 +180,19 @@
 <span>      <span class="op">)</span></span>
 <span>    <span class="op">)</span></span>
 <span>  <span class="op">)</span></span></code></pre></div>
-<div class="cell-output-display">
-<div id="htmlwidget-da3bbcff86380144aee3" style="width:100%;height:480px;" class="g6 html-widget"></div>
-<script type="application/json" data-for="htmlwidget-da3bbcff86380144aee3">{"x":{"data":{"nodes":[{"id":"circle","type":"circle"},{"id":"rect","type":"rect"},{"id":"ellipse","type":"ellipse"},{"id":"diamond","type":"diamond"},{"id":"triangle","type":"triangle"},{"id":"hexagon","type":"hexagon"},{"id":"star","type":"star"}]},"jsonUrl":null,"iconsUrl":"//at.alicdn.com/t/font_2678727_za4qjydwkkh.js","layout":{"type":"d3-force","link":{"distance":100,"strength":2},"collide":{"radius":40}},"node":{"style":{"labelText":"(d) => {\n            return d.id\n          }"}},"animation":false,"autoResize":false,"cursor":"default","rotation":0,"zoom":1,"zoomRange":[0.01,10],"theme":"light"},"evals":["node.style.labelText"],"jsHooks":[]}</script>
+<div id="htmlwidget-ac96cb3ee4656e2e9ec3" style="width:100%;height:432.632880098888px;" class="g6 html-widget"></div>
+<script type="application/json" data-for="htmlwidget-ac96cb3ee4656e2e9ec3">{"x":{"data":{"nodes":[{"id":"circle","type":"circle"},{"id":"rect","type":"rect"},{"id":"ellipse","type":"ellipse"},{"id":"diamond","type":"diamond"},{"id":"triangle","type":"triangle"},{"id":"hexagon","type":"hexagon"},{"id":"star","type":"star"}]},"jsonUrl":null,"iconsUrl":"//at.alicdn.com/t/font_2678727_za4qjydwkkh.js","layout":{"type":"d3-force","link":{"distance":100,"strength":2},"collide":{"radius":40}},"node":{"style":{"labelText":"(d) => {\n            return d.id\n          }"}},"animation":false,"autoResize":false,"cursor":"default","rotation":0,"zoom":1,"zoomRange":[0.01,10],"theme":"light"},"evals":["node.style.labelText"],"jsHooks":[]}</script>
 </div>
-</div>
-</section><section class="level3"><h3 id="special-types">Special types<a class="anchor" aria-label="anchor" href="#special-types"></a>
+<div class="section level3">
+<h3 id="special-types">Special types<a class="anchor" aria-label="anchor" href="#special-types"></a>
 </h3>
-<section class="level4"><h4 id="images">Images<a class="anchor" aria-label="anchor" href="#images"></a>
+<div class="section level4">
+<h4 id="images">Images<a class="anchor" aria-label="anchor" href="#images"></a>
 </h4>
-<p>You can create nodes with images by setting the <code>type</code> to <code>image</code> and providing a <code>src</code> property in the <code>style</code>. The image will be displayed as the node content:</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb5"><pre class="downlit sourceCode r">
+<p>You can create nodes with images by setting the <code>type</code> to
+<code>image</code> and providing a <code>src</code> property in the
+<code>style</code>. The image will be displayed as the node content:</p>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">nodes</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
 <span>    id <span class="op">=</span> <span class="st">"1"</span>,</span>
@@ -206,16 +216,19 @@
 <span>      <span class="op">)</span></span>
 <span>    <span class="op">)</span></span>
 <span>  <span class="op">)</span></span></code></pre></div>
-<div class="cell-output-display">
-<div id="htmlwidget-c12ab51faa5213766ada" style="width:100%;height:100px;" class="g6 html-widget"></div>
-<script type="application/json" data-for="htmlwidget-c12ab51faa5213766ada">{"x":{"data":{"nodes":[{"id":"1","type":"image","style":{"src":"https://gw.alipayobjects.com/mdn/rms_6ae20b/afts/img/A*N4ZMS7gHsUIAAAAAAAAAAABkARQnAQ"}}]},"jsonUrl":null,"iconsUrl":"//at.alicdn.com/t/font_2678727_za4qjydwkkh.js","layout":{"type":"d3-force","link":{"distance":100,"strength":2},"collide":{"radius":40}},"node":{"style":{"labelText":"(d) => {\n            return d.id\n          }"}},"animation":false,"autoResize":false,"cursor":"default","rotation":0,"zoom":1,"zoomRange":[0.01,10],"theme":"light"},"evals":["node.style.labelText"],"jsHooks":[]}</script>
+<div id="htmlwidget-e5c8c404fe174e4c81bd" style="width:100%;height:100px;" class="g6 html-widget"></div>
+<script type="application/json" data-for="htmlwidget-e5c8c404fe174e4c81bd">{"x":{"data":{"nodes":[{"id":"1","type":"image","style":{"src":"https://gw.alipayobjects.com/mdn/rms_6ae20b/afts/img/A*N4ZMS7gHsUIAAAAAAAAAAABkARQnAQ"}}]},"jsonUrl":null,"iconsUrl":"//at.alicdn.com/t/font_2678727_za4qjydwkkh.js","layout":{"type":"d3-force","link":{"distance":100,"strength":2},"collide":{"radius":40}},"node":{"style":{"labelText":"(d) => {\n            return d.id\n          }"}},"animation":false,"autoResize":false,"cursor":"default","rotation":0,"zoom":1,"zoomRange":[0.01,10],"theme":"light"},"evals":["node.style.labelText"],"jsHooks":[]}</script>
 </div>
-</div>
-</section><section class="level4"><h4 id="html-nodes">HTML nodes<a class="anchor" aria-label="anchor" href="#html-nodes"></a>
+<div class="section level4">
+<h4 id="html-nodes">HTML nodes<a class="anchor" aria-label="anchor" href="#html-nodes"></a>
 </h4>
-<p>There exists a last type which allows to create nodes with custom html. Importantly, you can’t have html nodes with other type of nodes. The type applies at the global node option level as shown in the following. The node structure is created with the <code>innerHTML</code> property which has to be a JavaScript callback taking node data as parameter:</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb6"><pre class="downlit sourceCode r">
+<p>There exists a last type which allows to create nodes with custom
+html. Importantly, you can’t have html nodes with other type of nodes.
+The type applies at the global node option level as shown in the
+following. The node structure is created with the <code>innerHTML</code>
+property which has to be a JavaScript callback taking node data as
+parameter:</p>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">nodes</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">lapply</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">3</span>, \<span class="op">(</span><span class="va">i</span><span class="op">)</span> <span class="op">{</span></span>
 <span>  <span class="va">id</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/character.html" class="external-link">as.character</a></span><span class="op">(</span><span class="va">i</span><span class="op">)</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>id <span class="op">=</span> <span class="va">id</span><span class="op">)</span></span>
@@ -240,16 +253,21 @@
 <span>      <span class="op">)</span></span>
 <span>    <span class="op">)</span></span>
 <span>  <span class="op">)</span></span></code></pre></div>
-<div class="cell-output-display">
-<div id="htmlwidget-388094a48493465e41d2" style="width:100%;height:200px;" class="g6 html-widget"></div>
-<script type="application/json" data-for="htmlwidget-388094a48493465e41d2">{"x":{"data":{"nodes":[{"id":"1"},{"id":"2"},{"id":"3"}]},"jsonUrl":null,"iconsUrl":"//at.alicdn.com/t/font_2678727_za4qjydwkkh.js","layout":{"type":"d3-force","link":{"distance":100,"strength":2},"collide":{"radius":40}},"node":{"type":"html","style":{"innerHTML":"(d) => {\n            return `\n              <div class=\"card\" style=\"width: 13rem;\">\n                <div class=\"card-body\">\n                  This is node: ${d.id}\n                <\/div>\n              <\/div>`;\n            }"}},"animation":false,"autoResize":false,"cursor":"default","rotation":0,"zoom":1,"zoomRange":[0.01,10],"theme":"light"},"evals":["node.style.innerHTML"],"jsHooks":[]}</script>
+<div id="htmlwidget-36aa3d2a04d42bbc2145" style="width:100%;height:200px;" class="g6 html-widget"></div>
+<script type="application/json" data-for="htmlwidget-36aa3d2a04d42bbc2145">{"x":{"data":{"nodes":[{"id":"1"},{"id":"2"},{"id":"3"}]},"jsonUrl":null,"iconsUrl":"//at.alicdn.com/t/font_2678727_za4qjydwkkh.js","layout":{"type":"d3-force","link":{"distance":100,"strength":2},"collide":{"radius":40}},"node":{"type":"html","style":{"innerHTML":"(d) => {\n            return `\n              <div class=\"card\" style=\"width: 13rem;\">\n                <div class=\"card-body\">\n                  This is node: ${d.id}\n                <\/div>\n              <\/div>`;\n            }"}},"animation":false,"autoResize":false,"cursor":"default","rotation":0,"zoom":1,"zoomRange":[0.01,10],"theme":"light"},"evals":["node.style.innerHTML"],"jsHooks":[]}</script>
 </div>
-</div>
-</section><section class="level4"><h4 id="donut">Donut<a class="anchor" aria-label="anchor" href="#donut"></a>
+<div class="section level4">
+<h4 id="donut">Donut<a class="anchor" aria-label="anchor" href="#donut"></a>
 </h4>
-<p>You can create donut nodes by setting the <code>type</code> to <code>donut</code>. The <code>style</code> property should contain a JavaScript function that returns an array of objects, each with a <code>value</code>, <code>color</code> and other possible properties described <a href="https://g6.antv.antgroup.com/en/manual/element/node/build-in/donut#donutround" class="external-link">here</a>, if you want to customize the segments of the donut. You may give an <code>index</code> property to the node to distinguish between different donuts and customize the output, as shown in the example below.</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb7"><pre class="downlit sourceCode r">
+<p>You can create donut nodes by setting the <code>type</code> to
+<code>donut</code>. The <code>style</code> property should contain a
+JavaScript function that returns an array of objects, each with a
+<code>value</code>, <code>color</code> and other possible properties
+described <a href="https://g6.antv.antgroup.com/en/manual/element/node/build-in/donut#donutround" class="external-link">here</a>,
+if you want to customize the segments of the donut. You may give an
+<code>index</code> property to the node to distinguish between different
+donuts and customize the output, as shown in the example below.</p>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">nodes</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
 <span>    id <span class="op">=</span> <span class="st">"1"</span>,</span>
@@ -289,23 +307,26 @@
 <span>      <span class="op">)</span></span>
 <span>    <span class="op">)</span></span>
 <span>  <span class="op">)</span></span></code></pre></div>
-<div class="cell-output-display">
-<div id="htmlwidget-9a6c9dab0ad557605e69" style="width:100%;height:200px;" class="g6 html-widget"></div>
-<script type="application/json" data-for="htmlwidget-9a6c9dab0ad557605e69">{"x":{"data":{"nodes":[{"id":"1","index":0},{"id":"2","index":1}]},"jsonUrl":null,"iconsUrl":"//at.alicdn.com/t/font_2678727_za4qjydwkkh.js","layout":{"type":"d3-force","link":{"distance":100,"strength":2},"collide":{"radius":40}},"node":{"type":"donut","style":{"donuts":"(item) => {\n            const { index } = item;\n            if (index === 0) {\n              return [\n                  { value: 50, color: 'red' },\n                  { value: 150, color: 'green' },\n                  { value: 100, color: 'blue' },\n                ];\n            }\n            if (index === 1) {\n              return [\n                  { value: 100, color: 'yellow' },\n                  { value: 50, color: 'purple' },\n                  { value: 150, color: 'orange' },\n                ];\n            }\n          }"}},"animation":false,"autoResize":false,"cursor":"default","rotation":0,"zoom":1,"zoomRange":[0.01,10],"theme":"light"},"evals":["node.style.donuts"],"jsHooks":[]}</script>
+<div id="htmlwidget-febe03efa1a2d8d52a86" style="width:100%;height:200px;" class="g6 html-widget"></div>
+<script type="application/json" data-for="htmlwidget-febe03efa1a2d8d52a86">{"x":{"data":{"nodes":[{"id":"1","index":0},{"id":"2","index":1}]},"jsonUrl":null,"iconsUrl":"//at.alicdn.com/t/font_2678727_za4qjydwkkh.js","layout":{"type":"d3-force","link":{"distance":100,"strength":2},"collide":{"radius":40}},"node":{"type":"donut","style":{"donuts":"(item) => {\n            const { index } = item;\n            if (index === 0) {\n              return [\n                  { value: 50, color: 'red' },\n                  { value: 150, color: 'green' },\n                  { value: 100, color: 'blue' },\n                ];\n            }\n            if (index === 1) {\n              return [\n                  { value: 100, color: 'yellow' },\n                  { value: 50, color: 'purple' },\n                  { value: 150, color: 'orange' },\n                ];\n            }\n          }"}},"animation":false,"autoResize":false,"cursor":"default","rotation":0,"zoom":1,"zoomRange":[0.01,10],"theme":"light"},"evals":["node.style.donuts"],"jsHooks":[]}</script>
 </div>
 </div>
-</section></section><section class="level3"><h3 id="styling-nodes">Styling nodes<a class="anchor" aria-label="anchor" href="#styling-nodes"></a>
+<div class="section level3">
+<h3 id="styling-nodes">Styling nodes<a class="anchor" aria-label="anchor" href="#styling-nodes"></a>
 </h3>
-<p>The <code>g6</code> JavaScript library exposes a wide range of style properties for nodes, which can be set in the <code>style</code> property of the node data. We list below the most outstanding properties, but you can find a comprehensive list in the <a href="https://g6.antv.antgroup.com/en/manual/element/node/build-in/base-node#style" class="external-link">documentation</a>.</p>
-<div class="quarto-figure quarto-figure-center">
-<figure><p><img src="figures/node.png" class="quarto-figure quarto-figure-center" style="width:50.0%"></p>
-</figure>
-</div>
-<section class="level4"><h4 id="main-graphic-properties">Main graphic properties<a class="anchor" aria-label="anchor" href="#main-graphic-properties"></a>
+<p>The <code>g6</code> JavaScript library exposes a wide range of style
+properties for nodes, which can be set in the <code>style</code>
+property of the node data. We list below the most outstanding
+properties, but you can find a comprehensive list in the <a href="https://g6.antv.antgroup.com/en/manual/element/node/build-in/base-node#style" class="external-link">documentation</a>.</p>
+<p><img src="figures/node.png" style="width:50.0%" fig-align="center"></p>
+<div class="section level4">
+<h4 id="main-graphic-properties">Main graphic properties<a class="anchor" aria-label="anchor" href="#main-graphic-properties"></a>
 </h4>
-<p>These properties are used to define the main graphic <a href="https://g6.antv.antgroup.com/en/manual/element/node/build-in/base-node#main-graphic-style" class="external-link">style</a> of the node, such as color, width, and line type. They can be applied at the global node option level or at the individual node level. Here is an example of how to set the color for all nodes of the same graph:</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb8"><pre class="downlit sourceCode r">
+<p>These properties are used to define the main graphic <a href="https://g6.antv.antgroup.com/en/manual/element/node/build-in/base-node#main-graphic-style" class="external-link">style</a>
+of the node, such as color, width, and line type. They can be applied at
+the global node option level or at the individual node level. Here is an
+example of how to set the color for all nodes of the same graph:</p>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">nodes</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>id <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"1"</span>, <span class="st">"2"</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="fu"><a href="../reference/g6.html">g6</a></span><span class="op">(</span><span class="va">nodes</span>, height <span class="op">=</span> <span class="st">"200px"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="../reference/g6_layout.html">g6_layout</a></span><span class="op">(</span><span class="fu"><a href="../reference/d3_force_layout.html">d3_force_layout</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
@@ -320,16 +341,14 @@
 <span>      <span class="op">)</span></span>
 <span>    <span class="op">)</span></span>
 <span>  <span class="op">)</span></span></code></pre></div>
-<div class="cell-output-display">
-<div id="htmlwidget-910dabb3f827563ea907" style="width:100%;height:200px;" class="g6 html-widget"></div>
-<script type="application/json" data-for="htmlwidget-910dabb3f827563ea907">{"x":{"data":{"nodes":[{"id":"1"},{"id":"2"}]},"jsonUrl":null,"iconsUrl":"//at.alicdn.com/t/font_2678727_za4qjydwkkh.js","layout":{"type":"d3-force","link":{"distance":100,"strength":2},"collide":{"radius":40}},"node":{"style":{"fill":"#FFB6C1","fillOpacity":0.5,"stroke":"#000","lineWidth":2,"radius":10}},"animation":true,"autoResize":false,"cursor":"default","rotation":0,"zoom":1,"zoomRange":[0.01,10],"theme":"light"},"evals":[],"jsHooks":[]}</script>
+<div id="htmlwidget-1fb4450895fe099f74a1" style="width:100%;height:200px;" class="g6 html-widget"></div>
+<script type="application/json" data-for="htmlwidget-1fb4450895fe099f74a1">{"x":{"data":{"nodes":[{"id":"1"},{"id":"2"}]},"jsonUrl":null,"iconsUrl":"//at.alicdn.com/t/font_2678727_za4qjydwkkh.js","layout":{"type":"d3-force","link":{"distance":100,"strength":2},"collide":{"radius":40}},"node":{"style":{"fill":"#FFB6C1","fillOpacity":0.5,"stroke":"#000","lineWidth":2,"radius":10}},"animation":true,"autoResize":false,"cursor":"default","rotation":0,"zoom":1,"zoomRange":[0.01,10],"theme":"light"},"evals":[],"jsHooks":[]}</script>
 </div>
-</div>
-</section><section class="level4"><h4 id="label-styling">Label styling<a class="anchor" aria-label="anchor" href="#label-styling"></a>
+<div class="section level4">
+<h4 id="label-styling">Label styling<a class="anchor" aria-label="anchor" href="#label-styling"></a>
 </h4>
 <p>Some common properties include label <a href="https://g6.antv.antgroup.com/en/manual/element/node/build-in/base-node#label-style" class="external-link">styling</a>:</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb9"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">nodes</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
 <span>    id <span class="op">=</span> <span class="st">"1"</span>,</span>
@@ -346,16 +365,17 @@
 <span></span>
 <span><span class="fu"><a href="../reference/g6.html">g6</a></span><span class="op">(</span><span class="va">nodes</span>, height <span class="op">=</span> <span class="st">"200px"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="../reference/g6_layout.html">g6_layout</a></span><span class="op">(</span><span class="fu"><a href="../reference/d3_force_layout.html">d3_force_layout</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<div class="cell-output-display">
-<div id="htmlwidget-f1df950f805c69be95a0" style="width:100%;height:200px;" class="g6 html-widget"></div>
-<script type="application/json" data-for="htmlwidget-f1df950f805c69be95a0">{"x":{"data":{"nodes":[{"id":"1","style":{"label":true,"labelText":"Node Name","labelFill":"#000","labelFontSize":15,"labelFontWeight":"normal","labelPlacement":"bottom"}}]},"jsonUrl":null,"iconsUrl":"//at.alicdn.com/t/font_2678727_za4qjydwkkh.js","layout":{"type":"d3-force","link":{"distance":100,"strength":2},"collide":{"radius":40}}},"evals":[],"jsHooks":[]}</script>
+<div id="htmlwidget-10b3b7155e8045a1b2ad" style="width:100%;height:200px;" class="g6 html-widget"></div>
+<script type="application/json" data-for="htmlwidget-10b3b7155e8045a1b2ad">{"x":{"data":{"nodes":[{"id":"1","style":{"label":true,"labelText":"Node Name","labelFill":"#000","labelFontSize":15,"labelFontWeight":"normal","labelPlacement":"bottom"}}]},"jsonUrl":null,"iconsUrl":"//at.alicdn.com/t/font_2678727_za4qjydwkkh.js","layout":{"type":"d3-force","link":{"distance":100,"strength":2},"collide":{"radius":40}}},"evals":[],"jsHooks":[]}</script>
 </div>
-</div>
-</section><section class="level4"><h4 id="badges">Badges<a class="anchor" aria-label="anchor" href="#badges"></a>
+<div class="section level4">
+<h4 id="badges">Badges<a class="anchor" aria-label="anchor" href="#badges"></a>
 </h4>
-<p>You can add <a href="https://g6.antv.antgroup.com/en/manual/element/node/build-in/base-node#badge-style" class="external-link">badges</a> to nodes using the <code>badge</code> property in the <code>style</code> list. Badges are small indicators that can display additional information, such as counts or statuses:</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb10"><pre class="downlit sourceCode r">
+<p>You can add <a href="https://g6.antv.antgroup.com/en/manual/element/node/build-in/base-node#badge-style" class="external-link">badges</a>
+to nodes using the <code>badge</code> property in the <code>style</code>
+list. Badges are small indicators that can display additional
+information, such as counts or statuses:</p>
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">nodes</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
 <span>    id <span class="op">=</span> <span class="st">"1"</span>,</span>
@@ -374,16 +394,17 @@
 <span></span>
 <span><span class="fu"><a href="../reference/g6.html">g6</a></span><span class="op">(</span><span class="va">nodes</span>, height <span class="op">=</span> <span class="st">"200px"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="../reference/g6_layout.html">g6_layout</a></span><span class="op">(</span><span class="fu"><a href="../reference/d3_force_layout.html">d3_force_layout</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<div class="cell-output-display">
-<div id="htmlwidget-40ca0b8980513d4e8b5f" style="width:100%;height:200px;" class="g6 html-widget"></div>
-<script type="application/json" data-for="htmlwidget-40ca0b8980513d4e8b5f">{"x":{"data":{"nodes":[{"id":"1","style":{"badge":true,"badges":[{"text":"A","placement":"right-top"},{"text":"Important","placement":"right"},{"text":"Notice","placement":"right-bottom"}],"badgePalette":["#7E92B5","#F4664A","#FFBE3A"],"badgeFontSize":7}}]},"jsonUrl":null,"iconsUrl":"//at.alicdn.com/t/font_2678727_za4qjydwkkh.js","layout":{"type":"d3-force","link":{"distance":100,"strength":2},"collide":{"radius":40}}},"evals":[],"jsHooks":[]}</script>
+<div id="htmlwidget-4018eef1a407a0df6b52" style="width:100%;height:200px;" class="g6 html-widget"></div>
+<script type="application/json" data-for="htmlwidget-4018eef1a407a0df6b52">{"x":{"data":{"nodes":[{"id":"1","style":{"badge":true,"badges":[{"text":"A","placement":"right-top"},{"text":"Important","placement":"right"},{"text":"Notice","placement":"right-bottom"}],"badgePalette":["#7E92B5","#F4664A","#FFBE3A"],"badgeFontSize":7}}]},"jsonUrl":null,"iconsUrl":"//at.alicdn.com/t/font_2678727_za4qjydwkkh.js","layout":{"type":"d3-force","link":{"distance":100,"strength":2},"collide":{"radius":40}}},"evals":[],"jsHooks":[]}</script>
 </div>
-</div>
-</section><section class="level4"><h4 id="ports">Ports<a class="anchor" aria-label="anchor" href="#ports"></a>
+<div class="section level4">
+<h4 id="ports">Ports<a class="anchor" aria-label="anchor" href="#ports"></a>
 </h4>
-<p><a href="https://g6.antv.antgroup.com/en/manual/element/node/build-in/base-node#port-style" class="external-link">Ports</a> are special points on nodes that can be used for connecting edges. They can be defined in the <code>style</code> property of the node data. You can specify the position and other properties of each port:</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb11"><pre class="downlit sourceCode r">
+<p><a href="https://g6.antv.antgroup.com/en/manual/element/node/build-in/base-node#port-style" class="external-link">Ports</a>
+are special points on nodes that can be used for connecting edges. They
+can be defined in the <code>style</code> property of the node data. You
+can specify the position and other properties of each port:</p>
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">nodes</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
 <span>    id <span class="op">=</span> <span class="st">"node1"</span>,</span>
@@ -420,16 +441,18 @@
 <span></span>
 <span><span class="fu"><a href="../reference/g6.html">g6</a></span><span class="op">(</span><span class="va">nodes</span>, height <span class="op">=</span> <span class="st">"200px"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="../reference/g6_layout.html">g6_layout</a></span><span class="op">(</span><span class="fu"><a href="../reference/d3_force_layout.html">d3_force_layout</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<div class="cell-output-display">
-<div id="htmlwidget-7afc67b75fd293b57ac3" style="width:100%;height:200px;" class="g6 html-widget"></div>
-<script type="application/json" data-for="htmlwidget-7afc67b75fd293b57ac3">{"x":{"data":{"nodes":[{"id":"node1","style":{"port":true,"ports":[{"key":"top","placement":[0.5,1],"fill":"#7E92B5"},{"key":"right","placement":[1,0.5],"fill":"#F4664A"},{"key":"bottom","placement":[0.5,0],"fill":"#FFBE3A"},{"key":"left","placement":[0,0.5],"fill":"#D580FF"}],"portR":3,"portLineWidth":1,"portStroke":"#fff"}}]},"jsonUrl":null,"iconsUrl":"//at.alicdn.com/t/font_2678727_za4qjydwkkh.js","layout":{"type":"d3-force","link":{"distance":100,"strength":2},"collide":{"radius":40}}},"evals":[],"jsHooks":[]}</script>
+<div id="htmlwidget-5b1b2f4ad92281566982" style="width:100%;height:200px;" class="g6 html-widget"></div>
+<script type="application/json" data-for="htmlwidget-5b1b2f4ad92281566982">{"x":{"data":{"nodes":[{"id":"node1","style":{"port":true,"ports":[{"key":"top","placement":[0.5,1],"fill":"#7E92B5"},{"key":"right","placement":[1,0.5],"fill":"#F4664A"},{"key":"bottom","placement":[0.5,0],"fill":"#FFBE3A"},{"key":"left","placement":[0,0.5],"fill":"#D580FF"}],"portR":3,"portLineWidth":1,"portStroke":"#fff"}}]},"jsonUrl":null,"iconsUrl":"//at.alicdn.com/t/font_2678727_za4qjydwkkh.js","layout":{"type":"d3-force","link":{"distance":100,"strength":2},"collide":{"radius":40}}},"evals":[],"jsHooks":[]}</script>
 </div>
 </div>
-</section></section><section class="level3"><h3 id="states">States<a class="anchor" aria-label="anchor" href="#states"></a>
+<div class="section level3">
+<h3 id="states">States<a class="anchor" aria-label="anchor" href="#states"></a>
 </h3>
-<p>Nodes can have different <a href="https://g6.antv.antgroup.com/en/manual/element/node/build-in/base-node#state" class="external-link">states</a> that can be used to indicate different conditions or interactions. States can be set in the <code>states</code> property of the node data:</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb12"><pre class="downlit sourceCode r">
+<p>Nodes can have different <a href="https://g6.antv.antgroup.com/en/manual/element/node/build-in/base-node#state" class="external-link">states</a>
+that can be used to indicate different conditions or interactions.
+States can be set in the <code>states</code> property of the node
+data:</p>
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">states</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span>
 <span>  <span class="st">"default"</span>,</span>
 <span>  <span class="st">"selected"</span>,</span>
@@ -455,114 +478,39 @@
 <span>      <span class="op">)</span></span>
 <span>    <span class="op">)</span></span>
 <span>  <span class="op">)</span></span></code></pre></div>
-<div class="cell-output-display">
-<div id="htmlwidget-a3cbaeeea47a165c05b2" style="width:100%;height:480px;" class="g6 html-widget"></div>
-<script type="application/json" data-for="htmlwidget-a3cbaeeea47a165c05b2">{"x":{"data":{"nodes":[{"id":1,"states":["default"],"data":{"state":"default"}},{"id":2,"states":["selected"],"data":{"state":"selected"}},{"id":3,"states":["highlight"],"data":{"state":"highlight"}},{"id":4,"states":["active"],"data":{"state":"active"}},{"id":5,"states":["inactive"],"data":{"state":"inactive"}},{"id":6,"states":["disabled"],"data":{"state":"disabled"}}]},"jsonUrl":null,"iconsUrl":"//at.alicdn.com/t/font_2678727_za4qjydwkkh.js","layout":{"type":"d3-force","link":{"distance":100,"strength":2},"collide":{"radius":40}},"node":{"style":{"labelText":"(d) => {\n            return d.data.state\n          }"}},"animation":false,"autoResize":false,"cursor":"default","rotation":0,"zoom":1,"zoomRange":[0.01,10],"theme":"light"},"evals":["node.style.labelText"],"jsHooks":[]}</script>
+<div id="htmlwidget-25c3e940e6859592f801" style="width:100%;height:432.632880098888px;" class="g6 html-widget"></div>
+<script type="application/json" data-for="htmlwidget-25c3e940e6859592f801">{"x":{"data":{"nodes":[{"id":1,"states":["default"],"data":{"state":"default"}},{"id":2,"states":["selected"],"data":{"state":"selected"}},{"id":3,"states":["highlight"],"data":{"state":"highlight"}},{"id":4,"states":["active"],"data":{"state":"active"}},{"id":5,"states":["inactive"],"data":{"state":"inactive"}},{"id":6,"states":["disabled"],"data":{"state":"disabled"}}]},"jsonUrl":null,"iconsUrl":"//at.alicdn.com/t/font_2678727_za4qjydwkkh.js","layout":{"type":"d3-force","link":{"distance":100,"strength":2},"collide":{"radius":40}},"node":{"style":{"labelText":"(d) => {\n            return d.data.state\n          }"}},"animation":false,"autoResize":false,"cursor":"default","rotation":0,"zoom":1,"zoomRange":[0.01,10],"theme":"light"},"evals":["node.style.labelText"],"jsHooks":[]}</script>
 </div>
-</div>
-</section><section class="level3"><h3 id="color-palette">Color palette<a class="anchor" aria-label="anchor" href="#color-palette"></a>
+<div class="section level3">
+<h3 id="color-palette">Color palette<a class="anchor" aria-label="anchor" href="#color-palette"></a>
 </h3>
 <p>TBD</p>
-</section></section><section class="level2"><h2 id="update-nodes-data">Update nodes data<a class="anchor" aria-label="anchor" href="#update-nodes-data"></a>
+</div>
+</div>
+<div class="section level2">
+<h2 id="update-nodes-data">Update nodes data<a class="anchor" aria-label="anchor" href="#update-nodes-data"></a>
 </h2>
-<p>These functions can only be used in a Shiny app context. They allow you to get or update the nodes data in the graph after it has been created. The functions are:</p>
+<p>These functions can only be used in a Shiny app context. They allow
+you to get or update the nodes data in the graph after it has been
+created. The functions are:</p>
 <ul>
 <li>
 <code><a href="../reference/g6-add.html">g6_add_nodes()</a></code>: adds new nodes to the graph.</li>
 <li>
-<code><a href="../reference/g6-update.html">g6_update_nodes()</a></code>: updates existing nodes in the graph.</li>
+<code><a href="../reference/g6-update.html">g6_update_nodes()</a></code>: updates existing nodes in the
+graph.</li>
 <li>
 <code><a href="../reference/g6-remove.html">g6_remove_nodes()</a></code>: removes nodes from the graph.</li>
 <li>
 <code><a href="../reference/g6-set.html">g6_set_nodes()</a></code>: set node state.</li>
 <li>
 <code><a href="../reference/g6-get.html">g6_get_nodes()</a></code>: get nodes data from the graph.</li>
-</ul></section><script id="quarto-html-after-body" type="application/javascript">
-  window.document.addEventListener("DOMContentLoaded", function (event) {
-      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
-      var mailtoRegex = new RegExp(/^mailto:/);
-        var filterRegex = new RegExp('/' + window.location.host + '/');
-      var isInternal = (href) => {
-          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
-      }
-      // Inspect non-navigation links and adorn them if external
-     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
-      for (var i=0; i<links.length; i++) {
-        const link = links[i];
-        if (!isInternal(link.href)) {
-          // undo the damage that might have been done by quarto-nav.js in the case of
-          // links that we want to consider external
-          if (link.dataset.originalHref !== undefined) {
-            link.href = link.dataset.originalHref;
-          }
-        }
-      }
-    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
-      const config = {
-        allowHTML: true,
-        maxWidth: 500,
-        delay: 100,
-        arrow: false,
-        appendTo: function(el) {
-            return el.parentElement;
-        },
-        interactive: true,
-        interactiveBorder: 10,
-        theme: 'light-border',
-        placement: 'bottom-start',
-      };
-      if (contentFn) {
-        config.content = contentFn;
-      }
-      if (onTriggerFn) {
-        config.onTrigger = onTriggerFn;
-      }
-      if (onUntriggerFn) {
-        config.onUntrigger = onUntriggerFn;
-      }
-      window.tippy(el, config);
-    }
-    const findCites = (el) => {
-      const parentEl = el.parentElement;
-      if (parentEl) {
-        const cites = parentEl.dataset.cites;
-        if (cites) {
-          return {
-            el,
-            cites: cites.split(' ')
-          };
-        } else {
-          return findCites(el.parentElement)
-        }
-      } else {
-        return undefined;
-      }
-    };
-    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
-    for (var i=0; i<bibliorefs.length; i++) {
-      const ref = bibliorefs[i];
-      const citeInfo = findCites(ref);
-      if (citeInfo) {
-        tippyHover(citeInfo.el, function() {
-          var popup = window.document.createElement('div');
-          citeInfo.cites.forEach(function(cite) {
-            var citeDiv = window.document.createElement('div');
-            citeDiv.classList.add('hanging-indent');
-            citeDiv.classList.add('csl-entry');
-            var biblioDiv = window.document.getElementById('ref-' + cite);
-            if (biblioDiv) {
-              citeDiv.innerHTML = biblioDiv.innerHTML;
-            }
-            popup.appendChild(citeDiv);
-          });
-          return popup.innerHTML;
-        });
-      }
-    }
-  });
-  </script></main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
+</ul>
+</div>
+  </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside>
 </div>
+
 
 
     <footer><div class="pkgdown-footer-left">

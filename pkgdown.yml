@@ -2,15 +2,15 @@ pandoc: 3.1.11
 pkgdown: 2.1.3
 pkgdown_sha: ~
 articles:
-  behaviors: behaviors.html
-  combos: combos.html
-  edges: edges.html
+  articles/behaviors: behaviors.html
+  articles/combos: combos.html
+  articles/edges: edges.html
   g6R: g6R.html
-  igraph: igraph.html
-  layouts: layouts.html
-  nodes: nodes.html
-  plugins: plugins.html
-last_built: 2025-07-02T09:57Z
+  articles/igraph: igraph.html
+  articles/layouts: layouts.html
+  articles/nodes: nodes.html
+  articles/plugins: plugins.html
+last_built: 2025-07-02T14:19Z
 urls:
   reference: https://cynkra.github.io/g6R/reference
   article: https://cynkra.github.io/g6R/articles

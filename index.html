@@ -22,7 +22,7 @@
 
     <a class="navbar-brand me-2" href="index.html">g6R</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.0.9000</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.1</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -83,15 +83,22 @@
 <div class="page-header"><h1 id="g6r">g6R<a class="anchor" aria-label="anchor" href="#g6r"></a>
 </h1></div>
 <!-- index.md is generated from index.qmd Please edit that file -->
-</div>
-<div class="section level1">
-<h1 id="g6r-1">g6R<a class="anchor" aria-label="anchor" href="#g6r-1"></a>
-</h1>
 <!-- badges: start -->
 
-<p><a href="https://github.com/cynkra/g6R" class="external-link">g6R</a> provides R bindings to the G6 graph <a href="https://g6.antv.antgroup.com/en" class="external-link">library</a>.</p>
 <p style="text-align: center;">
 <img src="./reference/figures/hex.png" style="width:50.0%"></p>
+<p><a href="https://github.com/cynkra/g6R" class="external-link">g6R</a> provides R bindings to the G6 graph <a href="https://g6.antv.antgroup.com/en" class="external-link">library</a>. It allows to create interactive network in R, with stunning set of features, including:</p>
+<ul>
+<li>Support for various <strong>layouts</strong>, such as force-directed, radial, circular, and hierarchical layouts.</li>
+<li>Interactive <strong>behaviors</strong> like zooming, dragging, and selecting elements.</li>
+<li>
+<strong>Plugins</strong> for additional functionality, such as minimaps and tooltips, context menus, and node grouping features like bubble sets, hulls and legends.</li>
+<li>Various <strong>data sources</strong> including data frames, lists and remote JSON urls.</li>
+<li>Support for <strong>combos</strong> allowing for <strong>nested</strong> nodes.</li>
+<li>High <strong>performance</strong> rendering (&gt;20000 nodes).</li>
+</ul>
+<p style="text-align: center;">
+<img src="./reference/figures/g6-layers.png" style="width:50.0%"></p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">shinyAppDir</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"examples"</span>, <span class="st">"demo"</span>, package <span class="op">=</span> <span class="st">"g6R"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <iframe class="border border-5 rounded shadow-lg" src="https://shinylive.io/r/app/#h=0&amp;code=NobwRAdghgtgpmAXGKAHVA6ASmANGAYwHsIAXOMpMAdzgCMAnRRASwgGdSoAbbgCgA6YAOYA2LENwACBnFRF2UgLxShAC1KlU7RAHpdBAJ4QA1gygZhLUmoCudDCyK663IgTMZadLLqEBKAQ41NkMAQXQAERYGPnZDTjgYDAAzFm44QTA4AA9YVAz2SVUwABMkomLUKA8oYThlErEJMH9-MABfAF0gA" style="zoom: 0.75;" width="100%" height="1100px">
@@ -107,7 +114,7 @@
 <div class="section level2">
 <h2 id="example">Example<a class="anchor" aria-label="anchor" href="#example"></a>
 </h2>
-<p>To create a <code>g6</code> graph:</p>
+<p>To create a <a href="https://github.com/cynkra/g6R" class="external-link">g6R</a> graph:</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/cynkra/g6R" class="external-link">g6R</a></span><span class="op">)</span></span>
 <span><span class="va">nodes</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span>
@@ -160,7 +167,6 @@
 <span>  <span class="op">)</span></span></code></pre></div>
 </div>
 </div>
-
   </main><aside class="col-md-3"><div class="links">
 <h2 data-toc-skip>Links</h2>
 <ul class="list-unstyled">

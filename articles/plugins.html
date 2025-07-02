@@ -10,9 +10,7 @@
 <link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
 <script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
 <link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
-<script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><script src="plugins_files/libs/quarto-html/popper.min.js"></script><script src="plugins_files/libs/quarto-html/tippy.umd.min.js"></script><link href="plugins_files/libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="plugins_files/libs/quarto-html/light-border.css" rel="stylesheet">
-<script src="plugins_files/libs/htmlwidgets-1.6.4/htmlwidgets.js"></script><script src="plugins_files/libs/g6-binding-0.0.0.9000/g6.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Plugins">
+<script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Plugins">
 </head>
 <body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
@@ -22,7 +20,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">g6R</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.0.9000</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.1</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -77,27 +75,31 @@
 
 
   </div>
-</nav><div class="container template-quarto">
-<div class="row">
+</nav><div class="container template-article">
+
+
+
+<script src="plugins_files/htmlwidgets-1.6.4/htmlwidgets.js"></script><script src="plugins_files/g6-binding-0.0.1/g6.js"></script><div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
 
       <h1>Plugins</h1>
-
-
-
-
-      <small class="dont-index">Source: <a href="https://github.com/cynkra/g6R/blob/main/vignettes/plugins.qmd" class="external-link"><code>vignettes/plugins.qmd</code></a></small>
-      <div class="d-none name"><code></code></div>
+            
+      
+      <small class="dont-index">Source: <a href="https://github.com/cynkra/g6R/blob/main/vignettes/articles/plugins.Rmd" class="external-link"><code>vignettes/articles/plugins.Rmd</code></a></small>
+      <div class="d-none name"><code>plugins.Rmd</code></div>
     </div>
 
-
-
-
-
-
-    <section class="level2"><h2 id="introduction">Introduction<a class="anchor" aria-label="anchor" href="#introduction"></a>
+    
+    
+<div class="section level2">
+<h2 id="introduction">Introduction<a class="anchor" aria-label="anchor" href="#introduction"></a>
 </h2>
-<p>Plugins extend the functionality of G6 graphs by adding interactive features, UI components, and visual enhancements. They can be added to the graph using the <code><a href="../reference/g6_plugins.html">g6_plugins()</a></code> function. Similar to behaviors, there are 2 ways to add plugins to the graph - either by calling plugin names as strings or by passing plugin functions with specific configurations:</p>
+<p>Plugins extend the functionality of G6 graphs by adding interactive
+features, UI components, and visual enhancements. They can be added to
+the graph using the <code><a href="../reference/g6_plugins.html">g6_plugins()</a></code> function. Similar to
+behaviors, there are 2 ways to add plugins to the graph - either by
+calling plugin names as strings or by passing plugin functions with
+specific configurations:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Defaults</span></span>
 <span><span class="fu"><a href="../reference/g6.html">g6</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span></span>
@@ -109,15 +111,20 @@
 <span>    <span class="fu"><a href="../reference/minimap.html">minimap</a></span><span class="op">(</span><span class="va">...</span><span class="op">)</span>,</span>
 <span>    <span class="fu">tooltip_plugin</span><span class="op">(</span><span class="va">...</span><span class="op">)</span></span>
 <span>  <span class="op">)</span></span></code></pre></div>
-</section><section class="level2"><h2 id="contextmenu-plugin">Contextmenu Plugin<a class="anchor" aria-label="anchor" href="#contextmenu-plugin"></a>
+</div>
+<div class="section level2">
+<h2 id="contextmenu-plugin">Contextmenu Plugin<a class="anchor" aria-label="anchor" href="#contextmenu-plugin"></a>
 </h2>
-<p>Displays a menu of selectable operations on right-click for context-sensitive actions.</p>
-<div id="htmlwidget-24ce3445894cf5bde23a" class="g6 html-widget" style="width:100%;height:500px;">
+<p>Displays a menu of selectable operations on right-click for
+context-sensitive actions.</p>
+<div id="htmlwidget-e5c8c404fe174e4c81bd" class="g6 html-widget" style="width:100%;height:500px;">
 
 </div>
-<script type="application/json" data-for="htmlwidget-24ce3445894cf5bde23a">{"x":{"data":{"nodes":[{"id":"a"},{"id":"b"},{"id":"c"},{"id":"d"},{"id":"e"},{"id":"f"},{"id":"g"},{"id":"h"}],"edges":[{"source":"a","target":"b"},{"source":"b","target":"c"},{"source":"c","target":"d"},{"source":"e","target":"f"},{"source":"f","target":"g"},{"source":"g","target":"h"},{"source":"a","target":"e"},{"source":"d","target":"h"}]},"jsonUrl":null,"iconsUrl":"//at.alicdn.com/t/font_2678727_za4qjydwkkh.js","layout":{"type":"d3-force","link":{"distance":100,"strength":2},"collide":{"radius":40}},"behaviors":[{"key":"drag-element","enable":true,"animation":true,"state":"selected","dropEffect":"move","hideEdge":"none","shadow":false,"type":"drag-element"}],"node":{"style":{"labelBackground":true,"labelBackgroundFill":"#FFB6C1","labelBackgroundRadius":4,"labelFontFamily":"Arial","labelPadding":[0,4],"labelText":"(d) => {\n        return d.id\n      }"}},"animation":false,"autoResize":false,"cursor":"default","rotation":0,"zoom":1,"zoomRange":[0.01,10],"theme":"light","plugins":[{"key":"contextmenu","className":"g6-contextmenu","trigger":"contextmenu","offset":[4,4],"onClick":"(value, target, current) => {\n        const graph = HTMLWidgets\n          .find(`#${target.closest('.g6').id}`)\n          .getWidget();\n        if (current.id === undefined) return;\n        if (value === 'create_edge') {\n          graph.updateBehavior({\n            key: 'create-edge', // Specify the behavior to update\n            enable: true,\n          });\n          // Select node\n          graph.setElementState(current.id, 'selected');\n          // Disable drag node as it is incompatible with edge creation\n          graph.updateBehavior({ key: 'drag-element', enable: false });\n          graph.updateBehavior({ key: 'drag-element-force', enable: false });\n        } else if (value === 'remove_node') {\n          graph.removeNodeData([current.id]);\n          graph.draw();\n        }\n      }\n    ","getItems":"() => {\n        return [\n          { name: 'Create edge', value: 'create_edge' },\n          { name: 'Remove node', value: 'remove_node' }\n        ];\n      }","enable":"(e) => e.targetType === 'node'","type":"contextmenu"}]},"evals":["node.style.labelText","plugins.0.onClick","plugins.0.getItems","plugins.0.enable"],"jsHooks":[]}</script><div>
-<blockquote>
-<p><strong>View R Code</strong></p>
+<script type="application/json" data-for="htmlwidget-e5c8c404fe174e4c81bd">{"x":{"data":{"nodes":[{"id":"a"},{"id":"b"},{"id":"c"},{"id":"d"},{"id":"e"},{"id":"f"},{"id":"g"},{"id":"h"}],"edges":[{"source":"a","target":"b"},{"source":"b","target":"c"},{"source":"c","target":"d"},{"source":"e","target":"f"},{"source":"f","target":"g"},{"source":"g","target":"h"},{"source":"a","target":"e"},{"source":"d","target":"h"}]},"jsonUrl":null,"iconsUrl":"//at.alicdn.com/t/font_2678727_za4qjydwkkh.js","layout":{"type":"d3-force","link":{"distance":100,"strength":2},"collide":{"radius":40}},"behaviors":[{"key":"drag-element","enable":true,"animation":true,"state":"selected","dropEffect":"move","hideEdge":"none","shadow":false,"type":"drag-element"}],"node":{"style":{"labelBackground":true,"labelBackgroundFill":"#FFB6C1","labelBackgroundRadius":4,"labelFontFamily":"Arial","labelPadding":[0,4],"labelText":"(d) => {\n        return d.id\n      }"}},"animation":false,"autoResize":false,"cursor":"default","rotation":0,"zoom":1,"zoomRange":[0.01,10],"theme":"light","plugins":[{"key":"contextmenu","className":"g6-contextmenu","trigger":"contextmenu","offset":[4,4],"onClick":"(value, target, current) => {\n        const graph = HTMLWidgets\n          .find(`#${target.closest('.g6').id}`)\n          .getWidget();\n        if (current.id === undefined) return;\n        if (value === 'create_edge') {\n          graph.updateBehavior({\n            key: 'create-edge', // Specify the behavior to update\n            enable: true,\n          });\n          // Select node\n          graph.setElementState(current.id, 'selected');\n          // Disable drag node as it is incompatible with edge creation\n          graph.updateBehavior({ key: 'drag-element', enable: false });\n          graph.updateBehavior({ key: 'drag-element-force', enable: false });\n        } else if (value === 'remove_node') {\n          graph.removeNodeData([current.id]);\n          graph.draw();\n        }\n      }\n    ","getItems":"() => {\n        return [\n          { name: 'Create edge', value: 'create_edge' },\n          { name: 'Remove node', value: 'remove_node' }\n        ];\n      }","enable":"(e) => e.targetType === 'node'","type":"contextmenu"}]},"evals":["node.style.labelText","plugins.0.onClick","plugins.0.getItems","plugins.0.enable"],"jsHooks":[]}</script>
+</div>
+<div class="section level2">
+<h2 id="view-r-code">View R Code<a class="anchor" aria-label="anchor" href="#view-r-code"></a>
+</h2>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">nodes</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span>
 <span>  id <span class="op">=</span> <span class="va">letters</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">8</span><span class="op">]</span></span>
@@ -149,17 +156,21 @@
 <span>    <span class="op">)</span></span>
 <span>  <span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="../reference/g6_plugins.html">g6_plugins</a></span><span class="op">(</span><span class="st">" contextmenu "</span><span class="op">)</span></span></code></pre></div>
-</blockquote>
+<hr>
 </div>
-<hr></section><section class="level2"><h2 id="edge-filter-lens-plugin">Edge Filter Lens Plugin<a class="anchor" aria-label="anchor" href="#edge-filter-lens-plugin"></a>
+<div class="section level2">
+<h2 id="edge-filter-lens-plugin">Edge Filter Lens Plugin<a class="anchor" aria-label="anchor" href="#edge-filter-lens-plugin"></a>
 </h2>
-<p>Filters and displays edges within a specified area for focused analysis.</p>
-<div id="htmlwidget-ab86ec085d5e6acacdc0" class="g6 html-widget" style="width:100%;height:500px;">
+<p>Filters and displays edges within a specified area for focused
+analysis.</p>
+<div id="htmlwidget-36aa3d2a04d42bbc2145" class="g6 html-widget" style="width:100%;height:500px;">
 
 </div>
-<script type="application/json" data-for="htmlwidget-ab86ec085d5e6acacdc0">{"x":{"data":{"nodes":[{"id":"a"},{"id":"b"},{"id":"c"},{"id":"d"},{"id":"e"},{"id":"f"},{"id":"g"},{"id":"h"}],"edges":[{"source":"a","target":"b"},{"source":"b","target":"c"},{"source":"c","target":"d"},{"source":"e","target":"f"},{"source":"f","target":"g"},{"source":"g","target":"h"},{"source":"a","target":"e"},{"source":"d","target":"h"}]},"jsonUrl":null,"iconsUrl":"//at.alicdn.com/t/font_2678727_za4qjydwkkh.js","layout":{"type":"d3-force","link":{"distance":100,"strength":2},"collide":{"radius":40}},"behaviors":[{"key":"drag-element","enable":true,"animation":true,"state":"selected","dropEffect":"move","hideEdge":"none","shadow":false,"type":"drag-element"}],"node":{"style":{"labelBackground":true,"labelBackgroundFill":"#FFB6C1","labelBackgroundRadius":4,"labelFontFamily":"Arial","labelPadding":[0,4],"labelText":"(d) => {\n        return d.id\n      }"}},"animation":false,"autoResize":false,"cursor":"default","rotation":0,"zoom":1,"zoomRange":[0.01,10],"theme":"light","plugins":[{"key":"edge-filter-lens","trigger":"pointermove","r":60,"minR":0,"scaleRBy":"wheel","nodeType":"both","nodeStyle":{"label":false},"edgeStyle":{"label":true},"preventDefault":true,"type":"edge-filter-lens"}]},"evals":["node.style.labelText"],"jsHooks":[]}</script><div>
-<blockquote>
-<p><strong>View R Code</strong></p>
+<script type="application/json" data-for="htmlwidget-36aa3d2a04d42bbc2145">{"x":{"data":{"nodes":[{"id":"a"},{"id":"b"},{"id":"c"},{"id":"d"},{"id":"e"},{"id":"f"},{"id":"g"},{"id":"h"}],"edges":[{"source":"a","target":"b"},{"source":"b","target":"c"},{"source":"c","target":"d"},{"source":"e","target":"f"},{"source":"f","target":"g"},{"source":"g","target":"h"},{"source":"a","target":"e"},{"source":"d","target":"h"}]},"jsonUrl":null,"iconsUrl":"//at.alicdn.com/t/font_2678727_za4qjydwkkh.js","layout":{"type":"d3-force","link":{"distance":100,"strength":2},"collide":{"radius":40}},"behaviors":[{"key":"drag-element","enable":true,"animation":true,"state":"selected","dropEffect":"move","hideEdge":"none","shadow":false,"type":"drag-element"}],"node":{"style":{"labelBackground":true,"labelBackgroundFill":"#FFB6C1","labelBackgroundRadius":4,"labelFontFamily":"Arial","labelPadding":[0,4],"labelText":"(d) => {\n        return d.id\n      }"}},"animation":false,"autoResize":false,"cursor":"default","rotation":0,"zoom":1,"zoomRange":[0.01,10],"theme":"light","plugins":[{"key":"edge-filter-lens","trigger":"pointermove","r":60,"minR":0,"scaleRBy":"wheel","nodeType":"both","nodeStyle":{"label":false},"edgeStyle":{"label":true},"preventDefault":true,"type":"edge-filter-lens"}]},"evals":["node.style.labelText"],"jsHooks":[]}</script>
+</div>
+<div class="section level2">
+<h2 id="view-r-code-1">View R Code<a class="anchor" aria-label="anchor" href="#view-r-code-1"></a>
+</h2>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">nodes</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span>
 <span>  id <span class="op">=</span> <span class="va">letters</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">8</span><span class="op">]</span></span>
@@ -191,17 +202,21 @@
 <span>    <span class="op">)</span></span>
 <span>  <span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="../reference/g6_plugins.html">g6_plugins</a></span><span class="op">(</span><span class="st">" edge-filter-lens "</span><span class="op">)</span></span></code></pre></div>
-</blockquote>
+<hr>
 </div>
-<hr></section><section class="level2"><h2 id="fisheye-plugin">Fisheye Plugin<a class="anchor" aria-label="anchor" href="#fisheye-plugin"></a>
+<div class="section level2">
+<h2 id="fisheye-plugin">Fisheye Plugin<a class="anchor" aria-label="anchor" href="#fisheye-plugin"></a>
 </h2>
-<p>Provides a focus + context exploration experience with distortion effects.</p>
-<div id="htmlwidget-e716684e12f0090a5774" class="g6 html-widget" style="width:100%;height:500px;">
+<p>Provides a focus + context exploration experience with distortion
+effects.</p>
+<div id="htmlwidget-febe03efa1a2d8d52a86" class="g6 html-widget" style="width:100%;height:500px;">
 
 </div>
-<script type="application/json" data-for="htmlwidget-e716684e12f0090a5774">{"x":{"data":{"nodes":[{"id":"a"},{"id":"b"},{"id":"c"},{"id":"d"},{"id":"e"},{"id":"f"},{"id":"g"},{"id":"h"}],"edges":[{"source":"a","target":"b"},{"source":"b","target":"c"},{"source":"c","target":"d"},{"source":"e","target":"f"},{"source":"f","target":"g"},{"source":"g","target":"h"},{"source":"a","target":"e"},{"source":"d","target":"h"}]},"jsonUrl":null,"iconsUrl":"//at.alicdn.com/t/font_2678727_za4qjydwkkh.js","layout":{"type":"d3-force","link":{"distance":100,"strength":2},"collide":{"radius":40}},"behaviors":[{"key":"drag-element","enable":true,"animation":true,"state":"selected","dropEffect":"move","hideEdge":"none","shadow":false,"type":"drag-element"}],"node":{"style":{"labelBackground":true,"labelBackgroundFill":"#FFB6C1","labelBackgroundRadius":4,"labelFontFamily":"Arial","labelPadding":[0,4],"labelText":"(d) => {\n        return d.id\n      }"}},"animation":false,"autoResize":false,"cursor":"default","rotation":0,"zoom":1,"zoomRange":[0.01,10],"theme":"light","plugins":[{"key":"fish-eye","trigger":"pointermove","r":120,"minR":0,"d":1.5,"maxD":5,"minD":0,"showDPercent":true,"nodeStyle":{"label":true},"preventDefault":true,"type":"fisheye"}]},"evals":["node.style.labelText"],"jsHooks":[]}</script><div>
-<blockquote>
-<p><strong>View R Code</strong></p>
+<script type="application/json" data-for="htmlwidget-febe03efa1a2d8d52a86">{"x":{"data":{"nodes":[{"id":"a"},{"id":"b"},{"id":"c"},{"id":"d"},{"id":"e"},{"id":"f"},{"id":"g"},{"id":"h"}],"edges":[{"source":"a","target":"b"},{"source":"b","target":"c"},{"source":"c","target":"d"},{"source":"e","target":"f"},{"source":"f","target":"g"},{"source":"g","target":"h"},{"source":"a","target":"e"},{"source":"d","target":"h"}]},"jsonUrl":null,"iconsUrl":"//at.alicdn.com/t/font_2678727_za4qjydwkkh.js","layout":{"type":"d3-force","link":{"distance":100,"strength":2},"collide":{"radius":40}},"behaviors":[{"key":"drag-element","enable":true,"animation":true,"state":"selected","dropEffect":"move","hideEdge":"none","shadow":false,"type":"drag-element"}],"node":{"style":{"labelBackground":true,"labelBackgroundFill":"#FFB6C1","labelBackgroundRadius":4,"labelFontFamily":"Arial","labelPadding":[0,4],"labelText":"(d) => {\n        return d.id\n      }"}},"animation":false,"autoResize":false,"cursor":"default","rotation":0,"zoom":1,"zoomRange":[0.01,10],"theme":"light","plugins":[{"key":"fish-eye","trigger":"pointermove","r":120,"minR":0,"d":1.5,"maxD":5,"minD":0,"showDPercent":true,"nodeStyle":{"label":true},"preventDefault":true,"type":"fisheye"}]},"evals":["node.style.labelText"],"jsHooks":[]}</script>
+</div>
+<div class="section level2">
+<h2 id="view-r-code-2">View R Code<a class="anchor" aria-label="anchor" href="#view-r-code-2"></a>
+</h2>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">nodes</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span>
 <span>  id <span class="op">=</span> <span class="va">letters</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">8</span><span class="op">]</span></span>
@@ -233,17 +248,21 @@
 <span>    <span class="op">)</span></span>
 <span>  <span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="../reference/g6_plugins.html">g6_plugins</a></span><span class="op">(</span><span class="st">" fisheye "</span><span class="op">)</span></span></code></pre></div>
-</blockquote>
+<hr>
 </div>
-<hr></section><section class="level2"><h2 id="grid-line-plugin">Grid Line Plugin<a class="anchor" aria-label="anchor" href="#grid-line-plugin"></a>
+<div class="section level2">
+<h2 id="grid-line-plugin">Grid Line Plugin<a class="anchor" aria-label="anchor" href="#grid-line-plugin"></a>
 </h2>
-<p>Displays grid reference lines on the canvas to help with element alignment and positioning.</p>
-<div id="htmlwidget-2891da695fb3f4c505d7" class="g6 html-widget" style="width:100%;height:500px;">
+<p>Displays grid reference lines on the canvas to help with element
+alignment and positioning.</p>
+<div id="htmlwidget-1fb4450895fe099f74a1" class="g6 html-widget" style="width:100%;height:500px;">
 
 </div>
-<script type="application/json" data-for="htmlwidget-2891da695fb3f4c505d7">{"x":{"data":{"nodes":[{"id":"a"},{"id":"b"},{"id":"c"},{"id":"d"},{"id":"e"},{"id":"f"},{"id":"g"},{"id":"h"}],"edges":[{"source":"a","target":"b"},{"source":"b","target":"c"},{"source":"c","target":"d"},{"source":"e","target":"f"},{"source":"f","target":"g"},{"source":"g","target":"h"},{"source":"a","target":"e"},{"source":"d","target":"h"}]},"jsonUrl":null,"iconsUrl":"//at.alicdn.com/t/font_2678727_za4qjydwkkh.js","layout":{"type":"d3-force","link":{"distance":100,"strength":2},"collide":{"radius":40}},"behaviors":[{"key":"drag-element","enable":true,"animation":true,"state":"selected","dropEffect":"move","hideEdge":"none","shadow":false,"type":"drag-element"}],"node":{"style":{"labelBackground":true,"labelBackgroundFill":"#FFB6C1","labelBackgroundRadius":4,"labelFontFamily":"Arial","labelPadding":[0,4],"labelText":"(d) => {\n        return d.id\n      }"}},"animation":false,"autoResize":false,"cursor":"default","rotation":0,"zoom":1,"zoomRange":[0.01,10],"theme":"light","plugins":[{"key":"grid-line","border":true,"borderLineWidth":1,"borderStroke":"#eee","borderStyle":"solid","follow":false,"lineWidth":1,"size":20,"stroke":"#eee","type":"grid-line"}]},"evals":["node.style.labelText"],"jsHooks":[]}</script><div>
-<blockquote>
-<p><strong>View R Code</strong></p>
+<script type="application/json" data-for="htmlwidget-1fb4450895fe099f74a1">{"x":{"data":{"nodes":[{"id":"a"},{"id":"b"},{"id":"c"},{"id":"d"},{"id":"e"},{"id":"f"},{"id":"g"},{"id":"h"}],"edges":[{"source":"a","target":"b"},{"source":"b","target":"c"},{"source":"c","target":"d"},{"source":"e","target":"f"},{"source":"f","target":"g"},{"source":"g","target":"h"},{"source":"a","target":"e"},{"source":"d","target":"h"}]},"jsonUrl":null,"iconsUrl":"//at.alicdn.com/t/font_2678727_za4qjydwkkh.js","layout":{"type":"d3-force","link":{"distance":100,"strength":2},"collide":{"radius":40}},"behaviors":[{"key":"drag-element","enable":true,"animation":true,"state":"selected","dropEffect":"move","hideEdge":"none","shadow":false,"type":"drag-element"}],"node":{"style":{"labelBackground":true,"labelBackgroundFill":"#FFB6C1","labelBackgroundRadius":4,"labelFontFamily":"Arial","labelPadding":[0,4],"labelText":"(d) => {\n        return d.id\n      }"}},"animation":false,"autoResize":false,"cursor":"default","rotation":0,"zoom":1,"zoomRange":[0.01,10],"theme":"light","plugins":[{"key":"grid-line","border":true,"borderLineWidth":1,"borderStroke":"#eee","borderStyle":"solid","follow":false,"lineWidth":1,"size":20,"stroke":"#eee","type":"grid-line"}]},"evals":["node.style.labelText"],"jsHooks":[]}</script>
+</div>
+<div class="section level2">
+<h2 id="view-r-code-3">View R Code<a class="anchor" aria-label="anchor" href="#view-r-code-3"></a>
+</h2>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">nodes</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span>
 <span>  id <span class="op">=</span> <span class="va">letters</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">8</span><span class="op">]</span></span>
@@ -275,17 +294,21 @@
 <span>    <span class="op">)</span></span>
 <span>  <span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="../reference/g6_plugins.html">g6_plugins</a></span><span class="op">(</span><span class="st">" grid-line "</span><span class="op">)</span></span></code></pre></div>
-</blockquote>
+<hr>
 </div>
-<hr></section><section class="level2"><h2 id="minimap-plugin">Minimap Plugin<a class="anchor" aria-label="anchor" href="#minimap-plugin"></a>
+<div class="section level2">
+<h2 id="minimap-plugin">Minimap Plugin<a class="anchor" aria-label="anchor" href="#minimap-plugin"></a>
 </h2>
-<p>Displays a thumbnail preview of the graph, supporting navigation in large graphs.</p>
-<div id="htmlwidget-81b53d62cd8abf6b0ecc" class="g6 html-widget" style="width:100%;height:500px;">
+<p>Displays a thumbnail preview of the graph, supporting navigation in
+large graphs.</p>
+<div id="htmlwidget-10b3b7155e8045a1b2ad" class="g6 html-widget" style="width:100%;height:500px;">
 
 </div>
-<script type="application/json" data-for="htmlwidget-81b53d62cd8abf6b0ecc">{"x":{"data":{"nodes":[{"id":"a"},{"id":"b"},{"id":"c"},{"id":"d"},{"id":"e"},{"id":"f"},{"id":"g"},{"id":"h"}],"edges":[{"source":"a","target":"b"},{"source":"b","target":"c"},{"source":"c","target":"d"},{"source":"e","target":"f"},{"source":"f","target":"g"},{"source":"g","target":"h"},{"source":"a","target":"e"},{"source":"d","target":"h"}]},"jsonUrl":null,"iconsUrl":"//at.alicdn.com/t/font_2678727_za4qjydwkkh.js","layout":{"type":"d3-force","link":{"distance":100,"strength":2},"collide":{"radius":40}},"behaviors":[{"key":"drag-element","enable":true,"animation":true,"state":"selected","dropEffect":"move","hideEdge":"none","shadow":false,"type":"drag-element"}],"node":{"style":{"labelBackground":true,"labelBackgroundFill":"#FFB6C1","labelBackgroundRadius":4,"labelFontFamily":"Arial","labelPadding":[0,4],"labelText":"(d) => {\n        return d.id\n      }"}},"animation":false,"autoResize":false,"cursor":"default","rotation":0,"zoom":1,"zoomRange":[0.01,10],"theme":"light","plugins":[{"key":"minimap","delay":128,"padding":10,"position":"right-bottom","shape":"key","size":[240,160],"type":"minimap"}]},"evals":["node.style.labelText"],"jsHooks":[]}</script><div>
-<blockquote>
-<p><strong>View R Code</strong></p>
+<script type="application/json" data-for="htmlwidget-10b3b7155e8045a1b2ad">{"x":{"data":{"nodes":[{"id":"a"},{"id":"b"},{"id":"c"},{"id":"d"},{"id":"e"},{"id":"f"},{"id":"g"},{"id":"h"}],"edges":[{"source":"a","target":"b"},{"source":"b","target":"c"},{"source":"c","target":"d"},{"source":"e","target":"f"},{"source":"f","target":"g"},{"source":"g","target":"h"},{"source":"a","target":"e"},{"source":"d","target":"h"}]},"jsonUrl":null,"iconsUrl":"//at.alicdn.com/t/font_2678727_za4qjydwkkh.js","layout":{"type":"d3-force","link":{"distance":100,"strength":2},"collide":{"radius":40}},"behaviors":[{"key":"drag-element","enable":true,"animation":true,"state":"selected","dropEffect":"move","hideEdge":"none","shadow":false,"type":"drag-element"}],"node":{"style":{"labelBackground":true,"labelBackgroundFill":"#FFB6C1","labelBackgroundRadius":4,"labelFontFamily":"Arial","labelPadding":[0,4],"labelText":"(d) => {\n        return d.id\n      }"}},"animation":false,"autoResize":false,"cursor":"default","rotation":0,"zoom":1,"zoomRange":[0.01,10],"theme":"light","plugins":[{"key":"minimap","delay":128,"padding":10,"position":"right-bottom","shape":"key","size":[240,160],"type":"minimap"}]},"evals":["node.style.labelText"],"jsHooks":[]}</script>
+</div>
+<div class="section level2">
+<h2 id="view-r-code-4">View R Code<a class="anchor" aria-label="anchor" href="#view-r-code-4"></a>
+</h2>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">nodes</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span>
 <span>  id <span class="op">=</span> <span class="va">letters</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">8</span><span class="op">]</span></span>
@@ -317,17 +340,21 @@
 <span>    <span class="op">)</span></span>
 <span>  <span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="../reference/g6_plugins.html">g6_plugins</a></span><span class="op">(</span><span class="st">" minimap "</span><span class="op">)</span></span></code></pre></div>
-</blockquote>
+<hr>
 </div>
-<hr></section><section class="level2"><h2 id="snapline-plugin">Snapline Plugin<a class="anchor" aria-label="anchor" href="#snapline-plugin"></a>
+<div class="section level2">
+<h2 id="snapline-plugin">Snapline Plugin<a class="anchor" aria-label="anchor" href="#snapline-plugin"></a>
 </h2>
-<p>Displays alignment reference lines when dragging elements to ensure precise positioning.</p>
-<div id="htmlwidget-25a405345046bcc47644" class="g6 html-widget" style="width:100%;height:500px;">
+<p>Displays alignment reference lines when dragging elements to ensure
+precise positioning.</p>
+<div id="htmlwidget-4018eef1a407a0df6b52" class="g6 html-widget" style="width:100%;height:500px;">
 
 </div>
-<script type="application/json" data-for="htmlwidget-25a405345046bcc47644">{"x":{"data":{"nodes":[{"id":"a"},{"id":"b"},{"id":"c"},{"id":"d"},{"id":"e"},{"id":"f"},{"id":"g"},{"id":"h"}],"edges":[{"source":"a","target":"b"},{"source":"b","target":"c"},{"source":"c","target":"d"},{"source":"e","target":"f"},{"source":"f","target":"g"},{"source":"g","target":"h"},{"source":"a","target":"e"},{"source":"d","target":"h"}]},"jsonUrl":null,"iconsUrl":"//at.alicdn.com/t/font_2678727_za4qjydwkkh.js","layout":{"type":"d3-force","link":{"distance":100,"strength":2},"collide":{"radius":40}},"behaviors":[{"key":"drag-element","enable":true,"animation":true,"state":"selected","dropEffect":"move","hideEdge":"none","shadow":false,"type":"drag-element"}],"node":{"style":{"labelBackground":true,"labelBackgroundFill":"#FFB6C1","labelBackgroundRadius":4,"labelFontFamily":"Arial","labelPadding":[0,4],"labelText":"(d) => {\n        return d.id\n      }"}},"animation":false,"autoResize":false,"cursor":"default","rotation":0,"zoom":1,"zoomRange":[0.01,10],"theme":"light","plugins":[{"key":"snapline","tolerance":5,"offset":20,"autoSnap":true,"shape":"key","verticalLineStyle":{"stroke":"#1783FF"},"horizontalLineStyle":{"stroke":"#1783FF"},"type":"snapline"}]},"evals":["node.style.labelText"],"jsHooks":[]}</script><div>
-<blockquote>
-<p><strong>View R Code</strong></p>
+<script type="application/json" data-for="htmlwidget-4018eef1a407a0df6b52">{"x":{"data":{"nodes":[{"id":"a"},{"id":"b"},{"id":"c"},{"id":"d"},{"id":"e"},{"id":"f"},{"id":"g"},{"id":"h"}],"edges":[{"source":"a","target":"b"},{"source":"b","target":"c"},{"source":"c","target":"d"},{"source":"e","target":"f"},{"source":"f","target":"g"},{"source":"g","target":"h"},{"source":"a","target":"e"},{"source":"d","target":"h"}]},"jsonUrl":null,"iconsUrl":"//at.alicdn.com/t/font_2678727_za4qjydwkkh.js","layout":{"type":"d3-force","link":{"distance":100,"strength":2},"collide":{"radius":40}},"behaviors":[{"key":"drag-element","enable":true,"animation":true,"state":"selected","dropEffect":"move","hideEdge":"none","shadow":false,"type":"drag-element"}],"node":{"style":{"labelBackground":true,"labelBackgroundFill":"#FFB6C1","labelBackgroundRadius":4,"labelFontFamily":"Arial","labelPadding":[0,4],"labelText":"(d) => {\n        return d.id\n      }"}},"animation":false,"autoResize":false,"cursor":"default","rotation":0,"zoom":1,"zoomRange":[0.01,10],"theme":"light","plugins":[{"key":"snapline","tolerance":5,"offset":20,"autoSnap":true,"shape":"key","verticalLineStyle":{"stroke":"#1783FF"},"horizontalLineStyle":{"stroke":"#1783FF"},"type":"snapline"}]},"evals":["node.style.labelText"],"jsHooks":[]}</script>
+</div>
+<div class="section level2">
+<h2 id="view-r-code-5">View R Code<a class="anchor" aria-label="anchor" href="#view-r-code-5"></a>
+</h2>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">nodes</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span>
 <span>  id <span class="op">=</span> <span class="va">letters</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">8</span><span class="op">]</span></span>
@@ -359,17 +386,23 @@
 <span>    <span class="op">)</span></span>
 <span>  <span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="../reference/g6_plugins.html">g6_plugins</a></span><span class="op">(</span><span class="st">" snapline "</span><span class="op">)</span></span></code></pre></div>
-</blockquote>
+<hr>
 </div>
-<hr></section><section class="level2"><h2 id="toolbar-plugin">Toolbar Plugin<a class="anchor" aria-label="anchor" href="#toolbar-plugin"></a>
+<div class="section level2">
+<h2 id="toolbar-plugin">Toolbar Plugin<a class="anchor" aria-label="anchor" href="#toolbar-plugin"></a>
 </h2>
-<p>Provides a collection of common operation buttons for graph manipulation. If you wish to use custom icons, you can browse at https://at.alicdn.com/t/project/2678727/caef142c-804a-4a2f-a914-ae82666a31ee.html?spm=a313x.7781069.1998910419.35 and then pass the icon name as <code>icon-&lt;NAME&gt;</code> in the toolbar <code>getItems</code> parameter. See more <a href="https://g6.antv.antgroup.com/en/manual/plugin/build-in/toolbar#custom-icons" class="external-link">here</a>.</p>
-<div id="htmlwidget-90ee02a889ffc16a71bb" class="g6 html-widget" style="width:100%;height:500px;">
+<p>Provides a collection of common operation buttons for graph
+manipulation. If you wish to use custom icons, you can browse at <a href="https://at.alicdn.com/t/project/2678727/caef142c-804a-4a2f-a914-ae82666a31ee.html?spm=a313x.7781069.1998910419.35" class="external-link uri">https://at.alicdn.com/t/project/2678727/caef142c-804a-4a2f-a914-ae82666a31ee.html?spm=a313x.7781069.1998910419.35</a>
+and then pass the icon name as <code>icon-&lt;NAME&gt;</code> in the
+toolbar <code>getItems</code> parameter. See more <a href="https://g6.antv.antgroup.com/en/manual/plugin/build-in/toolbar#custom-icons" class="external-link">here</a>.</p>
+<div id="htmlwidget-5b1b2f4ad92281566982" class="g6 html-widget" style="width:100%;height:500px;">
 
 </div>
-<script type="application/json" data-for="htmlwidget-90ee02a889ffc16a71bb">{"x":{"data":{"nodes":[{"id":"a"},{"id":"b"},{"id":"c"},{"id":"d"},{"id":"e"},{"id":"f"},{"id":"g"},{"id":"h"}],"edges":[{"source":"a","target":"b"},{"source":"b","target":"c"},{"source":"c","target":"d"},{"source":"e","target":"f"},{"source":"f","target":"g"},{"source":"g","target":"h"},{"source":"a","target":"e"},{"source":"d","target":"h"}]},"jsonUrl":null,"iconsUrl":"//at.alicdn.com/t/font_2678727_za4qjydwkkh.js","layout":{"type":"d3-force","link":{"distance":100,"strength":2},"collide":{"radius":40}},"behaviors":[{"key":"drag-element","enable":true,"animation":true,"state":"selected","dropEffect":"move","hideEdge":"none","shadow":false,"type":"drag-element"}],"node":{"style":{"labelBackground":true,"labelBackgroundFill":"#FFB6C1","labelBackgroundRadius":4,"labelFontFamily":"Arial","labelPadding":[0,4],"labelText":"(d) => {\n        return d.id\n      }"}},"animation":false,"autoResize":false,"cursor":"default","rotation":0,"zoom":1,"zoomRange":[0.01,10],"theme":"light","plugins":[{"getItems":"( ) => [\n        { id : 'zoom-in' , value : 'zoom-in' },\n        { id : 'zoom-out' , value : 'zoom-out' },\n        { id : 'auto-fit' , value : 'auto-fit' },\n        { id: 'delete', value: 'delete' },\n        { id: 'request-fullscreen', value: 'request-fullscreen' },\n        { id: 'exit-fullscreen', value: 'exit-fullscreen' },\n      ]","key":"toolbar","position":"top-left","onClick":"( value, target, current ) => {   \n        // Handle button click events\n        const graph = HTMLWidgets\n          .find(`#${target.closest('.g6').id}`)\n          .getWidget();\n        const fullScreen = graph.getPluginInstance('fullscreen');\n        const zoomLevel = graph.getZoom();\n        if ( value === 'zoom-in' ) {   \n          graph.zoomTo (graph.getZoom() + 0.25);\n        } else if ( value === 'zoom-out' ) {     \n          graph.zoomTo (graph.getZoom() - 0.25);\n        } else if ( value === 'auto-fit' ) {     \n          graph.fitView ( ) ;\n        } else if (value === 'delete') {\n          const selectedNodes = graph\n            .getElementDataByState('node', 'selected')\n            .map((node) => {\n              return node.id\n            }\n          );\n          graph.removeNodeData(selectedNodes);\n          graph.draw();\n        } else if (value === 'request-fullscreen') {\n          if (fullScreen !== undefined) {\n            fullScreen.request();\n          }\n        } else if (value === 'exit-fullscreen') {\n          if (fullScreen !== undefined) {\n            fullScreen.exit();\n          }\n        }\n      }\n    ","type":"toolbar"}]},"evals":["node.style.labelText","plugins.0.getItems","plugins.0.onClick"],"jsHooks":[]}</script><div>
-<blockquote>
-<p><strong>View R Code</strong></p>
+<script type="application/json" data-for="htmlwidget-5b1b2f4ad92281566982">{"x":{"data":{"nodes":[{"id":"a"},{"id":"b"},{"id":"c"},{"id":"d"},{"id":"e"},{"id":"f"},{"id":"g"},{"id":"h"}],"edges":[{"source":"a","target":"b"},{"source":"b","target":"c"},{"source":"c","target":"d"},{"source":"e","target":"f"},{"source":"f","target":"g"},{"source":"g","target":"h"},{"source":"a","target":"e"},{"source":"d","target":"h"}]},"jsonUrl":null,"iconsUrl":"//at.alicdn.com/t/font_2678727_za4qjydwkkh.js","layout":{"type":"d3-force","link":{"distance":100,"strength":2},"collide":{"radius":40}},"behaviors":[{"key":"drag-element","enable":true,"animation":true,"state":"selected","dropEffect":"move","hideEdge":"none","shadow":false,"type":"drag-element"}],"node":{"style":{"labelBackground":true,"labelBackgroundFill":"#FFB6C1","labelBackgroundRadius":4,"labelFontFamily":"Arial","labelPadding":[0,4],"labelText":"(d) => {\n        return d.id\n      }"}},"animation":false,"autoResize":false,"cursor":"default","rotation":0,"zoom":1,"zoomRange":[0.01,10],"theme":"light","plugins":[{"getItems":"( ) => [\n        { id : 'zoom-in' , value : 'zoom-in' },\n        { id : 'zoom-out' , value : 'zoom-out' },\n        { id : 'auto-fit' , value : 'auto-fit' },\n        { id: 'delete', value: 'delete' },\n        { id: 'request-fullscreen', value: 'request-fullscreen' },\n        { id: 'exit-fullscreen', value: 'exit-fullscreen' },\n      ]","key":"toolbar","position":"top-left","onClick":"( value, target, current ) => {   \n        // Handle button click events\n        const graph = HTMLWidgets\n          .find(`#${target.closest('.g6').id}`)\n          .getWidget();\n        const fullScreen = graph.getPluginInstance('fullscreen');\n        const zoomLevel = graph.getZoom();\n        if ( value === 'zoom-in' ) {   \n          graph.zoomTo (graph.getZoom() + 0.25);\n        } else if ( value === 'zoom-out' ) {     \n          graph.zoomTo (graph.getZoom() - 0.25);\n        } else if ( value === 'auto-fit' ) {     \n          graph.fitView ( ) ;\n        } else if (value === 'delete') {\n          const selectedNodes = graph\n            .getElementDataByState('node', 'selected')\n            .map((node) => {\n              return node.id\n            }\n          );\n          graph.removeNodeData(selectedNodes);\n          graph.draw();\n        } else if (value === 'request-fullscreen') {\n          if (fullScreen !== undefined) {\n            fullScreen.request();\n          }\n        } else if (value === 'exit-fullscreen') {\n          if (fullScreen !== undefined) {\n            fullScreen.exit();\n          }\n        }\n      }\n    ","type":"toolbar"}]},"evals":["node.style.labelText","plugins.0.getItems","plugins.0.onClick"],"jsHooks":[]}</script>
+</div>
+<div class="section level2">
+<h2 id="view-r-code-6">View R Code<a class="anchor" aria-label="anchor" href="#view-r-code-6"></a>
+</h2>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">nodes</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span>
 <span>  id <span class="op">=</span> <span class="va">letters</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">8</span><span class="op">]</span></span>
@@ -401,17 +434,22 @@
 <span>    <span class="op">)</span></span>
 <span>  <span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="../reference/g6_plugins.html">g6_plugins</a></span><span class="op">(</span><span class="st">" toolbar "</span><span class="op">)</span></span></code></pre></div>
-</blockquote>
+<hr>
 </div>
-<hr></section><section class="level2"><h2 id="tooltip-plugin">Tooltip Plugin<a class="anchor" aria-label="anchor" href="#tooltip-plugin"></a>
+<div class="section level2">
+<h2 id="tooltip-plugin">Tooltip Plugin<a class="anchor" aria-label="anchor" href="#tooltip-plugin"></a>
 </h2>
-<p>Displays detailed information about elements on hover for enhanced interactivity. Doesn’t work with Shiny yet due to a compatibility issue with Bootstrap tooltips class.</p>
-<div id="htmlwidget-951419349039cf611625" class="g6 html-widget" style="width:100%;height:500px;">
+<p>Displays detailed information about elements on hover for enhanced
+interactivity. Doesn’t work with Shiny yet due to a compatibility issue
+with Bootstrap tooltips class.</p>
+<div id="htmlwidget-25c3e940e6859592f801" class="g6 html-widget" style="width:100%;height:500px;">
 
 </div>
-<script type="application/json" data-for="htmlwidget-951419349039cf611625">{"x":{"data":{"nodes":[{"id":"a"},{"id":"b"},{"id":"c"},{"id":"d"},{"id":"e"},{"id":"f"},{"id":"g"},{"id":"h"}],"edges":[{"source":"a","target":"b"},{"source":"b","target":"c"},{"source":"c","target":"d"},{"source":"e","target":"f"},{"source":"f","target":"g"},{"source":"g","target":"h"},{"source":"a","target":"e"},{"source":"d","target":"h"}]},"jsonUrl":null,"iconsUrl":"//at.alicdn.com/t/font_2678727_za4qjydwkkh.js","layout":{"type":"d3-force","link":{"distance":100,"strength":2},"collide":{"radius":40}},"behaviors":[{"key":"drag-element","enable":true,"animation":true,"state":"selected","dropEffect":"move","hideEdge":"none","shadow":false,"type":"drag-element"}],"node":{"style":{"labelBackground":true,"labelBackgroundFill":"#FFB6C1","labelBackgroundRadius":4,"labelFontFamily":"Arial","labelPadding":[0,4],"labelText":"(d) => {\n        return d.id\n      }"}},"animation":false,"autoResize":false,"cursor":"default","rotation":0,"zoom":1,"zoomRange":[0.01,10],"theme":"light","plugins":[{"key":"tooltip","position":"top-right","enable":true,"trigger":"hover","offset":[10,10],"enterable":false,"type":"tooltip"}]},"evals":["node.style.labelText"],"jsHooks":[]}</script><div>
-<blockquote>
-<p><strong>View R Code</strong></p>
+<script type="application/json" data-for="htmlwidget-25c3e940e6859592f801">{"x":{"data":{"nodes":[{"id":"a"},{"id":"b"},{"id":"c"},{"id":"d"},{"id":"e"},{"id":"f"},{"id":"g"},{"id":"h"}],"edges":[{"source":"a","target":"b"},{"source":"b","target":"c"},{"source":"c","target":"d"},{"source":"e","target":"f"},{"source":"f","target":"g"},{"source":"g","target":"h"},{"source":"a","target":"e"},{"source":"d","target":"h"}]},"jsonUrl":null,"iconsUrl":"//at.alicdn.com/t/font_2678727_za4qjydwkkh.js","layout":{"type":"d3-force","link":{"distance":100,"strength":2},"collide":{"radius":40}},"behaviors":[{"key":"drag-element","enable":true,"animation":true,"state":"selected","dropEffect":"move","hideEdge":"none","shadow":false,"type":"drag-element"}],"node":{"style":{"labelBackground":true,"labelBackgroundFill":"#FFB6C1","labelBackgroundRadius":4,"labelFontFamily":"Arial","labelPadding":[0,4],"labelText":"(d) => {\n        return d.id\n      }"}},"animation":false,"autoResize":false,"cursor":"default","rotation":0,"zoom":1,"zoomRange":[0.01,10],"theme":"light","plugins":[{"key":"tooltip","position":"top-right","enable":true,"trigger":"hover","offset":[10,10],"enterable":false,"type":"tooltip"}]},"evals":["node.style.labelText"],"jsHooks":[]}</script>
+</div>
+<div class="section level2">
+<h2 id="view-r-code-7">View R Code<a class="anchor" aria-label="anchor" href="#view-r-code-7"></a>
+</h2>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">nodes</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span>
 <span>  id <span class="op">=</span> <span class="va">letters</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">8</span><span class="op">]</span></span>
@@ -443,13 +481,14 @@
 <span>    <span class="op">)</span></span>
 <span>  <span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="../reference/g6_plugins.html">g6_plugins</a></span><span class="op">(</span><span class="st">" tooltip "</span><span class="op">)</span></span></code></pre></div>
-</blockquote>
+<hr>
 </div>
-<hr></section><section class="level2"><h2 id="background-plugin">Background Plugin<a class="anchor" aria-label="anchor" href="#background-plugin"></a>
+<div class="section level2">
+<h2 id="background-plugin">Background Plugin<a class="anchor" aria-label="anchor" href="#background-plugin"></a>
 </h2>
-<p>Adds background images or colors to the canvas for visual enhancement and branding.</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb10"><pre class="downlit sourceCode r">
+<p>Adds background images or colors to the canvas for visual enhancement
+and branding.</p>
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Create and render the G6 plot</span></span>
 <span><span class="fu"><a href="../reference/g6.html">g6</a></span><span class="op">(</span><span class="va">nodes</span>, <span class="va">edges</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="../reference/g6_layout.html">g6_layout</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span></span>
@@ -461,16 +500,15 @@
 <span>  <span class="fu"><a href="../reference/g6_plugins.html">g6_plugins</a></span><span class="op">(</span></span>
 <span>    <span class="fu"><a href="../reference/background.html">background</a></span><span class="op">(</span>backgroundColor <span class="op">=</span> <span class="st">"#f0f2f5"</span><span class="op">)</span></span>
 <span>  <span class="op">)</span></span></code></pre></div>
-<div class="cell-output-display">
-<div id="htmlwidget-60848fb1e9d4fb80fe39" style="width:100%;height:480px;" class="g6 html-widget"></div>
-<script type="application/json" data-for="htmlwidget-60848fb1e9d4fb80fe39">{"x":{"data":{"nodes":[{"id":"a"},{"id":"b"},{"id":"c"},{"id":"d"},{"id":"e"},{"id":"f"},{"id":"g"},{"id":"h"}],"edges":[{"source":"a","target":"b"},{"source":"b","target":"c"},{"source":"c","target":"d"},{"source":"e","target":"f"},{"source":"f","target":"g"},{"source":"g","target":"h"},{"source":"a","target":"e"},{"source":"d","target":"h"}]},"jsonUrl":null,"iconsUrl":"//at.alicdn.com/t/font_2678727_za4qjydwkkh.js","layout":{"type":"d3-force","link":{"distance":100,"strength":2},"collide":{"radius":40}},"behaviors":[{"key":"drag-element","enable":true,"animation":true,"state":"selected","dropEffect":"move","hideEdge":"none","shadow":false,"type":"drag-element"}],"node":{"style":{"labelBackground":true,"labelBackgroundFill":"#FFB6C1","labelBackgroundRadius":4,"labelFontFamily":"Arial","labelPadding":[0,4],"labelText":"(d) => {\n        return d.id\n      }"}},"animation":false,"autoResize":false,"cursor":"default","rotation":0,"zoom":1,"zoomRange":[0.01,10],"theme":"light","plugins":[{"width":"100%","height":"100%","backgroundColor":"#f0f2f5","backgroundSize":"cover","transition":"background 0.5s","zIndex":"-1","type":"background"}]},"evals":["node.style.labelText"],"jsHooks":[]}</script>
+<div id="htmlwidget-3f27c09be0c60bb52829" style="width:100%;height:432.632880098888px;" class="g6 html-widget"></div>
+<script type="application/json" data-for="htmlwidget-3f27c09be0c60bb52829">{"x":{"data":{"nodes":[{"id":"a"},{"id":"b"},{"id":"c"},{"id":"d"},{"id":"e"},{"id":"f"},{"id":"g"},{"id":"h"}],"edges":[{"source":"a","target":"b"},{"source":"b","target":"c"},{"source":"c","target":"d"},{"source":"e","target":"f"},{"source":"f","target":"g"},{"source":"g","target":"h"},{"source":"a","target":"e"},{"source":"d","target":"h"}]},"jsonUrl":null,"iconsUrl":"//at.alicdn.com/t/font_2678727_za4qjydwkkh.js","layout":{"type":"d3-force","link":{"distance":100,"strength":2},"collide":{"radius":40}},"behaviors":[{"key":"drag-element","enable":true,"animation":true,"state":"selected","dropEffect":"move","hideEdge":"none","shadow":false,"type":"drag-element"}],"node":{"style":{"labelBackground":true,"labelBackgroundFill":"#FFB6C1","labelBackgroundRadius":4,"labelFontFamily":"Arial","labelPadding":[0,4],"labelText":"(d) => {\n        return d.id\n      }"}},"animation":false,"autoResize":false,"cursor":"default","rotation":0,"zoom":1,"zoomRange":[0.01,10],"theme":"light","plugins":[{"width":"100%","height":"100%","backgroundColor":"#f0f2f5","backgroundSize":"cover","transition":"background 0.5s","zIndex":"-1","type":"background"}]},"evals":["node.style.labelText"],"jsHooks":[]}</script>
 </div>
-</div>
-</section><section class="level2"><h2 id="bubble-sets-plugin">Bubble Sets Plugin<a class="anchor" aria-label="anchor" href="#bubble-sets-plugin"></a>
+<div class="section level2">
+<h2 id="bubble-sets-plugin">Bubble Sets Plugin<a class="anchor" aria-label="anchor" href="#bubble-sets-plugin"></a>
 </h2>
-<p>Creates smooth bubble-like element outlines for enhanced visual grouping.</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb11"><pre class="downlit sourceCode r">
+<p>Creates smooth bubble-like element outlines for enhanced visual
+grouping.</p>
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Create and render the G6 plot</span></span>
 <span><span class="fu"><a href="../reference/g6.html">g6</a></span><span class="op">(</span><span class="va">nodes</span>, <span class="va">edges</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="../reference/g6_layout.html">g6_layout</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span></span>
@@ -509,16 +547,15 @@
 <span>      labelBackgroundRadius <span class="op">=</span> <span class="fl">5</span></span>
 <span>    <span class="op">)</span></span>
 <span>  <span class="op">)</span></span></code></pre></div>
-<div class="cell-output-display">
-<div id="htmlwidget-0e794c771460ca7d28ef" style="width:100%;height:480px;" class="g6 html-widget"></div>
-<script type="application/json" data-for="htmlwidget-0e794c771460ca7d28ef">{"x":{"data":{"nodes":[{"id":"a"},{"id":"b"},{"id":"c"},{"id":"d"},{"id":"e"},{"id":"f"},{"id":"g"},{"id":"h"}],"edges":[{"source":"a","target":"b"},{"source":"b","target":"c"},{"source":"c","target":"d"},{"source":"e","target":"f"},{"source":"f","target":"g"},{"source":"g","target":"h"},{"source":"a","target":"e"},{"source":"d","target":"h"}]},"jsonUrl":null,"iconsUrl":"//at.alicdn.com/t/font_2678727_za4qjydwkkh.js","layout":{"type":"d3-force","link":{"distance":100,"strength":2},"collide":{"radius":40}},"behaviors":[{"key":"drag-element","enable":true,"animation":true,"state":"selected","dropEffect":"move","hideEdge":"none","shadow":false,"type":"drag-element"}],"node":{"style":{"labelBackground":true,"labelBackgroundFill":"#FFB6C1","labelBackgroundRadius":4,"labelFontFamily":"Arial","labelPadding":[0,4],"labelText":"(d) => {\n        return d.id\n      }"}},"animation":false,"autoResize":false,"cursor":"default","rotation":0,"zoom":1,"zoomRange":[0.01,10],"theme":"light","plugins":[{"members":["a","b","c","d"],"key":"bubble-set-1","label":true,"labelPlacement":"top","labelBackground":true,"labelPadding":2,"labelCloseToPath":true,"labelAutoRotate":true,"labelOffsetX":0,"labelOffsetY":0,"maxRoutingIterations":100,"maxMarchingIterations":20,"pixelGroup":4,"type":"bubble-sets","labelText":"cluster 1","fill":"#F08F56","stroke":"#F08F56","labelFill":"#fff","labelBackgroundFill":"#F08F56","labelBackgroundRadius":5},{"members":["e","f","g","h"],"key":"bubble-set-2","label":true,"labelPlacement":"top","labelBackground":true,"labelPadding":2,"labelCloseToPath":true,"labelAutoRotate":true,"labelOffsetX":0,"labelOffsetY":0,"maxRoutingIterations":100,"maxMarchingIterations":20,"pixelGroup":4,"type":"bubble-sets","labelText":"cluster 2","fill":"#D580FF","stroke":"#D580FF","labelFill":"#fff","labelBackgroundFill":"#D580FF","labelBackgroundRadius":5}]},"evals":["node.style.labelText"],"jsHooks":[]}</script>
+<div id="htmlwidget-416566eb193bf50d04e6" style="width:100%;height:432.632880098888px;" class="g6 html-widget"></div>
+<script type="application/json" data-for="htmlwidget-416566eb193bf50d04e6">{"x":{"data":{"nodes":[{"id":"a"},{"id":"b"},{"id":"c"},{"id":"d"},{"id":"e"},{"id":"f"},{"id":"g"},{"id":"h"}],"edges":[{"source":"a","target":"b"},{"source":"b","target":"c"},{"source":"c","target":"d"},{"source":"e","target":"f"},{"source":"f","target":"g"},{"source":"g","target":"h"},{"source":"a","target":"e"},{"source":"d","target":"h"}]},"jsonUrl":null,"iconsUrl":"//at.alicdn.com/t/font_2678727_za4qjydwkkh.js","layout":{"type":"d3-force","link":{"distance":100,"strength":2},"collide":{"radius":40}},"behaviors":[{"key":"drag-element","enable":true,"animation":true,"state":"selected","dropEffect":"move","hideEdge":"none","shadow":false,"type":"drag-element"}],"node":{"style":{"labelBackground":true,"labelBackgroundFill":"#FFB6C1","labelBackgroundRadius":4,"labelFontFamily":"Arial","labelPadding":[0,4],"labelText":"(d) => {\n        return d.id\n      }"}},"animation":false,"autoResize":false,"cursor":"default","rotation":0,"zoom":1,"zoomRange":[0.01,10],"theme":"light","plugins":[{"members":["a","b","c","d"],"key":"bubble-set-1","label":true,"labelPlacement":"top","labelBackground":true,"labelPadding":2,"labelCloseToPath":true,"labelAutoRotate":true,"labelOffsetX":0,"labelOffsetY":0,"maxRoutingIterations":100,"maxMarchingIterations":20,"pixelGroup":4,"type":"bubble-sets","labelText":"cluster 1","fill":"#F08F56","stroke":"#F08F56","labelFill":"#fff","labelBackgroundFill":"#F08F56","labelBackgroundRadius":5},{"members":["e","f","g","h"],"key":"bubble-set-2","label":true,"labelPlacement":"top","labelBackground":true,"labelPadding":2,"labelCloseToPath":true,"labelAutoRotate":true,"labelOffsetX":0,"labelOffsetY":0,"maxRoutingIterations":100,"maxMarchingIterations":20,"pixelGroup":4,"type":"bubble-sets","labelText":"cluster 2","fill":"#D580FF","stroke":"#D580FF","labelFill":"#fff","labelBackgroundFill":"#D580FF","labelBackgroundRadius":5}]},"evals":["node.style.labelText"],"jsHooks":[]}</script>
 </div>
-</div>
-</section><section class="level2"><h2 id="fullscreen-plugin">Fullscreen Plugin<a class="anchor" aria-label="anchor" href="#fullscreen-plugin"></a>
+<div class="section level2">
+<h2 id="fullscreen-plugin">Fullscreen Plugin<a class="anchor" aria-label="anchor" href="#fullscreen-plugin"></a>
 </h2>
-<p>Supports full-screen display and exit for charts to maximize viewing area.</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb12"><pre class="downlit sourceCode r">
+<p>Supports full-screen display and exit for charts to maximize viewing
+area.</p>
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/g6.html">g6</a></span><span class="op">(</span><span class="va">nodes</span>, <span class="va">edges</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="../reference/g6_layout.html">g6_layout</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="../reference/g6_behaviors.html">g6_behaviors</a></span><span class="op">(</span><span class="st">"drag-element"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
@@ -530,16 +567,15 @@
 <span>    <span class="fu"><a href="../reference/toolbar.html">toolbar</a></span><span class="op">(</span><span class="op">)</span>,</span>
 <span>    <span class="fu"><a href="../reference/fullscreen.html">fullscreen</a></span><span class="op">(</span><span class="op">)</span></span>
 <span>  <span class="op">)</span></span></code></pre></div>
-<div class="cell-output-display">
-<div id="htmlwidget-f90d66b1c22469ab5889" style="width:100%;height:480px;" class="g6 html-widget"></div>
-<script type="application/json" data-for="htmlwidget-f90d66b1c22469ab5889">{"x":{"data":{"nodes":[{"id":"a"},{"id":"b"},{"id":"c"},{"id":"d"},{"id":"e"},{"id":"f"},{"id":"g"},{"id":"h"}],"edges":[{"source":"a","target":"b"},{"source":"b","target":"c"},{"source":"c","target":"d"},{"source":"e","target":"f"},{"source":"f","target":"g"},{"source":"g","target":"h"},{"source":"a","target":"e"},{"source":"d","target":"h"}]},"jsonUrl":null,"iconsUrl":"//at.alicdn.com/t/font_2678727_za4qjydwkkh.js","layout":{"type":"d3-force","link":{"distance":100,"strength":2},"collide":{"radius":40}},"behaviors":[{"key":"drag-element","enable":true,"animation":true,"state":"selected","dropEffect":"move","hideEdge":"none","shadow":false,"type":"drag-element"}],"animation":false,"autoResize":false,"cursor":"default","rotation":0,"zoom":1,"zoomRange":[0.01,10],"theme":"light","nodes":{"style":{"labelBackground":true,"labelBackgroundFill":"#FFB6C1","labelBackgroundRadius":4,"labelFontFamily":"Arial","labelPadding":[0,4],"labelText":"(d) => {\n        return d.id\n      }"}},"plugins":[{"getItems":"( ) => [\n        { id : 'zoom-in' , value : 'zoom-in' },\n        { id : 'zoom-out' , value : 'zoom-out' },\n        { id : 'auto-fit' , value : 'auto-fit' },\n        { id: 'delete', value: 'delete' },\n        { id: 'request-fullscreen', value: 'request-fullscreen' },\n        { id: 'exit-fullscreen', value: 'exit-fullscreen' },\n      ]","key":"toolbar","position":"top-left","onClick":"( value, target, current ) => {   \n        // Handle button click events\n        const graph = HTMLWidgets\n          .find(`#${target.closest('.g6').id}`)\n          .getWidget();\n        const fullScreen = graph.getPluginInstance('fullscreen');\n        const zoomLevel = graph.getZoom();\n        if ( value === 'zoom-in' ) {   \n          graph.zoomTo (graph.getZoom() + 0.25);\n        } else if ( value === 'zoom-out' ) {     \n          graph.zoomTo (graph.getZoom() - 0.25);\n        } else if ( value === 'auto-fit' ) {     \n          graph.fitView ( ) ;\n        } else if (value === 'delete') {\n          const selectedNodes = graph\n            .getElementDataByState('node', 'selected')\n            .map((node) => {\n              return node.id\n            }\n          );\n          graph.removeNodeData(selectedNodes);\n          graph.draw();\n        } else if (value === 'request-fullscreen') {\n          if (fullScreen !== undefined) {\n            fullScreen.request();\n          }\n        } else if (value === 'exit-fullscreen') {\n          if (fullScreen !== undefined) {\n            fullScreen.exit();\n          }\n        }\n      }\n    ","type":"toolbar"},{"key":"fullscreen","autoFit":true,"type":"fullscreen"}]},"evals":["nodes.style.labelText","plugins.0.getItems","plugins.0.onClick"],"jsHooks":[]}</script>
+<div id="htmlwidget-72cbf064100ce560a04c" style="width:100%;height:432.632880098888px;" class="g6 html-widget"></div>
+<script type="application/json" data-for="htmlwidget-72cbf064100ce560a04c">{"x":{"data":{"nodes":[{"id":"a"},{"id":"b"},{"id":"c"},{"id":"d"},{"id":"e"},{"id":"f"},{"id":"g"},{"id":"h"}],"edges":[{"source":"a","target":"b"},{"source":"b","target":"c"},{"source":"c","target":"d"},{"source":"e","target":"f"},{"source":"f","target":"g"},{"source":"g","target":"h"},{"source":"a","target":"e"},{"source":"d","target":"h"}]},"jsonUrl":null,"iconsUrl":"//at.alicdn.com/t/font_2678727_za4qjydwkkh.js","layout":{"type":"d3-force","link":{"distance":100,"strength":2},"collide":{"radius":40}},"behaviors":[{"key":"drag-element","enable":true,"animation":true,"state":"selected","dropEffect":"move","hideEdge":"none","shadow":false,"type":"drag-element"}],"animation":false,"autoResize":false,"cursor":"default","rotation":0,"zoom":1,"zoomRange":[0.01,10],"theme":"light","nodes":{"style":{"labelBackground":true,"labelBackgroundFill":"#FFB6C1","labelBackgroundRadius":4,"labelFontFamily":"Arial","labelPadding":[0,4],"labelText":"(d) => {\n        return d.id\n      }"}},"plugins":[{"getItems":"( ) => [\n        { id : 'zoom-in' , value : 'zoom-in' },\n        { id : 'zoom-out' , value : 'zoom-out' },\n        { id : 'auto-fit' , value : 'auto-fit' },\n        { id: 'delete', value: 'delete' },\n        { id: 'request-fullscreen', value: 'request-fullscreen' },\n        { id: 'exit-fullscreen', value: 'exit-fullscreen' },\n      ]","key":"toolbar","position":"top-left","onClick":"( value, target, current ) => {   \n        // Handle button click events\n        const graph = HTMLWidgets\n          .find(`#${target.closest('.g6').id}`)\n          .getWidget();\n        const fullScreen = graph.getPluginInstance('fullscreen');\n        const zoomLevel = graph.getZoom();\n        if ( value === 'zoom-in' ) {   \n          graph.zoomTo (graph.getZoom() + 0.25);\n        } else if ( value === 'zoom-out' ) {     \n          graph.zoomTo (graph.getZoom() - 0.25);\n        } else if ( value === 'auto-fit' ) {     \n          graph.fitView ( ) ;\n        } else if (value === 'delete') {\n          const selectedNodes = graph\n            .getElementDataByState('node', 'selected')\n            .map((node) => {\n              return node.id\n            }\n          );\n          graph.removeNodeData(selectedNodes);\n          graph.draw();\n        } else if (value === 'request-fullscreen') {\n          if (fullScreen !== undefined) {\n            fullScreen.request();\n          }\n        } else if (value === 'exit-fullscreen') {\n          if (fullScreen !== undefined) {\n            fullScreen.exit();\n          }\n        }\n      }\n    ","type":"toolbar"},{"key":"fullscreen","autoFit":true,"type":"fullscreen"}]},"evals":["nodes.style.labelText","plugins.0.getItems","plugins.0.onClick"],"jsHooks":[]}</script>
 </div>
-</div>
-</section><section class="level2"><h2 id="hull-plugin">Hull Plugin<a class="anchor" aria-label="anchor" href="#hull-plugin"></a>
+<div class="section level2">
+<h2 id="hull-plugin">Hull Plugin<a class="anchor" aria-label="anchor" href="#hull-plugin"></a>
 </h2>
-<p>Creates an outline for a specified set of nodes to visually group related elements.</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb13"><pre class="downlit sourceCode r">
+<p>Creates an outline for a specified set of nodes to visually group
+related elements.</p>
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Create and render the G6 plot</span></span>
 <span><span class="fu"><a href="../reference/g6.html">g6</a></span><span class="op">(</span><span class="va">nodes</span>, <span class="va">edges</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="../reference/g6_layout.html">g6_layout</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span></span>
@@ -572,16 +608,15 @@
 <span>      labelBackgroundRadius <span class="op">=</span> <span class="fl">5</span></span>
 <span>    <span class="op">)</span></span>
 <span>  <span class="op">)</span></span></code></pre></div>
-<div class="cell-output-display">
-<div id="htmlwidget-5b353849493f66ee5942" style="width:100%;height:480px;" class="g6 html-widget"></div>
-<script type="application/json" data-for="htmlwidget-5b353849493f66ee5942">{"x":{"data":{"nodes":[{"id":"a"},{"id":"b"},{"id":"c"},{"id":"d"},{"id":"e"},{"id":"f"},{"id":"g"},{"id":"h"}],"edges":[{"source":"a","target":"b"},{"source":"b","target":"c"},{"source":"c","target":"d"},{"source":"e","target":"f"},{"source":"f","target":"g"},{"source":"g","target":"h"},{"source":"a","target":"e"},{"source":"d","target":"h"}]},"jsonUrl":null,"iconsUrl":"//at.alicdn.com/t/font_2678727_za4qjydwkkh.js","layout":{"type":"d3-force","link":{"distance":100,"strength":2},"collide":{"radius":40}},"behaviors":[{"key":"drag-element","enable":true,"animation":true,"state":"selected","dropEffect":"move","hideEdge":"none","shadow":false,"type":"drag-element"}],"node":{"style":{"labelBackground":true,"labelBackgroundFill":"#FFB6C1","labelBackgroundRadius":4,"labelFontFamily":"Arial","labelPadding":[0,4],"labelText":"(d) => {\n        return d.id\n      }"}},"animation":false,"autoResize":false,"cursor":"default","rotation":0,"zoom":1,"zoomRange":[0.01,10],"theme":"light","plugins":[{"members":["a","b","c","d"],"key":"bubble-set-1","concavity":null,"corner":"rounded","padding":10,"label":true,"labelText":"cluster 1","labelPlacement":"bottom","labelBackground":false,"labelPadding":2,"labelCloseToPath":true,"labelAutoRotate":true,"labelOffsetX":0,"labelOffsetY":0,"labelMaxWidth":0,"type":"hull","fill":"#F08F56","stroke":"#F08F56","labelFill":"#fff","labelBackgroundFill":"#F08F56","labelBackgroundRadius":5},{"members":["e","f","g","h"],"key":"bubble-set-2","concavity":null,"corner":"rounded","padding":10,"label":true,"labelText":"cluster 2","labelPlacement":"bottom","labelBackground":false,"labelPadding":2,"labelCloseToPath":true,"labelAutoRotate":true,"labelOffsetX":0,"labelOffsetY":0,"labelMaxWidth":0,"type":"hull","fill":"#D580FF","stroke":"#D580FF","labelFill":"#fff","labelBackgroundFill":"#D580FF","labelBackgroundRadius":5}]},"evals":["node.style.labelText"],"jsHooks":[]}</script>
+<div id="htmlwidget-d11fc4360aa0230696d7" style="width:100%;height:432.632880098888px;" class="g6 html-widget"></div>
+<script type="application/json" data-for="htmlwidget-d11fc4360aa0230696d7">{"x":{"data":{"nodes":[{"id":"a"},{"id":"b"},{"id":"c"},{"id":"d"},{"id":"e"},{"id":"f"},{"id":"g"},{"id":"h"}],"edges":[{"source":"a","target":"b"},{"source":"b","target":"c"},{"source":"c","target":"d"},{"source":"e","target":"f"},{"source":"f","target":"g"},{"source":"g","target":"h"},{"source":"a","target":"e"},{"source":"d","target":"h"}]},"jsonUrl":null,"iconsUrl":"//at.alicdn.com/t/font_2678727_za4qjydwkkh.js","layout":{"type":"d3-force","link":{"distance":100,"strength":2},"collide":{"radius":40}},"behaviors":[{"key":"drag-element","enable":true,"animation":true,"state":"selected","dropEffect":"move","hideEdge":"none","shadow":false,"type":"drag-element"}],"node":{"style":{"labelBackground":true,"labelBackgroundFill":"#FFB6C1","labelBackgroundRadius":4,"labelFontFamily":"Arial","labelPadding":[0,4],"labelText":"(d) => {\n        return d.id\n      }"}},"animation":false,"autoResize":false,"cursor":"default","rotation":0,"zoom":1,"zoomRange":[0.01,10],"theme":"light","plugins":[{"members":["a","b","c","d"],"key":"bubble-set-1","concavity":null,"corner":"rounded","padding":10,"label":true,"labelText":"cluster 1","labelPlacement":"bottom","labelBackground":false,"labelPadding":2,"labelCloseToPath":true,"labelAutoRotate":true,"labelOffsetX":0,"labelOffsetY":0,"labelMaxWidth":0,"type":"hull","fill":"#F08F56","stroke":"#F08F56","labelFill":"#fff","labelBackgroundFill":"#F08F56","labelBackgroundRadius":5},{"members":["e","f","g","h"],"key":"bubble-set-2","concavity":null,"corner":"rounded","padding":10,"label":true,"labelText":"cluster 2","labelPlacement":"bottom","labelBackground":false,"labelPadding":2,"labelCloseToPath":true,"labelAutoRotate":true,"labelOffsetX":0,"labelOffsetY":0,"labelMaxWidth":0,"type":"hull","fill":"#D580FF","stroke":"#D580FF","labelFill":"#fff","labelBackgroundFill":"#D580FF","labelBackgroundRadius":5}]},"evals":["node.style.labelText"],"jsHooks":[]}</script>
 </div>
-</div>
-</section><section class="level2"><h2 id="legend-plugin">Legend Plugin<a class="anchor" aria-label="anchor" href="#legend-plugin"></a>
+<div class="section level2">
+<h2 id="legend-plugin">Legend Plugin<a class="anchor" aria-label="anchor" href="#legend-plugin"></a>
 </h2>
-<p>Displays categories and corresponding style descriptions of chart data.</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb14"><pre class="downlit sourceCode r">
+<p>Displays categories and corresponding style descriptions of chart
+data.</p>
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">custom_nodes</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">lapply</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">8</span>, \<span class="op">(</span><span class="va">i</span><span class="op">)</span> <span class="op">{</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
 <span>    id <span class="op">=</span> <span class="va">letters</span><span class="op">[</span><span class="va">i</span><span class="op">]</span>,</span>
@@ -605,16 +640,15 @@
 <span>      nodeField <span class="op">=</span> <span class="st">"cluster"</span></span>
 <span>    <span class="op">)</span></span>
 <span>  <span class="op">)</span></span></code></pre></div>
-<div class="cell-output-display">
-<div id="htmlwidget-23fc6a38438b3c1ab2e9" style="width:100%;height:480px;" class="g6 html-widget"></div>
-<script type="application/json" data-for="htmlwidget-23fc6a38438b3c1ab2e9">{"x":{"data":{"nodes":[{"id":"a","style":{"fill":"#F08F56"},"data":{"cluster":"1"}},{"id":"b","style":{"fill":"#F08F56"},"data":{"cluster":"1"}},{"id":"c","style":{"fill":"#F08F56"},"data":{"cluster":"1"}},{"id":"d","style":{"fill":"#F08F56"},"data":{"cluster":"1"}},{"id":"e","style":{"fill":"#D580FF"},"data":{"cluster":"2"}},{"id":"f","style":{"fill":"#D580FF"},"data":{"cluster":"2"}},{"id":"g","style":{"fill":"#D580FF"},"data":{"cluster":"2"}},{"id":"h","style":{"fill":"#D580FF"},"data":{"cluster":"2"}}],"edges":[{"source":"a","target":"b"},{"source":"b","target":"c"},{"source":"c","target":"d"},{"source":"e","target":"f"},{"source":"f","target":"g"},{"source":"g","target":"h"},{"source":"a","target":"e"},{"source":"d","target":"h"}]},"jsonUrl":null,"iconsUrl":"//at.alicdn.com/t/font_2678727_za4qjydwkkh.js","layout":{"type":"d3-force","link":{"distance":100,"strength":2},"collide":{"radius":40}},"behaviors":[{"key":"drag-element","enable":true,"animation":true,"state":"selected","dropEffect":"move","hideEdge":"none","shadow":false,"type":"drag-element"}],"node":{"style":{"labelBackground":true,"labelBackgroundFill":"#FFB6C1","labelBackgroundRadius":4,"labelFontFamily":"Arial","labelPadding":[0,4],"labelText":"(d) => {\n        return d.id\n      }"}},"animation":false,"autoResize":false,"cursor":"default","rotation":0,"zoom":1,"zoomRange":[0.01,10],"theme":"light","plugins":[{"key":"legend","trigger":"hover","position":"top-left","nodeField":"cluster","orientation":"horizontal","layout":"flex","showTitle":false,"titleText":"","width":240,"height":160,"itemSpacing":4,"rowPadding":10,"colPadding":10,"itemMarkerSize":16,"itemLabelFontSize":16,"type":"legend"}]},"evals":["node.style.labelText"],"jsHooks":[]}</script>
+<div id="htmlwidget-21c7483268bafca56cec" style="width:100%;height:432.632880098888px;" class="g6 html-widget"></div>
+<script type="application/json" data-for="htmlwidget-21c7483268bafca56cec">{"x":{"data":{"nodes":[{"id":"a","style":{"fill":"#F08F56"},"data":{"cluster":"1"}},{"id":"b","style":{"fill":"#F08F56"},"data":{"cluster":"1"}},{"id":"c","style":{"fill":"#F08F56"},"data":{"cluster":"1"}},{"id":"d","style":{"fill":"#F08F56"},"data":{"cluster":"1"}},{"id":"e","style":{"fill":"#D580FF"},"data":{"cluster":"2"}},{"id":"f","style":{"fill":"#D580FF"},"data":{"cluster":"2"}},{"id":"g","style":{"fill":"#D580FF"},"data":{"cluster":"2"}},{"id":"h","style":{"fill":"#D580FF"},"data":{"cluster":"2"}}],"edges":[{"source":"a","target":"b"},{"source":"b","target":"c"},{"source":"c","target":"d"},{"source":"e","target":"f"},{"source":"f","target":"g"},{"source":"g","target":"h"},{"source":"a","target":"e"},{"source":"d","target":"h"}]},"jsonUrl":null,"iconsUrl":"//at.alicdn.com/t/font_2678727_za4qjydwkkh.js","layout":{"type":"d3-force","link":{"distance":100,"strength":2},"collide":{"radius":40}},"behaviors":[{"key":"drag-element","enable":true,"animation":true,"state":"selected","dropEffect":"move","hideEdge":"none","shadow":false,"type":"drag-element"}],"node":{"style":{"labelBackground":true,"labelBackgroundFill":"#FFB6C1","labelBackgroundRadius":4,"labelFontFamily":"Arial","labelPadding":[0,4],"labelText":"(d) => {\n        return d.id\n      }"}},"animation":false,"autoResize":false,"cursor":"default","rotation":0,"zoom":1,"zoomRange":[0.01,10],"theme":"light","plugins":[{"key":"legend","trigger":"hover","position":"top-left","nodeField":"cluster","orientation":"horizontal","layout":"flex","showTitle":false,"titleText":"","width":240,"height":160,"itemSpacing":4,"rowPadding":10,"colPadding":10,"itemMarkerSize":16,"itemLabelFontSize":16,"type":"legend"}]},"evals":["node.style.labelText"],"jsHooks":[]}</script>
 </div>
-</div>
-</section><section class="level2"><h2 id="timebar-plugin-does-not-work-yet">Timebar Plugin (does not work yet …)<a class="anchor" aria-label="anchor" href="#timebar-plugin-does-not-work-yet"></a>
+<div class="section level2">
+<h2 id="timebar-plugin-does-not-work-yet">Timebar Plugin (does not work yet …)<a class="anchor" aria-label="anchor" href="#timebar-plugin-does-not-work-yet"></a>
 </h2>
-<p>Provides filtering and playback control for temporal data visualization.</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb15"><pre class="downlit sourceCode r">
+<p>Provides filtering and playback control for temporal data
+visualization.</p>
+<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">start_date</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/as.POSIXlt.html" class="external-link">as.POSIXct</a></span><span class="op">(</span><span class="st">"2023-08-01"</span>, tz <span class="op">=</span> <span class="st">"UTC"</span><span class="op">)</span></span>
 <span><span class="va">dates</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/character.html" class="external-link">as.character</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="va">start_date</span>, by <span class="op">=</span> <span class="st">"1 days"</span>, length.out <span class="op">=</span> <span class="fl">3</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="va">times</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">lapply</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq_along</a></span><span class="op">(</span><span class="va">dates</span><span class="op">)</span>, \<span class="op">(</span><span class="va">i</span><span class="op">)</span> <span class="op">{</span></span>
@@ -644,16 +678,15 @@
 <span>      height <span class="op">=</span> <span class="fl">100</span></span>
 <span>    <span class="op">)</span></span>
 <span>  <span class="op">)</span></span></code></pre></div>
-<div class="cell-output-display">
-<div id="htmlwidget-6b089ba22032d58dd1f1" style="width:100%;height:480px;" class="g6 html-widget"></div>
-<script type="application/json" data-for="htmlwidget-6b089ba22032d58dd1f1">{"x":{"data":{"nodes":[{"id":"a","data":{"timestamp":"new Date('2023-08-01').getTime()"}},{"id":"b","data":{"timestamp":"new Date('2023-08-02').getTime()"}},{"id":"c","data":{"timestamp":"new Date('2023-08-03').getTime()"}}]},"jsonUrl":null,"iconsUrl":"//at.alicdn.com/t/font_2678727_za4qjydwkkh.js","layout":{"type":"d3-force","link":{"distance":100,"strength":2},"collide":{"radius":40}},"behaviors":[{"key":"drag-element","enable":true,"animation":true,"state":"selected","dropEffect":"move","hideEdge":"none","shadow":false,"type":"drag-element"}],"node":{"style":{"labelBackground":true,"labelBackgroundFill":"#FFB6C1","labelBackgroundRadius":4,"labelFontFamily":"Arial","labelPadding":[0,4],"labelText":"(d) => {\n        return d.id\n      }"}},"animation":false,"autoResize":false,"cursor":"default","rotation":0,"zoom":1,"zoomRange":[0.01,10],"theme":"light","plugins":[{"data":[{"value":1,"time":"new Date('2023-08-01').getTime()"},{"value":2,"time":"new Date('2023-08-02').getTime()"},{"value":3,"time":"new Date('2023-08-03').getTime()"}],"key":"timebar","className":"g6-timebar","width":450,"height":100,"position":"bottom","padding":10,"timebarType":"time","elementTypes":"node","mode":"modify","loop":false,"type":"timebar"}]},"evals":["data.nodes.0.data.timestamp","data.nodes.1.data.timestamp","data.nodes.2.data.timestamp","node.style.labelText","plugins.0.data.0.time","plugins.0.data.1.time","plugins.0.data.2.time"],"jsHooks":[]}</script>
+<div id="htmlwidget-1834a22cd196f3aa03a1" style="width:100%;height:432.632880098888px;" class="g6 html-widget"></div>
+<script type="application/json" data-for="htmlwidget-1834a22cd196f3aa03a1">{"x":{"data":{"nodes":[{"id":"a","data":{"timestamp":"new Date('2023-08-01').getTime()"}},{"id":"b","data":{"timestamp":"new Date('2023-08-02').getTime()"}},{"id":"c","data":{"timestamp":"new Date('2023-08-03').getTime()"}}]},"jsonUrl":null,"iconsUrl":"//at.alicdn.com/t/font_2678727_za4qjydwkkh.js","layout":{"type":"d3-force","link":{"distance":100,"strength":2},"collide":{"radius":40}},"behaviors":[{"key":"drag-element","enable":true,"animation":true,"state":"selected","dropEffect":"move","hideEdge":"none","shadow":false,"type":"drag-element"}],"node":{"style":{"labelBackground":true,"labelBackgroundFill":"#FFB6C1","labelBackgroundRadius":4,"labelFontFamily":"Arial","labelPadding":[0,4],"labelText":"(d) => {\n        return d.id\n      }"}},"animation":false,"autoResize":false,"cursor":"default","rotation":0,"zoom":1,"zoomRange":[0.01,10],"theme":"light","plugins":[{"data":[{"value":1,"time":"new Date('2023-08-01').getTime()"},{"value":2,"time":"new Date('2023-08-02').getTime()"},{"value":3,"time":"new Date('2023-08-03').getTime()"}],"key":"timebar","className":"g6-timebar","width":450,"height":100,"position":"bottom","padding":10,"timebarType":"time","elementTypes":"node","mode":"modify","loop":false,"type":"timebar"}]},"evals":["data.nodes.0.data.timestamp","data.nodes.1.data.timestamp","data.nodes.2.data.timestamp","node.style.labelText","plugins.0.data.0.time","plugins.0.data.1.time","plugins.0.data.2.time"],"jsHooks":[]}</script>
 </div>
-</div>
-</section><section class="level2"><h2 id="watermark-plugin">Watermark Plugin<a class="anchor" aria-label="anchor" href="#watermark-plugin"></a>
+<div class="section level2">
+<h2 id="watermark-plugin">Watermark Plugin<a class="anchor" aria-label="anchor" href="#watermark-plugin"></a>
 </h2>
-<p>Adds a watermark to the canvas to protect copyright and brand the visualization.</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb16"><pre class="downlit sourceCode r">
+<p>Adds a watermark to the canvas to protect copyright and brand the
+visualization.</p>
+<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/g6.html">g6</a></span><span class="op">(</span><span class="va">nodes</span>, <span class="va">edges</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="../reference/g6_layout.html">g6_layout</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="../reference/g6_behaviors.html">g6_behaviors</a></span><span class="op">(</span><span class="st">"drag-element"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
@@ -668,16 +701,17 @@
 <span>      rotate <span class="op">=</span> <span class="va">pi</span> <span class="op">/</span> <span class="fl">12</span></span>
 <span>    <span class="op">)</span></span>
 <span>  <span class="op">)</span></span></code></pre></div>
-<div class="cell-output-display">
-<div id="htmlwidget-b78ca3a54b4887f8812d" style="width:100%;height:480px;" class="g6 html-widget"></div>
-<script type="application/json" data-for="htmlwidget-b78ca3a54b4887f8812d">{"x":{"data":{"nodes":[{"id":"a"},{"id":"b"},{"id":"c"},{"id":"d"},{"id":"e"},{"id":"f"},{"id":"g"},{"id":"h"}],"edges":[{"source":"a","target":"b"},{"source":"b","target":"c"},{"source":"c","target":"d"},{"source":"e","target":"f"},{"source":"f","target":"g"},{"source":"g","target":"h"},{"source":"a","target":"e"},{"source":"d","target":"h"}]},"jsonUrl":null,"iconsUrl":"//at.alicdn.com/t/font_2678727_za4qjydwkkh.js","layout":{"type":"d3-force","link":{"distance":100,"strength":2},"collide":{"radius":40}},"behaviors":[{"key":"drag-element","enable":true,"animation":true,"state":"selected","dropEffect":"move","hideEdge":"none","shadow":false,"type":"drag-element"}],"node":{"style":{"labelBackground":true,"labelBackgroundFill":"#FFB6C1","labelBackgroundRadius":4,"labelFontFamily":"Arial","labelPadding":[0,4],"labelText":"(d) => {\n        return d.id\n      }"}},"animation":false,"autoResize":false,"cursor":"default","rotation":0,"zoom":1,"zoomRange":[0.01,10],"theme":"light","plugins":[{"key":"watermark","width":200,"height":100,"opacity":0.2,"rotate":0.2617993877991494,"text":"G6 Graph","textFill":"#000","textFontSize":16,"textAlign":"center","textBaseline":"alphabetic","backgroundRepeat":"repeat","type":"watermark"}]},"evals":["node.style.labelText"],"jsHooks":[]}</script>
+<div id="htmlwidget-28515d92cb327f90c9eb" style="width:100%;height:432.632880098888px;" class="g6 html-widget"></div>
+<script type="application/json" data-for="htmlwidget-28515d92cb327f90c9eb">{"x":{"data":{"nodes":[{"id":"a"},{"id":"b"},{"id":"c"},{"id":"d"},{"id":"e"},{"id":"f"},{"id":"g"},{"id":"h"}],"edges":[{"source":"a","target":"b"},{"source":"b","target":"c"},{"source":"c","target":"d"},{"source":"e","target":"f"},{"source":"f","target":"g"},{"source":"g","target":"h"},{"source":"a","target":"e"},{"source":"d","target":"h"}]},"jsonUrl":null,"iconsUrl":"//at.alicdn.com/t/font_2678727_za4qjydwkkh.js","layout":{"type":"d3-force","link":{"distance":100,"strength":2},"collide":{"radius":40}},"behaviors":[{"key":"drag-element","enable":true,"animation":true,"state":"selected","dropEffect":"move","hideEdge":"none","shadow":false,"type":"drag-element"}],"node":{"style":{"labelBackground":true,"labelBackgroundFill":"#FFB6C1","labelBackgroundRadius":4,"labelFontFamily":"Arial","labelPadding":[0,4],"labelText":"(d) => {\n        return d.id\n      }"}},"animation":false,"autoResize":false,"cursor":"default","rotation":0,"zoom":1,"zoomRange":[0.01,10],"theme":"light","plugins":[{"key":"watermark","width":200,"height":100,"opacity":0.2,"rotate":0.2617993877991494,"text":"G6 Graph","textFill":"#000","textFontSize":16,"textAlign":"center","textBaseline":"alphabetic","backgroundRepeat":"repeat","type":"watermark"}]},"evals":["node.style.labelText"],"jsHooks":[]}</script>
 </div>
-</div>
-</section><section class="level2"><h2 id="history-plugin">History plugin<a class="anchor" aria-label="anchor" href="#history-plugin"></a>
+<div class="section level2">
+<h2 id="history-plugin">History plugin<a class="anchor" aria-label="anchor" href="#history-plugin"></a>
 </h2>
-<p>The history plugin provides undo and redo functionality for graph modifications, allowing users to revert changes or reapply them. It works well with the <code>toolbar</code> plugin to provide a user interface for these actions:</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb17"><pre class="downlit sourceCode r">
+<p>The history plugin provides undo and redo functionality for graph
+modifications, allowing users to revert changes or reapply them. It
+works well with the <code>toolbar</code> plugin to provide a user
+interface for these actions:</p>
+<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/g6.html">g6</a></span><span class="op">(</span><span class="va">nodes</span>, <span class="va">edges</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="../reference/g6_layout.html">g6_layout</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="../reference/g6_behaviors.html">g6_behaviors</a></span><span class="op">(</span><span class="st">"drag-element"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
@@ -716,105 +750,33 @@
 <span>    <span class="co"># Keep 100 events in memory</span></span>
 <span>    <span class="fu"><a href="../reference/history.html">history</a></span><span class="op">(</span>stackSize <span class="op">=</span> <span class="fl">100</span><span class="op">)</span></span>
 <span>  <span class="op">)</span></span></code></pre></div>
-<div class="cell-output-display">
-<div id="htmlwidget-06cb41a79508635fc607" style="width:100%;height:480px;" class="g6 html-widget"></div>
-<script type="application/json" data-for="htmlwidget-06cb41a79508635fc607">{"x":{"data":{"nodes":[{"id":"a"},{"id":"b"},{"id":"c"},{"id":"d"},{"id":"e"},{"id":"f"},{"id":"g"},{"id":"h"}],"edges":[{"source":"a","target":"b"},{"source":"b","target":"c"},{"source":"c","target":"d"},{"source":"e","target":"f"},{"source":"f","target":"g"},{"source":"g","target":"h"},{"source":"a","target":"e"},{"source":"d","target":"h"}]},"jsonUrl":null,"iconsUrl":"//at.alicdn.com/t/font_2678727_za4qjydwkkh.js","layout":{"type":"d3-force","link":{"distance":100,"strength":2},"collide":{"radius":40}},"behaviors":[{"key":"drag-element","enable":true,"animation":true,"state":"selected","dropEffect":"move","hideEdge":"none","shadow":false,"type":"drag-element"}],"node":{"style":{"labelBackground":true,"labelBackgroundFill":"#FFB6C1","labelBackgroundRadius":4,"labelFontFamily":"Arial","labelPadding":[0,4],"labelText":"(d) => {\n        return d.id\n      }"}},"animation":false,"autoResize":false,"cursor":"default","rotation":0,"zoom":1,"zoomRange":[0.01,10],"theme":"light","plugins":[{"getItems":"() => [\n          { id: 'undo', value: 'undo' },\n          { id: 'redo', value: 'redo' },\n        ]","key":"toolbar","position":"top-left","onClick":"(value, target, current) => {\n          // redo, undo need to be used with the history plugin\n          const graph = HTMLWidgets\n            .find(`#${target.closest('.g6').id}`)\n            .getWidget();\n          const history = graph.getPluginInstance('history');\n          switch (value) {\n            case 'undo':\n              history?.undo();\n              break;\n            case 'redo':\n              history?.redo();\n              break;\n            default:\n              break;\n          }\n        }","type":"toolbar"},{"key":"history","stackSize":100,"type":"history"}]},"evals":["node.style.labelText","plugins.0.getItems","plugins.0.onClick"],"jsHooks":[]}</script>
+<div id="htmlwidget-0caf26d4e3c00206b0c5" style="width:100%;height:432.632880098888px;" class="g6 html-widget"></div>
+<script type="application/json" data-for="htmlwidget-0caf26d4e3c00206b0c5">{"x":{"data":{"nodes":[{"id":"a"},{"id":"b"},{"id":"c"},{"id":"d"},{"id":"e"},{"id":"f"},{"id":"g"},{"id":"h"}],"edges":[{"source":"a","target":"b"},{"source":"b","target":"c"},{"source":"c","target":"d"},{"source":"e","target":"f"},{"source":"f","target":"g"},{"source":"g","target":"h"},{"source":"a","target":"e"},{"source":"d","target":"h"}]},"jsonUrl":null,"iconsUrl":"//at.alicdn.com/t/font_2678727_za4qjydwkkh.js","layout":{"type":"d3-force","link":{"distance":100,"strength":2},"collide":{"radius":40}},"behaviors":[{"key":"drag-element","enable":true,"animation":true,"state":"selected","dropEffect":"move","hideEdge":"none","shadow":false,"type":"drag-element"}],"node":{"style":{"labelBackground":true,"labelBackgroundFill":"#FFB6C1","labelBackgroundRadius":4,"labelFontFamily":"Arial","labelPadding":[0,4],"labelText":"(d) => {\n        return d.id\n      }"}},"animation":false,"autoResize":false,"cursor":"default","rotation":0,"zoom":1,"zoomRange":[0.01,10],"theme":"light","plugins":[{"getItems":"() => [\n          { id: 'undo', value: 'undo' },\n          { id: 'redo', value: 'redo' },\n        ]","key":"toolbar","position":"top-left","onClick":"(value, target, current) => {\n          // redo, undo need to be used with the history plugin\n          const graph = HTMLWidgets\n            .find(`#${target.closest('.g6').id}`)\n            .getWidget();\n          const history = graph.getPluginInstance('history');\n          switch (value) {\n            case 'undo':\n              history?.undo();\n              break;\n            case 'redo':\n              history?.redo();\n              break;\n            default:\n              break;\n          }\n        }","type":"toolbar"},{"key":"history","stackSize":100,"type":"history"}]},"evals":["node.style.labelText","plugins.0.getItems","plugins.0.onClick"],"jsHooks":[]}</script>
 </div>
-</div>
-</section><section class="level2"><h2 id="dynamically-interact-with-plugins">Dynamically interact with plugins<a class="anchor" aria-label="anchor" href="#dynamically-interact-with-plugins"></a>
+<div class="section level2">
+<h2 id="dynamically-interact-with-plugins">Dynamically interact with plugins<a class="anchor" aria-label="anchor" href="#dynamically-interact-with-plugins"></a>
 </h2>
-<section class="level3"><h3 id="add">Add<a class="anchor" aria-label="anchor" href="#add"></a>
+<div class="section level3">
+<h3 id="add">Add<a class="anchor" aria-label="anchor" href="#add"></a>
 </h3>
-<p>To add a plugin dynamically from the server side of a Shiny app, you can use the <code><a href="../reference/g6_add_plugin.html">g6_add_plugin()</a></code> function. This function allows you to append new plugins to an existing G6 graph based on user interactions or other reactive data.</p>
-</section><section class="level3"><h3 id="update">Update<a class="anchor" aria-label="anchor" href="#update"></a>
+<p>To add a plugin dynamically from the server side of a Shiny app, you
+can use the <code><a href="../reference/g6_add_plugin.html">g6_add_plugin()</a></code> function. This function allows
+you to append new plugins to an existing G6 graph based on user
+interactions or other reactive data.</p>
+</div>
+<div class="section level3">
+<h3 id="update">Update<a class="anchor" aria-label="anchor" href="#update"></a>
 </h3>
-<p>To update a plugin from the server side of a Shiny app, you can use the <code><a href="../reference/g6_update_plugin.html">g6_update_plugin()</a></code> function. This function allows you to modify the plugin’s parameters dynamically based on user input or other reactive data.</p>
-</section></section><script id="quarto-html-after-body" type="application/javascript">
-  window.document.addEventListener("DOMContentLoaded", function (event) {
-      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
-      var mailtoRegex = new RegExp(/^mailto:/);
-        var filterRegex = new RegExp('/' + window.location.host + '/');
-      var isInternal = (href) => {
-          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
-      }
-      // Inspect non-navigation links and adorn them if external
-     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
-      for (var i=0; i<links.length; i++) {
-        const link = links[i];
-        if (!isInternal(link.href)) {
-          // undo the damage that might have been done by quarto-nav.js in the case of
-          // links that we want to consider external
-          if (link.dataset.originalHref !== undefined) {
-            link.href = link.dataset.originalHref;
-          }
-        }
-      }
-    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
-      const config = {
-        allowHTML: true,
-        maxWidth: 500,
-        delay: 100,
-        arrow: false,
-        appendTo: function(el) {
-            return el.parentElement;
-        },
-        interactive: true,
-        interactiveBorder: 10,
-        theme: 'light-border',
-        placement: 'bottom-start',
-      };
-      if (contentFn) {
-        config.content = contentFn;
-      }
-      if (onTriggerFn) {
-        config.onTrigger = onTriggerFn;
-      }
-      if (onUntriggerFn) {
-        config.onUntrigger = onUntriggerFn;
-      }
-      window.tippy(el, config);
-    }
-    const findCites = (el) => {
-      const parentEl = el.parentElement;
-      if (parentEl) {
-        const cites = parentEl.dataset.cites;
-        if (cites) {
-          return {
-            el,
-            cites: cites.split(' ')
-          };
-        } else {
-          return findCites(el.parentElement)
-        }
-      } else {
-        return undefined;
-      }
-    };
-    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
-    for (var i=0; i<bibliorefs.length; i++) {
-      const ref = bibliorefs[i];
-      const citeInfo = findCites(ref);
-      if (citeInfo) {
-        tippyHover(citeInfo.el, function() {
-          var popup = window.document.createElement('div');
-          citeInfo.cites.forEach(function(cite) {
-            var citeDiv = window.document.createElement('div');
-            citeDiv.classList.add('hanging-indent');
-            citeDiv.classList.add('csl-entry');
-            var biblioDiv = window.document.getElementById('ref-' + cite);
-            if (biblioDiv) {
-              citeDiv.innerHTML = biblioDiv.innerHTML;
-            }
-            popup.appendChild(citeDiv);
-          });
-          return popup.innerHTML;
-        });
-      }
-    }
-  });
-  </script></main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
+<p>To update a plugin from the server side of a Shiny app, you can use
+the <code><a href="../reference/g6_update_plugin.html">g6_update_plugin()</a></code> function. This function allows you
+to modify the plugin’s parameters dynamically based on user input or
+other reactive data.</p>
+</div>
+</div>
+  </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside>
 </div>
+
 
 
     <footer><div class="pkgdown-footer-left">

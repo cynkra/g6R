@@ -10,9 +10,7 @@
 <link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
 <script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
 <link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
-<script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><script src="behaviors_files/libs/quarto-html/popper.min.js"></script><script src="behaviors_files/libs/quarto-html/tippy.umd.min.js"></script><link href="behaviors_files/libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="behaviors_files/libs/quarto-html/light-border.css" rel="stylesheet">
-<script src="behaviors_files/libs/htmlwidgets-1.6.4/htmlwidgets.js"></script><script src="behaviors_files/libs/g6-binding-0.0.0.9000/g6.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Behaviors">
+<script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Behaviors">
 </head>
 <body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
@@ -22,7 +20,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">g6R</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.0.9000</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.1</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -77,33 +75,32 @@
 
 
   </div>
-</nav><div class="container template-quarto">
-<div class="row">
+</nav><div class="container template-article">
+
+
+
+<script src="behaviors_files/htmlwidgets-1.6.4/htmlwidgets.js"></script><script src="behaviors_files/g6-binding-0.0.1/g6.js"></script><div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
 
       <h1>Behaviors</h1>
-
-
-
-
-      <small class="dont-index">Source: <a href="https://github.com/cynkra/g6R/blob/main/vignettes/behaviors.qmd" class="external-link"><code>vignettes/behaviors.qmd</code></a></small>
-      <div class="d-none name"><code></code></div>
+            
+      
+      <small class="dont-index">Source: <a href="https://github.com/cynkra/g6R/blob/main/vignettes/articles/behaviors.Rmd" class="external-link"><code>vignettes/articles/behaviors.Rmd</code></a></small>
+      <div class="d-none name"><code>behaviors.Rmd</code></div>
     </div>
 
-
-
-
-
-
-    <div class="cell">
-<div class="cell-output-display">
-<div id="htmlwidget-b8f4a687e03dfbeaa921" style="width:100%;height:1px;" class="g6 html-widget"></div>
-<script type="application/json" data-for="htmlwidget-b8f4a687e03dfbeaa921">{"x":{"data":{},"jsonUrl":null,"iconsUrl":"//at.alicdn.com/t/font_2678727_za4qjydwkkh.js"},"evals":[],"jsHooks":[]}</script>
-</div>
-</div>
-<section class="level2"><h2 id="introduction">Introduction<a class="anchor" aria-label="anchor" href="#introduction"></a>
+    
+    
+<div id="htmlwidget-ac96cb3ee4656e2e9ec3" style="width:100%;height:1px;" class="g6 html-widget"></div>
+<script type="application/json" data-for="htmlwidget-ac96cb3ee4656e2e9ec3">{"x":{"data":{},"jsonUrl":null,"iconsUrl":"//at.alicdn.com/t/font_2678727_za4qjydwkkh.js"},"evals":[],"jsHooks":[]}</script><div class="section level2">
+<h2 id="introduction">Introduction<a class="anchor" aria-label="anchor" href="#introduction"></a>
 </h2>
-<p>Behaviors are actions that can be applied to the graph, such as zooming, panning, or selecting nodes. They can be added to the graph using the <code><a href="../reference/g6_behaviors.html">g6_behaviors()</a></code> function. There are 2 ways to add behaviors to the graph. Either calling behaviors name as a string, or passing behaviors functions. The latter is more convenient to have more control over the specific options:</p>
+<p>Behaviors are actions that can be applied to the graph, such as
+zooming, panning, or selecting nodes. They can be added to the graph
+using the <code><a href="../reference/g6_behaviors.html">g6_behaviors()</a></code> function. There are 2 ways to add
+behaviors to the graph. Either calling behaviors name as a string, or
+passing behaviors functions. The latter is more convenient to have more
+control over the specific options:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Defaults</span></span>
 <span><span class="fu"><a href="../reference/g6.html">g6</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span></span>
@@ -133,15 +130,20 @@
 <span>      notify <span class="op">=</span> <span class="cn">FALSE</span></span>
 <span>    <span class="op">)</span></span>
 <span>  <span class="op">)</span></span></code></pre></div>
-</section><section class="level2"><h2 id="auto-adapt-label-behavior">Auto Adapt Label Behavior<a class="anchor" aria-label="anchor" href="#auto-adapt-label-behavior"></a>
+</div>
+<div class="section level2">
+<h2 id="auto-adapt-label-behavior">Auto Adapt Label Behavior<a class="anchor" aria-label="anchor" href="#auto-adapt-label-behavior"></a>
 </h2>
-<p>Automatically adapts label positioning to avoid overlaps and improve readability.</p>
-<div id="htmlwidget-d93ea6e27126017517ba" class="g6 html-widget" style="width:100%;height:500px;">
+<p>Automatically adapts label positioning to avoid overlaps and improve
+readability.</p>
+<div id="htmlwidget-e5c8c404fe174e4c81bd" class="g6 html-widget" style="width:100%;height:500px;">
 
 </div>
-<script type="application/json" data-for="htmlwidget-d93ea6e27126017517ba">{"x":{"data":{"nodes":[{"id":"a"},{"id":"b"},{"id":"c"},{"id":"d"},{"id":"e"}]},"jsonUrl":null,"iconsUrl":"//at.alicdn.com/t/font_2678727_za4qjydwkkh.js","node":{"style":{"labelBackground":true,"labelBackgroundFill":"#FFB6C1","labelBackgroundRadius":4,"labelFontFamily":"Arial","labelPadding":[0,4],"labelText":"(d) => {\n        return d.id\n      }"}},"animation":false,"autoResize":false,"cursor":"default","rotation":0,"zoom":1,"zoomRange":[0.01,10],"theme":"light","layout":{"type":"d3-force","link":{"distance":100,"strength":2},"collide":{"radius":40}},"behaviors":[{"key":"auto-adapt-label","enable":true,"throttle":100,"padding":0,"sortNode":{"type":"degree"},"type":"auto-adapt-label"}]},"evals":["node.style.labelText"],"jsHooks":[]}</script><div>
-<blockquote>
-<p><strong>View R Code</strong></p>
+<script type="application/json" data-for="htmlwidget-e5c8c404fe174e4c81bd">{"x":{"data":{"nodes":[{"id":"a"},{"id":"b"},{"id":"c"},{"id":"d"},{"id":"e"}]},"jsonUrl":null,"iconsUrl":"//at.alicdn.com/t/font_2678727_za4qjydwkkh.js","node":{"style":{"labelBackground":true,"labelBackgroundFill":"#FFB6C1","labelBackgroundRadius":4,"labelFontFamily":"Arial","labelPadding":[0,4],"labelText":"(d) => {\n        return d.id\n      }"}},"animation":false,"autoResize":false,"cursor":"default","rotation":0,"zoom":1,"zoomRange":[0.01,10],"theme":"light","layout":{"type":"d3-force","link":{"distance":100,"strength":2},"collide":{"radius":40}},"behaviors":[{"key":"auto-adapt-label","enable":true,"throttle":100,"padding":0,"sortNode":{"type":"degree"},"type":"auto-adapt-label"}]},"evals":["node.style.labelText"],"jsHooks":[]}</script>
+</div>
+<div class="section level2">
+<h2 id="view-r-code">View R Code<a class="anchor" aria-label="anchor" href="#view-r-code"></a>
+</h2>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">nodes</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>id <span class="op">=</span> <span class="va">letters</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">5</span><span class="op">]</span><span class="op">)</span></span>
 <span></span>
@@ -159,17 +161,22 @@
 <span>  <span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="../reference/g6_layout.html">g6_layout</a></span><span class="op">(</span><span class="fu"><a href="../reference/d3_force_layout.html">d3_force_layout</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="../reference/g6_behaviors.html">g6_behaviors</a></span><span class="op">(</span><span class="st">" auto-adapt-label "</span><span class="op">)</span></span></code></pre></div>
-</blockquote>
+<hr>
 </div>
-<hr></section><section class="level2"><h2 id="brush-select-behavior">Brush Select Behavior<a class="anchor" aria-label="anchor" href="#brush-select-behavior"></a>
+<div class="section level2">
+<h2 id="brush-select-behavior">Brush Select Behavior<a class="anchor" aria-label="anchor" href="#brush-select-behavior"></a>
 </h2>
-<p>Enables rectangular brush selection for selecting multiple elements at once. By default, the selection is made by clicking on shift and draging the mouse over the canvas.</p>
-<div id="htmlwidget-370338434c6e1ad191ea" class="g6 html-widget" style="width:100%;height:500px;">
+<p>Enables rectangular brush selection for selecting multiple elements
+at once. By default, the selection is made by clicking on shift and
+draging the mouse over the canvas.</p>
+<div id="htmlwidget-36aa3d2a04d42bbc2145" class="g6 html-widget" style="width:100%;height:500px;">
 
 </div>
-<script type="application/json" data-for="htmlwidget-370338434c6e1ad191ea">{"x":{"data":{"nodes":[{"id":"a"},{"id":"b"},{"id":"c"},{"id":"d"},{"id":"e"}]},"jsonUrl":null,"iconsUrl":"//at.alicdn.com/t/font_2678727_za4qjydwkkh.js","node":{"style":{"labelBackground":true,"labelBackgroundFill":"#FFB6C1","labelBackgroundRadius":4,"labelFontFamily":"Arial","labelPadding":[0,4],"labelText":"(d) => {\n        return d.id\n      }"}},"animation":false,"autoResize":false,"cursor":"default","rotation":0,"zoom":1,"zoomRange":[0.01,10],"theme":"light","layout":{"type":"d3-force","link":{"distance":100,"strength":2},"collide":{"radius":40}},"behaviors":[{"key":"brush-select","animation":false,"enable":"(e) => {\n      return true\n    }","enableElements":["node"],"immediately":false,"mode":"default","state":"selected","trigger":"shift","type":"brush-select"}]},"evals":["node.style.labelText","behaviors.0.enable"],"jsHooks":[]}</script><div>
-<blockquote>
-<p><strong>View R Code</strong></p>
+<script type="application/json" data-for="htmlwidget-36aa3d2a04d42bbc2145">{"x":{"data":{"nodes":[{"id":"a"},{"id":"b"},{"id":"c"},{"id":"d"},{"id":"e"}]},"jsonUrl":null,"iconsUrl":"//at.alicdn.com/t/font_2678727_za4qjydwkkh.js","node":{"style":{"labelBackground":true,"labelBackgroundFill":"#FFB6C1","labelBackgroundRadius":4,"labelFontFamily":"Arial","labelPadding":[0,4],"labelText":"(d) => {\n        return d.id\n      }"}},"animation":false,"autoResize":false,"cursor":"default","rotation":0,"zoom":1,"zoomRange":[0.01,10],"theme":"light","layout":{"type":"d3-force","link":{"distance":100,"strength":2},"collide":{"radius":40}},"behaviors":[{"key":"brush-select","animation":false,"enable":"(e) => {\n      return true\n    }","enableElements":["node"],"immediately":false,"mode":"default","state":"selected","trigger":"shift","type":"brush-select"}]},"evals":["node.style.labelText","behaviors.0.enable"],"jsHooks":[]}</script>
+</div>
+<div class="section level2">
+<h2 id="view-r-code-1">View R Code<a class="anchor" aria-label="anchor" href="#view-r-code-1"></a>
+</h2>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">nodes</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>id <span class="op">=</span> <span class="va">letters</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">5</span><span class="op">]</span><span class="op">)</span></span>
 <span></span>
@@ -187,17 +194,22 @@
 <span>  <span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="../reference/g6_layout.html">g6_layout</a></span><span class="op">(</span><span class="fu"><a href="../reference/d3_force_layout.html">d3_force_layout</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="../reference/g6_behaviors.html">g6_behaviors</a></span><span class="op">(</span><span class="st">" brush-select "</span><span class="op">)</span></span></code></pre></div>
-</blockquote>
+<hr>
 </div>
-<hr></section><section class="level2"><h2 id="click-select-behavior">Click Select Behavior<a class="anchor" aria-label="anchor" href="#click-select-behavior"></a>
+<div class="section level2">
+<h2 id="click-select-behavior">Click Select Behavior<a class="anchor" aria-label="anchor" href="#click-select-behavior"></a>
 </h2>
-<p>Allows selection of elements through mouse clicks. You can also select multiple elements by clicking on them while holding the shift key and enabling the option <code>multiple = TRUE</code>.</p>
-<div id="htmlwidget-2f4f93e2c4b0c85b369d" class="g6 html-widget" style="width:100%;height:500px;">
+<p>Allows selection of elements through mouse clicks. You can also
+select multiple elements by clicking on them while holding the shift key
+and enabling the option <code>multiple = TRUE</code>.</p>
+<div id="htmlwidget-febe03efa1a2d8d52a86" class="g6 html-widget" style="width:100%;height:500px;">
 
 </div>
-<script type="application/json" data-for="htmlwidget-2f4f93e2c4b0c85b369d">{"x":{"data":{"nodes":[{"id":"a"},{"id":"b"},{"id":"c"},{"id":"d"},{"id":"e"}]},"jsonUrl":null,"iconsUrl":"//at.alicdn.com/t/font_2678727_za4qjydwkkh.js","node":{"style":{"labelBackground":true,"labelBackgroundFill":"#FFB6C1","labelBackgroundRadius":4,"labelFontFamily":"Arial","labelPadding":[0,4],"labelText":"(d) => {\n        return d.id\n      }"}},"animation":false,"autoResize":false,"cursor":"default","rotation":0,"zoom":1,"zoomRange":[0.01,10],"theme":"light","layout":{"type":"d3-force","link":{"distance":100,"strength":2},"collide":{"radius":40}},"behaviors":[{"key":"click-select","animation":true,"degree":0,"enable":true,"multiple":false,"state":"selected","neighborState":"selected","trigger":["shift"],"type":"click-select"}]},"evals":["node.style.labelText"],"jsHooks":[]}</script><div>
-<blockquote>
-<p><strong>View R Code</strong></p>
+<script type="application/json" data-for="htmlwidget-febe03efa1a2d8d52a86">{"x":{"data":{"nodes":[{"id":"a"},{"id":"b"},{"id":"c"},{"id":"d"},{"id":"e"}]},"jsonUrl":null,"iconsUrl":"//at.alicdn.com/t/font_2678727_za4qjydwkkh.js","node":{"style":{"labelBackground":true,"labelBackgroundFill":"#FFB6C1","labelBackgroundRadius":4,"labelFontFamily":"Arial","labelPadding":[0,4],"labelText":"(d) => {\n        return d.id\n      }"}},"animation":false,"autoResize":false,"cursor":"default","rotation":0,"zoom":1,"zoomRange":[0.01,10],"theme":"light","layout":{"type":"d3-force","link":{"distance":100,"strength":2},"collide":{"radius":40}},"behaviors":[{"key":"click-select","animation":true,"degree":0,"enable":true,"multiple":false,"state":"selected","neighborState":"selected","trigger":["shift"],"type":"click-select"}]},"evals":["node.style.labelText"],"jsHooks":[]}</script>
+</div>
+<div class="section level2">
+<h2 id="view-r-code-2">View R Code<a class="anchor" aria-label="anchor" href="#view-r-code-2"></a>
+</h2>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">nodes</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>id <span class="op">=</span> <span class="va">letters</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">5</span><span class="op">]</span><span class="op">)</span></span>
 <span></span>
@@ -215,17 +227,21 @@
 <span>  <span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="../reference/g6_layout.html">g6_layout</a></span><span class="op">(</span><span class="fu"><a href="../reference/d3_force_layout.html">d3_force_layout</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="../reference/g6_behaviors.html">g6_behaviors</a></span><span class="op">(</span><span class="st">" click-select "</span><span class="op">)</span></span></code></pre></div>
-</blockquote>
+<hr>
 </div>
-<hr></section><section class="level2"><h2 id="collapse-expand-behavior">Collapse Expand Behavior<a class="anchor" aria-label="anchor" href="#collapse-expand-behavior"></a>
+<div class="section level2">
+<h2 id="collapse-expand-behavior">Collapse Expand Behavior<a class="anchor" aria-label="anchor" href="#collapse-expand-behavior"></a>
 </h2>
-<p>Provides functionality to collapse and expand graph structures. This works in a combo context.</p>
-<div id="htmlwidget-7a8065ceede31d9061dc" class="g6 html-widget" style="width:100%;height:500px;">
+<p>Provides functionality to collapse and expand graph structures. This
+works in a combo context.</p>
+<div id="htmlwidget-1fb4450895fe099f74a1" class="g6 html-widget" style="width:100%;height:500px;">
 
 </div>
-<script type="application/json" data-for="htmlwidget-7a8065ceede31d9061dc">{"x":{"data":{"nodes":[{"id":"a"},{"id":"b"},{"id":"c"},{"id":"d"},{"id":"e"}]},"jsonUrl":null,"iconsUrl":"//at.alicdn.com/t/font_2678727_za4qjydwkkh.js","node":{"style":{"labelBackground":true,"labelBackgroundFill":"#FFB6C1","labelBackgroundRadius":4,"labelFontFamily":"Arial","labelPadding":[0,4],"labelText":"(d) => {\n        return d.id\n      }"}},"animation":false,"autoResize":false,"cursor":"default","rotation":0,"zoom":1,"zoomRange":[0.01,10],"theme":"light","layout":{"type":"d3-force","link":{"distance":100,"strength":2},"collide":{"radius":40}},"behaviors":[{"key":"collapse-expand","animation":true,"enable":true,"trigger":"dblclick","align":true,"type":"collapse-expand"}]},"evals":["node.style.labelText"],"jsHooks":[]}</script><div>
-<blockquote>
-<p><strong>View R Code</strong></p>
+<script type="application/json" data-for="htmlwidget-1fb4450895fe099f74a1">{"x":{"data":{"nodes":[{"id":"a"},{"id":"b"},{"id":"c"},{"id":"d"},{"id":"e"}]},"jsonUrl":null,"iconsUrl":"//at.alicdn.com/t/font_2678727_za4qjydwkkh.js","node":{"style":{"labelBackground":true,"labelBackgroundFill":"#FFB6C1","labelBackgroundRadius":4,"labelFontFamily":"Arial","labelPadding":[0,4],"labelText":"(d) => {\n        return d.id\n      }"}},"animation":false,"autoResize":false,"cursor":"default","rotation":0,"zoom":1,"zoomRange":[0.01,10],"theme":"light","layout":{"type":"d3-force","link":{"distance":100,"strength":2},"collide":{"radius":40}},"behaviors":[{"key":"collapse-expand","animation":true,"enable":true,"trigger":"dblclick","align":true,"type":"collapse-expand"}]},"evals":["node.style.labelText"],"jsHooks":[]}</script>
+</div>
+<div class="section level2">
+<h2 id="view-r-code-3">View R Code<a class="anchor" aria-label="anchor" href="#view-r-code-3"></a>
+</h2>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">nodes</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>id <span class="op">=</span> <span class="va">letters</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">5</span><span class="op">]</span><span class="op">)</span></span>
 <span></span>
@@ -243,17 +259,24 @@
 <span>  <span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="../reference/g6_layout.html">g6_layout</a></span><span class="op">(</span><span class="fu"><a href="../reference/d3_force_layout.html">d3_force_layout</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="../reference/g6_behaviors.html">g6_behaviors</a></span><span class="op">(</span><span class="st">" collapse-expand "</span><span class="op">)</span></span></code></pre></div>
-</blockquote>
+<hr>
 </div>
-<hr></section><section class="level2"><h2 id="create-edge-behavior">Create Edge Behavior<a class="anchor" aria-label="anchor" href="#create-edge-behavior"></a>
+<div class="section level2">
+<h2 id="create-edge-behavior">Create Edge Behavior<a class="anchor" aria-label="anchor" href="#create-edge-behavior"></a>
 </h2>
-<p>Enables interactive creation of new edges between nodes. You can drag from one node to another to create an edge and also change the trigger if you want to press another key to start the edge creation. Not that this may be incompatible with other behaviors such as <code>drag-canvas</code>.</p>
-<div id="htmlwidget-1725bb917c8f5bdc8886" class="g6 html-widget" style="width:100%;height:500px;">
+<p>Enables interactive creation of new edges between nodes. You can drag
+from one node to another to create an edge and also change the trigger
+if you want to press another key to start the edge creation. Not that
+this may be incompatible with other behaviors such as
+<code>drag-canvas</code>.</p>
+<div id="htmlwidget-10b3b7155e8045a1b2ad" class="g6 html-widget" style="width:100%;height:500px;">
 
 </div>
-<script type="application/json" data-for="htmlwidget-1725bb917c8f5bdc8886">{"x":{"data":{"nodes":[{"id":"a"},{"id":"b"},{"id":"c"},{"id":"d"},{"id":"e"}]},"jsonUrl":null,"iconsUrl":"//at.alicdn.com/t/font_2678727_za4qjydwkkh.js","node":{"style":{"labelBackground":true,"labelBackgroundFill":"#FFB6C1","labelBackgroundRadius":4,"labelFontFamily":"Arial","labelPadding":[0,4],"labelText":"(d) => {\n        return d.id\n      }"}},"animation":false,"autoResize":false,"cursor":"default","rotation":0,"zoom":1,"zoomRange":[0.01,10],"theme":"light","layout":{"type":"d3-force","link":{"distance":100,"strength":2},"collide":{"radius":40}},"behaviors":[{"key":"create-edge","trigger":"drag","enable":false,"notify":false,"type":"create-edge"}]},"evals":["node.style.labelText"],"jsHooks":[]}</script><div>
-<blockquote>
-<p><strong>View R Code</strong></p>
+<script type="application/json" data-for="htmlwidget-10b3b7155e8045a1b2ad">{"x":{"data":{"nodes":[{"id":"a"},{"id":"b"},{"id":"c"},{"id":"d"},{"id":"e"}]},"jsonUrl":null,"iconsUrl":"//at.alicdn.com/t/font_2678727_za4qjydwkkh.js","node":{"style":{"labelBackground":true,"labelBackgroundFill":"#FFB6C1","labelBackgroundRadius":4,"labelFontFamily":"Arial","labelPadding":[0,4],"labelText":"(d) => {\n        return d.id\n      }"}},"animation":false,"autoResize":false,"cursor":"default","rotation":0,"zoom":1,"zoomRange":[0.01,10],"theme":"light","layout":{"type":"d3-force","link":{"distance":100,"strength":2},"collide":{"radius":40}},"behaviors":[{"key":"create-edge","trigger":"drag","enable":false,"notify":false,"type":"create-edge"}]},"evals":["node.style.labelText"],"jsHooks":[]}</script>
+</div>
+<div class="section level2">
+<h2 id="view-r-code-4">View R Code<a class="anchor" aria-label="anchor" href="#view-r-code-4"></a>
+</h2>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">nodes</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>id <span class="op">=</span> <span class="va">letters</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">5</span><span class="op">]</span><span class="op">)</span></span>
 <span></span>
@@ -271,17 +294,22 @@
 <span>  <span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="../reference/g6_layout.html">g6_layout</a></span><span class="op">(</span><span class="fu"><a href="../reference/d3_force_layout.html">d3_force_layout</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="../reference/g6_behaviors.html">g6_behaviors</a></span><span class="op">(</span><span class="st">" create-edge "</span><span class="op">)</span></span></code></pre></div>
-</blockquote>
+<hr>
 </div>
-<hr></section><section class="level2"><h2 id="drag-canvas-behavior">Drag Canvas Behavior<a class="anchor" aria-label="anchor" href="#drag-canvas-behavior"></a>
+<div class="section level2">
+<h2 id="drag-canvas-behavior">Drag Canvas Behavior<a class="anchor" aria-label="anchor" href="#drag-canvas-behavior"></a>
 </h2>
-<p>Allows dragging the entire canvas to pan the view. May be incompatible with other behaviors such as <code>create-edge</code> depending on the trigger key.</p>
-<div id="htmlwidget-6cef7b27fa4345b42670" class="g6 html-widget" style="width:100%;height:500px;">
+<p>Allows dragging the entire canvas to pan the view. May be
+incompatible with other behaviors such as <code>create-edge</code>
+depending on the trigger key.</p>
+<div id="htmlwidget-4018eef1a407a0df6b52" class="g6 html-widget" style="width:100%;height:500px;">
 
 </div>
-<script type="application/json" data-for="htmlwidget-6cef7b27fa4345b42670">{"x":{"data":{"nodes":[{"id":"a"},{"id":"b"},{"id":"c"},{"id":"d"},{"id":"e"}]},"jsonUrl":null,"iconsUrl":"//at.alicdn.com/t/font_2678727_za4qjydwkkh.js","node":{"style":{"labelBackground":true,"labelBackgroundFill":"#FFB6C1","labelBackgroundRadius":4,"labelFontFamily":"Arial","labelPadding":[0,4],"labelText":"(d) => {\n        return d.id\n      }"}},"animation":false,"autoResize":false,"cursor":"default","rotation":0,"zoom":1,"zoomRange":[0.01,10],"theme":"light","layout":{"type":"d3-force","link":{"distance":100,"strength":2},"collide":{"radius":40}},"behaviors":[{"key":"drag-canvas","enable":true,"direction":"both","range":null,"sensitivity":10,"type":"drag-canvas"}]},"evals":["node.style.labelText"],"jsHooks":[]}</script><div>
-<blockquote>
-<p><strong>View R Code</strong></p>
+<script type="application/json" data-for="htmlwidget-4018eef1a407a0df6b52">{"x":{"data":{"nodes":[{"id":"a"},{"id":"b"},{"id":"c"},{"id":"d"},{"id":"e"}]},"jsonUrl":null,"iconsUrl":"//at.alicdn.com/t/font_2678727_za4qjydwkkh.js","node":{"style":{"labelBackground":true,"labelBackgroundFill":"#FFB6C1","labelBackgroundRadius":4,"labelFontFamily":"Arial","labelPadding":[0,4],"labelText":"(d) => {\n        return d.id\n      }"}},"animation":false,"autoResize":false,"cursor":"default","rotation":0,"zoom":1,"zoomRange":[0.01,10],"theme":"light","layout":{"type":"d3-force","link":{"distance":100,"strength":2},"collide":{"radius":40}},"behaviors":[{"key":"drag-canvas","enable":true,"direction":"both","range":null,"sensitivity":10,"type":"drag-canvas"}]},"evals":["node.style.labelText"],"jsHooks":[]}</script>
+</div>
+<div class="section level2">
+<h2 id="view-r-code-5">View R Code<a class="anchor" aria-label="anchor" href="#view-r-code-5"></a>
+</h2>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">nodes</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>id <span class="op">=</span> <span class="va">letters</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">5</span><span class="op">]</span><span class="op">)</span></span>
 <span></span>
@@ -299,17 +327,22 @@
 <span>  <span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="../reference/g6_layout.html">g6_layout</a></span><span class="op">(</span><span class="fu"><a href="../reference/d3_force_layout.html">d3_force_layout</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="../reference/g6_behaviors.html">g6_behaviors</a></span><span class="op">(</span><span class="st">" drag-canvas "</span><span class="op">)</span></span></code></pre></div>
-</blockquote>
+<hr>
 </div>
-<hr></section><section class="level2"><h2 id="drag-element-behavior">Drag Element Behavior<a class="anchor" aria-label="anchor" href="#drag-element-behavior"></a>
+<div class="section level2">
+<h2 id="drag-element-behavior">Drag Element Behavior<a class="anchor" aria-label="anchor" href="#drag-element-behavior"></a>
 </h2>
-<p>Enables dragging individual elements to reposition them. May be incompatible with other behaviors such as <code>create-edge</code> depending on the trigger key.</p>
-<div id="htmlwidget-1d49e586b8a22500e189" class="g6 html-widget" style="width:100%;height:500px;">
+<p>Enables dragging individual elements to reposition them. May be
+incompatible with other behaviors such as <code>create-edge</code>
+depending on the trigger key.</p>
+<div id="htmlwidget-5b1b2f4ad92281566982" class="g6 html-widget" style="width:100%;height:500px;">
 
 </div>
-<script type="application/json" data-for="htmlwidget-1d49e586b8a22500e189">{"x":{"data":{"nodes":[{"id":"a"},{"id":"b"},{"id":"c"},{"id":"d"},{"id":"e"}]},"jsonUrl":null,"iconsUrl":"//at.alicdn.com/t/font_2678727_za4qjydwkkh.js","node":{"style":{"labelBackground":true,"labelBackgroundFill":"#FFB6C1","labelBackgroundRadius":4,"labelFontFamily":"Arial","labelPadding":[0,4],"labelText":"(d) => {\n        return d.id\n      }"}},"animation":false,"autoResize":false,"cursor":"default","rotation":0,"zoom":1,"zoomRange":[0.01,10],"theme":"light","layout":{"type":"d3-force","link":{"distance":100,"strength":2},"collide":{"radius":40}},"behaviors":[{"key":"drag-element","enable":true,"animation":true,"state":"selected","dropEffect":"move","hideEdge":"none","shadow":false,"type":"drag-element"}]},"evals":["node.style.labelText"],"jsHooks":[]}</script><div>
-<blockquote>
-<p><strong>View R Code</strong></p>
+<script type="application/json" data-for="htmlwidget-5b1b2f4ad92281566982">{"x":{"data":{"nodes":[{"id":"a"},{"id":"b"},{"id":"c"},{"id":"d"},{"id":"e"}]},"jsonUrl":null,"iconsUrl":"//at.alicdn.com/t/font_2678727_za4qjydwkkh.js","node":{"style":{"labelBackground":true,"labelBackgroundFill":"#FFB6C1","labelBackgroundRadius":4,"labelFontFamily":"Arial","labelPadding":[0,4],"labelText":"(d) => {\n        return d.id\n      }"}},"animation":false,"autoResize":false,"cursor":"default","rotation":0,"zoom":1,"zoomRange":[0.01,10],"theme":"light","layout":{"type":"d3-force","link":{"distance":100,"strength":2},"collide":{"radius":40}},"behaviors":[{"key":"drag-element","enable":true,"animation":true,"state":"selected","dropEffect":"move","hideEdge":"none","shadow":false,"type":"drag-element"}]},"evals":["node.style.labelText"],"jsHooks":[]}</script>
+</div>
+<div class="section level2">
+<h2 id="view-r-code-6">View R Code<a class="anchor" aria-label="anchor" href="#view-r-code-6"></a>
+</h2>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">nodes</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>id <span class="op">=</span> <span class="va">letters</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">5</span><span class="op">]</span><span class="op">)</span></span>
 <span></span>
@@ -327,17 +360,21 @@
 <span>  <span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="../reference/g6_layout.html">g6_layout</a></span><span class="op">(</span><span class="fu"><a href="../reference/d3_force_layout.html">d3_force_layout</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="../reference/g6_behaviors.html">g6_behaviors</a></span><span class="op">(</span><span class="st">" drag-element "</span><span class="op">)</span></span></code></pre></div>
-</blockquote>
+<hr>
 </div>
-<hr></section><section class="level2"><h2 id="drag-element-force-behavior">Drag Element Force Behavior<a class="anchor" aria-label="anchor" href="#drag-element-force-behavior"></a>
+<div class="section level2">
+<h2 id="drag-element-force-behavior">Drag Element Force Behavior<a class="anchor" aria-label="anchor" href="#drag-element-force-behavior"></a>
 </h2>
-<p>Combines element dragging with force simulation for dynamic positioning.</p>
-<div id="htmlwidget-0107d575f08e596e1bad" class="g6 html-widget" style="width:100%;height:500px;">
+<p>Combines element dragging with force simulation for dynamic
+positioning.</p>
+<div id="htmlwidget-25c3e940e6859592f801" class="g6 html-widget" style="width:100%;height:500px;">
 
 </div>
-<script type="application/json" data-for="htmlwidget-0107d575f08e596e1bad">{"x":{"data":{"nodes":[{"id":"a"},{"id":"b"},{"id":"c"},{"id":"d"},{"id":"e"}]},"jsonUrl":null,"iconsUrl":"//at.alicdn.com/t/font_2678727_za4qjydwkkh.js","node":{"style":{"labelBackground":true,"labelBackgroundFill":"#FFB6C1","labelBackgroundRadius":4,"labelFontFamily":"Arial","labelPadding":[0,4],"labelText":"(d) => {\n        return d.id\n      }"}},"animation":false,"autoResize":false,"cursor":"default","rotation":0,"zoom":1,"zoomRange":[0.01,10],"theme":"light","layout":{"type":"d3-force","link":{"distance":100,"strength":2},"collide":{"radius":40}},"behaviors":[{"key":"drag-element-force","fixed":false,"enable":"(event) => {\n        return event.targetType === 'node' || event.targetType === 'combo';\n      }","state":"selected","hideEdge":"none","type":"drag-element-force"}]},"evals":["node.style.labelText","behaviors.0.enable"],"jsHooks":[]}</script><div>
-<blockquote>
-<p><strong>View R Code</strong></p>
+<script type="application/json" data-for="htmlwidget-25c3e940e6859592f801">{"x":{"data":{"nodes":[{"id":"a"},{"id":"b"},{"id":"c"},{"id":"d"},{"id":"e"}]},"jsonUrl":null,"iconsUrl":"//at.alicdn.com/t/font_2678727_za4qjydwkkh.js","node":{"style":{"labelBackground":true,"labelBackgroundFill":"#FFB6C1","labelBackgroundRadius":4,"labelFontFamily":"Arial","labelPadding":[0,4],"labelText":"(d) => {\n        return d.id\n      }"}},"animation":false,"autoResize":false,"cursor":"default","rotation":0,"zoom":1,"zoomRange":[0.01,10],"theme":"light","layout":{"type":"d3-force","link":{"distance":100,"strength":2},"collide":{"radius":40}},"behaviors":[{"key":"drag-element-force","fixed":false,"enable":"(event) => {\n        return event.targetType === 'node' || event.targetType === 'combo';\n      }","state":"selected","hideEdge":"none","type":"drag-element-force"}]},"evals":["node.style.labelText","behaviors.0.enable"],"jsHooks":[]}</script>
+</div>
+<div class="section level2">
+<h2 id="view-r-code-7">View R Code<a class="anchor" aria-label="anchor" href="#view-r-code-7"></a>
+</h2>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">nodes</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>id <span class="op">=</span> <span class="va">letters</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">5</span><span class="op">]</span><span class="op">)</span></span>
 <span></span>
@@ -355,17 +392,20 @@
 <span>  <span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="../reference/g6_layout.html">g6_layout</a></span><span class="op">(</span><span class="fu"><a href="../reference/d3_force_layout.html">d3_force_layout</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="../reference/g6_behaviors.html">g6_behaviors</a></span><span class="op">(</span><span class="st">" drag-element-force "</span><span class="op">)</span></span></code></pre></div>
-</blockquote>
+<hr>
 </div>
-<hr></section><section class="level2"><h2 id="fix-element-size-behavior">Fix Element Size Behavior<a class="anchor" aria-label="anchor" href="#fix-element-size-behavior"></a>
+<div class="section level2">
+<h2 id="fix-element-size-behavior">Fix Element Size Behavior<a class="anchor" aria-label="anchor" href="#fix-element-size-behavior"></a>
 </h2>
 <p>Maintains fixed element sizes during transformations.</p>
-<div id="htmlwidget-47d9181cdf4a3d0bc69b" class="g6 html-widget" style="width:100%;height:500px;">
+<div id="htmlwidget-3f27c09be0c60bb52829" class="g6 html-widget" style="width:100%;height:500px;">
 
 </div>
-<script type="application/json" data-for="htmlwidget-47d9181cdf4a3d0bc69b">{"x":{"data":{"nodes":[{"id":"a"},{"id":"b"},{"id":"c"},{"id":"d"},{"id":"e"}]},"jsonUrl":null,"iconsUrl":"//at.alicdn.com/t/font_2678727_za4qjydwkkh.js","node":{"style":{"labelBackground":true,"labelBackgroundFill":"#FFB6C1","labelBackgroundRadius":4,"labelFontFamily":"Arial","labelPadding":[0,4],"labelText":"(d) => {\n        return d.id\n      }"}},"animation":false,"autoResize":false,"cursor":"default","rotation":0,"zoom":1,"zoomRange":[0.01,10],"theme":"light","layout":{"type":"d3-force","link":{"distance":100,"strength":2},"collide":{"radius":40}},"behaviors":[{"key":"fix-element-size","enable":true,"reset":false,"state":"","nodeFilter":"() => true","edge":[{"shape":"key","fields":"lineWidth"},{"shape":"halo","fields":"lineWidth"},{"shape":"label","fields":"fontSize"}],"edgeFilter":"() => true","comboFilter":"() => true","type":"fix-element-size"}]},"evals":["node.style.labelText","behaviors.0.nodeFilter","behaviors.0.edgeFilter","behaviors.0.comboFilter"],"jsHooks":[]}</script><div>
-<blockquote>
-<p><strong>View R Code</strong></p>
+<script type="application/json" data-for="htmlwidget-3f27c09be0c60bb52829">{"x":{"data":{"nodes":[{"id":"a"},{"id":"b"},{"id":"c"},{"id":"d"},{"id":"e"}]},"jsonUrl":null,"iconsUrl":"//at.alicdn.com/t/font_2678727_za4qjydwkkh.js","node":{"style":{"labelBackground":true,"labelBackgroundFill":"#FFB6C1","labelBackgroundRadius":4,"labelFontFamily":"Arial","labelPadding":[0,4],"labelText":"(d) => {\n        return d.id\n      }"}},"animation":false,"autoResize":false,"cursor":"default","rotation":0,"zoom":1,"zoomRange":[0.01,10],"theme":"light","layout":{"type":"d3-force","link":{"distance":100,"strength":2},"collide":{"radius":40}},"behaviors":[{"key":"fix-element-size","enable":true,"reset":false,"state":"","nodeFilter":"() => true","edge":[{"shape":"key","fields":"lineWidth"},{"shape":"halo","fields":"lineWidth"},{"shape":"label","fields":"fontSize"}],"edgeFilter":"() => true","comboFilter":"() => true","type":"fix-element-size"}]},"evals":["node.style.labelText","behaviors.0.nodeFilter","behaviors.0.edgeFilter","behaviors.0.comboFilter"],"jsHooks":[]}</script>
+</div>
+<div class="section level2">
+<h2 id="view-r-code-8">View R Code<a class="anchor" aria-label="anchor" href="#view-r-code-8"></a>
+</h2>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">nodes</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>id <span class="op">=</span> <span class="va">letters</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">5</span><span class="op">]</span><span class="op">)</span></span>
 <span></span>
@@ -383,17 +423,20 @@
 <span>  <span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="../reference/g6_layout.html">g6_layout</a></span><span class="op">(</span><span class="fu"><a href="../reference/d3_force_layout.html">d3_force_layout</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="../reference/g6_behaviors.html">g6_behaviors</a></span><span class="op">(</span><span class="st">" fix-element-size "</span><span class="op">)</span></span></code></pre></div>
-</blockquote>
+<hr>
 </div>
-<hr></section><section class="level2"><h2 id="focus-element-behavior">Focus Element Behavior<a class="anchor" aria-label="anchor" href="#focus-element-behavior"></a>
+<div class="section level2">
+<h2 id="focus-element-behavior">Focus Element Behavior<a class="anchor" aria-label="anchor" href="#focus-element-behavior"></a>
 </h2>
 <p>Provides focusing capabilities to highlight specific elements.</p>
-<div id="htmlwidget-cfac07f0e0a631f0c421" class="g6 html-widget" style="width:100%;height:500px;">
+<div id="htmlwidget-416566eb193bf50d04e6" class="g6 html-widget" style="width:100%;height:500px;">
 
 </div>
-<script type="application/json" data-for="htmlwidget-cfac07f0e0a631f0c421">{"x":{"data":{"nodes":[{"id":"a"},{"id":"b"},{"id":"c"},{"id":"d"},{"id":"e"}]},"jsonUrl":null,"iconsUrl":"//at.alicdn.com/t/font_2678727_za4qjydwkkh.js","node":{"style":{"labelBackground":true,"labelBackgroundFill":"#FFB6C1","labelBackgroundRadius":4,"labelFontFamily":"Arial","labelPadding":[0,4],"labelText":"(d) => {\n        return d.id\n      }"}},"animation":false,"autoResize":false,"cursor":"default","rotation":0,"zoom":1,"zoomRange":[0.01,10],"theme":"light","layout":{"type":"d3-force","link":{"distance":100,"strength":2},"collide":{"radius":40}},"behaviors":[{"key":"focus-element","animation":{"duration":500,"easing":"ease-in"},"enable":true,"type":"focus-element"}]},"evals":["node.style.labelText"],"jsHooks":[]}</script><div>
-<blockquote>
-<p><strong>View R Code</strong></p>
+<script type="application/json" data-for="htmlwidget-416566eb193bf50d04e6">{"x":{"data":{"nodes":[{"id":"a"},{"id":"b"},{"id":"c"},{"id":"d"},{"id":"e"}]},"jsonUrl":null,"iconsUrl":"//at.alicdn.com/t/font_2678727_za4qjydwkkh.js","node":{"style":{"labelBackground":true,"labelBackgroundFill":"#FFB6C1","labelBackgroundRadius":4,"labelFontFamily":"Arial","labelPadding":[0,4],"labelText":"(d) => {\n        return d.id\n      }"}},"animation":false,"autoResize":false,"cursor":"default","rotation":0,"zoom":1,"zoomRange":[0.01,10],"theme":"light","layout":{"type":"d3-force","link":{"distance":100,"strength":2},"collide":{"radius":40}},"behaviors":[{"key":"focus-element","animation":{"duration":500,"easing":"ease-in"},"enable":true,"type":"focus-element"}]},"evals":["node.style.labelText"],"jsHooks":[]}</script>
+</div>
+<div class="section level2">
+<h2 id="view-r-code-9">View R Code<a class="anchor" aria-label="anchor" href="#view-r-code-9"></a>
+</h2>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">nodes</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>id <span class="op">=</span> <span class="va">letters</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">5</span><span class="op">]</span><span class="op">)</span></span>
 <span></span>
@@ -411,17 +454,20 @@
 <span>  <span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="../reference/g6_layout.html">g6_layout</a></span><span class="op">(</span><span class="fu"><a href="../reference/d3_force_layout.html">d3_force_layout</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="../reference/g6_behaviors.html">g6_behaviors</a></span><span class="op">(</span><span class="st">" focus-element "</span><span class="op">)</span></span></code></pre></div>
-</blockquote>
+<hr>
 </div>
-<hr></section><section class="level2"><h2 id="hover-activate-behavior">Hover Activate Behavior<a class="anchor" aria-label="anchor" href="#hover-activate-behavior"></a>
+<div class="section level2">
+<h2 id="hover-activate-behavior">Hover Activate Behavior<a class="anchor" aria-label="anchor" href="#hover-activate-behavior"></a>
 </h2>
 <p>Activates interactive features when hovering over elements.</p>
-<div id="htmlwidget-7059e2a8d9620e3d6b87" class="g6 html-widget" style="width:100%;height:500px;">
+<div id="htmlwidget-72cbf064100ce560a04c" class="g6 html-widget" style="width:100%;height:500px;">
 
 </div>
-<script type="application/json" data-for="htmlwidget-7059e2a8d9620e3d6b87">{"x":{"data":{"nodes":[{"id":"a"},{"id":"b"},{"id":"c"},{"id":"d"},{"id":"e"}]},"jsonUrl":null,"iconsUrl":"//at.alicdn.com/t/font_2678727_za4qjydwkkh.js","node":{"style":{"labelBackground":true,"labelBackgroundFill":"#FFB6C1","labelBackgroundRadius":4,"labelFontFamily":"Arial","labelPadding":[0,4],"labelText":"(d) => {\n        return d.id\n      }"}},"animation":false,"autoResize":false,"cursor":"default","rotation":0,"zoom":1,"zoomRange":[0.01,10],"theme":"light","layout":{"type":"d3-force","link":{"distance":100,"strength":2},"collide":{"radius":40}},"behaviors":[{"key":"hover-activate","animation":true,"enable":true,"degree":0,"direction":"both","state":"active","type":"hover-activate"}]},"evals":["node.style.labelText"],"jsHooks":[]}</script><div>
-<blockquote>
-<p><strong>View R Code</strong></p>
+<script type="application/json" data-for="htmlwidget-72cbf064100ce560a04c">{"x":{"data":{"nodes":[{"id":"a"},{"id":"b"},{"id":"c"},{"id":"d"},{"id":"e"}]},"jsonUrl":null,"iconsUrl":"//at.alicdn.com/t/font_2678727_za4qjydwkkh.js","node":{"style":{"labelBackground":true,"labelBackgroundFill":"#FFB6C1","labelBackgroundRadius":4,"labelFontFamily":"Arial","labelPadding":[0,4],"labelText":"(d) => {\n        return d.id\n      }"}},"animation":false,"autoResize":false,"cursor":"default","rotation":0,"zoom":1,"zoomRange":[0.01,10],"theme":"light","layout":{"type":"d3-force","link":{"distance":100,"strength":2},"collide":{"radius":40}},"behaviors":[{"key":"hover-activate","animation":true,"enable":true,"degree":0,"direction":"both","state":"active","type":"hover-activate"}]},"evals":["node.style.labelText"],"jsHooks":[]}</script>
+</div>
+<div class="section level2">
+<h2 id="view-r-code-10">View R Code<a class="anchor" aria-label="anchor" href="#view-r-code-10"></a>
+</h2>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">nodes</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>id <span class="op">=</span> <span class="va">letters</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">5</span><span class="op">]</span><span class="op">)</span></span>
 <span></span>
@@ -439,17 +485,22 @@
 <span>  <span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="../reference/g6_layout.html">g6_layout</a></span><span class="op">(</span><span class="fu"><a href="../reference/d3_force_layout.html">d3_force_layout</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="../reference/g6_behaviors.html">g6_behaviors</a></span><span class="op">(</span><span class="st">" hover-activate "</span><span class="op">)</span></span></code></pre></div>
-</blockquote>
+<hr>
 </div>
-<hr></section><section class="level2"><h2 id="lasso-select-behavior">Lasso Select Behavior<a class="anchor" aria-label="anchor" href="#lasso-select-behavior"></a>
+<div class="section level2">
+<h2 id="lasso-select-behavior">Lasso Select Behavior<a class="anchor" aria-label="anchor" href="#lasso-select-behavior"></a>
 </h2>
-<p>Enables free-form lasso selection for selecting multiple elements. By default, the selection is made by clicking on shift and draging the mouse over the canvas.</p>
-<div id="htmlwidget-2819a0c405d7fe8eeb52" class="g6 html-widget" style="width:100%;height:500px;">
+<p>Enables free-form lasso selection for selecting multiple elements. By
+default, the selection is made by clicking on shift and draging the
+mouse over the canvas.</p>
+<div id="htmlwidget-d11fc4360aa0230696d7" class="g6 html-widget" style="width:100%;height:500px;">
 
 </div>
-<script type="application/json" data-for="htmlwidget-2819a0c405d7fe8eeb52">{"x":{"data":{"nodes":[{"id":"a"},{"id":"b"},{"id":"c"},{"id":"d"},{"id":"e"}]},"jsonUrl":null,"iconsUrl":"//at.alicdn.com/t/font_2678727_za4qjydwkkh.js","node":{"style":{"labelBackground":true,"labelBackgroundFill":"#FFB6C1","labelBackgroundRadius":4,"labelFontFamily":"Arial","labelPadding":[0,4],"labelText":"(d) => {\n        return d.id\n      }"}},"animation":false,"autoResize":false,"cursor":"default","rotation":0,"zoom":1,"zoomRange":[0.01,10],"theme":"light","layout":{"type":"d3-force","link":{"distance":100,"strength":2},"collide":{"radius":40}},"behaviors":[{"key":"lasso-select","animation":false,"enable":true,"enableElements":["node"],"immediately":false,"mode":"default","state":"selected","trigger":"shift","type":"lasso-select"}]},"evals":["node.style.labelText"],"jsHooks":[]}</script><div>
-<blockquote>
-<p><strong>View R Code</strong></p>
+<script type="application/json" data-for="htmlwidget-d11fc4360aa0230696d7">{"x":{"data":{"nodes":[{"id":"a"},{"id":"b"},{"id":"c"},{"id":"d"},{"id":"e"}]},"jsonUrl":null,"iconsUrl":"//at.alicdn.com/t/font_2678727_za4qjydwkkh.js","node":{"style":{"labelBackground":true,"labelBackgroundFill":"#FFB6C1","labelBackgroundRadius":4,"labelFontFamily":"Arial","labelPadding":[0,4],"labelText":"(d) => {\n        return d.id\n      }"}},"animation":false,"autoResize":false,"cursor":"default","rotation":0,"zoom":1,"zoomRange":[0.01,10],"theme":"light","layout":{"type":"d3-force","link":{"distance":100,"strength":2},"collide":{"radius":40}},"behaviors":[{"key":"lasso-select","animation":false,"enable":true,"enableElements":["node"],"immediately":false,"mode":"default","state":"selected","trigger":"shift","type":"lasso-select"}]},"evals":["node.style.labelText"],"jsHooks":[]}</script>
+</div>
+<div class="section level2">
+<h2 id="view-r-code-11">View R Code<a class="anchor" aria-label="anchor" href="#view-r-code-11"></a>
+</h2>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">nodes</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>id <span class="op">=</span> <span class="va">letters</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">5</span><span class="op">]</span><span class="op">)</span></span>
 <span></span>
@@ -467,17 +518,20 @@
 <span>  <span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="../reference/g6_layout.html">g6_layout</a></span><span class="op">(</span><span class="fu"><a href="../reference/d3_force_layout.html">d3_force_layout</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="../reference/g6_behaviors.html">g6_behaviors</a></span><span class="op">(</span><span class="st">" lasso-select "</span><span class="op">)</span></span></code></pre></div>
-</blockquote>
+<hr>
 </div>
-<hr></section><section class="level2"><h2 id="optimize-viewport-transform-behavior">Optimize Viewport Transform Behavior<a class="anchor" aria-label="anchor" href="#optimize-viewport-transform-behavior"></a>
+<div class="section level2">
+<h2 id="optimize-viewport-transform-behavior">Optimize Viewport Transform Behavior<a class="anchor" aria-label="anchor" href="#optimize-viewport-transform-behavior"></a>
 </h2>
 <p>Optimizes viewport transformations for better performance.</p>
-<div id="htmlwidget-f4cc6385f9dac8be9998" class="g6 html-widget" style="width:100%;height:500px;">
+<div id="htmlwidget-21c7483268bafca56cec" class="g6 html-widget" style="width:100%;height:500px;">
 
 </div>
-<script type="application/json" data-for="htmlwidget-f4cc6385f9dac8be9998">{"x":{"data":{"nodes":[{"id":"a"},{"id":"b"},{"id":"c"},{"id":"d"},{"id":"e"}]},"jsonUrl":null,"iconsUrl":"//at.alicdn.com/t/font_2678727_za4qjydwkkh.js","node":{"style":{"labelBackground":true,"labelBackgroundFill":"#FFB6C1","labelBackgroundRadius":4,"labelFontFamily":"Arial","labelPadding":[0,4],"labelText":"(d) => {\n        return d.id\n      }"}},"animation":false,"autoResize":false,"cursor":"default","rotation":0,"zoom":1,"zoomRange":[0.01,10],"theme":"light","layout":{"type":"d3-force","link":{"distance":100,"strength":2},"collide":{"radius":40}},"behaviors":[{"key":"optimize-viewport-transform","enable":true,"debounce":200,"shapes":"(type) => type === 'node'","type":"optimize-viewport-transform"}]},"evals":["node.style.labelText","behaviors.0.shapes"],"jsHooks":[]}</script><div>
-<blockquote>
-<p><strong>View R Code</strong></p>
+<script type="application/json" data-for="htmlwidget-21c7483268bafca56cec">{"x":{"data":{"nodes":[{"id":"a"},{"id":"b"},{"id":"c"},{"id":"d"},{"id":"e"}]},"jsonUrl":null,"iconsUrl":"//at.alicdn.com/t/font_2678727_za4qjydwkkh.js","node":{"style":{"labelBackground":true,"labelBackgroundFill":"#FFB6C1","labelBackgroundRadius":4,"labelFontFamily":"Arial","labelPadding":[0,4],"labelText":"(d) => {\n        return d.id\n      }"}},"animation":false,"autoResize":false,"cursor":"default","rotation":0,"zoom":1,"zoomRange":[0.01,10],"theme":"light","layout":{"type":"d3-force","link":{"distance":100,"strength":2},"collide":{"radius":40}},"behaviors":[{"key":"optimize-viewport-transform","enable":true,"debounce":200,"shapes":"(type) => type === 'node'","type":"optimize-viewport-transform"}]},"evals":["node.style.labelText","behaviors.0.shapes"],"jsHooks":[]}</script>
+</div>
+<div class="section level2">
+<h2 id="view-r-code-12">View R Code<a class="anchor" aria-label="anchor" href="#view-r-code-12"></a>
+</h2>
 <div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">nodes</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>id <span class="op">=</span> <span class="va">letters</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">5</span><span class="op">]</span><span class="op">)</span></span>
 <span></span>
@@ -495,17 +549,20 @@
 <span>  <span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="../reference/g6_layout.html">g6_layout</a></span><span class="op">(</span><span class="fu"><a href="../reference/d3_force_layout.html">d3_force_layout</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="../reference/g6_behaviors.html">g6_behaviors</a></span><span class="op">(</span><span class="st">" optimize-viewport-transform "</span><span class="op">)</span></span></code></pre></div>
-</blockquote>
+<hr>
 </div>
-<hr></section><section class="level2"><h2 id="scroll-canvas-behavior">Scroll Canvas Behavior<a class="anchor" aria-label="anchor" href="#scroll-canvas-behavior"></a>
+<div class="section level2">
+<h2 id="scroll-canvas-behavior">Scroll Canvas Behavior<a class="anchor" aria-label="anchor" href="#scroll-canvas-behavior"></a>
 </h2>
 <p>Enables scrolling to navigate through large graphs.</p>
-<div id="htmlwidget-5ea5425506c257818197" class="g6 html-widget" style="width:100%;height:500px;">
+<div id="htmlwidget-1834a22cd196f3aa03a1" class="g6 html-widget" style="width:100%;height:500px;">
 
 </div>
-<script type="application/json" data-for="htmlwidget-5ea5425506c257818197">{"x":{"data":{"nodes":[{"id":"a"},{"id":"b"},{"id":"c"},{"id":"d"},{"id":"e"}]},"jsonUrl":null,"iconsUrl":"//at.alicdn.com/t/font_2678727_za4qjydwkkh.js","node":{"style":{"labelBackground":true,"labelBackgroundFill":"#FFB6C1","labelBackgroundRadius":4,"labelFontFamily":"Arial","labelPadding":[0,4],"labelText":"(d) => {\n        return d.id\n      }"}},"animation":false,"autoResize":false,"cursor":"default","rotation":0,"zoom":1,"zoomRange":[0.01,10],"theme":"light","layout":{"type":"d3-force","link":{"distance":100,"strength":2},"collide":{"radius":40}},"behaviors":[{"key":"scroll-canvas","enable":true,"range":1,"sensitivity":1,"preventDefault":true,"type":"scroll-canvas"}]},"evals":["node.style.labelText"],"jsHooks":[]}</script><div>
-<blockquote>
-<p><strong>View R Code</strong></p>
+<script type="application/json" data-for="htmlwidget-1834a22cd196f3aa03a1">{"x":{"data":{"nodes":[{"id":"a"},{"id":"b"},{"id":"c"},{"id":"d"},{"id":"e"}]},"jsonUrl":null,"iconsUrl":"//at.alicdn.com/t/font_2678727_za4qjydwkkh.js","node":{"style":{"labelBackground":true,"labelBackgroundFill":"#FFB6C1","labelBackgroundRadius":4,"labelFontFamily":"Arial","labelPadding":[0,4],"labelText":"(d) => {\n        return d.id\n      }"}},"animation":false,"autoResize":false,"cursor":"default","rotation":0,"zoom":1,"zoomRange":[0.01,10],"theme":"light","layout":{"type":"d3-force","link":{"distance":100,"strength":2},"collide":{"radius":40}},"behaviors":[{"key":"scroll-canvas","enable":true,"range":1,"sensitivity":1,"preventDefault":true,"type":"scroll-canvas"}]},"evals":["node.style.labelText"],"jsHooks":[]}</script>
+</div>
+<div class="section level2">
+<h2 id="view-r-code-13">View R Code<a class="anchor" aria-label="anchor" href="#view-r-code-13"></a>
+</h2>
 <div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">nodes</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>id <span class="op">=</span> <span class="va">letters</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">5</span><span class="op">]</span><span class="op">)</span></span>
 <span></span>
@@ -523,17 +580,20 @@
 <span>  <span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="../reference/g6_layout.html">g6_layout</a></span><span class="op">(</span><span class="fu"><a href="../reference/d3_force_layout.html">d3_force_layout</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="../reference/g6_behaviors.html">g6_behaviors</a></span><span class="op">(</span><span class="st">" scroll-canvas "</span><span class="op">)</span></span></code></pre></div>
-</blockquote>
+<hr>
 </div>
-<hr></section><section class="level2"><h2 id="zoom-canvas-behavior">Zoom Canvas Behavior<a class="anchor" aria-label="anchor" href="#zoom-canvas-behavior"></a>
+<div class="section level2">
+<h2 id="zoom-canvas-behavior">Zoom Canvas Behavior<a class="anchor" aria-label="anchor" href="#zoom-canvas-behavior"></a>
 </h2>
 <p>Provides zooming functionality for the canvas view.</p>
-<div id="htmlwidget-a29ce645894faf740f13" class="g6 html-widget" style="width:100%;height:500px;">
+<div id="htmlwidget-28515d92cb327f90c9eb" class="g6 html-widget" style="width:100%;height:500px;">
 
 </div>
-<script type="application/json" data-for="htmlwidget-a29ce645894faf740f13">{"x":{"data":{"nodes":[{"id":"a"},{"id":"b"},{"id":"c"},{"id":"d"},{"id":"e"}]},"jsonUrl":null,"iconsUrl":"//at.alicdn.com/t/font_2678727_za4qjydwkkh.js","node":{"style":{"labelBackground":true,"labelBackgroundFill":"#FFB6C1","labelBackgroundRadius":4,"labelFontFamily":"Arial","labelPadding":[0,4],"labelText":"(d) => {\n        return d.id\n      }"}},"animation":false,"autoResize":false,"cursor":"default","rotation":0,"zoom":1,"zoomRange":[0.01,10],"theme":"light","layout":{"type":"d3-force","link":{"distance":100,"strength":2},"collide":{"radius":40}},"behaviors":[{"key":"zoom-canvas","animation":{"duration":200},"enable":true,"preventDefault":true,"sensitivity":1,"type":"zoom-canvas"}]},"evals":["node.style.labelText"],"jsHooks":[]}</script><div>
-<blockquote>
-<p><strong>View R Code</strong></p>
+<script type="application/json" data-for="htmlwidget-28515d92cb327f90c9eb">{"x":{"data":{"nodes":[{"id":"a"},{"id":"b"},{"id":"c"},{"id":"d"},{"id":"e"}]},"jsonUrl":null,"iconsUrl":"//at.alicdn.com/t/font_2678727_za4qjydwkkh.js","node":{"style":{"labelBackground":true,"labelBackgroundFill":"#FFB6C1","labelBackgroundRadius":4,"labelFontFamily":"Arial","labelPadding":[0,4],"labelText":"(d) => {\n        return d.id\n      }"}},"animation":false,"autoResize":false,"cursor":"default","rotation":0,"zoom":1,"zoomRange":[0.01,10],"theme":"light","layout":{"type":"d3-force","link":{"distance":100,"strength":2},"collide":{"radius":40}},"behaviors":[{"key":"zoom-canvas","animation":{"duration":200},"enable":true,"preventDefault":true,"sensitivity":1,"type":"zoom-canvas"}]},"evals":["node.style.labelText"],"jsHooks":[]}</script>
+</div>
+<div class="section level2">
+<h2 id="view-r-code-14">View R Code<a class="anchor" aria-label="anchor" href="#view-r-code-14"></a>
+</h2>
 <div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">nodes</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>id <span class="op">=</span> <span class="va">letters</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">5</span><span class="op">]</span><span class="op">)</span></span>
 <span></span>
@@ -551,102 +611,28 @@
 <span>  <span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="../reference/g6_layout.html">g6_layout</a></span><span class="op">(</span><span class="fu"><a href="../reference/d3_force_layout.html">d3_force_layout</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="../reference/g6_behaviors.html">g6_behaviors</a></span><span class="op">(</span><span class="st">" zoom-canvas "</span><span class="op">)</span></span></code></pre></div>
-</blockquote>
+<hr>
 </div>
-<hr></section><section class="level2"><h2 id="dynamically-interact-with-behaviors">Dynamically interact with behaviors<a class="anchor" aria-label="anchor" href="#dynamically-interact-with-behaviors"></a>
+<div class="section level2">
+<h2 id="dynamically-interact-with-behaviors">Dynamically interact with behaviors<a class="anchor" aria-label="anchor" href="#dynamically-interact-with-behaviors"></a>
 </h2>
-<section class="level3"><h3 id="add">Add<a class="anchor" aria-label="anchor" href="#add"></a>
+<div class="section level3">
+<h3 id="add">Add<a class="anchor" aria-label="anchor" href="#add"></a>
 </h3>
 <p>TBD?</p>
-</section><section class="level3"><h3 id="update">Update<a class="anchor" aria-label="anchor" href="#update"></a>
+</div>
+<div class="section level3">
+<h3 id="update">Update<a class="anchor" aria-label="anchor" href="#update"></a>
 </h3>
-<p>To update behavior from the server of a Shiny app, you can use the <code><a href="../reference/g6_update_behavior.html">g6_update_behavior()</a></code> function. This function allows you to modify the behaviors of an existing G6 graph.</p>
-</section></section><script id="quarto-html-after-body" type="application/javascript">
-  window.document.addEventListener("DOMContentLoaded", function (event) {
-      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
-      var mailtoRegex = new RegExp(/^mailto:/);
-        var filterRegex = new RegExp('/' + window.location.host + '/');
-      var isInternal = (href) => {
-          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
-      }
-      // Inspect non-navigation links and adorn them if external
-     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
-      for (var i=0; i<links.length; i++) {
-        const link = links[i];
-        if (!isInternal(link.href)) {
-          // undo the damage that might have been done by quarto-nav.js in the case of
-          // links that we want to consider external
-          if (link.dataset.originalHref !== undefined) {
-            link.href = link.dataset.originalHref;
-          }
-        }
-      }
-    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
-      const config = {
-        allowHTML: true,
-        maxWidth: 500,
-        delay: 100,
-        arrow: false,
-        appendTo: function(el) {
-            return el.parentElement;
-        },
-        interactive: true,
-        interactiveBorder: 10,
-        theme: 'light-border',
-        placement: 'bottom-start',
-      };
-      if (contentFn) {
-        config.content = contentFn;
-      }
-      if (onTriggerFn) {
-        config.onTrigger = onTriggerFn;
-      }
-      if (onUntriggerFn) {
-        config.onUntrigger = onUntriggerFn;
-      }
-      window.tippy(el, config);
-    }
-    const findCites = (el) => {
-      const parentEl = el.parentElement;
-      if (parentEl) {
-        const cites = parentEl.dataset.cites;
-        if (cites) {
-          return {
-            el,
-            cites: cites.split(' ')
-          };
-        } else {
-          return findCites(el.parentElement)
-        }
-      } else {
-        return undefined;
-      }
-    };
-    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
-    for (var i=0; i<bibliorefs.length; i++) {
-      const ref = bibliorefs[i];
-      const citeInfo = findCites(ref);
-      if (citeInfo) {
-        tippyHover(citeInfo.el, function() {
-          var popup = window.document.createElement('div');
-          citeInfo.cites.forEach(function(cite) {
-            var citeDiv = window.document.createElement('div');
-            citeDiv.classList.add('hanging-indent');
-            citeDiv.classList.add('csl-entry');
-            var biblioDiv = window.document.getElementById('ref-' + cite);
-            if (biblioDiv) {
-              citeDiv.innerHTML = biblioDiv.innerHTML;
-            }
-            popup.appendChild(citeDiv);
-          });
-          return popup.innerHTML;
-        });
-      }
-    }
-  });
-  </script></main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
+<p>To update behavior from the server of a Shiny app, you can use the
+<code><a href="../reference/g6_update_behavior.html">g6_update_behavior()</a></code> function. This function allows you to
+modify the behaviors of an existing G6 graph.</p>
+</div>
+</div>
+  </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside>
 </div>
+
 
 
     <footer><div class="pkgdown-footer-left">
