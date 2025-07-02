@@ -86,7 +86,6 @@ for (plugin in names(plugins_data)) {
   # Display the plot using Quarto's widget rendering
   print(htmltools::tagList(g6_plot))
 
-  cat("## View R Code\n\n")
   cat("```r\n")
   cat("nodes <- data.frame(\n")
   cat("  id = letters[1:8]\n")

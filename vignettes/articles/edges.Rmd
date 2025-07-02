@@ -72,8 +72,8 @@ types <- c(
 nodes <- data.frame(id = as.character(1:5))
 edges <- lapply(seq_along(types), \(i) {
   list(
-    source = "1",
-    target = as.character(i + 1),
+    source = 1,
+    target = i + 1,
     id = types[[i]],
     type = types[[i]],
     style = list(
@@ -99,11 +99,11 @@ g6(tree$nodes, tree$edges) |>
 `{g6R}` implements a custom type with animation, namely `fly-marker-cubic`. This type has been implemented with JavaScript code and registered in the `g6R` package. You may do the same for your own custom types.
   
 ```{r}
-nodes <- data.frame(id = c("1", "2"))
+nodes <- data.frame(id = 1:2)
 edges <- list(
   list(
-    source = "1",
-    target = "2",
+    source = 1,
+    target = 2,
     type = "fly-marker-cubic"
   )
 )
@@ -115,18 +115,18 @@ g6(nodes, edges, height = "200px") |>
 
 The `g6` JavaScript library exposes a wide range of style properties for edges, which can be set in the `style` property of the edge data. We list below the most outstanding properties, but you can find a comprehensive list in the [documentation](https://g6.antv.antgroup.com/en/manual/element/edge/build-in/base-edge#style).
 
-![](figures/edges.png){fig-align="center" width=50%}
+![](figures/edges.png){fig-align="center" alt="Edge style" width=50%}
 
 #### Main graphic properties
 
 These properties are used to define the main graphic [style](https://g6.antv.antgroup.com/en/manual/element/edge/build-in/base-edge#main-graphic-style-key) of the edge, such as color, width, and line type. Like for nodes, these options may be set either at the global edge option level or at the individual edge level. Here is an example of how to set the color for a given edge:
 
 ```{r}
-nodes <- data.frame(id = c("1", "2"))
+nodes <- data.frame(id = 1:2)
 edges <- list(
   list(
-    source = "1",
-    target = "2",
+    source = 1,
+    target = 2,
     style = list(
       stroke = "pink",
       lineWidth = 10
@@ -142,11 +142,11 @@ g6(nodes, edges, height = "200px") |>
 Some common properties include label [styling](https://g6.antv.antgroup.com/en/manual/element/edge/build-in/base-edge#label-style):
 
 ```{r}
-nodes <- data.frame(id = c("1", "2"))
+nodes <- data.frame(id = 1:2)
 edges <- list(
   list(
-    source = "1",
-    target = "2",
+    source = 1,
+    target = 2,
     style = list(
       labelText = "Edge Label", # Label text content
       labelFill = "blue", # Label text color
@@ -167,11 +167,11 @@ g6(nodes, edges, height = "200px") |>
 You can add [badges](https://g6.antv.antgroup.com/en/manual/element/edge/build-in/base-edge#badge-style) to edges using the `badge` property in the `style` list. Badges are small indicators that can display additional information, such as counts or statuses:
 
 ```{r}
-nodes <- data.frame(id = c("1", "2"))
+nodes <- data.frame(id = 1:2)
 edges <- list(
   list(
-    source = "1",
-    target = "2",
+    source = 1,
+    target = 2,
     style = list(
       labelText = "Edge Label", # Label text content
       labelFill = "blue", # Label text color
@@ -195,11 +195,11 @@ g6(nodes, edges, height = "200px") |>
 End and start arrows can be styled too:
 
 ```{r}
-nodes <- data.frame(id = c("1", "2"))
+nodes <- data.frame(id = 1:2)
 edges <- list(
   list(
-    source = "1",
-    target = "2",
+    source = 1,
+    target = 2,
     style = list(
       startArrow = TRUE, # Enable edge start arrow
       startArrowFill = "yellow", # Edge start arrow fill color
@@ -227,11 +227,11 @@ states <- c(
   "inactive",
   "disabled"
 )
-nodes <- data.frame(id = as.character(1:7))
+nodes <- data.frame(id = 1:7)
 edges <- lapply(seq_along(states), \(i) {
   list(
-    source = "1",
-    target = as.character(i + 1),
+    source = 1,
+    target = i + 1,
     states = list(states[[i]]),
     style = list(
       labelText = states[[i]]

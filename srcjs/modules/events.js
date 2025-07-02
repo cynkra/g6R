@@ -12,6 +12,7 @@ const setClickEvents = (events, graph, el) => {
       // TBD set shiny input with el.id namespace
       const { target } = e; // Get the ID of the clicked node
       const clickSelect = getBehavior(graph.getBehaviors(), "click-select");
+      if (!clickSelect.length) return;
       const isMultiple = clickSelect[0].multiple;
 
       // If multiclick is allowed ...

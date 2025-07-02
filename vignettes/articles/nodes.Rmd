@@ -19,22 +19,22 @@ library(g6R)
 Nodes belong to the graph data. In `{g6R}`, nodes can be created from a __dataframe__ or a __list__ such as:
 
 ```r
-nodes <- data.frame(id = as.character(1:2))
+nodes <- data.frame(id = 1:2)
 nodes$label <- nodes$id
 
 # or
 nodes <- list(
-  list(id = "1", label = "Node 1"),
-  list(id = "2", label = "Node 2")
+  list(id = 1, label = "Node 1"),
+  list(id = 2, label = "Node 2")
 )
 ```
 
-While the former might be more convenient for simple cases, the latter provides more flexibility for advanced customization since some node properties have to be nested lists, for instance __style__ properties:
+While __dataframes__ might be more convenient for simple cases, __lists__ provides more flexibility for advanced customization since some node properties have to be nested lists, for instance __style__ properties:
 
 ```r
 nodes <- list(
   list(
-    id = "1",
+    id = 1,
     label = "Node 1",
     style = list(fill = "#FF0000", fillOpacity = 0.5)
   ),
@@ -95,7 +95,7 @@ You can create nodes with images by setting the `type` to `image` and providing 
 ```{r}
 nodes <- list(
   list(
-    id = "1",
+    id = 1,
     type = "image",
     style = list(
       src = "https://gw.alipayobjects.com/mdn/rms_6ae20b/afts/img/A*N4ZMS7gHsUIAAAAAAAAAAABkARQnAQ"
@@ -123,10 +123,7 @@ g6(nodes, height = "100px") |>
 There exists a last type which allows to create nodes with custom html. Importantly, you can't have html nodes with other type of nodes. The type applies at the global node option level as shown in the following. The node structure is created with the `innerHTML` property which has to be a JavaScript callback taking node data as parameter:
 
 ```{r}
-nodes <- lapply(1:3, \(i) {
-  id <- as.character(i)
-  list(id = id)
-})
+nodes <- data.frame(id = 1:3)
 g6(nodes, height = "200px") |>
   g6_layout(d3_force_layout()) |>
   g6_options(
@@ -156,11 +153,11 @@ You can create donut nodes by setting the `type` to `donut`. The `style` propert
 ```{r}
 nodes <- list(
   list(
-    id = "1",
+    id = 1,
     index = 0
   ),
   list(
-    id = "2",
+    id = 2,
     index = 1
   )
 )
@@ -199,14 +196,14 @@ g6(nodes, height = "200px") |>
 
 The `g6` JavaScript library exposes a wide range of style properties for nodes, which can be set in the `style` property of the node data. We list below the most outstanding properties, but you can find a comprehensive list in the [documentation](https://g6.antv.antgroup.com/en/manual/element/node/build-in/base-node#style).
 
-![](figures/node.png){fig-align="center" width=50%}
+![](figures/node.png){fig-align="center" alt="Node style" width=50%}
 
 #### Main graphic properties
 
 These properties are used to define the main graphic [style](https://g6.antv.antgroup.com/en/manual/element/node/build-in/base-node#main-graphic-style) of the node, such as color, width, and line type. They can be applied at the global node option level or at the individual node level. Here is an example of how to set the color for all nodes of the same graph:
 
 ```{r}
-nodes <- data.frame(id = c("1", "2"))
+nodes <- data.frame(id = 1:2)
 g6(nodes, height = "200px") |>
   g6_layout(d3_force_layout()) |>
   g6_options(
@@ -229,7 +226,7 @@ Some common properties include label [styling](https://g6.antv.antgroup.com/en/m
 ```{r}
 nodes <- list(
   list(
-    id = "1",
+    id = 1,
     style = list(
       label = TRUE, # Whether to display the node label
       labelText = "Node Name", # Label text content
@@ -252,7 +249,7 @@ You can add [badges](https://g6.antv.antgroup.com/en/manual/element/node/build-i
 ```{r}
 nodes <- list(
   list(
-    id = "1",
+    id = 1,
     style = list(
       badge = TRUE, # Whether to display the badge
       badges = list(
@@ -277,7 +274,7 @@ g6(nodes, height = "200px") |>
 ```{r}
 nodes <- list(
   list(
-    id = "node1",
+    id = 1,
     style = list(
       port = TRUE,
       ports = list(

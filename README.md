@@ -14,7 +14,8 @@ status](https://www.r-pkg.org/badges/version/g6R)](https://CRAN.R-project.org/pa
 
 <p style="text-align: center;">
 
-<img src="./man/figures/hex.png" style="width:50.0%" />
+<img src="./man/figures/hex.png" style="width:50.0%"
+alt="g6R hex logo" />
 </p>
 
 `{g6R}` provides R bindings to the G6 graph
@@ -35,7 +36,8 @@ interactive network in R, with stunning set of features, including:
 
 <p style="text-align: center;">
 
-<img src="./man/figures/g6-layers.png" style="width:50.0%" />
+<img src="./man/figures/g6-layers.png" style="width:50.0%"
+alt="g6R layers example" />
 </p>
 
 ## Installation
@@ -55,14 +57,14 @@ To create a `{g6R}` graph:
 ``` r
 library(g6R)
 nodes <- data.frame(
-  id = as.character(1:10),
-  label = as.character(1:10)
+  id = 1:10,
+  label = 1:10
 )
 
 # Generate random edges
 edges <- data.frame(
-  source = c("2", "6", "7"),
-  target = c("1", "3", "9")
+  source = c(2, 6, 7),
+  target = c(1, 3, 9)
 )
 
 g6(nodes, edges) |>

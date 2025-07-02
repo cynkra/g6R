@@ -5,7 +5,7 @@ import {
   register
 } from '@antv/g6';
 import { AntLine, FlyMarkerCubic, CircleComboWithExtraButton } from '../modules/extensions';
-import { setupGraph, setupIcons } from '../modules/utils';
+import { setupGraph, setupIcons, checkIds } from '../modules/utils';
 
 // Ant lines
 register(ExtensionCategory.EDGE, 'ant-line', AntLine);
@@ -22,14 +22,14 @@ HTMLWidgets.widget({
 
   factory: function (el, width, height) {
 
-    // TODO: define shared variables for this instance
+    // Define shared variables for this instance
     let graph;
 
     return {
 
       renderValue: function (x, id = el.id) {
 
-        // TODO: code to render the widget, e.g.
+        // code to render the widget, e.g.
         let config = x;
         // Don't change the container
         config.container = el.id;
@@ -42,11 +42,14 @@ HTMLWidgets.widget({
           fetch(x.jsonUrl)
             .then((res) => res.json())
             .then((data) => {
+              // TBD: check ID duplicates and character?
               config.data = data;
               graph = new Graph(config);
               setupGraph(graph, el, this);
             })
         } else {
+          // Find if there are any duplicated IDs and stop if so.
+          config.data = checkIds(config.data);
           graph = new Graph(config);
           setupGraph(graph, el, this);
         }
@@ -55,9 +58,10 @@ HTMLWidgets.widget({
         return graph
       },
       resize: function (width, height) {
-        // TODO: code to re-render the widget with a new size
-        graph.resize();
-
+        // code to re-render the widget with a new size
+        if (graph) {
+          graph.resize();
+        }
       }
 
     };

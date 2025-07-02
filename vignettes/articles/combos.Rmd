@@ -19,12 +19,12 @@ library(g6R)
 Combos are a way to group nodes in a graph. They can be used to represent hierarchical structures or to visually organize nodes. In `{g6R}`, combos can be created from a __dataframe__ or a __list__ such as:
 
 ```r
-combos <- data.frame(id = as.character(1:2))
+combos <- data.frame(id = 1:2)
 
 # or
 combos <- list(
-  list(id = "1", label = "Combo 1"),
-  list(id = "2", label = "Combo 2")
+  list(id = 1, label = "Combo 1"),
+  list(id = 2, label = "Combo 2")
 )
 ```
 
@@ -50,7 +50,7 @@ combos <- data.frame(
   combo = c("combo3", "combo3", NA)
 )
 nodes <- data.frame(
-  id = as.character(1:4),
+  id = 1:4,
   combo = c(
     "combo1",
     "combo1",
@@ -101,7 +101,7 @@ combos <- data.frame(
 )
 
 nodes <- data.frame(
-  id = as.character(1),
+  id = 1,
   combo = c("combo1")
 )
 
@@ -140,7 +140,7 @@ g6(nodes, combos = combos, height = "200px") |>
 
 The `g6` JavaScript library exposes a wide range of style properties for combos, which can be set in the `style` property of the combo data. We list below the most outstanding properties, but you can find a comprehensive list in the [documentation](https://g6.antv.antgroup.com/en/manual/element/combo/build-in/base-combo#style).
 
-![](figures/combo.png){fig-align="center" width=50%}
+![](figures/combo.png){fig-align="center" alt="Combo style" width=50%}
 
 #### Main graphic properties
 
@@ -149,7 +149,7 @@ These properties are used to define the main graphic [style](https://g6.antv.ant
 ```{r}
 combos <- data.frame(id = c("combo1"))
 nodes <- data.frame(
-  id = as.character(1),
+  id = 1,
   combo = c("combo1")
 )
 g6(nodes, combos = combos, height = "200px") |>
@@ -180,7 +180,7 @@ Some common properties include label [styling](https://g6.antv.antgroup.com/en/m
 ```{r}
 combos <- data.frame(id = c("combo1"))
 nodes <- data.frame(
-  id = as.character(1),
+  id = 1,
   combo = c("combo1")
 )
 g6(nodes, combos = combos, height = "200px") |>

@@ -3,8 +3,8 @@ library(bslib)
 library(g6R)
 
 nodes <- data.frame(
-  id = as.character(1:100),
-  label = as.character(1:100)
+  id = 1:100,
+  label = 1:100
 )
 
 # Set a seed for reproducibility

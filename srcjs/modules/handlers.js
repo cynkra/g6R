@@ -1,3 +1,5 @@
+import { sendNotification } from './utils';
+
 const registerShinyHandlers = (graph, el) => {
   // Update/remove/add nodes or combo or edges
   Shiny.addCustomMessageHandler(el.id + '_g6-data', (m) => {
@@ -42,7 +44,7 @@ const registerShinyHandlers = (graph, el) => {
         }
       }
     } catch (error) {
-      Shiny.notifications.show({ html: error, type: 'error' })
+      sendNotification(`${error}. Graph may not work anymore.`)
     }
   })
 
@@ -51,7 +53,7 @@ const registerShinyHandlers = (graph, el) => {
     try {
       graph.setSize(m.width, m.height);
     } catch (error) {
-      Shiny.notifications.show({ html: error, type: 'error' })
+      sendNotification(`${error}. Graph may not work anymore.`)
     }
   })
 
@@ -60,7 +62,7 @@ const registerShinyHandlers = (graph, el) => {
     try {
       graph.fitCenter(m);
     } catch (error) {
-      Shiny.notifications.show({ html: error, type: 'error' })
+      sendNotification(`${error}. Graph may not work anymore.`)
     }
   })
 
@@ -69,7 +71,7 @@ const registerShinyHandlers = (graph, el) => {
     try {
       graph[`${m.action}Element`](m.ids, m.animation);
     } catch (error) {
-      Shiny.notifications.show({ html: error, type: 'error' })
+      sendNotification(`${error}. Graph may not work anymore.`)
     }
   })
 
@@ -82,7 +84,7 @@ const registerShinyHandlers = (graph, el) => {
         graph[`${m.action}Element`](m.id, m.options);
       }
     } catch (error) {
-      Shiny.notifications.show({ html: error, type: 'error' })
+      sendNotification(`${error}. Graph may not work anymore.`)
     }
   })
 
@@ -93,7 +95,7 @@ const registerShinyHandlers = (graph, el) => {
       graph.setOptions(m);
       graph.draw();
     } catch (error) {
-      Shiny.notifications.show({ html: error, type: 'error' })
+      sendNotification(`${error}. Graph may not work anymore.`)
     }
   })
 
@@ -103,7 +105,7 @@ const registerShinyHandlers = (graph, el) => {
       graph.setOptions(m.theme);
       graph.draw();
     } catch (error) {
-      Shiny.notifications.show({ html: error, type: 'error' })
+      sendNotification(`${error}. Graph may not work anymore.`)
     }
   })
 
@@ -116,7 +118,7 @@ const registerShinyHandlers = (graph, el) => {
       }
       graph.updatePlugin(m.opts);
     } catch (error) {
-      Shiny.notifications.show({ html: error, type: 'error' })
+      sendNotification(`${error}. Graph may not work anymore.`)
     }
   })
 
@@ -131,7 +133,7 @@ const registerShinyHandlers = (graph, el) => {
         return currentPlugins
       });
     } catch (error) {
-      Shiny.notifications.show({ html: error, type: 'error' })
+      sendNotification(`${error}. Graph may not work anymore.`)
     }
   });
 
@@ -144,7 +146,7 @@ const registerShinyHandlers = (graph, el) => {
       }
       graph.updateBehavior(m.opts);
     } catch (error) {
-      Shiny.notifications.show({ html: error, type: 'error' })
+      sendNotification(`${error}. Graph may not work anymore.`)
     }
   })
 }

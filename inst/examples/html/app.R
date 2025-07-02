@@ -3,8 +3,8 @@ library(bslib)
 library(g6R)
 
 nodes <- data.frame(
-  id = as.character(1:5),
-  label = as.character(1:5),
+  id = 1:5,
+  label = 1:5,
   combo = c("stack2", "stack2", "stack2", "stack1", "stack1")
 )
 

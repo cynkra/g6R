@@ -9,6 +9,62 @@ import {
 import { setClickEvents, setGraphEvents } from './events';
 import { registerShinyHandlers } from './handlers';
 
+const sendNotification = (message, type = "error", duration = null) => {
+  Shiny.notifications.show({
+    html: message,
+    type: type,
+    duration: duration
+  })
+}
+
+const checkIds = (data) => {
+  let nodeIds = [];
+  if (data.nodes) {
+    nodeIds = data.nodes.map((node) => {
+      // Convert ID to string if not already
+      if (typeof node.id !== 'string') {
+        node.id = node.id.toString();
+      }
+      return node.id
+    });
+  }
+  let edgesIds = [];
+  if (data.edges) {
+    edgesIds = data.edges.map((edge) => {
+      // Assign id to edge if not defined
+      if (edge.id === undefined) {
+        // If no ID is defined, we create one
+        edge.id = `${edge.source}-${edge.target}`;
+      }
+      if (typeof edge.source !== 'string') {
+        edge.source = edge.source.toString();
+      }
+      if (typeof edge.target !== 'string') {
+        edge.target = edge.target.toString();
+      }
+      return edge.id
+    });
+  }
+  let combosIds = [];
+  if (data.combos) {
+    combosIds = data.combos.map((combo) => {
+      // Convert ID to string if not already
+      if (typeof combo.id !== 'string') {
+        combo.id = combo.id.toString();
+      }
+      return combo.id
+    });
+  }
+  const allIds = nodeIds.concat(edgesIds).concat(combosIds);
+  const uniqueIds = new Set(allIds);
+  if (allIds.length !== uniqueIds.size) {
+    sendNotification('Cannot initialize graph. Duplicated IDs found.')
+    throw new Error("Invalid graph data: execution aborted");
+  } else {
+    return (data)
+  }
+}
+
 const getBehavior = (behaviors, value) => {
   return behaviors.filter((behavior) => {
     if (typeof behavior === 'string') return behavior === value;
@@ -69,4 +125,4 @@ const setupIcons = (url) => {
   })
 }
 
-export { getBehavior, setupGraph, setupIcons };
+export { getBehavior, setupGraph, setupIcons, checkIds, sendNotification };

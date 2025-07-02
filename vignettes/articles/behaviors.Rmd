@@ -107,7 +107,6 @@ for (behavior in names(behaviors_data)) {
   # Display the plot using Quarto's widget rendering
   print(htmltools::tagList(g6_plot))
 
-  cat("## View R Code\n\n")
   cat("```r\n")
   cat("nodes <- data.frame(id = letters[1:5])\n\n")
   cat("g6(nodes) |>\n")
