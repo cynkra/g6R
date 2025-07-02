@@ -97,10 +97,13 @@
 
     <div class="cell">
 <div class="sourceCode cell-code" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/cynkra/g6R" class="external-link">g6R</a></span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/cynkra/g6R" class="external-link">g6R</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://shiny.posit.co/" class="external-link">shiny</a></span><span class="op">)</span></span></code></pre></div>
 </div>
 <section class="level2"><h2 id="graph-data">Graph data<a class="anchor" aria-label="anchor" href="#graph-data"></a>
 </h2>
+<section class="level3"><h3 id="data-formats">Data formats<a class="anchor" aria-label="anchor" href="#data-formats"></a>
+</h3>
 <p>To setup a <a href="https://github.com/cynkra/g6R" class="external-link">g6R</a> graph, you first have to define <strong>node</strong>, <strong>edges</strong> and <strong>combos</strong> (collection of nodes), like so:</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb2"><pre class="downlit sourceCode r">
@@ -134,11 +137,23 @@
 <span>  <span class="va">edges</span> <span class="op">&lt;-</span> <span class="va">edges</span><span class="op">[</span><span class="op">-</span><span class="va">duplicated_id</span>, <span class="op">]</span></span>
 <span><span class="op">}</span></span></code></pre></div>
 </div>
-</section><section class="level2"><h2 id="initialise-the-graph">Initialise the graph<a class="anchor" aria-label="anchor" href="#initialise-the-graph"></a>
+</section><section class="level3"><h3 id="performance">Performance<a class="anchor" aria-label="anchor" href="#performance"></a>
+</h3>
+<p>If you are dealing with large graphs, you might want to use the <code>jsonUrl</code> parameter to <strong>fetch</strong> the graph data from a hosted JSON file instead. If so, then leave <code>nodes</code>, <code>edges</code> and <code>combos</code> <code>NULL</code>. This allows to bypass the serialization of the graph data to JavaScript, which can be slow for large graphs. That’s done in the <code>shinyAppDir(system.file("examples", "json", package = "g6R"))</code> example.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/shiny/man/shinyApp.html" class="external-link">shinyAppDir</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"examples"</span>, <span class="st">"json"</span>, package <span class="op">=</span> <span class="st">"g6R"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+</div>
+<div class="cell">
+<div class="cell-output-display">
+<iframe class="border border-5 rounded shadow-lg" src="https://shinylive.io/r/app/#h=0&amp;code=NobwRAdghgtgpmAXGKAHVA6ASmANGAYwHsIAXOMpMAdzgCMAnRRASwgGdSoAbbgCgA6YAOYA2LENwACBnFRF2UgLxShAC1KlU7RAHpdBAJ4QA1gygZhLUmoCudDCyK663IgTMZadLLqEBKAQ41NkMAQXQAERYGPnZDTjgYDAAzFm44QTA4AA9YVAz2SVUwACt2EmLUKA8oYThlErEJMH9-MABfAF0gA" style="zoom: 0.75;" width="100%" height="1100px"></iframe>
+</div>
+</div>
+</section></section><section class="level2"><h2 id="initialise-the-graph">Initialise the graph<a class="anchor" aria-label="anchor" href="#initialise-the-graph"></a>
 </h2>
 <p>We leverage <code>g6</code> to create an <strong>instance</strong> of our network:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb5"><pre class="downlit sourceCode r">
+<div class="sourceCode cell-code" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/g6.html">g6</a></span><span class="op">(</span><span class="va">nodes</span>, <span class="va">edges</span>, width <span class="op">=</span> <span class="fl">200</span>, height <span class="op">=</span> <span class="fl">200</span><span class="op">)</span></span></code></pre></div>
 <div class="cell-output-display">
 <div id="htmlwidget-5affc4f25ab85bf888dc" style="width:200px;height:200px;" class="g6 html-widget"></div>
@@ -150,7 +165,7 @@
 </h2>
 <p><code><a href="../reference/g6_layout.html">g6_layout()</a></code> allows to pass any supported <a href="https://g6.antv.antgroup.com/en/manual/layout/overview" class="external-link">layout</a>. For this example, we select the <code><a href="../reference/d3_force_layout.html">d3_force_layout()</a></code>:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb6"><pre class="downlit sourceCode r">
+<div class="sourceCode cell-code" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">g</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/g6.html">g6</a></span><span class="op">(</span><span class="va">nodes</span>, <span class="va">edges</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="../reference/g6_layout.html">g6_layout</a></span><span class="op">(</span><span class="fu"><a href="../reference/d3_force_layout.html">d3_force_layout</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="va">g</span></span></code></pre></div>
@@ -164,7 +179,7 @@
 </h2>
 <p><code><a href="../reference/g6_options.html">g6_options()</a></code> is your to go tool when it comes to change the style of the graph element such as nodes. Properties are selected from the <a href="https://g6.antv.antgroup.com/en/manual/element/node/build-in/base-node#main-graphic-style" class="external-link">documentation</a>:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb7"><pre class="downlit sourceCode r">
+<div class="sourceCode cell-code" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">g</span> <span class="op">&lt;-</span> <span class="va">g</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="../reference/g6_options.html">g6_options</a></span><span class="op">(</span></span>
 <span>    node <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
@@ -185,13 +200,13 @@
 <span><span class="va">g</span></span></code></pre></div>
 <div class="cell-output-display">
 <div id="htmlwidget-502a66744b8e1fe96c06" style="width:100%;height:480px;" class="g6 html-widget"></div>
-<script type="application/json" data-for="htmlwidget-502a66744b8e1fe96c06">{"x":{"data":{"nodes":[{"id":"1","label":"1"},{"id":"2","label":"2"},{"id":"3","label":"3"},{"id":"4","label":"4"},{"id":"5","label":"5"},{"id":"6","label":"6"},{"id":"7","label":"7"},{"id":"8","label":"8"},{"id":"9","label":"9"},{"id":"10","label":"10"}],"edges":[{"source":"3","target":"5","id":"35"},{"source":"3","target":"4","id":"34"},{"source":"10","target":"6","id":"106"},{"source":"2","target":"9","id":"29"},{"source":"6","target":"10","id":"610"}]},"jsonUrl":null,"iconsUrl":"//at.alicdn.com/t/font_2678727_za4qjydwkkh.js","layout":{"type":"d3-force","link":{"distance":100,"strength":2},"collide":{"radius":40}},"node":{"style":{"labelBackground":true,"labelBackgroundFill":"#FFB6C1","labelBackgroundRadius":4,"labelFontFamily":"Arial","labelPadding":[0,4],"labelText":"(d) => {\n              return d.id\n            }"}},"edge":{"type":"line","style":{"cursor":"default","fillRule":"nonzero","isBillboard":true,"lineDash":0,"lineDashOffset":0,"lineWidth":1,"opacity":1,"stroke":"#000","strokeOpacity":1,"visibility":"visible","zIndex":-10000}},"autoFit":{"type":"view","options":{"when":"overflow","direction":"x"},"animation":{"duration":1000,"easing":"ease-in-out"}},"canvas":{},"animation":true,"autoResize":false,"cursor":"default","rotation":0,"zoom":1,"zoomRange":[0.01,10],"theme":"light"},"evals":["node.style.labelText"],"jsHooks":[]}</script>
+<script type="application/json" data-for="htmlwidget-502a66744b8e1fe96c06">{"x":{"data":{"nodes":[{"id":"1","label":"1"},{"id":"2","label":"2"},{"id":"3","label":"3"},{"id":"4","label":"4"},{"id":"5","label":"5"},{"id":"6","label":"6"},{"id":"7","label":"7"},{"id":"8","label":"8"},{"id":"9","label":"9"},{"id":"10","label":"10"}],"edges":[{"source":"3","target":"5","id":"35"},{"source":"3","target":"4","id":"34"},{"source":"10","target":"6","id":"106"},{"source":"2","target":"9","id":"29"},{"source":"6","target":"10","id":"610"}]},"jsonUrl":null,"iconsUrl":"//at.alicdn.com/t/font_2678727_za4qjydwkkh.js","layout":{"type":"d3-force","link":{"distance":100,"strength":2},"collide":{"radius":40}},"node":{"style":{"labelBackground":true,"labelBackgroundFill":"#FFB6C1","labelBackgroundRadius":4,"labelFontFamily":"Arial","labelPadding":[0,4],"labelText":"(d) => {\n              return d.id\n            }"}},"animation":true,"autoResize":false,"cursor":"default","rotation":0,"zoom":1,"zoomRange":[0.01,10],"theme":"light"},"evals":["node.style.labelText"],"jsHooks":[]}</script>
 </div>
 </div>
 </section><section class="level2"><h2 id="plugins">Plugins<a class="anchor" aria-label="anchor" href="#plugins"></a>
 </h2>
 <p>Plugins allowing users to improve the user experience by adding graphical components to the canvas like <strong>minimaps</strong> or <strong>tooltips</strong>. We can pass them inside <code>g6_plugins</code> either as a character string with a reference to the plugin name or using the correponding function to pass more configuration options:</p>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Use defaults</span></span>
 <span><span class="fu"><a href="../reference/g6_plugins.html">g6_plugins</a></span><span class="op">(</span><span class="st">"minimap"</span><span class="op">)</span></span>
 <span></span>
@@ -200,7 +215,7 @@
 <span>  <span class="fu"><a href="../reference/minimap.html">minimap</a></span><span class="op">(</span>size <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">100</span>, <span class="fl">100</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="op">)</span></span></code></pre></div>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb9"><pre class="downlit sourceCode r">
+<div class="sourceCode cell-code" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">g</span> <span class="op">&lt;-</span> <span class="va">g</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="../reference/g6_plugins.html">g6_plugins</a></span><span class="op">(</span></span>
 <span>    <span class="fu"><a href="../reference/minimap.html">minimap</a></span><span class="op">(</span>size <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">100</span>, <span class="fl">100</span><span class="op">)</span><span class="op">)</span></span>
@@ -208,14 +223,14 @@
 <span><span class="va">g</span></span></code></pre></div>
 <div class="cell-output-display">
 <div id="htmlwidget-88a849169abb3486349a" style="width:100%;height:480px;" class="g6 html-widget"></div>
-<script type="application/json" data-for="htmlwidget-88a849169abb3486349a">{"x":{"data":{"nodes":[{"id":"1","label":"1"},{"id":"2","label":"2"},{"id":"3","label":"3"},{"id":"4","label":"4"},{"id":"5","label":"5"},{"id":"6","label":"6"},{"id":"7","label":"7"},{"id":"8","label":"8"},{"id":"9","label":"9"},{"id":"10","label":"10"}],"edges":[{"source":"3","target":"5","id":"35"},{"source":"3","target":"4","id":"34"},{"source":"10","target":"6","id":"106"},{"source":"2","target":"9","id":"29"},{"source":"6","target":"10","id":"610"}]},"jsonUrl":null,"iconsUrl":"//at.alicdn.com/t/font_2678727_za4qjydwkkh.js","layout":{"type":"d3-force","link":{"distance":100,"strength":2},"collide":{"radius":40}},"node":{"style":{"labelBackground":true,"labelBackgroundFill":"#FFB6C1","labelBackgroundRadius":4,"labelFontFamily":"Arial","labelPadding":[0,4],"labelText":"(d) => {\n              return d.id\n            }"}},"edge":{"type":"line","style":{"cursor":"default","fillRule":"nonzero","isBillboard":true,"lineDash":0,"lineDashOffset":0,"lineWidth":1,"opacity":1,"stroke":"#000","strokeOpacity":1,"visibility":"visible","zIndex":-10000}},"autoFit":{"type":"view","options":{"when":"overflow","direction":"x"},"animation":{"duration":1000,"easing":"ease-in-out"}},"canvas":{},"animation":true,"autoResize":false,"cursor":"default","rotation":0,"zoom":1,"zoomRange":[0.01,10],"theme":"light","plugins":[{"key":"minimap","delay":128,"padding":10,"position":"right-bottom","shape":"key","size":[100,100],"type":"minimap"}]},"evals":["node.style.labelText"],"jsHooks":[]}</script>
+<script type="application/json" data-for="htmlwidget-88a849169abb3486349a">{"x":{"data":{"nodes":[{"id":"1","label":"1"},{"id":"2","label":"2"},{"id":"3","label":"3"},{"id":"4","label":"4"},{"id":"5","label":"5"},{"id":"6","label":"6"},{"id":"7","label":"7"},{"id":"8","label":"8"},{"id":"9","label":"9"},{"id":"10","label":"10"}],"edges":[{"source":"3","target":"5","id":"35"},{"source":"3","target":"4","id":"34"},{"source":"10","target":"6","id":"106"},{"source":"2","target":"9","id":"29"},{"source":"6","target":"10","id":"610"}]},"jsonUrl":null,"iconsUrl":"//at.alicdn.com/t/font_2678727_za4qjydwkkh.js","layout":{"type":"d3-force","link":{"distance":100,"strength":2},"collide":{"radius":40}},"node":{"style":{"labelBackground":true,"labelBackgroundFill":"#FFB6C1","labelBackgroundRadius":4,"labelFontFamily":"Arial","labelPadding":[0,4],"labelText":"(d) => {\n              return d.id\n            }"}},"animation":true,"autoResize":false,"cursor":"default","rotation":0,"zoom":1,"zoomRange":[0.01,10],"theme":"light","plugins":[{"key":"minimap","delay":128,"padding":10,"position":"right-bottom","shape":"key","size":[100,100],"type":"minimap"}]},"evals":["node.style.labelText"],"jsHooks":[]}</script>
 </div>
 </div>
 </section><section class="level2"><h2 id="behaviors">Behaviors<a class="anchor" aria-label="anchor" href="#behaviors"></a>
 </h2>
 <p>Behaviors correspond to interactions between users and the graph elements, such as dragging the nodes and selecting nodes. Be mindful that not all behaviors are compatible: dragging canvas and canvas elements would require to specify different triggers for each behavior. With <a href="https://github.com/cynkra/g6R" class="external-link">g6R</a> behaviors can be added with <code>g6_behaviors</code>, like plugins:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb10"><pre class="downlit sourceCode r">
+<div class="sourceCode cell-code" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">g</span> <span class="op">&lt;-</span> <span class="va">g</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="../reference/g6_behaviors.html">g6_behaviors</a></span><span class="op">(</span></span>
 <span>    <span class="st">"zoom-canvas"</span>,</span>
@@ -233,7 +248,7 @@
 <span><span class="va">g</span></span></code></pre></div>
 <div class="cell-output-display">
 <div id="htmlwidget-dfa5d821dc44474b3e8c" style="width:100%;height:480px;" class="g6 html-widget"></div>
-<script type="application/json" data-for="htmlwidget-dfa5d821dc44474b3e8c">{"x":{"data":{"nodes":[{"id":"1","label":"1"},{"id":"2","label":"2"},{"id":"3","label":"3"},{"id":"4","label":"4"},{"id":"5","label":"5"},{"id":"6","label":"6"},{"id":"7","label":"7"},{"id":"8","label":"8"},{"id":"9","label":"9"},{"id":"10","label":"10"}],"edges":[{"source":"3","target":"5","id":"35"},{"source":"3","target":"4","id":"34"},{"source":"10","target":"6","id":"106"},{"source":"2","target":"9","id":"29"},{"source":"6","target":"10","id":"610"}]},"jsonUrl":null,"iconsUrl":"//at.alicdn.com/t/font_2678727_za4qjydwkkh.js","layout":{"type":"d3-force","link":{"distance":100,"strength":2},"collide":{"radius":40}},"node":{"style":{"labelBackground":true,"labelBackgroundFill":"#FFB6C1","labelBackgroundRadius":4,"labelFontFamily":"Arial","labelPadding":[0,4],"labelText":"(d) => {\n              return d.id\n            }"}},"edge":{"type":"line","style":{"cursor":"default","fillRule":"nonzero","isBillboard":true,"lineDash":0,"lineDashOffset":0,"lineWidth":1,"opacity":1,"stroke":"#000","strokeOpacity":1,"visibility":"visible","zIndex":-10000}},"autoFit":{"type":"view","options":{"when":"overflow","direction":"x"},"animation":{"duration":1000,"easing":"ease-in-out"}},"canvas":{},"animation":true,"autoResize":false,"cursor":"default","rotation":0,"zoom":1,"zoomRange":[0.01,10],"theme":"light","plugins":[{"key":"minimap","delay":128,"padding":10,"position":"right-bottom","shape":"key","size":[100,100],"type":"minimap"}],"behaviors":[{"key":"zoom-canvas","animation":{"duration":200},"enable":true,"preventDefault":true,"sensitivity":1,"type":"zoom-canvas"},{"key":"drag-element-force","fixed":true,"enable":"(event) => {\n        return event.targetType === 'node' || event.targetType === 'combo';\n      }","state":"selected","hideEdge":"none","type":"drag-element-force"},{"key":"click-select","animation":true,"degree":0,"enable":true,"multiple":true,"state":"selected","neighborState":"selected","onClick":"(e) => {\n            console.log(e);\n          }","trigger":["shift"],"type":"click-select"},{"key":"brush-select","animation":false,"enable":"(e) => {\n      return true\n    }","enableElements":["node"],"immediately":false,"mode":"default","state":"selected","trigger":"shift","type":"brush-select"}]},"evals":["node.style.labelText","behaviors.1.enable","behaviors.2.onClick","behaviors.3.enable"],"jsHooks":[]}</script>
+<script type="application/json" data-for="htmlwidget-dfa5d821dc44474b3e8c">{"x":{"data":{"nodes":[{"id":"1","label":"1"},{"id":"2","label":"2"},{"id":"3","label":"3"},{"id":"4","label":"4"},{"id":"5","label":"5"},{"id":"6","label":"6"},{"id":"7","label":"7"},{"id":"8","label":"8"},{"id":"9","label":"9"},{"id":"10","label":"10"}],"edges":[{"source":"3","target":"5","id":"35"},{"source":"3","target":"4","id":"34"},{"source":"10","target":"6","id":"106"},{"source":"2","target":"9","id":"29"},{"source":"6","target":"10","id":"610"}]},"jsonUrl":null,"iconsUrl":"//at.alicdn.com/t/font_2678727_za4qjydwkkh.js","layout":{"type":"d3-force","link":{"distance":100,"strength":2},"collide":{"radius":40}},"node":{"style":{"labelBackground":true,"labelBackgroundFill":"#FFB6C1","labelBackgroundRadius":4,"labelFontFamily":"Arial","labelPadding":[0,4],"labelText":"(d) => {\n              return d.id\n            }"}},"animation":true,"autoResize":false,"cursor":"default","rotation":0,"zoom":1,"zoomRange":[0.01,10],"theme":"light","plugins":[{"key":"minimap","delay":128,"padding":10,"position":"right-bottom","shape":"key","size":[100,100],"type":"minimap"}],"behaviors":[{"key":"zoom-canvas","animation":{"duration":200},"enable":true,"preventDefault":true,"sensitivity":1,"type":"zoom-canvas"},{"key":"drag-element-force","fixed":true,"enable":"(event) => {\n        return event.targetType === 'node' || event.targetType === 'combo';\n      }","state":"selected","hideEdge":"none","type":"drag-element-force"},{"key":"click-select","animation":true,"degree":0,"enable":true,"multiple":true,"state":"selected","neighborState":"selected","onClick":"(e) => {\n            console.log(e);\n          }","trigger":["shift"],"type":"click-select"},{"key":"brush-select","animation":false,"enable":"(e) => {\n      return true\n    }","enableElements":["node"],"immediately":false,"mode":"default","state":"selected","trigger":"shift","type":"brush-select"}]},"evals":["node.style.labelText","behaviors.1.enable","behaviors.2.onClick","behaviors.3.enable"],"jsHooks":[]}</script>
 </div>
 </div>
 <p>Notice that we can pass <strong>callback</strong> functions from R to JavaScript. This is useful in combination with Shiny to set custom inputs, for instance.</p>
