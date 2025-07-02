@@ -166,8 +166,8 @@ available <a href="https://g6.antv.antgroup.com/en/manual/element/edge/build-in/
 <span><span class="va">nodes</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>id <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/character.html" class="external-link">as.character</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">5</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="va">edges</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">lapply</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq_along</a></span><span class="op">(</span><span class="va">types</span><span class="op">)</span>, \<span class="op">(</span><span class="va">i</span><span class="op">)</span> <span class="op">{</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
-<span>    source <span class="op">=</span> <span class="st">"1"</span>,</span>
-<span>    target <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/character.html" class="external-link">as.character</a></span><span class="op">(</span><span class="va">i</span> <span class="op">+</span> <span class="fl">1</span><span class="op">)</span>,</span>
+<span>    source <span class="op">=</span> <span class="fl">1</span>,</span>
+<span>    target <span class="op">=</span> <span class="va">i</span> <span class="op">+</span> <span class="fl">1</span>,</span>
 <span>    id <span class="op">=</span> <span class="va">types</span><span class="op">[[</span><span class="va">i</span><span class="op">]</span><span class="op">]</span>,</span>
 <span>    type <span class="op">=</span> <span class="va">types</span><span class="op">[[</span><span class="va">i</span><span class="op">]</span><span class="op">]</span>,</span>
 <span>    style <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
@@ -178,7 +178,7 @@ available <a href="https://g6.antv.antgroup.com/en/manual/element/edge/build-in/
 <span><span class="fu"><a href="../reference/g6.html">g6</a></span><span class="op">(</span><span class="va">nodes</span>, <span class="va">edges</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="../reference/g6_layout.html">g6_layout</a></span><span class="op">(</span><span class="fu"><a href="../reference/d3_force_layout.html">d3_force_layout</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <div id="htmlwidget-ac96cb3ee4656e2e9ec3" style="width:100%;height:432.632880098888px;" class="g6 html-widget"></div>
-<script type="application/json" data-for="htmlwidget-ac96cb3ee4656e2e9ec3">{"x":{"data":{"nodes":[{"id":"1"},{"id":"2"},{"id":"3"},{"id":"4"},{"id":"5"}],"edges":[{"source":"1","target":"2","id":"line","type":"line","style":{"labelText":"line"}},{"source":"1","target":"3","id":"polyline","type":"polyline","style":{"labelText":"polyline"}},{"source":"1","target":"4","id":"quadratic","type":"quadratic","style":{"labelText":"quadratic"}},{"source":"1","target":"5","id":"cubic","type":"cubic","style":{"labelText":"cubic"}}]},"jsonUrl":null,"iconsUrl":"//at.alicdn.com/t/font_2678727_za4qjydwkkh.js","layout":{"type":"d3-force","link":{"distance":100,"strength":2},"collide":{"radius":40}}},"evals":[],"jsHooks":[]}</script><p>Special type <code>cubic-vertical</code> and
+<script type="application/json" data-for="htmlwidget-ac96cb3ee4656e2e9ec3">{"x":{"data":{"nodes":[{"id":"1"},{"id":"2"},{"id":"3"},{"id":"4"},{"id":"5"}],"edges":[{"source":1,"target":2,"id":"line","type":"line","style":{"labelText":"line"}},{"source":1,"target":3,"id":"polyline","type":"polyline","style":{"labelText":"polyline"}},{"source":1,"target":4,"id":"quadratic","type":"quadratic","style":{"labelText":"quadratic"}},{"source":1,"target":5,"id":"cubic","type":"cubic","style":{"labelText":"cubic"}}]},"jsonUrl":null,"iconsUrl":"//at.alicdn.com/t/font_2678727_za4qjydwkkh.js","layout":{"type":"d3-force","link":{"distance":100,"strength":2},"collide":{"radius":40}}},"evals":[],"jsHooks":[]}</script><p>Special type <code>cubic-vertical</code> and
 <code>cubic-horizontal</code> are respectively used for vertical and
 horizontal <a href="https://cynkra.github.io/g6R/articles/layouts.html#tree-layouts">layouts</a>:</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
@@ -196,18 +196,18 @@ horizontal <a href="https://cynkra.github.io/g6R/articles/layouts.html#tree-layo
 JavaScript code and registered in the <code>g6R</code> package. You may
 do the same for your own custom types.</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">nodes</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>id <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"1"</span>, <span class="st">"2"</span><span class="op">)</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="va">nodes</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>id <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">2</span><span class="op">)</span></span>
 <span><span class="va">edges</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
-<span>    source <span class="op">=</span> <span class="st">"1"</span>,</span>
-<span>    target <span class="op">=</span> <span class="st">"2"</span>,</span>
+<span>    source <span class="op">=</span> <span class="fl">1</span>,</span>
+<span>    target <span class="op">=</span> <span class="fl">2</span>,</span>
 <span>    type <span class="op">=</span> <span class="st">"fly-marker-cubic"</span></span>
 <span>  <span class="op">)</span></span>
 <span><span class="op">)</span></span>
 <span><span class="fu"><a href="../reference/g6.html">g6</a></span><span class="op">(</span><span class="va">nodes</span>, <span class="va">edges</span>, height <span class="op">=</span> <span class="st">"200px"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="../reference/g6_layout.html">g6_layout</a></span><span class="op">(</span><span class="fu"><a href="../reference/d3_force_layout.html">d3_force_layout</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <div id="htmlwidget-36aa3d2a04d42bbc2145" style="width:100%;height:200px;" class="g6 html-widget"></div>
-<script type="application/json" data-for="htmlwidget-36aa3d2a04d42bbc2145">{"x":{"data":{"nodes":[{"id":"1"},{"id":"2"}],"edges":[{"source":"1","target":"2","type":"fly-marker-cubic"}]},"jsonUrl":null,"iconsUrl":"//at.alicdn.com/t/font_2678727_za4qjydwkkh.js","layout":{"type":"d3-force","link":{"distance":100,"strength":2},"collide":{"radius":40}}},"evals":[],"jsHooks":[]}</script>
+<script type="application/json" data-for="htmlwidget-36aa3d2a04d42bbc2145">{"x":{"data":{"nodes":[{"id":1},{"id":2}],"edges":[{"source":1,"target":2,"type":"fly-marker-cubic"}]},"jsonUrl":null,"iconsUrl":"//at.alicdn.com/t/font_2678727_za4qjydwkkh.js","layout":{"type":"d3-force","link":{"distance":100,"strength":2},"collide":{"radius":40}}},"evals":[],"jsHooks":[]}</script>
 </div>
 <div class="section level3">
 <h3 id="styling-edges">Styling edges<a class="anchor" aria-label="anchor" href="#styling-edges"></a>
@@ -216,7 +216,7 @@ do the same for your own custom types.</p>
 properties for edges, which can be set in the <code>style</code>
 property of the edge data. We list below the most outstanding
 properties, but you can find a comprehensive list in the <a href="https://g6.antv.antgroup.com/en/manual/element/edge/build-in/base-edge#style" class="external-link">documentation</a>.</p>
-<p><img src="figures/edges.png" style="width:50.0%" fig-align="center"></p>
+<p><img src="figures/edges.png" style="width:50.0%" fig-align="center" alt="Edge style"></p>
 <div class="section level4">
 <h4 id="main-graphic-properties">Main graphic properties<a class="anchor" aria-label="anchor" href="#main-graphic-properties"></a>
 </h4>
@@ -226,11 +226,11 @@ options may be set either at the global edge option level or at the
 individual edge level. Here is an example of how to set the color for a
 given edge:</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">nodes</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>id <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"1"</span>, <span class="st">"2"</span><span class="op">)</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="va">nodes</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>id <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">2</span><span class="op">)</span></span>
 <span><span class="va">edges</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
-<span>    source <span class="op">=</span> <span class="st">"1"</span>,</span>
-<span>    target <span class="op">=</span> <span class="st">"2"</span>,</span>
+<span>    source <span class="op">=</span> <span class="fl">1</span>,</span>
+<span>    target <span class="op">=</span> <span class="fl">2</span>,</span>
 <span>    style <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
 <span>      stroke <span class="op">=</span> <span class="st">"pink"</span>,</span>
 <span>      lineWidth <span class="op">=</span> <span class="fl">10</span></span>
@@ -240,18 +240,18 @@ given edge:</p>
 <span><span class="fu"><a href="../reference/g6.html">g6</a></span><span class="op">(</span><span class="va">nodes</span>, <span class="va">edges</span>, height <span class="op">=</span> <span class="st">"200px"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="../reference/g6_layout.html">g6_layout</a></span><span class="op">(</span><span class="fu"><a href="../reference/d3_force_layout.html">d3_force_layout</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <div id="htmlwidget-febe03efa1a2d8d52a86" style="width:100%;height:200px;" class="g6 html-widget"></div>
-<script type="application/json" data-for="htmlwidget-febe03efa1a2d8d52a86">{"x":{"data":{"nodes":[{"id":"1"},{"id":"2"}],"edges":[{"source":"1","target":"2","style":{"stroke":"pink","lineWidth":10}}]},"jsonUrl":null,"iconsUrl":"//at.alicdn.com/t/font_2678727_za4qjydwkkh.js","layout":{"type":"d3-force","link":{"distance":100,"strength":2},"collide":{"radius":40}}},"evals":[],"jsHooks":[]}</script>
+<script type="application/json" data-for="htmlwidget-febe03efa1a2d8d52a86">{"x":{"data":{"nodes":[{"id":1},{"id":2}],"edges":[{"source":1,"target":2,"style":{"stroke":"pink","lineWidth":10}}]},"jsonUrl":null,"iconsUrl":"//at.alicdn.com/t/font_2678727_za4qjydwkkh.js","layout":{"type":"d3-force","link":{"distance":100,"strength":2},"collide":{"radius":40}}},"evals":[],"jsHooks":[]}</script>
 </div>
 <div class="section level4">
 <h4 id="label-styling">Label styling<a class="anchor" aria-label="anchor" href="#label-styling"></a>
 </h4>
 <p>Some common properties include label <a href="https://g6.antv.antgroup.com/en/manual/element/edge/build-in/base-edge#label-style" class="external-link">styling</a>:</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">nodes</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>id <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"1"</span>, <span class="st">"2"</span><span class="op">)</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="va">nodes</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>id <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">2</span><span class="op">)</span></span>
 <span><span class="va">edges</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
-<span>    source <span class="op">=</span> <span class="st">"1"</span>,</span>
-<span>    target <span class="op">=</span> <span class="st">"2"</span>,</span>
+<span>    source <span class="op">=</span> <span class="fl">1</span>,</span>
+<span>    target <span class="op">=</span> <span class="fl">2</span>,</span>
 <span>    style <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
 <span>      labelText <span class="op">=</span> <span class="st">"Edge Label"</span>, <span class="co"># Label text content</span></span>
 <span>      labelFill <span class="op">=</span> <span class="st">"blue"</span>, <span class="co"># Label text color</span></span>
@@ -266,7 +266,7 @@ given edge:</p>
 <span><span class="fu"><a href="../reference/g6.html">g6</a></span><span class="op">(</span><span class="va">nodes</span>, <span class="va">edges</span>, height <span class="op">=</span> <span class="st">"200px"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="../reference/g6_layout.html">g6_layout</a></span><span class="op">(</span><span class="fu"><a href="../reference/d3_force_layout.html">d3_force_layout</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <div id="htmlwidget-1fb4450895fe099f74a1" style="width:100%;height:200px;" class="g6 html-widget"></div>
-<script type="application/json" data-for="htmlwidget-1fb4450895fe099f74a1">{"x":{"data":{"nodes":[{"id":"1"},{"id":"2"}],"edges":[{"source":"1","target":"2","style":{"labelText":"Edge Label","labelFill":"blue","labelOffsetY":20,"labelFontSize":14,"labelPlacement":"center","labelBackground":true,"labelBackgroundFill":"yellow"}}]},"jsonUrl":null,"iconsUrl":"//at.alicdn.com/t/font_2678727_za4qjydwkkh.js","layout":{"type":"d3-force","link":{"distance":100,"strength":2},"collide":{"radius":40}}},"evals":[],"jsHooks":[]}</script>
+<script type="application/json" data-for="htmlwidget-1fb4450895fe099f74a1">{"x":{"data":{"nodes":[{"id":1},{"id":2}],"edges":[{"source":1,"target":2,"style":{"labelText":"Edge Label","labelFill":"blue","labelOffsetY":20,"labelFontSize":14,"labelPlacement":"center","labelBackground":true,"labelBackgroundFill":"yellow"}}]},"jsonUrl":null,"iconsUrl":"//at.alicdn.com/t/font_2678727_za4qjydwkkh.js","layout":{"type":"d3-force","link":{"distance":100,"strength":2},"collide":{"radius":40}}},"evals":[],"jsHooks":[]}</script>
 </div>
 <div class="section level4">
 <h4 id="badges">Badges<a class="anchor" aria-label="anchor" href="#badges"></a>
@@ -276,11 +276,11 @@ to edges using the <code>badge</code> property in the <code>style</code>
 list. Badges are small indicators that can display additional
 information, such as counts or statuses:</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">nodes</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>id <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"1"</span>, <span class="st">"2"</span><span class="op">)</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="va">nodes</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>id <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">2</span><span class="op">)</span></span>
 <span><span class="va">edges</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
-<span>    source <span class="op">=</span> <span class="st">"1"</span>,</span>
-<span>    target <span class="op">=</span> <span class="st">"2"</span>,</span>
+<span>    source <span class="op">=</span> <span class="fl">1</span>,</span>
+<span>    target <span class="op">=</span> <span class="fl">2</span>,</span>
 <span>    style <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
 <span>      labelText <span class="op">=</span> <span class="st">"Edge Label"</span>, <span class="co"># Label text content</span></span>
 <span>      labelFill <span class="op">=</span> <span class="st">"blue"</span>, <span class="co"># Label text color</span></span>
@@ -298,18 +298,18 @@ information, such as counts or statuses:</p>
 <span><span class="fu"><a href="../reference/g6.html">g6</a></span><span class="op">(</span><span class="va">nodes</span>, <span class="va">edges</span>, height <span class="op">=</span> <span class="st">"200px"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="../reference/g6_layout.html">g6_layout</a></span><span class="op">(</span><span class="fu"><a href="../reference/d3_force_layout.html">d3_force_layout</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <div id="htmlwidget-10b3b7155e8045a1b2ad" style="width:100%;height:200px;" class="g6 html-widget"></div>
-<script type="application/json" data-for="htmlwidget-10b3b7155e8045a1b2ad">{"x":{"data":{"nodes":[{"id":"1"},{"id":"2"}],"edges":[{"source":"1","target":"2","style":{"labelText":"Edge Label","labelFill":"blue","labelFontSize":14,"labelOffsetY":20,"labelPlacement":"center","badgeText":"badge","badgeFill":"green","badgeOffsetX":-40,"badgePlacement":"suffix","badgeBackground":true}}]},"jsonUrl":null,"iconsUrl":"//at.alicdn.com/t/font_2678727_za4qjydwkkh.js","layout":{"type":"d3-force","link":{"distance":100,"strength":2},"collide":{"radius":40}}},"evals":[],"jsHooks":[]}</script>
+<script type="application/json" data-for="htmlwidget-10b3b7155e8045a1b2ad">{"x":{"data":{"nodes":[{"id":1},{"id":2}],"edges":[{"source":1,"target":2,"style":{"labelText":"Edge Label","labelFill":"blue","labelFontSize":14,"labelOffsetY":20,"labelPlacement":"center","badgeText":"badge","badgeFill":"green","badgeOffsetX":-40,"badgePlacement":"suffix","badgeBackground":true}}]},"jsonUrl":null,"iconsUrl":"//at.alicdn.com/t/font_2678727_za4qjydwkkh.js","layout":{"type":"d3-force","link":{"distance":100,"strength":2},"collide":{"radius":40}}},"evals":[],"jsHooks":[]}</script>
 </div>
 <div class="section level4">
 <h4 id="arrow-styling">Arrow styling<a class="anchor" aria-label="anchor" href="#arrow-styling"></a>
 </h4>
 <p>End and start arrows can be styled too:</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">nodes</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>id <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"1"</span>, <span class="st">"2"</span><span class="op">)</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="va">nodes</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>id <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">2</span><span class="op">)</span></span>
 <span><span class="va">edges</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
-<span>    source <span class="op">=</span> <span class="st">"1"</span>,</span>
-<span>    target <span class="op">=</span> <span class="st">"2"</span>,</span>
+<span>    source <span class="op">=</span> <span class="fl">1</span>,</span>
+<span>    target <span class="op">=</span> <span class="fl">2</span>,</span>
 <span>    style <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
 <span>      startArrow <span class="op">=</span> <span class="cn">TRUE</span>, <span class="co"># Enable edge start arrow</span></span>
 <span>      startArrowFill <span class="op">=</span> <span class="st">"yellow"</span>, <span class="co"># Edge start arrow fill color</span></span>
@@ -323,7 +323,7 @@ information, such as counts or statuses:</p>
 <span><span class="fu"><a href="../reference/g6.html">g6</a></span><span class="op">(</span><span class="va">nodes</span>, <span class="va">edges</span>, height <span class="op">=</span> <span class="st">"200px"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="../reference/g6_layout.html">g6_layout</a></span><span class="op">(</span><span class="fu"><a href="../reference/d3_force_layout.html">d3_force_layout</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <div id="htmlwidget-4018eef1a407a0df6b52" style="width:100%;height:200px;" class="g6 html-widget"></div>
-<script type="application/json" data-for="htmlwidget-4018eef1a407a0df6b52">{"x":{"data":{"nodes":[{"id":"1"},{"id":"2"}],"edges":[{"source":"1","target":"2","style":{"startArrow":true,"startArrowFill":"yellow","startArrowType":"rect","endArrow":true,"endArrowFill":"orange","endArrowType":"triangle"}}]},"jsonUrl":null,"iconsUrl":"//at.alicdn.com/t/font_2678727_za4qjydwkkh.js","layout":{"type":"d3-force","link":{"distance":100,"strength":2},"collide":{"radius":40}}},"evals":[],"jsHooks":[]}</script>
+<script type="application/json" data-for="htmlwidget-4018eef1a407a0df6b52">{"x":{"data":{"nodes":[{"id":1},{"id":2}],"edges":[{"source":1,"target":2,"style":{"startArrow":true,"startArrowFill":"yellow","startArrowType":"rect","endArrow":true,"endArrowFill":"orange","endArrowType":"triangle"}}]},"jsonUrl":null,"iconsUrl":"//at.alicdn.com/t/font_2678727_za4qjydwkkh.js","layout":{"type":"d3-force","link":{"distance":100,"strength":2},"collide":{"radius":40}}},"evals":[],"jsHooks":[]}</script>
 </div>
 </div>
 <div class="section level3">
@@ -342,11 +342,11 @@ data:</p>
 <span>  <span class="st">"inactive"</span>,</span>
 <span>  <span class="st">"disabled"</span></span>
 <span><span class="op">)</span></span>
-<span><span class="va">nodes</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>id <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/character.html" class="external-link">as.character</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">7</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">nodes</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>id <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">7</span><span class="op">)</span></span>
 <span><span class="va">edges</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">lapply</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq_along</a></span><span class="op">(</span><span class="va">states</span><span class="op">)</span>, \<span class="op">(</span><span class="va">i</span><span class="op">)</span> <span class="op">{</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
-<span>    source <span class="op">=</span> <span class="st">"1"</span>,</span>
-<span>    target <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/character.html" class="external-link">as.character</a></span><span class="op">(</span><span class="va">i</span> <span class="op">+</span> <span class="fl">1</span><span class="op">)</span>,</span>
+<span>    source <span class="op">=</span> <span class="fl">1</span>,</span>
+<span>    target <span class="op">=</span> <span class="va">i</span> <span class="op">+</span> <span class="fl">1</span>,</span>
 <span>    states <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">states</span><span class="op">[[</span><span class="va">i</span><span class="op">]</span><span class="op">]</span><span class="op">)</span>,</span>
 <span>    style <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
 <span>      labelText <span class="op">=</span> <span class="va">states</span><span class="op">[[</span><span class="va">i</span><span class="op">]</span><span class="op">]</span></span>
@@ -356,7 +356,7 @@ data:</p>
 <span><span class="fu"><a href="../reference/g6.html">g6</a></span><span class="op">(</span><span class="va">nodes</span>, <span class="va">edges</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="../reference/g6_layout.html">g6_layout</a></span><span class="op">(</span><span class="fu"><a href="../reference/d3_force_layout.html">d3_force_layout</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <div id="htmlwidget-5b1b2f4ad92281566982" style="width:100%;height:432.632880098888px;" class="g6 html-widget"></div>
-<script type="application/json" data-for="htmlwidget-5b1b2f4ad92281566982">{"x":{"data":{"nodes":[{"id":"1"},{"id":"2"},{"id":"3"},{"id":"4"},{"id":"5"},{"id":"6"},{"id":"7"}],"edges":[{"source":"1","target":"2","states":["default"],"style":{"labelText":"default"}},{"source":"1","target":"3","states":["selected"],"style":{"labelText":"selected"}},{"source":"1","target":"4","states":["highlight"],"style":{"labelText":"highlight"}},{"source":"1","target":"5","states":["active"],"style":{"labelText":"active"}},{"source":"1","target":"6","states":["inactive"],"style":{"labelText":"inactive"}},{"source":"1","target":"7","states":["disabled"],"style":{"labelText":"disabled"}}]},"jsonUrl":null,"iconsUrl":"//at.alicdn.com/t/font_2678727_za4qjydwkkh.js","layout":{"type":"d3-force","link":{"distance":100,"strength":2},"collide":{"radius":40}}},"evals":[],"jsHooks":[]}</script>
+<script type="application/json" data-for="htmlwidget-5b1b2f4ad92281566982">{"x":{"data":{"nodes":[{"id":1},{"id":2},{"id":3},{"id":4},{"id":5},{"id":6},{"id":7}],"edges":[{"source":1,"target":2,"states":["default"],"style":{"labelText":"default"}},{"source":1,"target":3,"states":["selected"],"style":{"labelText":"selected"}},{"source":1,"target":4,"states":["highlight"],"style":{"labelText":"highlight"}},{"source":1,"target":5,"states":["active"],"style":{"labelText":"active"}},{"source":1,"target":6,"states":["inactive"],"style":{"labelText":"inactive"}},{"source":1,"target":7,"states":["disabled"],"style":{"labelText":"disabled"}}]},"jsonUrl":null,"iconsUrl":"//at.alicdn.com/t/font_2678727_za4qjydwkkh.js","layout":{"type":"d3-force","link":{"distance":100,"strength":2},"collide":{"radius":40}}},"evals":[],"jsHooks":[]}</script>
 </div>
 <div class="section level3">
 <h3 id="color-palette">Color palette<a class="anchor" aria-label="anchor" href="#color-palette"></a>

@@ -101,22 +101,22 @@
 created from a <strong>dataframe</strong> or a <strong>list</strong>
 such as:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">nodes</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>id <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/character.html" class="external-link">as.character</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">2</span><span class="op">)</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="va">nodes</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>id <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">2</span><span class="op">)</span></span>
 <span><span class="va">nodes</span><span class="op">$</span><span class="va">label</span> <span class="op">&lt;-</span> <span class="va">nodes</span><span class="op">$</span><span class="va">id</span></span>
 <span></span>
 <span><span class="co"># or</span></span>
 <span><span class="va">nodes</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
-<span>  <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>id <span class="op">=</span> <span class="st">"1"</span>, label <span class="op">=</span> <span class="st">"Node 1"</span><span class="op">)</span>,</span>
-<span>  <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>id <span class="op">=</span> <span class="st">"2"</span>, label <span class="op">=</span> <span class="st">"Node 2"</span><span class="op">)</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>id <span class="op">=</span> <span class="fl">1</span>, label <span class="op">=</span> <span class="st">"Node 1"</span><span class="op">)</span>,</span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>id <span class="op">=</span> <span class="fl">2</span>, label <span class="op">=</span> <span class="st">"Node 2"</span><span class="op">)</span></span>
 <span><span class="op">)</span></span></code></pre></div>
-<p>While the former might be more convenient for simple cases, the
-latter provides more flexibility for advanced customization since some
-node properties have to be nested lists, for instance
-<strong>style</strong> properties:</p>
+<p>While <strong>dataframes</strong> might be more convenient for simple
+cases, <strong>lists</strong> provides more flexibility for advanced
+customization since some node properties have to be nested lists, for
+instance <strong>style</strong> properties:</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">nodes</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
-<span>    id <span class="op">=</span> <span class="st">"1"</span>,</span>
+<span>    id <span class="op">=</span> <span class="fl">1</span>,</span>
 <span>    label <span class="op">=</span> <span class="st">"Node 1"</span>,</span>
 <span>    style <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>fill <span class="op">=</span> <span class="st">"#FF0000"</span>, fillOpacity <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span></span>
 <span>  <span class="op">)</span>,</span>
@@ -195,7 +195,7 @@ link).</li>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">nodes</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
-<span>    id <span class="op">=</span> <span class="st">"1"</span>,</span>
+<span>    id <span class="op">=</span> <span class="fl">1</span>,</span>
 <span>    type <span class="op">=</span> <span class="st">"image"</span>,</span>
 <span>    style <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
 <span>      src <span class="op">=</span> <span class="st">"https://gw.alipayobjects.com/mdn/rms_6ae20b/afts/img/A*N4ZMS7gHsUIAAAAAAAAAAABkARQnAQ"</span></span>
@@ -217,7 +217,7 @@ link).</li>
 <span>    <span class="op">)</span></span>
 <span>  <span class="op">)</span></span></code></pre></div>
 <div id="htmlwidget-e5c8c404fe174e4c81bd" style="width:100%;height:100px;" class="g6 html-widget"></div>
-<script type="application/json" data-for="htmlwidget-e5c8c404fe174e4c81bd">{"x":{"data":{"nodes":[{"id":"1","type":"image","style":{"src":"https://gw.alipayobjects.com/mdn/rms_6ae20b/afts/img/A*N4ZMS7gHsUIAAAAAAAAAAABkARQnAQ"}}]},"jsonUrl":null,"iconsUrl":"//at.alicdn.com/t/font_2678727_za4qjydwkkh.js","layout":{"type":"d3-force","link":{"distance":100,"strength":2},"collide":{"radius":40}},"node":{"style":{"labelText":"(d) => {\n            return d.id\n          }"}},"animation":false,"autoResize":false,"cursor":"default","rotation":0,"zoom":1,"zoomRange":[0.01,10],"theme":"light"},"evals":["node.style.labelText"],"jsHooks":[]}</script>
+<script type="application/json" data-for="htmlwidget-e5c8c404fe174e4c81bd">{"x":{"data":{"nodes":[{"id":1,"type":"image","style":{"src":"https://gw.alipayobjects.com/mdn/rms_6ae20b/afts/img/A*N4ZMS7gHsUIAAAAAAAAAAABkARQnAQ"}}]},"jsonUrl":null,"iconsUrl":"//at.alicdn.com/t/font_2678727_za4qjydwkkh.js","layout":{"type":"d3-force","link":{"distance":100,"strength":2},"collide":{"radius":40}},"node":{"style":{"labelText":"(d) => {\n            return d.id\n          }"}},"animation":false,"autoResize":false,"cursor":"default","rotation":0,"zoom":1,"zoomRange":[0.01,10],"theme":"light"},"evals":["node.style.labelText"],"jsHooks":[]}</script>
 </div>
 <div class="section level4">
 <h4 id="html-nodes">HTML nodes<a class="anchor" aria-label="anchor" href="#html-nodes"></a>
@@ -229,10 +229,7 @@ following. The node structure is created with the <code>innerHTML</code>
 property which has to be a JavaScript callback taking node data as
 parameter:</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">nodes</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">lapply</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">3</span>, \<span class="op">(</span><span class="va">i</span><span class="op">)</span> <span class="op">{</span></span>
-<span>  <span class="va">id</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/character.html" class="external-link">as.character</a></span><span class="op">(</span><span class="va">i</span><span class="op">)</span></span>
-<span>  <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>id <span class="op">=</span> <span class="va">id</span><span class="op">)</span></span>
-<span><span class="op">}</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="va">nodes</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>id <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">3</span><span class="op">)</span></span>
 <span><span class="fu"><a href="../reference/g6.html">g6</a></span><span class="op">(</span><span class="va">nodes</span>, height <span class="op">=</span> <span class="st">"200px"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="../reference/g6_layout.html">g6_layout</a></span><span class="op">(</span><span class="fu"><a href="../reference/d3_force_layout.html">d3_force_layout</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="../reference/g6_options.html">g6_options</a></span><span class="op">(</span></span>
@@ -254,7 +251,7 @@ parameter:</p>
 <span>    <span class="op">)</span></span>
 <span>  <span class="op">)</span></span></code></pre></div>
 <div id="htmlwidget-36aa3d2a04d42bbc2145" style="width:100%;height:200px;" class="g6 html-widget"></div>
-<script type="application/json" data-for="htmlwidget-36aa3d2a04d42bbc2145">{"x":{"data":{"nodes":[{"id":"1"},{"id":"2"},{"id":"3"}]},"jsonUrl":null,"iconsUrl":"//at.alicdn.com/t/font_2678727_za4qjydwkkh.js","layout":{"type":"d3-force","link":{"distance":100,"strength":2},"collide":{"radius":40}},"node":{"type":"html","style":{"innerHTML":"(d) => {\n            return `\n              <div class=\"card\" style=\"width: 13rem;\">\n                <div class=\"card-body\">\n                  This is node: ${d.id}\n                <\/div>\n              <\/div>`;\n            }"}},"animation":false,"autoResize":false,"cursor":"default","rotation":0,"zoom":1,"zoomRange":[0.01,10],"theme":"light"},"evals":["node.style.innerHTML"],"jsHooks":[]}</script>
+<script type="application/json" data-for="htmlwidget-36aa3d2a04d42bbc2145">{"x":{"data":{"nodes":[{"id":1},{"id":2},{"id":3}]},"jsonUrl":null,"iconsUrl":"//at.alicdn.com/t/font_2678727_za4qjydwkkh.js","layout":{"type":"d3-force","link":{"distance":100,"strength":2},"collide":{"radius":40}},"node":{"type":"html","style":{"innerHTML":"(d) => {\n            return `\n              <div class=\"card\" style=\"width: 13rem;\">\n                <div class=\"card-body\">\n                  This is node: ${d.id}\n                <\/div>\n              <\/div>`;\n            }"}},"animation":false,"autoResize":false,"cursor":"default","rotation":0,"zoom":1,"zoomRange":[0.01,10],"theme":"light"},"evals":["node.style.innerHTML"],"jsHooks":[]}</script>
 </div>
 <div class="section level4">
 <h4 id="donut">Donut<a class="anchor" aria-label="anchor" href="#donut"></a>
@@ -270,11 +267,11 @@ donuts and customize the output, as shown in the example below.</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">nodes</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
-<span>    id <span class="op">=</span> <span class="st">"1"</span>,</span>
+<span>    id <span class="op">=</span> <span class="fl">1</span>,</span>
 <span>    index <span class="op">=</span> <span class="fl">0</span></span>
 <span>  <span class="op">)</span>,</span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
-<span>    id <span class="op">=</span> <span class="st">"2"</span>,</span>
+<span>    id <span class="op">=</span> <span class="fl">2</span>,</span>
 <span>    index <span class="op">=</span> <span class="fl">1</span></span>
 <span>  <span class="op">)</span></span>
 <span><span class="op">)</span></span>
@@ -308,7 +305,7 @@ donuts and customize the output, as shown in the example below.</p>
 <span>    <span class="op">)</span></span>
 <span>  <span class="op">)</span></span></code></pre></div>
 <div id="htmlwidget-febe03efa1a2d8d52a86" style="width:100%;height:200px;" class="g6 html-widget"></div>
-<script type="application/json" data-for="htmlwidget-febe03efa1a2d8d52a86">{"x":{"data":{"nodes":[{"id":"1","index":0},{"id":"2","index":1}]},"jsonUrl":null,"iconsUrl":"//at.alicdn.com/t/font_2678727_za4qjydwkkh.js","layout":{"type":"d3-force","link":{"distance":100,"strength":2},"collide":{"radius":40}},"node":{"type":"donut","style":{"donuts":"(item) => {\n            const { index } = item;\n            if (index === 0) {\n              return [\n                  { value: 50, color: 'red' },\n                  { value: 150, color: 'green' },\n                  { value: 100, color: 'blue' },\n                ];\n            }\n            if (index === 1) {\n              return [\n                  { value: 100, color: 'yellow' },\n                  { value: 50, color: 'purple' },\n                  { value: 150, color: 'orange' },\n                ];\n            }\n          }"}},"animation":false,"autoResize":false,"cursor":"default","rotation":0,"zoom":1,"zoomRange":[0.01,10],"theme":"light"},"evals":["node.style.donuts"],"jsHooks":[]}</script>
+<script type="application/json" data-for="htmlwidget-febe03efa1a2d8d52a86">{"x":{"data":{"nodes":[{"id":1,"index":0},{"id":2,"index":1}]},"jsonUrl":null,"iconsUrl":"//at.alicdn.com/t/font_2678727_za4qjydwkkh.js","layout":{"type":"d3-force","link":{"distance":100,"strength":2},"collide":{"radius":40}},"node":{"type":"donut","style":{"donuts":"(item) => {\n            const { index } = item;\n            if (index === 0) {\n              return [\n                  { value: 50, color: 'red' },\n                  { value: 150, color: 'green' },\n                  { value: 100, color: 'blue' },\n                ];\n            }\n            if (index === 1) {\n              return [\n                  { value: 100, color: 'yellow' },\n                  { value: 50, color: 'purple' },\n                  { value: 150, color: 'orange' },\n                ];\n            }\n          }"}},"animation":false,"autoResize":false,"cursor":"default","rotation":0,"zoom":1,"zoomRange":[0.01,10],"theme":"light"},"evals":["node.style.donuts"],"jsHooks":[]}</script>
 </div>
 </div>
 <div class="section level3">
@@ -318,7 +315,7 @@ donuts and customize the output, as shown in the example below.</p>
 properties for nodes, which can be set in the <code>style</code>
 property of the node data. We list below the most outstanding
 properties, but you can find a comprehensive list in the <a href="https://g6.antv.antgroup.com/en/manual/element/node/build-in/base-node#style" class="external-link">documentation</a>.</p>
-<p><img src="figures/node.png" style="width:50.0%" fig-align="center"></p>
+<p><img src="figures/node.png" style="width:50.0%" fig-align="center" alt="Node style"></p>
 <div class="section level4">
 <h4 id="main-graphic-properties">Main graphic properties<a class="anchor" aria-label="anchor" href="#main-graphic-properties"></a>
 </h4>
@@ -327,7 +324,7 @@ of the node, such as color, width, and line type. They can be applied at
 the global node option level or at the individual node level. Here is an
 example of how to set the color for all nodes of the same graph:</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">nodes</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>id <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"1"</span>, <span class="st">"2"</span><span class="op">)</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="va">nodes</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>id <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">2</span><span class="op">)</span></span>
 <span><span class="fu"><a href="../reference/g6.html">g6</a></span><span class="op">(</span><span class="va">nodes</span>, height <span class="op">=</span> <span class="st">"200px"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="../reference/g6_layout.html">g6_layout</a></span><span class="op">(</span><span class="fu"><a href="../reference/d3_force_layout.html">d3_force_layout</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="../reference/g6_options.html">g6_options</a></span><span class="op">(</span></span>
@@ -342,7 +339,7 @@ example of how to set the color for all nodes of the same graph:</p>
 <span>    <span class="op">)</span></span>
 <span>  <span class="op">)</span></span></code></pre></div>
 <div id="htmlwidget-1fb4450895fe099f74a1" style="width:100%;height:200px;" class="g6 html-widget"></div>
-<script type="application/json" data-for="htmlwidget-1fb4450895fe099f74a1">{"x":{"data":{"nodes":[{"id":"1"},{"id":"2"}]},"jsonUrl":null,"iconsUrl":"//at.alicdn.com/t/font_2678727_za4qjydwkkh.js","layout":{"type":"d3-force","link":{"distance":100,"strength":2},"collide":{"radius":40}},"node":{"style":{"fill":"#FFB6C1","fillOpacity":0.5,"stroke":"#000","lineWidth":2,"radius":10}},"animation":true,"autoResize":false,"cursor":"default","rotation":0,"zoom":1,"zoomRange":[0.01,10],"theme":"light"},"evals":[],"jsHooks":[]}</script>
+<script type="application/json" data-for="htmlwidget-1fb4450895fe099f74a1">{"x":{"data":{"nodes":[{"id":1},{"id":2}]},"jsonUrl":null,"iconsUrl":"//at.alicdn.com/t/font_2678727_za4qjydwkkh.js","layout":{"type":"d3-force","link":{"distance":100,"strength":2},"collide":{"radius":40}},"node":{"style":{"fill":"#FFB6C1","fillOpacity":0.5,"stroke":"#000","lineWidth":2,"radius":10}},"animation":true,"autoResize":false,"cursor":"default","rotation":0,"zoom":1,"zoomRange":[0.01,10],"theme":"light"},"evals":[],"jsHooks":[]}</script>
 </div>
 <div class="section level4">
 <h4 id="label-styling">Label styling<a class="anchor" aria-label="anchor" href="#label-styling"></a>
@@ -351,7 +348,7 @@ example of how to set the color for all nodes of the same graph:</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">nodes</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
-<span>    id <span class="op">=</span> <span class="st">"1"</span>,</span>
+<span>    id <span class="op">=</span> <span class="fl">1</span>,</span>
 <span>    style <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
 <span>      label <span class="op">=</span> <span class="cn">TRUE</span>, <span class="co"># Whether to display the node label</span></span>
 <span>      labelText <span class="op">=</span> <span class="st">"Node Name"</span>, <span class="co"># Label text content</span></span>
@@ -366,7 +363,7 @@ example of how to set the color for all nodes of the same graph:</p>
 <span><span class="fu"><a href="../reference/g6.html">g6</a></span><span class="op">(</span><span class="va">nodes</span>, height <span class="op">=</span> <span class="st">"200px"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="../reference/g6_layout.html">g6_layout</a></span><span class="op">(</span><span class="fu"><a href="../reference/d3_force_layout.html">d3_force_layout</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <div id="htmlwidget-10b3b7155e8045a1b2ad" style="width:100%;height:200px;" class="g6 html-widget"></div>
-<script type="application/json" data-for="htmlwidget-10b3b7155e8045a1b2ad">{"x":{"data":{"nodes":[{"id":"1","style":{"label":true,"labelText":"Node Name","labelFill":"#000","labelFontSize":15,"labelFontWeight":"normal","labelPlacement":"bottom"}}]},"jsonUrl":null,"iconsUrl":"//at.alicdn.com/t/font_2678727_za4qjydwkkh.js","layout":{"type":"d3-force","link":{"distance":100,"strength":2},"collide":{"radius":40}}},"evals":[],"jsHooks":[]}</script>
+<script type="application/json" data-for="htmlwidget-10b3b7155e8045a1b2ad">{"x":{"data":{"nodes":[{"id":1,"style":{"label":true,"labelText":"Node Name","labelFill":"#000","labelFontSize":15,"labelFontWeight":"normal","labelPlacement":"bottom"}}]},"jsonUrl":null,"iconsUrl":"//at.alicdn.com/t/font_2678727_za4qjydwkkh.js","layout":{"type":"d3-force","link":{"distance":100,"strength":2},"collide":{"radius":40}}},"evals":[],"jsHooks":[]}</script>
 </div>
 <div class="section level4">
 <h4 id="badges">Badges<a class="anchor" aria-label="anchor" href="#badges"></a>
@@ -378,7 +375,7 @@ information, such as counts or statuses:</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">nodes</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
-<span>    id <span class="op">=</span> <span class="st">"1"</span>,</span>
+<span>    id <span class="op">=</span> <span class="fl">1</span>,</span>
 <span>    style <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
 <span>      badge <span class="op">=</span> <span class="cn">TRUE</span>, <span class="co"># Whether to display the badge</span></span>
 <span>      badges <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
@@ -395,7 +392,7 @@ information, such as counts or statuses:</p>
 <span><span class="fu"><a href="../reference/g6.html">g6</a></span><span class="op">(</span><span class="va">nodes</span>, height <span class="op">=</span> <span class="st">"200px"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="../reference/g6_layout.html">g6_layout</a></span><span class="op">(</span><span class="fu"><a href="../reference/d3_force_layout.html">d3_force_layout</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <div id="htmlwidget-4018eef1a407a0df6b52" style="width:100%;height:200px;" class="g6 html-widget"></div>
-<script type="application/json" data-for="htmlwidget-4018eef1a407a0df6b52">{"x":{"data":{"nodes":[{"id":"1","style":{"badge":true,"badges":[{"text":"A","placement":"right-top"},{"text":"Important","placement":"right"},{"text":"Notice","placement":"right-bottom"}],"badgePalette":["#7E92B5","#F4664A","#FFBE3A"],"badgeFontSize":7}}]},"jsonUrl":null,"iconsUrl":"//at.alicdn.com/t/font_2678727_za4qjydwkkh.js","layout":{"type":"d3-force","link":{"distance":100,"strength":2},"collide":{"radius":40}}},"evals":[],"jsHooks":[]}</script>
+<script type="application/json" data-for="htmlwidget-4018eef1a407a0df6b52">{"x":{"data":{"nodes":[{"id":1,"style":{"badge":true,"badges":[{"text":"A","placement":"right-top"},{"text":"Important","placement":"right"},{"text":"Notice","placement":"right-bottom"}],"badgePalette":["#7E92B5","#F4664A","#FFBE3A"],"badgeFontSize":7}}]},"jsonUrl":null,"iconsUrl":"//at.alicdn.com/t/font_2678727_za4qjydwkkh.js","layout":{"type":"d3-force","link":{"distance":100,"strength":2},"collide":{"radius":40}}},"evals":[],"jsHooks":[]}</script>
 </div>
 <div class="section level4">
 <h4 id="ports">Ports<a class="anchor" aria-label="anchor" href="#ports"></a>
@@ -407,7 +404,7 @@ can specify the position and other properties of each port:</p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">nodes</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
-<span>    id <span class="op">=</span> <span class="st">"node1"</span>,</span>
+<span>    id <span class="op">=</span> <span class="fl">1</span>,</span>
 <span>    style <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
 <span>      port <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>      ports <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
@@ -442,7 +439,7 @@ can specify the position and other properties of each port:</p>
 <span><span class="fu"><a href="../reference/g6.html">g6</a></span><span class="op">(</span><span class="va">nodes</span>, height <span class="op">=</span> <span class="st">"200px"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="../reference/g6_layout.html">g6_layout</a></span><span class="op">(</span><span class="fu"><a href="../reference/d3_force_layout.html">d3_force_layout</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <div id="htmlwidget-5b1b2f4ad92281566982" style="width:100%;height:200px;" class="g6 html-widget"></div>
-<script type="application/json" data-for="htmlwidget-5b1b2f4ad92281566982">{"x":{"data":{"nodes":[{"id":"node1","style":{"port":true,"ports":[{"key":"top","placement":[0.5,1],"fill":"#7E92B5"},{"key":"right","placement":[1,0.5],"fill":"#F4664A"},{"key":"bottom","placement":[0.5,0],"fill":"#FFBE3A"},{"key":"left","placement":[0,0.5],"fill":"#D580FF"}],"portR":3,"portLineWidth":1,"portStroke":"#fff"}}]},"jsonUrl":null,"iconsUrl":"//at.alicdn.com/t/font_2678727_za4qjydwkkh.js","layout":{"type":"d3-force","link":{"distance":100,"strength":2},"collide":{"radius":40}}},"evals":[],"jsHooks":[]}</script>
+<script type="application/json" data-for="htmlwidget-5b1b2f4ad92281566982">{"x":{"data":{"nodes":[{"id":1,"style":{"port":true,"ports":[{"key":"top","placement":[0.5,1],"fill":"#7E92B5"},{"key":"right","placement":[1,0.5],"fill":"#F4664A"},{"key":"bottom","placement":[0.5,0],"fill":"#FFBE3A"},{"key":"left","placement":[0,0.5],"fill":"#D580FF"}],"portR":3,"portLineWidth":1,"portStroke":"#fff"}}]},"jsonUrl":null,"iconsUrl":"//at.alicdn.com/t/font_2678727_za4qjydwkkh.js","layout":{"type":"d3-force","link":{"distance":100,"strength":2},"collide":{"radius":40}}},"evals":[],"jsHooks":[]}</script>
 </div>
 </div>
 <div class="section level3">
