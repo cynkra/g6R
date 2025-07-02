@@ -10,11 +10,15 @@ import { setClickEvents, setGraphEvents } from './events';
 import { registerShinyHandlers } from './handlers';
 
 const sendNotification = (message, type = "error", duration = null) => {
-  Shiny.notifications.show({
-    html: message,
-    type: type,
-    duration: duration
-  })
+  if (HTMLWidgets.shinyMode) {
+    Shiny.setInputValue('g6-notification', {
+      message: message,
+      type: type,
+      duration: duration
+    });
+  } else {
+    alert(message)
+  }
 }
 
 const checkIds = (data) => {
