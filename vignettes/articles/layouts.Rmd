@@ -1,10 +1,5 @@
 ---
 title: "Layouts"
-output: rmarkdown::html_vignette
-vignette: >
-  %\VignetteIndexEntry{layouts}
-  %\VignetteEngine{quarto::html}
-  %\VignetteEncoding{UTF-8}
 ---
 
 ```{r, include = FALSE}

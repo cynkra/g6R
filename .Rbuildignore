@@ -20,3 +20,4 @@
 ^index\.qmd$
 ^index\.md$
 ^cran-comments\.md$
+^vignettes/articles$

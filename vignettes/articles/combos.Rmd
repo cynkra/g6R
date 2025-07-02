@@ -1,10 +1,5 @@
 ---
 title: "Combos"
-output: rmarkdown::html_vignette
-vignette: >
-  %\VignetteIndexEntry{combos}
-  %\VignetteEngine{quarto::html}
-  %\VignetteEncoding{UTF-8}
 ---
 
 ```{r, include = FALSE}

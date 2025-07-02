@@ -21,10 +21,21 @@ knitr::opts_chunk$set(
 [![CRAN status](https://www.r-pkg.org/badges/version/g6R)](https://CRAN.R-project.org/package=g6R)
 <!-- badges: end -->
 
-`{g6R}` provides R bindings to the G6 graph [library](https://g6.antv.antgroup.com/en).
-
 <p style="text-align: center;">
 ![](./man/figures/hex.png){width="50%"}
+</p>
+
+`{g6R}` provides R bindings to the G6 graph [library](https://g6.antv.antgroup.com/en). It allows to create interactive network in R, with stunning set of features, including:
+
+- Support for various __layouts__, such as force-directed, radial, circular, and hierarchical layouts.
+- Interactive __behaviors__ like zooming, dragging, and selecting elements.
+- __Plugins__ for additional functionality, such as minimaps and tooltips, context menus, and node grouping features like bubble sets, hulls and legends.
+- Various __data sources__ including data frames, lists and remote JSON urls.
+- Support for __combos__ allowing for __nested__ nodes.
+- High __performance__ rendering (>20000 nodes).
+
+<p style="text-align: center;">
+![](./man/figures/g6-layers.png){width="50%"}
 </p>
 
 ## Installation
@@ -38,7 +49,7 @@ pak::pak("cynkra/g6R")
 
 ## Example
 
-To create a `g6` graph:
+To create a `{g6R}` graph:
 
 ```r
 library(g6R)

@@ -2,9 +2,6 @@
 
 
 <!-- index.md is generated from index.qmd Please edit that file -->
-
-# g6R
-
 <!-- badges: start -->
 
 [![R-CMD-check](https://github.com/cynkra/g6R/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/cynkra/g6R/actions/workflows/R-CMD-check.yaml)
@@ -14,11 +11,28 @@ experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](h
 status](https://www.r-pkg.org/badges/version/g6R.png)](https://CRAN.R-project.org/package=g6R)
 <!-- badges: end -->
 
-`{g6R}` provides R bindings to the G6 graph
-[library](https://g6.antv.antgroup.com/en).
-
 <p style="text-align: center;">
 <img src="./man/figures/hex.png" style="width:50.0%" />
+</p>
+
+`{g6R}` provides R bindings to the G6 graph
+[library](https://g6.antv.antgroup.com/en). It allows to create
+interactive network in R, with stunning set of features, including:
+
+-   Support for various **layouts**, such as force-directed, radial,
+    circular, and hierarchical layouts.
+-   Interactive **behaviors** like zooming, dragging, and selecting
+    elements.
+-   **Plugins** for additional functionality, such as minimaps and
+    tooltips, context menus, and node grouping features like bubble
+    sets, hulls and legends.
+-   Various **data sources** including data frames, lists and remote
+    JSON urls.
+-   Support for **combos** allowing for **nested** nodes.
+-   High **performance** rendering (\>20000 nodes).
+
+<p style="text-align: center;">
+<img src="./man/figures/g6-layers.png" style="width:50.0%" />
 </p>
 
 ``` r
@@ -39,7 +53,7 @@ pak::pak("cynkra/g6R")
 
 ## Example
 
-To create a `g6` graph:
+To create a `{g6R}` graph:
 
 ``` r
 library(g6R)

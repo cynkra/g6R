@@ -1,10 +1,5 @@
 ---
 title: "Plugins"
-output: rmarkdown::html_vignette
-vignette: >
-  %\VignetteIndexEntry{plugins}
-  %\VignetteEngine{quarto::html}
-  %\VignetteEncoding{UTF-8}
 ---
 
 ```{r, include = FALSE}
@@ -72,9 +67,7 @@ g6() |>
   )
 ```
 
-```{r}
-#| results: asis
-#| echo: false
+```{r, results = 'asis', echo = FALSE}
 for (plugin in names(plugins_data)) {
   # Print the section header
   cat("## ", gsub('-', ' ', stringr::str_to_title(plugin)), " Plugin\n\n")
@@ -93,7 +86,6 @@ for (plugin in names(plugins_data)) {
   # Display the plot using Quarto's widget rendering
   print(htmltools::tagList(g6_plot))
 
-  cat("\n\n::: {.callout-note collapse=\"true\"}\n")
   cat("## View R Code\n\n")
   cat("```r\n")
   cat("nodes <- data.frame(\n")
@@ -125,7 +117,6 @@ for (plugin in names(plugins_data)) {
   cat("  ) |>\n")
   cat("  g6_plugins(\"", plugin, "\")\n")
   cat("```\n")
-  cat(":::\n\n")
   cat("---\n\n")
 }
 ```

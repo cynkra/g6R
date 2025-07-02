@@ -1,10 +1,5 @@
 ---
 title: "Behaviors"
-output: rmarkdown::html_vignette
-vignette: >
-  %\VignetteIndexEntry{behaviors}
-  %\VignetteEngine{quarto::html}
-  %\VignetteEncoding{UTF-8}
 ---
 
 ```{r, include = FALSE}
@@ -92,9 +87,7 @@ g6() |>
   )
 ```
 
-```{r}
-#| results: asis
-#| echo: false
+```{r, results='asis', echo=FALSE}
 for (behavior in names(behaviors_data)) {
   # Print the section header
   cat("## ", gsub('-', ' ', stringr::str_to_title(behavior)), " Behavior\n\n")
@@ -114,7 +107,6 @@ for (behavior in names(behaviors_data)) {
   # Display the plot using Quarto's widget rendering
   print(htmltools::tagList(g6_plot))
 
-  cat("\n\n::: {.callout-note collapse=\"true\"}\n")
   cat("## View R Code\n\n")
   cat("```r\n")
   cat("nodes <- data.frame(id = letters[1:5])\n\n")
@@ -133,7 +125,6 @@ for (behavior in names(behaviors_data)) {
   cat("  g6_layout(d3_force_layout()) |>\n")
   cat("  g6_behaviors(\"", behavior, "\")\n")
   cat("```\n")
-  cat(":::\n\n")
   cat("---\n\n")
 }
 ```

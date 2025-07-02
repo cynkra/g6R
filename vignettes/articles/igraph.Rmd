@@ -1,10 +1,5 @@
 ---
 title: "igraph support"
-output: rmarkdown::html_vignette
-vignette: >
-  %\VignetteIndexEntry{igraph}
-  %\VignetteEngine{quarto::html}
-  %\VignetteEncoding{UTF-8}
 ---
 
 ```{r, include = FALSE}
@@ -14,9 +9,7 @@ knitr::opts_chunk$set(
 )
 ```
 
-```{r setup}
-#| warnings: false
-#| message: false
+```{r setup, warning = FALSE, message = FALSE}
 library(g6R)
 library(igraph)
 ```
