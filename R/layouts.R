@@ -240,7 +240,7 @@ antv_dagre_layout <- function(
 #' @param width Width of layout.
 #' @param height Height of layout.
 #' @param ... Additional parameters to pass to the layout.
-#' See \url{https://g6.antv.antgroup.com/manual/layout/build-in/circular-layout}.
+#' See \url{https://g6.antv.antgroup.com/en/manual/layout/circular-layout}.
 #'
 #' @return A list containing the configuration for G6 AntV circular layout.
 #' @export
@@ -369,6 +369,7 @@ circular_layout <- function(
 #' Function format: \code{function(node) { return number }}
 #' @param radial Whether to enable radial layout
 #' @param ... Additional parameters to pass to the layout.
+#' See \url{https://g6.antv.antgroup.com/en/manual/layout/compact-box-layout}.
 #'
 #' @return A list containing the configuration for G6 AntV Compact Box layout.
 #' @export
@@ -465,7 +466,7 @@ compact_box_layout <- function(
 #'     \item{iterations}{The number of iterations for collision detection. Default is 1}
 #'   }
 #' @param ... Additional parameters to pass to the layout.
-#' See \url{https://g6.antv.antgroup.com/manual/layout/build-in/d3-force}.
+#' See \url{https://g6.antv.antgroup.com/en/manual/layout/d3-force}.
 #'
 #' @return A list containing the configuration for G6 AntV D3 Force layout.
 #' @export
@@ -602,7 +603,8 @@ d3_force_layout <- function(
 #'   is undefined, it will be set to \code{2 * Math.PI * (1 - 1 / |level.nodes|)}, where level.nodes
 #'   is the number of nodes in each layer calculated by the algorithm, and |level.nodes| is
 #'   the number of nodes in the layer.
-#' @param ... Additional parameters to pass to the layout
+#' @param ... Additional parameters to pass to the layout.
+#' See \url{https://g6.antv.antgroup.com/en/manual/layout/concentric-layout}.
 #'
 #' @return A list containing the configuration for G6 AntV Concentric layout
 #' @export
@@ -761,7 +763,8 @@ concentric_layout <- function(
 #'   Can be a single number (same width/height), an array \code{[width, height]},
 #'   or a function that returns either.
 #' @param controlPoints Whether to keep the control points of the edge.
-#' @param ... Additional parameters to pass to the layout.
+#' @param ... Additional parameters to pass to the layout. See
+#' \url{https://g6.antv.antgroup.com/en/manual/layout/dagre-layout}.
 #'
 #' @return A list containing the configuration for G6 AntV Dagre layout.
 #' @export
@@ -873,7 +876,7 @@ dagre_layout <- function(
 #' Each node is attracted to this point, with gravity controlled by \code{kg}.
 #' If not set, uses canvas center.
 #' @param ... Additional parameters to pass to the layout.
-#' See \url{https://g6.antv.antgroup.com/manual/layout/build-in/force-atlas2-layout}.
+#' See \url{https://g6.antv.antgroup.com/en/manual/layout/force-atlas2-layout}.
 #'
 #' @return A list containing the configuration for G6 force atlas2 layout.
 #' @export
@@ -983,7 +986,7 @@ force_atlas2_layout <- function(
 #' Larger values make the layout more compact. Defaults to 10.
 #' @param speed Numeric. Node movement speed per iteration. Higher values may cause oscillation. Defaults to 5.
 #' @param ... Additional parameters to pass to the layout.
-#' See \url{https://g6.antv.antgroup.com/en/manual/layout/build-in/fruchterman-layout}.
+#' See \url{https://g6.antv.antgroup.com/en/manual/layout/fruchterman-layout}.
 #'
 #' @return A list containing the configuration for G6 fruchterman layout.
 #' @export
@@ -1050,7 +1053,7 @@ fruchterman_layout <- function(
 #' @param sortStrength Numeric. Sorting strength for nodes in the same layer. Defaults to 10.
 #' @param strictRadial Logical. Strictly place nodes in the same layer on the same ring. Defaults to TRUE.
 #' @param ... Additional parameters to pass to the layout.
-#' See \url{https://g6.antv.antgroup.com/en/manual/layout/build-in/radial-layout}.
+#' See \url{https://g6.antv.antgroup.com/en/manual/layout/radial-layout}.
 #'
 #' @return A list containing the configuration for G6 radial layout.
 #' @export
@@ -1177,7 +1180,7 @@ radial_layout <- function(
 #' @param rankSep Numeric. Rank spacing, distance between different levels. Defaults to 200.
 #' @param radial Logical. Whether to enable radial layout. Defaults to FALSE.
 #' @param ... Additional parameters to pass to the layout.
-#' See \url{https://g6.antv.antgroup.com/en/manual/layout/build-in/dendrogram-layout}.
+#' See \url{https://g6.antv.antgroup.com/en/manual/layout/dendrogram-layout}.
 #'
 #' @return A list containing the configuration for G6 dendrogram layout.
 #' @export
@@ -1228,6 +1231,7 @@ dendrogram_layout <- function(
 #'   different nodes. Default is NULL.
 #' @param treeKey Tree key identifier as a character string. Default is NULL.
 #' @param ... Additional parameters passed to the layout configuration.
+#' See \url{https://g6.antv.antgroup.com/en/manual/layout/combo-combined-layout}.
 #'
 #' @return A layout configuration object for use with G6 graphs.
 #'

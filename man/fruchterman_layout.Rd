@@ -17,7 +17,7 @@ Larger values make the layout more compact. Defaults to 10.}
 \item{speed}{Numeric. Node movement speed per iteration. Higher values may cause oscillation. Defaults to 5.}
 
 \item{...}{Additional parameters to pass to the layout.
-See \url{https://g6.antv.antgroup.com/en/manual/layout/build-in/fruchterman-layout}.}
+See \url{https://g6.antv.antgroup.com/en/manual/layout/fruchterman-layout}.}
 }
 \value{
 A list containing the configuration for G6 fruchterman layout.

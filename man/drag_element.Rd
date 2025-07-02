@@ -33,7 +33,7 @@ drag_element(
 
 \item{cursor}{Customize the mouse style during dragging (list, default: NULL).}
 
-\item{...}{Extra parameters. See \url{https://g6.antv.antgroup.com/manual/behavior/build-in/drag-element}.}
+\item{...}{Extra parameters. See \url{https://g6.antv.antgroup.com/en/manual/behavior/drag-element}.}
 }
 \value{
 A list with the configuration settings for the drag-element behavior.

@@ -52,7 +52,7 @@ circular_layout(
 \item{height}{Height of layout.}
 
 \item{...}{Additional parameters to pass to the layout.
-See \url{https://g6.antv.antgroup.com/manual/layout/build-in/circular-layout}.}
+See \url{https://g6.antv.antgroup.com/en/manual/layout/circular-layout}.}
 }
 \value{
 A list containing the configuration for G6 AntV circular layout.

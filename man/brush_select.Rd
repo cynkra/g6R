@@ -37,11 +37,11 @@ Can be \code{c("node", "edge", "combo")}.}
 \item{state}{State to switch to when selected (string, default: "selected").}
 
 \item{style}{Style specification for the selection box (list).
-See \url{https://g6.antv.antgroup.com/en/manual/behavior/build-in/brush-select#style}.}
+See \url{https://g6.antv.antgroup.com/en/manual/behavior/brush-select#style}.}
 
 \item{trigger}{Shortcut keys for selection (character vector).}
 
-\item{...}{Extra parameters. See \url{https://g6.antv.antgroup.com/manual/behavior/build-in/brush-select}.}
+\item{...}{Extra parameters. See \url{https://g6.antv.antgroup.com/en/manual/behavior/brush-select}.}
 }
 \value{
 A list with the configuration settings for the brush select behavior.

@@ -30,7 +30,7 @@ collapse_expand(
 
 \item{align}{Align with the target element to avoid view offset (boolean, default: TRUE).}
 
-\item{...}{Extra parameters. See \url{https://g6.antv.antgroup.com/manual/behavior/build-in/collapse-expand}.}
+\item{...}{Extra parameters. See \url{https://g6.antv.antgroup.com/en/manual/behavior/collapse-expand}.}
 }
 \value{
 A list with the configuration settings for the collapse-expand behavior.

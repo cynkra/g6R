@@ -59,7 +59,8 @@ is undefined, it will be set to \code{2 * Math.PI * (1 - 1 / |level.nodes|)}, wh
 is the number of nodes in each layer calculated by the algorithm, and |level.nodes| is
 the number of nodes in the layer.}
 
-\item{...}{Additional parameters to pass to the layout}
+\item{...}{Additional parameters to pass to the layout.
+See \url{https://g6.antv.antgroup.com/en/manual/layout/concentric-layout}.}
 }
 \value{
 A list containing the configuration for G6 AntV Concentric layout

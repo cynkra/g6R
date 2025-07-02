@@ -45,7 +45,8 @@ edge_filter_lens(
 
 \item{preventDefault}{Whether to prevent default events (boolean, default: TRUE).}
 
-\item{...}{Extra parameters. See \url{https://g6.antv.antgroup.com/manual/plugin/build-in/edge-filter-lens}.}
+\item{...}{Extra parameters.
+See \url{https://g6.antv.antgroup.com/en/manual/plugin/edge-filter-lens}.}
 }
 \value{
 A list with the configuration settings for the edge-filter-lens plugin.

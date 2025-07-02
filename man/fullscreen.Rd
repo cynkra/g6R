@@ -26,7 +26,8 @@ list(request = "button", exit = "escape") (list, default: NULL).}
 
 \item{onExit}{Callback function after exiting fullscreen mode (JS function, default: NULL).}
 
-\item{...}{Extra parameters. See \url{https://g6.antv.antgroup.com/manual/plugin/build-in/fullscreen}.}
+\item{...}{Extra parameters.
+See \url{https://g6.antv.antgroup.com/en/manual/plugin/fullscreen}.}
 }
 \value{
 A list with the configuration settings for the fullscreen plugin.

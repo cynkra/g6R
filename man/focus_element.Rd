@@ -19,7 +19,7 @@ focus_element(
 
 \item{enable}{Whether to enable the focus feature (boolean or JS function, default: TRUE).}
 
-\item{...}{Extra parameters. See \url{https://g6.antv.antgroup.com/manual/behavior/build-in/focus-element}.}
+\item{...}{Extra parameters. See \url{https://g6.antv.antgroup.com/en/manual/behavior/focus-element}.}
 }
 \value{
 A list with the configuration settings for the focus-element behavior.

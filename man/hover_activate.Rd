@@ -36,7 +36,7 @@ hover_activate(
 
 \item{onHoverEnd}{Callback when hover ends (JS function, default: NULL).}
 
-\item{...}{Extra parameters. See \url{https://g6.antv.antgroup.com/manual/behavior/build-in/hover-activate}.}
+\item{...}{Extra parameters. See \url{https://g6.antv.antgroup.com/en/manual/behavior/hover-activate}.}
 }
 \value{
 A list with the configuration settings for the hover-activate behavior.

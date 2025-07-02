@@ -84,7 +84,8 @@ watermark(
 
 \item{backgroundSize}{Background size of the watermark (string, default: NULL).}
 
-\item{...}{Extra parameters. See \url{https://g6.antv.antgroup.com/manual/plugin/build-in/watermark}.}
+\item{...}{Extra parameters.
+See \url{https://g6.antv.antgroup.com/en/manual/plugin/watermark}.}
 }
 \value{
 A list with the configuration settings for the watermark plugin.

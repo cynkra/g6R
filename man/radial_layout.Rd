@@ -52,7 +52,7 @@ radial_layout(
 \item{strictRadial}{Logical. Strictly place nodes in the same layer on the same ring. Defaults to TRUE.}
 
 \item{...}{Additional parameters to pass to the layout.
-See \url{https://g6.antv.antgroup.com/en/manual/layout/build-in/radial-layout}.}
+See \url{https://g6.antv.antgroup.com/en/manual/layout/radial-layout}.}
 }
 \value{
 A list containing the configuration for G6 radial layout.

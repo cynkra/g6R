@@ -22,7 +22,7 @@ dendrogram_layout(
 \item{radial}{Logical. Whether to enable radial layout. Defaults to FALSE.}
 
 \item{...}{Additional parameters to pass to the layout.
-See \url{https://g6.antv.antgroup.com/en/manual/layout/build-in/dendrogram-layout}.}
+See \url{https://g6.antv.antgroup.com/en/manual/layout/dendrogram-layout}.}
 }
 \value{
 A list containing the configuration for G6 dendrogram layout.

@@ -82,7 +82,8 @@ legend(
 
 \item{gridRow}{Maximum number of rows for grid layout (number, default: NULL).}
 
-\item{...}{Extra parameters. See \url{https://g6.antv.antgroup.com/manual/plugin/build-in/legend}.}
+\item{...}{Extra parameters.
+See \url{https://g6.antv.antgroup.com/en/manual/plugin/legend}.}
 }
 \value{
 A list with the configuration settings for the legend plugin.

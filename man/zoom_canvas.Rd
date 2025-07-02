@@ -33,7 +33,7 @@ zoom_canvas(
 
 \item{trigger}{How to trigger zooming, supports mouse wheel and keyboard shortcuts (list, default: NULL).}
 
-\item{...}{Extra parameters. See \url{https://g6.antv.antgroup.com/manual/behavior/build-in/zoom-canvas}.}
+\item{...}{Extra parameters. See \url{https://g6.antv.antgroup.com/en/manual/behavior/zoom-canvas}.}
 }
 \value{
 A list with the configuration settings for the zoom-canvas behavior.

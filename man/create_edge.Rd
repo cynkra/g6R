@@ -34,7 +34,7 @@ creation is succesful so that it does not conflict with other drag behaviors.}
 
 \item{notify}{Whether to show a feedback message in the ui.}
 
-\item{...}{Extra parameters. See \url{https://g6.antv.antgroup.com/manual/behavior/build-in/create-edge}.}
+\item{...}{Extra parameters. See \url{https://g6.antv.antgroup.com/en/manual/behavior/create-edge}.}
 }
 \value{
 A list with the configuration settings for the create-edge behavior.

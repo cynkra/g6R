@@ -139,7 +139,8 @@ validate_plugin <- function(x) {
 #' @param opacity Background opacity (string, default: NULL).
 #' @param transition Transition animation (string, default: "background 0.5s").
 #' @param zIndex Stacking order (string, default: "-1").
-#' @param ... Extra parameters. See \url{https://g6.antv.antgroup.com/manual/plugin/build-in/background}.
+#' @param ... Extra parameters.
+#' See \url{https://g6.antv.antgroup.com/en/manual/plugin/background}.
 #'
 #' @return A list with the configuration settings for the background plugin.
 #' @export
@@ -217,7 +218,8 @@ background <- function(
 #' @param edgeInfluenceFactor Edge influence factor (numeric, default: NULL).
 #' @param nonMemberInfluenceFactor Non-member influence factor (numeric, default: NULL).
 #' @param virtualEdges Whether to use virtual edges (boolean, default: NULL).
-#' @param ... Extra parameters. See \url{https://g6.antv.antgroup.com/manual/plugin/build-in/bubble-sets}.
+#' @param ... Extra parameters.
+#' See \url{https://g6.antv.antgroup.com/en/manual/plugin/bubble-sets}.
 #'
 #' @return A list with the configuration settings for the bubble-sets plugin.
 #' @export
@@ -317,7 +319,8 @@ bubble_sets <- function(
 #' @param loadingContent Menu content used when getContent returns a
 #' Promise (string or HTML element, default: NULL).
 #' @param enable Whether the context menu is available (boolean or JS function, default: TRUE).
-#' @param ... Extra parameters. See \url{https://g6.antv.antgroup.com/manual/plugin/build-in/contextmenu}.
+#' @param ... Extra parameters.
+#' See \url{https://g6.antv.antgroup.com/en/manual/plugin/contextmenu}.
 #'
 #' @return A list with the configuration settings for the context menu plugin.
 #' @export
@@ -469,7 +472,8 @@ context_menu <- function(
 #' @param iterRate Iteration decrement rate (number, default: 2/3).
 #' @param K Edge strength, affects attraction and repulsion between edges (number, default: 0.1).
 #' @param lambda Initial step size (number, default: 0.1).
-#' @param ... Extra parameters. See \url{https://g6.antv.antgroup.com/manual/plugin/build-in/edge-bundling}.
+#' @param ... Extra parameters.
+#' See \url{https://g6.antv.antgroup.com/en/manual/plugin/edge-bundling}.
 #'
 #' @return A list with the configuration settings for the edge-bundling plugin.
 #' @export
@@ -560,7 +564,8 @@ edge_bundling <- function(
 #' @param nodeStyle Style of nodes in the lens (list or JS function, default: list(label = FALSE)).
 #' @param edgeStyle Style of edges in the lens (list or JS function, default: list(label = TRUE)).
 #' @param preventDefault Whether to prevent default events (boolean, default: TRUE).
-#' @param ... Extra parameters. See \url{https://g6.antv.antgroup.com/manual/plugin/build-in/edge-filter-lens}.
+#' @param ... Extra parameters.
+#' See \url{https://g6.antv.antgroup.com/en/manual/plugin/edge-filter-lens}.
 #'
 #' @return A list with the configuration settings for the edge-filter-lens plugin.
 #' @export
@@ -682,7 +687,8 @@ edge_filter_lens <- function(
 #' @param style Style of the fisheye (list, default: NULL).
 #' @param nodeStyle Style of nodes in the fisheye (list or JS function, default: list(label = TRUE)).
 #' @param preventDefault Whether to prevent default events (boolean, default: TRUE).
-#' @param ... Extra parameters. See \url{https://g6.antv.antgroup.com/manual/plugin/build-in/fisheye}.
+#' @param ... Extra parameters.
+#' See \url{https://g6.antv.antgroup.com/en/manual/fisheye}.
 #'
 #' @return A list with the configuration settings for the fisheye plugin.
 #' @export
@@ -809,7 +815,8 @@ fish_eye <- function(
 #' list(request = "button", exit = "escape") (list, default: NULL).
 #' @param onEnter Callback function after entering fullscreen mode (JS function, default: NULL).
 #' @param onExit Callback function after exiting fullscreen mode (JS function, default: NULL).
-#' @param ... Extra parameters. See \url{https://g6.antv.antgroup.com/manual/plugin/build-in/fullscreen}.
+#' @param ... Extra parameters.
+#' See \url{https://g6.antv.antgroup.com/en/manual/plugin/fullscreen}.
 #'
 #' @return A list with the configuration settings for the fullscreen plugin.
 #' @export
@@ -895,7 +902,8 @@ fullscreen <- function(
 #' @param lineWidth Grid line width (number or string, default: 1).
 #' @param size Grid unit size in pixels (number, default: 20).
 #' @param stroke Grid line color (string, default: "#eee").
-#' @param ... Extra parameters. See \url{https://g6.antv.antgroup.com/manual/plugin/build-in/grid-line}.
+#' @param ... Extra parameters.
+#' See \url{https://g6.antv.antgroup.com/en/manual/plugin/grid-line}.
 #'
 #' @return A list with the configuration settings for the grid-line plugin.
 #' @export
@@ -1013,7 +1021,8 @@ grid_line <- function(
 #' the undo/redo queue (JS function, default: NULL).
 #' @param executeCommand Callback function called when executing a command (JS function, default: NULL).
 #' @param stackSize Maximum length of history records to be recorded, 0 means unlimited (number, default: 0).
-#' @param ... Extra parameters. See \url{https://g6.antv.antgroup.com/manual/plugin/build-in/history}.
+#' @param ... Extra parameters.
+#' See \url{https://g6.antv.antgroup.com/en/manual/plugin/history}.
 #'
 #' @return A list with the configuration settings for the history plugin.
 #' @export
@@ -1102,7 +1111,8 @@ history <- function(
 #' @param labelOffsetX X-axis offset (number, default: 0).
 #' @param labelOffsetY Y-axis offset (number, default: 0).
 #' @param labelMaxWidth Maximum width of the text, exceeding will be ellipsized (number, default: 0).
-#' @param ... Other options. See \url{https://g6.antv.antgroup.com/manual/plugin/build-in/hull}.
+#' @param ... Other options.
+#' See \url{https://g6.antv.antgroup.com/en/manual/plugin/hull}.
 #'
 #' @return A list with the configuration settings for the hull plugin.
 #' @export
@@ -1232,7 +1242,8 @@ hull <- function(
 #' @param itemLabelFontSize Font size of the legend item text (number, default: 16).
 #' @param gridCol Maximum number of columns for grid layout (number, default: NULL).
 #' @param gridRow Maximum number of rows for grid layout (number, default: NULL).
-#' @param ... Extra parameters. See \url{https://g6.antv.antgroup.com/manual/plugin/build-in/legend}.
+#' @param ... Extra parameters.
+#' See \url{https://g6.antv.antgroup.com/en/manual/plugin/legend}.
 #'
 #' @return A list with the configuration settings for the legend plugin.
 #' @export
@@ -1456,7 +1467,8 @@ legend <- function(
 #' @param renderer Custom renderer (JS object, default: NULL).
 #' @param shape Method for generating element thumbnails (string or JS function, default: "key").
 #' @param size Width and height of the minimap \code{[width, height]} (numeric vector, default: c(240, 160)).
-#' @param ... Extra parameters. See \url{https://g6.antv.antgroup.com/manual/plugin/build-in/minimap}.
+#' @param ... Extra parameters.
+#' See \url{https://g6.antv.antgroup.com/en/manual/plugin/minimap}.
 #'
 #' @return A list with the configuration settings for the minimap plugin.
 #' @export
@@ -1629,7 +1641,8 @@ minimap <- function(
 #' @param verticalLineStyle Vertical snapline style (list or JS object, default: list(stroke = "#1783FF")).
 #' @param horizontalLineStyle Horizontal snapline style (list or JS object, default: list(stroke = "#1783FF")).
 #' @param filter Function to filter nodes that don't participate in alignment (JS function, default: NULL).
-#' @param ... Extra parameters. See \url{https://g6.antv.antgroup.com/manual/plugin/build-in/snapline}.
+#' @param ... Extra parameters.
+#' See \url{https://g6.antv.antgroup.com/en/manual/plugin/snapline}.
 #'
 #' @return A list with the configuration settings for the snapline plugin.
 #' @export
@@ -1756,7 +1769,8 @@ snapline <- function(
 #' @param onPause Callback when paused (JS function, default: NULL).
 #' @param onBackward Callback when moving backward (JS function, default: NULL).
 #' @param onForward Callback when moving forward (JS function, default: NULL).
-#' @param ... Extra parameters. See \url{https://g6.antv.antgroup.com/manual/plugin/build-in/timebar}.
+#' @param ... Extra parameters.
+#' See \url{https://g6.antv.antgroup.com/en/manual/plugin/timebar}.
 #'
 #' @return A list with the configuration settings for the timebar plugin.
 #' @export
@@ -1923,7 +1937,8 @@ timebar <- function(
 #' @param position Toolbar position relative to the canvas (string, default: "top-left").
 #' @param style Custom style for the toolbar DOM element (list or JS object, default: NULL).
 #' @param onClick Callback function after a toolbar item is clicked (JS function, default: NULL).
-#' @param ... Extra parameters. See \url{https://g6.antv.antgroup.com/manual/plugin/build-in/toolbar}.
+#' @param ... Extra parameters.
+#' See \url{https://g6.antv.antgroup.com/en/manual/plugin/toolbar}.
 #'
 #' @return A list with the configuration settings for the toolbar plugin.
 #' @export
@@ -2083,7 +2098,8 @@ toolbar <- function(
 #' @param enterable Whether the pointer can enter the tooltip (boolean, default: FALSE).
 #' @param title Title for the tooltip (string, default: NULL).
 #' @param style Custom style for the tooltip (list or JS object, default: list(".tooltip" = list(visibility = "hidden"))).
-#' @param ... Extra parameters. See \url{https://g6.antv.antgroup.com/manual/plugin/build-in/tooltip}.
+#' @param ... Extra parameters.
+#' See \url{https://g6.antv.antgroup.com/en/manual/plugin/tooltip}.
 #'
 #' @return A list with the configuration settings for the tooltip plugin.
 #' @export
@@ -2233,7 +2249,8 @@ tooltips <- function(
 #' @param backgroundPositionX Horizontal position of the watermark background (string, default: NULL).
 #' @param backgroundPositionY Vertical position of the watermark background (string, default: NULL).
 #' @param backgroundSize Background size of the watermark (string, default: NULL).
-#' @param ... Extra parameters. See \url{https://g6.antv.antgroup.com/manual/plugin/build-in/watermark}.
+#' @param ... Extra parameters.
+#' See \url{https://g6.antv.antgroup.com/en/manual/plugin/watermark}.
 #'
 #' @return A list with the configuration settings for the watermark plugin.
 #' @export

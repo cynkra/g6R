@@ -102,7 +102,7 @@ valid_states <- c("selected", "active", "inactive", "disabled", "highlight")
 #' @param sortNode Sorting rule specifically for node labels (list, default: list(type = "degree")).
 #' @param sortEdge Sorting rule specifically for edge labels (list, default: NULL).
 #' @param sortCombo Sorting rule specifically for combo labels (list, default: NULL).
-#' @param ... Extra parameters. See \url{https://g6.antv.antgroup.com/manual/behavior/build-in/auto-adapt-label}.
+#' @param ... Extra parameters. See \url{https://g6.antv.antgroup.com/en/manual/behavior/auto-adapt-label}.
 #'
 #' Sorting parameters determine which labels take priority when space is limited:
 #' \itemize{
@@ -227,9 +227,9 @@ auto_adapt_label <- function(
 #' @param onSelect Callback for selected element state (JS function).
 #' @param state State to switch to when selected (string, default: "selected").
 #' @param style Style specification for the selection box (list).
-#' See \url{https://g6.antv.antgroup.com/en/manual/behavior/build-in/brush-select#style}.
+#' See \url{https://g6.antv.antgroup.com/en/manual/behavior/brush-select#style}.
 #' @param trigger Shortcut keys for selection (character vector).
-#' @param ... Extra parameters. See \url{https://g6.antv.antgroup.com/manual/behavior/build-in/brush-select}.
+#' @param ... Extra parameters. See \url{https://g6.antv.antgroup.com/en/manual/behavior/brush-select}.
 #'
 #' @return A list with the configuration settings for the brush select behavior.
 #' @export
@@ -347,7 +347,7 @@ brush_select <- function(
 #' @param unselectedState The state applied to all other elements (string, default: NULL).
 #' @param onClick Callback when an element is clicked (function, default: NULL).
 #' @param trigger Keys for multi-selection (character vector, default: c("shift")).
-#' @param ... Extra parameters. See \url{https://g6.antv.antgroup.com/manual/behavior/build-in/click-select}.
+#' @param ... Extra parameters. See \url{https://g6.antv.antgroup.com/en/manual/behavior/click-select}.
 #'
 #' @return A list with the configuration settings for the click select behavior.
 #' @export
@@ -438,7 +438,7 @@ click_select <- function(
 #' @param onCollapse Callback function when collapse is completed (function, default: NULL).
 #' @param onExpand Callback function when expand is completed (function, default: NULL).
 #' @param align Align with the target element to avoid view offset (boolean, default: TRUE).
-#' @param ... Extra parameters. See \url{https://g6.antv.antgroup.com/manual/behavior/build-in/collapse-expand}.
+#' @param ... Extra parameters. See \url{https://g6.antv.antgroup.com/en/manual/behavior/collapse-expand}.
 #'
 #' @return A list with the configuration settings for the collapse-expand behavior.
 #' @export
@@ -508,7 +508,7 @@ collapse_expand <- function(
 #' creation is succesful so that it does not conflict with other drag behaviors.
 #' @param style Style of the newly created edge (list, default: NULL).
 #' @param notify Whether to show a feedback message in the ui.
-#' @param ... Extra parameters. See \url{https://g6.antv.antgroup.com/manual/behavior/build-in/create-edge}.
+#' @param ... Extra parameters. See \url{https://g6.antv.antgroup.com/en/manual/behavior/create-edge}.
 #'
 #' @note \link{create_edge}, \link{drag_element} and \link{drag_element_force} are incompatible by default,
 #' as there triggers are the same. You can change the trigger to workaround this.
@@ -622,7 +622,7 @@ create_edge <- function(
 #' @param sensitivity Distance to trigger a single keyboard movement (number, default: 10).
 #' @param trigger Keyboard keys to trigger dragging (list, default: NULL).
 #' @param onFinish Callback function when dragging is completed (function, default: NULL).
-#' @param ... Extra parameters. See \url{https://g6.antv.antgroup.com/manual/behavior/build-in/drag-canvas}.
+#' @param ... Extra parameters. See \url{https://g6.antv.antgroup.com/en/manual/behavior/drag-canvas}.
 #'
 #' @return A list with the configuration settings for the drag-canvas behavior.
 #' @export
@@ -706,7 +706,7 @@ drag_canvas <- function(
 #' @param hideEdge Controls the display state of edges during dragging: "none", "out", "in", "both", or "all" (string, default: "none").
 #' @param shadow Whether to enable ghost nodes (boolean, default: FALSE).
 #' @param cursor Customize the mouse style during dragging (list, default: NULL).
-#' @param ... Extra parameters. See \url{https://g6.antv.antgroup.com/manual/behavior/build-in/drag-element}.
+#' @param ... Extra parameters. See \url{https://g6.antv.antgroup.com/en/manual/behavior/drag-element}.
 #'
 #' @return A list with the configuration settings for the drag-element behavior.
 #' @export
@@ -790,7 +790,7 @@ drag_element <- function(
 #' @param state Identifier for the selected state of nodes (string, default: "selected").
 #' @param hideEdge Controls the display state of edges during dragging: "none", "out", "in", "both", or "all" (string, default: "none").
 #' @param cursor Customize the mouse style during dragging (list, default: NULL).
-#' @param ... Extra parameters. See \url{https://g6.antv.antgroup.com/manual/behavior/build-in/drag-element-force}.
+#' @param ... Extra parameters. See \url{https://g6.antv.antgroup.com/en/manual/behavior/drag-element-force}.
 #'
 #' @return A list with the configuration settings for the drag-element-force behavior.
 #' @export
@@ -883,7 +883,7 @@ drag_element_force <- function(
 #' (list or array of lists, default: NULL).
 #' @param comboFilter Combo filter to determine which combos maintain fixed size
 #' (JS function, default: returns TRUE for all combos).
-#' @param ... Extra parameters. See \url{https://g6.antv.antgroup.com/manual/behavior/build-in/fix-element-size}.
+#' @param ... Extra parameters. See \url{https://g6.antv.antgroup.com/en/manual/behavior/fix-element-size}.
 #'
 #' @return A list with the configuration settings for the fix-element-size behavior.
 #' @export
@@ -993,7 +993,7 @@ fix_element_size <- function(
 #' (string, default: "focus-element").
 #' @param animation Focus animation settings (list, default: list with duration 500ms and easing "ease-in").
 #' @param enable Whether to enable the focus feature (boolean or JS function, default: TRUE).
-#' @param ... Extra parameters. See \url{https://g6.antv.antgroup.com/manual/behavior/build-in/focus-element}.
+#' @param ... Extra parameters. See \url{https://g6.antv.antgroup.com/en/manual/behavior/focus-element}.
 #'
 #' @return A list with the configuration settings for the focus-element behavior.
 #' @export
@@ -1071,7 +1071,7 @@ focus_element <- function(
 #' @param inactiveState State of inactive elements (string, default: NULL).
 #' @param onHover Callback when element is hovered (JS function, default: NULL).
 #' @param onHoverEnd Callback when hover ends (JS function, default: NULL).
-#' @param ... Extra parameters. See \url{https://g6.antv.antgroup.com/manual/behavior/build-in/hover-activate}.
+#' @param ... Extra parameters. See \url{https://g6.antv.antgroup.com/en/manual/behavior/hover-activate}.
 #'
 #' @return A list with the configuration settings for the hover-activate behavior.
 #' @export
@@ -1167,7 +1167,7 @@ hover_activate <- function(
 #' @param state State to switch to when selected (string, default: "selected").
 #' @param style Style of the lasso during selection (list, default: NULL).
 #' @param trigger Press this shortcut key along with mouse click to select (character vector, default: c("shift")).
-#' @param ... Extra parameters. See \url{https://g6.antv.antgroup.com/manual/behavior/build-in/lasso-select}.
+#' @param ... Extra parameters. See \url{https://g6.antv.antgroup.com/en/manual/behavior/lasso-select}.
 #'
 #' @return A list with the configuration settings for the lasso-select behavior.
 #' @export
@@ -1292,7 +1292,7 @@ lasso_select <- function(
 #' in milliseconds (number, default: 200).
 #' @param shapes Function to specify which graphical elements should remain visible during canvas
 #' operations (JS function, default: returns TRUE for nodes).
-#' @param ... Extra parameters. See \url{https://g6.antv.antgroup.com/manual/behavior/build-in/optimize-viewport-transform}.
+#' @param ... Extra parameters. See \url{https://g6.antv.antgroup.com/en/manual/behavior/optimize-viewport-transform}.
 #'
 #' @return A list with the configuration settings for the optimize-viewport-transform behavior.
 #' @export
@@ -1362,7 +1362,7 @@ optimize_viewport_transform <- function(
 #' @param trigger Keyboard shortcuts to trigger scrolling (list, default: NULL).
 #' @param onFinish Callback function when scrolling is finished (JS function, default: NULL).
 #' @param preventDefault Whether to prevent the browser's default event (boolean, default: TRUE).
-#' @param ... Extra parameters. See \url{https://g6.antv.antgroup.com/manual/behavior/build-in/scroll-canvas}.
+#' @param ... Extra parameters. See \url{https://g6.antv.antgroup.com/en/manual/behavior/scroll-canvas}.
 #'
 #' @return A list with the configuration settings for the scroll-canvas behavior.
 #' @export
@@ -1460,7 +1460,7 @@ scroll_canvas <- function(
 #' @param preventDefault Whether to prevent the browser's default event (boolean, default: TRUE).
 #' @param sensitivity Zoom sensitivity, the larger the value, the faster the zoom (numeric, default: 1).
 #' @param trigger How to trigger zooming, supports mouse wheel and keyboard shortcuts (list, default: NULL).
-#' @param ... Extra parameters. See \url{https://g6.antv.antgroup.com/manual/behavior/build-in/zoom-canvas}.
+#' @param ... Extra parameters. See \url{https://g6.antv.antgroup.com/en/manual/behavior/zoom-canvas}.
 #'
 #' @return A list with the configuration settings for the zoom-canvas behavior.
 #' @export

@@ -40,7 +40,8 @@ different nodes. Default is NULL.}
 
 \item{treeKey}{Tree key identifier as a character string. Default is NULL.}
 
-\item{...}{Additional parameters passed to the layout configuration.}
+\item{...}{Additional parameters passed to the layout configuration.
+See \url{https://g6.antv.antgroup.com/en/manual/layout/combo-combined-layout}.}
 }
 \value{
 A layout configuration object for use with G6 graphs.

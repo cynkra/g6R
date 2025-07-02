@@ -34,7 +34,8 @@ snapline(
 
 \item{filter}{Function to filter nodes that don't participate in alignment (JS function, default: NULL).}
 
-\item{...}{Extra parameters. See \url{https://g6.antv.antgroup.com/manual/plugin/build-in/snapline}.}
+\item{...}{Extra parameters.
+See \url{https://g6.antv.antgroup.com/en/manual/plugin/snapline}.}
 }
 \value{
 A list with the configuration settings for the snapline plugin.

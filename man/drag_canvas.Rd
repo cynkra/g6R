@@ -33,7 +33,7 @@ drag_canvas(
 
 \item{onFinish}{Callback function when dragging is completed (function, default: NULL).}
 
-\item{...}{Extra parameters. See \url{https://g6.antv.antgroup.com/manual/behavior/build-in/drag-canvas}.}
+\item{...}{Extra parameters. See \url{https://g6.antv.antgroup.com/en/manual/behavior/drag-canvas}.}
 }
 \value{
 A list with the configuration settings for the drag-canvas behavior.

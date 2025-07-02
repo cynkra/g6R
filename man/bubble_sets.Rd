@@ -84,7 +84,8 @@ bubble_sets(
 
 \item{virtualEdges}{Whether to use virtual edges (boolean, default: NULL).}
 
-\item{...}{Extra parameters. See \url{https://g6.antv.antgroup.com/manual/plugin/build-in/bubble-sets}.}
+\item{...}{Extra parameters.
+See \url{https://g6.antv.antgroup.com/en/manual/plugin/bubble-sets}.}
 }
 \value{
 A list with the configuration settings for the bubble-sets plugin.

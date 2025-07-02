@@ -55,7 +55,8 @@ closeToPath is true (boolean, default: TRUE).}
 
 \item{labelMaxWidth}{Maximum width of the text, exceeding will be ellipsized (number, default: 0).}
 
-\item{...}{Other options. See \url{https://g6.antv.antgroup.com/manual/plugin/build-in/hull}.}
+\item{...}{Other options.
+See \url{https://g6.antv.antgroup.com/en/manual/plugin/hull}.}
 }
 \value{
 A list with the configuration settings for the hull plugin.

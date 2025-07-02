@@ -23,7 +23,7 @@ in milliseconds (number, default: 200).}
 \item{shapes}{Function to specify which graphical elements should remain visible during canvas
 operations (JS function, default: returns TRUE for nodes).}
 
-\item{...}{Extra parameters. See \url{https://g6.antv.antgroup.com/manual/behavior/build-in/optimize-viewport-transform}.}
+\item{...}{Extra parameters. See \url{https://g6.antv.antgroup.com/en/manual/behavior/optimize-viewport-transform}.}
 }
 \value{
 A list with the configuration settings for the optimize-viewport-transform behavior.

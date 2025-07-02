@@ -28,7 +28,8 @@ toolbar(
 
 \item{onClick}{Callback function after a toolbar item is clicked (JS function, default: NULL).}
 
-\item{...}{Extra parameters. See \url{https://g6.antv.antgroup.com/manual/plugin/build-in/toolbar}.}
+\item{...}{Extra parameters.
+See \url{https://g6.antv.antgroup.com/en/manual/plugin/toolbar}.}
 }
 \value{
 A list with the configuration settings for the toolbar plugin.

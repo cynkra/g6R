@@ -43,7 +43,8 @@ tooltips(
 
 \item{style}{Custom style for the tooltip (list or JS object, default: list(".tooltip" = list(visibility = "hidden"))).}
 
-\item{...}{Extra parameters. See \url{https://g6.antv.antgroup.com/manual/plugin/build-in/tooltip}.}
+\item{...}{Extra parameters.
+See \url{https://g6.antv.antgroup.com/en/manual/plugin/tooltip}.}
 }
 \value{
 A list with the configuration settings for the tooltip plugin.

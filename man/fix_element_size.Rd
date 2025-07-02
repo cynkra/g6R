@@ -47,7 +47,7 @@ size (list or array of lists, default: NULL).}
 \item{comboFilter}{Combo filter to determine which combos maintain fixed size
 (JS function, default: returns TRUE for all combos).}
 
-\item{...}{Extra parameters. See \url{https://g6.antv.antgroup.com/manual/behavior/build-in/fix-element-size}.}
+\item{...}{Extra parameters. See \url{https://g6.antv.antgroup.com/en/manual/behavior/fix-element-size}.}
 }
 \value{
 A list with the configuration settings for the fix-element-size behavior.

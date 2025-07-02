@@ -27,7 +27,7 @@ drag_element_force(
 
 \item{cursor}{Customize the mouse style during dragging (list, default: NULL).}
 
-\item{...}{Extra parameters. See \url{https://g6.antv.antgroup.com/manual/behavior/build-in/drag-element-force}.}
+\item{...}{Extra parameters. See \url{https://g6.antv.antgroup.com/en/manual/behavior/drag-element-force}.}
 }
 \value{
 A list with the configuration settings for the drag-element-force behavior.

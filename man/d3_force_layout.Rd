@@ -30,7 +30,7 @@ Can be a number or a function \code{function(node, index, nodes) { return number
 }}
 
 \item{...}{Additional parameters to pass to the layout.
-See \url{https://g6.antv.antgroup.com/manual/layout/build-in/d3-force}.}
+See \url{https://g6.antv.antgroup.com/en/manual/layout/d3-force}.}
 }
 \value{
 A list containing the configuration for G6 AntV D3 Force layout.

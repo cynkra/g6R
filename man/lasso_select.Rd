@@ -39,7 +39,7 @@ lasso_select(
 
 \item{trigger}{Press this shortcut key along with mouse click to select (character vector, default: c("shift")).}
 
-\item{...}{Extra parameters. See \url{https://g6.antv.antgroup.com/manual/behavior/build-in/lasso-select}.}
+\item{...}{Extra parameters. See \url{https://g6.antv.antgroup.com/en/manual/behavior/lasso-select}.}
 }
 \value{
 A list with the configuration settings for the lasso-select behavior.

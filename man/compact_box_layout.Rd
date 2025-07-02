@@ -42,7 +42,8 @@ Function format: \code{function(node) { return number }}}
 
 \item{radial}{Whether to enable radial layout}
 
-\item{...}{Additional parameters to pass to the layout.}
+\item{...}{Additional parameters to pass to the layout.
+See \url{https://g6.antv.antgroup.com/en/manual/layout/compact-box-layout}.}
 }
 \value{
 A list containing the configuration for G6 AntV Compact Box layout.

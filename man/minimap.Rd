@@ -46,7 +46,8 @@ minimap(
 
 \item{size}{Width and height of the minimap \code{[width, height]} (numeric vector, default: c(240, 160)).}
 
-\item{...}{Extra parameters. See \url{https://g6.antv.antgroup.com/manual/plugin/build-in/minimap}.}
+\item{...}{Extra parameters.
+See \url{https://g6.antv.antgroup.com/en/manual/plugin/minimap}.}
 }
 \value{
 A list with the configuration settings for the minimap plugin.

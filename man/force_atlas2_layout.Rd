@@ -69,7 +69,7 @@ Each node is attracted to this point, with gravity controlled by \code{kg}.
 If not set, uses canvas center.}
 
 \item{...}{Additional parameters to pass to the layout.
-See \url{https://g6.antv.antgroup.com/manual/layout/build-in/force-atlas2-layout}.}
+See \url{https://g6.antv.antgroup.com/en/manual/layout/force-atlas2-layout}.}
 }
 \value{
 A list containing the configuration for G6 force atlas2 layout.

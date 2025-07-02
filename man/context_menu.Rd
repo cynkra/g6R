@@ -40,7 +40,8 @@ Promise (string or HTML element, default: NULL).}
 
 \item{enable}{Whether the context menu is available (boolean or JS function, default: TRUE).}
 
-\item{...}{Extra parameters. See \url{https://g6.antv.antgroup.com/manual/plugin/build-in/contextmenu}.}
+\item{...}{Extra parameters.
+See \url{https://g6.antv.antgroup.com/en/manual/plugin/contextmenu}.}
 }
 \value{
 A list with the configuration settings for the context menu plugin.

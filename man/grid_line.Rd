@@ -36,7 +36,8 @@ grid_line(
 
 \item{stroke}{Grid line color (string, default: "#eee").}
 
-\item{...}{Extra parameters. See \url{https://g6.antv.antgroup.com/manual/plugin/build-in/grid-line}.}
+\item{...}{Extra parameters.
+See \url{https://g6.antv.antgroup.com/en/manual/plugin/grid-line}.}
 }
 \value{
 A list with the configuration settings for the grid-line plugin.

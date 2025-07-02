@@ -37,7 +37,8 @@ should be bundled together (number, default: 0.6).}
 
 \item{lambda}{Initial step size (number, default: 0.1).}
 
-\item{...}{Extra parameters. See \url{https://g6.antv.antgroup.com/manual/plugin/build-in/edge-bundling}.}
+\item{...}{Extra parameters.
+See \url{https://g6.antv.antgroup.com/en/manual/plugin/edge-bundling}.}
 }
 \value{
 A list with the configuration settings for the edge-bundling plugin.

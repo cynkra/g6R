@@ -33,7 +33,7 @@ auto_adapt_label(
 
 \item{sortCombo}{Sorting rule specifically for combo labels (list, default: NULL).}
 
-\item{...}{Extra parameters. See \url{https://g6.antv.antgroup.com/manual/behavior/build-in/auto-adapt-label}.
+\item{...}{Extra parameters. See \url{https://g6.antv.antgroup.com/en/manual/behavior/auto-adapt-label}.
 
 Sorting parameters determine which labels take priority when space is limited:
 \itemize{

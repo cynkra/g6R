@@ -52,7 +52,8 @@ fish_eye(
 
 \item{preventDefault}{Whether to prevent default events (boolean, default: TRUE).}
 
-\item{...}{Extra parameters. See \url{https://g6.antv.antgroup.com/manual/plugin/build-in/fisheye}.}
+\item{...}{Extra parameters.
+See \url{https://g6.antv.antgroup.com/en/manual/fisheye}.}
 }
 \value{
 A list with the configuration settings for the fisheye plugin.

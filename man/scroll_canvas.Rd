@@ -35,7 +35,7 @@ scroll_canvas(
 
 \item{preventDefault}{Whether to prevent the browser's default event (boolean, default: TRUE).}
 
-\item{...}{Extra parameters. See \url{https://g6.antv.antgroup.com/manual/behavior/build-in/scroll-canvas}.}
+\item{...}{Extra parameters. See \url{https://g6.antv.antgroup.com/en/manual/behavior/scroll-canvas}.}
 }
 \value{
 A list with the configuration settings for the scroll-canvas behavior.

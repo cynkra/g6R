@@ -79,7 +79,8 @@ timebar(
 
 \item{onForward}{Callback when moving forward (JS function, default: NULL).}
 
-\item{...}{Extra parameters. See \url{https://g6.antv.antgroup.com/manual/plugin/build-in/timebar}.}
+\item{...}{Extra parameters.
+See \url{https://g6.antv.antgroup.com/en/manual/plugin/timebar}.}
 }
 \value{
 A list with the configuration settings for the timebar plugin.

@@ -39,7 +39,7 @@ click_select(
 
 \item{trigger}{Keys for multi-selection (character vector, default: c("shift")).}
 
-\item{...}{Extra parameters. See \url{https://g6.antv.antgroup.com/manual/behavior/build-in/click-select}.}
+\item{...}{Extra parameters. See \url{https://g6.antv.antgroup.com/en/manual/behavior/click-select}.}
 }
 \value{
 A list with the configuration settings for the click select behavior.
