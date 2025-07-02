@@ -1,6 +1,5 @@
 #' Configure Global Options for G6 Graph
 #'
-#' @description
 #' Sets up the global configuration options for a G6 graph including node, edge and
 #' combo styles, layout, canvas, animation, and interactive behavior settings.
 #'
@@ -11,22 +10,22 @@
 #'
 #' @param graph g6 graph instance.
 #' @param node Node configuration. Controls the default appearance and behavior of nodes.
-#'   Created with \code{node_options()}. Default: Default node options.
+#'   Created with \code{node_options()}. Default: NULL.
 #'
 #' @param edge Edge configuration. Controls the default appearance and behavior of edges.
-#'   Created with \code{edge_options()}. Default: Default edge options.
+#'   Created with \code{edge_options()}. Default: NULL.
 #'
 #' @param combo Combo configuration. Controls the default appearance and behavior of combo nodes.
-#'   Created with \code{combo_options()}. Default: Default combo options.
+#'   Created with \code{combo_options()}. Default: NULL.
 #'
 #' @param autoFit Automatically fit the graph content to the canvas.
-#'   Created with \code{auto_fit_config()}. Default: Default auto-fit settings.
+#'   Created with \code{auto_fit_config()}. Default: NULL.
 #'
 #' @param canvas Canvas configuration for the graph rendering surface.
-#'   Created with \code{canvas_config()}. Default: Default canvas settings.
+#'   Created with \code{canvas_config()}. Default: NULL.
 #'
 #' @param animation Global animation configuration for graph transitions.
-#'   Created with \code{animation_config()}. Default: Default to FALSE.
+#'   Created with \code{animation_config()}. Default: TRUE.
 #'
 #' @param autoResize Whether the graph should automatically resize when the window size changes.
 #'   Default: FALSE.
@@ -156,7 +155,6 @@ g6_options <- function(
 
 #' Create Auto-Fit Configuration for G6 Graphs
 #'
-#' @description
 #' Configures the auto-fit behavior for a G6 graph. Auto-fit automatically adjusts
 #' the view to fit all elements or centers them within the canvas.
 #'
@@ -198,7 +196,7 @@ g6_options <- function(
 #'     \item \code{"step-end"}: Jump at the end to the end state
 #'   }
 #'
-#' @return A list containing the auto-fit configuration that can be passed to a G6 graph
+#' @return A list containing the auto-fit configuration that can be passed to [g6_options()].
 #'
 #' @export
 #'
@@ -260,7 +258,6 @@ auto_fit_config <- function(
 
 #' Create Canvas Configuration for G6 Graphs
 #'
-#' @description
 #' Configures the canvas settings for a G6 graph. The canvas is the rendering
 #' surface where the graph is drawn.
 #'
@@ -299,7 +296,7 @@ auto_fit_config <- function(
 #'   Multi-layer rendering can improve performance for complex graphs by
 #'   separating elements into different rendering layers.
 #'
-#' @return A list containing the canvas configuration that can be passed to a G6 graph
+#' @return A list containing the canvas configuration that can be passed to [g6_options()].
 #'
 #' @export
 #'
@@ -385,7 +382,6 @@ canvas_config <- function(
 
 #' Create Animation Configuration for G6 Graphs
 #'
-#' @description
 #' Configures animation settings for G6 graph elements. These settings control
 #' how graph elements animate when changes occur.
 #'
@@ -426,7 +422,7 @@ canvas_config <- function(
 #'   \code{Inf} will cause the animation to repeat indefinitely. Must be a
 #'   non-negative numeric value.
 #'
-#' @return A list containing animation configuration that can be passed to a G6 graph
+#' @return A list containing animation configuration that can be passed to [g6_options()].
 #'
 #' @export
 #'
@@ -504,7 +500,6 @@ animation_config <- function(
 
 #' Create Node Options Configuration for G6 Graphs
 #'
-#' @description
 #' Configures the general options for nodes in a G6 graph. These settings control
 #' the type, style, state, palette, and animation of nodes.
 #'
@@ -532,7 +527,7 @@ animation_config <- function(
 #'   \code{animation_config()}.
 #'   Default: NULL.
 #'
-#' @return A list containing node options configuration that can be passed to a G6 graph
+#' @return A list containing node options configuration that can be passed to [g6_options()].
 #'
 #' @export
 #'
@@ -578,7 +573,6 @@ node_options <- function(
 
 #' Create Node Style Options for G6 Graphs
 #'
-#' @description
 #' Configures the styling options for nodes in a G6 graph. These settings control
 #' the appearance and interaction behavior of nodes. Used in \link{node_options}.
 #'
@@ -644,7 +638,7 @@ node_options <- function(
 #' @param zIndex Node rendering level (for layering). Default: 0.
 #' @param ... Other parameters.
 #'
-#' @return A list containing node style options that can be passed to a G6 graph
+#' @return A list containing node style options that can be passed to [node_options()].
 #'
 #' @export
 #'
@@ -797,7 +791,6 @@ node_style_options <- function(
 
 #' Create Edge Options Configuration for G6 Graphs
 #'
-#' @description
 #' Configures the general options for edges in a G6 graph. These settings control
 #' the type, style, state, palette, and animation of edges.
 #'
@@ -825,7 +818,7 @@ node_style_options <- function(
 #'   \code{animation_config()}.
 #'   Default: NULL.
 #'
-#' @return A list containing edge options configuration that can be passed to a G6 graph
+#' @return A list containing edge options configuration that can be passed to [g6_options()].
 #'
 #' @export
 #'
@@ -929,7 +922,6 @@ valid_cursors <- c(
 
 #' Create Edge Style Options for G6 Graphs
 #'
-#' @description
 #' Configures the styling options for edges in a G6 graph. These settings control
 #' the appearance and interaction behavior of edges.
 #'
@@ -993,7 +985,7 @@ valid_cursors <- c(
 #' @param zIndex Edge rendering level (for layering). Default: 1.
 #' @param ... Extra parameters.
 #'
-#' @return A list containing edge style options that can be passed to a G6 graph
+#' @return A list containing edge style options that can be passed to [edge_options()].
 #'
 #' @export
 edge_style_options <- function(
@@ -1057,7 +1049,6 @@ edge_style_options <- function(
 
 #' Create Combo Options Configuration for G6 Graphs
 #'
-#' @description
 #' Configures the general options for combos in a G6 graph. These settings control
 #' the type, style, state, palette, and animation of combos.
 #'
@@ -1084,7 +1075,7 @@ edge_style_options <- function(
 #'   \code{animation_config()}.
 #'   Default: NULL.
 #'
-#' @return A list containing combo options configuration that can be passed to a G6 graph
+#' @return A list containing combo options configuration that can be passed to [g6_options()].
 #'
 #' @export
 #'

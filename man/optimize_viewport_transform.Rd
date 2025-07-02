@@ -13,18 +13,20 @@ optimize_viewport_transform(
 )
 }
 \arguments{
-\item{key}{Unique identifier for the behavior (string, default: "optimize-viewport-transform")}
+\item{key}{Unique identifier for the behavior (string, default: "optimize-viewport-transform").}
 
-\item{enable}{Whether to enable this behavior (boolean or JS function, default: TRUE)}
+\item{enable}{Whether to enable this behavior (boolean or JS function, default: TRUE).}
 
-\item{debounce}{How long after the operation ends to restore the visibility of all elements in milliseconds (number, default: 200)}
+\item{debounce}{How long after the operation ends to restore the visibility of all elements
+in milliseconds (number, default: 200).}
 
-\item{shapes}{Function to specify which graphical elements should remain visible during canvas operations (JS function, default: returns TRUE for nodes)}
+\item{shapes}{Function to specify which graphical elements should remain visible during canvas
+operations (JS function, default: returns TRUE for nodes).}
 
 \item{...}{Extra parameters. See \url{https://g6.antv.antgroup.com/manual/behavior/build-in/optimize-viewport-transform}.}
 }
 \value{
-A list with the configuration settings
+A list with the configuration settings for the optimize-viewport-transform behavior.
 }
 \description{
 Creates a configuration object for the optimize-viewport-transform behavior in G6.

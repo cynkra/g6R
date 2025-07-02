@@ -11,16 +11,11 @@
 #' @return A proxy object of class "g6_proxy" that can be used with g6 proxy methods
 #'   such as `g6_add_nodes()`, `g6_remove_nodes()`, etc.
 #'
-#' @details
-#' This function must be called from within a Shiny server function. The returned
-#' proxy object contains a reference to the session and the ID of the graph to be
-#' modified.
-#'
 #' @export
 g6_proxy <- function(id, session = shiny::getDefaultReactiveDomain()) {
   if (is.null(session)) {
     stop(
-      "g6_proxy must be called from the server function of a Shiny app"
+      "g6_proxy must be called from the server function of a Shiny app."
     )
   }
 
@@ -34,7 +29,7 @@ g6_proxy <- function(id, session = shiny::getDefaultReactiveDomain()) {
 g6_data <- function(graph, el, action, type) {
   if (!any(class(graph) %in% "g6_proxy")) {
     stop(
-      "Can't use g6_add_* with g6 object. Only within shiny and using g6_proxy"
+      "Can't use g6_add_* with g6 object. Only within shiny and using g6_proxy."
     )
   }
   if (action != "remove") {
@@ -181,7 +176,7 @@ g6_set_combos <- function(graph, combos) {
 g6_set_data <- function(graph, data) {
   if (!any(class(graph) %in% "g6_proxy")) {
     stop(
-      "Can't use g6_add_* with g6 object. Only within shiny and using g6_proxy"
+      "Can't use g6_add_* with g6 object. Only within shiny and using g6_proxy."
     )
   }
 
@@ -239,7 +234,7 @@ g6_add_combos <- function(graph, combos) {
 g6_add_data <- function(graph, data) {
   if (!any(class(graph) %in% "g6_proxy")) {
     stop(
-      "Can't use g6_update_* with g6 object. Only within shiny and using g6_proxy"
+      "Can't use g6_update_* with g6 object. Only within shiny and using g6_proxy."
     )
   }
 
@@ -260,7 +255,7 @@ g6_add_data <- function(graph, data) {
 #'
 #' @param graph A g6_proxy object created with \code{\link{g6_proxy}}.
 #' @param ids Character vector or list containing the IDs of the nodes/edges/combos to be removed.
-#'   If a single ID is provided, it will be converted to a list internally. You can't mix
+#' If a single ID is provided, it will be converted to a list internally. You can't mix
 #' nodes, edges and combos ids, elements have to be of the same type.
 #'
 #' @return The g6_proxy object (invisibly), allowing for method chaining.
@@ -355,7 +350,7 @@ g6_update_combos <- function(graph, combos) {
 g6_canvas_resize <- function(graph, width, height) {
   if (!any(class(graph) %in% "g6_proxy")) {
     stop(
-      "Can't use g6_canvas_resize with g6 object. Only within shiny and using g6_proxy"
+      "Can't use g6_canvas_resize with g6 object. Only within shiny and using g6_proxy."
     )
   }
 
@@ -392,7 +387,7 @@ g6_canvas_resize <- function(graph, width, height) {
 g6_fit_center <- function(graph, animation = NULL) {
   if (!any(class(graph) %in% "g6_proxy")) {
     stop(
-      "Can't use g6_fit_center with g6 object. Only within shiny and using g6_proxy"
+      "Can't use g6_fit_center with g6 object. Only within shiny and using g6_proxy."
     )
   }
 
@@ -415,7 +410,7 @@ g6_fit_center <- function(graph, animation = NULL) {
 g6_element_action <- function(graph, ids, animation = NULL, action) {
   if (!any(class(graph) %in% "g6_proxy")) {
     stop(
-      "Can't use g6_*_element with g6 object. Only within shiny and using g6_proxy"
+      "Can't use g6_*_element with g6 object. Only within shiny and using g6_proxy."
     )
   }
 
@@ -495,7 +490,7 @@ g6_show_elements <- function(graph, ids, animation = NULL) {
 g6_combo_action <- function(graph, id, options = NULL, action) {
   if (!any(class(graph) %in% "g6_proxy")) {
     stop(
-      "Can't use g6_*_combo with g6 object. Use only within shiny and using g6_proxy"
+      "Can't use g6_*_combo with g6 object. Use only within shiny and using g6_proxy."
     )
   }
 
@@ -565,7 +560,7 @@ g6_expand_combo <- function(graph, id, options = NULL) {
 g6_set_options <- function(graph, ...) {
   if (!any(class(graph) %in% "g6_proxy")) {
     stop(
-      "Can't use g6_*_combo with g6 object. Use only within shiny and using g6_proxy"
+      "Can't use g6_*_combo with g6 object. Use only within shiny and using g6_proxy."
     )
   }
   # TBD: support JS wrapped options
@@ -601,7 +596,7 @@ g6_set_options <- function(graph, ...) {
 g6_update_plugin <- function(graph, key, ...) {
   if (!any(class(graph) %in% "g6_proxy")) {
     stop(
-      "Can't use g6_update_plugin with g6 object. Use only within shiny and using g6_proxy"
+      "Can't use g6_update_plugin with g6 object. Use only within shiny and using g6_proxy."
     )
   }
   opts <- list(key = key, ...)
@@ -638,7 +633,7 @@ g6_update_plugin <- function(graph, key, ...) {
 g6_add_plugin <- function(graph, ...) {
   if (!any(class(graph) %in% "g6_proxy")) {
     stop(
-      "Can't use g6_add_plugin with g6 object. Use only within shiny and using g6_proxy"
+      "Can't use g6_add_plugin with g6 object. Use only within shiny and using g6_proxy."
     )
   }
   # TBD: support JS wrapped options
@@ -674,7 +669,7 @@ g6_add_plugin <- function(graph, ...) {
 g6_update_behavior <- function(graph, key, ...) {
   if (!any(class(graph) %in% "g6_proxy")) {
     stop(
-      "Can't use g6_update_behavior with g6 object. Use only within shiny and using g6_proxy"
+      "Can't use g6_update_behavior with g6 object. Use only within shiny and using g6_proxy."
     )
   }
   opts <- list(key = key, ...)
@@ -703,7 +698,7 @@ g6_update_behavior <- function(graph, key, ...) {
 g6_set_theme <- function(graph, theme) {
   if (!any(class(graph) %in% "g6_proxy")) {
     stop(
-      "Can't use g6_set_theme with g6 object. Use only within shiny and using g6_proxy"
+      "Can't use g6_set_theme with g6 object. Use only within shiny and using g6_proxy."
     )
   }
   graph$session$sendCustomMessage(

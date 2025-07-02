@@ -6,7 +6,7 @@
 \alias{g6R-package}
 \title{g6R: Graph Visualisation Engine Widget for R and 'shiny' Apps}
 \description{
-Create stunning network experiences powered by the G6 graph visualisation engine JavaScript library \url{https://g6.antv.antgroup.com/en}. In 'shiny' mode, modify your graph directly from the server function to dynamically interact nodes and edges. Select you favorite layout among 20 choices. 15 behaviors are available such as interactive edge creation, collapse-expand and brush select. 17 plugins designed to improve the user experience such as a minimap, toolbars and grid lines.
+Create stunning network experiences powered by the 'G6' graph visualisation engine 'JavaScript' library \url{https://g6.antv.antgroup.com/en}. In 'shiny' mode, modify your graph directly from the server function to dynamically interact nodes and edges. Select you favorite layout among 20 choices. 15 behaviors are available such as interactive edge creation, collapse-expand and brush select. 17 plugins designed to improve the user experience such as a minimap, toolbars and grid lines. Customise the look and feel of your graph with comprehensive options for nodes, edges and more.
 }
 \seealso{
 Useful links:

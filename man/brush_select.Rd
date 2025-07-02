@@ -21,30 +21,30 @@ brush_select(
 \arguments{
 \item{key}{Behavior unique identifier. Useful to modify this behavior from JS side.}
 
-\item{animation}{Whether to enable animation (boolean, default: FALSE)}
+\item{animation}{Whether to enable animation (boolean, default: FALSE).}
 
-\item{enable}{Whether to enable brush select functionality (boolean or function, default: TRUE)}
+\item{enable}{Whether to enable brush select functionality (boolean or function, default: TRUE).}
 
 \item{enableElements}{Types of elements that can be selected (character vector, default: "node").
 Can be \code{c("node", "edge", "combo")}.}
 
-\item{immediately}{Whether to select immediately in default mode (boolean, default: FALSE)}
+\item{immediately}{Whether to select immediately in default mode (boolean, default: FALSE).}
 
-\item{mode}{Selection mode: "union", "intersect", "diff", or "default" (string, default: "default")}
+\item{mode}{Selection mode: "union", "intersect", "diff", or "default" (string, default: "default").}
 
-\item{onSelect}{Callback for selected element state (JS function)}
+\item{onSelect}{Callback for selected element state (JS function).}
 
-\item{state}{State to switch to when selected (string, default: "selected")}
+\item{state}{State to switch to when selected (string, default: "selected").}
 
 \item{style}{Style specification for the selection box (list).
 See \url{https://g6.antv.antgroup.com/en/manual/behavior/build-in/brush-select#style}.}
 
-\item{trigger}{Shortcut keys for selection (character vector)}
+\item{trigger}{Shortcut keys for selection (character vector).}
 
 \item{...}{Extra parameters. See \url{https://g6.antv.antgroup.com/manual/behavior/build-in/brush-select}.}
 }
 \value{
-A list with the configuration settings
+A list with the configuration settings for the brush select behavior.
 }
 \description{
 Creates a configuration object for brush selection interaction in graph visualizations.

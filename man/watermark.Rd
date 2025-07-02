@@ -34,60 +34,60 @@ watermark(
 )
 }
 \arguments{
-\item{key}{Unique identifier for the plugin (string, default: NULL)}
+\item{key}{Unique identifier for the plugin (string, default: NULL).}
 
-\item{width}{Width of a single watermark (number, default: 200)}
+\item{width}{Width of a single watermark (number, default: 200).}
 
-\item{height}{Height of a single watermark (number, default: 100)}
+\item{height}{Height of a single watermark (number, default: 100).}
 
-\item{opacity}{Opacity of the watermark (number, default: 0.2)}
+\item{opacity}{Opacity of the watermark (number, default: 0.2).}
 
-\item{rotate}{Rotation angle of the watermark in radians (number, default: pi/12)}
+\item{rotate}{Rotation angle of the watermark in radians (number, default: pi/12).}
 
-\item{imageURL}{Image watermark URL, higher priority than text watermark (string, default: NULL)}
+\item{imageURL}{Image watermark URL, higher priority than text watermark (string, default: NULL).}
 
-\item{text}{Watermark text content (string, default: NULL)}
+\item{text}{Watermark text content (string, default: NULL).}
 
-\item{textFill}{Color of the text watermark (string, default: "#000")}
+\item{textFill}{Color of the text watermark (string, default: "#000").}
 
-\item{textFontSize}{Font size of the text watermark (number, default: 16)}
+\item{textFontSize}{Font size of the text watermark (number, default: 16).}
 
-\item{textFontFamily}{Font of the text watermark (string, default: NULL)}
+\item{textFontFamily}{Font of the text watermark (string, default: NULL).}
 
-\item{textFontWeight}{Font weight of the text watermark (string, default: NULL)}
+\item{textFontWeight}{Font weight of the text watermark (string, default: NULL).}
 
-\item{textFontVariant}{Font variant of the text watermark (string, default: NULL)}
+\item{textFontVariant}{Font variant of the text watermark (string, default: NULL).}
 
-\item{textAlign}{Text alignment of the watermark (string, default: "center")}
+\item{textAlign}{Text alignment of the watermark (string, default: "center").}
 
-\item{textBaseline}{Baseline alignment of the text watermark (string, default: "middle")}
+\item{textBaseline}{Baseline alignment of the text watermark (string, default: "middle").}
 
-\item{backgroundRepeat}{Repeat mode of the watermark (string, default: "repeat")}
+\item{backgroundRepeat}{Repeat mode of the watermark (string, default: "repeat").}
 
-\item{backgroundAttachment}{Background attachment behavior of the watermark (string, default: NULL)}
+\item{backgroundAttachment}{Background attachment behavior of the watermark (string, default: NULL).}
 
-\item{backgroundBlendMode}{Background blend mode of the watermark (string, default: NULL)}
+\item{backgroundBlendMode}{Background blend mode of the watermark (string, default: NULL).}
 
-\item{backgroundClip}{Background clip of the watermark (string, default: NULL)}
+\item{backgroundClip}{Background clip of the watermark (string, default: NULL).}
 
-\item{backgroundColor}{Background color of the watermark (string, default: NULL)}
+\item{backgroundColor}{Background color of the watermark (string, default: NULL).}
 
-\item{backgroundImage}{Background image of the watermark (string, default: NULL)}
+\item{backgroundImage}{Background image of the watermark (string, default: NULL).}
 
-\item{backgroundOrigin}{Background origin of the watermark (string, default: NULL)}
+\item{backgroundOrigin}{Background origin of the watermark (string, default: NULL).}
 
-\item{backgroundPosition}{Background position of the watermark (string, default: NULL)}
+\item{backgroundPosition}{Background position of the watermark (string, default: NULL).}
 
-\item{backgroundPositionX}{Horizontal position of the watermark background (string, default: NULL)}
+\item{backgroundPositionX}{Horizontal position of the watermark background (string, default: NULL).}
 
-\item{backgroundPositionY}{Vertical position of the watermark background (string, default: NULL)}
+\item{backgroundPositionY}{Vertical position of the watermark background (string, default: NULL).}
 
-\item{backgroundSize}{Background size of the watermark (string, default: NULL)}
+\item{backgroundSize}{Background size of the watermark (string, default: NULL).}
 
 \item{...}{Extra parameters. See \url{https://g6.antv.antgroup.com/manual/plugin/build-in/watermark}.}
 }
 \value{
-A list with the configuration settings
+A list with the configuration settings for the watermark plugin.
 }
 \description{
 Creates a configuration object for the watermark plugin in G6.

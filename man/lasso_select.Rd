@@ -19,30 +19,30 @@ lasso_select(
 )
 }
 \arguments{
-\item{key}{Unique identifier for the behavior (string, default: "lasso-select")}
+\item{key}{Unique identifier for the behavior (string, default: "lasso-select").}
 
-\item{animation}{Whether to enable animation (boolean, default: FALSE)}
+\item{animation}{Whether to enable animation (boolean, default: FALSE).}
 
-\item{enable}{Whether to enable lasso selection (boolean or JS function, default: TRUE)}
+\item{enable}{Whether to enable lasso selection (boolean or JS function, default: TRUE).}
 
-\item{enableElements}{Types of elements that can be selected (character vector, default: c("node", "combo", "edge"))}
+\item{enableElements}{Types of elements that can be selected (character vector, default: c("node", "combo", "edge")).}
 
-\item{immediately}{Whether to select immediately, only effective when selection mode is default (boolean, default: FALSE)}
+\item{immediately}{Whether to select immediately, only effective when selection mode is default (boolean, default: FALSE).}
 
-\item{mode}{Selection mode: "union", "intersect", "diff", or "default" (string, default: "default")}
+\item{mode}{Selection mode: "union", "intersect", "diff", or "default" (string, default: "default").}
 
-\item{onSelect}{Callback for selected element state (JS function, default: NULL)}
+\item{onSelect}{Callback for selected element state (JS function, default: NULL).}
 
-\item{state}{State to switch to when selected (string, default: "selected")}
+\item{state}{State to switch to when selected (string, default: "selected").}
 
-\item{style}{Style of the lasso during selection (list, default: NULL)}
+\item{style}{Style of the lasso during selection (list, default: NULL).}
 
-\item{trigger}{Press this shortcut key along with mouse click to select (character vector, default: c("shift"))}
+\item{trigger}{Press this shortcut key along with mouse click to select (character vector, default: c("shift")).}
 
 \item{...}{Extra parameters. See \url{https://g6.antv.antgroup.com/manual/behavior/build-in/lasso-select}.}
 }
 \value{
-A list with the configuration settings
+A list with the configuration settings for the lasso-select behavior.
 }
 \description{
 Creates a configuration object for the lasso-select behavior in G6.

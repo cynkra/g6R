@@ -34,60 +34,60 @@ bubble_sets(
 )
 }
 \arguments{
-\item{members}{Member elements, including nodes and edges (character vector, required)}
+\item{members}{Member elements, including nodes and edges (character vector, required).}
 
-\item{key}{Unique identifier for updates (string, default: NULL)}
+\item{key}{Unique identifier for updates (string, default: NULL).}
 
-\item{avoidMembers}{Elements to avoid when drawing contours (character vector, default: NULL)}
+\item{avoidMembers}{Elements to avoid when drawing contours (character vector, default: NULL).}
 
-\item{label}{Whether to display labels (boolean, default: TRUE)}
+\item{label}{Whether to display labels (boolean, default: TRUE).}
 
-\item{labelPlacement}{Label position (string, default: "bottom")}
+\item{labelPlacement}{Label position (string, default: "bottom").}
 
-\item{labelBackground}{Whether to display background (boolean, default: FALSE)}
+\item{labelBackground}{Whether to display background (boolean, default: FALSE).}
 
-\item{labelPadding}{Label padding (numeric or numeric vector, default: 0)}
+\item{labelPadding}{Label padding (numeric or numeric vector, default: 0).}
 
-\item{labelCloseToPath}{Whether the label is close to the contour (boolean, default: TRUE)}
+\item{labelCloseToPath}{Whether the label is close to the contour (boolean, default: TRUE).}
 
-\item{labelAutoRotate}{Whether the label rotates with the contour (boolean, default: TRUE)}
+\item{labelAutoRotate}{Whether the label rotates with the contour (boolean, default: TRUE).}
 
-\item{labelOffsetX}{Label x-axis offset (numeric, default: 0)}
+\item{labelOffsetX}{Label x-axis offset (numeric, default: 0).}
 
-\item{labelOffsetY}{Label y-axis offset (numeric, default: 0)}
+\item{labelOffsetY}{Label y-axis offset (numeric, default: 0).}
 
-\item{labelMaxWidth}{Maximum width of the text (numeric, default: NULL)}
+\item{labelMaxWidth}{Maximum width of the text (numeric, default: NULL).}
 
-\item{maxRoutingIterations}{Maximum iterations for path calculation (numeric, default: 100)}
+\item{maxRoutingIterations}{Maximum iterations for path calculation (numeric, default: 100).}
 
-\item{maxMarchingIterations}{Maximum iterations for contour calculation (numeric, default: 20)}
+\item{maxMarchingIterations}{Maximum iterations for contour calculation (numeric, default: 20).}
 
-\item{pixelGroup}{Number of pixels per potential area group (numeric, default: 4)}
+\item{pixelGroup}{Number of pixels per potential area group (numeric, default: 4).}
 
-\item{edgeR0}{Edge radius parameter R0 (numeric, default: NULL)}
+\item{edgeR0}{Edge radius parameter R0 (numeric, default: NULL).}
 
-\item{edgeR1}{Edge radius parameter R1 (numeric, default: NULL)}
+\item{edgeR1}{Edge radius parameter R1 (numeric, default: NULL).}
 
-\item{nodeR0}{Node radius parameter R0 (numeric, default: NULL)}
+\item{nodeR0}{Node radius parameter R0 (numeric, default: NULL).}
 
-\item{nodeR1}{Node radius parameter R1 (numeric, default: NULL)}
+\item{nodeR1}{Node radius parameter R1 (numeric, default: NULL).}
 
-\item{morphBuffer}{Morph buffer size (numeric, default: NULL)}
+\item{morphBuffer}{Morph buffer size (numeric, default: NULL).}
 
-\item{threshold}{Threshold (numeric, default: NULL)}
+\item{threshold}{Threshold (numeric, default: NULL).}
 
-\item{memberInfluenceFactor}{Member influence factor (numeric, default: NULL)}
+\item{memberInfluenceFactor}{Member influence factor (numeric, default: NULL).}
 
-\item{edgeInfluenceFactor}{Edge influence factor (numeric, default: NULL)}
+\item{edgeInfluenceFactor}{Edge influence factor (numeric, default: NULL).}
 
-\item{nonMemberInfluenceFactor}{Non-member influence factor (numeric, default: NULL)}
+\item{nonMemberInfluenceFactor}{Non-member influence factor (numeric, default: NULL).}
 
-\item{virtualEdges}{Whether to use virtual edges (boolean, default: NULL)}
+\item{virtualEdges}{Whether to use virtual edges (boolean, default: NULL).}
 
 \item{...}{Extra parameters. See \url{https://g6.antv.antgroup.com/manual/plugin/build-in/bubble-sets}.}
 }
 \value{
-A list with the configuration settings for the bubble-sets plugin
+A list with the configuration settings for the bubble-sets plugin.
 }
 \description{
 Creates a configuration object for the bubble-sets plugin in G6.

@@ -17,26 +17,27 @@ snapline(
 )
 }
 \arguments{
-\item{key}{Unique identifier for the plugin (string, default: NULL)}
+\item{key}{Unique identifier for the plugin (string, default: NULL).}
 
-\item{tolerance}{The alignment accuracy in pixels (number, default: 5)}
+\item{tolerance}{The alignment accuracy in pixels (number, default: 5).}
 
-\item{offset}{The extension distance of the snapline (number, default: 20)}
+\item{offset}{The extension distance of the snapline (number, default: 20).}
 
-\item{autoSnap}{Whether to enable automatic snapping (boolean, default: TRUE)}
+\item{autoSnap}{Whether to enable automatic snapping (boolean, default: TRUE).}
 
-\item{shape}{Specifies which shape to use as reference: "key" or a function (string or JS function, default: "key")}
+\item{shape}{Specifies which shape to use as reference: "key" or a function
+(string or JS function, default: "key").}
 
-\item{verticalLineStyle}{Vertical snapline style (list or JS object, default: list(stroke = "#1783FF"))}
+\item{verticalLineStyle}{Vertical snapline style (list or JS object, default: list(stroke = "#1783FF")).}
 
-\item{horizontalLineStyle}{Horizontal snapline style (list or JS object, default: list(stroke = "#1783FF"))}
+\item{horizontalLineStyle}{Horizontal snapline style (list or JS object, default: list(stroke = "#1783FF")).}
 
-\item{filter}{Function to filter nodes that don't participate in alignment (JS function, default: NULL)}
+\item{filter}{Function to filter nodes that don't participate in alignment (JS function, default: NULL).}
 
 \item{...}{Extra parameters. See \url{https://g6.antv.antgroup.com/manual/plugin/build-in/snapline}.}
 }
 \value{
-A list with the configuration settings
+A list with the configuration settings for the snapline plugin.
 }
 \description{
 Creates a configuration object for the snapline plugin in G6.

@@ -18,28 +18,29 @@ edge_bundling(
 )
 }
 \arguments{
-\item{key}{Unique identifier for the plugin (string, default: NULL)}
+\item{key}{Unique identifier for the plugin (string, default: NULL).}
 
-\item{bundleThreshold}{Edge compatibility threshold, determines which edges should be bundled together (number, default: 0.6)}
+\item{bundleThreshold}{Edge compatibility threshold, determines which edges
+should be bundled together (number, default: 0.6).}
 
-\item{cycles}{Number of simulation cycles (number, default: 6)}
+\item{cycles}{Number of simulation cycles (number, default: 6).}
 
-\item{divisions}{Initial number of cut points (number, default: 1)}
+\item{divisions}{Initial number of cut points (number, default: 1).}
 
-\item{divRate}{Growth rate of cut points (number, default: 2)}
+\item{divRate}{Growth rate of cut points (number, default: 2).}
 
-\item{iterations}{Number of iterations executed in the first cycle (number, default: 90)}
+\item{iterations}{Number of iterations executed in the first cycle (number, default: 90).}
 
-\item{iterRate}{Iteration decrement rate (number, default: 2/3)}
+\item{iterRate}{Iteration decrement rate (number, default: 2/3).}
 
-\item{K}{Edge strength, affects attraction and repulsion between edges (number, default: 0.1)}
+\item{K}{Edge strength, affects attraction and repulsion between edges (number, default: 0.1).}
 
-\item{lambda}{Initial step size (number, default: 0.1)}
+\item{lambda}{Initial step size (number, default: 0.1).}
 
 \item{...}{Extra parameters. See \url{https://g6.antv.antgroup.com/manual/plugin/build-in/edge-bundling}.}
 }
 \value{
-A list with the configuration settings
+A list with the configuration settings for the edge-bundling plugin.
 }
 \description{
 Creates a configuration object for the edge-bundling plugin in G6.

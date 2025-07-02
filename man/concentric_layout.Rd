@@ -24,9 +24,9 @@ concentric_layout(
 \item{center}{The center position of the circular layout \code{[x, y]} or \code{[x, y, z]}.
 By default, it's the center position of the current container.}
 
-\item{clockwise}{Whether nodes are arranged in clockwise order}
+\item{clockwise}{Whether nodes are arranged in clockwise order.}
 
-\item{equidistant}{Whether the distances between rings are equal}
+\item{equidistant}{Whether the distances between rings are equal.}
 
 \item{width}{The width of the layout. By default, the container width is used.}
 

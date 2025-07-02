@@ -20,30 +20,37 @@ fix_element_size(
 )
 }
 \arguments{
-\item{key}{Unique identifier for the behavior, used for subsequent operations (string, default: "fix-element-size")}
+\item{key}{Unique identifier for the behavior, used for subsequent operations
+(string, default: "fix-element-size").}
 
-\item{enable}{Whether to enable this interaction (boolean or JS function, default: TRUE)}
+\item{enable}{Whether to enable this interaction (boolean or JS function, default: TRUE).}
 
-\item{reset}{Whether to restore style when elements are redrawn (boolean, default: FALSE)}
+\item{reset}{Whether to restore style when elements are redrawn (boolean, default: FALSE).}
 
 \item{state}{Specify the state of elements to fix size (string, default: "")}
 
-\item{node}{Node configuration item(s) to define which attributes maintain fixed size (list or array of lists, default: NULL)}
+\item{node}{Node configuration item(s) to define which attributes maintain fixed
+size (list or array of lists, default: NULL).}
 
-\item{nodeFilter}{Node filter to determine which nodes maintain fixed size (JS function, default: returns TRUE for all nodes)}
+\item{nodeFilter}{Node filter to determine which nodes maintain fixed size
+(JS function, default: returns TRUE for all nodes).}
 
-\item{edge}{Edge configuration item(s) to define which attributes maintain fixed size (list or array of lists, default: predefined list)}
+\item{edge}{Edge configuration item(s) to define which attributes maintain fixed size
+(list or array of lists, default: predefined list).}
 
-\item{edgeFilter}{Edge filter to determine which edges maintain fixed size (JS function, default: returns TRUE for all edges)}
+\item{edgeFilter}{Edge filter to determine which edges maintain fixed size
+(JS function, default: returns TRUE for all edges).}
 
-\item{combo}{Combo configuration item(s) to define which attributes maintain fixed size (list or array of lists, default: NULL)}
+\item{combo}{Combo configuration item(s) to define which attributes maintain fixed size
+(list or array of lists, default: NULL).}
 
-\item{comboFilter}{Combo filter to determine which combos maintain fixed size (JS function, default: returns TRUE for all combos)}
+\item{comboFilter}{Combo filter to determine which combos maintain fixed size
+(JS function, default: returns TRUE for all combos).}
 
 \item{...}{Extra parameters. See \url{https://g6.antv.antgroup.com/manual/behavior/build-in/fix-element-size}.}
 }
 \value{
-A list with the configuration settings
+A list with the configuration settings for the fix-element-size behavior.
 }
 \description{
 Creates a configuration object for the fix-element-size behavior in G6.

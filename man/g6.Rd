@@ -49,7 +49,8 @@ Default: NULL (automatically generated).}
 }
 \value{
 An htmlwidget object that can be printed, included in R Markdown documents,
-or used in Shiny applications.
+or used in Shiny applications. This widget contains the graph data and configuration
+necessary to render the G6 graph visualization.
 }
 \description{
 Creates an interactive graph visualization using the G6 graph visualization library.

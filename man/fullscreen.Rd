@@ -14,20 +14,22 @@ fullscreen(
 )
 }
 \arguments{
-\item{key}{Unique identifier for the plugin (string, default: NULL)}
+\item{key}{Unique identifier for the plugin (string, default: NULL).}
 
-\item{autoFit}{Whether to auto-fit the canvas size to the screen when in fullscreen mode (boolean, default: TRUE)}
+\item{autoFit}{Whether to auto-fit the canvas size to the screen when in
+fullscreen mode (boolean, default: TRUE).}
 
-\item{trigger}{Methods to trigger fullscreen, e.g., list(request = "button", exit = "escape") (list, default: NULL)}
+\item{trigger}{Methods to trigger fullscreen, e.g.,
+list(request = "button", exit = "escape") (list, default: NULL).}
 
-\item{onEnter}{Callback function after entering fullscreen mode (JS function, default: NULL)}
+\item{onEnter}{Callback function after entering fullscreen mode (JS function, default: NULL).}
 
-\item{onExit}{Callback function after exiting fullscreen mode (JS function, default: NULL)}
+\item{onExit}{Callback function after exiting fullscreen mode (JS function, default: NULL).}
 
 \item{...}{Extra parameters. See \url{https://g6.antv.antgroup.com/manual/plugin/build-in/fullscreen}.}
 }
 \value{
-A list with the configuration settings
+A list with the configuration settings for the fullscreen plugin.
 }
 \description{
 Creates a configuration object for the fullscreen plugin in G6.

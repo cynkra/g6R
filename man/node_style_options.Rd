@@ -94,7 +94,7 @@ Default: NULL.}
 \item{...}{Other parameters.}
 }
 \value{
-A list containing node style options that can be passed to a G6 graph
+A list containing node style options that can be passed to \code{\link[=node_options]{node_options()}}.
 }
 \description{
 Configures the styling options for nodes in a G6 graph. These settings control

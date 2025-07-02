@@ -34,58 +34,58 @@ legend(
 )
 }
 \arguments{
-\item{key}{Unique identifier for the plugin (string, default: NULL)}
+\item{key}{Unique identifier for the plugin (string, default: NULL).}
 
-\item{trigger}{How legend items trigger highlighting: "hover" or "click" (string, default: "hover")}
+\item{trigger}{How legend items trigger highlighting: "hover" or "click" (string, default: "hover").}
 
-\item{position}{Relative position of the legend on the canvas (string, default: "bottom")}
+\item{position}{Relative position of the legend on the canvas (string, default: "bottom").}
 
-\item{container}{Container to which the legend is mounted (HTML element or string, default: NULL)}
+\item{container}{Container to which the legend is mounted (HTML element or string, default: NULL).}
 
-\item{className}{Legend canvas class name (string, default: NULL)}
+\item{className}{Legend canvas class name (string, default: NULL).}
 
-\item{containerStyle}{Style of the legend container (list or JS object, default: NULL)}
+\item{containerStyle}{Style of the legend container (list or JS object, default: NULL).}
 
-\item{nodeField}{Node classification identifier (string or JS function, default: NULL)}
+\item{nodeField}{Node classification identifier (string or JS function, default: NULL).}
 
-\item{edgeField}{Edge classification identifier (string or JS function, default: NULL)}
+\item{edgeField}{Edge classification identifier (string or JS function, default: NULL).}
 
-\item{comboField}{Combo classification identifier (string or JS function, default: NULL)}
+\item{comboField}{Combo classification identifier (string or JS function, default: NULL).}
 
-\item{orientation}{Layout direction: "horizontal" or "vertical" (string, default: "horizontal")}
+\item{orientation}{Layout direction: "horizontal" or "vertical" (string, default: "horizontal").}
 
-\item{layout}{Layout method: "flex" or "grid" (string, default: "flex")}
+\item{layout}{Layout method: "flex" or "grid" (string, default: "flex").}
 
-\item{showTitle}{Whether to display the title (boolean, default: FALSE)}
+\item{showTitle}{Whether to display the title (boolean, default: FALSE).}
 
-\item{titleText}{Title content (string, default: "")}
+\item{titleText}{Title content (string, default: "").}
 
-\item{x}{Relative horizontal position (number, default: NULL)}
+\item{x}{Relative horizontal position (number, default: NULL).}
 
-\item{y}{Relative vertical position (number, default: NULL)}
+\item{y}{Relative vertical position (number, default: NULL).}
 
-\item{width}{Width of the legend (number, default: 240)}
+\item{width}{Width of the legend (number, default: 240).}
 
-\item{height}{Height of the legend (number, default: 160)}
+\item{height}{Height of the legend (number, default: 160).}
 
-\item{itemSpacing}{Spacing between text and marker (number, default: 4)}
+\item{itemSpacing}{Spacing between text and marker (number, default: 4).}
 
-\item{rowPadding}{Spacing between rows (number, default: 10)}
+\item{rowPadding}{Spacing between rows (number, default: 10).}
 
-\item{colPadding}{Spacing between columns (number, default: 10)}
+\item{colPadding}{Spacing between columns (number, default: 10).}
 
-\item{itemMarkerSize}{Size of the legend item marker (number, default: 16)}
+\item{itemMarkerSize}{Size of the legend item marker (number, default: 16).}
 
-\item{itemLabelFontSize}{Font size of the legend item text (number, default: 16)}
+\item{itemLabelFontSize}{Font size of the legend item text (number, default: 16).}
 
-\item{gridCol}{Maximum number of columns for grid layout (number, default: NULL)}
+\item{gridCol}{Maximum number of columns for grid layout (number, default: NULL).}
 
-\item{gridRow}{Maximum number of rows for grid layout (number, default: NULL)}
+\item{gridRow}{Maximum number of rows for grid layout (number, default: NULL).}
 
 \item{...}{Extra parameters. See \url{https://g6.antv.antgroup.com/manual/plugin/build-in/legend}.}
 }
 \value{
-A list with the configuration settings
+A list with the configuration settings for the legend plugin.
 }
 \description{
 Creates a configuration object for the legend plugin in G6.

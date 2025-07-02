@@ -21,28 +21,28 @@ click_select(
 \arguments{
 \item{key}{Behavior unique identifier. Useful to modify this behavior from JS side.}
 
-\item{animation}{Whether to enable animation effects when switching element states (boolean, default: TRUE)}
+\item{animation}{Whether to enable animation effects when switching element states (boolean, default: TRUE).}
 
-\item{degree}{Controls the highlight spread range (number or function, default: 0)}
+\item{degree}{Controls the highlight spread range (number or function, default: 0).}
 
-\item{enable}{Whether to enable the click element function (boolean or function, default: TRUE)}
+\item{enable}{Whether to enable the click element function (boolean or function, default: TRUE).}
 
-\item{multiple}{Whether to allow multiple selections (boolean, default: FALSE)}
+\item{multiple}{Whether to allow multiple selections (boolean, default: FALSE).}
 
-\item{state}{The state applied when an element is selected (string, default: "selected")}
+\item{state}{The state applied when an element is selected (string, default: "selected").}
 
-\item{neighborState}{The state applied to elements with n-degree relationships (string, default: "selected")}
+\item{neighborState}{The state applied to elements with n-degree relationships (string, default: "selected").}
 
-\item{unselectedState}{The state applied to all other elements (string, default: NULL)}
+\item{unselectedState}{The state applied to all other elements (string, default: NULL).}
 
-\item{onClick}{Callback when an element is clicked (function, default: NULL)}
+\item{onClick}{Callback when an element is clicked (function, default: NULL).}
 
-\item{trigger}{Keys for multi-selection (character vector, default: c("shift"))}
+\item{trigger}{Keys for multi-selection (character vector, default: c("shift")).}
 
 \item{...}{Extra parameters. See \url{https://g6.antv.antgroup.com/manual/behavior/build-in/click-select}.}
 }
 \value{
-A list with the configuration settings
+A list with the configuration settings for the click select behavior.
 }
 \description{
 Creates a configuration object for the click-select behavior in G6.

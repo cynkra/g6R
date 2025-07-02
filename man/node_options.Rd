@@ -34,7 +34,7 @@ Default: NULL.}
 Default: NULL.}
 }
 \value{
-A list containing node options configuration that can be passed to a G6 graph
+A list containing node options configuration that can be passed to \code{\link[=g6_options]{g6_options()}}.
 }
 \description{
 Configures the general options for nodes in a G6 graph. These settings control

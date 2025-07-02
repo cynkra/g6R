@@ -33,7 +33,7 @@ Can be a number or a function \code{function(node, index, nodes) { return number
 See \url{https://g6.antv.antgroup.com/manual/layout/build-in/d3-force}.}
 }
 \value{
-A list containing the configuration for G6 AntV D3 Force layout with class "g6-layout"
+A list containing the configuration for G6 AntV D3 Force layout.
 }
 \description{
 This function creates a configuration list for G6 D3 Force layout

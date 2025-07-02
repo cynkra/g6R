@@ -81,7 +81,8 @@
 #'   Default: NULL (automatically generated).
 #'
 #' @return An htmlwidget object that can be printed, included in R Markdown documents,
-#'   or used in Shiny applications.
+#' or used in Shiny applications. This widget contains the graph data and configuration
+#' necessary to render the G6 graph visualization.
 #'
 #' @examples
 #' # Create a simple graph with two nodes and one edge
@@ -180,6 +181,12 @@ g6 <- function(
 #'   is useful if you want to save an expression in a variable.
 #'
 #' @name g6-shiny
+#'
+#' @return `g6Output` and `g6_output`
+#' return a Shiny output function that can be used in the UI part of a Shiny app.
+#' `renderG6` and `render_g6` return a
+#' Shiny render function that can be used in the server part of a Shiny app to
+#' render a `g6` element.
 #'
 #' @export
 g6Output <- function(outputId, width = "100%", height = "400px") {

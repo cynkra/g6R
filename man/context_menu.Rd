@@ -18,29 +18,32 @@ context_menu(
 )
 }
 \arguments{
-\item{key}{Unique identifier for the behavior, used for subsequent operations (string, default: "context-menu")}
+\item{key}{Unique identifier for the behavior, used for
+subsequent operations (string, default: "context-menu").}
 
-\item{className}{Additional class name for the menu DOM (string, default: "g6-contextmenu")}
+\item{className}{Additional class name for the menu DOM (string, default: "g6-contextmenu").}
 
-\item{trigger}{How to trigger the menu: "contextmenu" for right-click, "click" for click (string, default: "contextmenu")}
+\item{trigger}{How to trigger the menu: "contextmenu" for right-click,
+"click" for click (string, default: "contextmenu").}
 
-\item{offset}{Offset of the menu display in X and Y directions (numeric vector, default: c(4, 4))}
+\item{offset}{Offset of the menu display in X and Y directions (numeric vector, default: c(4, 4)).}
 
 \item{onClick}{Callback method triggered after menu item is clicked (JS function). Our default allows
 to create edge or either remove the current node.}
 
-\item{getItems}{Returns the list of menu items, supports Promise (JS function, default: NULL)}
+\item{getItems}{Returns the list of menu items, supports Promise (JS function, default: NULL).}
 
-\item{getContent}{Returns the content of the menu, supports Promise (JS function, default: NULL)}
+\item{getContent}{Returns the content of the menu, supports Promise (JS function, default: NULL).}
 
-\item{loadingContent}{Menu content used when getContent returns a Promise (string or HTML element, default: NULL)}
+\item{loadingContent}{Menu content used when getContent returns a
+Promise (string or HTML element, default: NULL).}
 
-\item{enable}{Whether the context menu is available (boolean or JS function, default: TRUE)}
+\item{enable}{Whether the context menu is available (boolean or JS function, default: TRUE).}
 
-\item{...}{Extra parameters. See \url{https://g6.antv.antgroup.com/manual/plugin/build-in/contextmenu}}
+\item{...}{Extra parameters. See \url{https://g6.antv.antgroup.com/manual/plugin/build-in/contextmenu}.}
 }
 \value{
-A list with the configuration settings
+A list with the configuration settings for the context menu plugin.
 }
 \description{
 Creates a configuration object for the context-menu behavior in G6.

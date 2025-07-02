@@ -18,28 +18,28 @@ grid_line(
 )
 }
 \arguments{
-\item{key}{Unique identifier for the plugin (string, default: NULL)}
+\item{key}{Unique identifier for the plugin (string, default: NULL).}
 
-\item{border}{Whether to display the border (boolean, default: TRUE)}
+\item{border}{Whether to display the border (boolean, default: TRUE).}
 
-\item{borderLineWidth}{Border line width (number, default: 1)}
+\item{borderLineWidth}{Border line width (number, default: 1).}
 
-\item{borderStroke}{Border color (string, default: "#eee")}
+\item{borderStroke}{Border color (string, default: "#eee").}
 
-\item{borderStyle}{Border style (string, default: "solid")}
+\item{borderStyle}{Border style (string, default: "solid").}
 
-\item{follow}{Whether the grid follows canvas movements (boolean or list, default: FALSE)}
+\item{follow}{Whether the grid follows canvas movements (boolean or list, default: FALSE).}
 
-\item{lineWidth}{Grid line width (number or string, default: 1)}
+\item{lineWidth}{Grid line width (number or string, default: 1).}
 
-\item{size}{Grid unit size in pixels (number, default: 20)}
+\item{size}{Grid unit size in pixels (number, default: 20).}
 
-\item{stroke}{Grid line color (string, default: "#eee")}
+\item{stroke}{Grid line color (string, default: "#eee").}
 
 \item{...}{Extra parameters. See \url{https://g6.antv.antgroup.com/manual/plugin/build-in/grid-line}.}
 }
 \value{
-A list with the configuration settings
+A list with the configuration settings for the grid-line plugin.
 }
 \description{
 Creates a configuration object for the grid-line plugin in G6.

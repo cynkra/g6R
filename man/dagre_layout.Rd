@@ -17,10 +17,10 @@ dagre_layout(
 }
 \arguments{
 \item{rankdir}{Layout direction: "TB" (top to bottom), "BT" (bottom to top),
-"LR" (left to right), or "RL" (right to left)}
+"LR" (left to right), or "RL" (right to left).}
 
 \item{align}{Node alignment: "UL" (upper left), "UR" (upper right),
-"DL" (down left), or "DR" (down right)}
+"DL" (down left), or "DR" (down right).}
 
 \item{nodesep}{Node spacing (px). When rankdir is "TB" or "BT", it's the horizontal
 spacing of nodes; when rankdir is "LR" or "RL", it's the vertical spacing of nodes.}
@@ -31,18 +31,18 @@ it represents the spacing between adjacent layers in the horizontal direction.}
 
 \item{ranker}{The algorithm for assigning a level to each node: "network-simplex" (the network
 simplex algorithm), "tight-tree" (the compact tree algorithm), or "longest-path"
-(the longest path algorithm)}
+(the longest path algorithm).}
 
 \item{nodeSize}{G6 custom attribute to specify the node size uniformly or for each node.
 Can be a single number (same width/height), an array \code{[width, height]},
 or a function that returns either.}
 
-\item{controlPoints}{Whether to keep the control points of the edge}
+\item{controlPoints}{Whether to keep the control points of the edge.}
 
-\item{...}{Additional parameters to pass to the layout}
+\item{...}{Additional parameters to pass to the layout.}
 }
 \value{
-A list containing the configuration for G6 AntV Dagre layout
+A list containing the configuration for G6 AntV Dagre layout.
 }
 \description{
 This function creates a configuration list for G6 AntV Dagre layout

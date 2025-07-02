@@ -23,38 +23,39 @@ fish_eye(
 )
 }
 \arguments{
-\item{key}{Unique identifier for the plugin (string, default: NULL)}
+\item{key}{Unique identifier for the plugin (string, default: NULL).}
 
-\item{trigger}{Method to move the fisheye: "pointermove", "click", or "drag" (string, default: "pointermove")}
+\item{trigger}{Method to move the fisheye: "pointermove", "click", or "drag" (string, default: "pointermove").}
 
-\item{r}{Radius of the fisheye (number, default: 120)}
+\item{r}{Radius of the fisheye (number, default: 120).}
 
-\item{maxR}{Maximum adjustable radius of the fisheye (number, default: NULL - half of the smaller canvas dimension)}
+\item{maxR}{Maximum adjustable radius of the fisheye
+(number, default: NULL - half of the smaller canvas dimension).}
 
-\item{minR}{Minimum adjustable radius of the fisheye (number, default: 0)}
+\item{minR}{Minimum adjustable radius of the fisheye (number, default: 0).}
 
-\item{d}{Distortion factor (number, default: 1.5)}
+\item{d}{Distortion factor (number, default: 1.5).}
 
-\item{maxD}{Maximum adjustable distortion factor (number, default: 5)}
+\item{maxD}{Maximum adjustable distortion factor (number, default: 5).}
 
-\item{minD}{Minimum adjustable distortion factor (number, default: 0)}
+\item{minD}{Minimum adjustable distortion factor (number, default: 0).}
 
-\item{scaleRBy}{Method to adjust the fisheye radius: "wheel" or "drag" (string, default: NULL)}
+\item{scaleRBy}{Method to adjust the fisheye radius: "wheel" or "drag" (string, default: NULL).}
 
-\item{scaleDBy}{Method to adjust the fisheye distortion factor: "wheel" or "drag" (string, default: NULL)}
+\item{scaleDBy}{Method to adjust the fisheye distortion factor: "wheel" or "drag" (string, default: NULL).}
 
-\item{showDPercent}{Whether to show the distortion factor value in the fisheye (boolean, default: TRUE)}
+\item{showDPercent}{Whether to show the distortion factor value in the fisheye (boolean, default: TRUE).}
 
-\item{style}{Style of the fisheye (list, default: NULL)}
+\item{style}{Style of the fisheye (list, default: NULL).}
 
-\item{nodeStyle}{Style of nodes in the fisheye (list or JS function, default: list(label = TRUE))}
+\item{nodeStyle}{Style of nodes in the fisheye (list or JS function, default: list(label = TRUE)).}
 
-\item{preventDefault}{Whether to prevent default events (boolean, default: TRUE)}
+\item{preventDefault}{Whether to prevent default events (boolean, default: TRUE).}
 
 \item{...}{Extra parameters. See \url{https://g6.antv.antgroup.com/manual/plugin/build-in/fisheye}.}
 }
 \value{
-A list with the configuration settings
+A list with the configuration settings for the fisheye plugin.
 }
 \description{
 Creates a configuration object for the fisheye plugin in G6.

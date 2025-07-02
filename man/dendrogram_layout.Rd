@@ -25,7 +25,7 @@ dendrogram_layout(
 See \url{https://g6.antv.antgroup.com/en/manual/layout/build-in/dendrogram-layout}.}
 }
 \value{
-A list containing the configuration for G6 dendrogram layout with class "g6-layout"
+A list containing the configuration for G6 dendrogram layout.
 }
 \description{
 This function creates a configuration list for G6 Dendrogram layout

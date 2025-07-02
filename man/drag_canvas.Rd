@@ -19,24 +19,24 @@ drag_canvas(
 \arguments{
 \item{key}{Behavior unique identifier. Useful to modify this behavior from JS side.}
 
-\item{enable}{Whether to enable this behavior (boolean or function, default: function that enables dragging only on canvas)}
+\item{enable}{Whether to enable this behavior (boolean or function, default: function that enables dragging only on canvas).}
 
-\item{animation}{Drag animation configuration for keyboard movement (list, default: NULL)}
+\item{animation}{Drag animation configuration for keyboard movement (list, default: NULL).}
 
-\item{direction}{Allowed drag direction: "x", "y", or "both" (string, default: "both")}
+\item{direction}{Allowed drag direction: "x", "y", or "both" (string, default: "both").}
 
-\item{range}{Draggable viewport range in viewport size units (number or numeric vector, default: Inf)}
+\item{range}{Draggable viewport range in viewport size units (number or numeric vector, default: Inf).}
 
-\item{sensitivity}{Distance to trigger a single keyboard movement (number, default: 10)}
+\item{sensitivity}{Distance to trigger a single keyboard movement (number, default: 10).}
 
-\item{trigger}{Keyboard keys to trigger dragging (list, default: NULL)}
+\item{trigger}{Keyboard keys to trigger dragging (list, default: NULL).}
 
-\item{onFinish}{Callback function when dragging is completed (function, default: NULL)}
+\item{onFinish}{Callback function when dragging is completed (function, default: NULL).}
 
 \item{...}{Extra parameters. See \url{https://g6.antv.antgroup.com/manual/behavior/build-in/drag-canvas}.}
 }
 \value{
-A list with the configuration settings
+A list with the configuration settings for the drag-canvas behavior.
 }
 \description{
 Creates a configuration object for the drag-canvas behavior in G6.

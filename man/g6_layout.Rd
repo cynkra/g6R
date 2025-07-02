@@ -18,29 +18,27 @@ The modified g6 graph object with the specified layout, allowing for method chai
 }
 \description{
 This function configures the layout algorithm used to position nodes in a g6 graph.
-G6 provides various layout algorithms such as 'force', 'radial', 'circular', 'grid',
-'concentric', 'dagre', and more. Each layout has its own set of configurable parameters.
 }
 \details{
 G6 provides several layout algorithms, each suitable for different graph structures:
 
 \itemize{
-\item \strong{force}: Force-directed layout using physical simulation of forces
-\item \strong{random}: Random layout placing nodes randomly
-\item \strong{circular}: Arranges nodes on a circle
-\item \strong{radial}: Radial layout with nodes arranged outward from a central node
-\item \strong{grid}: Arranges nodes in a grid pattern
-\item \strong{concentric}: Concentric circles with important nodes in the center
-\item \strong{dagre}: Hierarchical layout for directed acyclic graphs
-\item \strong{fruchterman}: Force-directed layout based on the Fruchterman-Reingold algorithm
-\item \strong{mds}: Multidimensional scaling layout
-\item \strong{comboForce}: Force-directed layout specially designed for combo graphs
+\item \strong{force}: Force-directed layout using physical simulation of forces.
+\item \strong{random}: Random layout placing nodes randomly.
+\item \strong{circular}: Arranges nodes on a circle.
+\item \strong{radial}: Radial layout with nodes arranged outward from a central node.
+\item \strong{grid}: Arranges nodes in a grid pattern.
+\item \strong{concentric}: Concentric circles with important nodes in the center.
+\item \strong{dagre}: Hierarchical layout for directed acyclic graphs.
+\item \strong{fruchterman}: Force-directed layout based on the Fruchterman-Reingold algorithm.
+\item \strong{mds}: Multidimensional scaling layout.
+\item \strong{comboForce}: Force-directed layout specially designed for combo graphs.
 }
 
 Each layout algorithm has specific configuration options. See the G6 documentation
 for detailed information on each layout and its parameters:
-\url{https://g6.antv.antgroup.com/en/manual/layout/overview}
+\url{https://g6.antv.antgroup.com/en/manual/layout/overview}.
 }
 \seealso{
-\code{\link{g6}}
+\code{\link[=g6]{g6()}}
 }

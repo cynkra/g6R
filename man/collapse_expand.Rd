@@ -18,22 +18,22 @@ collapse_expand(
 \arguments{
 \item{key}{Behavior unique identifier. Useful to modify this behavior from JS side.}
 
-\item{animation}{Enable expand/collapse animation effects (boolean, default: TRUE)}
+\item{animation}{Enable expand/collapse animation effects (boolean, default: TRUE).}
 
-\item{enable}{Enable expand/collapse functionality (boolean or function, default: TRUE)}
+\item{enable}{Enable expand/collapse functionality (boolean or function, default: TRUE).}
 
-\item{trigger}{Trigger method: "click" or "dblclick" (string, default: "dblclick")}
+\item{trigger}{Trigger method: "click" or "dblclick" (string, default: "dblclick").}
 
-\item{onCollapse}{Callback function when collapse is completed (function, default: NULL)}
+\item{onCollapse}{Callback function when collapse is completed (function, default: NULL).}
 
-\item{onExpand}{Callback function when expand is completed (function, default: NULL)}
+\item{onExpand}{Callback function when expand is completed (function, default: NULL).}
 
-\item{align}{Align with the target element to avoid view offset (boolean, default: TRUE)}
+\item{align}{Align with the target element to avoid view offset (boolean, default: TRUE).}
 
 \item{...}{Extra parameters. See \url{https://g6.antv.antgroup.com/manual/behavior/build-in/collapse-expand}.}
 }
 \value{
-A list with the configuration settings
+A list with the configuration settings for the collapse-expand behavior.
 }
 \description{
 Creates a configuration object for the collapse-expand behavior in G6.

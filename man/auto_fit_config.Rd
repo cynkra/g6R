@@ -48,7 +48,7 @@ auto_fit_config(
 }}
 }
 \value{
-A list containing the auto-fit configuration that can be passed to a G6 graph
+A list containing the auto-fit configuration that can be passed to \code{\link[=g6_options]{g6_options()}}.
 }
 \description{
 Configures the auto-fit behavior for a G6 graph. Auto-fit automatically adjusts

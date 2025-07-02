@@ -20,7 +20,7 @@ Larger values make the layout more compact. Defaults to 10.}
 See \url{https://g6.antv.antgroup.com/en/manual/layout/build-in/fruchterman-layout}.}
 }
 \value{
-A list containing the configuration for G6 fruchterman with class "g6-layout"
+A list containing the configuration for G6 fruchterman layout.
 }
 \description{
 This function creates a configuration list for G6 Fruchterman layout

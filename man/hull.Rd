@@ -24,40 +24,41 @@ hull(
 )
 }
 \arguments{
-\item{members}{Elements within the hull, including nodes and edges (character vector, required)}
+\item{members}{Elements within the hull, including nodes and edges (character vector, required).}
 
-\item{key}{Unique identifier for the plugin (string, default: NULL)}
+\item{key}{Unique identifier for the plugin (string, default: NULL).}
 
-\item{concavity}{Concavity parameter, larger values create less concave hulls (number, default: Infinity)}
+\item{concavity}{Concavity parameter, larger values create less concave hulls (number, default: Infinity).}
 
-\item{corner}{Corner type: "rounded", "smooth", or "sharp" (string, default: "rounded")}
+\item{corner}{Corner type: "rounded", "smooth", or "sharp" (string, default: "rounded").}
 
-\item{padding}{Padding around the elements (number, default: 10)}
+\item{padding}{Padding around the elements (number, default: 10).}
 
-\item{label}{Whether to display the label (boolean, default: TRUE)}
+\item{label}{Whether to display the label (boolean, default: TRUE).}
 
 \item{labelText}{Label text content. Default to NULL.}
 
-\item{labelPlacement}{Label position: "left", "right", "top", "bottom", or "center" (string, default: "bottom")}
+\item{labelPlacement}{Label position: "left", "right", "top", "bottom", or "center" (string, default: "bottom").}
 
-\item{labelBackground}{Whether to display the background (boolean, default: FALSE)}
+\item{labelBackground}{Whether to display the background (boolean, default: FALSE).}
 
-\item{labelPadding}{Label padding (number or numeric vector, default: 0)}
+\item{labelPadding}{Label padding (number or numeric vector, default: 0).}
 
-\item{labelCloseToPath}{Whether the label is close to the hull (boolean, default: TRUE)}
+\item{labelCloseToPath}{Whether the label is close to the hull (boolean, default: TRUE).}
 
-\item{labelAutoRotate}{Whether the label rotates with the hull, effective only when closeToPath is true (boolean, default: TRUE)}
+\item{labelAutoRotate}{Whether the label rotates with the hull, effective only when
+closeToPath is true (boolean, default: TRUE).}
 
-\item{labelOffsetX}{X-axis offset (number, default: 0)}
+\item{labelOffsetX}{X-axis offset (number, default: 0).}
 
-\item{labelOffsetY}{Y-axis offset (number, default: 0)}
+\item{labelOffsetY}{Y-axis offset (number, default: 0).}
 
-\item{labelMaxWidth}{Maximum width of the text, exceeding will be ellipsized (number, default: 0)}
+\item{labelMaxWidth}{Maximum width of the text, exceeding will be ellipsized (number, default: 0).}
 
 \item{...}{Other options. See \url{https://g6.antv.antgroup.com/manual/plugin/build-in/hull}.}
 }
 \value{
-A list with the configuration settings
+A list with the configuration settings for the hull plugin.
 }
 \description{
 Creates a configuration object for the hull plugin in G6.

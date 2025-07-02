@@ -21,8 +21,3 @@ This function creates a proxy object that can be used to update an existing g6 g
 instance after it has been rendered in the UI. The proxy allows for server-side
 modifications of the graph without completely re-rendering it.
 }
-\details{
-This function must be called from within a Shiny server function. The returned
-proxy object contains a reference to the session and the ID of the graph to be
-modified.
-}

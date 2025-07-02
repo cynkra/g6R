@@ -21,34 +21,34 @@ edge_filter_lens(
 )
 }
 \arguments{
-\item{key}{Unique identifier for the plugin (string, default: NULL)}
+\item{key}{Unique identifier for the plugin (string, default: NULL).}
 
-\item{trigger}{Method to move the lens: "pointermove", "click", or "drag" (string, default: "pointermove")}
+\item{trigger}{Method to move the lens: "pointermove", "click", or "drag" (string, default: "pointermove").}
 
-\item{r}{Radius of the lens (number, default: 60)}
+\item{r}{Radius of the lens (number, default: 60).}
 
-\item{maxR}{Maximum radius of the lens (number, default: NULL - half of the smaller canvas dimension)}
+\item{maxR}{Maximum radius of the lens (number, default: NULL - half of the smaller canvas dimension).}
 
-\item{minR}{Minimum radius of the lens (number, default: 0)}
+\item{minR}{Minimum radius of the lens (number, default: 0).}
 
-\item{scaleRBy}{Method to scale the lens radius (string, default: "wheel")}
+\item{scaleRBy}{Method to scale the lens radius (string, default: "wheel").}
 
-\item{nodeType}{Edge display condition: "both", "source", "target", or "either" (string, default: "both")}
+\item{nodeType}{Edge display condition: "both", "source", "target", or "either" (string, default: "both").}
 
-\item{filter}{Filter out elements that are never displayed in the lens (JS function, default: NULL)}
+\item{filter}{Filter out elements that are never displayed in the lens (JS function, default: NULL).}
 
-\item{style}{Style of the lens (list, default: NULL)}
+\item{style}{Style of the lens (list, default: NULL).}
 
-\item{nodeStyle}{Style of nodes in the lens (list or JS function, default: list(label = FALSE))}
+\item{nodeStyle}{Style of nodes in the lens (list or JS function, default: list(label = FALSE)).}
 
-\item{edgeStyle}{Style of edges in the lens (list or JS function, default: list(label = TRUE))}
+\item{edgeStyle}{Style of edges in the lens (list or JS function, default: list(label = TRUE)).}
 
-\item{preventDefault}{Whether to prevent default events (boolean, default: TRUE)}
+\item{preventDefault}{Whether to prevent default events (boolean, default: TRUE).}
 
 \item{...}{Extra parameters. See \url{https://g6.antv.antgroup.com/manual/plugin/build-in/edge-filter-lens}.}
 }
 \value{
-A list with the configuration settings
+A list with the configuration settings for the edge-filter-lens plugin.
 }
 \description{
 Creates a configuration object for the edge-filter-lens plugin in G6.

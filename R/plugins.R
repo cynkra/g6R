@@ -1,6 +1,5 @@
 #' Create a List of G6 Plugins
 #'
-#' @description
 #' Combines multiple G6 plugins into a list that can be passed to a G6 graph configuration.
 #' G6 plugins extend the functionality of the base graph visualization with additional features.
 #'
@@ -56,13 +55,14 @@
 #' @note You can also build your own plugins as described at
 #' \url{https://g6.antv.antgroup.com/en/manual/plugin/custom-plugin}.
 #'
-#' @return A list of G6 plugin configurations that can be passed to a G6 graph
+#' @return A list of G6 plugin configurations that can be passed to a G6 graph.
 #'
 #' @export
 #'
 #' @examples
 #' # Create a configuration with multiple plugins
 #' plugins <- g6_plugins(
+#'   g6(),
 #'   minimap(),
 #'   grid_line(),
 #'   tooltips(
@@ -74,6 +74,7 @@
 #'
 #' # Add a context menu and toolbar
 #' plugins <- g6_plugins(
+#'   g6(),
 #'   context_menu(
 #'     key = "my-context-menu",
 #'     className = "my-context-menu",
@@ -127,20 +128,20 @@ validate_plugin <- function(x) {
 #' Creates a configuration object for the background plugin in G6.
 #' This plugin adds a customizable background to the graph canvas.
 #'
-#' @param key Unique identifier for updates (string, default: NULL)
-#' @param width Background width (string, default: "100%")
-#' @param height Background height (string, default: "100%")
-#' @param backgroundColor Background color (string, default: NULL)
-#' @param backgroundImage Background image URL (string, default: NULL)
-#' @param backgroundSize Background size (string, default: "cover")
-#' @param backgroundPosition Background position (string, default: NULL)
-#' @param backgroundRepeat Background repeat (string, default: NULL)
-#' @param opacity Background opacity (string, default: NULL)
-#' @param transition Transition animation (string, default: "background 0.5s")
-#' @param zIndex Stacking order (string, default: "-1")
+#' @param key Unique identifier for updates (string, default: NULL).
+#' @param width Background width (string, default: "100%").
+#' @param height Background height (string, default: "100%").
+#' @param backgroundColor Background color (string, default: NULL).
+#' @param backgroundImage Background image URL (string, default: NULL).
+#' @param backgroundSize Background size (string, default: "cover").
+#' @param backgroundPosition Background position (string, default: NULL).
+#' @param backgroundRepeat Background repeat (string, default: NULL).
+#' @param opacity Background opacity (string, default: NULL).
+#' @param transition Transition animation (string, default: "background 0.5s").
+#' @param zIndex Stacking order (string, default: "-1").
 #' @param ... Extra parameters. See \url{https://g6.antv.antgroup.com/manual/plugin/build-in/background}.
 #'
-#' @return A list with the configuration settings for the background plugin
+#' @return A list with the configuration settings for the background plugin.
 #' @export
 #'
 #' @examples
@@ -191,34 +192,34 @@ background <- function(
 #' Creates a configuration object for the bubble-sets plugin in G6.
 #' This plugin creates bubble-like contours around groups of specified elements.
 #'
-#' @param members Member elements, including nodes and edges (character vector, required)
-#' @param key Unique identifier for updates (string, default: NULL)
-#' @param avoidMembers Elements to avoid when drawing contours (character vector, default: NULL)
-#' @param label Whether to display labels (boolean, default: TRUE)
-#' @param labelPlacement Label position (string, default: "bottom")
-#' @param labelBackground Whether to display background (boolean, default: FALSE)
-#' @param labelPadding Label padding (numeric or numeric vector, default: 0)
-#' @param labelCloseToPath Whether the label is close to the contour (boolean, default: TRUE)
-#' @param labelAutoRotate Whether the label rotates with the contour (boolean, default: TRUE)
-#' @param labelOffsetX Label x-axis offset (numeric, default: 0)
-#' @param labelOffsetY Label y-axis offset (numeric, default: 0)
-#' @param labelMaxWidth Maximum width of the text (numeric, default: NULL)
-#' @param maxRoutingIterations Maximum iterations for path calculation (numeric, default: 100)
-#' @param maxMarchingIterations Maximum iterations for contour calculation (numeric, default: 20)
-#' @param pixelGroup Number of pixels per potential area group (numeric, default: 4)
-#' @param edgeR0 Edge radius parameter R0 (numeric, default: NULL)
-#' @param edgeR1 Edge radius parameter R1 (numeric, default: NULL)
-#' @param nodeR0 Node radius parameter R0 (numeric, default: NULL)
-#' @param nodeR1 Node radius parameter R1 (numeric, default: NULL)
-#' @param morphBuffer Morph buffer size (numeric, default: NULL)
-#' @param threshold Threshold (numeric, default: NULL)
-#' @param memberInfluenceFactor Member influence factor (numeric, default: NULL)
-#' @param edgeInfluenceFactor Edge influence factor (numeric, default: NULL)
-#' @param nonMemberInfluenceFactor Non-member influence factor (numeric, default: NULL)
-#' @param virtualEdges Whether to use virtual edges (boolean, default: NULL)
+#' @param members Member elements, including nodes and edges (character vector, required).
+#' @param key Unique identifier for updates (string, default: NULL).
+#' @param avoidMembers Elements to avoid when drawing contours (character vector, default: NULL).
+#' @param label Whether to display labels (boolean, default: TRUE).
+#' @param labelPlacement Label position (string, default: "bottom").
+#' @param labelBackground Whether to display background (boolean, default: FALSE).
+#' @param labelPadding Label padding (numeric or numeric vector, default: 0).
+#' @param labelCloseToPath Whether the label is close to the contour (boolean, default: TRUE).
+#' @param labelAutoRotate Whether the label rotates with the contour (boolean, default: TRUE).
+#' @param labelOffsetX Label x-axis offset (numeric, default: 0).
+#' @param labelOffsetY Label y-axis offset (numeric, default: 0).
+#' @param labelMaxWidth Maximum width of the text (numeric, default: NULL).
+#' @param maxRoutingIterations Maximum iterations for path calculation (numeric, default: 100).
+#' @param maxMarchingIterations Maximum iterations for contour calculation (numeric, default: 20).
+#' @param pixelGroup Number of pixels per potential area group (numeric, default: 4).
+#' @param edgeR0 Edge radius parameter R0 (numeric, default: NULL).
+#' @param edgeR1 Edge radius parameter R1 (numeric, default: NULL).
+#' @param nodeR0 Node radius parameter R0 (numeric, default: NULL).
+#' @param nodeR1 Node radius parameter R1 (numeric, default: NULL).
+#' @param morphBuffer Morph buffer size (numeric, default: NULL).
+#' @param threshold Threshold (numeric, default: NULL).
+#' @param memberInfluenceFactor Member influence factor (numeric, default: NULL).
+#' @param edgeInfluenceFactor Edge influence factor (numeric, default: NULL).
+#' @param nonMemberInfluenceFactor Non-member influence factor (numeric, default: NULL).
+#' @param virtualEdges Whether to use virtual edges (boolean, default: NULL).
 #' @param ... Extra parameters. See \url{https://g6.antv.antgroup.com/manual/plugin/build-in/bubble-sets}.
 #'
-#' @return A list with the configuration settings for the bubble-sets plugin
+#' @return A list with the configuration settings for the bubble-sets plugin.
 #' @export
 #'
 #' @examples
@@ -303,19 +304,22 @@ bubble_sets <- function(
 #' Creates a configuration object for the context-menu behavior in G6.
 #' This allows users to display a context menu when right-clicking or clicking on graph elements.
 #'
-#' @param key Unique identifier for the behavior, used for subsequent operations (string, default: "context-menu")
-#' @param className Additional class name for the menu DOM (string, default: "g6-contextmenu")
-#' @param trigger How to trigger the menu: "contextmenu" for right-click, "click" for click (string, default: "contextmenu")
-#' @param offset Offset of the menu display in X and Y directions (numeric vector, default: c(4, 4))
+#' @param key Unique identifier for the behavior, used for
+#' subsequent operations (string, default: "context-menu").
+#' @param className Additional class name for the menu DOM (string, default: "g6-contextmenu").
+#' @param trigger How to trigger the menu: "contextmenu" for right-click,
+#' "click" for click (string, default: "contextmenu").
+#' @param offset Offset of the menu display in X and Y directions (numeric vector, default: c(4, 4)).
 #' @param onClick Callback method triggered after menu item is clicked (JS function). Our default allows
 #' to create edge or either remove the current node.
-#' @param getItems Returns the list of menu items, supports Promise (JS function, default: NULL)
-#' @param getContent Returns the content of the menu, supports Promise (JS function, default: NULL)
-#' @param loadingContent Menu content used when getContent returns a Promise (string or HTML element, default: NULL)
-#' @param enable Whether the context menu is available (boolean or JS function, default: TRUE)
-#' @param ... Extra parameters. See \url{https://g6.antv.antgroup.com/manual/plugin/build-in/contextmenu}
+#' @param getItems Returns the list of menu items, supports Promise (JS function, default: NULL).
+#' @param getContent Returns the content of the menu, supports Promise (JS function, default: NULL).
+#' @param loadingContent Menu content used when getContent returns a
+#' Promise (string or HTML element, default: NULL).
+#' @param enable Whether the context menu is available (boolean or JS function, default: TRUE).
+#' @param ... Extra parameters. See \url{https://g6.antv.antgroup.com/manual/plugin/build-in/contextmenu}.
 #'
-#' @return A list with the configuration settings
+#' @return A list with the configuration settings for the context menu plugin.
 #' @export
 #'
 #' @examples
@@ -455,18 +459,19 @@ context_menu <- function(
 #' Creates a configuration object for the edge-bundling plugin in G6.
 #' This plugin automatically bundles similar edges together to reduce visual clutter.
 #'
-#' @param key Unique identifier for the plugin (string, default: NULL)
-#' @param bundleThreshold Edge compatibility threshold, determines which edges should be bundled together (number, default: 0.6)
-#' @param cycles Number of simulation cycles (number, default: 6)
-#' @param divisions Initial number of cut points (number, default: 1)
-#' @param divRate Growth rate of cut points (number, default: 2)
-#' @param iterations Number of iterations executed in the first cycle (number, default: 90)
-#' @param iterRate Iteration decrement rate (number, default: 2/3)
-#' @param K Edge strength, affects attraction and repulsion between edges (number, default: 0.1)
-#' @param lambda Initial step size (number, default: 0.1)
+#' @param key Unique identifier for the plugin (string, default: NULL).
+#' @param bundleThreshold Edge compatibility threshold, determines which edges
+#' should be bundled together (number, default: 0.6).
+#' @param cycles Number of simulation cycles (number, default: 6).
+#' @param divisions Initial number of cut points (number, default: 1).
+#' @param divRate Growth rate of cut points (number, default: 2).
+#' @param iterations Number of iterations executed in the first cycle (number, default: 90).
+#' @param iterRate Iteration decrement rate (number, default: 2/3).
+#' @param K Edge strength, affects attraction and repulsion between edges (number, default: 0.1).
+#' @param lambda Initial step size (number, default: 0.1).
 #' @param ... Extra parameters. See \url{https://g6.antv.antgroup.com/manual/plugin/build-in/edge-bundling}.
 #'
-#' @return A list with the configuration settings
+#' @return A list with the configuration settings for the edge-bundling plugin.
 #' @export
 #'
 #' @examples
@@ -543,21 +548,21 @@ edge_bundling <- function(
 #' Creates a configuration object for the edge-filter-lens plugin in G6.
 #' This plugin creates a lens that filters and displays edges within a specific area.
 #'
-#' @param key Unique identifier for the plugin (string, default: NULL)
-#' @param trigger Method to move the lens: "pointermove", "click", or "drag" (string, default: "pointermove")
-#' @param r Radius of the lens (number, default: 60)
-#' @param maxR Maximum radius of the lens (number, default: NULL - half of the smaller canvas dimension)
-#' @param minR Minimum radius of the lens (number, default: 0)
-#' @param scaleRBy Method to scale the lens radius (string, default: "wheel")
-#' @param nodeType Edge display condition: "both", "source", "target", or "either" (string, default: "both")
-#' @param filter Filter out elements that are never displayed in the lens (JS function, default: NULL)
-#' @param style Style of the lens (list, default: NULL)
-#' @param nodeStyle Style of nodes in the lens (list or JS function, default: list(label = FALSE))
-#' @param edgeStyle Style of edges in the lens (list or JS function, default: list(label = TRUE))
-#' @param preventDefault Whether to prevent default events (boolean, default: TRUE)
+#' @param key Unique identifier for the plugin (string, default: NULL).
+#' @param trigger Method to move the lens: "pointermove", "click", or "drag" (string, default: "pointermove").
+#' @param r Radius of the lens (number, default: 60).
+#' @param maxR Maximum radius of the lens (number, default: NULL - half of the smaller canvas dimension).
+#' @param minR Minimum radius of the lens (number, default: 0).
+#' @param scaleRBy Method to scale the lens radius (string, default: "wheel").
+#' @param nodeType Edge display condition: "both", "source", "target", or "either" (string, default: "both").
+#' @param filter Filter out elements that are never displayed in the lens (JS function, default: NULL).
+#' @param style Style of the lens (list, default: NULL).
+#' @param nodeStyle Style of nodes in the lens (list or JS function, default: list(label = FALSE)).
+#' @param edgeStyle Style of edges in the lens (list or JS function, default: list(label = TRUE)).
+#' @param preventDefault Whether to prevent default events (boolean, default: TRUE).
 #' @param ... Extra parameters. See \url{https://g6.antv.antgroup.com/manual/plugin/build-in/edge-filter-lens}.
 #'
-#' @return A list with the configuration settings
+#' @return A list with the configuration settings for the edge-filter-lens plugin.
 #' @export
 #'
 #' @examples
@@ -662,23 +667,24 @@ edge_filter_lens <- function(
 #' Creates a configuration object for the fisheye plugin in G6.
 #' This plugin creates a fisheye lens effect that magnifies elements within a specific area.
 #'
-#' @param key Unique identifier for the plugin (string, default: NULL)
-#' @param trigger Method to move the fisheye: "pointermove", "click", or "drag" (string, default: "pointermove")
-#' @param r Radius of the fisheye (number, default: 120)
-#' @param maxR Maximum adjustable radius of the fisheye (number, default: NULL - half of the smaller canvas dimension)
-#' @param minR Minimum adjustable radius of the fisheye (number, default: 0)
-#' @param d Distortion factor (number, default: 1.5)
-#' @param maxD Maximum adjustable distortion factor (number, default: 5)
-#' @param minD Minimum adjustable distortion factor (number, default: 0)
-#' @param scaleRBy Method to adjust the fisheye radius: "wheel" or "drag" (string, default: NULL)
-#' @param scaleDBy Method to adjust the fisheye distortion factor: "wheel" or "drag" (string, default: NULL)
-#' @param showDPercent Whether to show the distortion factor value in the fisheye (boolean, default: TRUE)
-#' @param style Style of the fisheye (list, default: NULL)
-#' @param nodeStyle Style of nodes in the fisheye (list or JS function, default: list(label = TRUE))
-#' @param preventDefault Whether to prevent default events (boolean, default: TRUE)
+#' @param key Unique identifier for the plugin (string, default: NULL).
+#' @param trigger Method to move the fisheye: "pointermove", "click", or "drag" (string, default: "pointermove").
+#' @param r Radius of the fisheye (number, default: 120).
+#' @param maxR Maximum adjustable radius of the fisheye
+#' (number, default: NULL - half of the smaller canvas dimension).
+#' @param minR Minimum adjustable radius of the fisheye (number, default: 0).
+#' @param d Distortion factor (number, default: 1.5).
+#' @param maxD Maximum adjustable distortion factor (number, default: 5).
+#' @param minD Minimum adjustable distortion factor (number, default: 0).
+#' @param scaleRBy Method to adjust the fisheye radius: "wheel" or "drag" (string, default: NULL).
+#' @param scaleDBy Method to adjust the fisheye distortion factor: "wheel" or "drag" (string, default: NULL).
+#' @param showDPercent Whether to show the distortion factor value in the fisheye (boolean, default: TRUE).
+#' @param style Style of the fisheye (list, default: NULL).
+#' @param nodeStyle Style of nodes in the fisheye (list or JS function, default: list(label = TRUE)).
+#' @param preventDefault Whether to prevent default events (boolean, default: TRUE).
 #' @param ... Extra parameters. See \url{https://g6.antv.antgroup.com/manual/plugin/build-in/fisheye}.
 #'
-#' @return A list with the configuration settings
+#' @return A list with the configuration settings for the fisheye plugin.
 #' @export
 #'
 #' @examples
@@ -796,14 +802,16 @@ fish_eye <- function(
 #' Creates a configuration object for the fullscreen plugin in G6.
 #' This plugin enables fullscreen mode for the graph.
 #'
-#' @param key Unique identifier for the plugin (string, default: NULL)
-#' @param autoFit Whether to auto-fit the canvas size to the screen when in fullscreen mode (boolean, default: TRUE)
-#' @param trigger Methods to trigger fullscreen, e.g., list(request = "button", exit = "escape") (list, default: NULL)
-#' @param onEnter Callback function after entering fullscreen mode (JS function, default: NULL)
-#' @param onExit Callback function after exiting fullscreen mode (JS function, default: NULL)
+#' @param key Unique identifier for the plugin (string, default: NULL).
+#' @param autoFit Whether to auto-fit the canvas size to the screen when in
+#' fullscreen mode (boolean, default: TRUE).
+#' @param trigger Methods to trigger fullscreen, e.g.,
+#' list(request = "button", exit = "escape") (list, default: NULL).
+#' @param onEnter Callback function after entering fullscreen mode (JS function, default: NULL).
+#' @param onExit Callback function after exiting fullscreen mode (JS function, default: NULL).
 #' @param ... Extra parameters. See \url{https://g6.antv.antgroup.com/manual/plugin/build-in/fullscreen}.
 #'
-#' @return A list with the configuration settings
+#' @return A list with the configuration settings for the fullscreen plugin.
 #' @export
 #'
 #' @examples
@@ -878,18 +886,18 @@ fullscreen <- function(
 #' Creates a configuration object for the grid-line plugin in G6.
 #' This plugin adds a background grid to the graph canvas.
 #'
-#' @param key Unique identifier for the plugin (string, default: NULL)
-#' @param border Whether to display the border (boolean, default: TRUE)
-#' @param borderLineWidth Border line width (number, default: 1)
-#' @param borderStroke Border color (string, default: "#eee")
-#' @param borderStyle Border style (string, default: "solid")
-#' @param follow Whether the grid follows canvas movements (boolean or list, default: FALSE)
-#' @param lineWidth Grid line width (number or string, default: 1)
-#' @param size Grid unit size in pixels (number, default: 20)
-#' @param stroke Grid line color (string, default: "#eee")
+#' @param key Unique identifier for the plugin (string, default: NULL).
+#' @param border Whether to display the border (boolean, default: TRUE).
+#' @param borderLineWidth Border line width (number, default: 1).
+#' @param borderStroke Border color (string, default: "#eee").
+#' @param borderStyle Border style (string, default: "solid").
+#' @param follow Whether the grid follows canvas movements (boolean or list, default: FALSE).
+#' @param lineWidth Grid line width (number or string, default: 1).
+#' @param size Grid unit size in pixels (number, default: 20).
+#' @param stroke Grid line color (string, default: "#eee").
 #' @param ... Extra parameters. See \url{https://g6.antv.antgroup.com/manual/plugin/build-in/grid-line}.
 #'
-#' @return A list with the configuration settings
+#' @return A list with the configuration settings for the grid-line plugin.
 #' @export
 #'
 #' @examples
@@ -998,14 +1006,16 @@ grid_line <- function(
 #' Creates a configuration object for the history plugin in G6.
 #' This plugin enables undo/redo functionality for graph operations.
 #'
-#' @param key Unique identifier for the plugin (string, default: NULL)
-#' @param afterAddCommand Callback function called after a command is added to the undo/redo queue (JS function, default: NULL)
-#' @param beforeAddCommand Callback function called before a command is added to the undo/redo queue (JS function, default: NULL)
-#' @param executeCommand Callback function called when executing a command (JS function, default: NULL)
-#' @param stackSize Maximum length of history records to be recorded, 0 means unlimited (number, default: 0)
+#' @param key Unique identifier for the plugin (string, default: NULL).
+#' @param afterAddCommand Callback function called after a command is added to
+#' the undo/redo queue (JS function, default: NULL).
+#' @param beforeAddCommand Callback function called before a command is added to
+#' the undo/redo queue (JS function, default: NULL).
+#' @param executeCommand Callback function called when executing a command (JS function, default: NULL).
+#' @param stackSize Maximum length of history records to be recorded, 0 means unlimited (number, default: 0).
 #' @param ... Extra parameters. See \url{https://g6.antv.antgroup.com/manual/plugin/build-in/history}.
 #'
-#' @return A list with the configuration settings
+#' @return A list with the configuration settings for the history plugin.
 #' @export
 #'
 #' @examples
@@ -1076,24 +1086,25 @@ history <- function(
 #' Creates a configuration object for the hull plugin in G6.
 #' This plugin creates a hull (convex or concave) that surrounds specified graph elements.
 #'
-#' @param members Elements within the hull, including nodes and edges (character vector, required)
-#' @param key Unique identifier for the plugin (string, default: NULL)
-#' @param concavity Concavity parameter, larger values create less concave hulls (number, default: Infinity)
-#' @param corner Corner type: "rounded", "smooth", or "sharp" (string, default: "rounded")
-#' @param padding Padding around the elements (number, default: 10)
-#' @param label Whether to display the label (boolean, default: TRUE)
+#' @param members Elements within the hull, including nodes and edges (character vector, required).
+#' @param key Unique identifier for the plugin (string, default: NULL).
+#' @param concavity Concavity parameter, larger values create less concave hulls (number, default: Infinity).
+#' @param corner Corner type: "rounded", "smooth", or "sharp" (string, default: "rounded").
+#' @param padding Padding around the elements (number, default: 10).
+#' @param label Whether to display the label (boolean, default: TRUE).
 #' @param labelText Label text content. Default to NULL.
-#' @param labelPlacement Label position: "left", "right", "top", "bottom", or "center" (string, default: "bottom")
-#' @param labelBackground Whether to display the background (boolean, default: FALSE)
-#' @param labelPadding Label padding (number or numeric vector, default: 0)
-#' @param labelCloseToPath Whether the label is close to the hull (boolean, default: TRUE)
-#' @param labelAutoRotate Whether the label rotates with the hull, effective only when closeToPath is true (boolean, default: TRUE)
-#' @param labelOffsetX X-axis offset (number, default: 0)
-#' @param labelOffsetY Y-axis offset (number, default: 0)
-#' @param labelMaxWidth Maximum width of the text, exceeding will be ellipsized (number, default: 0)
+#' @param labelPlacement Label position: "left", "right", "top", "bottom", or "center" (string, default: "bottom").
+#' @param labelBackground Whether to display the background (boolean, default: FALSE).
+#' @param labelPadding Label padding (number or numeric vector, default: 0).
+#' @param labelCloseToPath Whether the label is close to the hull (boolean, default: TRUE).
+#' @param labelAutoRotate Whether the label rotates with the hull, effective only when
+#' closeToPath is true (boolean, default: TRUE).
+#' @param labelOffsetX X-axis offset (number, default: 0).
+#' @param labelOffsetY Y-axis offset (number, default: 0).
+#' @param labelMaxWidth Maximum width of the text, exceeding will be ellipsized (number, default: 0).
 #' @param ... Other options. See \url{https://g6.antv.antgroup.com/manual/plugin/build-in/hull}.
 #'
-#' @return A list with the configuration settings
+#' @return A list with the configuration settings for the hull plugin.
 #' @export
 #'
 #' @examples
@@ -1197,33 +1208,33 @@ hull <- function(
 #' This plugin adds a legend to the graph, allowing users to identify and interact with
 #' different categories of elements.
 #'
-#' @param key Unique identifier for the plugin (string, default: NULL)
-#' @param trigger How legend items trigger highlighting: "hover" or "click" (string, default: "hover")
-#' @param position Relative position of the legend on the canvas (string, default: "bottom")
-#' @param container Container to which the legend is mounted (HTML element or string, default: NULL)
-#' @param className Legend canvas class name (string, default: NULL)
-#' @param containerStyle Style of the legend container (list or JS object, default: NULL)
-#' @param nodeField Node classification identifier (string or JS function, default: NULL)
-#' @param edgeField Edge classification identifier (string or JS function, default: NULL)
-#' @param comboField Combo classification identifier (string or JS function, default: NULL)
-#' @param orientation Layout direction: "horizontal" or "vertical" (string, default: "horizontal")
-#' @param layout Layout method: "flex" or "grid" (string, default: "flex")
-#' @param showTitle Whether to display the title (boolean, default: FALSE)
-#' @param titleText Title content (string, default: "")
-#' @param x Relative horizontal position (number, default: NULL)
-#' @param y Relative vertical position (number, default: NULL)
-#' @param width Width of the legend (number, default: 240)
-#' @param height Height of the legend (number, default: 160)
-#' @param itemSpacing Spacing between text and marker (number, default: 4)
-#' @param rowPadding Spacing between rows (number, default: 10)
-#' @param colPadding Spacing between columns (number, default: 10)
-#' @param itemMarkerSize Size of the legend item marker (number, default: 16)
-#' @param itemLabelFontSize Font size of the legend item text (number, default: 16)
-#' @param gridCol Maximum number of columns for grid layout (number, default: NULL)
-#' @param gridRow Maximum number of rows for grid layout (number, default: NULL)
+#' @param key Unique identifier for the plugin (string, default: NULL).
+#' @param trigger How legend items trigger highlighting: "hover" or "click" (string, default: "hover").
+#' @param position Relative position of the legend on the canvas (string, default: "bottom").
+#' @param container Container to which the legend is mounted (HTML element or string, default: NULL).
+#' @param className Legend canvas class name (string, default: NULL).
+#' @param containerStyle Style of the legend container (list or JS object, default: NULL).
+#' @param nodeField Node classification identifier (string or JS function, default: NULL).
+#' @param edgeField Edge classification identifier (string or JS function, default: NULL).
+#' @param comboField Combo classification identifier (string or JS function, default: NULL).
+#' @param orientation Layout direction: "horizontal" or "vertical" (string, default: "horizontal").
+#' @param layout Layout method: "flex" or "grid" (string, default: "flex").
+#' @param showTitle Whether to display the title (boolean, default: FALSE).
+#' @param titleText Title content (string, default: "").
+#' @param x Relative horizontal position (number, default: NULL).
+#' @param y Relative vertical position (number, default: NULL).
+#' @param width Width of the legend (number, default: 240).
+#' @param height Height of the legend (number, default: 160).
+#' @param itemSpacing Spacing between text and marker (number, default: 4).
+#' @param rowPadding Spacing between rows (number, default: 10).
+#' @param colPadding Spacing between columns (number, default: 10).
+#' @param itemMarkerSize Size of the legend item marker (number, default: 16).
+#' @param itemLabelFontSize Font size of the legend item text (number, default: 16).
+#' @param gridCol Maximum number of columns for grid layout (number, default: NULL).
+#' @param gridRow Maximum number of rows for grid layout (number, default: NULL).
 #' @param ... Extra parameters. See \url{https://g6.antv.antgroup.com/manual/plugin/build-in/legend}.
 #'
-#' @return A list with the configuration settings
+#' @return A list with the configuration settings for the legend plugin.
 #' @export
 #'
 #' @examples
@@ -1432,21 +1443,22 @@ legend <- function(
 #' Creates a configuration object for the minimap plugin in G6.
 #' This plugin adds a minimap/thumbnail view of the entire graph.
 #'
-#' @param key Unique identifier for the plugin (string, default: NULL)
-#' @param className Class name of the thumbnail canvas (string, default: NULL)
-#' @param container Container to which the thumbnail is mounted (HTML element or string, default: NULL)
-#' @param containerStyle Style of the thumbnail container (list or JS object, default: NULL)
-#' @param delay Delay update time in milliseconds for performance optimization (number, default: 128)
-#' @param filter Function to filter elements to display in minimap (JS function, default: NULL)
-#' @param maskStyle Style of the mask (list or JS object, default: NULL)
-#' @param padding Padding around the minimap (number or numeric vector, default: 10)
-#' @param position Position of the thumbnail relative to the canvas (string or numeric vector, default: "right-bottom")
-#' @param renderer Custom renderer (JS object, default: NULL)
-#' @param shape Method for generating element thumbnails (string or JS function, default: "key")
-#' @param size Width and height of the minimap \code{[width, height]} (numeric vector, default: c(240, 160))
+#' @param key Unique identifier for the plugin (string, default: NULL).
+#' @param className Class name of the thumbnail canvas (string, default: NULL).
+#' @param container Container to which the thumbnail is mounted (HTML element or string, default: NULL).
+#' @param containerStyle Style of the thumbnail container (list or JS object, default: NULL).
+#' @param delay Delay update time in milliseconds for performance optimization (number, default: 128).
+#' @param filter Function to filter elements to display in minimap (JS function, default: NULL).
+#' @param maskStyle Style of the mask (list or JS object, default: NULL).
+#' @param padding Padding around the minimap (number or numeric vector, default: 10).
+#' @param position Position of the thumbnail relative to the canvas
+#' (string or numeric vector, default: "right-bottom").
+#' @param renderer Custom renderer (JS object, default: NULL).
+#' @param shape Method for generating element thumbnails (string or JS function, default: "key").
+#' @param size Width and height of the minimap \code{[width, height]} (numeric vector, default: c(240, 160)).
 #' @param ... Extra parameters. See \url{https://g6.antv.antgroup.com/manual/plugin/build-in/minimap}.
 #'
-#' @return A list with the configuration settings
+#' @return A list with the configuration settings for the minimap plugin.
 #' @export
 #'
 #' @examples
@@ -1608,17 +1620,18 @@ minimap <- function(
 #' Creates a configuration object for the snapline plugin in G6.
 #' This plugin provides alignment guidelines when moving nodes.
 #'
-#' @param key Unique identifier for the plugin (string, default: NULL)
-#' @param tolerance The alignment accuracy in pixels (number, default: 5)
-#' @param offset The extension distance of the snapline (number, default: 20)
-#' @param autoSnap Whether to enable automatic snapping (boolean, default: TRUE)
-#' @param shape Specifies which shape to use as reference: "key" or a function (string or JS function, default: "key")
-#' @param verticalLineStyle Vertical snapline style (list or JS object, default: list(stroke = "#1783FF"))
-#' @param horizontalLineStyle Horizontal snapline style (list or JS object, default: list(stroke = "#1783FF"))
-#' @param filter Function to filter nodes that don't participate in alignment (JS function, default: NULL)
+#' @param key Unique identifier for the plugin (string, default: NULL).
+#' @param tolerance The alignment accuracy in pixels (number, default: 5).
+#' @param offset The extension distance of the snapline (number, default: 20).
+#' @param autoSnap Whether to enable automatic snapping (boolean, default: TRUE).
+#' @param shape Specifies which shape to use as reference: "key" or a function
+#' (string or JS function, default: "key").
+#' @param verticalLineStyle Vertical snapline style (list or JS object, default: list(stroke = "#1783FF")).
+#' @param horizontalLineStyle Horizontal snapline style (list or JS object, default: list(stroke = "#1783FF")).
+#' @param filter Function to filter nodes that don't participate in alignment (JS function, default: NULL).
 #' @param ... Extra parameters. See \url{https://g6.antv.antgroup.com/manual/plugin/build-in/snapline}.
 #'
-#' @return A list with the configuration settings
+#' @return A list with the configuration settings for the snapline plugin.
 #' @export
 #'
 #' @examples
@@ -1719,32 +1732,33 @@ snapline <- function(
 #' Creates a configuration object for the timebar plugin in G6.
 #' This plugin adds a timeline or chart-based control for time-related data visualization.
 #'
-#' @param data Time data, either a vector of timestamps or a list of objects with time and value (required)
-#' @param key Unique identifier for the plugin (string, default: NULL)
-#' @param className Additional class name for the timebar DOM (string, default: "g6-timebar")
-#' @param x X position, will be ignored if position is set (number, default: NULL)
-#' @param y Y position, will be ignored if position is set (number, default: NULL)
-#' @param width Timebar width (number, default: 450)
-#' @param height Timebar height (number, default: 60)
-#' @param position Timebar position: "bottom" or "top" (string, default: "bottom")
-#' @param padding Padding around the timebar (number or numeric vector, default: 10)
-#' @param timebarType Display type: "time" or "chart" (string, default: "time")
-#' @param elementTypes Filter element types: vector of "node", "edge", and/or "combo" (character vector, default: c("node"))
-#' @param mode Control element filtering method: "modify" or "visibility" (string, default: "modify")
-#' @param values Current time value (number, vector of two numbers, Date, or vector of two Dates, default: NULL)
-#' @param loop Whether to loop playback (boolean, default: FALSE)
-#' @param getTime Method to get element time (JS function, default: NULL)
-#' @param labelFormatter Custom time formatting in chart mode (JS function, default: NULL)
-#' @param onChange Callback when time interval changes (JS function, default: NULL)
-#' @param onReset Callback when reset (JS function, default: NULL)
-#' @param onSpeedChange Callback when playback speed changes (JS function, default: NULL)
-#' @param onPlay Callback when playback starts (JS function, default: NULL)
-#' @param onPause Callback when paused (JS function, default: NULL)
-#' @param onBackward Callback when moving backward (JS function, default: NULL)
-#' @param onForward Callback when moving forward (JS function, default: NULL)
+#' @param data Time data, either a vector of timestamps or a list of objects with time and value (required).
+#' @param key Unique identifier for the plugin (string, default: NULL).
+#' @param className Additional class name for the timebar DOM (string, default: "g6-timebar").
+#' @param x X position, will be ignored if position is set (number, default: NULL).
+#' @param y Y position, will be ignored if position is set (number, default: NULL).
+#' @param width Timebar width (number, default: 450).
+#' @param height Timebar height (number, default: 60).
+#' @param position Timebar position: "bottom" or "top" (string, default: "bottom").
+#' @param padding Padding around the timebar (number or numeric vector, default: 10).
+#' @param timebarType Display type: "time" or "chart" (string, default: "time").
+#' @param elementTypes Filter element types: vector of "node", "edge", and/or "combo"
+#' (character vector, default: c("node")).
+#' @param mode Control element filtering method: "modify" or "visibility" (string, default: "modify").
+#' @param values Current time value (number, vector of two numbers, Date, or vector of two Dates, default: NULL).
+#' @param loop Whether to loop playback (boolean, default: FALSE).
+#' @param getTime Method to get element time (JS function, default: NULL).
+#' @param labelFormatter Custom time formatting in chart mode (JS function, default: NULL).
+#' @param onChange Callback when time interval changes (JS function, default: NULL).
+#' @param onReset Callback when reset (JS function, default: NULL).
+#' @param onSpeedChange Callback when playback speed changes (JS function, default: NULL).
+#' @param onPlay Callback when playback starts (JS function, default: NULL).
+#' @param onPause Callback when paused (JS function, default: NULL).
+#' @param onBackward Callback when moving backward (JS function, default: NULL).
+#' @param onForward Callback when moving forward (JS function, default: NULL).
 #' @param ... Extra parameters. See \url{https://g6.antv.antgroup.com/manual/plugin/build-in/timebar}.
 #'
-#' @return A list with the configuration settings
+#' @return A list with the configuration settings for the timebar plugin.
 #' @export
 #'
 #' @examples
@@ -1903,15 +1917,15 @@ timebar <- function(
 #' Creates a configuration object for the toolbar plugin in G6.
 #' This plugin adds a customizable toolbar with items for graph operations.
 #'
-#' @param getItems Function that returns the list of toolbar items (JS function, required)
-#' @param key Unique identifier for the plugin (string, default: NULL)
-#' @param className Additional CSS class name for the toolbar DOM element (string, default: NULL)
-#' @param position Toolbar position relative to the canvas (string, default: "top-left")
-#' @param style Custom style for the toolbar DOM element (list or JS object, default: NULL)
-#' @param onClick Callback function after a toolbar item is clicked (JS function, default: NULL)
+#' @param getItems Function that returns the list of toolbar items (JS function, required).
+#' @param key Unique identifier for the plugin (string, default: NULL).
+#' @param className Additional CSS class name for the toolbar DOM element (string, default: NULL).
+#' @param position Toolbar position relative to the canvas (string, default: "top-left").
+#' @param style Custom style for the toolbar DOM element (list or JS object, default: NULL).
+#' @param onClick Callback function after a toolbar item is clicked (JS function, default: NULL).
 #' @param ... Extra parameters. See \url{https://g6.antv.antgroup.com/manual/plugin/build-in/toolbar}.
 #'
-#' @return A list with the configuration settings
+#' @return A list with the configuration settings for the toolbar plugin.
 #' @export
 #'
 #' @examples
@@ -2058,20 +2072,20 @@ toolbar <- function(
 #' Creates a configuration object for the tooltip plugin in G6.
 #' This plugin displays tooltips when interacting with graph elements.
 #'
-#' @param key Unique identifier for the plugin (string, default: NULL)
-#' @param position Tooltip position relative to the element (string, default: "top-right")
-#' @param enable Whether the plugin is enabled (boolean or function, default: TRUE)
-#' @param getContent Function to generate custom tooltip content (JS function, default: NULL)
-#' @param onOpenChange Callback for tooltip show/hide events (JS function, default: NULL)
-#' @param trigger Trigger behavior: "hover" or "click" (string, default: "hover")
-#' @param container Custom rendering container for tooltip (string or HTML element, default: NULL)
-#' @param offset Offset distance as a vector of two numbers \code{[x, y]} (numeric vector, default: c(10, 10))
-#' @param enterable Whether the pointer can enter the tooltip (boolean, default: FALSE)
-#' @param title Title for the tooltip (string, default: NULL)
-#' @param style Custom style for the tooltip (list or JS object, default: list(".tooltip" = list(visibility = "hidden")))
+#' @param key Unique identifier for the plugin (string, default: NULL).
+#' @param position Tooltip position relative to the element (string, default: "top-right").
+#' @param enable Whether the plugin is enabled (boolean or function, default: TRUE).
+#' @param getContent Function to generate custom tooltip content (JS function, default: NULL).
+#' @param onOpenChange Callback for tooltip show/hide events (JS function, default: NULL).
+#' @param trigger Trigger behavior: "hover" or "click" (string, default: "hover").
+#' @param container Custom rendering container for tooltip (string or HTML element, default: NULL).
+#' @param offset Offset distance as a vector of two numbers \code{[x, y]} (numeric vector, default: c(10, 10)).
+#' @param enterable Whether the pointer can enter the tooltip (boolean, default: FALSE).
+#' @param title Title for the tooltip (string, default: NULL).
+#' @param style Custom style for the tooltip (list or JS object, default: list(".tooltip" = list(visibility = "hidden"))).
 #' @param ... Extra parameters. See \url{https://g6.antv.antgroup.com/manual/plugin/build-in/tooltip}.
 #'
-#' @return A list with the configuration settings
+#' @return A list with the configuration settings for the tooltip plugin.
 #' @export
 #'
 #' @examples
@@ -2194,34 +2208,34 @@ tooltips <- function(
 #' Creates a configuration object for the watermark plugin in G6.
 #' This plugin adds a watermark to the graph canvas.
 #'
-#' @param key Unique identifier for the plugin (string, default: NULL)
-#' @param width Width of a single watermark (number, default: 200)
-#' @param height Height of a single watermark (number, default: 100)
-#' @param opacity Opacity of the watermark (number, default: 0.2)
-#' @param rotate Rotation angle of the watermark in radians (number, default: pi/12)
-#' @param imageURL Image watermark URL, higher priority than text watermark (string, default: NULL)
-#' @param text Watermark text content (string, default: NULL)
-#' @param textFill Color of the text watermark (string, default: "#000")
-#' @param textFontSize Font size of the text watermark (number, default: 16)
-#' @param textFontFamily Font of the text watermark (string, default: NULL)
-#' @param textFontWeight Font weight of the text watermark (string, default: NULL)
-#' @param textFontVariant Font variant of the text watermark (string, default: NULL)
-#' @param textAlign Text alignment of the watermark (string, default: "center")
-#' @param textBaseline Baseline alignment of the text watermark (string, default: "middle")
-#' @param backgroundRepeat Repeat mode of the watermark (string, default: "repeat")
-#' @param backgroundAttachment Background attachment behavior of the watermark (string, default: NULL)
-#' @param backgroundBlendMode Background blend mode of the watermark (string, default: NULL)
-#' @param backgroundClip Background clip of the watermark (string, default: NULL)
-#' @param backgroundColor Background color of the watermark (string, default: NULL)
-#' @param backgroundImage Background image of the watermark (string, default: NULL)
-#' @param backgroundOrigin Background origin of the watermark (string, default: NULL)
-#' @param backgroundPosition Background position of the watermark (string, default: NULL)
-#' @param backgroundPositionX Horizontal position of the watermark background (string, default: NULL)
-#' @param backgroundPositionY Vertical position of the watermark background (string, default: NULL)
-#' @param backgroundSize Background size of the watermark (string, default: NULL)
+#' @param key Unique identifier for the plugin (string, default: NULL).
+#' @param width Width of a single watermark (number, default: 200).
+#' @param height Height of a single watermark (number, default: 100).
+#' @param opacity Opacity of the watermark (number, default: 0.2).
+#' @param rotate Rotation angle of the watermark in radians (number, default: pi/12).
+#' @param imageURL Image watermark URL, higher priority than text watermark (string, default: NULL).
+#' @param text Watermark text content (string, default: NULL).
+#' @param textFill Color of the text watermark (string, default: "#000").
+#' @param textFontSize Font size of the text watermark (number, default: 16).
+#' @param textFontFamily Font of the text watermark (string, default: NULL).
+#' @param textFontWeight Font weight of the text watermark (string, default: NULL).
+#' @param textFontVariant Font variant of the text watermark (string, default: NULL).
+#' @param textAlign Text alignment of the watermark (string, default: "center").
+#' @param textBaseline Baseline alignment of the text watermark (string, default: "middle").
+#' @param backgroundRepeat Repeat mode of the watermark (string, default: "repeat").
+#' @param backgroundAttachment Background attachment behavior of the watermark (string, default: NULL).
+#' @param backgroundBlendMode Background blend mode of the watermark (string, default: NULL).
+#' @param backgroundClip Background clip of the watermark (string, default: NULL).
+#' @param backgroundColor Background color of the watermark (string, default: NULL).
+#' @param backgroundImage Background image of the watermark (string, default: NULL).
+#' @param backgroundOrigin Background origin of the watermark (string, default: NULL).
+#' @param backgroundPosition Background position of the watermark (string, default: NULL).
+#' @param backgroundPositionX Horizontal position of the watermark background (string, default: NULL).
+#' @param backgroundPositionY Vertical position of the watermark background (string, default: NULL).
+#' @param backgroundSize Background size of the watermark (string, default: NULL).
 #' @param ... Extra parameters. See \url{https://g6.antv.antgroup.com/manual/plugin/build-in/watermark}.
 #'
-#' @return A list with the configuration settings
+#' @return A list with the configuration settings for the watermark plugin.
 #' @export
 #'
 #' @examples

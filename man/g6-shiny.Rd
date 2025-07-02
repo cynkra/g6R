@@ -30,6 +30,13 @@ string and have \code{'px'} appended.}
 \item{quoted}{Is \code{expr} a quoted expression (with \code{quote()})? This
 is useful if you want to save an expression in a variable.}
 }
+\value{
+\code{g6Output} and \code{g6_output}
+return a Shiny output function that can be used in the UI part of a Shiny app.
+\code{renderG6} and \code{render_g6} return a
+Shiny render function that can be used in the server part of a Shiny app to
+render a \code{g6} element.
+}
 \description{
 Output and render functions for using g6 within Shiny
 applications and interactive Rmd documents.

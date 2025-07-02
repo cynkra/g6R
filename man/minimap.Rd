@@ -21,34 +21,35 @@ minimap(
 )
 }
 \arguments{
-\item{key}{Unique identifier for the plugin (string, default: NULL)}
+\item{key}{Unique identifier for the plugin (string, default: NULL).}
 
-\item{className}{Class name of the thumbnail canvas (string, default: NULL)}
+\item{className}{Class name of the thumbnail canvas (string, default: NULL).}
 
-\item{container}{Container to which the thumbnail is mounted (HTML element or string, default: NULL)}
+\item{container}{Container to which the thumbnail is mounted (HTML element or string, default: NULL).}
 
-\item{containerStyle}{Style of the thumbnail container (list or JS object, default: NULL)}
+\item{containerStyle}{Style of the thumbnail container (list or JS object, default: NULL).}
 
-\item{delay}{Delay update time in milliseconds for performance optimization (number, default: 128)}
+\item{delay}{Delay update time in milliseconds for performance optimization (number, default: 128).}
 
-\item{filter}{Function to filter elements to display in minimap (JS function, default: NULL)}
+\item{filter}{Function to filter elements to display in minimap (JS function, default: NULL).}
 
-\item{maskStyle}{Style of the mask (list or JS object, default: NULL)}
+\item{maskStyle}{Style of the mask (list or JS object, default: NULL).}
 
-\item{padding}{Padding around the minimap (number or numeric vector, default: 10)}
+\item{padding}{Padding around the minimap (number or numeric vector, default: 10).}
 
-\item{position}{Position of the thumbnail relative to the canvas (string or numeric vector, default: "right-bottom")}
+\item{position}{Position of the thumbnail relative to the canvas
+(string or numeric vector, default: "right-bottom").}
 
-\item{renderer}{Custom renderer (JS object, default: NULL)}
+\item{renderer}{Custom renderer (JS object, default: NULL).}
 
-\item{shape}{Method for generating element thumbnails (string or JS function, default: "key")}
+\item{shape}{Method for generating element thumbnails (string or JS function, default: "key").}
 
-\item{size}{Width and height of the minimap \code{[width, height]} (numeric vector, default: c(240, 160))}
+\item{size}{Width and height of the minimap \code{[width, height]} (numeric vector, default: c(240, 160)).}
 
 \item{...}{Extra parameters. See \url{https://g6.antv.antgroup.com/manual/plugin/build-in/minimap}.}
 }
 \value{
-A list with the configuration settings
+A list with the configuration settings for the minimap plugin.
 }
 \description{
 Creates a configuration object for the minimap plugin in G6.

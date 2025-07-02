@@ -12,7 +12,7 @@ g6_plugins(graph, ...)
 \item{...}{G6 plugin configuration objects created with plugin-specific functions}
 }
 \value{
-A list of G6 plugin configurations that can be passed to a G6 graph
+A list of G6 plugin configurations that can be passed to a G6 graph.
 }
 \description{
 Combines multiple G6 plugins into a list that can be passed to a G6 graph configuration.
@@ -72,6 +72,7 @@ You can also build your own plugins as described at
 \examples{
 # Create a configuration with multiple plugins
 plugins <- g6_plugins(
+  g6(),
   minimap(),
   grid_line(),
   tooltips(
@@ -83,6 +84,7 @@ plugins <- g6_plugins(
 
 # Add a context menu and toolbar
 plugins <- g6_plugins(
+  g6(),
   context_menu(
     key = "my-context-menu",
     className = "my-context-menu",

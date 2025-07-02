@@ -50,6 +50,7 @@
 #' @examples
 #' # Create a basic set of behaviors
 #' behaviors <- g6_behaviors(
+#'   g6(),
 #'   drag_canvas(),
 #'   zoom_canvas(),
 #'   click_select()
@@ -57,6 +58,7 @@
 #'
 #' # Create a more customized set of behaviors
 #' behaviors <- g6_behaviors(
+#'   g6(),
 #'   drag_canvas(),
 #'   zoom_canvas(sensitivity = 1.5),
 #'   hover_activate(state = "highlight"),
@@ -92,20 +94,15 @@ valid_states <- c("selected", "active", "inactive", "disabled", "highlight")
 #' This behavior automatically adjusts label positions to reduce overlapping and
 #' improve readability in the graph visualization.
 #'
-#' @param key Unique identifier for the behavior (string, default: "auto-adapt-label")
-#' @param enable Whether to enable this behavior (JS function, default: returns TRUE for all events)
-#' @param throttle Throttle time in milliseconds to optimize performance (numeric, default: 100)
-#' @param padding Padding space around labels in pixels (numeric, default: 0)
-#' @param sort Global sorting rule for all element types (list or JS function, default: NULL)
-#' @param sortNode Sorting rule specifically for node labels (list, default: list(type = "degree"))
-#' @param sortEdge Sorting rule specifically for edge labels (list, default: NULL)
-#' @param sortCombo Sorting rule specifically for combo labels (list, default: NULL)
+#' @param key Unique identifier for the behavior (string, default: "auto-adapt-label").
+#' @param enable Whether to enable this behavior (JS function, default: returns TRUE for all events).
+#' @param throttle Throttle time in milliseconds to optimize performance (numeric, default: 100).
+#' @param padding Padding space around labels in pixels (numeric, default: 0).
+#' @param sort Global sorting rule for all element types (list or JS function, default: NULL).
+#' @param sortNode Sorting rule specifically for node labels (list, default: list(type = "degree")).
+#' @param sortEdge Sorting rule specifically for edge labels (list, default: NULL).
+#' @param sortCombo Sorting rule specifically for combo labels (list, default: NULL).
 #' @param ... Extra parameters. See \url{https://g6.antv.antgroup.com/manual/behavior/build-in/auto-adapt-label}.
-#'
-#' @details
-#' The auto-adapt-label behavior helps prevent label overlap by automatically adjusting
-#' label positions based on specified rules. It can selectively hide labels when there's
-#' not enough space to display all of them.
 #'
 #' Sorting parameters determine which labels take priority when space is limited:
 #' \itemize{
@@ -114,7 +111,7 @@ valid_states <- c("selected", "active", "inactive", "disabled", "highlight")
 #'   \item The default sorting for nodes is by degree (higher degree nodes' labels are shown first)
 #' }
 #'
-#' @return A list with the configuration settings for the auto-adapt-label behavior
+#' @return A list with the configuration settings for the auto-adapt-label behavior.
 #' @export
 #'
 #' @examples
@@ -221,20 +218,20 @@ auto_adapt_label <- function(
 #' This function configures how elements are selected when using a brush selection tool.
 #'
 #' @param key Behavior unique identifier. Useful to modify this behavior from JS side.
-#' @param animation Whether to enable animation (boolean, default: FALSE)
-#' @param enable Whether to enable brush select functionality (boolean or function, default: TRUE)
+#' @param animation Whether to enable animation (boolean, default: FALSE).
+#' @param enable Whether to enable brush select functionality (boolean or function, default: TRUE).
 #' @param enableElements Types of elements that can be selected (character vector, default: "node").
 #' Can be \code{c("node", "edge", "combo")}.
-#' @param immediately Whether to select immediately in default mode (boolean, default: FALSE)
-#' @param mode Selection mode: "union", "intersect", "diff", or "default" (string, default: "default")
-#' @param onSelect Callback for selected element state (JS function)
-#' @param state State to switch to when selected (string, default: "selected")
+#' @param immediately Whether to select immediately in default mode (boolean, default: FALSE).
+#' @param mode Selection mode: "union", "intersect", "diff", or "default" (string, default: "default").
+#' @param onSelect Callback for selected element state (JS function).
+#' @param state State to switch to when selected (string, default: "selected").
 #' @param style Style specification for the selection box (list).
 #' See \url{https://g6.antv.antgroup.com/en/manual/behavior/build-in/brush-select#style}.
-#' @param trigger Shortcut keys for selection (character vector)
+#' @param trigger Shortcut keys for selection (character vector).
 #' @param ... Extra parameters. See \url{https://g6.antv.antgroup.com/manual/behavior/build-in/brush-select}.
 #'
-#' @return A list with the configuration settings
+#' @return A list with the configuration settings for the brush select behavior.
 #' @export
 #'
 #' @examples
@@ -341,18 +338,18 @@ brush_select <- function(
 #' This allows users to select graph elements by clicking.
 #'
 #' @param key Behavior unique identifier. Useful to modify this behavior from JS side.
-#' @param animation Whether to enable animation effects when switching element states (boolean, default: TRUE)
-#' @param degree Controls the highlight spread range (number or function, default: 0)
-#' @param enable Whether to enable the click element function (boolean or function, default: TRUE)
-#' @param multiple Whether to allow multiple selections (boolean, default: FALSE)
-#' @param state The state applied when an element is selected (string, default: "selected")
-#' @param neighborState The state applied to elements with n-degree relationships (string, default: "selected")
-#' @param unselectedState The state applied to all other elements (string, default: NULL)
-#' @param onClick Callback when an element is clicked (function, default: NULL)
-#' @param trigger Keys for multi-selection (character vector, default: c("shift"))
+#' @param animation Whether to enable animation effects when switching element states (boolean, default: TRUE).
+#' @param degree Controls the highlight spread range (number or function, default: 0).
+#' @param enable Whether to enable the click element function (boolean or function, default: TRUE).
+#' @param multiple Whether to allow multiple selections (boolean, default: FALSE).
+#' @param state The state applied when an element is selected (string, default: "selected").
+#' @param neighborState The state applied to elements with n-degree relationships (string, default: "selected").
+#' @param unselectedState The state applied to all other elements (string, default: NULL).
+#' @param onClick Callback when an element is clicked (function, default: NULL).
+#' @param trigger Keys for multi-selection (character vector, default: c("shift")).
 #' @param ... Extra parameters. See \url{https://g6.antv.antgroup.com/manual/behavior/build-in/click-select}.
 #'
-#' @return A list with the configuration settings
+#' @return A list with the configuration settings for the click select behavior.
 #' @export
 #'
 #' @examples
@@ -435,15 +432,15 @@ click_select <- function(
 #' This allows users to collapse or expand nodes/combos with child elements.
 #'
 #' @param key Behavior unique identifier. Useful to modify this behavior from JS side.
-#' @param animation Enable expand/collapse animation effects (boolean, default: TRUE)
-#' @param enable Enable expand/collapse functionality (boolean or function, default: TRUE)
-#' @param trigger Trigger method: "click" or "dblclick" (string, default: "dblclick")
-#' @param onCollapse Callback function when collapse is completed (function, default: NULL)
-#' @param onExpand Callback function when expand is completed (function, default: NULL)
-#' @param align Align with the target element to avoid view offset (boolean, default: TRUE)
+#' @param animation Enable expand/collapse animation effects (boolean, default: TRUE).
+#' @param enable Enable expand/collapse functionality (boolean or function, default: TRUE).
+#' @param trigger Trigger method: "click" or "dblclick" (string, default: "dblclick").
+#' @param onCollapse Callback function when collapse is completed (function, default: NULL).
+#' @param onExpand Callback function when expand is completed (function, default: NULL).
+#' @param align Align with the target element to avoid view offset (boolean, default: TRUE).
 #' @param ... Extra parameters. See \url{https://g6.antv.antgroup.com/manual/behavior/build-in/collapse-expand}.
 #'
-#' @return A list with the configuration settings
+#' @return A list with the configuration settings for the collapse-expand behavior.
 #' @export
 #'
 #' @examples
@@ -501,22 +498,22 @@ collapse_expand <- function(
 #' This allows users to create edges between nodes by clicking or dragging.
 #'
 #' @param key Behavior unique identifier. Useful to modify this behavior from JS side.
-#' @param trigger The way to trigger edge creation: "click" or "drag" (string, default: "drag")
+#' @param trigger The way to trigger edge creation: "click" or "drag" (string, default: "drag").
 #' @param enable Whether to enable this behavior (boolean or function, default: FALSE).
 #' Our default implementation works in parallel with the \link{context_menu} plugin which is
 #' responsible for activating the edge behavior when edge creation is selected.
-#' @param onCreate Callback function for creating an edge, returns edge data (function, default: NULL)
+#' @param onCreate Callback function for creating an edge, returns edge data (function, default: NULL).
 #' @param onFinish Callback function for successfully creating an edge (function).
 #' By default, we provide an internal implementation that disables the edge mode when the edge
 #' creation is succesful so that it does not conflict with other drag behaviors.
-#' @param style Style of the newly created edge (list, default: NULL)
+#' @param style Style of the newly created edge (list, default: NULL).
 #' @param notify Whether to show a feedback message in the ui.
 #' @param ... Extra parameters. See \url{https://g6.antv.antgroup.com/manual/behavior/build-in/create-edge}.
 #'
 #' @note \link{create_edge}, \link{drag_element} and \link{drag_element_force} are incompatible by default,
 #' as there triggers are the same. You can change the trigger to workaround this.
 #'
-#' @return A list with the configuration settings
+#' @return A list with the configuration settings for the create-edge behavior.
 #' @export
 #'
 #' @examples
@@ -618,16 +615,16 @@ create_edge <- function(
 #' This allows users to drag the canvas to pan the view.
 #'
 #' @param key Behavior unique identifier. Useful to modify this behavior from JS side.
-#' @param enable Whether to enable this behavior (boolean or function, default: function that enables dragging only on canvas)
-#' @param animation Drag animation configuration for keyboard movement (list, default: NULL)
-#' @param direction Allowed drag direction: "x", "y", or "both" (string, default: "both")
-#' @param range Draggable viewport range in viewport size units (number or numeric vector, default: Inf)
-#' @param sensitivity Distance to trigger a single keyboard movement (number, default: 10)
-#' @param trigger Keyboard keys to trigger dragging (list, default: NULL)
-#' @param onFinish Callback function when dragging is completed (function, default: NULL)
+#' @param enable Whether to enable this behavior (boolean or function, default: function that enables dragging only on canvas).
+#' @param animation Drag animation configuration for keyboard movement (list, default: NULL).
+#' @param direction Allowed drag direction: "x", "y", or "both" (string, default: "both").
+#' @param range Draggable viewport range in viewport size units (number or numeric vector, default: Inf).
+#' @param sensitivity Distance to trigger a single keyboard movement (number, default: 10).
+#' @param trigger Keyboard keys to trigger dragging (list, default: NULL).
+#' @param onFinish Callback function when dragging is completed (function, default: NULL).
 #' @param ... Extra parameters. See \url{https://g6.antv.antgroup.com/manual/behavior/build-in/drag-canvas}.
 #'
-#' @return A list with the configuration settings
+#' @return A list with the configuration settings for the drag-canvas behavior.
 #' @export
 #'
 #' @examples
@@ -702,16 +699,16 @@ drag_canvas <- function(
 #' This allows users to drag nodes and combos in the graph.
 #'
 #' @param key Unique identifier for the behavior, used for subsequent operations (string, default: NULL)
-#' @param enable Whether to enable the drag function (boolean or function, default: function that enables dragging for nodes and combos)
-#' @param animation Whether to enable drag animation (boolean, default: TRUE)
-#' @param state Identifier for the selected state of nodes (string, default: "selected")
-#' @param dropEffect Defines the operation effect after dragging ends: "link", "move", or "none" (string, default: "move")
-#' @param hideEdge Controls the display state of edges during dragging: "none", "out", "in", "both", or "all" (string, default: "none")
-#' @param shadow Whether to enable ghost nodes (boolean, default: FALSE)
-#' @param cursor Customize the mouse style during dragging (list, default: NULL)
+#' @param enable Whether to enable the drag function (boolean or function, default: function that enables dragging for nodes and combos).
+#' @param animation Whether to enable drag animation (boolean, default: TRUE).
+#' @param state Identifier for the selected state of nodes (string, default: "selected").
+#' @param dropEffect Defines the operation effect after dragging ends: "link", "move", or "none" (string, default: "move").
+#' @param hideEdge Controls the display state of edges during dragging: "none", "out", "in", "both", or "all" (string, default: "none").
+#' @param shadow Whether to enable ghost nodes (boolean, default: FALSE).
+#' @param cursor Customize the mouse style during dragging (list, default: NULL).
 #' @param ... Extra parameters. See \url{https://g6.antv.antgroup.com/manual/behavior/build-in/drag-element}.
 #'
-#' @return A list with the configuration settings
+#' @return A list with the configuration settings for the drag-element behavior.
 #' @export
 #'
 #' @examples
@@ -787,15 +784,15 @@ drag_element <- function(
 #' Creates a configuration object for the drag-element-force behavior in G6.
 #' This allows users to drag nodes and combos with force-directed layout interactions.
 #'
-#' @param key Unique identifier for the behavior, used for subsequent operations (string, default: "drag-element-force")
-#' @param fixed Whether to keep the node position fixed after dragging ends (boolean, default: FALSE)
-#' @param enable Whether to enable the drag function (boolean or JS function, default: JS function that enables dragging for nodes and combos)
-#' @param state Identifier for the selected state of nodes (string, default: "selected")
-#' @param hideEdge Controls the display state of edges during dragging: "none", "out", "in", "both", or "all" (string, default: "none")
-#' @param cursor Customize the mouse style during dragging (list, default: NULL)
+#' @param key Unique identifier for the behavior, used for subsequent operations (string, default: "drag-element-force").
+#' @param fixed Whether to keep the node position fixed after dragging ends (boolean, default: FALSE).
+#' @param enable Whether to enable the drag function (boolean or JS function, default: JS function that enables dragging for nodes and combos).
+#' @param state Identifier for the selected state of nodes (string, default: "selected").
+#' @param hideEdge Controls the display state of edges during dragging: "none", "out", "in", "both", or "all" (string, default: "none").
+#' @param cursor Customize the mouse style during dragging (list, default: NULL).
 #' @param ... Extra parameters. See \url{https://g6.antv.antgroup.com/manual/behavior/build-in/drag-element-force}.
 #'
-#' @return A list with the configuration settings
+#' @return A list with the configuration settings for the drag-element-force behavior.
 #' @export
 #'
 #' @examples
@@ -869,19 +866,26 @@ drag_element_force <- function(
 #' Creates a configuration object for the fix-element-size behavior in G6.
 #' This allows maintaining fixed visual sizes for elements during zoom operations.
 #'
-#' @param key Unique identifier for the behavior, used for subsequent operations (string, default: "fix-element-size")
-#' @param enable Whether to enable this interaction (boolean or JS function, default: TRUE)
-#' @param reset Whether to restore style when elements are redrawn (boolean, default: FALSE)
+#' @param key Unique identifier for the behavior, used for subsequent operations
+#' (string, default: "fix-element-size").
+#' @param enable Whether to enable this interaction (boolean or JS function, default: TRUE).
+#' @param reset Whether to restore style when elements are redrawn (boolean, default: FALSE).
 #' @param state Specify the state of elements to fix size (string, default: "")
-#' @param node Node configuration item(s) to define which attributes maintain fixed size (list or array of lists, default: NULL)
-#' @param nodeFilter Node filter to determine which nodes maintain fixed size (JS function, default: returns TRUE for all nodes)
-#' @param edge Edge configuration item(s) to define which attributes maintain fixed size (list or array of lists, default: predefined list)
-#' @param edgeFilter Edge filter to determine which edges maintain fixed size (JS function, default: returns TRUE for all edges)
-#' @param combo Combo configuration item(s) to define which attributes maintain fixed size (list or array of lists, default: NULL)
-#' @param comboFilter Combo filter to determine which combos maintain fixed size (JS function, default: returns TRUE for all combos)
+#' @param node Node configuration item(s) to define which attributes maintain fixed
+#' size (list or array of lists, default: NULL).
+#' @param nodeFilter Node filter to determine which nodes maintain fixed size
+#' (JS function, default: returns TRUE for all nodes).
+#' @param edge Edge configuration item(s) to define which attributes maintain fixed size
+#' (list or array of lists, default: predefined list).
+#' @param edgeFilter Edge filter to determine which edges maintain fixed size
+#' (JS function, default: returns TRUE for all edges).
+#' @param combo Combo configuration item(s) to define which attributes maintain fixed size
+#' (list or array of lists, default: NULL).
+#' @param comboFilter Combo filter to determine which combos maintain fixed size
+#' (JS function, default: returns TRUE for all combos).
 #' @param ... Extra parameters. See \url{https://g6.antv.antgroup.com/manual/behavior/build-in/fix-element-size}.
 #'
-#' @return A list with the configuration settings
+#' @return A list with the configuration settings for the fix-element-size behavior.
 #' @export
 #'
 #' @examples
@@ -985,12 +989,13 @@ fix_element_size <- function(
 #' Creates a configuration object for the focus-element behavior in G6.
 #' This behavior allows focusing on specific elements by automatically adjusting the viewport.
 #'
-#' @param key Unique identifier for the behavior, used for subsequent operations (string, default: "focus-element")
-#' @param animation Focus animation settings (list, default: list with duration 500ms and easing "ease-in")
-#' @param enable Whether to enable the focus feature (boolean or JS function, default: TRUE)
+#' @param key Unique identifier for the behavior, used for subsequent operations
+#' (string, default: "focus-element").
+#' @param animation Focus animation settings (list, default: list with duration 500ms and easing "ease-in").
+#' @param enable Whether to enable the focus feature (boolean or JS function, default: TRUE).
 #' @param ... Extra parameters. See \url{https://g6.antv.antgroup.com/manual/behavior/build-in/focus-element}.
 #'
-#' @return A list with the configuration settings
+#' @return A list with the configuration settings for the focus-element behavior.
 #' @export
 #'
 #' @examples
@@ -1057,18 +1062,18 @@ focus_element <- function(
 #' Creates a configuration object for the hover-activate behavior in G6.
 #' This behavior activates elements when the mouse hovers over them.
 #'
-#' @param key Unique identifier for the behavior (string, default: "hover-activate")
-#' @param animation Whether to enable animation (boolean, default: TRUE)
-#' @param enable Whether to enable hover feature (boolean or JS function, default: TRUE)
-#' @param degree Degree of relationship to activate elements (number or JS function, default: 0)
-#' @param direction Specify edge direction: "both", "in", or "out" (string, default: "both")
-#' @param state State of activated elements (string, default: "active")
-#' @param inactiveState State of inactive elements (string, default: NULL)
-#' @param onHover Callback when element is hovered (JS function, default: NULL)
-#' @param onHoverEnd Callback when hover ends (JS function, default: NULL)
+#' @param key Unique identifier for the behavior (string, default: "hover-activate").
+#' @param animation Whether to enable animation (boolean, default: TRUE).
+#' @param enable Whether to enable hover feature (boolean or JS function, default: TRUE).
+#' @param degree Degree of relationship to activate elements (number or JS function, default: 0).
+#' @param direction Specify edge direction: "both", "in", or "out" (string, default: "both").
+#' @param state State of activated elements (string, default: "active").
+#' @param inactiveState State of inactive elements (string, default: NULL).
+#' @param onHover Callback when element is hovered (JS function, default: NULL).
+#' @param onHoverEnd Callback when hover ends (JS function, default: NULL).
 #' @param ... Extra parameters. See \url{https://g6.antv.antgroup.com/manual/behavior/build-in/hover-activate}.
 #'
-#' @return A list with the configuration settings
+#' @return A list with the configuration settings for the hover-activate behavior.
 #' @export
 #'
 #' @examples
@@ -1152,19 +1157,19 @@ hover_activate <- function(
 #' Creates a configuration object for the lasso-select behavior in G6.
 #' This behavior allows selecting elements by drawing a lasso around them.
 #'
-#' @param key Unique identifier for the behavior (string, default: "lasso-select")
-#' @param animation Whether to enable animation (boolean, default: FALSE)
-#' @param enable Whether to enable lasso selection (boolean or JS function, default: TRUE)
-#' @param enableElements Types of elements that can be selected (character vector, default: c("node", "combo", "edge"))
-#' @param immediately Whether to select immediately, only effective when selection mode is default (boolean, default: FALSE)
-#' @param mode Selection mode: "union", "intersect", "diff", or "default" (string, default: "default")
-#' @param onSelect Callback for selected element state (JS function, default: NULL)
-#' @param state State to switch to when selected (string, default: "selected")
-#' @param style Style of the lasso during selection (list, default: NULL)
-#' @param trigger Press this shortcut key along with mouse click to select (character vector, default: c("shift"))
+#' @param key Unique identifier for the behavior (string, default: "lasso-select").
+#' @param animation Whether to enable animation (boolean, default: FALSE).
+#' @param enable Whether to enable lasso selection (boolean or JS function, default: TRUE).
+#' @param enableElements Types of elements that can be selected (character vector, default: c("node", "combo", "edge")).
+#' @param immediately Whether to select immediately, only effective when selection mode is default (boolean, default: FALSE).
+#' @param mode Selection mode: "union", "intersect", "diff", or "default" (string, default: "default").
+#' @param onSelect Callback for selected element state (JS function, default: NULL).
+#' @param state State to switch to when selected (string, default: "selected").
+#' @param style Style of the lasso during selection (list, default: NULL).
+#' @param trigger Press this shortcut key along with mouse click to select (character vector, default: c("shift")).
 #' @param ... Extra parameters. See \url{https://g6.antv.antgroup.com/manual/behavior/build-in/lasso-select}.
 #'
-#' @return A list with the configuration settings
+#' @return A list with the configuration settings for the lasso-select behavior.
 #' @export
 #'
 #' @examples
@@ -1281,13 +1286,15 @@ lasso_select <- function(
 #' This behavior improves performance during viewport transformations by temporarily
 #' hiding certain elements.
 #'
-#' @param key Unique identifier for the behavior (string, default: "optimize-viewport-transform")
-#' @param enable Whether to enable this behavior (boolean or JS function, default: TRUE)
-#' @param debounce How long after the operation ends to restore the visibility of all elements in milliseconds (number, default: 200)
-#' @param shapes Function to specify which graphical elements should remain visible during canvas operations (JS function, default: returns TRUE for nodes)
+#' @param key Unique identifier for the behavior (string, default: "optimize-viewport-transform").
+#' @param enable Whether to enable this behavior (boolean or JS function, default: TRUE).
+#' @param debounce How long after the operation ends to restore the visibility of all elements
+#' in milliseconds (number, default: 200).
+#' @param shapes Function to specify which graphical elements should remain visible during canvas
+#' operations (JS function, default: returns TRUE for nodes).
 #' @param ... Extra parameters. See \url{https://g6.antv.antgroup.com/manual/behavior/build-in/optimize-viewport-transform}.
 #'
-#' @return A list with the configuration settings
+#' @return A list with the configuration settings for the optimize-viewport-transform behavior.
 #' @export
 #'
 #' @examples
@@ -1345,17 +1352,19 @@ optimize_viewport_transform <- function(
 #' Creates a configuration object for the scroll-canvas behavior in G6.
 #' This behavior allows scrolling the canvas with mouse wheel or keyboard.
 #'
-#' @param key Unique identifier for the behavior (string, default: "scroll-canvas")
-#' @param enable Whether to enable this behavior (boolean or JS function, default: TRUE)
-#' @param direction Allowed scrolling direction: "x", "y", or NULL for no limit (string or NULL, default: NULL)
-#' @param range Scrollable viewport range in viewport size units (numeric or numeric vector, default: 1)
-#' @param sensitivity Scrolling sensitivity, the larger the value, the faster the scrolling (numeric, default: 1)
-#' @param trigger Keyboard shortcuts to trigger scrolling (list, default: NULL)
-#' @param onFinish Callback function when scrolling is finished (JS function, default: NULL)
-#' @param preventDefault Whether to prevent the browser's default event (boolean, default: TRUE)
+#' @param key Unique identifier for the behavior (string, default: "scroll-canvas").
+#' @param enable Whether to enable this behavior (boolean or JS function, default: TRUE).
+#' @param direction Allowed scrolling direction: "x", "y", or NULL for no limit
+#' (string or NULL, default: NULL).
+#' @param range Scrollable viewport range in viewport size units (numeric or numeric vector, default: 1).
+#' @param sensitivity Scrolling sensitivity, the larger the value, the faster the scrolling
+#' (numeric, default: 1).
+#' @param trigger Keyboard shortcuts to trigger scrolling (list, default: NULL).
+#' @param onFinish Callback function when scrolling is finished (JS function, default: NULL).
+#' @param preventDefault Whether to prevent the browser's default event (boolean, default: TRUE).
 #' @param ... Extra parameters. See \url{https://g6.antv.antgroup.com/manual/behavior/build-in/scroll-canvas}.
 #'
-#' @return A list with the configuration settings
+#' @return A list with the configuration settings for the scroll-canvas behavior.
 #' @export
 #'
 #' @examples
@@ -1443,17 +1452,17 @@ scroll_canvas <- function(
 #' Creates a configuration object for the zoom-canvas behavior in G6.
 #' This behavior allows zooming the canvas with mouse wheel or keyboard shortcuts.
 #'
-#' @param key Unique identifier for the behavior (string, default: "zoom-canvas")
-#' @param animation Zoom animation effect settings (list, default: list with duration 200ms)
-#' @param enable Whether to enable this behavior (boolean or JS function, default: TRUE)
-#' @param origin Zoom center point in viewport coordinates (list with x, y values, default: NULL)
-#' @param onFinish Callback function when zooming is finished (JS function, default: NULL)
-#' @param preventDefault Whether to prevent the browser's default event (boolean, default: TRUE)
-#' @param sensitivity Zoom sensitivity, the larger the value, the faster the zoom (numeric, default: 1)
-#' @param trigger How to trigger zooming, supports mouse wheel and keyboard shortcuts (list, default: NULL)
+#' @param key Unique identifier for the behavior (string, default: "zoom-canvas").
+#' @param animation Zoom animation effect settings (list, default: list with duration 200ms).
+#' @param enable Whether to enable this behavior (boolean or JS function, default: TRUE).
+#' @param origin Zoom center point in viewport coordinates (list with x, y values, default: NULL).
+#' @param onFinish Callback function when zooming is finished (JS function, default: NULL).
+#' @param preventDefault Whether to prevent the browser's default event (boolean, default: TRUE).
+#' @param sensitivity Zoom sensitivity, the larger the value, the faster the zoom (numeric, default: 1).
+#' @param trigger How to trigger zooming, supports mouse wheel and keyboard shortcuts (list, default: NULL).
 #' @param ... Extra parameters. See \url{https://g6.antv.antgroup.com/manual/behavior/build-in/zoom-canvas}.
 #'
-#' @return A list with the configuration settings
+#' @return A list with the configuration settings for the zoom-canvas behavior.
 #' @export
 #'
 #' @examples

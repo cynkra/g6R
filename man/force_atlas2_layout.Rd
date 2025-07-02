@@ -23,7 +23,9 @@ force_atlas2_layout(
 )
 }
 \arguments{
-\item{barnesHut}{Logical. Whether to enable quadtree acceleration. When enabled, improves performance for large graphs but may affect layout quality. By default, enabled if node count > 250.}
+\item{barnesHut}{Logical. Whether to enable quadtree acceleration.
+When enabled, improves performance for large graphs but may affect layout quality.
+By default, enabled if node count > 250.}
 
 \item{dissuadeHubs}{Logical. Whether to enable hub mode.
 If TRUE, nodes with higher in-degree are more likely to be placed at the center
@@ -70,7 +72,7 @@ If not set, uses canvas center.}
 See \url{https://g6.antv.antgroup.com/manual/layout/build-in/force-atlas2-layout}.}
 }
 \value{
-A list containing the configuration for G6 force atlas2 with class "g6-layout"
+A list containing the configuration for G6 force atlas2 layout.
 }
 \description{
 This function creates a configuration list for G6 Force Atlas2 layout

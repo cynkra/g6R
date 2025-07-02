@@ -15,22 +15,22 @@ drag_element_force(
 )
 }
 \arguments{
-\item{key}{Unique identifier for the behavior, used for subsequent operations (string, default: "drag-element-force")}
+\item{key}{Unique identifier for the behavior, used for subsequent operations (string, default: "drag-element-force").}
 
-\item{fixed}{Whether to keep the node position fixed after dragging ends (boolean, default: FALSE)}
+\item{fixed}{Whether to keep the node position fixed after dragging ends (boolean, default: FALSE).}
 
-\item{enable}{Whether to enable the drag function (boolean or JS function, default: JS function that enables dragging for nodes and combos)}
+\item{enable}{Whether to enable the drag function (boolean or JS function, default: JS function that enables dragging for nodes and combos).}
 
-\item{state}{Identifier for the selected state of nodes (string, default: "selected")}
+\item{state}{Identifier for the selected state of nodes (string, default: "selected").}
 
-\item{hideEdge}{Controls the display state of edges during dragging: "none", "out", "in", "both", or "all" (string, default: "none")}
+\item{hideEdge}{Controls the display state of edges during dragging: "none", "out", "in", "both", or "all" (string, default: "none").}
 
-\item{cursor}{Customize the mouse style during dragging (list, default: NULL)}
+\item{cursor}{Customize the mouse style during dragging (list, default: NULL).}
 
 \item{...}{Extra parameters. See \url{https://g6.antv.antgroup.com/manual/behavior/build-in/drag-element-force}.}
 }
 \value{
-A list with the configuration settings
+A list with the configuration settings for the drag-element-force behavior.
 }
 \description{
 Creates a configuration object for the drag-element-force behavior in G6.

@@ -91,7 +91,7 @@ Default: NULL.}
 \item{...}{Extra parameters.}
 }
 \value{
-A list containing edge style options that can be passed to a G6 graph
+A list containing edge style options that can be passed to \code{\link[=edge_options]{edge_options()}}.
 }
 \description{
 Configures the styling options for edges in a G6 graph. These settings control

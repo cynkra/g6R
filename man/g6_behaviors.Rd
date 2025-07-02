@@ -62,6 +62,7 @@ at \url{https://g6.antv.antgroup.com/en/manual/behavior/custom-behavior}.
 \examples{
 # Create a basic set of behaviors
 behaviors <- g6_behaviors(
+  g6(),
   drag_canvas(),
   zoom_canvas(),
   click_select()
@@ -69,6 +70,7 @@ behaviors <- g6_behaviors(
 
 # Create a more customized set of behaviors
 behaviors <- g6_behaviors(
+  g6(),
   drag_canvas(),
   zoom_canvas(sensitivity = 1.5),
   hover_activate(state = "highlight"),

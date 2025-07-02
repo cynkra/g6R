@@ -17,26 +17,28 @@ scroll_canvas(
 )
 }
 \arguments{
-\item{key}{Unique identifier for the behavior (string, default: "scroll-canvas")}
+\item{key}{Unique identifier for the behavior (string, default: "scroll-canvas").}
 
-\item{enable}{Whether to enable this behavior (boolean or JS function, default: TRUE)}
+\item{enable}{Whether to enable this behavior (boolean or JS function, default: TRUE).}
 
-\item{direction}{Allowed scrolling direction: "x", "y", or NULL for no limit (string or NULL, default: NULL)}
+\item{direction}{Allowed scrolling direction: "x", "y", or NULL for no limit
+(string or NULL, default: NULL).}
 
-\item{range}{Scrollable viewport range in viewport size units (numeric or numeric vector, default: 1)}
+\item{range}{Scrollable viewport range in viewport size units (numeric or numeric vector, default: 1).}
 
-\item{sensitivity}{Scrolling sensitivity, the larger the value, the faster the scrolling (numeric, default: 1)}
+\item{sensitivity}{Scrolling sensitivity, the larger the value, the faster the scrolling
+(numeric, default: 1).}
 
-\item{trigger}{Keyboard shortcuts to trigger scrolling (list, default: NULL)}
+\item{trigger}{Keyboard shortcuts to trigger scrolling (list, default: NULL).}
 
-\item{onFinish}{Callback function when scrolling is finished (JS function, default: NULL)}
+\item{onFinish}{Callback function when scrolling is finished (JS function, default: NULL).}
 
-\item{preventDefault}{Whether to prevent the browser's default event (boolean, default: TRUE)}
+\item{preventDefault}{Whether to prevent the browser's default event (boolean, default: TRUE).}
 
 \item{...}{Extra parameters. See \url{https://g6.antv.antgroup.com/manual/behavior/build-in/scroll-canvas}.}
 }
 \value{
-A list with the configuration settings
+A list with the configuration settings for the scroll-canvas behavior.
 }
 \description{
 Creates a configuration object for the scroll-canvas behavior in G6.

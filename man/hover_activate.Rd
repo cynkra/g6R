@@ -18,28 +18,28 @@ hover_activate(
 )
 }
 \arguments{
-\item{key}{Unique identifier for the behavior (string, default: "hover-activate")}
+\item{key}{Unique identifier for the behavior (string, default: "hover-activate").}
 
-\item{animation}{Whether to enable animation (boolean, default: TRUE)}
+\item{animation}{Whether to enable animation (boolean, default: TRUE).}
 
-\item{enable}{Whether to enable hover feature (boolean or JS function, default: TRUE)}
+\item{enable}{Whether to enable hover feature (boolean or JS function, default: TRUE).}
 
-\item{degree}{Degree of relationship to activate elements (number or JS function, default: 0)}
+\item{degree}{Degree of relationship to activate elements (number or JS function, default: 0).}
 
-\item{direction}{Specify edge direction: "both", "in", or "out" (string, default: "both")}
+\item{direction}{Specify edge direction: "both", "in", or "out" (string, default: "both").}
 
-\item{state}{State of activated elements (string, default: "active")}
+\item{state}{State of activated elements (string, default: "active").}
 
-\item{inactiveState}{State of inactive elements (string, default: NULL)}
+\item{inactiveState}{State of inactive elements (string, default: NULL).}
 
-\item{onHover}{Callback when element is hovered (JS function, default: NULL)}
+\item{onHover}{Callback when element is hovered (JS function, default: NULL).}
 
-\item{onHoverEnd}{Callback when hover ends (JS function, default: NULL)}
+\item{onHoverEnd}{Callback when hover ends (JS function, default: NULL).}
 
 \item{...}{Extra parameters. See \url{https://g6.antv.antgroup.com/manual/behavior/build-in/hover-activate}.}
 }
 \value{
-A list with the configuration settings
+A list with the configuration settings for the hover-activate behavior.
 }
 \description{
 Creates a configuration object for the hover-activate behavior in G6.

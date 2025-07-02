@@ -12,16 +12,17 @@ focus_element(
 )
 }
 \arguments{
-\item{key}{Unique identifier for the behavior, used for subsequent operations (string, default: "focus-element")}
+\item{key}{Unique identifier for the behavior, used for subsequent operations
+(string, default: "focus-element").}
 
-\item{animation}{Focus animation settings (list, default: list with duration 500ms and easing "ease-in")}
+\item{animation}{Focus animation settings (list, default: list with duration 500ms and easing "ease-in").}
 
-\item{enable}{Whether to enable the focus feature (boolean or JS function, default: TRUE)}
+\item{enable}{Whether to enable the focus feature (boolean or JS function, default: TRUE).}
 
 \item{...}{Extra parameters. See \url{https://g6.antv.antgroup.com/manual/behavior/build-in/focus-element}.}
 }
 \value{
-A list with the configuration settings
+A list with the configuration settings for the focus-element behavior.
 }
 \description{
 Creates a configuration object for the focus-element behavior in G6.

@@ -55,7 +55,7 @@ radial_layout(
 See \url{https://g6.antv.antgroup.com/en/manual/layout/build-in/radial-layout}.}
 }
 \value{
-A list containing the configuration for G6 radial layout with class "g6-layout"
+A list containing the configuration for G6 radial layout.
 }
 \description{
 This function creates a configuration list for G6 Radial layout

@@ -1,8 +1,6 @@
 #' Set the layout algorithm for a g6 graph
 #'
 #' This function configures the layout algorithm used to position nodes in a g6 graph.
-#' G6 provides various layout algorithms such as 'force', 'radial', 'circular', 'grid',
-#' 'concentric', 'dagre', and more. Each layout has its own set of configurable parameters.
 #'
 #' @param graph A g6 graph object created with \code{g6()}.
 #' @param layout An existing layout function like \link{circular_layout} or a string like `circular-layout`.
@@ -15,23 +13,23 @@
 #' G6 provides several layout algorithms, each suitable for different graph structures:
 #'
 #' \itemize{
-#'   \item \strong{force}: Force-directed layout using physical simulation of forces
-#'   \item \strong{random}: Random layout placing nodes randomly
-#'   \item \strong{circular}: Arranges nodes on a circle
-#'   \item \strong{radial}: Radial layout with nodes arranged outward from a central node
-#'   \item \strong{grid}: Arranges nodes in a grid pattern
-#'   \item \strong{concentric}: Concentric circles with important nodes in the center
-#'   \item \strong{dagre}: Hierarchical layout for directed acyclic graphs
-#'   \item \strong{fruchterman}: Force-directed layout based on the Fruchterman-Reingold algorithm
-#'   \item \strong{mds}: Multidimensional scaling layout
-#'   \item \strong{comboForce}: Force-directed layout specially designed for combo graphs
+#'   \item \strong{force}: Force-directed layout using physical simulation of forces.
+#'   \item \strong{random}: Random layout placing nodes randomly.
+#'   \item \strong{circular}: Arranges nodes on a circle.
+#'   \item \strong{radial}: Radial layout with nodes arranged outward from a central node.
+#'   \item \strong{grid}: Arranges nodes in a grid pattern.
+#'   \item \strong{concentric}: Concentric circles with important nodes in the center.
+#'   \item \strong{dagre}: Hierarchical layout for directed acyclic graphs.
+#'   \item \strong{fruchterman}: Force-directed layout based on the Fruchterman-Reingold algorithm.
+#'   \item \strong{mds}: Multidimensional scaling layout.
+#'   \item \strong{comboForce}: Force-directed layout specially designed for combo graphs.
 #' }
 #'
 #' Each layout algorithm has specific configuration options. See the G6 documentation
 #' for detailed information on each layout and its parameters:
-#' \url{https://g6.antv.antgroup.com/en/manual/layout/overview}
+#' \url{https://g6.antv.antgroup.com/en/manual/layout/overview}.
 #'
-#' @seealso \code{\link{g6}}
+#' @seealso [g6()]
 #' @export
 g6_layout <- function(graph, layout = d3_force_layout()) {
   if (is.null(layout)) {
@@ -46,7 +44,7 @@ validate_layout <- function(x) {
   validate_component(x, "layout")
 }
 
-# Generic layout constructor that inspects its caller
+#' @keywords internal
 build_layout <- function(type, ...) {
   # Which function called build_layout?
   caller_fun <- sys.function(sys.parent())
@@ -72,33 +70,33 @@ build_layout <- function(type, ...) {
 #' with all available options as parameters.
 #'
 #' @param rankdir Layout direction: "TB" (top to bottom), "BT" (bottom to top),
-#'   "LR" (left to right), or "RL" (right to left)
+#'   "LR" (left to right), or "RL" (right to left).
 #' @param align Node alignment: "UL" (upper left), "UR" (upper right),
-#'   "DL" (down left), or "DR" (down right)
-#' @param nodesep Node spacing (px). When rankdir is "TB" or "BT", it's the horizontal
-#'   spacing of nodes; when rankdir is "LR" or "RL", it's the vertical spacing of nodes
+#'   "DL" (down left), or "DR" (down right).
+#' @param nodesep Node spacing (px). When rankdir is "TB" or "BT", it's the horizontal.
+#'   spacing of nodes; when rankdir is "LR" or "RL", it's the vertical spacing of nodes.
 #' @param nodesepFunc Function to customize node spacing for different nodes,
-#'   in the form of function(node) that returns a number. Has higher priority than nodesep
+#'   in the form of function(node) that returns a number. Has higher priority than nodesep.
 #' @param ranksep Layer spacing (px). When rankdir is "TB" or "BT", it's the vertical spacing
-#'   between adjacent layers; when rankdir is "LR" or "RL", it's the horizontal spacing
+#'   between adjacent layers; when rankdir is "LR" or "RL", it's the horizontal spacing.
 #' @param ranksepFunc Function to customize layer spacing, in the form of function(node)
-#'   that returns a number. Has higher priority than ranksep
+#'   that returns a number. Has higher priority than ranksep.
 #' @param ranker Algorithm for assigning ranks to nodes: "network-simplex", "tight-tree",
-#'   or "longest-path"
+#'   or "longest-path".
 #' @param nodeSize Node size for collision detection. Can be a single number (same width/height),
-#'   an array \code{[width, height]}, or a function that returns either
-#' @param controlPoints Whether to retain edge control points
+#'   an array \code{[width, height]}, or a function that returns either.
+#' @param controlPoints Whether to retain edge control points.
 #' @param begin Alignment position of the upper left corner of the layout.
-#' Can be \code{[x, y]} or \code{[x, y, z]}
-#' @param sortByCombo Whether to sort nodes on the same layer by parentId to prevent combo overlap
-#' @param edgeLabelSpace Whether to leave space for edge labels
-#' @param nodeOrder Reference array of node order on the same layer, containing node id values
-#' @param radial Whether to perform a radial layout based on dagre
-#' @param focusNode Focused node (only used when radial=TRUE). Can be a node ID or node object
-#' @param preset Node positions to reference during layout calculation
-#' @param ... Additional parameters to pass to the layout
+#' Can be \code{[x, y]} or \code{[x, y, z]}.
+#' @param sortByCombo Whether to sort nodes on the same layer by parentId to prevent combo overlap.
+#' @param edgeLabelSpace Whether to leave space for edge labels.
+#' @param nodeOrder Reference array of node order on the same layer, containing node id values.
+#' @param radial Whether to perform a radial layout based on dagre.
+#' @param focusNode Focused node (only used when radial=TRUE). Can be a node ID or node object.
+#' @param preset Node positions to reference during layout calculation.
+#' @param ... Additional parameters to pass to the layout.
 #'
-#' @return A list containing the configuration for G6 AntV Dagre layout with class "g6-layout"
+#' @return A list containing the configuration for G6 AntV Dagre layout.
 #' @export
 #'
 #' @examples
@@ -227,24 +225,24 @@ antv_dagre_layout <- function(
 #' This function creates a configuration list for G6 AntV circular layout
 #' with all available options as parameters.
 #'
-#' @param angleRatio How many 2*PI are there between the first node and the last node?
-#' @param center Center of layout as vector c(x, y) or c(x, y, z)
+#' @param angleRatio How many `2*PI` are there between the first node and the last node.
+#' @param center Center of layout as vector `c(x, y)` or `c(x, y, z)`.
 #' @param clockwise Is it arranged clockwise?
-#' @param divisions Number of segments that nodes are placed on the ring
-#' @param nodeSize Node size (diameter) for collision detection
-#' @param nodeSpacing Minimum distance between rings
-#' @param ordering Basis for sorting nodes ("topology", "topology-directed", or "degree")
-#' @param radius Radius of the circle (overrides startRadius and endRadius)
-#' @param startAngle Starting angle of the layout
-#' @param endAngle End angle of the layout
-#' @param startRadius Starting radius of the spiral layout
-#' @param endRadius End radius of the spiral layout
-#' @param width Width of layout
-#' @param height Height of layout
+#' @param divisions Number of segments that nodes are placed on the ring.
+#' @param nodeSize Node size (diameter) for collision detection.
+#' @param nodeSpacing Minimum distance between rings.
+#' @param ordering Basis for sorting nodes ("topology", "topology-directed", or "degree").
+#' @param radius Radius of the circle (overrides startRadius and endRadius).
+#' @param startAngle Starting angle of the layout.
+#' @param endAngle End angle of the layout.
+#' @param startRadius Starting radius of the spiral layout.
+#' @param endRadius End radius of the spiral layout.
+#' @param width Width of layout.
+#' @param height Height of layout.
 #' @param ... Additional parameters to pass to the layout.
 #' See \url{https://g6.antv.antgroup.com/manual/layout/build-in/circular-layout}.
 #'
-#' @return A list containing the configuration for G6 AntV circular layout
+#' @return A list containing the configuration for G6 AntV circular layout.
 #' @export
 #'
 #' @examples
@@ -370,9 +368,9 @@ circular_layout <- function(
 #' @param getVGap Function to calculate the vertical gap for each node.
 #' Function format: \code{function(node) { return number }}
 #' @param radial Whether to enable radial layout
-#' @param ... Additional parameters to pass to the layout
+#' @param ... Additional parameters to pass to the layout.
 #'
-#' @return A list containing the configuration for G6 AntV Compact Box layout
+#' @return A list containing the configuration for G6 AntV Compact Box layout.
 #' @export
 #'
 #' @examples
@@ -469,7 +467,7 @@ compact_box_layout <- function(
 #' @param ... Additional parameters to pass to the layout.
 #' See \url{https://g6.antv.antgroup.com/manual/layout/build-in/d3-force}.
 #'
-#' @return A list containing the configuration for G6 AntV D3 Force layout with class "g6-layout"
+#' @return A list containing the configuration for G6 AntV D3 Force layout.
 #' @export
 #'
 #' @examples
@@ -580,8 +578,8 @@ d3_force_layout <- function(
 #'
 #' @param center The center position of the circular layout \code{[x, y]} or \code{[x, y, z]}.
 #'   By default, it's the center position of the current container.
-#' @param clockwise Whether nodes are arranged in clockwise order
-#' @param equidistant Whether the distances between rings are equal
+#' @param clockwise Whether nodes are arranged in clockwise order.
+#' @param equidistant Whether the distances between rings are equal.
 #' @param width The width of the layout. By default, the container width is used.
 #' @param height The height of the layout. By default, the container height is used.
 #' @param sortBy Specify the sorting basis (node attribute name). The higher the value,
@@ -748,9 +746,9 @@ concentric_layout <- function(
 #' for directed graphs, creating hierarchical layouts with nodes arranged in layers.
 #'
 #' @param rankdir Layout direction: "TB" (top to bottom), "BT" (bottom to top),
-#'   "LR" (left to right), or "RL" (right to left)
+#'   "LR" (left to right), or "RL" (right to left).
 #' @param align Node alignment: "UL" (upper left), "UR" (upper right),
-#'   "DL" (down left), or "DR" (down right)
+#'   "DL" (down left), or "DR" (down right).
 #' @param nodesep Node spacing (px). When rankdir is "TB" or "BT", it's the horizontal
 #'   spacing of nodes; when rankdir is "LR" or "RL", it's the vertical spacing of nodes.
 #' @param ranksep Interlayer spacing (px). When rankdir is "TB" or "BT", it's the
@@ -758,14 +756,14 @@ concentric_layout <- function(
 #'   it represents the spacing between adjacent layers in the horizontal direction.
 #' @param ranker The algorithm for assigning a level to each node: "network-simplex" (the network
 #'   simplex algorithm), "tight-tree" (the compact tree algorithm), or "longest-path"
-#'   (the longest path algorithm)
+#'   (the longest path algorithm).
 #' @param nodeSize G6 custom attribute to specify the node size uniformly or for each node.
 #'   Can be a single number (same width/height), an array \code{[width, height]},
 #'   or a function that returns either.
-#' @param controlPoints Whether to keep the control points of the edge
-#' @param ... Additional parameters to pass to the layout
+#' @param controlPoints Whether to keep the control points of the edge.
+#' @param ... Additional parameters to pass to the layout.
 #'
-#' @return A list containing the configuration for G6 AntV Dagre layout
+#' @return A list containing the configuration for G6 AntV Dagre layout.
 #' @export
 #'
 #' @examples
@@ -843,7 +841,9 @@ dagre_layout <- function(
 #' This function creates a configuration list for G6 Force Atlas2 layout
 #' with all available options as parameters.
 #'
-#' @param barnesHut Logical. Whether to enable quadtree acceleration. When enabled, improves performance for large graphs but may affect layout quality. By default, enabled if node count > 250.
+#' @param barnesHut Logical. Whether to enable quadtree acceleration.
+#' When enabled, improves performance for large graphs but may affect layout quality.
+#' By default, enabled if node count > 250.
 #' @param dissuadeHubs Logical. Whether to enable hub mode.
 #' If TRUE, nodes with higher in-degree are more likely to be placed at the center
 #' than those with high out-degree. Defaults to FALSE.
@@ -875,7 +875,7 @@ dagre_layout <- function(
 #' @param ... Additional parameters to pass to the layout.
 #' See \url{https://g6.antv.antgroup.com/manual/layout/build-in/force-atlas2-layout}.
 #'
-#' @return A list containing the configuration for G6 force atlas2 with class "g6-layout"
+#' @return A list containing the configuration for G6 force atlas2 layout.
 #' @export
 #'
 #' @examples
@@ -985,7 +985,7 @@ force_atlas2_layout <- function(
 #' @param ... Additional parameters to pass to the layout.
 #' See \url{https://g6.antv.antgroup.com/en/manual/layout/build-in/fruchterman-layout}.
 #'
-#' @return A list containing the configuration for G6 fruchterman with class "g6-layout"
+#' @return A list containing the configuration for G6 fruchterman layout.
 #' @export
 #' @examples
 #' \dontrun{
@@ -1052,7 +1052,7 @@ fruchterman_layout <- function(
 #' @param ... Additional parameters to pass to the layout.
 #' See \url{https://g6.antv.antgroup.com/en/manual/layout/build-in/radial-layout}.
 #'
-#' @return A list containing the configuration for G6 radial layout with class "g6-layout"
+#' @return A list containing the configuration for G6 radial layout.
 #' @export
 #' @examples
 #' \dontrun{
@@ -1179,7 +1179,7 @@ radial_layout <- function(
 #' @param ... Additional parameters to pass to the layout.
 #' See \url{https://g6.antv.antgroup.com/en/manual/layout/build-in/dendrogram-layout}.
 #'
-#' @return A list containing the configuration for G6 dendrogram layout with class "g6-layout"
+#' @return A list containing the configuration for G6 dendrogram layout.
 #' @export
 dendrogram_layout <- function(
   direction = c("LR", "RL", "TB", "BT", "H", "V"),

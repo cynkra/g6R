@@ -42,10 +42,10 @@ Function format: \code{function(node) { return number }}}
 
 \item{radial}{Whether to enable radial layout}
 
-\item{...}{Additional parameters to pass to the layout}
+\item{...}{Additional parameters to pass to the layout.}
 }
 \value{
-A list containing the configuration for G6 AntV Compact Box layout
+A list containing the configuration for G6 AntV Compact Box layout.
 }
 \description{
 This function creates a configuration list for G6 AntV Compact Box layout

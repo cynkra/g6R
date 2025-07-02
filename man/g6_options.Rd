@@ -31,22 +31,22 @@ g6_options(
 \item{graph}{g6 graph instance.}
 
 \item{node}{Node configuration. Controls the default appearance and behavior of nodes.
-Created with \code{node_options()}. Default: Default node options.}
+Created with \code{node_options()}. Default: NULL.}
 
 \item{edge}{Edge configuration. Controls the default appearance and behavior of edges.
-Created with \code{edge_options()}. Default: Default edge options.}
+Created with \code{edge_options()}. Default: NULL.}
 
 \item{combo}{Combo configuration. Controls the default appearance and behavior of combo nodes.
-Created with \code{combo_options()}. Default: Default combo options.}
+Created with \code{combo_options()}. Default: NULL.}
 
 \item{autoFit}{Automatically fit the graph content to the canvas.
-Created with \code{auto_fit_config()}. Default: Default auto-fit settings.}
+Created with \code{auto_fit_config()}. Default: NULL.}
 
 \item{canvas}{Canvas configuration for the graph rendering surface.
-Created with \code{canvas_config()}. Default: Default canvas settings.}
+Created with \code{canvas_config()}. Default: NULL.}
 
 \item{animation}{Global animation configuration for graph transitions.
-Created with \code{animation_config()}. Default: Default to FALSE.}
+Created with \code{animation_config()}. Default: TRUE.}
 
 \item{autoResize}{Whether the graph should automatically resize when the window size changes.
 Default: FALSE.}

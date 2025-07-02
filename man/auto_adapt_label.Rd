@@ -17,43 +17,38 @@ auto_adapt_label(
 )
 }
 \arguments{
-\item{key}{Unique identifier for the behavior (string, default: "auto-adapt-label")}
+\item{key}{Unique identifier for the behavior (string, default: "auto-adapt-label").}
 
-\item{enable}{Whether to enable this behavior (JS function, default: returns TRUE for all events)}
+\item{enable}{Whether to enable this behavior (JS function, default: returns TRUE for all events).}
 
-\item{throttle}{Throttle time in milliseconds to optimize performance (numeric, default: 100)}
+\item{throttle}{Throttle time in milliseconds to optimize performance (numeric, default: 100).}
 
-\item{padding}{Padding space around labels in pixels (numeric, default: 0)}
+\item{padding}{Padding space around labels in pixels (numeric, default: 0).}
 
-\item{sort}{Global sorting rule for all element types (list or JS function, default: NULL)}
+\item{sort}{Global sorting rule for all element types (list or JS function, default: NULL).}
 
-\item{sortNode}{Sorting rule specifically for node labels (list, default: list(type = "degree"))}
+\item{sortNode}{Sorting rule specifically for node labels (list, default: list(type = "degree")).}
 
-\item{sortEdge}{Sorting rule specifically for edge labels (list, default: NULL)}
+\item{sortEdge}{Sorting rule specifically for edge labels (list, default: NULL).}
 
-\item{sortCombo}{Sorting rule specifically for combo labels (list, default: NULL)}
+\item{sortCombo}{Sorting rule specifically for combo labels (list, default: NULL).}
 
-\item{...}{Extra parameters. See \url{https://g6.antv.antgroup.com/manual/behavior/build-in/auto-adapt-label}.}
-}
-\value{
-A list with the configuration settings for the auto-adapt-label behavior
-}
-\description{
-Creates a configuration object for the auto-adapt-label behavior in G6.
-This behavior automatically adjusts label positions to reduce overlapping and
-improve readability in the graph visualization.
-}
-\details{
-The auto-adapt-label behavior helps prevent label overlap by automatically adjusting
-label positions based on specified rules. It can selectively hide labels when there's
-not enough space to display all of them.
+\item{...}{Extra parameters. See \url{https://g6.antv.antgroup.com/manual/behavior/build-in/auto-adapt-label}.
 
 Sorting parameters determine which labels take priority when space is limited:
 \itemize{
 \item When \code{sort} is provided, it applies to all element types and overrides type-specific settings
 \item Type-specific sorting (\code{sortNode}, \code{sortEdge}, \code{sortCombo}) only applies when \code{sort} is NULL
 \item The default sorting for nodes is by degree (higher degree nodes' labels are shown first)
+}}
 }
+\value{
+A list with the configuration settings for the auto-adapt-label behavior.
+}
+\description{
+Creates a configuration object for the auto-adapt-label behavior in G6.
+This behavior automatically adjusts label positions to reduce overlapping and
+improve readability in the graph visualization.
 }
 \examples{
 # Basic configuration with defaults

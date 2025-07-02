@@ -17,26 +17,26 @@ zoom_canvas(
 )
 }
 \arguments{
-\item{key}{Unique identifier for the behavior (string, default: "zoom-canvas")}
+\item{key}{Unique identifier for the behavior (string, default: "zoom-canvas").}
 
-\item{animation}{Zoom animation effect settings (list, default: list with duration 200ms)}
+\item{animation}{Zoom animation effect settings (list, default: list with duration 200ms).}
 
-\item{enable}{Whether to enable this behavior (boolean or JS function, default: TRUE)}
+\item{enable}{Whether to enable this behavior (boolean or JS function, default: TRUE).}
 
-\item{origin}{Zoom center point in viewport coordinates (list with x, y values, default: NULL)}
+\item{origin}{Zoom center point in viewport coordinates (list with x, y values, default: NULL).}
 
-\item{onFinish}{Callback function when zooming is finished (JS function, default: NULL)}
+\item{onFinish}{Callback function when zooming is finished (JS function, default: NULL).}
 
-\item{preventDefault}{Whether to prevent the browser's default event (boolean, default: TRUE)}
+\item{preventDefault}{Whether to prevent the browser's default event (boolean, default: TRUE).}
 
-\item{sensitivity}{Zoom sensitivity, the larger the value, the faster the zoom (numeric, default: 1)}
+\item{sensitivity}{Zoom sensitivity, the larger the value, the faster the zoom (numeric, default: 1).}
 
-\item{trigger}{How to trigger zooming, supports mouse wheel and keyboard shortcuts (list, default: NULL)}
+\item{trigger}{How to trigger zooming, supports mouse wheel and keyboard shortcuts (list, default: NULL).}
 
 \item{...}{Extra parameters. See \url{https://g6.antv.antgroup.com/manual/behavior/build-in/zoom-canvas}.}
 }
 \value{
-A list with the configuration settings
+A list with the configuration settings for the zoom-canvas behavior.
 }
 \description{
 Creates a configuration object for the zoom-canvas behavior in G6.

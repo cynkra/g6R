@@ -47,7 +47,7 @@ the animation. Common values include "linear", "ease", "ease-in", "ease-out",
 non-negative numeric value.}
 }
 \value{
-A list containing animation configuration that can be passed to a G6 graph
+A list containing animation configuration that can be passed to \code{\link[=g6_options]{g6_options()}}.
 }
 \description{
 Configures animation settings for G6 graph elements. These settings control

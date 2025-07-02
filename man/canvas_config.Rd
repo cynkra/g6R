@@ -43,7 +43,7 @@ Multi-layer rendering can improve performance for complex graphs by
 separating elements into different rendering layers.}
 }
 \value{
-A list containing the canvas configuration that can be passed to a G6 graph
+A list containing the canvas configuration that can be passed to \code{\link[=g6_options]{g6_options()}}.
 }
 \description{
 Configures the canvas settings for a G6 graph. The canvas is the rendering

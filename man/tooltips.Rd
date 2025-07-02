@@ -21,32 +21,32 @@ tooltips(
 )
 }
 \arguments{
-\item{key}{Unique identifier for the plugin (string, default: NULL)}
+\item{key}{Unique identifier for the plugin (string, default: NULL).}
 
-\item{position}{Tooltip position relative to the element (string, default: "top-right")}
+\item{position}{Tooltip position relative to the element (string, default: "top-right").}
 
-\item{enable}{Whether the plugin is enabled (boolean or function, default: TRUE)}
+\item{enable}{Whether the plugin is enabled (boolean or function, default: TRUE).}
 
-\item{getContent}{Function to generate custom tooltip content (JS function, default: NULL)}
+\item{getContent}{Function to generate custom tooltip content (JS function, default: NULL).}
 
-\item{onOpenChange}{Callback for tooltip show/hide events (JS function, default: NULL)}
+\item{onOpenChange}{Callback for tooltip show/hide events (JS function, default: NULL).}
 
-\item{trigger}{Trigger behavior: "hover" or "click" (string, default: "hover")}
+\item{trigger}{Trigger behavior: "hover" or "click" (string, default: "hover").}
 
-\item{container}{Custom rendering container for tooltip (string or HTML element, default: NULL)}
+\item{container}{Custom rendering container for tooltip (string or HTML element, default: NULL).}
 
-\item{offset}{Offset distance as a vector of two numbers \code{[x, y]} (numeric vector, default: c(10, 10))}
+\item{offset}{Offset distance as a vector of two numbers \code{[x, y]} (numeric vector, default: c(10, 10)).}
 
-\item{enterable}{Whether the pointer can enter the tooltip (boolean, default: FALSE)}
+\item{enterable}{Whether the pointer can enter the tooltip (boolean, default: FALSE).}
 
-\item{title}{Title for the tooltip (string, default: NULL)}
+\item{title}{Title for the tooltip (string, default: NULL).}
 
-\item{style}{Custom style for the tooltip (list or JS object, default: list(".tooltip" = list(visibility = "hidden")))}
+\item{style}{Custom style for the tooltip (list or JS object, default: list(".tooltip" = list(visibility = "hidden"))).}
 
 \item{...}{Extra parameters. See \url{https://g6.antv.antgroup.com/manual/plugin/build-in/tooltip}.}
 }
 \value{
-A list with the configuration settings
+A list with the configuration settings for the tooltip plugin.
 }
 \description{
 Creates a configuration object for the tooltip plugin in G6.

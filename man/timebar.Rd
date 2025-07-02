@@ -32,56 +32,57 @@ timebar(
 )
 }
 \arguments{
-\item{data}{Time data, either a vector of timestamps or a list of objects with time and value (required)}
+\item{data}{Time data, either a vector of timestamps or a list of objects with time and value (required).}
 
-\item{key}{Unique identifier for the plugin (string, default: NULL)}
+\item{key}{Unique identifier for the plugin (string, default: NULL).}
 
-\item{className}{Additional class name for the timebar DOM (string, default: "g6-timebar")}
+\item{className}{Additional class name for the timebar DOM (string, default: "g6-timebar").}
 
-\item{x}{X position, will be ignored if position is set (number, default: NULL)}
+\item{x}{X position, will be ignored if position is set (number, default: NULL).}
 
-\item{y}{Y position, will be ignored if position is set (number, default: NULL)}
+\item{y}{Y position, will be ignored if position is set (number, default: NULL).}
 
-\item{width}{Timebar width (number, default: 450)}
+\item{width}{Timebar width (number, default: 450).}
 
-\item{height}{Timebar height (number, default: 60)}
+\item{height}{Timebar height (number, default: 60).}
 
-\item{position}{Timebar position: "bottom" or "top" (string, default: "bottom")}
+\item{position}{Timebar position: "bottom" or "top" (string, default: "bottom").}
 
-\item{padding}{Padding around the timebar (number or numeric vector, default: 10)}
+\item{padding}{Padding around the timebar (number or numeric vector, default: 10).}
 
-\item{timebarType}{Display type: "time" or "chart" (string, default: "time")}
+\item{timebarType}{Display type: "time" or "chart" (string, default: "time").}
 
-\item{elementTypes}{Filter element types: vector of "node", "edge", and/or "combo" (character vector, default: c("node"))}
+\item{elementTypes}{Filter element types: vector of "node", "edge", and/or "combo"
+(character vector, default: c("node")).}
 
-\item{mode}{Control element filtering method: "modify" or "visibility" (string, default: "modify")}
+\item{mode}{Control element filtering method: "modify" or "visibility" (string, default: "modify").}
 
-\item{values}{Current time value (number, vector of two numbers, Date, or vector of two Dates, default: NULL)}
+\item{values}{Current time value (number, vector of two numbers, Date, or vector of two Dates, default: NULL).}
 
-\item{loop}{Whether to loop playback (boolean, default: FALSE)}
+\item{loop}{Whether to loop playback (boolean, default: FALSE).}
 
-\item{getTime}{Method to get element time (JS function, default: NULL)}
+\item{getTime}{Method to get element time (JS function, default: NULL).}
 
-\item{labelFormatter}{Custom time formatting in chart mode (JS function, default: NULL)}
+\item{labelFormatter}{Custom time formatting in chart mode (JS function, default: NULL).}
 
-\item{onChange}{Callback when time interval changes (JS function, default: NULL)}
+\item{onChange}{Callback when time interval changes (JS function, default: NULL).}
 
-\item{onReset}{Callback when reset (JS function, default: NULL)}
+\item{onReset}{Callback when reset (JS function, default: NULL).}
 
-\item{onSpeedChange}{Callback when playback speed changes (JS function, default: NULL)}
+\item{onSpeedChange}{Callback when playback speed changes (JS function, default: NULL).}
 
-\item{onPlay}{Callback when playback starts (JS function, default: NULL)}
+\item{onPlay}{Callback when playback starts (JS function, default: NULL).}
 
-\item{onPause}{Callback when paused (JS function, default: NULL)}
+\item{onPause}{Callback when paused (JS function, default: NULL).}
 
-\item{onBackward}{Callback when moving backward (JS function, default: NULL)}
+\item{onBackward}{Callback when moving backward (JS function, default: NULL).}
 
-\item{onForward}{Callback when moving forward (JS function, default: NULL)}
+\item{onForward}{Callback when moving forward (JS function, default: NULL).}
 
 \item{...}{Extra parameters. See \url{https://g6.antv.antgroup.com/manual/plugin/build-in/timebar}.}
 }
 \value{
-A list with the configuration settings
+A list with the configuration settings for the timebar plugin.
 }
 \description{
 Creates a configuration object for the timebar plugin in G6.

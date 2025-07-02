@@ -16,22 +16,22 @@ toolbar(
 )
 }
 \arguments{
-\item{getItems}{Function that returns the list of toolbar items (JS function, required)}
+\item{getItems}{Function that returns the list of toolbar items (JS function, required).}
 
-\item{key}{Unique identifier for the plugin (string, default: NULL)}
+\item{key}{Unique identifier for the plugin (string, default: NULL).}
 
-\item{className}{Additional CSS class name for the toolbar DOM element (string, default: NULL)}
+\item{className}{Additional CSS class name for the toolbar DOM element (string, default: NULL).}
 
-\item{position}{Toolbar position relative to the canvas (string, default: "top-left")}
+\item{position}{Toolbar position relative to the canvas (string, default: "top-left").}
 
-\item{style}{Custom style for the toolbar DOM element (list or JS object, default: NULL)}
+\item{style}{Custom style for the toolbar DOM element (list or JS object, default: NULL).}
 
-\item{onClick}{Callback function after a toolbar item is clicked (JS function, default: NULL)}
+\item{onClick}{Callback function after a toolbar item is clicked (JS function, default: NULL).}
 
 \item{...}{Extra parameters. See \url{https://g6.antv.antgroup.com/manual/plugin/build-in/toolbar}.}
 }
 \value{
-A list with the configuration settings
+A list with the configuration settings for the toolbar plugin.
 }
 \description{
 Creates a configuration object for the toolbar plugin in G6.

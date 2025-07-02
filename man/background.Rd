@@ -20,32 +20,32 @@ background(
 )
 }
 \arguments{
-\item{key}{Unique identifier for updates (string, default: NULL)}
+\item{key}{Unique identifier for updates (string, default: NULL).}
 
-\item{width}{Background width (string, default: "100\%")}
+\item{width}{Background width (string, default: "100\%").}
 
-\item{height}{Background height (string, default: "100\%")}
+\item{height}{Background height (string, default: "100\%").}
 
-\item{backgroundColor}{Background color (string, default: NULL)}
+\item{backgroundColor}{Background color (string, default: NULL).}
 
-\item{backgroundImage}{Background image URL (string, default: NULL)}
+\item{backgroundImage}{Background image URL (string, default: NULL).}
 
-\item{backgroundSize}{Background size (string, default: "cover")}
+\item{backgroundSize}{Background size (string, default: "cover").}
 
-\item{backgroundPosition}{Background position (string, default: NULL)}
+\item{backgroundPosition}{Background position (string, default: NULL).}
 
-\item{backgroundRepeat}{Background repeat (string, default: NULL)}
+\item{backgroundRepeat}{Background repeat (string, default: NULL).}
 
-\item{opacity}{Background opacity (string, default: NULL)}
+\item{opacity}{Background opacity (string, default: NULL).}
 
-\item{transition}{Transition animation (string, default: "background 0.5s")}
+\item{transition}{Transition animation (string, default: "background 0.5s").}
 
-\item{zIndex}{Stacking order (string, default: "-1")}
+\item{zIndex}{Stacking order (string, default: "-1").}
 
 \item{...}{Extra parameters. See \url{https://g6.antv.antgroup.com/manual/plugin/build-in/background}.}
 }
 \value{
-A list with the configuration settings for the background plugin
+A list with the configuration settings for the background plugin.
 }
 \description{
 Creates a configuration object for the background plugin in G6.

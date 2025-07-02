@@ -18,26 +18,26 @@ create_edge(
 \arguments{
 \item{key}{Behavior unique identifier. Useful to modify this behavior from JS side.}
 
-\item{trigger}{The way to trigger edge creation: "click" or "drag" (string, default: "drag")}
+\item{trigger}{The way to trigger edge creation: "click" or "drag" (string, default: "drag").}
 
 \item{enable}{Whether to enable this behavior (boolean or function, default: FALSE).
 Our default implementation works in parallel with the \link{context_menu} plugin which is
 responsible for activating the edge behavior when edge creation is selected.}
 
-\item{onCreate}{Callback function for creating an edge, returns edge data (function, default: NULL)}
+\item{onCreate}{Callback function for creating an edge, returns edge data (function, default: NULL).}
 
 \item{onFinish}{Callback function for successfully creating an edge (function).
 By default, we provide an internal implementation that disables the edge mode when the edge
 creation is succesful so that it does not conflict with other drag behaviors.}
 
-\item{style}{Style of the newly created edge (list, default: NULL)}
+\item{style}{Style of the newly created edge (list, default: NULL).}
 
 \item{notify}{Whether to show a feedback message in the ui.}
 
 \item{...}{Extra parameters. See \url{https://g6.antv.antgroup.com/manual/behavior/build-in/create-edge}.}
 }
 \value{
-A list with the configuration settings
+A list with the configuration settings for the create-edge behavior.
 }
 \description{
 Creates a configuration object for the create-edge behavior in G6.
