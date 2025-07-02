@@ -65,8 +65,9 @@
 #'   with two elements: c(min_zoom, max_zoom).
 #'   Default: c(0.01, 10).
 #'
-#' @param theme Color theme for the graph. Options: "light" or "dark".
-#'   Default: "light".
+#' @param theme Color theme for the graph. Either `light` or `dark` or a list
+#' representing a custom theme:
+#' see \url{https://g6.antv.antgroup.com/en/manual/theme/custom-theme}.
 #' @param ... Other configuration parameters.
 #'
 #' @return A list containing all specified G6 graph configuration options.
@@ -118,10 +119,10 @@
 g6_options <- function(
   graph,
   node = NULL,
-  edge = edge_options(),
+  edge = NULL,
   combo = NULL,
-  autoFit = auto_fit_config(),
-  canvas = canvas_config(),
+  autoFit = NULL,
+  canvas = NULL,
   animation = TRUE,
   autoResize = FALSE,
   background = NULL,
@@ -134,14 +135,13 @@ g6_options <- function(
   y = NULL,
   zoom = 1,
   zoomRange = c(0.01, 10),
-  theme = c("light", "dark", "blue", "yellow"),
+  theme = "light",
   ...
 ) {
   if (!inherits(graph, "g6")) {
     stop("g6_options must be called on a g6 instance")
   }
 
-  theme <- match.arg(theme)
   cursor <- match.arg(cursor)
 
   arg_names <- names(formals())

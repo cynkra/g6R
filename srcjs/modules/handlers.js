@@ -97,6 +97,16 @@ const registerShinyHandlers = (graph, el) => {
     }
   })
 
+  // This can also be done with setOptions but this is better to be more specific
+  Shiny.addCustomMessageHandler(el.id + '_g6-set-theme', (m) => {
+    try {
+      graph.setOptions(m.theme);
+      graph.draw();
+    } catch (error) {
+      Shiny.notifications.show({ html: error, type: 'error' })
+    }
+  })
+
   // Update plugin
   Shiny.addCustomMessageHandler(el.id + '_g6-update-plugin', (m) => {
     try {

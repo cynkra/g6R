@@ -7,10 +7,10 @@
 g6_options(
   graph,
   node = NULL,
-  edge = edge_options(),
+  edge = NULL,
   combo = NULL,
-  autoFit = auto_fit_config(),
-  canvas = canvas_config(),
+  autoFit = NULL,
+  canvas = NULL,
   animation = TRUE,
   autoResize = FALSE,
   background = NULL,
@@ -23,7 +23,7 @@ g6_options(
   y = NULL,
   zoom = 1,
   zoomRange = c(0.01, 10),
-  theme = c("light", "dark", "blue", "yellow"),
+  theme = "light",
   ...
 )
 }
@@ -85,8 +85,9 @@ Default: 1.}
 with two elements: c(min_zoom, max_zoom).
 Default: c(0.01, 10).}
 
-\item{theme}{Color theme for the graph. Options: "light" or "dark".
-Default: "light".}
+\item{theme}{Color theme for the graph. Either \code{light} or \code{dark} or a list
+representing a custom theme:
+see \url{https://g6.antv.antgroup.com/en/manual/theme/custom-theme}.}
 
 \item{...}{Other configuration parameters.}
 }

@@ -400,7 +400,9 @@ g6_fit_center <- function(graph, animation = NULL) {
     stopifnot(is.list(animation))
   }
 
-  if (is.null(animation)) animation <- list()
+  if (is.null(animation)) {
+    animation <- list()
+  }
 
   graph$session$sendCustomMessage(
     sprintf("%s_g6-fit-center", graph$id),
@@ -681,6 +683,32 @@ g6_update_behavior <- function(graph, key, ...) {
     # Mark any element of options wrapped by htmlwidgets::JS
     # so it can be evaluated on the JS side.
     list(opts = opts, evals = JSEvals(opts))
+  )
+  graph
+}
+
+#' Set the theme for a g6 graph via proxy
+#'
+#' This function sets the theme for an existing g6 graph instance
+#'
+#' @param graph A g6_proxy object created with \code{\link{g6_proxy}}.
+#' @param theme A character string representing the theme to apply to the graph.
+#' There are 2 internal predefined themes: `light` and `dark`.
+#' Alternatively, you can pass a custom theme object that conforms to the G6 theme specifications,
+#' according to the documentation at \url{https://g6.antv.antgroup.com/en/manual/theme/custom-theme}.
+#'
+#' @return The g6_proxy object (invisibly), allowing for method chaining.
+#' @seealso [g6_proxy()]
+#' @export
+g6_set_theme <- function(graph, theme) {
+  if (!any(class(graph) %in% "g6_proxy")) {
+    stop(
+      "Can't use g6_set_theme with g6 object. Use only within shiny and using g6_proxy"
+    )
+  }
+  graph$session$sendCustomMessage(
+    sprintf("%s_g6-set-theme", graph$id),
+    list(theme = theme)
   )
   graph
 }

@@ -143,6 +143,7 @@ reference:
       - auto_fit_config
       - canvas_config
       - animation_config
+      - g6_set_theme
 
   - title: Behaviors
     desc: Container for behavior elements

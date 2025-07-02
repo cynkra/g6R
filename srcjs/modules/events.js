@@ -56,8 +56,10 @@ const setGraphEvents = (events, graph, el) => {
         Shiny.setInputValue(el.id + '-initialized', true);
       }
       // Update the state any time there is a change.
-      // Useful to serialise and restore
-      Shiny.setInputValue(el.id + '-state', graph.getData())
+      // Useful to serialise and restore. Only do it when initialized.
+      if (Shiny.shinyapp.$inputValues[el.id + '-initialized']) {
+        Shiny.setInputValue(el.id + '-state', graph.getData())
+      }
     })
   }
 }

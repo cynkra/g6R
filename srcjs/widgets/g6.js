@@ -7,7 +7,6 @@ import {
 import { AntLine, FlyMarkerCubic, CircleComboWithExtraButton } from '../modules/extensions';
 import { setupGraph, setupIcons } from '../modules/utils';
 
-
 // Ant lines
 register(ExtensionCategory.EDGE, 'ant-line', AntLine);
 // Animated lines
@@ -51,7 +50,6 @@ HTMLWidgets.widget({
           graph = new Graph(config);
           setupGraph(graph, el, this);
         }
-
       },
       getWidget: function () {
         return graph
