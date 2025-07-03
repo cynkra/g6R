@@ -646,16 +646,23 @@ create_edge <- function(
 #' )
 drag_canvas <- function(
   key = "drag-canvas",
-  enable = TRUE,
+  enable = NULL,
   animation = NULL,
   direction = c("both", "x", "y"),
-  range = Inf,
+  range = NULL,
   sensitivity = 10,
   trigger = NULL,
   onFinish = NULL,
   ...
 ) {
   # Validate inputs
+  if (is.null(enable)) {
+    enable <- JS(
+      "(e) => {
+        return e.targetType === 'canvas';
+      }"
+    )
+  }
   if (!is.logical(enable) && !is_js(enable)) {
     stop("'enable' should be a boolean or a function")
   }
@@ -666,7 +673,7 @@ drag_canvas <- function(
 
   direction <- match.arg(direction)
 
-  if (!is.numeric(range) && !is.infinite(range)) {
+  if (!is.null(range) && !is.numeric(range)) {
     stop("'range' should be a number, numeric vector, or Inf")
   }
 
@@ -829,7 +836,7 @@ drag_element_force <- function(
   if (is.null(enable)) {
     enable <- JS(
       "(event) => {
-        return event.targetType === 'node' || event.targetType === 'combo';
+        return ['node', 'combo'].includes(event.targetType);
       }"
     )
   }

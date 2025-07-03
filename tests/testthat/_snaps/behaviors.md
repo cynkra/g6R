@@ -283,11 +283,10 @@
         ..$ jsonUrl  : NULL
         ..$ iconsUrl : chr "//at.alicdn.com/t/font_2678727_za4qjydwkkh.js"
         ..$ behaviors:List of 1
-        .. ..$ :List of 6
+        .. ..$ :List of 5
         .. .. ..$ key        : chr "drag-canvas"
-        .. .. ..$ enable     : logi TRUE
+        .. .. ..$ enable     : 'JS_EVAL' chr "(e) => {\n        return e.targetType === 'canvas';\n      }"
         .. .. ..$ direction  : chr "both"
-        .. .. ..$ range      : num Inf
         .. .. ..$ sensitivity: num 10
         .. .. ..$ type       : chr "drag-canvas"
        $ width        : chr "100%"
@@ -386,7 +385,7 @@
         .. ..$ :List of 6
         .. .. ..$ key     : chr "drag-element-force"
         .. .. ..$ fixed   : logi FALSE
-        .. .. ..$ enable  : 'JS_EVAL' chr "(event) => {\n        return event.targetType === 'node' || event.targetType === 'combo';\n      }"
+        .. .. ..$ enable  : 'JS_EVAL' chr "(event) => {\n        return ['node', 'combo'].includes(event.targetType);\n      }"
         .. .. ..$ state   : chr "selected"
         .. .. ..$ hideEdge: chr "none"
         .. .. ..$ type    : chr "drag-element-force"

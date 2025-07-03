@@ -70,7 +70,7 @@ g6() |>
 ```{r, results = 'asis', echo = FALSE}
 for (plugin in names(plugins_data)) {
   # Print the section header
-  cat("## ", gsub('-', ' ', stringr::str_to_title(plugin)), " Plugin\n\n")
+  cat("## ", gsub('-', ' ', stringr::str_to_title(plugin)), "\n\n")
   cat(plugins_data[[plugin]], "\n\n")
 
   # Create and render the G6 plot
@@ -120,7 +120,7 @@ for (plugin in names(plugins_data)) {
 }
 ```
 
-## Background Plugin
+## Background
 
 Adds background images or colors to the canvas for visual enhancement and branding.
 
@@ -138,7 +138,7 @@ g6(nodes, edges) |>
   )
 ```
 
-## Bubble Sets Plugin
+## Bubble sets
 
 Creates smooth bubble-like element outlines for enhanced visual grouping.
 
@@ -183,7 +183,7 @@ g6(nodes, edges) |>
   )
 ```
 
-## Fullscreen Plugin
+## Fullscreen
 
 Supports full-screen display and exit for charts to maximize viewing area.
 
@@ -201,7 +201,7 @@ g6(nodes, edges) |>
   )
 ```
 
-## Hull Plugin
+## Hull
 
 Creates an outline for a specified set of nodes to visually group related elements.
 
@@ -240,7 +240,7 @@ g6(nodes, edges) |>
   )
 ```
 
-## Legend Plugin
+## Legend
 
 Displays categories and corresponding style descriptions of chart data.
 
@@ -270,7 +270,9 @@ g6(custom_nodes, edges) |>
   )
 ```
 
-## Timebar Plugin (does not work yet ...)
+## Timebar
+
+does not work yet ...
 
 Provides filtering and playback control for temporal data visualization.
 
@@ -306,7 +308,7 @@ g6(custom_nodes) |>
   )
 ```
 
-## Watermark Plugin
+## Watermark
 
 Adds a watermark to the canvas to protect copyright and brand the visualization.
 
@@ -327,7 +329,7 @@ g6(nodes, edges) |>
   )
 ```
 
-## History plugin
+## History
 
 The history plugin provides undo and redo functionality for graph modifications, allowing users to revert changes or reapply them. It works well with the `toolbar` plugin to provide a user interface for these actions:
 

@@ -119,7 +119,8 @@ server <- function(input, output, session) {
       ) |>
       g6_behaviors(
         "zoom-canvas",
-        "drag-canvas"
+        "drag-canvas",
+        "optimize-viewport-transform"
       )
   })
 

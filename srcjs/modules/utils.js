@@ -29,6 +29,9 @@ const checkIds = (data) => {
       if (typeof node.id !== 'string') {
         node.id = node.id.toString();
       }
+      if (node.combo !== undefined && typeof node.combo !== 'string') {
+        node.combo = node.combo.toString();
+      }
       return node.id
     });
   }

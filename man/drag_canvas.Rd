@@ -6,10 +6,10 @@
 \usage{
 drag_canvas(
   key = "drag-canvas",
-  enable = TRUE,
+  enable = NULL,
   animation = NULL,
   direction = c("both", "x", "y"),
-  range = Inf,
+  range = NULL,
   sensitivity = 10,
   trigger = NULL,
   onFinish = NULL,
