@@ -172,18 +172,18 @@ See <a href="https://g6.antv.antgroup.com/en/manual/layout/force-atlas2-layout" 
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span> <span class="co"># \dontrun{</span></span></span>
-<span class="r-in"><span> <span class="fu"><a href="g6.html">g6</a></span><span class="op">(</span><span class="va">lesmis</span><span class="op">$</span><span class="va">nodes</span>, <span class="va">lesmis</span><span class="op">$</span><span class="va">edges</span><span class="op">)</span> <span class="op">|&gt;</span></span></span>
-<span class="r-in"><span>   <span class="fu"><a href="g6_layout.html">g6_layout</a></span><span class="op">(</span><span class="fu">force_atlas2_layout</span><span class="op">(</span></span></span>
-<span class="r-in"><span>     kr <span class="op">=</span> <span class="fl">20</span>,</span></span>
-<span class="r-in"><span>     preventOverlap <span class="op">=</span> <span class="cn">TRUE</span>,</span></span>
-<span class="r-in"><span>     center <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">250</span>, <span class="fl">250</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span></span>
-<span class="r-in"><span>   <span class="fu"><a href="g6_options.html">g6_options</a></span><span class="op">(</span>autoResize <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op">|&gt;</span></span></span>
-<span class="r-in"><span>   <span class="fu"><a href="g6_behaviors.html">g6_behaviors</a></span><span class="op">(</span></span></span>
-<span class="r-in"><span>     <span class="st">"zoom-canvas"</span>,</span></span>
-<span class="r-in"><span>     <span class="fu"><a href="drag_element.html">drag_element</a></span><span class="op">(</span><span class="op">)</span></span></span>
-<span class="r-in"><span>   <span class="op">)</span></span></span>
-<span class="r-in"><span><span class="op">}</span> <span class="co"># }</span></span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/interactive.html" class="external-link">interactive</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="g6.html">g6</a></span><span class="op">(</span><span class="va">lesmis</span><span class="op">$</span><span class="va">nodes</span>, <span class="va">lesmis</span><span class="op">$</span><span class="va">edges</span><span class="op">)</span> <span class="op">|&gt;</span></span></span>
+<span class="r-in"><span>    <span class="fu"><a href="g6_layout.html">g6_layout</a></span><span class="op">(</span><span class="fu">force_atlas2_layout</span><span class="op">(</span></span></span>
+<span class="r-in"><span>      kr <span class="op">=</span> <span class="fl">20</span>,</span></span>
+<span class="r-in"><span>      preventOverlap <span class="op">=</span> <span class="cn">TRUE</span>,</span></span>
+<span class="r-in"><span>      center <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">250</span>, <span class="fl">250</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span></span>
+<span class="r-in"><span>    <span class="fu"><a href="g6_options.html">g6_options</a></span><span class="op">(</span>autoResize <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op">|&gt;</span></span></span>
+<span class="r-in"><span>    <span class="fu"><a href="g6_behaviors.html">g6_behaviors</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>      <span class="st">"zoom-canvas"</span>,</span></span>
+<span class="r-in"><span>      <span class="fu"><a href="drag_element.html">drag_element</a></span><span class="op">(</span><span class="op">)</span></span></span>
+<span class="r-in"><span>    <span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">}</span></span></span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
