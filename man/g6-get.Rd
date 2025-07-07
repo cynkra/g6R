@@ -32,19 +32,39 @@ If a node with the same ID already exists, it will not be added again.
 See \url{https://g6.antv.antgroup.com/en/api/data#graphgetnodedata} for more details.
 }
 \examples{
- \dontrun{
-   # Send query to JS
-   observeEvent(req(input[["graph-initialized"]]), {
-     g6_proxy("graph") |> g6_get_nodes(c("node1", "node2"))
-   })
+ if (interactive()) {
+   library(shiny)
+   library(bslib)
 
-   # Recover query result inside input[["<GRAPH_ID>-<ELEMENT_ID>-state"]]
-   output$res <- renderPrint({
-     list(
-       node1_state = input[["graph-node1-state"]],
-       node2_state = input[["graph-node2-state"]]
-     )
-   })
+    ui <- page_fluid(
+      verbatimTextOutput("res"),
+      g6Output("graph")
+    )
+
+    server <- function(input, output, session) {
+      output$graph <- renderG6({
+        g6(
+          nodes = data.frame(id = c("node1", "node2"))
+        ) |>
+          g6_options(animation = FALSE) |>
+          g6_layout() |>
+          g6_behaviors(click_select())
+      })
+
+      # Send query to JS
+      observeEvent(req(input[["graph-initialized"]]), {
+        g6_proxy("graph") |> g6_get_nodes(c("node1", "node2"))
+      })
+
+      # Recover query result inside input[["<GRAPH_ID>-<ELEMENT_ID>-state"]]
+      output$res <- renderPrint({
+        list(
+          node1_state = input[["graph-node1-state"]],
+          node2_state = input[["graph-node2-state"]]
+        )
+      })
+    }
+    shinyApp(ui, server)
  }
 }
 \seealso{

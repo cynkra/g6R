@@ -62,17 +62,18 @@ This function creates a configuration list for G6 Radial layout
 with all available options as parameters.
 }
 \examples{
-\dontrun{
-radial <- jsonlite::fromJSON("https://assets.antv.antgroup.com/g6/radial.json")
-g6(radial$nodes, radial$edges) |>
-  g6_layout(radial_layout(
-    unitRadius = 100,
-    linkDistance = 200
-  )) |>
-  g6_behaviors(
-    "zoom-canvas",
-    drag_element()
-  )
+if (interactive()) {
+  g6(jsonUrl = "https://assets.antv.antgroup.com/g6/radial.json") |>
+    g6_layout(
+      radial_layout(
+        unitRadius = 100,
+        linkDistance = 200
+      )
+    ) |>
+    g6_behaviors(
+      "zoom-canvas",
+      drag_element()
+    )
 }
 
 }

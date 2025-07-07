@@ -882,18 +882,18 @@ dagre_layout <- function(
 #' @export
 #'
 #' @examples
-#' \dontrun{
-#'  g6(lesmis$nodes, lesmis$edges) |>
-#'    g6_layout(force_atlas2_layout(
-#'      kr = 20,
-#'      preventOverlap = TRUE,
-#'      center = c(250, 250))) |>
-#'    g6_options(autoResize = TRUE) |>
-#'    g6_behaviors(
-#'      "zoom-canvas",
-#'      drag_element()
-#'    )
-#'}
+#' if (interactive()) {
+#'   g6(lesmis$nodes, lesmis$edges) |>
+#'     g6_layout(force_atlas2_layout(
+#'       kr = 20,
+#'       preventOverlap = TRUE,
+#'       center = c(250, 250))) |>
+#'     g6_options(autoResize = TRUE) |>
+#'     g6_behaviors(
+#'       "zoom-canvas",
+#'       drag_element()
+#'     )
+#' }
 force_atlas2_layout <- function(
   barnesHut = NULL,
   dissuadeHubs = FALSE,
@@ -991,16 +991,16 @@ force_atlas2_layout <- function(
 #' @return A list containing the configuration for G6 fruchterman layout.
 #' @export
 #' @examples
-#' \dontrun{
-#' g6(lesmis$nodes, lesmis$edges) |>
-#'  g6_layout(fruchterman_layout(
-#'    gravity = 5,
-#'    speed = 5
-#'  )) |>
-#'  g6_behaviors(
-#'    "zoom-canvas",
-#'    drag_element()
-#'  )
+#' if (interactive()) {
+#'   g6(lesmis$nodes, lesmis$edges) |>
+#'    g6_layout(fruchterman_layout(
+#'      gravity = 5,
+#'      speed = 5
+#'    )) |>
+#'    g6_behaviors(
+#'      "zoom-canvas",
+#'      drag_element()
+#'    )
 #' }
 #'
 fruchterman_layout <- function(
@@ -1058,17 +1058,18 @@ fruchterman_layout <- function(
 #' @return A list containing the configuration for G6 radial layout.
 #' @export
 #' @examples
-#' \dontrun{
-#' radial <- jsonlite::fromJSON("https://assets.antv.antgroup.com/g6/radial.json")
-#' g6(radial$nodes, radial$edges) |>
-#'   g6_layout(radial_layout(
-#'     unitRadius = 100,
-#'     linkDistance = 200
-#'   )) |>
-#'   g6_behaviors(
-#'     "zoom-canvas",
-#'     drag_element()
-#'   )
+#' if (interactive()) {
+#'   g6(jsonUrl = "https://assets.antv.antgroup.com/g6/radial.json") |>
+#'     g6_layout(
+#'       radial_layout(
+#'         unitRadius = 100,
+#'         linkDistance = 200
+#'       )
+#'     ) |>
+#'     g6_behaviors(
+#'       "zoom-canvas",
+#'       drag_element()
+#'     )
 #' }
 #'
 radial_layout <- function(
@@ -1242,7 +1243,6 @@ dendrogram_layout <- function(
 #' the outer layout manages the overall arrangement.
 #'
 #' @examples
-#' \dontrun{
 #' # Basic combo combined layout
 #' layout <- combo_combined_layout()
 #'
@@ -1252,7 +1252,6 @@ dendrogram_layout <- function(
 #'   nodeSize = 15,
 #'   spacing = 10
 #' )
-#' }
 #'
 #' @seealso \code{\link{antv_dagre_layout}} for dagre layout configuration
 #'

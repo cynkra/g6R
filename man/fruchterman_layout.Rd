@@ -27,16 +27,16 @@ This function creates a configuration list for G6 Fruchterman layout
 with all available options as parameters.
 }
 \examples{
-\dontrun{
-g6(lesmis$nodes, lesmis$edges) |>
- g6_layout(fruchterman_layout(
-   gravity = 5,
-   speed = 5
- )) |>
- g6_behaviors(
-   "zoom-canvas",
-   drag_element()
- )
+if (interactive()) {
+  g6(lesmis$nodes, lesmis$edges) |>
+   g6_layout(fruchterman_layout(
+     gravity = 5,
+     speed = 5
+   )) |>
+   g6_behaviors(
+     "zoom-canvas",
+     drag_element()
+   )
 }
 
 }

@@ -10,6 +10,8 @@ dropNulls <- function(x) {
 #' @param ... Any valid JS element.
 #'
 #' @export
+#' @return A character vector with class "JS_EVAL" that can be used in htmlwidgets
+#' to mark is as a JavaScript function.
 JS <- function(...) {
   x <- c(...)
   if (is.null(x)) {

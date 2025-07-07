@@ -79,16 +79,16 @@ This function creates a configuration list for G6 Force Atlas2 layout
 with all available options as parameters.
 }
 \examples{
-\dontrun{
- g6(lesmis$nodes, lesmis$edges) |>
-   g6_layout(force_atlas2_layout(
-     kr = 20,
-     preventOverlap = TRUE,
-     center = c(250, 250))) |>
-   g6_options(autoResize = TRUE) |>
-   g6_behaviors(
-     "zoom-canvas",
-     drag_element()
-   )
+if (interactive()) {
+  g6(lesmis$nodes, lesmis$edges) |>
+    g6_layout(force_atlas2_layout(
+      kr = 20,
+      preventOverlap = TRUE,
+      center = c(250, 250))) |>
+    g6_options(autoResize = TRUE) |>
+    g6_behaviors(
+      "zoom-canvas",
+      drag_element()
+    )
 }
 }

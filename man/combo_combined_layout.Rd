@@ -58,7 +58,6 @@ of the hierarchy. The inner layout handles elements within combos, while
 the outer layout manages the overall arrangement.
 }
 \examples{
-\dontrun{
 # Basic combo combined layout
 layout <- combo_combined_layout()
 
@@ -68,7 +67,6 @@ layout <- combo_combined_layout(
   nodeSize = 15,
   spacing = 10
 )
-}
 
 }
 \seealso{

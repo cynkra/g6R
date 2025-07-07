@@ -9,6 +9,10 @@ JS(...)
 \arguments{
 \item{...}{Any valid JS element.}
 }
+\value{
+A character vector with class "JS_EVAL" that can be used in htmlwidgets
+to mark is as a JavaScript function.
+}
 \description{
 Useful for htmlwidgets
 }
