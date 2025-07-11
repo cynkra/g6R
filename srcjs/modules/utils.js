@@ -12,8 +12,8 @@ import { registerShinyHandlers } from './handlers';
 
 const sendNotification = (message, type = "error", duration = null) => {
   if (HTMLWidgets.shinyMode) {
-    Shiny.setInputValue('g6-notification', {
-      message: message,
+    Shiny.notifications.show({
+      html: message,
       type: type,
       duration: duration
     });
