@@ -3,7 +3,8 @@ import {
   ComboEvent,
   EdgeEvent,
   NodeEvent,
-  GraphEvent
+  GraphEvent,
+  CommonEvent,
 } from '@antv/g6';
 
 import { setClickEvents, setGraphEvents } from './events';
@@ -11,8 +12,8 @@ import { registerShinyHandlers } from './handlers';
 
 const sendNotification = (message, type = "error", duration = null) => {
   if (HTMLWidgets.shinyMode) {
-    Shiny.setInputValue('g6-notification', {
-      message: message,
+    Shiny.notifications.show({
+      html: message,
       type: type,
       duration: duration
     });
@@ -108,6 +109,13 @@ const setupGraph = (graph, el, widget) => {
       Shiny.setInputValue(el.id + '-selected_node', null);
       Shiny.setInputValue(el.id + '-selected_edge', null);
       Shiny.setInputValue(el.id + '-selected_combo', null);
+    });
+
+    // Recover the target of a right click event
+    graph.on(CommonEvent.CONTEXT_MENU, (e) => {
+      const { targetType, target } = e;
+      // If target is canvas, id will be null.
+      Shiny.setInputValue(el.id + '-contextmenu', { type: targetType, id: target.id })
     });
 
     registerShinyHandlers(graph, el);
