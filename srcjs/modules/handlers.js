@@ -126,12 +126,19 @@ const registerShinyHandlers = (graph, el) => {
   Shiny.addCustomMessageHandler(el.id + "_g6-add-plugin", (m) => {
     try {
       // TBD: support JS wrapped options
-      graph.setPlugins((currentPlugins) => {
-        m.map((newPlugin) => {
-          currentPlugins.push(newPlugin)
-        })
-        return currentPlugins
-      });
+      graph.setPlugins(
+        (currentPlugins) => {
+          let plugins;
+          if (currentPlugins.length) {
+            plugins = currentPlugins.concat(m);
+          } else {
+            plugins = m;
+          }
+          return plugins;
+        }
+      );
+      // Re-render the graph to draw the new plugin
+      graph.render();
     } catch (error) {
       sendNotification(`${error}. Graph may not work anymore.`)
     }

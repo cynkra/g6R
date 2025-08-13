@@ -74,7 +74,7 @@
       str(g6_plugins(g6(), plugin))
     Condition
       Error in `valid_choices[[x]]()`:
-      ! 'members' is required and must contain at least one element ID
+      ! argument "members" is missing, with no default
 
 ---
 

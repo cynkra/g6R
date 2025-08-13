@@ -193,9 +193,9 @@ background <- function(
 #' Creates a configuration object for the bubble-sets plugin in G6.
 #' This plugin creates bubble-like contours around groups of specified elements.
 #'
-#' @param members Member elements, including nodes and edges (character vector, required).
+#' @param members Member elements, including nodes and edges (character/numeric vector, required).
 #' @param key Unique identifier for updates (string, default: NULL).
-#' @param avoidMembers Elements to avoid when drawing contours (character vector, default: NULL).
+#' @param avoidMembers Elements to avoid when drawing contours (character/numeric vector, default: NULL).
 #' @param label Whether to display labels (boolean, default: TRUE).
 #' @param labelPlacement Label position (string, default: "bottom").
 #' @param labelBackground Whether to display background (boolean, default: FALSE).
@@ -281,13 +281,27 @@ bubble_sets <- function(
   virtualEdges = NULL,
   ...
 ) {
-  # TBD: validate members to it validate real node ids who exist.
   if (label) {
     labelPlacement <- match.arg(labelPlacement)
   }
   # Check for required parameters
-  if (missing(members) || is.null(members) || length(members) == 0) {
-    stop("'members' is required and must contain at least one element ID")
+  if (!is.character(members) && !is.numeric(members) || length(members) == 0) {
+    stop("'members' must be a non-empty character/numeric vector")
+  }
+
+  members <- as.character(members)
+
+  if (
+    !is.null(avoidMembers) &&
+      (!is.character(avoidMembers) &&
+        !is.numeric(avoidMembers) ||
+        length(avoidMembers) == 0)
+  ) {
+    stop("'avoidMembers' must be a character/numeric vector or NULL")
+  }
+
+  if (!is.null(avoidMembers)) {
+    avoidMembers <- as.character(avoidMembers)
   }
 
   # Get argument names
@@ -1095,7 +1109,7 @@ history <- function(
 #' Creates a configuration object for the hull plugin in G6.
 #' This plugin creates a hull (convex or concave) that surrounds specified graph elements.
 #'
-#' @param members Elements within the hull, including nodes and edges (character vector, required).
+#' @param members Elements within the hull, including nodes and edges (character/numeric vector, required).
 #' @param key Unique identifier for the plugin (string, default: NULL).
 #' @param concavity Concavity parameter, larger values create less concave hulls (number, default: Infinity).
 #' @param corner Corner type: "rounded", "smooth", or "sharp" (string, default: "rounded").
@@ -1153,9 +1167,10 @@ hull <- function(
   ...
 ) {
   # Validate inputs
-  if (!is.character(members) || length(members) == 0) {
-    stop("'members' must be a non-empty character vector")
+  if (!is.character(members) && !is.numeric(members) || length(members) == 0) {
+    stop("'members' must be a non-empty character/numeric vector")
   }
+  members <- as.character(members)
 
   if (!is.numeric(concavity) || concavity <= 0) {
     stop("'concavity' must be a positive number or Infinity")

@@ -24,7 +24,7 @@ hull(
 )
 }
 \arguments{
-\item{members}{Elements within the hull, including nodes and edges (character vector, required).}
+\item{members}{Elements within the hull, including nodes and edges (character/numeric vector, required).}
 
 \item{key}{Unique identifier for the plugin (string, default: NULL).}
 

@@ -51,9 +51,7 @@ server <- function(input, output, session) {
           )
         )
       ) |>
-      g6_layout(
-        layout = d3_force_layout()
-      ) |>
+      g6_layout() |>
       g6_behaviors(
         "zoom-canvas",
         drag_element_force(fixed = TRUE),
@@ -63,7 +61,6 @@ server <- function(input, output, session) {
       ) |>
       g6_plugins(
         "minimap",
-        "tooltip",
         context_menu()
       )
   })
@@ -72,9 +69,9 @@ server <- function(input, output, session) {
     g6_proxy("graph") |>
       g6_add_plugin(
         hull(
+          members = sample(nodes$id, 10),
           fill = "#F08F56",
           stroke = "#F08F56",
-          members = sample(nodes$id, 10),
           labelText = "hull-a",
           labelPlacement = "top",
           labelBackground = TRUE,
