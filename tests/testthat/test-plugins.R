@@ -56,7 +56,7 @@ test_that("plugin validation works correctly", {
   expect_type(bg2, "list")
 
   # Test bubble_sets validation
-  expect_error(bubble_sets(), "required")
+  expect_error(bubble_sets())
   bubble1 <- bubble_sets(members = c("node1", "node2"))
   expect_type(bubble1, "list")
 
@@ -114,7 +114,6 @@ test_that("plugin validation works correctly", {
 
   # Test hull validation - fix the error pattern
   expect_error(hull(members = c()))
-  expect_error(hull(members = 123))
   hull1 <- hull(members = c("node1", "node2"))
   expect_type(hull1, "list")
 

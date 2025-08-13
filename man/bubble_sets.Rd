@@ -34,11 +34,11 @@ bubble_sets(
 )
 }
 \arguments{
-\item{members}{Member elements, including nodes and edges (character vector, required).}
+\item{members}{Member elements, including nodes and edges (character/numeric vector, required).}
 
 \item{key}{Unique identifier for updates (string, default: NULL).}
 
-\item{avoidMembers}{Elements to avoid when drawing contours (character vector, default: NULL).}
+\item{avoidMembers}{Elements to avoid when drawing contours (character/numeric vector, default: NULL).}
 
 \item{label}{Whether to display labels (boolean, default: TRUE).}
 

@@ -1,6 +1,6 @@
 Package: g6R
 Title: Graph Visualisation Engine Widget for R and 'shiny' Apps
-Version: 0.1.1
+Version: 0.2.0
 Authors@R: 
     c(
     person("David", "Granjon", , "dgranjon@ymail.com", role = c("aut", "cre")),
