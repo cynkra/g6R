@@ -35,7 +35,7 @@ server <- function(input, output, session) {
   output$graph <- renderG6({
     g6(nodes, edges) |>
       g6_options(
-        animation = FALSE,
+        autoFit = "view",
         node = list(
           style = list(
             labelBackground = TRUE,
@@ -54,7 +54,7 @@ server <- function(input, output, session) {
       g6_layout() |>
       g6_behaviors(
         "zoom-canvas",
-        drag_element_force(fixed = TRUE),
+        drag_element_force(),
         click_select(multiple = TRUE),
         brush_select(),
         create_edge()

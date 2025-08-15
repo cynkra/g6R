@@ -223,14 +223,19 @@ g6(nodes, combos = data.frame(id = 1)) |>
 
 ## Drag element force
 
-Combines element dragging with force simulation for dynamic positioning.
+Combines element dragging with force simulation for dynamic positioning. This requires animation to be enabled in `g6_options()`.
 
 ```{r}
 nodes <- data.frame(id = letters[1:5])
 
-g6(nodes) |>
+g6(
+  nodes,
+  edges = data.frame(
+    source = c("a", "b", "c", "d"),
+    target = c("b", "c", "d", "e")
+  )
+) |>
   g6_options(
-    animation = FALSE,
     nodes = nodes_options
   ) |>
   g6_layout(d3_force_layout()) |>
