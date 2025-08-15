@@ -506,19 +506,25 @@ enclosing combo.</p>
 <h2 id="drag-element-force">Drag element force<a class="anchor" aria-label="anchor" href="#drag-element-force"></a>
 </h2>
 <p>Combines element dragging with force simulation for dynamic
-positioning.</p>
+positioning. This requires animation to be enabled in
+<code><a href="../reference/g6_options.html">g6_options()</a></code>.</p>
 <div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">nodes</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>id <span class="op">=</span> <span class="va">letters</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">5</span><span class="op">]</span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu"><a href="../reference/g6.html">g6</a></span><span class="op">(</span><span class="va">nodes</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span><span class="fu"><a href="../reference/g6.html">g6</a></span><span class="op">(</span></span>
+<span>  <span class="va">nodes</span>,</span>
+<span>  edges <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span>
+<span>    source <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"a"</span>, <span class="st">"b"</span>, <span class="st">"c"</span>, <span class="st">"d"</span><span class="op">)</span>,</span>
+<span>    target <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"b"</span>, <span class="st">"c"</span>, <span class="st">"d"</span>, <span class="st">"e"</span><span class="op">)</span></span>
+<span>  <span class="op">)</span></span>
+<span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="../reference/g6_options.html">g6_options</a></span><span class="op">(</span></span>
-<span>    animation <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>    nodes <span class="op">=</span> <span class="va">nodes_options</span></span>
 <span>  <span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="../reference/g6_layout.html">g6_layout</a></span><span class="op">(</span><span class="fu"><a href="../reference/d3_force_layout.html">d3_force_layout</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="../reference/g6_behaviors.html">g6_behaviors</a></span><span class="op">(</span><span class="fu"><a href="../reference/drag_element_force.html">drag_element_force</a></span><span class="op">(</span>fixed <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <div id="htmlwidget-0caf26d4e3c00206b0c5" style="width:100%;height:432.632880098888px;" class="g6 html-widget"></div>
-<script type="application/json" data-for="htmlwidget-0caf26d4e3c00206b0c5">{"x":{"data":{"nodes":[{"id":"a"},{"id":"b"},{"id":"c"},{"id":"d"},{"id":"e"}]},"jsonUrl":null,"iconsUrl":"//at.alicdn.com/t/font_2678727_za4qjydwkkh.js","animation":false,"autoResize":false,"cursor":"default","rotation":0,"zoom":1,"zoomRange":[0.01,10],"theme":"light","nodes":{"style":{"labelBackground":true,"labelBackgroundFill":"#FFB6C1","labelBackgroundRadius":4,"labelFontFamily":"Arial","labelPadding":[0,4],"labelText":"(d) => {\n        return d.id\n      }"}},"layout":{"type":"d3-force","link":{"distance":100,"strength":2},"collide":{"radius":40}},"behaviors":[{"key":"drag-element-force","fixed":true,"enable":"(event) => {\n        return ['node', 'combo'].includes(event.targetType);\n      }","state":"selected","hideEdge":"none","type":"drag-element-force"}]},"evals":["nodes.style.labelText","behaviors.0.enable"],"jsHooks":[]}</script>
+<script type="application/json" data-for="htmlwidget-0caf26d4e3c00206b0c5">{"x":{"data":{"nodes":[{"id":"a"},{"id":"b"},{"id":"c"},{"id":"d"},{"id":"e"}],"edges":[{"source":"a","target":"b"},{"source":"b","target":"c"},{"source":"c","target":"d"},{"source":"d","target":"e"}]},"jsonUrl":null,"iconsUrl":"//at.alicdn.com/t/font_2678727_za4qjydwkkh.js","animation":true,"autoResize":false,"cursor":"default","rotation":0,"zoom":1,"zoomRange":[0.01,10],"theme":"light","nodes":{"style":{"labelBackground":true,"labelBackgroundFill":"#FFB6C1","labelBackgroundRadius":4,"labelFontFamily":"Arial","labelPadding":[0,4],"labelText":"(d) => {\n        return d.id\n      }"}},"layout":{"type":"d3-force","link":{"distance":100,"strength":2},"collide":{"radius":40}},"behaviors":[{"key":"drag-element-force","fixed":true,"enable":"(event) => {\n        return ['node', 'combo'].includes(event.targetType);\n      }","state":"selected","hideEdge":"none","type":"drag-element-force"}]},"evals":["nodes.style.labelText","behaviors.0.enable"],"jsHooks":[]}</script>
 </div>
 <div class="section level2">
 <h2 id="dynamically-interact-with-behaviors">Dynamically interact with behaviors<a class="anchor" aria-label="anchor" href="#dynamically-interact-with-behaviors"></a>
