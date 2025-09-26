@@ -55,6 +55,7 @@ const setGraphEvents = (events, graph, el) => {
       // Set an input to set that the graph is rendered
       if (event === GraphEvent.AFTER_RENDER) {
         Shiny.setInputValue(el.id + '-initialized', true);
+        Shiny.setInputValue(el.id + '-state', graph.getData());
       }
       // Update the state any time there is a change.
       // Useful to serialise and restore. Only do it when initialized.
