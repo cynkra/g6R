@@ -80,6 +80,22 @@ const getBehavior = (behaviors, value) => {
   });
 }
 
+// Extract reset function for better code organization
+const resetOtherElementTypes = (elementId, targetType) => {
+  const resetMap = {
+    'edge': ['node', 'combo'],
+    'node': ['edge', 'combo'],
+    'combo': ['node', 'edge']
+  };
+
+  const typesToReset = resetMap[targetType];
+  if (typesToReset) {
+    typesToReset.forEach(type => {
+      Shiny.setInputValue(`${elementId}-selected_${type}`, null);
+    });
+  }
+}
+
 const setupGraph = (graph, el, widget) => {
   if (HTMLWidgets.shinyMode) {
 
@@ -140,4 +156,4 @@ const setupIcons = (url) => {
   })
 }
 
-export { getBehavior, setupGraph, setupIcons, checkIds, sendNotification };
+export { getBehavior, setupGraph, setupIcons, checkIds, sendNotification, resetOtherElementTypes };

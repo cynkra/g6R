@@ -1,5 +1,6 @@
 # g6R 0.2.0
 
+- Fix: when selecting an edge/node/combo, if another type of element was selected, the corresponding input is reset. This avoids to accidentally delete a previously selected element when another type of element is selected.
 - Fix: state never get set on first render.
 - Fix [#23](<https://github.com/cynkra/g6R/issues/23>): graph has to be re-rendered after dynamic plugin addition so that new elements like `hull` are drawn.
 - Fix [#22](<https://github.com/cynkra/g6R/issues/22>): internal typo in JS function when an error was caught in the graph.

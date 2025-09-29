@@ -1,4 +1,4 @@
-import { getBehavior } from "./utils";
+import { getBehavior, resetOtherElementTypes } from "./utils";
 import {
   GraphEvent
 } from '@antv/g6';
@@ -14,6 +14,8 @@ const setClickEvents = (events, graph, el) => {
       const clickSelect = getBehavior(graph.getBehaviors(), "click-select");
       if (!clickSelect.length) return;
       const isMultiple = clickSelect[0].multiple;
+
+      resetOtherElementTypes(el.id, e.targetType);
 
       // If multiclick is allowed ...
       if (isMultiple && e.shiftKey) {
