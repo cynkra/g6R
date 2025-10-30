@@ -6,36 +6,36 @@ const setClickEvents = (events, graph, el) => {
 
   for (let event of events) {
     graph.on(event, (e) => {
-      const inputName = `${el.id}-selected_${e.targetType}`;
-      // TBD set shiny input with el.id namespace
       const { target } = e; // Get the ID of the clicked node
+      const prefix = target.type + '-';
+      const inputName = `${el.id}-selected_${target.type}`;
       const clickSelect = getBehavior(graph.getBehaviors(), "click-select");
       if (!clickSelect.length) return;
       const isMultiple = clickSelect[0].multiple;
 
-      resetOtherElementTypes(el.id, e.targetType);
+      resetOtherElementTypes(el.id, target.type);
 
       // If multiclick is allowed ...
       if (isMultiple && e.shiftKey) {
         // If initial state, we set an array with the current value
         if (Shiny.shinyapp.$inputValues[inputName] === undefined) {
-          Shiny.setInputValue(inputName, [target.id]);
+          Shiny.setInputValue(inputName, [target.id.replace(prefix, "")]);
         } else {
           // add new element if never clicked
           if (graph.getElementState(target.id).length === 0) {
-            Shiny.setInputValue(inputName, [Shiny.shinyapp.$inputValues[inputName], target.id])
+            Shiny.setInputValue(inputName, [Shiny.shinyapp.$inputValues[inputName], target.id.replace(prefix, "")])
           } else {
             // remove otherwise
             const newInput = Shiny.shinyapp.$inputValues[inputName].filter(function (el) {
-              return el !== target.id;
+              return el !== target.id.replace(prefix, "");
             });
-            Shiny.setInputValue(inputName, newInput)
+            Shiny.setInputValue(inputName, newInput);
           }
         }
       } else {
         // No multiclick, this is simple
         if (graph.getElementState(target.id).length === 0) {
-          Shiny.setInputValue(inputName, target.id)
+          Shiny.setInputValue(inputName, target.id.replace(prefix, ""));
         } else {
           Shiny.setInputValue(inputName, null);
         }

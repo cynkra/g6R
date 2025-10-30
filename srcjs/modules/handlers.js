@@ -34,7 +34,10 @@ const registerShinyHandlers = (graph, el) => {
             res = [res];
           }
           res.map((r) => {
-            Shiny.setInputValue(`${el.id}-${r.id}-state`, r);
+            const prefix = m.type.toLowerCase();
+            const regex = new RegExp(`^${prefix}-`, "i");
+            const id = r.id.replace(regex, "");
+            Shiny.setInputValue(`${el.id}-${id}-state`, r);
           });
           return;
         }
