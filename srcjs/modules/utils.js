@@ -23,25 +23,24 @@ const sendNotification = (message, type = "error", duration = null) => {
 }
 
 const checkIds = (data) => {
-  let nodeIds = [];
+  const nodeIds = [];
   if (data.nodes) {
-    nodeIds = data.nodes.map((node) => {
-      // Convert ID to string if not already
+    data.nodes.forEach((node) => {
       if (typeof node.id !== 'string') {
         node.id = node.id.toString();
       }
       if (node.combo !== undefined && typeof node.combo !== 'string') {
         node.combo = node.combo.toString();
       }
-      return node.id
+      node.id = `node-${node.id}`;
+      node.combo = node.combo ? `combo-${node.combo}` : undefined;
+      nodeIds.push(node.id);
     });
   }
-  let edgesIds = [];
+  const edgesIds = [];
   if (data.edges) {
-    edgesIds = data.edges.map((edge) => {
-      // Assign id to edge if not defined
+    data.edges.forEach((edge) => {
       if (edge.id === undefined) {
-        // If no ID is defined, we create one
         edge.id = `${edge.source}-${edge.target}`;
       }
       if (typeof edge.source !== 'string') {
@@ -50,27 +49,29 @@ const checkIds = (data) => {
       if (typeof edge.target !== 'string') {
         edge.target = edge.target.toString();
       }
-      return edge.id
+      edge.source = `node-${edge.source}`;
+      edge.target = `node-${edge.target}`;
+      edge.id = `edge-${edge.id}`;
+      edgesIds.push(edge.id);
     });
   }
-  let combosIds = [];
+  const combosIds = [];
   if (data.combos) {
-    combosIds = data.combos.map((combo) => {
-      // Convert ID to string if not already
+    data.combos.forEach((combo) => {
       if (typeof combo.id !== 'string') {
         combo.id = combo.id.toString();
       }
-      return combo.id
+      combo.id = `combo-${combo.id}`;
+      combosIds.push(combo.id);
     });
   }
-  const allIds = nodeIds.concat(edgesIds).concat(combosIds);
+  const allIds = nodeIds.concat(edgesIds, combosIds);
   const uniqueIds = new Set(allIds);
   if (allIds.length !== uniqueIds.size) {
-    sendNotification('Cannot initialize graph. Duplicated IDs found.')
+    sendNotification('Cannot initialize graph. Duplicated IDs found.');
     throw new Error("Invalid graph data: execution aborted");
-  } else {
-    return (data)
   }
+  return data;
 }
 
 const getBehavior = (behaviors, value) => {

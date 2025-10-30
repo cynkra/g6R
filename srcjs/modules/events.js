@@ -1,7 +1,5 @@
 import { getBehavior, resetOtherElementTypes } from "./utils";
-import {
-  GraphEvent
-} from '@antv/g6';
+import { GraphEvent, CanvasEvent } from '@antv/g6';
 
 const setClickEvents = (events, graph, el) => {
   // Loop over events
@@ -63,6 +61,11 @@ const setGraphEvents = (events, graph, el) => {
       // Useful to serialise and restore. Only do it when initialized.
       if (Shiny.shinyapp.$inputValues[el.id + '-initialized']) {
         Shiny.setInputValue(el.id + '-state', graph.getData())
+      }
+
+      // Canvas drop
+      if (event === CanvasEvent.DROP) {
+        Shiny.setInputValue(el.id + '-canvas_drop', e.targetType);
       }
     })
   }
