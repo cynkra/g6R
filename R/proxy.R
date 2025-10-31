@@ -486,7 +486,7 @@ g6_element_action <- function(graph, ids, animation = NULL, action) {
 #' animate the view to focus on them.
 #'
 #' @param graph A g6_proxy object created with \code{\link{g6_proxy}}.
-#' @param ids Character vector containing the IDs of the elements (nodes/edges) to focus on.
+#' @param ids Character vector containing the IDs of the elements (nodes/edges/combos) to focus on.
 #' @param animation Optional list containing animation configuration parameters for the focus action.
 #'   Common parameters include:
 #'   \itemize{
@@ -504,9 +504,34 @@ g6_element_action <- function(graph, ids, animation = NULL, action) {
 #' See \url{https://g6.antv.antgroup.com/en/api/element#graphfocuselementid-animation} for more details.
 #'
 #' @seealso \code{\link{g6_proxy}}
-#' @export
+#' @rdname g6-focus
+#' @keywords internal
 g6_focus_elements <- function(graph, ids, animation = NULL) {
   g6_element_action(graph, ids, animation, action = "focus")
+}
+
+#' Focus nodes in a g6 graph via proxy
+#' @export
+#' @rdname g6-focus
+g6_focus_nodes <- function(graph, ids, animation = NULL) {
+  ids <- paste0("node-", ids)
+  g6_focus_elements(graph, ids, animation)
+}
+
+#' Focus edges in a g6 graph via proxy
+#' @export
+#' @rdname g6-focus
+g6_focus_edges <- function(graph, ids, animation = NULL) {
+  ids <- paste0("edge-", edges)
+  g6_focus_elements(graph, ids, animation)
+}
+
+#' Focus combos in a g6 graph via proxy
+#' @export
+#' @rdname g6-focus
+g6_focus_combos <- function(graph, ids, animation = NULL) {
+  ids <- paste0("combo-", combos)
+  g6_focus_elements(graph, ids, animation)
 }
 
 #' Hide/show elements in a g6 graph
@@ -538,10 +563,58 @@ g6_hide_elements <- function(graph, ids, animation = NULL) {
   g6_element_action(graph, ids, animation, action = "hide")
 }
 
+#' Hide nodes in a g6 graph via proxy
+#' @export
+#' @rdname g6-element-toggle
+g6_hide_nodes <- function(graph, ids, animation = NULL) {
+  ids <- paste0("node-", ids)
+  g6_hide_elements(graph, ids, animation)
+}
+
+#' Hide edges in a g6 graph via proxy
+#' @export
+#' @rdname g6-element-toggle
+g6_hide_edges <- function(graph, ids, animation = NULL) {
+  ids <- paste0("edge-", edges)
+  g6_hide_elements(graph, ids, animation)
+}
+
+#' Hide combos in a g6 graph via proxy
+#' @export
+#' @rdname g6-element-toggle
+g6_hide_combos <- function(graph, ids, animation = NULL) {
+  ids <- paste0("combo-", combos)
+  g6_hide_elements(graph, ids, animation)
+}
+
 #' @rdname g6-element-toggle
 #' @export
 g6_show_elements <- function(graph, ids, animation = NULL) {
   g6_element_action(graph, ids, animation, action = "show")
+}
+
+#' Show nodes in a g6 graph via proxy
+#' @export
+#' @rdname g6-element-toggle
+g6_show_nodes <- function(graph, ids, animation = NULL) {
+  ids <- paste0("node-", ids)
+  g6_show_elements(graph, ids, animation)
+}
+
+#' Show edges in a g6 graph via proxy
+#' @export
+#' @rdname g6-element-toggle
+g6_show_edges <- function(graph, ids, animation = NULL) {
+  ids <- paste0("edge-", edges)
+  g6_show_elements(graph, ids, animation)
+}
+
+#' Show combos in a g6 graph via proxy
+#' @export
+#' @rdname g6-element-toggle
+g6_show_combos <- function(graph, ids, animation = NULL) {
+  ids <- paste0("combo-", combos)
+  g6_show_elements(graph, ids, animation)
 }
 
 #' @keywords internal

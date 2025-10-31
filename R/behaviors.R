@@ -256,7 +256,7 @@ brush_select <- function(
   animation = FALSE,
   enable = JS(
     "(e) => {
-      return true
+      return true;
     }"
   ),
   enableElements = "node",
@@ -321,9 +321,15 @@ brush_select <- function(
       sprintf(
         "(states) => {
           const selected = Object.getOwnPropertyNames(states);
-          const nodes = selected.filter(id => id.startsWith('node-'));
-          const edges = selected.filter(id => id.startsWith('edge-'));
-          const combos = selected.filter(id => id.startsWith('combo-'));
+          const nodes = selected
+            .filter(id => id.startsWith('node-'))
+            .map(id => id.replace(/^node-/, ''));
+          const edges = selected
+            .filter(id => id.startsWith('edge-'))
+            .map(id => id.replace(/^edge-/, ''));
+          const combos = selected
+            .filter(id => id.startsWith('combo-'))
+            .map(id => id.replace(/^combo-/, ''));
 
           Shiny.setInputValue('%s-selected_node', nodes, {priority: 'event'});
           Shiny.setInputValue('%s-selected_edge', edges, {priority: 'event'});
@@ -1283,9 +1289,15 @@ lasso_select <- function(
       sprintf(
         "(states) => {
           const selected = Object.getOwnPropertyNames(states);
-          const nodes = selected.filter(id => id.startsWith('node-'));
-          const edges = selected.filter(id => id.startsWith('edge-'));
-          const combos = selected.filter(id => id.startsWith('combo-'));
+          const nodes = selected
+            .filter(id => id.startsWith('node-'))
+            .map(id => id.replace(/^node-/, ''));
+          const edges = selected
+            .filter(id => id.startsWith('edge-'))
+            .map(id => id.replace(/^edge-/, ''));
+          const combos = selected
+            .filter(id => id.startsWith('combo-'))
+            .map(id => id.replace(/^combo-/, ''));
 
           Shiny.setInputValue('%s-selected_node', nodes, {priority: 'event'});
           Shiny.setInputValue('%s-selected_edge', edges, {priority: 'event'});

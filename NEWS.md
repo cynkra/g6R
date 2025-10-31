@@ -1,6 +1,16 @@
 # g6R 0.2.0
 
-- Fix: when selecting an edge/node/combo, if another type of element was selected, the corresponding input is reset. This avoids to accidentally delete a previously selected element when another type of element is selected.
+## Possible breaking changes
+
+- Internally, elements are now prefixed by their type which avoid mapping issues on the JS side.
+That should not change anything on the R side. A side effect of that, you can now have `list(id = 1)` for a node and `list(id = 1)` for an edge or combo without conflicts, as they are prefixed in JS before uniqueness checking. If you specify nodes like `list(list(id = 1), list(id = 1))` you still get an error as IDs are not unique.
+- `g6_focus_elements()`, `g6_hide_elements()` and `g6_show_elements()` are now internal. You can use the type specific functions instead: `g6_focus_nodes()`, `g6_focus_edges()`, `g6_focus_combos()`, `g6_hide_nodes()`, `g6_hide_edges()`, `g6_hide_combos()`, `g6_show_nodes()`, `g6_show_edges()`, `g6_show_combos()`.
+
+## New features and fixes
+
+- Improvements to `brush_select()`: now it correctly returns the list of selected nodes, edges and combos, available via `input$<graph_ID>-selected_node`, `input$<graph_ID>-selected_edge` and `input$<graph_ID>-selected_combo`, thanks to the internal IDs refactoring. After a brush select operation, you can now shift click (depending on the `click_select()` multiple selection trigger settings you set, it might be another key) to add/remove elements to/from the current selection.
+- `lasso_select()` also gets the same quality of life improvements.
+- Fix: when selecting (simple select not multiselect) an edge/node/combo, if another type of element was selected, the corresponding input is reset. This avoids to accidentally delete a previously selected element when another type of element is selected.
 - Fix: state never get set on first render.
 - Fix [#23](<https://github.com/cynkra/g6R/issues/23>): graph has to be re-rendered after dynamic plugin addition so that new elements like `hull` are drawn.
 - Fix [#22](<https://github.com/cynkra/g6R/issues/22>): internal typo in JS function when an error was caught in the graph.

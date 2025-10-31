@@ -2,12 +2,30 @@
 % Please edit documentation in R/proxy.R
 \name{g6_hide_elements}
 \alias{g6_hide_elements}
+\alias{g6_hide_nodes}
+\alias{g6_hide_edges}
+\alias{g6_hide_combos}
 \alias{g6_show_elements}
+\alias{g6_show_nodes}
+\alias{g6_show_edges}
+\alias{g6_show_combos}
 \title{Hide/show elements in a g6 graph}
 \usage{
 g6_hide_elements(graph, ids, animation = NULL)
 
+g6_hide_nodes(graph, ids, animation = NULL)
+
+g6_hide_edges(graph, ids, animation = NULL)
+
+g6_hide_combos(graph, ids, animation = NULL)
+
 g6_show_elements(graph, ids, animation = NULL)
+
+g6_show_nodes(graph, ids, animation = NULL)
+
+g6_show_edges(graph, ids, animation = NULL)
+
+g6_show_combos(graph, ids, animation = NULL)
 }
 \arguments{
 \item{graph}{A g6 graph object or a g6_proxy object for Shiny applications.}

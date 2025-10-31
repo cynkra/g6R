@@ -102,9 +102,15 @@ reference:
   - subtitle: Elements actions
     desc: elements actions
     contents:
-      - g6_focus_elements
-      - g6_hide_elements
-      - g6_show_elements
+      - g6_focus_nodes
+      - g6_focus_edges
+      - g6_focus_combos
+      - g6_hide_nodes
+      - g6_hide_edges
+      - g6_hide_combos
+      - g6_show_nodes
+      - g6_show_edges
+      - g6_show_combos
       - g6_collapse_combo
       - g6_expand_combo
   - subtitle: Others

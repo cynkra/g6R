@@ -2,14 +2,23 @@
 % Please edit documentation in R/proxy.R
 \name{g6_focus_elements}
 \alias{g6_focus_elements}
+\alias{g6_focus_nodes}
+\alias{g6_focus_edges}
+\alias{g6_focus_combos}
 \title{Focus on specific elements in a g6 graph via proxy}
 \usage{
 g6_focus_elements(graph, ids, animation = NULL)
+
+g6_focus_nodes(graph, ids, animation = NULL)
+
+g6_focus_edges(graph, ids, animation = NULL)
+
+g6_focus_combos(graph, ids, animation = NULL)
 }
 \arguments{
 \item{graph}{A g6_proxy object created with \code{\link{g6_proxy}}.}
 
-\item{ids}{Character vector containing the IDs of the elements (nodes/edges) to focus on.}
+\item{ids}{Character vector containing the IDs of the elements (nodes/edges/combos) to focus on.}
 
 \item{animation}{Optional list containing animation configuration parameters for the focus action.
 Common parameters include:
@@ -36,3 +45,4 @@ See \url{https://g6.antv.antgroup.com/en/api/element#graphfocuselementid-animati
 \seealso{
 \code{\link{g6_proxy}}
 }
+\keyword{internal}

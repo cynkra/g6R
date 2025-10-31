@@ -68,7 +68,7 @@ const checkIds = (data) => {
   const allIds = nodeIds.concat(edgesIds, combosIds);
   const uniqueIds = new Set(allIds);
   if (allIds.length !== uniqueIds.size) {
-    sendNotification('Cannot initialize graph. Duplicated IDs found.');
+    sendNotification('Cannot initialize/update graph. Duplicated IDs found.');
     throw new Error("Invalid graph data: execution aborted");
   }
   return data;

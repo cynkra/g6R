@@ -1,4 +1,4 @@
-import { sendNotification } from './utils';
+import { sendNotification, checkIds } from './utils';
 
 const registerShinyHandlers = (graph, el) => {
   // Update/remove/add nodes or combo or edges
@@ -9,7 +9,7 @@ const registerShinyHandlers = (graph, el) => {
 
       // Replace/update/add graph data
       if (m.type === "Data") {
-        graph[`${m.action}Data`](m.data);
+        graph[`${m.action}Data`](checkIds(m.data));
         graph.render();
         return;
       }
