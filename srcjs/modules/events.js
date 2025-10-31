@@ -2,27 +2,30 @@ import { getBehavior, resetOtherElementTypes } from "./utils";
 import { GraphEvent, CanvasEvent } from '@antv/g6';
 
 // Since users are not supposed to prefix elements IDs by their
-// type, we have to save the state without prefixes too.
+// type, we have to save the state without prefixes too. This
+// does not modify original data!
 const unprefixIds = (data) => {
-  if (data.nodes) {
-    data.nodes.forEach((node) => {
+  // Deep copy to avoid mutating the original
+  const dat = JSON.parse(JSON.stringify(data));
+  if (dat.nodes) {
+    dat.nodes.forEach((node) => {
       node.id = node.id.replace(/^node-/, "");
       if (node.combo) node.combo = node.combo.replace(/^combo-/, "");
     });
   }
-  if (data.edges) {
-    data.edges.forEach((edge) => {
+  if (dat.edges) {
+    dat.edges.forEach((edge) => {
       edge.id = edge.id.replace(/^edge-/, "");
       edge.source = edge.source.replace(/^node-/, "");
       edge.target = edge.target.replace(/^node-/, "");
     });
   }
-  if (data.combos) {
-    data.combos.forEach((combo) => {
+  if (dat.combos) {
+    dat.combos.forEach((combo) => {
       combo.id = combo.id.replace(/^combo-/, "");
     });
   }
-  return data;
+  return dat;
 }
 
 const setClickEvents = (events, graph, el) => {

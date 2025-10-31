@@ -15,6 +15,7 @@ lasso_select(
   state = "selected",
   style = NULL,
   trigger = c("shift"),
+  outputId = NULL,
   ...
 )
 }
@@ -38,6 +39,12 @@ lasso_select(
 \item{style}{Style of the lasso during selection (list, default: NULL).}
 
 \item{trigger}{Press this shortcut key along with mouse click to select (character vector, default: c("shift")).}
+
+\item{outputId}{Manually pass the Shiny output ID. This is useful when the graph
+is initialised outside the shiny render function and the ID cannot be automatically
+inferred. This allows to set input values from the callback function
+with the right namespace and graph ID. You must typically pass \code{session$ns("graphid")}
+to ensure this also works in modules.}
 
 \item{...}{Extra parameters. See \url{https://g6.antv.antgroup.com/en/manual/behavior/lasso-select}.}
 }

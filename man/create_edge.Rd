@@ -12,6 +12,7 @@ create_edge(
   onFinish = NULL,
   style = NULL,
   notify = FALSE,
+  outputId = NULL,
   ...
 )
 }
@@ -33,6 +34,12 @@ creation is succesful so that it does not conflict with other drag behaviors.}
 \item{style}{Style of the newly created edge (list, default: NULL).}
 
 \item{notify}{Whether to show a feedback message in the ui.}
+
+\item{outputId}{Manually pass the Shiny output ID. This is useful when the graph
+is initialised outside the shiny render function and the ID cannot be automatically
+inferred. This allows to set input values from the callback function
+with the right namespace and graph ID. You must typically pass \code{session$ns("graphid")}
+to ensure this also works in modules.}
 
 \item{...}{Extra parameters. See \url{https://g6.antv.antgroup.com/en/manual/behavior/create-edge}.}
 }

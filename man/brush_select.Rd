@@ -7,7 +7,7 @@
 brush_select(
   key = "brush-select",
   animation = FALSE,
-  enable = JS("(e) => {\\n      return true\\n    }"),
+  enable = JS("(e) => {\\n      return true;\\n    }"),
   enableElements = "node",
   immediately = FALSE,
   mode = c("default", "union", "intersect", "diff"),
@@ -15,6 +15,7 @@ brush_select(
   state = c("selected", "active", "inactive", "disabled", "highlight"),
   style = NULL,
   trigger = "shift",
+  outputId = NULL,
   ...
 )
 }
@@ -40,6 +41,12 @@ Can be \code{c("node", "edge", "combo")}.}
 See \url{https://g6.antv.antgroup.com/en/manual/behavior/brush-select#style}.}
 
 \item{trigger}{Shortcut keys for selection (character vector).}
+
+\item{outputId}{Manually pass the Shiny output ID. This is useful when the graph
+is initialised outside the shiny render function and the ID cannot be automatically
+inferred. This allows to set input values from the callback function
+with the right namespace and graph ID. You must typically pass \code{session$ns("graphid")}
+to ensure this also works in modules.}
 
 \item{...}{Extra parameters. See \url{https://g6.antv.antgroup.com/en/manual/behavior/brush-select}.}
 }

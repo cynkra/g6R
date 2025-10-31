@@ -8,6 +8,7 @@ That should not change anything on the R side. A side effect of that, you can no
 
 ## New features and fixes
 
+- `brush_select()`, `lasso_select()` and `create_edge()` gain an `outputId` parameter which allows to manually pass the Shiny output ID of the graph instance. This is useful when the graph is initialised outside the shiny render function and the ID cannot be automatically inferred with `shiny::getCurrentOutputInfo()`. This allows to set input values from the callback function with the right namespace and graph ID. You must typically pass `session$ns("graphid")` to ensure this also works in modules.
 - Improvements to `brush_select()`: now it correctly returns the list of selected nodes, edges and combos, available via `input$<graph_ID>-selected_node`, `input$<graph_ID>-selected_edge` and `input$<graph_ID>-selected_combo`, thanks to the internal IDs refactoring. After a brush select operation, you can now shift click (depending on the `click_select()` multiple selection trigger settings you set, it might be another key) to add/remove elements to/from the current selection.
 - `lasso_select()` also gets the same quality of life improvements.
 - Fix: when selecting (simple select not multiselect) an edge/node/combo, if another type of element was selected, the corresponding input is reset. This avoids to accidentally delete a previously selected element when another type of element is selected.
