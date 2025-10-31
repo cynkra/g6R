@@ -259,17 +259,17 @@ server <- function(input, output, session) {
 
   observeEvent(input$focus, {
     g6_proxy("graph") |>
-      g6_focus_elements("node1", animation = list(duration = 2000))
+      g6_focus_nodes("node1", animation = list(duration = 2000))
   })
 
   observeEvent(input$show, {
     g6_proxy("graph") |>
-      g6_show_elements("node1")
+      g6_show_nodes("node1")
   })
 
   observeEvent(input$hide, {
     g6_proxy("graph") |>
-      g6_hide_elements("node1")
+      g6_hide_nodes("node1")
   })
 
   observeEvent(input$expand, {

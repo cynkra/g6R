@@ -49,6 +49,13 @@ g6_data <- function(graph, el, action, type) {
         }
         setNames(as.list(el[i, ]), colnames(el))
       })
+    } else {
+      if (action %in% c("add", "update")) {
+        el <- lapply(el, function(e) {
+          e$id <- paste0(prefix_id(type), "-", e$id)
+          e
+        })
+      }
     }
   } else {
     if (!is.null(el)) {
@@ -93,10 +100,6 @@ g6_remove <- function(graph, el, type) {
 
 #' @keywords internal
 g6_update <- function(graph, el, type) {
-  el <- lapply(el, function(e) {
-    e$id <- paste0(prefix_id(type), "-", e$id)
-    e
-  })
   g6_data(graph, el, action = "update", type = type)
 }
 
