@@ -312,7 +312,6 @@ brush_select <- function(
 
   # Provide default for onSelect for Shiny context
   if (is.null(config$onSelect) && !is.null(output_id)) {
-    session <- shiny::getDefaultReactiveDomain()
     # unfortunately, we can't create selected_node, selected_edge
     # since state contains all ids without categories. This could
     # be possible if IDs were prefixed with their type, e.g., node-1, edge-2, etc.
@@ -337,9 +336,9 @@ brush_select <- function(
 
           return states;
         }",
-        session$ns(output_id),
-        session$ns(output_id),
-        session$ns(output_id)
+        output_id,
+        output_id,
+        output_id
       )
     )
   }
@@ -579,7 +578,6 @@ create_edge <- function(
 
   # Provide default in Shiny context only
   if (is.null(config$onFinish) && !is.null(output_id)) {
-    session <- shiny::getDefaultReactiveDomain()
     config$onFinish <- JS(
       sprintf(
         "(edge) => {
@@ -617,7 +615,7 @@ create_edge <- function(
           }
         }",
         as.numeric(notify),
-        session$ns(output_id)
+        output_id
       )
     )
   }
@@ -1284,7 +1282,6 @@ lasso_select <- function(
   output_id <- shiny::getCurrentOutputInfo()[["name"]]
 
   if (is.null(config$onSelect) && !is.null(output_id)) {
-    session <- shiny::getDefaultReactiveDomain()
     config$onSelect <- JS(
       sprintf(
         "(states) => {
@@ -1305,9 +1302,9 @@ lasso_select <- function(
 
           return states;
         }",
-        session$ns(output_id),
-        session$ns(output_id),
-        session$ns(output_id)
+        output_id,
+        output_id,
+        output_id
       )
     )
   }
