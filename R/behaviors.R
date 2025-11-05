@@ -323,24 +323,24 @@ brush_select <- function(
     config$onSelect <- JS(
       sprintf(
         "(states) => {
-          //const outputId = this.
           const selected = Object.getOwnPropertyNames(states);
-          const nodes = selected
-            .filter(id => id.startsWith('node-'))
-            .map(id => id.replace(/^node-/, ''));
-          const edges = selected
-            .filter(id => id.startsWith('edge-'))
-            .map(id => id.replace(/^edge-/, ''));
-          const combos = selected
-            .filter(id => id.startsWith('combo-'))
-            .map(id => id.replace(/^combo-/, ''));
-
+          const nodes = [];
+          const edges = [];
+          const combos = [];
+          const widget = HTMLWidgets.find('#%s').getWidget();
+          if (selected.length === 0) return states;
+          selected.forEach(id => {
+            const type = widget.getElementType(id);
+            if (type === 'node') nodes.push(id);
+            else if (type === 'edge') edges.push(id);
+            else if (type === 'combo') combos.push(id);
+          });
           Shiny.setInputValue('%s-selected_node', nodes, {priority: 'event'});
           Shiny.setInputValue('%s-selected_edge', edges, {priority: 'event'});
           Shiny.setInputValue('%s-selected_combo', combos, {priority: 'event'});
-
           return states;
         }",
+        config$outputId,
         config$outputId,
         config$outputId,
         config$outputId
@@ -1307,22 +1307,23 @@ lasso_select <- function(
       sprintf(
         "(states) => {
           const selected = Object.getOwnPropertyNames(states);
-          const nodes = selected
-            .filter(id => id.startsWith('node-'))
-            .map(id => id.replace(/^node-/, ''));
-          const edges = selected
-            .filter(id => id.startsWith('edge-'))
-            .map(id => id.replace(/^edge-/, ''));
-          const combos = selected
-            .filter(id => id.startsWith('combo-'))
-            .map(id => id.replace(/^combo-/, ''));
-
+          const nodes = [];
+          const edges = [];
+          const combos = [];
+          const widget = HTMLWidgets.find('#%s').getWidget();
+          if (selected.length === 0) return states;
+          selected.forEach(id => {
+            const type = widget.getElementType(id);
+            if (type === 'node') nodes.push(id);
+            else if (type === 'edge') edges.push(id);
+            else if (type === 'combo') combos.push(id);
+          });
           Shiny.setInputValue('%s-selected_node', nodes, {priority: 'event'});
           Shiny.setInputValue('%s-selected_edge', edges, {priority: 'event'});
           Shiny.setInputValue('%s-selected_combo', combos, {priority: 'event'});
-
           return states;
         }",
+        config$outputId,
         config$outputId,
         config$outputId,
         config$outputId

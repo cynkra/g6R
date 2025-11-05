@@ -146,7 +146,8 @@ g6 <- function(
   x <- list(
     data = dat,
     jsonUrl = jsonUrl,
-    iconsUrl = iconsUrl
+    iconsUrl = iconsUrl,
+    mode = get_g6_mode()
   )
 
   # In case we need it ...
@@ -164,6 +165,23 @@ g6 <- function(
     elementId = elementId,
     preRenderHook = NULL
   )
+}
+
+#' @keywords internal
+validate_g6_mode <- function(mode) {
+  if (!(mode %in% c("dev", "prod"))) {
+    stop(sprintf(
+      "`g6R.mode` option must be one of 'dev' or 'prod'. Current value: '%s'",
+      mode
+    ))
+  }
+  invisible(mode)
+}
+
+#' @keywords internal
+get_g6_mode <- function() {
+  mode <- getOption("g6R.mode", "prod")
+  validate_g6_mode(mode)
 }
 
 #' Shiny bindings for g6

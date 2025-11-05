@@ -35,27 +35,8 @@ g6_data <- function(graph, el, action, type) {
   if (action != "remove") {
     if (inherits(el, "data.frame")) {
       el <- lapply(seq_len(nrow(el)), \(i) {
-        if ("id" %in% colnames(el)) {
-          el[i, "id"] <- paste0(prefix_id(type), "-", el[i, "id"])
-        }
-        if ("combo" %in% colnames(el)) {
-          el[i, "combo"] <- paste0("combo-", el[i, "combo"])
-        }
-        if ("source" %in% colnames(el)) {
-          el[i, "source"] <- paste0("node-", el[i, "source"])
-        }
-        if ("target" %in% colnames(el)) {
-          el[i, "target"] <- paste0("node-", el[i, "target"])
-        }
         setNames(as.list(el[i, ]), colnames(el))
       })
-    } else {
-      if (action %in% c("add", "update")) {
-        el <- lapply(el, function(e) {
-          e$id <- paste0(prefix_id(type), "-", e$id)
-          e
-        })
-      }
     }
   } else {
     if (!is.null(el)) {
@@ -73,29 +54,13 @@ g6_data <- function(graph, el, action, type) {
 }
 
 #' @keywords internal
-prefix_id <- function(type) {
-  prefix <- switch(
-    type,
-    "Node" = "node",
-    "Edge" = "edge",
-    "Combo" = "combo",
-    stop("Unknown type")
-  )
-}
-
-#' @keywords internal
 g6_add <- function(graph, el, type) {
   g6_data(graph, el, action = "add", type = type)
 }
 
 #' @keywords internal
 g6_remove <- function(graph, el, type) {
-  g6_data(
-    graph,
-    paste(prefix_id(type), el, sep = "-"),
-    action = "remove",
-    type = type
-  )
+  g6_data(graph, el, action = "remove", type = type)
 }
 
 #' @keywords internal
@@ -105,18 +70,12 @@ g6_update <- function(graph, el, type) {
 
 #' @keywords internal
 g6_set <- function(graph, el, type) {
-  names(el) <- paste0(prefix_id(type), "-", names(el))
   g6_data(graph, el, action = "set", type = type)
 }
 
 #' @keywords internal
 g6_get <- function(graph, el, type) {
-  g6_data(
-    graph,
-    paste(prefix_id(type), el, sep = "-"),
-    action = "get",
-    type = type
-  )
+  g6_data(graph, el, action = "get", type = type)
 }
 
 #' Get the state of nodes/edges/combos in a g6 graph via proxy
@@ -517,7 +476,6 @@ g6_focus_elements <- function(graph, ids, animation = NULL) {
 #' @export
 #' @rdname g6-focus
 g6_focus_nodes <- function(graph, ids, animation = NULL) {
-  ids <- paste0("node-", ids)
   g6_focus_elements(graph, ids, animation)
 }
 
@@ -525,7 +483,6 @@ g6_focus_nodes <- function(graph, ids, animation = NULL) {
 #' @export
 #' @rdname g6-focus
 g6_focus_edges <- function(graph, ids, animation = NULL) {
-  ids <- paste0("edge-", edges)
   g6_focus_elements(graph, ids, animation)
 }
 
@@ -533,7 +490,6 @@ g6_focus_edges <- function(graph, ids, animation = NULL) {
 #' @export
 #' @rdname g6-focus
 g6_focus_combos <- function(graph, ids, animation = NULL) {
-  ids <- paste0("combo-", combos)
   g6_focus_elements(graph, ids, animation)
 }
 
@@ -570,7 +526,6 @@ g6_hide_elements <- function(graph, ids, animation = NULL) {
 #' @export
 #' @rdname g6-element-toggle
 g6_hide_nodes <- function(graph, ids, animation = NULL) {
-  ids <- paste0("node-", ids)
   g6_hide_elements(graph, ids, animation)
 }
 
@@ -578,7 +533,6 @@ g6_hide_nodes <- function(graph, ids, animation = NULL) {
 #' @export
 #' @rdname g6-element-toggle
 g6_hide_edges <- function(graph, ids, animation = NULL) {
-  ids <- paste0("edge-", edges)
   g6_hide_elements(graph, ids, animation)
 }
 
@@ -586,7 +540,6 @@ g6_hide_edges <- function(graph, ids, animation = NULL) {
 #' @export
 #' @rdname g6-element-toggle
 g6_hide_combos <- function(graph, ids, animation = NULL) {
-  ids <- paste0("combo-", combos)
   g6_hide_elements(graph, ids, animation)
 }
 
@@ -600,7 +553,6 @@ g6_show_elements <- function(graph, ids, animation = NULL) {
 #' @export
 #' @rdname g6-element-toggle
 g6_show_nodes <- function(graph, ids, animation = NULL) {
-  ids <- paste0("node-", ids)
   g6_show_elements(graph, ids, animation)
 }
 
@@ -608,7 +560,6 @@ g6_show_nodes <- function(graph, ids, animation = NULL) {
 #' @export
 #' @rdname g6-element-toggle
 g6_show_edges <- function(graph, ids, animation = NULL) {
-  ids <- paste0("edge-", edges)
   g6_show_elements(graph, ids, animation)
 }
 
@@ -616,7 +567,6 @@ g6_show_edges <- function(graph, ids, animation = NULL) {
 #' @export
 #' @rdname g6-element-toggle
 g6_show_combos <- function(graph, ids, animation = NULL) {
-  ids <- paste0("combo-", combos)
   g6_show_elements(graph, ids, animation)
 }
 
@@ -630,7 +580,7 @@ g6_combo_action <- function(graph, id, options = NULL, action) {
 
   graph$session$sendCustomMessage(
     sprintf("%s_g6-combo-action", graph$id),
-    list(id = sprintf("combo-%s", id), options = options, action = action)
+    list(id = id, options = options, action = action)
   )
   graph
 }

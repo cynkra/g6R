@@ -1,15 +1,42 @@
-import { sendNotification, checkIds } from './utils';
+import { sendNotification } from './utils';
 
-const registerShinyHandlers = (graph, el) => {
+const tryCatchDev = (expr, mode = "prod") => {
+  try {
+    return expr();
+  } catch (error) {
+    // Try to extract caller info from stack trace
+    let context = "";
+    if (error && error.stack) {
+      // Find the first stack line with 'Graph.' and a method name
+      const stackLines = error.stack.split("\n");
+      const graphLine = stackLines.find(line => /Graph\.\w+/.test(line));
+      if (graphLine) {
+        const match = graphLine.match(/Graph\.\w+/);
+        if (match) context = match[0];
+      }
+    }
+    const msg = context
+      ? `[${context}] ${error.message || error}`
+      : `${error.message || error}`;
+    if (mode === "dev") sendNotification(msg, "error");
+    // propagate error as normal: 
+    // try is just here to show notification in dev mode
+    throw error;
+  }
+}
+
+const registerShinyHandlers = (graph, mode) => {
+  const id = graph.options.container;
+
   // Update/remove/add nodes or combo or edges
-  Shiny.addCustomMessageHandler(el.id + '_g6-data', (m) => {
-    try {
+  Shiny.addCustomMessageHandler(id + '_g6-data', (m) => {
+    tryCatchDev(() => {
       // TBD: check if nodes data are also updated
       // In case of selection, we have to update the related Shiny input
 
       // Replace/update/add graph data
       if (m.type === "Data") {
-        graph[`${m.action}Data`](checkIds(m.data));
+        graph[`${m.action}Data`](m.data);
         graph.render();
         return;
       }
@@ -22,7 +49,7 @@ const registerShinyHandlers = (graph, el) => {
           if (m.el[key] === 'selected') return key;
         });
         if (selected.length > 0) {
-          const inputId = `${el.id}-selected_${m.type.toLowerCase()}`;
+          const inputId = `${id}-selected_${m.type.toLowerCase()}`;
           Shiny.setInputValue(inputId, selected);
         }
       } else {
@@ -34,10 +61,7 @@ const registerShinyHandlers = (graph, el) => {
             res = [res];
           }
           res.map((r) => {
-            const prefix = m.type.toLowerCase();
-            const regex = new RegExp(`^${prefix}-`, "i");
-            const id = r.id.replace(regex, "");
-            Shiny.setInputValue(`${el.id}-${id}-state`, r);
+            Shiny.setInputValue(`${id}-${r.id}-state`, r);
           });
           return;
         }
@@ -46,88 +70,65 @@ const registerShinyHandlers = (graph, el) => {
           graph.layout();
         }
       }
-    } catch (error) {
-      sendNotification(`${error}. Graph may not work anymore.`)
-    }
+    }, mode);
   })
 
   // Canvas resize
-  Shiny.addCustomMessageHandler(el.id + '_g6-canvas-resize', (m) => {
-    try {
-      graph.setSize(m.width, m.height);
-    } catch (error) {
-      sendNotification(`${error}. Graph may not work anymore.`)
-    }
+  Shiny.addCustomMessageHandler(id + '_g6-canvas-resize', (m) => {
+    tryCatchDev(() => graph.setSize(m.width, m.height), mode);
   })
 
   // Fit center
-  Shiny.addCustomMessageHandler(el.id + '_g6-fit-center', (m) => {
-    try {
-      graph.fitCenter(m);
-    } catch (error) {
-      sendNotification(`${error}. Graph may not work anymore.`)
-    }
+  Shiny.addCustomMessageHandler(id + '_g6-fit-center', (m) => {
+    tryCatchDev(() => graph.fitCenter(m), mode);
   })
 
   // Focus/hide/show element
-  Shiny.addCustomMessageHandler(el.id + '_g6-element-action', (m) => {
-    try {
-      graph[`${m.action}Element`](m.ids, m.animation);
-    } catch (error) {
-      sendNotification(`${error}. Graph may not work anymore.`)
-    }
+  Shiny.addCustomMessageHandler(id + '_g6-element-action', (m) => {
+    tryCatchDev(() => graph[`${m.action}Element`](m.ids, m.animation), mode);
   })
 
   // Combo actions
-  Shiny.addCustomMessageHandler(el.id + '_g6-combo-action', (m) => {
-    try {
+  Shiny.addCustomMessageHandler(id + '_g6-combo-action', (m) => {
+    tryCatchDev(() => {
       if (m.options === null) {
         graph[`${m.action}Element`](m.id);
       } else {
         graph[`${m.action}Element`](m.id, m.options);
       }
-    } catch (error) {
-      sendNotification(`${error}. Graph may not work anymore.`)
-    }
+    }, mode)
   })
 
   // Set options
-  Shiny.addCustomMessageHandler(el.id + '_g6-set-options', (m) => {
-    try {
-      // TBD: support JS wrapped options
+  Shiny.addCustomMessageHandler(id + '_g6-set-options', (m) => {
+    tryCatchDev(() => {
       graph.setOptions(m);
       graph.draw();
-    } catch (error) {
-      sendNotification(`${error}. Graph may not work anymore.`)
-    }
+    }, mode);
   })
 
   // This can also be done with setOptions but this is better to be more specific
-  Shiny.addCustomMessageHandler(el.id + '_g6-set-theme', (m) => {
-    try {
+  Shiny.addCustomMessageHandler(id + '_g6-set-theme', (m) => {
+    tryCatchDev(() => {
       graph.setOptions(m.theme);
       graph.draw();
-    } catch (error) {
-      sendNotification(`${error}. Graph may not work anymore.`)
-    }
+    }, mode);
   })
 
   // Update plugin
-  Shiny.addCustomMessageHandler(el.id + '_g6-update-plugin', (m) => {
-    try {
+  Shiny.addCustomMessageHandler(id + '_g6-update-plugin', (m) => {
+    tryCatchDev(() => {
       // Transform each eval member into a function call
       for (var i = 0; m.evals && i < m.evals.length; i++) {
         window.HTMLWidgets.evaluateStringMember(m.opts, m.evals[i]);
       }
       graph.updatePlugin(m.opts);
-    } catch (error) {
-      sendNotification(`${error}. Graph may not work anymore.`)
-    }
+    }, mode);
   })
 
   // Append plugin
-  Shiny.addCustomMessageHandler(el.id + "_g6-add-plugin", (m) => {
-    try {
+  Shiny.addCustomMessageHandler(id + "_g6-add-plugin", (m) => {
+    tryCatchDev(() => {
       // TBD: support JS wrapped options
       graph.setPlugins(
         (currentPlugins) => {
@@ -142,23 +143,19 @@ const registerShinyHandlers = (graph, el) => {
       );
       // Re-render the graph to draw the new plugin
       graph.render();
-    } catch (error) {
-      sendNotification(`${error}. Graph may not work anymore.`)
-    }
+    }, mode);
   });
 
   // Update behavior
-  Shiny.addCustomMessageHandler(el.id + '_g6-update-behavior', (m) => {
-    try {
+  Shiny.addCustomMessageHandler(id + '_g6-update-behavior', (m) => {
+    tryCatchDev(() => {
       // Transform each eval member into a function call
       for (var i = 0; m.evals && i < m.evals.length; i++) {
         window.HTMLWidgets.evaluateStringMember(m.opts, m.evals[i]);
       }
       graph.updateBehavior(m.opts);
-    } catch (error) {
-      sendNotification(`${error}. Graph may not work anymore.`)
-    }
+    }, mode);
   })
 }
 
-export { registerShinyHandlers };
+export { registerShinyHandlers, tryCatchDev };

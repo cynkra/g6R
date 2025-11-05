@@ -1,11 +1,10 @@
 import 'widgets';
 import {
-  Graph,
   ExtensionCategory,
   register
 } from '@antv/g6';
 import { AntLine, FlyMarkerCubic, CircleComboWithExtraButton } from '../modules/extensions';
-import { setupGraph, setupIcons, checkIds } from '../modules/utils';
+import { setupIcons, loadAndInitGraph, getGraph } from '../modules/utils';
 
 // Ant lines
 register(ExtensionCategory.EDGE, 'ant-line', AntLine);
@@ -27,7 +26,7 @@ HTMLWidgets.widget({
 
     return {
 
-      renderValue: function (x, id = el.id) {
+      renderValue: function (x) {
 
         // code to render the widget, e.g.
         let config = x;
@@ -37,25 +36,10 @@ HTMLWidgets.widget({
         // This is to be able to use custom icons.
         setupIcons(config.iconsUrl);
 
-        // Bypass R data processing an fetch JSON data from JS
-        if (config.jsonUrl !== null) {
-          fetch(x.jsonUrl)
-            .then((res) => res.json())
-            .then((data) => {
-              // TBD: check ID duplicates and character?
-              config.data = data;
-              graph = new Graph(config);
-              setupGraph(graph, el, this);
-            })
-        } else {
-          // Find if there are any duplicated IDs and stop if so.
-          config.data = checkIds(config.data);
-          graph = new Graph(config);
-          setupGraph(graph, el, this);
-        }
+        loadAndInitGraph(config, this);
       },
       getWidget: function () {
-        return graph
+        return getGraph()
       },
       resize: function (width, height) {
         // code to re-render the widget with a new size

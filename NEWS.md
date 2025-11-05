@@ -1,13 +1,10 @@
 # g6R 0.2.0
 
-## Possible breaking changes
-
-- Internally, elements are now prefixed by their type which avoid mapping issues on the JS side.
-That should not change anything on the R side. A side effect of that, you can now have `list(id = 1)` for a node and `list(id = 1)` for an edge or combo without conflicts, as they are prefixed in JS before uniqueness checking. If you specify nodes like `list(list(id = 1), list(id = 1))` you still get an error as IDs are not unique.
-- `g6_focus_elements()`, `g6_hide_elements()` and `g6_show_elements()` are now internal. You can use the type specific functions instead: `g6_focus_nodes()`, `g6_focus_edges()`, `g6_focus_combos()`, `g6_hide_nodes()`, `g6_hide_edges()`, `g6_hide_combos()`, `g6_show_nodes()`, `g6_show_edges()`, `g6_show_combos()`.
-
 ## New features and fixes
 
+- New `options("g6R.mode)` that can be `dev` or `prod` (default). In `dev` mode, Shiny notifications are
+displayed in the UI whenever a JavaScript error happens (they are still available in the JS console).
+- `g6_focus_elements()`, `g6_hide_elements()` and `g6_show_elements()` gain more specific siblings: `g6_focus_nodes()`, `g6_focus_edges()`, `g6_focus_combos()`, `g6_hide_nodes()`, `g6_hide_edges()`, `g6_hide_combos()`, `g6_show_nodes()`, `g6_show_edges()`, `g6_show_combos()`.
 - `brush_select()`, `lasso_select()` and `create_edge()` gain an `outputId` parameter which allows to manually pass the Shiny output ID of the graph instance. This is useful when the graph is initialised outside the shiny render function and the ID cannot be automatically inferred with `shiny::getCurrentOutputInfo()`. This allows to set input values from the callback function with the right namespace and graph ID. You must typically pass `session$ns("graphid")` to ensure this also works in modules.
 - Improvements to `brush_select()`: now it correctly returns the list of selected nodes, edges and combos, available via `input$<graph_ID>-selected_node`, `input$<graph_ID>-selected_edge` and `input$<graph_ID>-selected_combo`, thanks to the internal IDs refactoring. After a brush select operation, you can now shift click (depending on the `click_select()` multiple selection trigger settings you set, it might be another key) to add/remove elements to/from the current selection.
 - `lasso_select()` also gets the same quality of life improvements.
