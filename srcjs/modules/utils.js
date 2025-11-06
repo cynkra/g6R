@@ -46,6 +46,47 @@ const resetOtherElementTypes = (elementId, targetType) => {
   }
 }
 
+const checkIds = (data) => {
+  if (data.nodes) {
+    data.nodes.map((node) => {
+      // Convert ID to string if not already
+      if (typeof node.id !== 'string') {
+        node.id = node.id.toString();
+      }
+      if (node.combo != null && typeof node.combo !== 'string') {
+        node.combo = node.combo.toString();
+      }
+      return node.id
+    });
+  }
+  if (data.edges) {
+    data.edges.map((edge) => {
+      // Assign id to edge if not defined
+      if (edge.id == null) {
+        // If no ID is defined, we create one
+        edge.id = `${edge.source}-${edge.target}`;
+      }
+      if (typeof edge.source !== 'string') {
+        edge.source = edge.source.toString();
+      }
+      if (typeof edge.target !== 'string') {
+        edge.target = edge.target.toString();
+      }
+      return edge.id
+    });
+  }
+  if (data.combos) {
+    data.combos.map((combo) => {
+      // Convert ID to string if not already
+      if (typeof combo.id !== 'string') {
+        combo.id = combo.id.toString();
+      }
+      return combo.id
+    });
+  }
+  return data;
+}
+
 const setupGraph = (graph, widget, mode) => {
   const id = graph.options.container;
 
@@ -101,7 +142,7 @@ let graph = null;
 const loadAndInitGraph = (config, widget) => {
   tryCatchDev(() => {
     const initialize = (data) => {
-      config.data = data;
+      config.data = checkIds(data);
       graph = new Graph(config);
       setupGraph(graph, widget, config.mode);
     };

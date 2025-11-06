@@ -31,8 +31,9 @@ const registerShinyHandlers = (graph, mode) => {
   // Update/remove/add nodes or combo or edges
   Shiny.addCustomMessageHandler(id + '_g6-data', (m) => {
     tryCatchDev(() => {
-      // TBD: check if nodes data are also updated
-      // In case of selection, we have to update the related Shiny input
+      // TBD: this became a bit ugly with the different actions and types
+      // Maybe we can create separate handler for each action type for easier
+      // maintenance.
 
       // Replace/update/add graph data
       if (m.type === "Data") {
@@ -53,10 +54,33 @@ const registerShinyHandlers = (graph, mode) => {
           Shiny.setInputValue(inputId, selected);
         }
       } else {
-        // store in case we need to get the state
+        // Convert ids to string
+        if (m.action === 'get') {
+          if (Array.isArray(m.el)) {
+            m.el = m.el.map((e) => e.toString());
+          } else {
+            m.el = m.el.toString();
+          }
+        } else {
+          // For other actions like update or add ...
+          m.el = m.el.map((e) => {
+            e.id = e.id.toString();
+            // Also process combo
+            if (e.combo != null) {
+              e.combo = e.combo.toString();
+            }
+            return e;
+          });
+        }
+
+        // Call g6 method
         let res = graph[`${m.action}${m.type}Data`](m.el);
+
+        // Set state input if method was get
         if (m.action === 'get') {
           if (res === undefined) return;
+
+          // If we passed only one node
           if (!Array.isArray(res)) {
             res = [res];
           }
@@ -65,6 +89,8 @@ const registerShinyHandlers = (graph, mode) => {
           });
           return;
         }
+
+        // Redraw and layout if needed
         graph.draw();
         if (m.action !== 'update') {
           graph.layout();
