@@ -26,7 +26,7 @@ g6_proxy <- function(id, session = shiny::getDefaultReactiveDomain()) {
 }
 
 #' @keywords internal
-g6_data <- function(graph, el, action, type) {
+g6_data_proxy <- function(graph, el, action, type) {
   if (!any(class(graph) %in% "g6_proxy")) {
     stop(
       "Can't use g6_add_* with g6 object. Only within shiny and using g6_proxy."
@@ -55,27 +55,27 @@ g6_data <- function(graph, el, action, type) {
 
 #' @keywords internal
 g6_add <- function(graph, el, type) {
-  g6_data(graph, el, action = "add", type = type)
+  g6_data_proxy(graph, el, action = "add", type = type)
 }
 
 #' @keywords internal
 g6_remove <- function(graph, el, type) {
-  g6_data(graph, el, action = "remove", type = type)
+  g6_data_proxy(graph, el, action = "remove", type = type)
 }
 
 #' @keywords internal
 g6_update <- function(graph, el, type) {
-  g6_data(graph, el, action = "update", type = type)
+  g6_data_proxy(graph, el, action = "update", type = type)
 }
 
 #' @keywords internal
 g6_set <- function(graph, el, type) {
-  g6_data(graph, el, action = "set", type = type)
+  g6_data_proxy(graph, el, action = "set", type = type)
 }
 
 #' @keywords internal
 g6_get <- function(graph, el, type) {
-  g6_data(graph, el, action = "get", type = type)
+  g6_data_proxy(graph, el, action = "get", type = type)
 }
 
 #' Get the state of nodes/edges/combos in a g6 graph via proxy

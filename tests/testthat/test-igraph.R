@@ -37,10 +37,14 @@ test_that("g6_igraph handles vertex and edge attributes", {
   g6_graph <- g6_igraph(g_igraph)
 
   # Check that attributes are preserved
-  expect_true(any(sapply(g6_graph$x$data$nodes, function(x) !is.null(x$name))))
-  expect_true(any(sapply(g6_graph$x$data$nodes, function(x) !is.null(x$color))))
+  expect_true(any(sapply(g6_graph$x$data$nodes, function(x) {
+    !is.null(x$style$name)
+  })))
+  expect_true(any(sapply(g6_graph$x$data$nodes, function(x) {
+    !is.null(x$style$color)
+  })))
   expect_true(any(sapply(g6_graph$x$data$edges, function(x) {
-    !is.null(x$weight)
+    !is.null(x$style$weight)
   })))
 })
 

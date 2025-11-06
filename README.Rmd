@@ -53,10 +53,7 @@ To create a `{g6R}` graph:
 
 ```r
 library(g6R)
-nodes <- data.frame(
-  id = 1:10,
-  label = 1:10
-)
+nodes <- data.frame(id = 1:10)
 
 # Generate random edges
 edges <- data.frame(

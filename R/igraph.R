@@ -50,7 +50,7 @@ g6_igraph <- function(
   edges_df <- igraph::as_data_frame(graph, what = "edges")
   names(edges_df)[1:2] <- c("source", "target")
   if (igraph::is_directed(graph)) {
-    edges_df$endArrow <- TRUE
+    edges_df$style$endArrow <- TRUE
   }
   edges <- style_from_df(edges_df, edge_style_options)
   igraph::V(graph)$name <- names
@@ -66,6 +66,21 @@ g6_igraph <- function(
 }
 
 #' @keywords internal
+reserved_properties <- function() {
+  c(
+    "id",
+    "type",
+    "data",
+    "style",
+    "states",
+    "combo",
+    "source",
+    "target",
+    "children"
+  )
+}
+
+#' @keywords internal
 style_from_df <- function(df, style_fn) {
   formal_args <- names(formals(style_fn))
   has_dots <- "..." %in% formal_args
@@ -75,8 +90,12 @@ style_from_df <- function(df, style_fn) {
   items <- lapply(items, function(row) {
     item <- as.list(row)
 
+    # TBD: David Schoch: implement mapping between g6R and igraph
+    # for attributes names ...
     style_inputs <- item[names(item) %in% style_args]
-    extra_inputs <- item[!names(item) %in% style_args]
+    extra_inputs <- item[
+      !names(item) %in% style_args & !names(item) %in% reserved_properties()
+    ]
 
     if (has_dots) {
       style <- do.call(style_fn, c(style_inputs, extra_inputs))
@@ -85,6 +104,9 @@ style_from_df <- function(df, style_fn) {
     }
 
     item$style <- style
+    # Should not be at the top level
+    item[names(item) %in% style_args] <- NULL
+    item[names(item) %in% names(extra_inputs)] <- NULL
     return(item)
   })
 

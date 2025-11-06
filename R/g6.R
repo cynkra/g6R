@@ -120,26 +120,7 @@ g6 <- function(
   dat <- NULL
   if (is.null(jsonUrl)) {
     # Convert data frames to lists of records
-    if (inherits(nodes, "data.frame")) {
-      nodes <- unname(split(nodes, seq(nrow(nodes))))
-      nodes <- lapply(nodes, function(node) as.list(node))
-    }
-    if (inherits(edges, "data.frame")) {
-      edges <- unname(split(edges, seq(nrow(edges))))
-      edges <- lapply(edges, function(edge) as.list(edge))
-    }
-    if (inherits(combos, "data.frame")) {
-      combos <- unname(split(combos, seq(nrow(combos))))
-      combos <- lapply(combos, function(combo) as.list(combo))
-    }
-
-    dat <- dropNulls(
-      list(
-        nodes = nodes,
-        edges = edges,
-        combos = combos
-      )
-    )
+    dat <- g6_data(nodes, edges, combos)
   }
 
   # Build properly named list of parameters to pass to widget

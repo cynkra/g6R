@@ -1,7 +1,9 @@
-# g6R 0.2.0
+# g6R 0.5.0
 
 ## New features and fixes
 
+- Added new elements API: `g6_node()`, `g6_edge()`, `g6_combo()` to create nodes, edges and combos respectively. We suggest to use them instead of passing lists or dataframes to g6 as they provide
+safety checks. We also added `g6_nodes()`, `g6_edges()` and `g6_combos()` which are internally used by some proxy functions like `g6_add_nodes()` to provide more flexibility.
 - New `options("g6R.mode)` that can be `dev` or `prod` (default). In `dev` mode, Shiny notifications are
 displayed in the UI whenever a JavaScript error happens (they are still available in the JS console).
 - `g6_focus_elements()`, `g6_hide_elements()` and `g6_show_elements()` gain more specific siblings: `g6_focus_nodes()`, `g6_focus_edges()`, `g6_focus_combos()`, `g6_hide_nodes()`, `g6_hide_edges()`, `g6_hide_combos()`, `g6_show_nodes()`, `g6_show_edges()`, `g6_show_combos()`.

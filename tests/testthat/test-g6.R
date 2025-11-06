@@ -17,7 +17,6 @@ test_that("g6 function creates proper htmlwidget", {
   # Test with data frames
   nodes_df <- data.frame(
     id = c("node1", "node2", "node3"),
-    label = c("Node 1", "Node 2", "Node 3"),
     stringsAsFactors = FALSE
   )
 
@@ -34,7 +33,6 @@ test_that("g6 function creates proper htmlwidget", {
 
   # Check node structure
   expect_equal(g$x$data$nodes[[1]]$id, "node1")
-  expect_equal(g$x$data$nodes[[1]]$label, "Node 1")
 
   # Check edge structure
   expect_equal(g$x$data$edges[[1]]$source, "node1")
@@ -44,8 +42,8 @@ test_that("g6 function creates proper htmlwidget", {
 test_that("g6 function handles list input", {
   # Test with lists
   nodes_list <- list(
-    list(id = "a", label = "Node A"),
-    list(id = "b", label = "Node B")
+    list(id = "a"),
+    list(id = "b")
   )
 
   edges_list <- list(
@@ -68,7 +66,6 @@ test_that("g6 function handles combos", {
 
   combos_df <- data.frame(
     id = "combo1",
-    label = "Group 1",
     stringsAsFactors = FALSE
   )
 

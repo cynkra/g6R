@@ -1,9 +1,9 @@
-# g6_data handles inputs correctly
+# g6_data_proxy handles inputs correctly
 
     Code
-      g6_data(list(), test_df, "add", "Node")
+      g6_data_proxy(list(), test_df, "add", "Node")
     Condition
-      Error in `g6_data()`:
+      Error in `g6_data_proxy()`:
       ! Can't use g6_add_* with g6 object. Only within shiny and using g6_proxy.
 
 # g6_fit_center works correctly

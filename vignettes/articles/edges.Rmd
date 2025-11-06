@@ -56,7 +56,7 @@ edges <- list(
 - `type`: the type of the edge.
 - `data`: custom data for the edge that can be retrieved.
 - `style`: style properties. A comprehensive list is available [here](https://g6.antv.antgroup.com/en/manual/element/edge/build-in/base-edge#style).
-- `states`: initial [states](https://g6.antv.antgroup.com/en/manual/element/edge/build-in/base-edge#state).
+- `states`: initial [states](https://g6.antv.antgroup.com/en/manual/element/edge/build-in/base-edge#state). An unnamed list of valid states.
 
 ### Edge types
 
@@ -89,6 +89,7 @@ g6(nodes, edges) |>
 Special type `cubic-vertical` and `cubic-horizontal` are respectively used for vertical and horizontal [layouts](https://cynkra.github.io/g6R/articles/layouts.html#tree-layouts):
 
 ```{r}
+tree$nodes$label <- NULL
 g6(tree$nodes, tree$edges) |>
   g6_layout(dendrogram_layout(nodeSep = 36, rankSep = 250, direction = "LR")) |>
   g6_options(edge = list(type = "cubic-horizontal"), autoFit = "view")
@@ -251,9 +252,27 @@ edges <- unname(split(lesmis$edges, seq(nrow(lesmis$edges))))
 edges <- lapply(edges, function(edge) {
   edge <- as.list(edge)
   edge$data <- list(value = edge$value)
+  edge$value <- NULL
   edge
 })
-g6(lesmis$nodes, edges) |>
+
+nodes <- unname(split(lesmis$nodes, seq(nrow(lesmis$nodes))))
+nodes <- lapply(nodes, function(node) {
+  node <- as.list(node)
+  node$style <- list(
+    labelText = node$label,
+    x = node$x,
+    y = node$y
+  )
+
+  node$label <- NULL
+  node$x <- NULL
+  node$y <- NULL
+
+  node
+})
+
+g6(nodes, edges) |>
   g6_layout(d3_force_layout()) |>
   g6_options(
     animation = FALSE,

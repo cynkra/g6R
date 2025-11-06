@@ -11,13 +11,11 @@ default_node_style <- list(
 nodes <- list(
   list(
     id = "1",
-    label = "Node 1",
     combo = "combo1",
     style = default_node_style
   ),
   list(
     id = "2",
-    label = "Node 2",
     combo = "combo1",
     style = list(
       fill = "#ee705c",
@@ -43,19 +41,16 @@ nodes <- list(
   ),
   list(
     id = "3",
-    label = "Node 3",
     combo = "combo1",
     style = default_node_style
   ),
   list(
     id = "4",
-    label = "Node 4",
     combo = "combo2",
     style = default_node_style
   ),
   list(
     id = "5",
-    label = "Node 5",
     combo = "combo2",
     style = default_node_style
   )
@@ -77,7 +72,6 @@ edges <- list(
       badgeBackgroundFill = "#ee705c",
       badgeBackground = TRUE
     ),
-    animation = list(),
     states = list("inactive")
   ),
   list(
@@ -140,7 +134,7 @@ server <- function(input, output, session) {
             labelPadding = c(0, 4),
             labelText = JS(
               "(d) => {
-                return d.label
+                return d.id
               }"
             )
           )

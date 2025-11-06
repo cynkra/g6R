@@ -27,14 +27,13 @@ To setup a `{g6R}` graph, you first have to define __node__, __edges__ and __com
 
 ```{r}
 nodes <- data.frame(id = 1:10)
-nodes$label <- nodes$id
 ```
 
 You could also pass these elements as __list__, which will be faster than the dataframe approach since under the hood, `{g6R}` has to send list to JavaScript:
 
 ```r
 nodes <- lapply(seq_len(10), function(i) {
-  list(id = i, label = i)
+  list(id = i)
 })
 ```
 

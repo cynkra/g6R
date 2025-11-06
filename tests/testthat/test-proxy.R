@@ -21,7 +21,7 @@ test_that("g6_proxy creation works correctly", {
 })
 
 # Test g6_data internal function
-test_that("g6_data handles inputs correctly", {
+test_that("g6_data_proxy handles inputs correctly", {
   # Mock a shiny session with sendCustomMessage
   session <- list(
     sendCustomMessage = function(type, message) {
@@ -41,13 +41,13 @@ test_that("g6_data handles inputs correctly", {
 
   # Should not error
   expect_error(
-    g6_data(proxy, test_df, "add", "Node"),
+    g6_data_proxy(proxy, test_df, "add", "Node"),
     NA
   )
 
   # Test with non-proxy object
   expect_snapshot(error = TRUE, {
-    g6_data(list(), test_df, "add", "Node")
+    g6_data_proxy(list(), test_df, "add", "Node")
   })
 })
 

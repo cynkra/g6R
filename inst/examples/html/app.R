@@ -4,7 +4,6 @@ library(g6R)
 
 nodes <- data.frame(
   id = 1:5,
-  label = 1:5,
   combo = c("stack2", "stack2", "stack2", "stack1", "stack1")
 )
 

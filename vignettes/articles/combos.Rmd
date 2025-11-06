@@ -23,8 +23,8 @@ combos <- data.frame(id = 1:2)
 
 # or
 combos <- list(
-  list(id = 1, label = "Combo 1"),
-  list(id = 2, label = "Combo 2")
+  list(id = 1),
+  list(id = 2)
 )
 ```
 
@@ -36,7 +36,7 @@ combos <- list(
 - `type`: the type of the combo.
 - `data`: custom data for the combo that can be retrieved.
 - `style`: style properties. A comprehensive list is available [here](https://g6.antv.antgroup.com/en/manual/element/combo/build-in/base-combo#style).
-- `states`: initial [states](https://g6.antv.antgroup.com/en/manual/element/combo/build-in/base-combo#state).
+- `states`: initial [states](https://g6.antv.antgroup.com/en/manual/element/combo/build-in/base-combo#state). An unnamed list of valid states.
 - `combo`: id of the parent combo if any.
 
 ### Combo types
