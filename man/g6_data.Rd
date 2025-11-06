@@ -4,7 +4,7 @@
 \alias{g6_data}
 \title{Create a g6_data object}
 \usage{
-g6_data(graph, el, action, type)
+g6_data(nodes = NULL, edges = NULL, combos = NULL)
 }
 \arguments{
 \item{nodes}{Nodes data.}
