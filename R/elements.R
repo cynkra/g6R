@@ -521,7 +521,7 @@ g6_data <- function(nodes = NULL, edges = NULL, combos = NULL) {
     dat[["edges"]] <- as_g6_edges(edges)
   }
   if (!is.null(combos)) {
-    dat[["combos"]] <- as_g6_nodes(combos)
+    dat[["combos"]] <- as_g6_combos(combos)
   }
 
   structure(dat, class = "g6_data")
