@@ -66,14 +66,21 @@ reference:
       - is_g6_node
       - is_g6_edge
       - is_g6_combo
+      - as_g6_node
+      - as_g6_edge
+      - as_g6_combo
   - subtitle: Create list of g6 elements
     contents:
       - g6_data
       - as_g6_data
+      - is_g6_data
       - g6_nodes
       - g6_edges
       - g6_combos
       - validate_elements
+      - as_g6_nodes
+      - as_g6_edges
+      - as_g6_combos
 
   - title: Proxy
     desc: Update a g6 instance from the server function of a Shiny app

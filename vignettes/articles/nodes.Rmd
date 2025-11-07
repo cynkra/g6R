@@ -39,6 +39,45 @@ nodes <- list(
 )
 ```
 
+In `{g6R}`, the preferred way to create nodes is by using the helper functions `g6_node()` and `g6_nodes()`. 
+These functions provide a consistent and user-friendly interface for node creation, 
+supporting both simple and advanced customization. `g6_node()` allows you to define a single 
+node with specific properties, while `g6_nodes()` and `as_g6_nodes()` can generate multiple nodes 
+from various input format (data.frame, list):
+
+```{r}
+as.list(methods("as_g6_node"))
+as.list(methods("as_g6_nodes"))
+```
+
+Using these helpers ensures compatibility with all `{g6R}` 
+features and is the recommended method for node creation.
+
+For example:
+
+```{r}
+# Create a single node
+node <- g6_node(id = "A", type = "circle", style = list(fill = "#FFB6C1"))
+
+# Create multiple nodes from a data frame
+df <- data.frame(id = c("A", "B"), type = c("circle", "rect"))
+nodes <- as_g6_nodes(df)
+
+# With g6_nodes()
+nodes <- g6_nodes(
+  g6_node(id = "A", type = "circle"),
+  g6_node(id = "B", type = "rect")
+)
+
+# with a list
+lst <- list(
+  list(id = "A", type = "circle"),
+  list(id = "B", type = "rect")
+)
+nodes <- as_g6_nodes(lst)
+nodes
+```
+
 ## Data properties
 
 `{g6R}` nodes are allowed to have the following properties:

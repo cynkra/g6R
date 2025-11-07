@@ -13,8 +13,14 @@
 \alias{validate_element.g6_edge}
 \alias{validate_element.g6_combo}
 \alias{as_g6_node}
+\alias{as_g6_node.g6_node}
+\alias{as_g6_node.list}
 \alias{as_g6_edge}
+\alias{as_g6_edge.g6_edge}
+\alias{as_g6_edge.list}
 \alias{as_g6_combo}
+\alias{as_g6_combo.g6_combo}
+\alias{as_g6_combo.list}
 \title{G6 Graph Elements}
 \usage{
 g6_node(
@@ -62,11 +68,23 @@ validate_element(x, ...)
 
 \method{validate_element}{g6_combo}(x, ...)
 
-as_g6_node(x)
+as_g6_node(x, ...)
 
-as_g6_edge(x)
+\method{as_g6_node}{g6_node}(x, ...)
 
-as_g6_combo(x)
+\method{as_g6_node}{list}(x, ...)
+
+as_g6_edge(x, ...)
+
+\method{as_g6_edge}{g6_edge}(x, ...)
+
+\method{as_g6_edge}{list}(x, ...)
+
+as_g6_combo(x, ...)
+
+\method{as_g6_combo}{g6_combo}(x, ...)
+
+\method{as_g6_combo}{list}(x, ...)
 }
 \arguments{
 \item{id}{Character. Unique identifier for the node or combo (required).
@@ -88,7 +106,8 @@ For edges, this is optional (id is constructed as source-target if not provided)
 
 \item{target}{Character. Target node ID (required, edges only).}
 
-\item{x}{An object of class \code{g6_element}, \code{g6_node}, \code{g6_edge}, or \code{g6_combo}.}
+\item{x}{An object of class \code{g6_element},
+\code{g6_node}, \code{g6_edge}, or \code{g6_combo}.}
 
 \item{...}{Additional arguments (unused).
 the checks on source and target.}
@@ -132,4 +151,3 @@ combo <- g6_combo(
 # Validate a node explicitly
 validate_element(node)
 }
-\keyword{internal}

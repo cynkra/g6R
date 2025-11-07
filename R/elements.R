@@ -146,7 +146,8 @@ is_g6_combo <- function(x) {
 }
 
 #' @rdname g6_element
-#' @param x An object of class \code{g6_element}, \code{g6_node}, \code{g6_edge}, or \code{g6_combo}.
+#' @param x An object of class \code{g6_element},
+#' \code{g6_node}, \code{g6_edge}, or \code{g6_combo}.
 #' @export
 validate_element <- function(x, ...) {
   UseMethod("validate_element")
@@ -352,47 +353,69 @@ validate_elements.g6_combos <- function(x, ...) {
   x
 }
 
+#' Coerce to a g6_node object
+#' @export
+#' @rdname g6_element
+as_g6_node <- function(x, ...) {
+  UseMethod("as_g6_node")
+}
+
+#' @export
+#' @rdname g6_element
+as_g6_node.g6_node <- function(x, ...) {
+  x
+}
+
+#' @export
+#' @rdname g6_element
+as_g6_node.list <- function(x, ...) {
+  do.call(g6_node, x)
+}
+
 #' Coerce to a list of g6_node objects
-#' @keywords internal
+#' @export
 #' @rdname g6_elements
-as_g6_nodes <- function(x) {
-  if (inherits(x, "data.frame")) {
-    x <- unname(split(x, seq(nrow(x))))
-    x <- lapply(x, as.list)
-  }
+as_g6_nodes <- function(x, ...) {
+  UseMethod("as_g6_nodes")
+}
+
+#' @export
+#' @rdname g6_elements
+as_g6_nodes.g6_nodes <- function(x, ...) {
+  x
+}
+
+#' @export
+#' @rdname g6_elements
+as_g6_nodes.data.frame <- function(x, ...) {
+  lst <- unname(split(x, seq(nrow(x))))
+  lst <- lapply(lst, as.list)
+  as_g6_nodes(lst)
+}
+
+#' @export
+#' @rdname g6_elements
+as_g6_nodes.list <- function(x, ...) {
   nodes <- lapply(x, as_g6_node)
   structure(nodes, class = "g6_nodes")
 }
 
-#' Coerce to a g6_node object
-#' @keywords internal
-#' @rdname g6_element
-as_g6_node <- function(x) {
-  if (inherits(x, "g6_node")) {
-    return(x)
-  }
-  do.call(g6_node, x)
-}
-
-#' Coerce to a list of g6_edge objects
-#' @keywords internal
-#' @rdname g6_elements
-as_g6_edges <- function(x) {
-  if (inherits(x, "data.frame")) {
-    x <- unname(split(x, seq(nrow(x))))
-    x <- lapply(x, as.list)
-  }
-  edges <- lapply(x, as_g6_edge)
-  structure(edges, class = "g6_edges")
-}
-
 #' Coerce to a g6_edge object
-#' @keywords internal
+#' @export
 #' @rdname g6_element
-as_g6_edge <- function(x) {
-  if (inherits(x, "g6_edge")) {
-    return(x)
-  }
+as_g6_edge <- function(x, ...) {
+  UseMethod("as_g6_edge")
+}
+
+#' @export
+#' @rdname g6_element
+as_g6_edge.g6_edge <- function(x, ...) {
+  x
+}
+
+#' @export
+#' @rdname g6_element
+as_g6_edge.list <- function(x, ...) {
   if (!is.null(x$id) && is.null(x$source) && is.null(x$target)) {
     do.call(g6_edge_update, x)
   } else {
@@ -400,26 +423,79 @@ as_g6_edge <- function(x) {
   }
 }
 
-#' Coerce to a list of g6_combo objects
-#' @keywords internal
+#' Coerce to a list of g6_edge objects
+#' @export
 #' @rdname g6_elements
-as_g6_combos <- function(x) {
-  if (inherits(x, "data.frame")) {
-    x <- unname(split(x, seq(nrow(x))))
-    x <- lapply(x, as.list)
-  }
-  combos <- lapply(x, as_g6_combo)
-  structure(combos, class = "g6_combos")
+as_g6_edges <- function(x, ...) {
+  UseMethod("as_g6_edges")
+}
+
+#' @export
+#' @rdname g6_elements
+as_g6_edges.g6_edges <- function(x, ...) {
+  x
+}
+
+#' @export
+#' @rdname g6_elements
+as_g6_edges.data.frame <- function(x, ...) {
+  lst <- unname(split(x, seq(nrow(x))))
+  lst <- lapply(lst, as.list)
+  as_g6_edges(lst)
+}
+
+#' @export
+#' @rdname g6_elements
+as_g6_edges.list <- function(x, ...) {
+  edges <- lapply(x, as_g6_edge)
+  structure(edges, class = "g6_edges")
 }
 
 #' Coerce to a g6_combo object
-#' @keywords internal
+#' @export
 #' @rdname g6_element
-as_g6_combo <- function(x) {
-  if (inherits(x, "g6_combo")) {
-    return(x)
-  }
+as_g6_combo <- function(x, ...) {
+  UseMethod("as_g6_combo")
+}
+
+#' @export
+#' @rdname g6_element
+as_g6_combo.g6_combo <- function(x, ...) {
+  x
+}
+
+#' @export
+#' @rdname g6_element
+as_g6_combo.list <- function(x, ...) {
   do.call(g6_combo, x)
+}
+
+#' Coerce to a list of g6_combo objects
+#' @export
+#' @rdname g6_elements
+as_g6_combos <- function(x, ...) {
+  UseMethod("as_g6_combos")
+}
+
+#' @export
+#' @rdname g6_elements
+as_g6_combos.g6_combos <- function(x, ...) {
+  x
+}
+
+#' @export
+#' @rdname g6_elements
+as_g6_combos.data.frame <- function(x, ...) {
+  lst <- unname(split(x, seq(nrow(x))))
+  lst <- lapply(lst, as.list)
+  as_g6_combos(lst)
+}
+
+#' @export
+#' @rdname g6_elements
+as_g6_combos.list <- function(x, ...) {
+  combos <- lapply(x, as_g6_combo)
+  structure(combos, class = "g6_combos")
 }
 
 #' Create a g6_data object
@@ -430,6 +506,7 @@ as_g6_combo <- function(x) {
 #' @param nodes Nodes data.
 #' @param edges Edges data.
 #' @param combos Combo data.
+#' @param x A list with elements \code{nodes}, \code{edges}, and/or \code{combos}.
 #'
 #' @export
 #' @rdname g6_data
@@ -439,7 +516,7 @@ g6_data <- function(nodes = NULL, edges = NULL, combos = NULL) {
   if (!is.null(nodes)) {
     dat[["nodes"]] <- as_g6_nodes(nodes)
   }
-  if (!is.null(nodes)) {
+  if (!is.null(edges)) {
     dat[["edges"]] <- as_g6_edges(edges)
   }
   if (!is.null(combos)) {
@@ -449,22 +526,29 @@ g6_data <- function(nodes = NULL, edges = NULL, combos = NULL) {
   structure(dat, class = "g6_data")
 }
 
-#' @keywords internal
+#' @export
+#' @rdname g6_data
 is_g6_data <- function(x) {
   inherits(x, "g6_data")
 }
 
-#' Coerce a list to a g6_data object
+#' Coerce to a g6_data object
 #'
 #' @export
 #' @rdname g6_data
-#' @param x A list with elements \code{nodes}, \code{edges}, and/or
-#' \code{combos} or a \code{g6_data} object.
-as_g6_data <- function(x) {
-  if (is_g6_data(x)) {
-    return(x)
-  }
+as_g6_data <- function(x, ...) {
+  UseMethod("as_g6_data")
+}
 
+#' @export
+#' @rdname g6_data
+as_g6_data.g6_data <- function(x, ...) {
+  x
+}
+
+#' @export
+#' @rdname g6_data
+as_g6_data.list <- function(x, ...) {
   g6_data(
     nodes = x$nodes,
     edges = x$edges,

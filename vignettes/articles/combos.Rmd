@@ -28,6 +28,43 @@ combos <- list(
 )
 ```
 
+In `{g6R}`, the preferred way to create combos is by using the helper functions `g6_combo()` and `g6_combos()`.  
+These functions provide a consistent and user-friendly interface for combo creation, supporting both simple and advanced customization.  
+`g6_combo()` allows you to define a single combo with specific properties, while `g6_combos()` and `as_g6_combos()` can generate multiple combos from various input formats (data.frame, list):
+
+```{r}
+as.list(methods("as_g6_combo"))
+as.list(methods("as_g6_combos"))
+```
+
+Using these helpers ensures compatibility with all `{g6R}` features and is the recommended method for combo creation.
+
+For example:
+
+```{r}
+# Create a single combo
+combo <- g6_combo(id = "combo1", type = "rect", style = list(fill = "#FFD700"))
+
+# Create multiple combos from a data frame
+df <- data.frame(id = c("combo1", "combo2"), type = c("rect", "circle"))
+combos <- as_g6_combos(df)
+combos
+
+# With g6_combos()
+combos <- g6_combos(
+  g6_combo(id = "combo1", type = "rect"),
+  g6_combo(id = "combo2", type = "circle")
+)
+
+# with a list
+lst <- list(
+  list(id = "combo1", type = "rect"),
+  list(id = "combo2", type = "circle")
+)
+combos <- as_g6_combos(lst)
+combos
+```
+
 ## Data properties
 
 `{g6R}` combos are allowed to have the following properties:
