@@ -26,6 +26,8 @@ as_g6_data(x, ...)
 \item{combos}{Combo data.}
 
 \item{x}{A list with elements \code{nodes}, \code{edges}, and/or \code{combos}.}
+
+\item{...}{Additional arguments (unused).}
 }
 \description{
 Create compatible data structure for \code{\link[=g6_add_data]{g6_add_data()}}, \code{\link[=g6_set_data]{g6_set_data()}} or

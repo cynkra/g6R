@@ -507,6 +507,7 @@ as_g6_combos.list <- function(x, ...) {
 #' @param edges Edges data.
 #' @param combos Combo data.
 #' @param x A list with elements \code{nodes}, \code{edges}, and/or \code{combos}.
+#' @param ... Additional arguments (unused).
 #'
 #' @export
 #' @rdname g6_data
