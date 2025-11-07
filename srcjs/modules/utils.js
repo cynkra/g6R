@@ -61,11 +61,6 @@ const checkIds = (data) => {
   }
   if (data.edges) {
     data.edges.map((edge) => {
-      // Assign id to edge if not defined
-      if (edge.id == null) {
-        // If no ID is defined, we create one
-        edge.id = `${edge.source}-${edge.target}`;
-      }
       if (typeof edge.source !== 'string') {
         edge.source = edge.source.toString();
       }

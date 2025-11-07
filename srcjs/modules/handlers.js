@@ -55,7 +55,7 @@ const registerShinyHandlers = (graph, mode) => {
         }
       } else {
         // Convert ids to string
-        if (m.action === 'get') {
+        if (m.action === 'get' || m.action === 'remove') {
           if (Array.isArray(m.el)) {
             m.el = m.el.map((e) => e.toString());
           } else {

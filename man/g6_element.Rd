@@ -12,6 +12,9 @@
 \alias{validate_element.g6_node}
 \alias{validate_element.g6_edge}
 \alias{validate_element.g6_combo}
+\alias{as_g6_node}
+\alias{as_g6_edge}
+\alias{as_g6_combo}
 \title{G6 Graph Elements}
 \usage{
 g6_node(
@@ -27,7 +30,7 @@ g6_node(
 g6_edge(
   source,
   target,
-  id = NULL,
+  id = paste(source, target, sep = "-"),
   type = NULL,
   data = NULL,
   style = NULL,
@@ -58,6 +61,12 @@ validate_element(x, ...)
 \method{validate_element}{g6_edge}(x, ...)
 
 \method{validate_element}{g6_combo}(x, ...)
+
+as_g6_node(x)
+
+as_g6_edge(x)
+
+as_g6_combo(x)
 }
 \arguments{
 \item{id}{Character. Unique identifier for the node or combo (required).
@@ -81,7 +90,8 @@ For edges, this is optional (id is constructed as source-target if not provided)
 
 \item{x}{An object of class \code{g6_element}, \code{g6_node}, \code{g6_edge}, or \code{g6_combo}.}
 
-\item{...}{Additional arguments (unused).}
+\item{...}{Additional arguments (unused).
+the checks on source and target.}
 }
 \value{
 An S3 object of class \code{g6_node}, \code{g6_edge}, or \code{g6_combo} (and \code{g6_element}).
@@ -122,3 +132,4 @@ combo <- g6_combo(
 # Validate a node explicitly
 validate_element(node)
 }
+\keyword{internal}

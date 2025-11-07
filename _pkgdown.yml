@@ -69,6 +69,7 @@ reference:
   - subtitle: Create list of g6 elements
     contents:
       - g6_data
+      - as_g6_data
       - g6_nodes
       - g6_edges
       - g6_combos

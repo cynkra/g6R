@@ -2,6 +2,8 @@ library(shiny)
 library(bslib)
 library(g6R)
 
+options("g6R.mode" = "dev")
+
 nodes <- list(
   list(
     id = "node1",

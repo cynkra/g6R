@@ -6,18 +6,19 @@
 \alias{g6_update_combos}
 \title{Update nodes/edges/combos to a g6 graph via proxy}
 \usage{
-g6_update_nodes(graph, nodes)
+g6_update_nodes(graph, ...)
 
-g6_update_edges(graph, edges)
+g6_update_edges(graph, ...)
 
-g6_update_combos(graph, combos)
+g6_update_combos(graph, ...)
 }
 \arguments{
 \item{graph}{A g6_proxy object created with \code{\link{g6_proxy}}.}
 
-\item{nodes, edges, combos}{A data frame or list specifying
-the nodes/edges/combos to be updated. All elements have to be of the same type,
-you can't mix nodes with edges.}
+\item{...}{Nodes or edges or combos. You can pass a list of nodes/edges/combos, a dataframe
+or leverage the g6_nodes(), g6_edges() or g6_combos() helpers or pass individual elements like
+g6_node(), g6_edge() or g6_combo(). Elements structure must be compliant with specifications listed at
+\url{https://g6.antv.antgroup.com/manual/element/overview}.}
 }
 \value{
 The g6_proxy object (invisibly), allowing for method chaining.

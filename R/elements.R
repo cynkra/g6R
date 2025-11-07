@@ -13,6 +13,7 @@
 #' @param source Character. Source node ID (required, edges only).
 #' @param target Character. Target node ID (required, edges only).
 #' @param ... Additional arguments (unused).
+#' the checks on source and target.
 #'
 #' @return An S3 object of class \code{g6_node}, \code{g6_edge}, or \code{g6_combo} (and \code{g6_element}).
 #' @examples
@@ -58,7 +59,7 @@ g6_node <- function(
   combo = NULL,
   children = NULL
 ) {
-  node <- list(
+  node <- dropNulls(list(
     id = id,
     type = type,
     data = data,
@@ -66,7 +67,7 @@ g6_node <- function(
     states = states,
     combo = combo,
     children = children
-  )
+  ))
   node <- structure(node, class = c("g6_node", "g6_element"))
   validate_element(node)
 }
@@ -76,13 +77,13 @@ g6_node <- function(
 g6_edge <- function(
   source,
   target,
-  id = NULL,
+  id = paste(source, target, sep = "-"),
   type = NULL,
   data = NULL,
   style = NULL,
   states = NULL
 ) {
-  edge <- list(
+  edge <- dropNulls(list(
     source = source,
     target = target,
     id = id,
@@ -90,9 +91,18 @@ g6_edge <- function(
     data = data,
     style = style,
     states = states
-  )
+  ))
   edge <- structure(edge, class = c("g6_edge", "g6_element"))
   validate_element(edge)
+}
+
+#' @keywords internal
+#' @note To manage updating an edge
+#' since source and target are not mandatory in that case.
+g6_edge_update <- function(id, ...) {
+  edge <- dropNulls(list(id = id, ...))
+  edge <- structure(edge, class = c("g6_edge", "g6_element"), update = TRUE)
+  validate_element(edge) # update validation
 }
 
 #' @rdname g6_element
@@ -105,14 +115,14 @@ g6_combo <- function(
   states = NULL,
   combo = NULL
 ) {
-  combo <- list(
+  combo <- dropNulls(list(
     id = id,
     type = type,
     data = data,
     style = style,
     states = states,
     combo = combo
-  )
+  ))
   combo <- structure(combo, class = c("g6_combo", "g6_element"))
   validate_element(combo)
 }
@@ -198,7 +208,12 @@ validate_element.g6_node <- function(x, ...) {
 #' @rdname g6_element
 #' @export
 validate_element.g6_edge <- function(x, ...) {
-  # Edge-specific validation
+  # Skip source/target validation if updating
+  if (isTRUE(attr(x, "update"))) {
+    attributes(x)$update <- NULL
+    return(NextMethod())
+  }
+
   if (
     is.null(x$source) ||
       length(x$source) != 1 ||
@@ -339,6 +354,7 @@ validate_elements.g6_combos <- function(x, ...) {
 
 #' Coerce to a list of g6_node objects
 #' @keywords internal
+#' @rdname g6_elements
 as_g6_nodes <- function(x) {
   if (inherits(x, "data.frame")) {
     x <- unname(split(x, seq(nrow(x))))
@@ -350,6 +366,7 @@ as_g6_nodes <- function(x) {
 
 #' Coerce to a g6_node object
 #' @keywords internal
+#' @rdname g6_element
 as_g6_node <- function(x) {
   if (inherits(x, "g6_node")) {
     return(x)
@@ -359,6 +376,7 @@ as_g6_node <- function(x) {
 
 #' Coerce to a list of g6_edge objects
 #' @keywords internal
+#' @rdname g6_elements
 as_g6_edges <- function(x) {
   if (inherits(x, "data.frame")) {
     x <- unname(split(x, seq(nrow(x))))
@@ -370,15 +388,21 @@ as_g6_edges <- function(x) {
 
 #' Coerce to a g6_edge object
 #' @keywords internal
+#' @rdname g6_element
 as_g6_edge <- function(x) {
   if (inherits(x, "g6_edge")) {
     return(x)
   }
-  do.call(g6_edge, x)
+  if (!is.null(x$id) && is.null(x$source) && is.null(x$target)) {
+    do.call(g6_edge_update, x)
+  } else {
+    do.call(g6_edge, x)
+  }
 }
 
 #' Coerce to a list of g6_combo objects
 #' @keywords internal
+#' @rdname g6_elements
 as_g6_combos <- function(x) {
   if (inherits(x, "data.frame")) {
     x <- unname(split(x, seq(nrow(x))))
@@ -390,6 +414,7 @@ as_g6_combos <- function(x) {
 
 #' Coerce to a g6_combo object
 #' @keywords internal
+#' @rdname g6_element
 as_g6_combo <- function(x) {
   if (inherits(x, "g6_combo")) {
     return(x)
@@ -407,6 +432,7 @@ as_g6_combo <- function(x) {
 #' @param combos Combo data.
 #'
 #' @export
+#' @rdname g6_data
 g6_data <- function(nodes = NULL, edges = NULL, combos = NULL) {
   dat <- list()
 
@@ -421,4 +447,58 @@ g6_data <- function(nodes = NULL, edges = NULL, combos = NULL) {
   }
 
   structure(dat, class = "g6_data")
+}
+
+#' @keywords internal
+is_g6_data <- function(x) {
+  inherits(x, "g6_data")
+}
+
+#' Coerce a list to a g6_data object
+#'
+#' @export
+#' @rdname g6_data
+#' @param x A list with elements \code{nodes}, \code{edges}, and/or
+#' \code{combos} or a \code{g6_data} object.
+as_g6_data <- function(x) {
+  if (is_g6_data(x)) {
+    return(x)
+  }
+
+  g6_data(
+    nodes = x$nodes,
+    edges = x$edges,
+    combos = x$combos
+  )
+}
+
+#' @keywords internal
+flatten_g6_elements <- function(el, max_depth = 2) {
+  depth <- 1
+  while (
+    length(el) == 1 &&
+      is.list(el[[1]]) &&
+      is.null(names(el[[1]]))
+  ) {
+    el <- el[[1]]
+    depth <- depth + 1
+    if (depth > max_depth) {
+      stop(
+        "Input is too deeply nested. Please provide a 
+        list of elements, not a list of lists of lists."
+      )
+    }
+  }
+  el
+}
+
+#' @keywords internal
+as_g6_elements <- function(..., coerc_func) {
+  el <- list(...)
+  # If user passed a single data frame, use it directly
+  if (length(el) == 1 && inherits(el[[1]], "data.frame")) {
+    return(coerc_func(el[[1]]))
+  }
+  el <- flatten_g6_elements(el)
+  coerc_func(el)
 }

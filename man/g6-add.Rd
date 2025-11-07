@@ -7,22 +7,24 @@
 \alias{g6_add_data}
 \title{Add nodes/edges/combos to a g6 graph via proxy}
 \usage{
-g6_add_nodes(graph, nodes)
+g6_add_nodes(graph, ...)
 
-g6_add_edges(graph, edges)
+g6_add_edges(graph, ...)
 
-g6_add_combos(graph, combos)
+g6_add_combos(graph, ...)
 
 g6_add_data(graph, data)
 }
 \arguments{
 \item{graph}{A g6_proxy object created with \code{\link{g6_proxy}}.}
 
-\item{nodes, edges, combos}{A data frame or list specifying the elements to be added.
-Elements structure must be compliant with specifications listed at
-\url{https://g6.antv.antgroup.com/manual/element/overview}}
+\item{...}{Nodes or edges or combos. You can pass a list of nodes/edges/combos, a dataframe
+or leverage the g6_nodes(), g6_edges() or g6_combos() helpers or pass individual elements like
+g6_node(), g6_edge() or g6_combo(). Elements structure must be compliant with specifications listed at
+\url{https://g6.antv.antgroup.com/manual/element/overview}.}
 
-\item{data}{A nested list possibly containing nodes, edges and combo data.}
+\item{data}{A nested list possibly containing nodes, edges and combo data. Can also be
+created with the \code{\link{g6_data}} helper.}
 }
 \value{
 The g6_proxy object (invisibly), allowing for method chaining.
@@ -40,6 +42,64 @@ If a node with the same ID already exists, it will not be added again.
 See \url{https://g6.antv.antgroup.com/en/api/data#graphaddnodedata},
 \url{https://g6.antv.antgroup.com/en/api/data#graphaddedgedata} and
 \url{https://g6.antv.antgroup.com/en/api/data#graphaddcombodata} for more details.
+}
+\examples{
+if (interactive()) {
+  library(shiny)
+  library(bslib)
+  library(g6R)
+  ui <- page_fluid(
+    titlePanel("g6_proxy Add Nodes/Data Examples"),
+    layout_sidebar(
+      sidebar = sidebar(
+        actionButton("old1", "Old: list(list(id = 'n1'), list(id = 'n2'))"),
+        actionButton("old2", "Old: list(id = 'n3'), list(id = 'n4')"),
+        actionButton("old3", "Old: g6_nodes(g6_node(id = 'n5'), g6_node(id = 'n6'))"),
+        actionButton("new1", "New: g6_node(id = 'n7'), g6_node(id = 'n8')"),
+        actionButton("new2", "New: data.frame(id = c('n9', 'n10'))"),
+        actionButton("add_data", "Add Data (nodes/edges/combos)"),
+        verbatimTextOutput("graph_data")
+      ),
+      g6Output("graph")
+    )
+  )
+  server <- function(input, output, session) {
+    output$graph <- renderG6({
+      g6() |>
+        g6_layout()
+    })
+    proxy <- g6_proxy("graph")
+    observeEvent(input$old1, {
+      g6_add_nodes(proxy, list(list(id = "n1"), list(id = "n2")))
+    })
+    observeEvent(input$old2, {
+      g6_add_nodes(proxy, list(id = "n3"), list(id = "n4"))
+    })
+    observeEvent(input$old3, {
+      g6_add_nodes(proxy, g6_nodes(g6_node(id = "n5"), g6_node(id = "n6")))
+    })
+    observeEvent(input$new1, {
+      g6_add_nodes(proxy, g6_node(id = "n7"), g6_node(id = "n8"))
+    })
+    observeEvent(input$new2, {
+      g6_add_nodes(proxy, data.frame(id = c("n9", "n10")))
+    })
+    observeEvent(input$add_data, {
+      g6_add_data(
+        proxy,
+        list(
+          nodes = list(list(id = "n11"), list(id = "n12")),
+          edges = list(list(source = "n11", target = "n12", id = "e1")),
+          combos = list(list(id = "combo1"))
+        )
+      )
+    })
+    output$graph_data <- renderPrint({
+      "See graph updates in the visualization above."
+    })
+  }
+  shinyApp(ui, server)
+}
 }
 \seealso{
 \code{\link{g6_proxy}}, \code{\link{g6_remove_nodes}}

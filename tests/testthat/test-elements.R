@@ -138,3 +138,38 @@ test_that("g6_combos fails if no combos provided", {
     g6_combos()
   })
 })
+
+test_that("node, edge, combo coercion and predicates", {
+  n <- as_g6_node(list(id = "n1"))
+  expect_true(is_g6_node(n))
+  nodes <- as_g6_nodes(list(list(id = "n1"), list(id = "n2")))
+  expect_true(is_g6_nodes(nodes))
+  expect_true(all(vapply(nodes, is_g6_node, logical(1))))
+
+  e <- as_g6_edge(list(source = "n1", target = "n2"))
+  expect_true(is_g6_edge(e))
+  edges <- as_g6_edges(list(
+    list(source = "n1", target = "n2"),
+    list(source = "n2", target = "n1")
+  ))
+  expect_true(is_g6_edges(edges))
+  expect_true(all(vapply(edges, is_g6_edge, logical(1))))
+
+  c <- as_g6_combo(list(id = "combo1"))
+  expect_true(is_g6_combo(c))
+  combos <- as_g6_combos(list(list(id = "combo1"), list(id = "combo2")))
+  expect_true(is_g6_combos(combos))
+  expect_true(all(vapply(combos, is_g6_combo, logical(1))))
+})
+
+test_that("g6_data and related functions", {
+  nodes <- list(list(id = "n1"), list(id = "n2"))
+  edges <- list(list(source = "n1", target = "n2"))
+  combos <- list(list(id = "combo1"))
+  dat <- g6_data(nodes = nodes, edges = edges, combos = combos)
+  expect_true(is_g6_data(dat))
+  expect_s3_class(dat, "g6_data")
+  dat2 <- as_g6_data(list(nodes = nodes, edges = edges, combos = combos))
+  expect_true(is_g6_data(dat2))
+  expect_equal(dat, dat2)
+})

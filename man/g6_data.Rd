@@ -2,9 +2,12 @@
 % Please edit documentation in R/elements.R
 \name{g6_data}
 \alias{g6_data}
+\alias{as_g6_data}
 \title{Create a g6_data object}
 \usage{
 g6_data(nodes = NULL, edges = NULL, combos = NULL)
+
+as_g6_data(x)
 }
 \arguments{
 \item{nodes}{Nodes data.}
@@ -12,6 +15,9 @@ g6_data(nodes = NULL, edges = NULL, combos = NULL)
 \item{edges}{Edges data.}
 
 \item{combos}{Combo data.}
+
+\item{x}{A list with elements \code{nodes}, \code{edges}, and/or
+\code{combos} or a \code{g6_data} object.}
 }
 \description{
 Create compatible data structure for \code{\link[=g6_add_data]{g6_add_data()}}, \code{\link[=g6_set_data]{g6_set_data()}} or

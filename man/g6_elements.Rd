@@ -11,6 +11,9 @@
 \alias{validate_elements.g6_nodes}
 \alias{validate_elements.g6_edges}
 \alias{validate_elements.g6_combos}
+\alias{as_g6_nodes}
+\alias{as_g6_edges}
+\alias{as_g6_combos}
 \title{Create and validate lists of G6 elements}
 \usage{
 g6_nodes(...)
@@ -32,6 +35,12 @@ validate_elements(x, ...)
 \method{validate_elements}{g6_edges}(x, ...)
 
 \method{validate_elements}{g6_combos}(x, ...)
+
+as_g6_nodes(x)
+
+as_g6_edges(x)
+
+as_g6_combos(x)
 }
 \arguments{
 \item{...}{Additional arguments (unused).}
@@ -63,3 +72,4 @@ combos <- g6_combos(
   g6_combo(id = "c1")
 )
 }
+\keyword{internal}

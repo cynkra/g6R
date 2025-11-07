@@ -24,7 +24,8 @@ g6_set_data(graph, data)
 
 \item{combos}{A key value pair list with the combo id and its state.}
 
-\item{data}{A nested list containing all nodes, edges and combo data.}
+\item{data}{A nested list containing all nodes, edges and combo data.
+Alternatively you can use \code{\link{g6_data}} to generate compatible data.}
 }
 \value{
 The g6_proxy object (invisibly), allowing for method chaining.
