@@ -146,17 +146,17 @@ g6(nodes, height = "200px") |>
 
 #### Donut
 
-You can create donut nodes by setting the `type` to `donut`. The `style` property should contain a JavaScript function that returns an array of objects, each with a `value`, `color` and other possible properties described [here](https://g6.antv.antgroup.com/en/manual/element/node/build-in/donut#donutround), if you want to customize the segments of the donut. You may give an `index` property to the node to distinguish between different donuts and customize the output, as shown in the example below.
+You can create donut nodes by setting the `type` to `donut`. The `style` property should contain a JavaScript function that returns an array of objects, each with a `value`, `color` and other possible properties described [here](https://g6.antv.antgroup.com/en/manual/element/node/build-in/donut#donutround), if you want to customize the segments of the donut. You may give an `data.index` property to the node to distinguish between different donuts and customize the output, as shown in the example below.
 
 ```{r}
 nodes <- list(
   list(
     id = 1,
-    index = 0
+    data = list(index = 0)
   ),
   list(
     id = 2,
-    index = 1
+    data = list(index = 1)
   )
 )
 g6(nodes, height = "200px") |>
@@ -168,7 +168,7 @@ g6(nodes, height = "200px") |>
       style = list(
         donuts = JS(
           "(item) => {
-            const { index } = item;
+            const { index } = item.data;
             if (index === 0) {
               return [
                   { value: 50, color: 'red' },

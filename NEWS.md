@@ -1,5 +1,9 @@
 # g6R 0.5.0
 
+## Potential breaking changes
+
+Due to the new data validation for nodes, edges and combos, some existing code might break if the data provided to g6R functions is not valid. See the corresponding [documentation](https://cynkra.github.io/g6R/articles/nodes.html#data-properties) section. If you had to pass custom data you can do it in the `data` slot.
+
 ## New features and fixes
 
 - Added new elements API: `g6_node()`, `g6_edge()`, `g6_combo()` to create nodes, edges and combos respectively. We suggest to use them instead of passing lists or dataframes to g6 as they provide
