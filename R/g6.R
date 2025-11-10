@@ -120,33 +120,15 @@ g6 <- function(
   dat <- NULL
   if (is.null(jsonUrl)) {
     # Convert data frames to lists of records
-    if (inherits(nodes, "data.frame")) {
-      nodes <- unname(split(nodes, seq(nrow(nodes))))
-      nodes <- lapply(nodes, function(node) as.list(node))
-    }
-    if (inherits(edges, "data.frame")) {
-      edges <- unname(split(edges, seq(nrow(edges))))
-      edges <- lapply(edges, function(edge) as.list(edge))
-    }
-    if (inherits(combos, "data.frame")) {
-      combos <- unname(split(combos, seq(nrow(combos))))
-      combos <- lapply(combos, function(combo) as.list(combo))
-    }
-
-    dat <- dropNulls(
-      list(
-        nodes = nodes,
-        edges = edges,
-        combos = combos
-      )
-    )
+    dat <- g6_data(nodes, edges, combos)
   }
 
   # Build properly named list of parameters to pass to widget
   x <- list(
     data = dat,
     jsonUrl = jsonUrl,
-    iconsUrl = iconsUrl
+    iconsUrl = iconsUrl,
+    mode = get_g6_mode()
   )
 
   # In case we need it ...
@@ -164,6 +146,23 @@ g6 <- function(
     elementId = elementId,
     preRenderHook = NULL
   )
+}
+
+#' @keywords internal
+validate_g6_mode <- function(mode) {
+  if (!(mode %in% c("dev", "prod"))) {
+    stop(sprintf(
+      "`g6R.mode` option must be one of 'dev' or 'prod'. Current value: '%s'",
+      mode
+    ))
+  }
+  invisible(mode)
+}
+
+#' @keywords internal
+get_g6_mode <- function() {
+  mode <- getOption("g6R.mode", "prod")
+  validate_g6_mode(mode)
 }
 
 #' Shiny bindings for g6

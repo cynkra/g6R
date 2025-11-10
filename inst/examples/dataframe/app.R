@@ -2,10 +2,7 @@ library(shiny)
 library(bslib)
 library(g6R)
 
-nodes <- data.frame(
-  id = 1:100,
-  label = 1:100
-)
+nodes <- data.frame(id = 1:100)
 
 # Set a seed for reproducibility
 set.seed(123)
@@ -45,8 +42,8 @@ server <- function(input, output, session) {
             labelPadding = c(0, 4),
             labelText = JS(
               "(d) => {
-              return d.id
-            }"
+                return d.id
+              }"
             )
           )
         )

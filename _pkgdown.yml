@@ -55,6 +55,33 @@ reference:
     contents:
       - g6_igraph
 
+  - title: Data
+    desc: Create g6 data structures and validate them
+  - subtitle: Create atomic elements
+    contents:
+      - g6_node
+      - g6_edge
+      - g6_combo
+      - validate_element
+      - is_g6_node
+      - is_g6_edge
+      - is_g6_combo
+      - as_g6_node
+      - as_g6_edge
+      - as_g6_combo
+  - subtitle: Create list of g6 elements
+    contents:
+      - g6_data
+      - as_g6_data
+      - is_g6_data
+      - g6_nodes
+      - g6_edges
+      - g6_combos
+      - validate_elements
+      - as_g6_nodes
+      - as_g6_edges
+      - as_g6_combos
+
   - title: Proxy
     desc: Update a g6 instance from the server function of a Shiny app
   - subtitle: Setup
@@ -102,9 +129,15 @@ reference:
   - subtitle: Elements actions
     desc: elements actions
     contents:
-      - g6_focus_elements
-      - g6_hide_elements
-      - g6_show_elements
+      - g6_focus_nodes
+      - g6_focus_edges
+      - g6_focus_combos
+      - g6_hide_nodes
+      - g6_hide_edges
+      - g6_hide_combos
+      - g6_show_nodes
+      - g6_show_edges
+      - g6_show_combos
       - g6_collapse_combo
       - g6_expand_combo
   - subtitle: Others

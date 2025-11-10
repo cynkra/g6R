@@ -10,6 +10,24 @@ names(edges)[1:2] <- c("source", "target")
 
 lesmis <- list(nodes = nodes, edges = edges)
 
+# For compatibility with g6R data checks, we can't have anything at the top level.
+# Some elements go to style, some to data.
+# See more here: https://g6.antv.antgroup.com/en/manual/element/node/base-node#main-graphic-style
+lesmis$nodes <- lesmis$nodes |>
+  dplyr::mutate(
+    style = purrr::pmap(
+      list(label, x, y),
+      ~ list(labelText = ..1, x = ..2, y = ..3)
+    )
+  ) %>%
+  dplyr::select(id, style)
+
+lesmis$edges <- lesmis$edges |>
+  dplyr::mutate(
+    data = purrr::map(value, ~ list(value = .x))
+  ) |>
+  dplyr::select(source, target, data)
+
 usethis::use_data(lesmis, overwrite = TRUE)
 
 
@@ -55,6 +73,15 @@ edges <-
 
 edges$source <- match(edges$source, nodes$label)
 edges$target <- match(edges$target, nodes$label)
+
+nodes <- nodes |>
+  dplyr::mutate(
+    style = purrr::map(
+      label,
+      ~ list(labelText = .x)
+    )
+  ) %>%
+  dplyr::select(id, style)
 
 tree <- list(nodes = nodes, edges = edges)
 usethis::use_data(tree, overwrite = TRUE)

@@ -20,12 +20,11 @@ Nodes belong to the graph data. In `{g6R}`, nodes can be created from a __datafr
 
 ```r
 nodes <- data.frame(id = 1:2)
-nodes$label <- nodes$id
 
 # or
 nodes <- list(
-  list(id = 1, label = "Node 1"),
-  list(id = 2, label = "Node 2")
+  list(id = 1),
+  list(id = 2)
 )
 ```
 
@@ -35,10 +34,48 @@ While __dataframes__ might be more convenient for simple cases, __lists__ provid
 nodes <- list(
   list(
     id = 1,
-    label = "Node 1",
     style = list(fill = "#FF0000", fillOpacity = 0.5)
   ),
 )
+```
+
+In `{g6R}`, the preferred way to create nodes is by using the helper functions `g6_node()` and `g6_nodes()`. 
+These functions provide a consistent and user-friendly interface for node creation, 
+supporting both simple and advanced customization. `g6_node()` allows you to define a single 
+node with specific properties, while `g6_nodes()` and `as_g6_nodes()` can generate multiple nodes 
+from various input format (data.frame, list):
+
+```{r}
+as.list(methods("as_g6_node"))
+as.list(methods("as_g6_nodes"))
+```
+
+Using these helpers ensures compatibility with all `{g6R}` 
+features and is the recommended method for node creation.
+
+For example:
+
+```{r}
+# Create a single node
+node <- g6_node(id = "A", type = "circle", style = list(fill = "#FFB6C1"))
+
+# Create multiple nodes from a data frame
+df <- data.frame(id = c("A", "B"), type = c("circle", "rect"))
+nodes <- as_g6_nodes(df)
+
+# With g6_nodes()
+nodes <- g6_nodes(
+  g6_node(id = "A", type = "circle"),
+  g6_node(id = "B", type = "rect")
+)
+
+# with a list
+lst <- list(
+  list(id = "A", type = "circle"),
+  list(id = "B", type = "rect")
+)
+nodes <- as_g6_nodes(lst)
+nodes
 ```
 
 ## Data properties
@@ -49,7 +86,7 @@ nodes <- list(
 - `type`: the type of the node.
 - `data`: custom data for the node that can be retrieved.
 - `style`: style properties. A comprehensive list is available [here](https://g6.antv.antgroup.com/en/manual/element/node/build-in/base-node#style).
-- `states`: initial [states](https://g6.antv.antgroup.com/en/manual/element/node/build-in/base-node#state).
+- `states`: initial [states](https://g6.antv.antgroup.com/en/manual/element/node/build-in/base-node#state). An unnamed list of valid states.
 - `combo`: id of the [combo](https://g6.antv.antgroup.com/en/manual/element/combo/overview) the node belongs to. Combo are describes in another vignette (TBD link).
 - `children`: nodes ids for tree.
 
@@ -148,17 +185,17 @@ g6(nodes, height = "200px") |>
 
 #### Donut
 
-You can create donut nodes by setting the `type` to `donut`. The `style` property should contain a JavaScript function that returns an array of objects, each with a `value`, `color` and other possible properties described [here](https://g6.antv.antgroup.com/en/manual/element/node/build-in/donut#donutround), if you want to customize the segments of the donut. You may give an `index` property to the node to distinguish between different donuts and customize the output, as shown in the example below.
+You can create donut nodes by setting the `type` to `donut`. The `style` property should contain a JavaScript function that returns an array of objects, each with a `value`, `color` and other possible properties described [here](https://g6.antv.antgroup.com/en/manual/element/node/build-in/donut#donutround), if you want to customize the segments of the donut. You may give an `data.index` property to the node to distinguish between different donuts and customize the output, as shown in the example below.
 
 ```{r}
 nodes <- list(
   list(
     id = 1,
-    index = 0
+    data = list(index = 0)
   ),
   list(
     id = 2,
-    index = 1
+    data = list(index = 1)
   )
 )
 g6(nodes, height = "200px") |>
@@ -170,7 +207,7 @@ g6(nodes, height = "200px") |>
       style = list(
         donuts = JS(
           "(item) => {
-            const { index } = item;
+            const { index } = item.data;
             if (index === 0) {
               return [
                   { value: 50, color: 'red' },

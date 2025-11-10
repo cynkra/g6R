@@ -63,3 +63,7 @@ validate_component <- function(x, mode) {
   }
   x
 }
+
+lgl_ply <- function(x, fun, ..., length = 1L, use_names = FALSE) {
+  vapply(x, fun, logical(length), ..., USE.NAMES = use_names)
+}

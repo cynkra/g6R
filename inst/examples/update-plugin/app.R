@@ -2,10 +2,7 @@ library(shiny)
 library(bslib)
 library(g6R)
 
-nodes <- data.frame(
-  id = as.character(1:10),
-  label = as.character(1:10)
-)
+nodes <- data.frame(id = as.character(1:10))
 
 # Generate random edges
 edges <- data.frame(
@@ -15,6 +12,10 @@ edges <- data.frame(
 
 ui <- page_fluid(
   actionButton("update", "Update plugin"),
+  h6(
+    class = "my-2",
+    "Right click on an edge. Then, click on update and right click on an edge again."
+  ),
   g6_output("graph")
 )
 

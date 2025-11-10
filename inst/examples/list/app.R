@@ -2,6 +2,8 @@ library(shiny)
 library(bslib)
 library(g6R)
 
+options("g6R.mode" = "dev")
+
 nodes <- list(
   list(
     id = "node1",
@@ -110,7 +112,9 @@ ui <- page_fluid(
   ),
   div(
     class = "d-flex align-items-center",
-    actionButton("set_nodes", "Set nodes state")
+    actionButton("set_nodes", "Set nodes state"),
+    actionButton("add_data", "Add new data"),
+    actionButton("set_data", "Set data (overwrite")
   )
 )
 
@@ -151,6 +155,35 @@ server <- function(input, output, session) {
         #tooltips()
         toolbar(),
         context_menu()
+      )
+  })
+
+  observeEvent(input$set_data, {
+    g6_proxy("graph") |>
+      g6_set_data(
+        list(
+          nodes = list(
+            list(id = "add1")
+          )
+        )
+      )
+  })
+
+  observeEvent(input$add_data, {
+    g6_proxy("graph") |>
+      g6_add_data(
+        list(
+          combos = list(
+            list(id = "addcombo1")
+          ),
+          edges = list(
+            list(source = "add1", target = "add2")
+          ),
+          nodes = list(
+            list(id = "add1", combo = "addcombo1"),
+            list(id = "add2")
+          )
+        )
       )
   })
 
@@ -228,17 +261,17 @@ server <- function(input, output, session) {
 
   observeEvent(input$focus, {
     g6_proxy("graph") |>
-      g6_focus_elements("node1", animation = list(duration = 2000))
+      g6_focus_nodes("node1", animation = list(duration = 2000))
   })
 
   observeEvent(input$show, {
     g6_proxy("graph") |>
-      g6_show_elements("node1")
+      g6_show_nodes("node1")
   })
 
   observeEvent(input$hide, {
     g6_proxy("graph") |>
-      g6_hide_elements("node1")
+      g6_hide_nodes("node1")
   })
 
   observeEvent(input$expand, {

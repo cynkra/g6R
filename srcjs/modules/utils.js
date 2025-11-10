@@ -5,10 +5,11 @@ import {
   NodeEvent,
   GraphEvent,
   CommonEvent,
+  Graph
 } from '@antv/g6';
 
 import { setClickEvents, setGraphEvents } from './events';
-import { registerShinyHandlers } from './handlers';
+import { tryCatchDev, registerShinyHandlers } from './handlers';
 
 const sendNotification = (message, type = "error", duration = null) => {
   if (HTMLWidgets.shinyMode) {
@@ -19,57 +20,6 @@ const sendNotification = (message, type = "error", duration = null) => {
     });
   } else {
     alert(message)
-  }
-}
-
-const checkIds = (data) => {
-  let nodeIds = [];
-  if (data.nodes) {
-    nodeIds = data.nodes.map((node) => {
-      // Convert ID to string if not already
-      if (typeof node.id !== 'string') {
-        node.id = node.id.toString();
-      }
-      if (node.combo !== undefined && typeof node.combo !== 'string') {
-        node.combo = node.combo.toString();
-      }
-      return node.id
-    });
-  }
-  let edgesIds = [];
-  if (data.edges) {
-    edgesIds = data.edges.map((edge) => {
-      // Assign id to edge if not defined
-      if (edge.id === undefined) {
-        // If no ID is defined, we create one
-        edge.id = `${edge.source}-${edge.target}`;
-      }
-      if (typeof edge.source !== 'string') {
-        edge.source = edge.source.toString();
-      }
-      if (typeof edge.target !== 'string') {
-        edge.target = edge.target.toString();
-      }
-      return edge.id
-    });
-  }
-  let combosIds = [];
-  if (data.combos) {
-    combosIds = data.combos.map((combo) => {
-      // Convert ID to string if not already
-      if (typeof combo.id !== 'string') {
-        combo.id = combo.id.toString();
-      }
-      return combo.id
-    });
-  }
-  const allIds = nodeIds.concat(edgesIds).concat(combosIds);
-  const uniqueIds = new Set(allIds);
-  if (allIds.length !== uniqueIds.size) {
-    sendNotification('Cannot initialize graph. Duplicated IDs found.')
-    throw new Error("Invalid graph data: execution aborted");
-  } else {
-    return (data)
   }
 }
 
@@ -96,7 +46,45 @@ const resetOtherElementTypes = (elementId, targetType) => {
   }
 }
 
-const setupGraph = (graph, el, widget) => {
+const checkIds = (data) => {
+  if (data.nodes) {
+    data.nodes.map((node) => {
+      // Convert ID to string if not already
+      if (typeof node.id !== 'string') {
+        node.id = node.id.toString();
+      }
+      if (node.combo != null && typeof node.combo !== 'string') {
+        node.combo = node.combo.toString();
+      }
+      return node.id
+    });
+  }
+  if (data.edges) {
+    data.edges.map((edge) => {
+      if (typeof edge.source !== 'string') {
+        edge.source = edge.source.toString();
+      }
+      if (typeof edge.target !== 'string') {
+        edge.target = edge.target.toString();
+      }
+      return edge.id
+    });
+  }
+  if (data.combos) {
+    data.combos.map((combo) => {
+      // Convert ID to string if not already
+      if (typeof combo.id !== 'string') {
+        combo.id = combo.id.toString();
+      }
+      return combo.id
+    });
+  }
+  return data;
+}
+
+const setupGraph = (graph, widget, mode) => {
+  const id = graph.options.container;
+
   if (HTMLWidgets.shinyMode) {
 
     const clickEvents = [
@@ -104,7 +92,7 @@ const setupGraph = (graph, el, widget) => {
       EdgeEvent.CLICK,
       ComboEvent.CLICK
     ]
-    setClickEvents(clickEvents, graph, el);
+    setClickEvents(clickEvents, graph);
 
     // Is this enough? :)
     const graphEvents = [
@@ -117,24 +105,24 @@ const setupGraph = (graph, el, widget) => {
       ComboEvent.DROP,
       CanvasEvent.DROP
     ]
-    setGraphEvents(graphEvents, graph, el);
+    setGraphEvents(graphEvents, graph);
 
     // When click on canvas and target isn't node or edge or combo
     // we have to reset the Shiny selected-node or edge or combo
     graph.on(CanvasEvent.CLICK, (e) => {
-      Shiny.setInputValue(el.id + '-selected_node', null);
-      Shiny.setInputValue(el.id + '-selected_edge', null);
-      Shiny.setInputValue(el.id + '-selected_combo', null);
+      Shiny.setInputValue(id + '-selected_node', null);
+      Shiny.setInputValue(id + '-selected_edge', null);
+      Shiny.setInputValue(id + '-selected_combo', null);
     });
 
     // Recover the target of a right click event
     graph.on(CommonEvent.CONTEXT_MENU, (e) => {
       const { targetType, target } = e;
       // If target is canvas, id will be null.
-      Shiny.setInputValue(el.id + '-contextmenu', { type: targetType, id: target.id })
+      Shiny.setInputValue(id + '-contextmenu', { type: targetType, id: target.id })
     });
 
-    registerShinyHandlers(graph, el);
+    registerShinyHandlers(graph, mode);
   }
 
   graph.render();
@@ -143,6 +131,37 @@ const setupGraph = (graph, el, widget) => {
     widget.resize();
   })
 }
+
+let graph = null;
+
+const loadAndInitGraph = (config, widget) => {
+  tryCatchDev(() => {
+    const initialize = (data) => {
+      config.data = checkIds(data);
+      graph = new Graph(config);
+      setupGraph(graph, widget, config.mode);
+    };
+
+    if (config.jsonUrl !== null) {
+      fetch(config.jsonUrl)
+        .then((res) => res.json())
+        .then((data) => {
+          // You can add checks here if needed
+          initialize(data);
+        })
+        .catch((err) => {
+          if (config.mode === "dev") sendNotification(`Failed to fetch JSON: ${err}`, "error");
+          throw err;
+        });
+    } else {
+      // You can add checks here if needed
+      initialize(config.data);
+    }
+  }, config.mode);
+}
+
+// Getter for graph
+const getGraph = () => graph;
 
 const setupIcons = (url) => {
   // https://at.alicdn.com/t/project/2678727/caef142c-804a-4a2f-a914-ae82666a31ee.html?spm=a313x.7781069.1998910419.35
@@ -156,4 +175,4 @@ const setupIcons = (url) => {
   })
 }
 
-export { getBehavior, setupGraph, setupIcons, checkIds, sendNotification, resetOtherElementTypes };
+export { getBehavior, setupIcons, sendNotification, resetOtherElementTypes, loadAndInitGraph, getGraph };

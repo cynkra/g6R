@@ -27,14 +27,13 @@ To setup a `{g6R}` graph, you first have to define __node__, __edges__ and __com
 
 ```{r}
 nodes <- data.frame(id = 1:10)
-nodes$label <- nodes$id
 ```
 
 You could also pass these elements as __list__, which will be faster than the dataframe approach since under the hood, `{g6R}` has to send list to JavaScript:
 
 ```r
 nodes <- lapply(seq_len(10), function(i) {
-  list(id = i, label = i)
+  list(id = i)
 })
 ```
 
@@ -58,6 +57,48 @@ duplicated_id <- which(duplicated(edges$id) == TRUE)
 if (length(duplicated_id)) {
   edges <- edges[-duplicated_id, ]
 }
+```
+
+In `{g6R}`, the recommended way to assemble graph data is by using the helper functions `g6_data()` and `as_g6_data()`.  
+These functions provide a consistent and user-friendly interface for combining nodes, edges, and combos into a single graph data object.  
+`g6_data()` allows you to explicitly construct a graph data object from validated nodes, edges, and combos, while `as_g6_data()` 
+can coerce various input formats (lists, data frames) into a graph data object.
+
+You can list available methods for `as_g6_data` with:
+
+```{r}
+as.list(methods("as_g6_data"))
+```
+
+Using these helpers ensures compatibility with all `{g6R}` features and is the recommended method for graph data creation.
+
+For example:
+
+```{r}
+# Create nodes and edges
+my_nodes <- data.frame(id = c("A", "B"))
+my_edges <- data.frame(source = "A", target = "B")
+
+# Assemble graph data using g6_data()
+graph <- g6_data(
+  nodes = my_nodes,
+  edges = my_edges
+)
+graph
+
+# Or use as_g6_data() directly with a list
+lst <- list(
+  nodes = list(
+    list(id = "A"),
+    list(id = "B")
+  ),
+  edges = list(
+    list(source = "A", target = "B")
+  )
+)
+graph2 <- as_g6_data(lst)
+
+all.equal(graph, graph2)
 ```
 
 ### Performance
