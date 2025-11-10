@@ -43,8 +43,8 @@ HTMLWidgets.widget({
       },
       resize: function (width, height) {
         // code to re-render the widget with a new size
-        if (graph) {
-          graph.resize();
+        if (getGraph()) {
+          getGraph().resize();
         }
       }
 
