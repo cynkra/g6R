@@ -1,0 +1,474 @@
+# g6R
+
+![g6R hex logo](./reference/figures/hex.png)
+
+[g6R](https://github.com/cynkra/g6R) provides R bindings to the G6 graph
+[library](https://g6.antv.antgroup.com/en). It allows to create
+interactive network in R, with stunning set of features, including:
+
+- Support for various **layouts**, such as force-directed, radial,
+  circular, and hierarchical layouts.
+- Interactive **behaviors** like zooming, dragging, and selecting
+  elements.
+- **Plugins** for additional functionality, such as minimaps and
+  tooltips, context menus, and node grouping features like bubble sets,
+  hulls and legends.
+- Various **data sources** including data frames, lists and remote JSON
+  urls.
+- Support for **combos** allowing for **nested** nodes.
+- High **performance** rendering (\>20000 nodes).
+
+![g6R layers example](./reference/figures/g6-layers.png)
+
+``` r
+shinyAppDir(system.file("examples", "demo", package = "g6R"))
+```
+
+## Installation
+
+You can install the development version of
+[g6R](https://github.com/cynkra/g6R) from [GitHub](https://github.com/)
+with:
+
+``` r
+# install.packages("pak")
+pak::pak("cynkra/g6R")
+```
+
+## Example
+
+To create a [g6R](https://github.com/cynkra/g6R) graph:
+
+``` r
+library(g6R)
+nodes <- data.frame(id = 1:10)
+
+# Generate random edges
+edges <- data.frame(
+  source = c(2, 6, 7),
+  target = c(1, 3, 9)
+)
+
+g6(nodes, edges) |>
+  g6_options(
+    node = list(
+      style = list(
+        labelBackground = TRUE,
+        labelBackgroundFill = '#FFB6C1',
+        labelBackgroundRadius = 4,
+        labelFontFamily = 'Arial',
+        labelPadding = c(0, 4),
+        labelText = JS(
+          "(d) => {
+            return d.id
+        }"
+        )
+      )
+    )
+  ) |>
+  g6_layout(d3_force_layout()) |>
+  g6_behaviors(
+    "zoom-canvas",
+    drag_element_force(fixed = TRUE),
+    click_select(
+      multiple = TRUE,
+      onClick = JS(
+        "(e) => {
+            console.log(e);
+          }"
+      )
+    ),
+    brush_select(),
+    create_edge()
+  ) |>
+  g6_plugins(
+    "minimap",
+    "tooltip",
+    context_menu()
+  )
+```
+
+# Package index
+
+## Initialize
+
+### g6
+
+Initialize a g6 network
+
+- [`g6()`](https://cynkra.github.io/g6R/reference/g6.md) : Create a G6
+  Graph Visualization
+
+### Shiny
+
+Render g6 instance in a Shiny app
+
+- [`g6Output()`](https://cynkra.github.io/g6R/reference/g6-shiny.md)
+  [`g6_output()`](https://cynkra.github.io/g6R/reference/g6-shiny.md)
+  [`renderG6()`](https://cynkra.github.io/g6R/reference/g6-shiny.md)
+  [`render_g6()`](https://cynkra.github.io/g6R/reference/g6-shiny.md) :
+  Shiny bindings for g6
+
+### igraph
+
+Render an igraph object as g6
+
+- [`g6_igraph()`](https://cynkra.github.io/g6R/reference/g6_igraph.md) :
+  Create a G6 Graph from an igraph Object
+
+## Data
+
+Create g6 data structures and validate them
+
+### Create atomic elements
+
+- [`g6_node()`](https://cynkra.github.io/g6R/reference/g6_element.md)
+  [`g6_edge()`](https://cynkra.github.io/g6R/reference/g6_element.md)
+  [`g6_combo()`](https://cynkra.github.io/g6R/reference/g6_element.md)
+  [`is_g6_node()`](https://cynkra.github.io/g6R/reference/g6_element.md)
+  [`is_g6_edge()`](https://cynkra.github.io/g6R/reference/g6_element.md)
+  [`is_g6_combo()`](https://cynkra.github.io/g6R/reference/g6_element.md)
+  [`validate_element()`](https://cynkra.github.io/g6R/reference/g6_element.md)
+  [`as_g6_node()`](https://cynkra.github.io/g6R/reference/g6_element.md)
+  [`as_g6_edge()`](https://cynkra.github.io/g6R/reference/g6_element.md)
+  [`as_g6_combo()`](https://cynkra.github.io/g6R/reference/g6_element.md)
+  : G6 Graph Elements
+
+### Create list of g6 elements
+
+- [`g6_data()`](https://cynkra.github.io/g6R/reference/g6_data.md)
+  [`is_g6_data()`](https://cynkra.github.io/g6R/reference/g6_data.md)
+  [`as_g6_data()`](https://cynkra.github.io/g6R/reference/g6_data.md) :
+  Create a g6_data object
+- [`g6_nodes()`](https://cynkra.github.io/g6R/reference/g6_elements.md)
+  [`g6_edges()`](https://cynkra.github.io/g6R/reference/g6_elements.md)
+  [`g6_combos()`](https://cynkra.github.io/g6R/reference/g6_elements.md)
+  [`is_g6_nodes()`](https://cynkra.github.io/g6R/reference/g6_elements.md)
+  [`is_g6_edges()`](https://cynkra.github.io/g6R/reference/g6_elements.md)
+  [`is_g6_combos()`](https://cynkra.github.io/g6R/reference/g6_elements.md)
+  [`validate_elements()`](https://cynkra.github.io/g6R/reference/g6_elements.md)
+  [`as_g6_nodes()`](https://cynkra.github.io/g6R/reference/g6_elements.md)
+  [`as_g6_edges()`](https://cynkra.github.io/g6R/reference/g6_elements.md)
+  [`as_g6_combos()`](https://cynkra.github.io/g6R/reference/g6_elements.md)
+  : Create and validate lists of G6 elements
+
+## Proxy
+
+Update a g6 instance from the server function of a Shiny app
+
+### Setup
+
+Setup a g6 proxy
+
+- [`g6_proxy()`](https://cynkra.github.io/g6R/reference/g6_proxy.md) :
+  Create a proxy object to modify an existing g6 graph instance
+
+### Add elements
+
+Add elements to a g6 instance
+
+- [`g6_add_nodes()`](https://cynkra.github.io/g6R/reference/g6-add.md)
+  [`g6_add_edges()`](https://cynkra.github.io/g6R/reference/g6-add.md)
+  [`g6_add_combos()`](https://cynkra.github.io/g6R/reference/g6-add.md)
+  [`g6_add_data()`](https://cynkra.github.io/g6R/reference/g6-add.md) :
+  Add nodes/edges/combos to a g6 graph via proxy
+- [`g6_add_plugin()`](https://cynkra.github.io/g6R/reference/g6_add_plugin.md)
+  : Add a plugin to a g6 graph via proxy
+
+### Remove elements
+
+Remove elements from a g6 instance
+
+- [`g6_remove_nodes()`](https://cynkra.github.io/g6R/reference/g6-remove.md)
+  [`g6_remove_edges()`](https://cynkra.github.io/g6R/reference/g6-remove.md)
+  [`g6_remove_combos()`](https://cynkra.github.io/g6R/reference/g6-remove.md)
+  : Remove nodes/edge/combos from a g6 graph via proxy
+
+### Update elements
+
+Update elements from a g6 instance
+
+- [`g6_update_nodes()`](https://cynkra.github.io/g6R/reference/g6-update.md)
+  [`g6_update_edges()`](https://cynkra.github.io/g6R/reference/g6-update.md)
+  [`g6_update_combos()`](https://cynkra.github.io/g6R/reference/g6-update.md)
+  : Update nodes/edges/combos to a g6 graph via proxy
+
+### Get elements
+
+Get elements state from a g6 instance
+
+- [`g6_get_nodes()`](https://cynkra.github.io/g6R/reference/g6-get.md)
+  [`g6_get_edges()`](https://cynkra.github.io/g6R/reference/g6-get.md)
+  [`g6_get_combos()`](https://cynkra.github.io/g6R/reference/g6-get.md)
+  : Get the state of nodes/edges/combos in a g6 graph via proxy
+
+### Select elements
+
+Select elements state from a g6 instance
+
+- [`g6_set_nodes()`](https://cynkra.github.io/g6R/reference/g6-set.md)
+  [`g6_set_edges()`](https://cynkra.github.io/g6R/reference/g6-set.md)
+  [`g6_set_combos()`](https://cynkra.github.io/g6R/reference/g6-set.md)
+  [`g6_set_data()`](https://cynkra.github.io/g6R/reference/g6-set.md) :
+  Set the state of nodes/edges/combos in a g6 graph via proxy
+
+### Canvas
+
+canvas util function
+
+- [`g6_canvas_resize()`](https://cynkra.github.io/g6R/reference/g6_canvas_resize.md)
+  : Resize the canvas of a g6 graph via proxy
+- [`g6_fit_center()`](https://cynkra.github.io/g6R/reference/g6_fit_center.md)
+  : Center graph
+
+### Elements actions
+
+elements actions
+
+- [`g6_focus_elements()`](https://cynkra.github.io/g6R/reference/g6-focus.md)
+  [`g6_focus_nodes()`](https://cynkra.github.io/g6R/reference/g6-focus.md)
+  [`g6_focus_edges()`](https://cynkra.github.io/g6R/reference/g6-focus.md)
+  [`g6_focus_combos()`](https://cynkra.github.io/g6R/reference/g6-focus.md)
+  : Focus on specific elements in a g6 graph via proxy
+- [`g6_hide_elements()`](https://cynkra.github.io/g6R/reference/g6-element-toggle.md)
+  [`g6_hide_nodes()`](https://cynkra.github.io/g6R/reference/g6-element-toggle.md)
+  [`g6_hide_edges()`](https://cynkra.github.io/g6R/reference/g6-element-toggle.md)
+  [`g6_hide_combos()`](https://cynkra.github.io/g6R/reference/g6-element-toggle.md)
+  [`g6_show_elements()`](https://cynkra.github.io/g6R/reference/g6-element-toggle.md)
+  [`g6_show_nodes()`](https://cynkra.github.io/g6R/reference/g6-element-toggle.md)
+  [`g6_show_edges()`](https://cynkra.github.io/g6R/reference/g6-element-toggle.md)
+  [`g6_show_combos()`](https://cynkra.github.io/g6R/reference/g6-element-toggle.md)
+  : Hide/show elements in a g6 graph
+- [`g6_collapse_combo()`](https://cynkra.github.io/g6R/reference/g6-combo-action.md)
+  [`g6_expand_combo()`](https://cynkra.github.io/g6R/reference/g6-combo-action.md)
+  : Collapse or expand a combo element in a g6 graph
+
+### Others
+
+Others
+
+- [`g6_add_plugin()`](https://cynkra.github.io/g6R/reference/g6_add_plugin.md)
+  : Add a plugin to a g6 graph via proxy
+- [`g6_set_options()`](https://cynkra.github.io/g6R/reference/g6_set_options.md)
+  : Set options for a g6 graph via proxy
+- [`g6_update_plugin()`](https://cynkra.github.io/g6R/reference/g6_update_plugin.md)
+  : Update a plugin in a g6 graph via proxy
+- [`g6_update_behavior()`](https://cynkra.github.io/g6R/reference/g6_update_behavior.md)
+  : Update a behavior in a g6 graph via proxy
+
+## Layout
+
+Graph layout
+
+- [`g6_layout()`](https://cynkra.github.io/g6R/reference/g6_layout.md) :
+  Set the layout algorithm for a g6 graph
+- [`antv_dagre_layout()`](https://cynkra.github.io/g6R/reference/antv_dagre_layout.md)
+  : Generate G6 AntV Dagre layout configuration
+- [`circular_layout()`](https://cynkra.github.io/g6R/reference/circular_layout.md)
+  : Generate G6 AntV circular layout configuration
+- [`compact_box_layout()`](https://cynkra.github.io/g6R/reference/compact_box_layout.md)
+  : Generate G6 AntV Compact Box layout configuration
+- [`concentric_layout()`](https://cynkra.github.io/g6R/reference/concentric_layout.md)
+  : Generate G6 AntV Concentric layout configuration
+- [`d3_force_layout()`](https://cynkra.github.io/g6R/reference/d3_force_layout.md)
+  : Generate G6 D3 Force layout configuration
+- [`dagre_layout()`](https://cynkra.github.io/g6R/reference/dagre_layout.md)
+  : Generate G6 AntV Dagre layout configuration
+- [`dendrogram_layout()`](https://cynkra.github.io/g6R/reference/dendrogram_layout.md)
+  : Generate G6 Dendrogram layout configuration
+- [`force_atlas2_layout()`](https://cynkra.github.io/g6R/reference/force_atlas2_layout.md)
+  : Generate G6 Force Atlas2 layout configuration
+- [`fruchterman_layout()`](https://cynkra.github.io/g6R/reference/fruchterman_layout.md)
+  : Generate G6 Fruchterman layout configuration
+- [`radial_layout()`](https://cynkra.github.io/g6R/reference/radial_layout.md)
+  : Generate G6 Radial layout configuration
+- [`combo_combined_layout()`](https://cynkra.github.io/g6R/reference/combo_combined_layout.md)
+  : Create an AntV Combo Combined Layout
+
+## Options
+
+g6 options
+
+- [`g6_options()`](https://cynkra.github.io/g6R/reference/g6_options.md)
+  : Configure Global Options for G6 Graph
+- [`node_options()`](https://cynkra.github.io/g6R/reference/node_options.md)
+  : Create Node Options Configuration for G6 Graphs
+- [`node_style_options()`](https://cynkra.github.io/g6R/reference/node_style_options.md)
+  : Create Node Style Options for G6 Graphs
+- [`edge_options()`](https://cynkra.github.io/g6R/reference/edge_options.md)
+  : Create Edge Options Configuration for G6 Graphs
+- [`edge_style_options()`](https://cynkra.github.io/g6R/reference/edge_style_options.md)
+  : Create Edge Style Options for G6 Graphs
+- [`combo_options()`](https://cynkra.github.io/g6R/reference/combo_options.md)
+  : Create Combo Options Configuration for G6 Graphs
+- [`auto_fit_config()`](https://cynkra.github.io/g6R/reference/auto_fit_config.md)
+  : Create Auto-Fit Configuration for G6 Graphs
+- [`canvas_config()`](https://cynkra.github.io/g6R/reference/canvas_config.md)
+  : Create Canvas Configuration for G6 Graphs
+- [`animation_config()`](https://cynkra.github.io/g6R/reference/animation_config.md)
+  : Create Animation Configuration for G6 Graphs
+- [`g6_set_theme()`](https://cynkra.github.io/g6R/reference/g6_set_theme.md)
+  : Set the theme for a g6 graph via proxy
+
+## Behaviors
+
+Container for behavior elements
+
+- [`g6_behaviors()`](https://cynkra.github.io/g6R/reference/g6_behaviors.md)
+  : Create G6 Graph Behaviors Configuration
+
+### Navigation behaviors
+
+Navigation behaviors
+
+- [`drag_canvas()`](https://cynkra.github.io/g6R/reference/drag_canvas.md)
+  : Configure Drag Canvas Behavior
+- [`optimize_viewport_transform()`](https://cynkra.github.io/g6R/reference/optimize_viewport_transform.md)
+  : Configure Optimize Viewport Transform Behavior
+- [`scroll_canvas()`](https://cynkra.github.io/g6R/reference/scroll_canvas.md)
+  : Configure Scroll Canvas Behavior
+- [`zoom_canvas()`](https://cynkra.github.io/g6R/reference/zoom_canvas.md)
+  : Configure Zoom Canvas Behavior
+
+### Selection behaviors
+
+Selection behaviors
+
+- [`brush_select()`](https://cynkra.github.io/g6R/reference/brush_select.md)
+  : Configure Brush Selection Interaction
+- [`click_select()`](https://cynkra.github.io/g6R/reference/click_select.md)
+  : Configure Click Select Behavior
+- [`lasso_select()`](https://cynkra.github.io/g6R/reference/lasso_select.md)
+  : Configure Lasso Select Behavior
+
+### Editing behaviors
+
+Editing behaviors
+
+- [`create_edge()`](https://cynkra.github.io/g6R/reference/create_edge.md)
+  : Configure Create Edge Behavior
+- [`drag_element()`](https://cynkra.github.io/g6R/reference/drag_element.md)
+  : Configure Drag Element Behavior
+- [`drag_element_force()`](https://cynkra.github.io/g6R/reference/drag_element_force.md)
+  : Configure Drag Element Force Behavior
+
+### Data Exploration behaviors
+
+Data Exploration behaviors
+
+- [`collapse_expand()`](https://cynkra.github.io/g6R/reference/collapse_expand.md)
+  : Configure Collapse Expand Behavior
+- [`focus_element()`](https://cynkra.github.io/g6R/reference/focus_element.md)
+  : Configure Focus Element Behavior
+- [`hover_activate()`](https://cynkra.github.io/g6R/reference/hover_activate.md)
+  : Configure Hover Activate Behavior
+
+### Visual Optimization behaviors
+
+Visual Optimization behaviors
+
+- [`auto_adapt_label()`](https://cynkra.github.io/g6R/reference/auto_adapt_label.md)
+  : Configure Auto Adapt Label Behavior
+- [`fix_element_size()`](https://cynkra.github.io/g6R/reference/fix_element_size.md)
+  : Configure Fix Element Size Behavior
+
+## Plugins
+
+Container for plugin elements
+
+- [`g6_plugins()`](https://cynkra.github.io/g6R/reference/g6_plugins.md)
+  : Create a List of G6 Plugins
+
+### Visual Style Enhancement
+
+Enrich the graph style
+
+- [`background()`](https://cynkra.github.io/g6R/reference/background.md)
+  : Configure Background Plugin for G6
+- [`bubble_sets()`](https://cynkra.github.io/g6R/reference/bubble_sets.md)
+  : Configure Bubble Sets Plugin for G6
+- [`grid_line()`](https://cynkra.github.io/g6R/reference/grid_line.md) :
+  Configure Grid Line Plugin
+- [`hull()`](https://cynkra.github.io/g6R/reference/hull.md) : Configure
+  Hull Plugin
+- [`snapline()`](https://cynkra.github.io/g6R/reference/snapline.md) :
+  Configure Snapline Plugin
+- [`watermark()`](https://cynkra.github.io/g6R/reference/watermark.md) :
+  Configure Watermark Plugin
+
+### Navigation and Overview
+
+Navigation and Overview
+
+- [`fullscreen()`](https://cynkra.github.io/g6R/reference/fullscreen.md)
+  : Configure Fullscreen Plugin
+- [`minimap()`](https://cynkra.github.io/g6R/reference/minimap.md) :
+  Configure Minimap Plugin
+- [`timebar()`](https://cynkra.github.io/g6R/reference/timebar.md) :
+  Configure Timebar Plugin
+
+### Interactive Controls
+
+Interactive Controls
+
+- [`context_menu()`](https://cynkra.github.io/g6R/reference/context_menu.md)
+  : Configure Context Menu Behavior
+- [`legend()`](https://cynkra.github.io/g6R/reference/legend.md) :
+  Configure Legend Plugin
+- [`toolbar()`](https://cynkra.github.io/g6R/reference/toolbar.md) :
+  Configure Toolbar Plugin
+- [`tooltips()`](https://cynkra.github.io/g6R/reference/tooltips.md) :
+  Configure Tooltip Plugin
+
+### Data Exploration
+
+Data Exploration
+
+- [`edge_bundling()`](https://cynkra.github.io/g6R/reference/edge_bundling.md)
+  : Configure Edge Bundling Plugin
+- [`edge_filter_lens()`](https://cynkra.github.io/g6R/reference/edge_filter_lens.md)
+  : Configure Edge Filter Lens Plugin
+- [`fish_eye()`](https://cynkra.github.io/g6R/reference/fish_eye.md) :
+  Configure Fish Eye Plugin
+
+### Advanced Features
+
+Advanced Features
+
+- [`history()`](https://cynkra.github.io/g6R/reference/history.md) :
+  Configure History Plugin
+
+## Miscellaneous
+
+Utils function
+
+- [`JS()`](https://cynkra.github.io/g6R/reference/JS.md) : Marks as
+  string to be processed as a JS function
+
+## Example Data
+
+Example Data
+
+- [`dag`](https://cynkra.github.io/g6R/reference/dag.md) : Example DAG
+  graph
+- [`lesmis`](https://cynkra.github.io/g6R/reference/lesmis.md) :
+  Character network from "Les miserables" novel
+- [`radial`](https://cynkra.github.io/g6R/reference/radial.md) : Example
+  Network for radial layouts
+- [`tree`](https://cynkra.github.io/g6R/reference/tree.md) : Example
+  tree graph
+- [`poke`](https://cynkra.github.io/g6R/reference/poke.md) : Example
+  pokemon data
+
+# Articles
+
+### All vignettes
+
+- [Behaviors](https://cynkra.github.io/g6R/articles/behaviors.md):
+- [Combos](https://cynkra.github.io/g6R/articles/combos.md):
+- [Edges](https://cynkra.github.io/g6R/articles/edges.md):
+- [g6R](https://cynkra.github.io/g6R/articles/g6R.md):
+- [igraph support](https://cynkra.github.io/g6R/articles/igraph.md):
+- [Layouts](https://cynkra.github.io/g6R/articles/layouts.md):
+- [Nodes](https://cynkra.github.io/g6R/articles/nodes.md):
+- [Plugins](https://cynkra.github.io/g6R/articles/plugins.md):

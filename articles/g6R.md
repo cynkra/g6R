@@ -1,0 +1,270 @@
+# g6R
+
+``` r
+library(g6R)
+library(shiny)
+```
+
+## Graph data
+
+### Data formats
+
+To setup a [g6R](https://github.com/cynkra/g6R) graph, you first have to
+define **node**, **edges** and **combos** (collection of nodes), like
+so:
+
+``` r
+nodes <- data.frame(id = 1:10)
+```
+
+You could also pass these elements as **list**, which will be faster
+than the dataframe approach since under the hood,
+[g6R](https://github.com/cynkra/g6R) has to send list to JavaScript:
+
+``` r
+nodes <- lapply(seq_len(10), function(i) {
+  list(id = i)
+})
+```
+
+We then define some random edges:
+
+``` r
+# Set a seed for reproducibility
+set.seed(123)
+
+# Define the number of edges to create (e.g., 200 random connections)
+num_edges <- 5
+
+# Generate random edges
+edges <- data.frame(
+  source = sample(nodes$id, num_edges, replace = TRUE),
+  target = sample(nodes$id, num_edges, replace = TRUE)
+)
+
+edges$id <- paste0(edges$source, edges$target)
+duplicated_id <- which(duplicated(edges$id) == TRUE)
+if (length(duplicated_id)) {
+  edges <- edges[-duplicated_id, ]
+}
+```
+
+In [g6R](https://github.com/cynkra/g6R), the recommended way to assemble
+graph data is by using the helper functions
+[`g6_data()`](https://cynkra.github.io/g6R/reference/g6_data.md) and
+[`as_g6_data()`](https://cynkra.github.io/g6R/reference/g6_data.md).  
+These functions provide a consistent and user-friendly interface for
+combining nodes, edges, and combos into a single graph data object.  
+[`g6_data()`](https://cynkra.github.io/g6R/reference/g6_data.md) allows
+you to explicitly construct a graph data object from validated nodes,
+edges, and combos, while
+[`as_g6_data()`](https://cynkra.github.io/g6R/reference/g6_data.md) can
+coerce various input formats (lists, data frames) into a graph data
+object.
+
+You can list available methods for `as_g6_data` with:
+
+``` r
+as.list(methods("as_g6_data"))
+#> [[1]]
+#> [1] "as_g6_data.g6_data"
+#> 
+#> [[2]]
+#> [1] "as_g6_data.list"
+```
+
+Using these helpers ensures compatibility with all
+[g6R](https://github.com/cynkra/g6R) features and is the recommended
+method for graph data creation.
+
+For example:
+
+``` r
+# Create nodes and edges
+my_nodes <- data.frame(id = c("A", "B"))
+my_edges <- data.frame(source = "A", target = "B")
+
+# Assemble graph data using g6_data()
+graph <- g6_data(
+  nodes = my_nodes,
+  edges = my_edges
+)
+graph
+#> $nodes
+#> [[1]]
+#> $id
+#> [1] "A"
+#> 
+#> attr(,"class")
+#> [1] "g6_node"    "g6_element"
+#> 
+#> [[2]]
+#> $id
+#> [1] "B"
+#> 
+#> attr(,"class")
+#> [1] "g6_node"    "g6_element"
+#> 
+#> attr(,"class")
+#> [1] "g6_nodes"
+#> 
+#> $edges
+#> [[1]]
+#> $source
+#> [1] "A"
+#> 
+#> $target
+#> [1] "B"
+#> 
+#> $id
+#> [1] "A-B"
+#> 
+#> attr(,"class")
+#> [1] "g6_edge"    "g6_element"
+#> 
+#> attr(,"class")
+#> [1] "g6_edges"
+#> 
+#> attr(,"class")
+#> [1] "g6_data"
+
+# Or use as_g6_data() directly with a list
+lst <- list(
+  nodes = list(
+    list(id = "A"),
+    list(id = "B")
+  ),
+  edges = list(
+    list(source = "A", target = "B")
+  )
+)
+graph2 <- as_g6_data(lst)
+
+all.equal(graph, graph2)
+#> [1] TRUE
+```
+
+### Performance
+
+If you are dealing with large graphs, you might want to use the
+`jsonUrl` parameter to **fetch** the graph data from a hosted JSON file
+instead. If so, then leave `nodes`, `edges` and `combos` `NULL`. This
+allows to bypass the serialization of the graph data to JavaScript,
+which can be slow for large graphs. That’s done in the
+`shinyAppDir(system.file("examples", "json", package = "g6R"))` example.
+
+``` r
+shinyAppDir(system.file("examples", "json", package = "g6R"))
+```
+
+## Initialise the graph
+
+We leverage `g6` to create an **instance** of our network:
+
+``` r
+g6(nodes, edges, width = 200, height = 200)
+```
+
+As you can see, the nodes don’t render well yet. Let’s add it some
+layout.
+
+## Layout
+
+[`g6_layout()`](https://cynkra.github.io/g6R/reference/g6_layout.md)
+allows to pass any supported
+[layout](https://g6.antv.antgroup.com/en/manual/layout/overview). For
+this example, we select the
+[`d3_force_layout()`](https://cynkra.github.io/g6R/reference/d3_force_layout.md):
+
+``` r
+g <- g6(nodes, edges) |>
+  g6_layout(d3_force_layout())
+g
+```
+
+That’s better! We could go further by displaying nodes **label**.
+
+## Tweak options
+
+[`g6_options()`](https://cynkra.github.io/g6R/reference/g6_options.md)
+is your to go tool when it comes to change the style of the graph
+element such as nodes. Properties are selected from the
+[documentation](https://g6.antv.antgroup.com/en/manual/element/node/build-in/base-node#main-graphic-style):
+
+``` r
+g <- g |>
+  g6_options(
+    node = list(
+      style = list(
+        labelBackground = TRUE,
+        labelBackgroundFill = '#FFB6C1',
+        labelBackgroundRadius = 4,
+        labelFontFamily = 'Arial',
+        labelPadding = c(0, 4),
+        labelText = JS(
+          "(d) => {
+              return d.id
+            }"
+        )
+      )
+    )
+  )
+g
+```
+
+## Plugins
+
+Plugins allowing users to improve the user experience by adding
+graphical components to the canvas like **minimaps** or **tooltips**. We
+can pass them inside `g6_plugins` either as a character string with a
+reference to the plugin name or using the correponding function to pass
+more configuration options:
+
+``` r
+# Use defaults
+g6_plugins("minimap")
+
+# Custom options
+g6_plugins(
+  minimap(size = c(100, 100))
+)
+```
+
+``` r
+g <- g |>
+  g6_plugins(
+    minimap(size = c(100, 100))
+  )
+g
+```
+
+## Behaviors
+
+Behaviors correspond to interactions between users and the graph
+elements, such as dragging the nodes and selecting nodes. Be mindful
+that not all behaviors are compatible: dragging canvas and canvas
+elements would require to specify different triggers for each behavior.
+With [g6R](https://github.com/cynkra/g6R) behaviors can be added with
+`g6_behaviors`, like plugins:
+
+``` r
+g <- g |>
+  g6_behaviors(
+    "zoom-canvas",
+    drag_element_force(fixed = TRUE),
+    click_select(
+      multiple = TRUE,
+      onClick = JS(
+        "(e) => {
+            console.log(e);
+          }"
+      )
+    ),
+    brush_select()
+  )
+g
+```
+
+Notice that we can pass **callback** functions from R to JavaScript.
+This is useful in combination with Shiny to set custom inputs, for
+instance.

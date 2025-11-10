@@ -1,0 +1,187 @@
+# Configure Timebar Plugin
+
+Creates a configuration object for the timebar plugin in G6. This plugin
+adds a timeline or chart-based control for time-related data
+visualization.
+
+## Usage
+
+``` r
+timebar(
+  data,
+  key = "timebar",
+  className = "g6-timebar",
+  x = NULL,
+  y = NULL,
+  width = 450,
+  height = 60,
+  position = c("bottom", "top"),
+  padding = 10,
+  timebarType = c("time", "chart"),
+  elementTypes = c("node", "edge", "combo"),
+  mode = c("modify", "visibility"),
+  values = NULL,
+  loop = FALSE,
+  getTime = NULL,
+  labelFormatter = NULL,
+  onChange = NULL,
+  onReset = NULL,
+  onSpeedChange = NULL,
+  onPlay = NULL,
+  onPause = NULL,
+  onBackward = NULL,
+  onForward = NULL,
+  ...
+)
+```
+
+## Arguments
+
+- data:
+
+  Time data, either a vector of timestamps or a list of objects with
+  time and value (required).
+
+- key:
+
+  Unique identifier for the plugin (string, default: NULL).
+
+- className:
+
+  Additional class name for the timebar DOM (string, default:
+  "g6-timebar").
+
+- x:
+
+  X position, will be ignored if position is set (number, default:
+  NULL).
+
+- y:
+
+  Y position, will be ignored if position is set (number, default:
+  NULL).
+
+- width:
+
+  Timebar width (number, default: 450).
+
+- height:
+
+  Timebar height (number, default: 60).
+
+- position:
+
+  Timebar position: "bottom" or "top" (string, default: "bottom").
+
+- padding:
+
+  Padding around the timebar (number or numeric vector, default: 10).
+
+- timebarType:
+
+  Display type: "time" or "chart" (string, default: "time").
+
+- elementTypes:
+
+  Filter element types: vector of "node", "edge", and/or "combo"
+  (character vector, default: c("node")).
+
+- mode:
+
+  Control element filtering method: "modify" or "visibility" (string,
+  default: "modify").
+
+- values:
+
+  Current time value (number, vector of two numbers, Date, or vector of
+  two Dates, default: NULL).
+
+- loop:
+
+  Whether to loop playback (boolean, default: FALSE).
+
+- getTime:
+
+  Method to get element time (JS function, default: NULL).
+
+- labelFormatter:
+
+  Custom time formatting in chart mode (JS function, default: NULL).
+
+- onChange:
+
+  Callback when time interval changes (JS function, default: NULL).
+
+- onReset:
+
+  Callback when reset (JS function, default: NULL).
+
+- onSpeedChange:
+
+  Callback when playback speed changes (JS function, default: NULL).
+
+- onPlay:
+
+  Callback when playback starts (JS function, default: NULL).
+
+- onPause:
+
+  Callback when paused (JS function, default: NULL).
+
+- onBackward:
+
+  Callback when moving backward (JS function, default: NULL).
+
+- onForward:
+
+  Callback when moving forward (JS function, default: NULL).
+
+- ...:
+
+  Extra parameters. See
+  <https://g6.antv.antgroup.com/en/manual/plugin/timebar>.
+
+## Value
+
+A list with the configuration settings for the timebar plugin.
+
+## Examples
+
+``` r
+# Basic timebar with array of timestamps
+config <- timebar(
+  data = c(1609459200000, 1609545600000, 1609632000000)  # Jan 1-3, 2021 in milliseconds
+)
+
+# Chart-type timebar with time-value pairs
+config <- timebar(
+  data = list(
+    list(time = 1609459200000, value = 10),
+    list(time = 1609545600000, value = 25),
+    list(time = 1609632000000, value = 15)
+  ),
+  timebarType = "chart",
+  width = 600,
+  height = 100,
+  position = "top"
+)
+
+# With custom callbacks
+config <- timebar(
+  data = c(1609459200000, 1609545600000, 1609632000000),
+  onChange = JS("(values) => {
+    console.log('Time changed:', values);
+  }"),
+  onPlay = JS("() => {
+    console.log('Playback started');
+  }")
+)
+
+# With custom time getter function for elements
+config <- timebar(
+  data = c(1609459200000, 1609545600000, 1609632000000),
+  getTime = JS("(datum) => {
+    return datum.created_at; // Get time from created_at property
+  }")
+)
+```

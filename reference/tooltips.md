@@ -1,0 +1,133 @@
+# Configure Tooltip Plugin
+
+Creates a configuration object for the tooltip plugin in G6. This plugin
+displays tooltips when interacting with graph elements.
+
+## Usage
+
+``` r
+tooltips(
+  key = "tooltip",
+  position = c("top-right", "top", "bottom", "left", "right", "top-left", "bottom-left",
+    "bottom-right"),
+  enable = TRUE,
+  getContent = NULL,
+  onOpenChange = NULL,
+  trigger = c("hover", "click"),
+  container = NULL,
+  offset = c(10, 10),
+  enterable = FALSE,
+  title = NULL,
+  style = NULL,
+  ...
+)
+```
+
+## Arguments
+
+- key:
+
+  Unique identifier for the plugin (string, default: NULL).
+
+- position:
+
+  Tooltip position relative to the element (string, default:
+  "top-right").
+
+- enable:
+
+  Whether the plugin is enabled (boolean or function, default: TRUE).
+
+- getContent:
+
+  Function to generate custom tooltip content (JS function, default:
+  NULL).
+
+- onOpenChange:
+
+  Callback for tooltip show/hide events (JS function, default: NULL).
+
+- trigger:
+
+  Trigger behavior: "hover" or "click" (string, default: "hover").
+
+- container:
+
+  Custom rendering container for tooltip (string or HTML element,
+  default: NULL).
+
+- offset:
+
+  Offset distance as a vector of two numbers `[x, y]` (numeric vector,
+  default: c(10, 10)).
+
+- enterable:
+
+  Whether the pointer can enter the tooltip (boolean, default: FALSE).
+
+- title:
+
+  Title for the tooltip (string, default: NULL).
+
+- style:
+
+  Custom style for the tooltip (list or JS object, default:
+  list(".tooltip" = list(visibility = "hidden"))).
+
+- ...:
+
+  Extra parameters. See
+  <https://g6.antv.antgroup.com/en/manual/plugin/tooltip>.
+
+## Value
+
+A list with the configuration settings for the tooltip plugin.
+
+## Examples
+
+``` r
+# Basic tooltip
+config <- tooltips()
+
+# Tooltip with custom position and content
+config <- tooltips(
+  position = "bottom",
+  getContent = JS("(event, items) => {
+    let result = `<h4>Custom Content</h4>`;
+    items.forEach((item) => {
+      result += `<p>Type: ${item.data.description}</p>`;
+    });
+    return result;
+  }")
+)
+
+# Click-triggered tooltip with custom style
+config <- tooltips(
+  trigger = "click",
+  position = "bottom-left",
+  offset = c(15, 20),
+  style = list(
+    ".tooltip" = list(
+      backgroundColor = "#fff",
+      border = "1px solid #ccc",
+      borderRadius = "4px",
+      boxShadow = "0 2px 6px rgba(0,0,0,0.1)",
+      padding = "10px",
+      maxWidth = "300px"
+    )
+  )
+)
+
+# Conditional tooltip based on node type
+config <- tooltips(
+  enable = JS("(event, items) => {
+    // Only show tooltip for nodes with type 'important'
+    const item = items[0];
+    return item.type === 'important';
+  }"),
+  enterable = TRUE,
+  onOpenChange = JS("(open) => {
+    console.log('Tooltip visibility changed:', open);
+  }")
+)
+```

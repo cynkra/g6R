@@ -1,0 +1,128 @@
+# Generate G6 Force Atlas2 layout configuration
+
+This function creates a configuration list for G6 Force Atlas2 layout
+with all available options as parameters.
+
+## Usage
+
+``` r
+force_atlas2_layout(
+  barnesHut = NULL,
+  dissuadeHubs = FALSE,
+  height = NULL,
+  kg = 1,
+  kr = 5,
+  ks = 0.1,
+  ksmax = 10,
+  mode = "normal",
+  nodeSize = NULL,
+  preventOverlap = FALSE,
+  prune = NULL,
+  tao = 0.1,
+  width = NULL,
+  center = NULL,
+  ...
+)
+```
+
+## Arguments
+
+- barnesHut:
+
+  Logical. Whether to enable quadtree acceleration. When enabled,
+  improves performance for large graphs but may affect layout quality.
+  By default, enabled if node count \> 250.
+
+- dissuadeHubs:
+
+  Logical. Whether to enable hub mode. If TRUE, nodes with higher
+  in-degree are more likely to be placed at the center than those with
+  high out-degree. Defaults to FALSE.
+
+- height:
+
+  Numeric. Layout height. Defaults to container height.
+
+- kg:
+
+  Numeric. Gravity coefficient. The larger the value, the more
+  concentrated the layout is at the center. Defaults to 1.
+
+- kr:
+
+  Numeric. Repulsion coefficient. Adjusts the compactness of the layout.
+  The larger the value, the looser the layout. Defaults to 5.
+
+- ks:
+
+  Numeric. Controls the speed of node movement during iteration.
+  Defaults to 0.1.
+
+- ksmax:
+
+  Numeric. Maximum node movement speed during iteration. Defaults to 10.
+
+- mode:
+
+  Character. Clustering mode. Options are "normal" or "linlog". In
+  "linlog" mode, clusters are more compact. Defaults to "normal".
+
+- nodeSize:
+
+  Numeric or function. Node size (diameter). Used for repulsion
+  calculation when preventOverlap is enabled.
+
+  If not set, uses data.size in node data.
+
+- preventOverlap:
+
+  Logical. Whether to prevent node overlap. When enabled, layout
+  considers node size to avoid overlap. Node size is specified by
+  `nodeSize` or `data.size` in node data. Defaults to FALSE.
+
+- prune:
+
+  Logical. Whether to enable auto-pruning. By default, enabled if node
+  count \> 100. Pruning speeds up convergence but may reduce layout
+  quality. Set to FALSE to disable auto-activation.
+
+- tao:
+
+  Numeric. Tolerance for stopping oscillation when layout is near
+  convergence. Defaults to 0.1.
+
+- width:
+
+  Numeric. Layout width. Defaults to container width.
+
+- center:
+
+  Numeric vector of length 2. Layout center in the form `[x, y]`. Each
+  node is attracted to this point, with gravity controlled by `kg`. If
+  not set, uses canvas center.
+
+- ...:
+
+  Additional parameters to pass to the layout. See
+  <https://g6.antv.antgroup.com/en/manual/layout/force-atlas2-layout>.
+
+## Value
+
+A list containing the configuration for G6 force atlas2 layout.
+
+## Examples
+
+``` r
+if (interactive()) {
+  g6(lesmis$nodes, lesmis$edges) |>
+    g6_layout(force_atlas2_layout(
+      kr = 20,
+      preventOverlap = TRUE,
+      center = c(250, 250))) |>
+    g6_options(autoResize = TRUE) |>
+    g6_behaviors(
+      "zoom-canvas",
+      drag_element()
+    )
+}
+```

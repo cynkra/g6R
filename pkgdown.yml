@@ -1,5 +1,5 @@
 pandoc: 3.1.11
-pkgdown: 2.1.3
+pkgdown: 2.2.0
 pkgdown_sha: ~
 articles:
   articles/behaviors: behaviors.html
@@ -10,7 +10,7 @@ articles:
   articles/layouts: layouts.html
   articles/nodes: nodes.html
   articles/plugins: plugins.html
-last_built: 2025-09-29T09:20Z
+last_built: 2025-11-10T15:49Z
 urls:
   reference: https://cynkra.github.io/g6R/reference
   article: https://cynkra.github.io/g6R/articles

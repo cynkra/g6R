@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">g6R</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.5.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -56,14 +56,30 @@
     </div>
 
     <div class="section level2">
-<h2 class="pkg-version" data-toc-text="0.2.0" id="g6r-020">g6R 0.2.0<a class="anchor" aria-label="anchor" href="#g6r-020"></a></h2>
-<ul><li>Fix: when selecting an edge/node/combo, if another type of element was selected, the corresponding input is reset. This avoids to accidentally delete a previously selected element when another type of element is selected.</li>
+<h2 class="pkg-version" data-toc-text="0.5.0" id="g6r-050">g6R 0.5.0<a class="anchor" aria-label="anchor" href="#g6r-050"></a></h2>
+<div class="section level3">
+<h3 id="potential-breaking-changes-0-5-0">Potential breaking changes<a class="anchor" aria-label="anchor" href="#potential-breaking-changes-0-5-0"></a></h3>
+<p>Due to the new data validation for nodes, edges and combos, some existing code might break if the data provided to g6R functions is not valid. See the corresponding <a href="https://cynkra.github.io/g6R/articles/nodes.html#data-properties">documentation</a> section. If you had to pass custom data you can do it in the <code>data</code> slot.</p>
+</div>
+<div class="section level3">
+<h3 id="new-features-and-fixes-0-5-0">New features and fixes<a class="anchor" aria-label="anchor" href="#new-features-and-fixes-0-5-0"></a></h3>
+<ul><li>Added new elements API: <code><a href="../reference/g6_element.html">g6_node()</a></code>, <code><a href="../reference/g6_element.html">g6_edge()</a></code>, <code><a href="../reference/g6_element.html">g6_combo()</a></code> to create nodes, edges and combos respectively. We suggest to use them instead of passing lists or dataframes to g6 as they provide safety checks. We also added <code><a href="../reference/g6_elements.html">g6_nodes()</a></code>, <code><a href="../reference/g6_elements.html">g6_edges()</a></code> and <code><a href="../reference/g6_elements.html">g6_combos()</a></code> which are internally used by some proxy functions like <code><a href="../reference/g6-add.html">g6_add_nodes()</a></code> to provide more flexibility.</li>
+<li>New <code>options("g6R.mode)</code> that can be <code>dev</code> or <code>prod</code> (default). In <code>dev</code> mode, Shiny notifications are displayed in the UI whenever a JavaScript error happens (they are still available in the JS console).</li>
+<li>
+<code><a href="../reference/g6-focus.html">g6_focus_elements()</a></code>, <code><a href="../reference/g6-element-toggle.html">g6_hide_elements()</a></code> and <code><a href="../reference/g6-element-toggle.html">g6_show_elements()</a></code> gain more specific siblings: <code><a href="../reference/g6-focus.html">g6_focus_nodes()</a></code>, <code><a href="../reference/g6-focus.html">g6_focus_edges()</a></code>, <code><a href="../reference/g6-focus.html">g6_focus_combos()</a></code>, <code><a href="../reference/g6-element-toggle.html">g6_hide_nodes()</a></code>, <code><a href="../reference/g6-element-toggle.html">g6_hide_edges()</a></code>, <code><a href="../reference/g6-element-toggle.html">g6_hide_combos()</a></code>, <code><a href="../reference/g6-element-toggle.html">g6_show_nodes()</a></code>, <code><a href="../reference/g6-element-toggle.html">g6_show_edges()</a></code>, <code><a href="../reference/g6-element-toggle.html">g6_show_combos()</a></code>.</li>
+<li>
+<code><a href="../reference/brush_select.html">brush_select()</a></code>, <code><a href="../reference/lasso_select.html">lasso_select()</a></code> and <code><a href="../reference/create_edge.html">create_edge()</a></code> gain an <code>outputId</code> parameter which allows to manually pass the Shiny output ID of the graph instance. This is useful when the graph is initialised outside the shiny render function and the ID cannot be automatically inferred with <code><a href="https://rdrr.io/pkg/shiny/man/getCurrentOutputInfo.html" class="external-link">shiny::getCurrentOutputInfo()</a></code>. This allows to set input values from the callback function with the right namespace and graph ID. You must typically pass <code>session$ns("graphid")</code> to ensure this also works in modules.</li>
+<li>Improvements to <code><a href="../reference/brush_select.html">brush_select()</a></code>: now it correctly returns the list of selected nodes, edges and combos, available via <code>input$&lt;graph_ID&gt;-selected_node</code>, <code>input$&lt;graph_ID&gt;-selected_edge</code> and <code>input$&lt;graph_ID&gt;-selected_combo</code>, thanks to the internal IDs refactoring. After a brush select operation, you can now shift click (depending on the <code><a href="../reference/click_select.html">click_select()</a></code> multiple selection trigger settings you set, it might be another key) to add/remove elements to/from the current selection.</li>
+<li>
+<code><a href="../reference/lasso_select.html">lasso_select()</a></code> also gets the same quality of life improvements.</li>
+<li>Fix: when selecting (simple select not multiselect) an edge/node/combo, if another type of element was selected, the corresponding input is reset. This avoids to accidentally delete a previously selected element when another type of element is selected.</li>
 <li>Fix: state never get set on first render.</li>
 <li>Fix <a href="https://github.com/cynkra/g6R/issues/23" class="external-link">#23</a>: graph has to be re-rendered after dynamic plugin addition so that new elements like <code>hull</code> are drawn.</li>
 <li>Fix <a href="https://github.com/cynkra/g6R/issues/22" class="external-link">#22</a>: internal typo in JS function when an error was caught in the graph.</li>
 <li>Add <code>input$&lt;graph_ID&gt;-contextmenu</code> to extract the type and id of element which was clicked in the context menu. This can be listened to from the Shiny server function.</li>
 <li>Fix layout and behavior issues in some examples: <code>drag_element_force</code> only works when <code>animation</code> is TRUE. Also added <code>autoFit = TRUE</code> wherever required (manual layout vignette).</li>
 </ul></div>
+</div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.1.0" id="g6r-010">g6R 0.1.0<a class="anchor" aria-label="anchor" href="#g6r-010"></a></h2><p class="text-muted">CRAN release: 2025-07-10</p>
 <ul><li>Initial CRAN submission.</li>
@@ -77,7 +93,7 @@
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.3.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
 </div>
 
     </footer></div>

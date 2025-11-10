@@ -1,0 +1,106 @@
+# Configure Fix Element Size Behavior
+
+Creates a configuration object for the fix-element-size behavior in G6.
+This allows maintaining fixed visual sizes for elements during zoom
+operations.
+
+## Usage
+
+``` r
+fix_element_size(
+  key = "fix-element-size",
+  enable = TRUE,
+  reset = FALSE,
+  state = "",
+  node = NULL,
+  nodeFilter = JS("() => true"),
+  edge = list(list(shape = "key", fields = c("lineWidth")), list(shape = "halo", fields =
+    c("lineWidth")), list(shape = "label", fields = c("fontSize"))),
+  edgeFilter = JS("() => true"),
+  combo = NULL,
+  comboFilter = JS("() => true"),
+  ...
+)
+```
+
+## Arguments
+
+- key:
+
+  Unique identifier for the behavior, used for subsequent operations
+  (string, default: "fix-element-size").
+
+- enable:
+
+  Whether to enable this interaction (boolean or JS function, default:
+  TRUE).
+
+- reset:
+
+  Whether to restore style when elements are redrawn (boolean, default:
+  FALSE).
+
+- state:
+
+  Specify the state of elements to fix size (string, default: "")
+
+- node:
+
+  Node configuration item(s) to define which attributes maintain fixed
+  size (list or array of lists, default: NULL).
+
+- nodeFilter:
+
+  Node filter to determine which nodes maintain fixed size (JS function,
+  default: returns TRUE for all nodes).
+
+- edge:
+
+  Edge configuration item(s) to define which attributes maintain fixed
+  size (list or array of lists, default: predefined list).
+
+- edgeFilter:
+
+  Edge filter to determine which edges maintain fixed size (JS function,
+  default: returns TRUE for all edges).
+
+- combo:
+
+  Combo configuration item(s) to define which attributes maintain fixed
+  size (list or array of lists, default: NULL).
+
+- comboFilter:
+
+  Combo filter to determine which combos maintain fixed size (JS
+  function, default: returns TRUE for all combos).
+
+- ...:
+
+  Extra parameters. See
+  <https://g6.antv.antgroup.com/en/manual/behavior/fix-element-size>.
+
+## Value
+
+A list with the configuration settings for the fix-element-size
+behavior.
+
+## Examples
+
+``` r
+# Basic configuration
+config <- fix_element_size()
+
+# Custom configuration with filters and specific shape configurations
+config <- fix_element_size(
+  key = "my-fix-size-behavior",
+  reset = TRUE,
+  state = "active",
+  node = list(
+    list(shape = "circle", fields = c("r", "lineWidth")),
+    list(shape = "label", fields = c("fontSize"))
+  ),
+  nodeFilter = JS("(node) => node.type === 'important'"),
+  edge = list(shape = "line", fields = c("lineWidth", "lineDash")),
+  edgeFilter = JS("(edge) => edge.weight > 5")
+)
+```

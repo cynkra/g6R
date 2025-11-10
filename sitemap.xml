@@ -52,6 +52,7 @@
 <url><loc>https://cynkra.github.io/g6R/reference/g6-add.html</loc></url>
 <url><loc>https://cynkra.github.io/g6R/reference/g6-combo-action.html</loc></url>
 <url><loc>https://cynkra.github.io/g6R/reference/g6-element-toggle.html</loc></url>
+<url><loc>https://cynkra.github.io/g6R/reference/g6-focus.html</loc></url>
 <url><loc>https://cynkra.github.io/g6R/reference/g6-get.html</loc></url>
 <url><loc>https://cynkra.github.io/g6R/reference/g6-remove.html</loc></url>
 <url><loc>https://cynkra.github.io/g6R/reference/g6-set.html</loc></url>
@@ -62,8 +63,10 @@
 <url><loc>https://cynkra.github.io/g6R/reference/g6_add_plugin.html</loc></url>
 <url><loc>https://cynkra.github.io/g6R/reference/g6_behaviors.html</loc></url>
 <url><loc>https://cynkra.github.io/g6R/reference/g6_canvas_resize.html</loc></url>
+<url><loc>https://cynkra.github.io/g6R/reference/g6_data.html</loc></url>
+<url><loc>https://cynkra.github.io/g6R/reference/g6_element.html</loc></url>
+<url><loc>https://cynkra.github.io/g6R/reference/g6_elements.html</loc></url>
 <url><loc>https://cynkra.github.io/g6R/reference/g6_fit_center.html</loc></url>
-<url><loc>https://cynkra.github.io/g6R/reference/g6_focus_elements.html</loc></url>
 <url><loc>https://cynkra.github.io/g6R/reference/g6_igraph.html</loc></url>
 <url><loc>https://cynkra.github.io/g6R/reference/g6_layout.html</loc></url>
 <url><loc>https://cynkra.github.io/g6R/reference/g6_options.html</loc></url>

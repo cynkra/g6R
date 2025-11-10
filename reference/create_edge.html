@@ -9,7 +9,7 @@ This allows users to create edges between nodes by clicking or dragging."></head
 
     <a class="navbar-brand me-2" href="../index.html">g6R</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.5.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -73,6 +73,7 @@ This allows users to create edges between nodes by clicking or dragging.</p>
 <span>  onFinish <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  style <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  notify <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  outputId <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  <span class="va">...</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
@@ -113,6 +114,14 @@ creation is succesful so that it does not conflict with other drag behaviors.</p
 <dd><p>Whether to show a feedback message in the ui.</p></dd>
 
 
+<dt id="arg-outputid">outputId<a class="anchor" aria-label="anchor" href="#arg-outputid"></a></dt>
+<dd><p>Manually pass the Shiny output ID. This is useful when the graph
+is initialised outside the shiny render function and the ID cannot be automatically
+inferred. This allows to set input values from the callback function
+with the right namespace and graph ID. You must typically pass <code>session$ns("graphid")</code>
+to ensure this also works in modules.</p></dd>
+
+
 <dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>
 <dd><p>Extra parameters. See <a href="https://g6.antv.antgroup.com/en/manual/behavior/create-edge" class="external-link">https://g6.antv.antgroup.com/en/manual/behavior/create-edge</a>.</p></dd>
 
@@ -142,7 +151,7 @@ as there triggers are the same. You can change the trigger to workaround this.</
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.3.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
 </div>
 
     </footer></div>

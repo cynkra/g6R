@@ -12,7 +12,7 @@
 <link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
 <script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><script src="g6R_files/libs/quarto-html/popper.min.js"></script><script src="g6R_files/libs/quarto-html/tippy.umd.min.js"></script><link href="g6R_files/libs/quarto-html/tippy.css" rel="stylesheet">
 <link href="g6R_files/libs/quarto-html/light-border.css" rel="stylesheet">
-<script src="g6R_files/libs/htmlwidgets-1.6.4/htmlwidgets.js"></script><script src="g6R_files/libs/g6-binding-0.2.0/g6.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="g6R">
+<script src="g6R_files/libs/htmlwidgets-1.6.4/htmlwidgets.js"></script><script src="g6R_files/libs/g6-binding-0.5.0/g6.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="g6R">
 </head>
 <body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
@@ -22,7 +22,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">g6R</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.5.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -107,13 +107,12 @@
 <p>To setup a <a href="https://github.com/cynkra/g6R" class="external-link">g6R</a> graph, you first have to define <strong>node</strong>, <strong>edges</strong> and <strong>combos</strong> (collection of nodes), like so:</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">nodes</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>id <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">10</span><span class="op">)</span></span>
-<span><span class="va">nodes</span><span class="op">$</span><span class="va">label</span> <span class="op">&lt;-</span> <span class="va">nodes</span><span class="op">$</span><span class="va">id</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">nodes</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>id <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">10</span><span class="op">)</span></span></code></pre></div>
 </div>
 <p>You could also pass these elements as <strong>list</strong>, which will be faster than the dataframe approach since under the hood, <a href="https://github.com/cynkra/g6R" class="external-link">g6R</a> has to send list to JavaScript:</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">nodes</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">lapply</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq_len</a></span><span class="op">(</span><span class="fl">10</span><span class="op">)</span>, <span class="kw">function</span><span class="op">(</span><span class="va">i</span><span class="op">)</span> <span class="op">{</span></span>
-<span>  <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>id <span class="op">=</span> <span class="va">i</span>, label <span class="op">=</span> <span class="va">i</span><span class="op">)</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>id <span class="op">=</span> <span class="va">i</span><span class="op">)</span></span>
 <span><span class="op">}</span><span class="op">)</span></span></code></pre></div>
 <p>We then define some random edges:</p>
 <div class="cell">
@@ -136,11 +135,90 @@
 <span>  <span class="va">edges</span> <span class="op">&lt;-</span> <span class="va">edges</span><span class="op">[</span><span class="op">-</span><span class="va">duplicated_id</span>, <span class="op">]</span></span>
 <span><span class="op">}</span></span></code></pre></div>
 </div>
+<p>In <a href="https://github.com/cynkra/g6R" class="external-link">g6R</a>, the recommended way to assemble graph data is by using the helper functions <code><a href="../reference/g6_data.html">g6_data()</a></code> and <code><a href="../reference/g6_data.html">as_g6_data()</a></code>.<br>
+These functions provide a consistent and user-friendly interface for combining nodes, edges, and combos into a single graph data object.<br><code><a href="../reference/g6_data.html">g6_data()</a></code> allows you to explicitly construct a graph data object from validated nodes, edges, and combos, while <code><a href="../reference/g6_data.html">as_g6_data()</a></code> can coerce various input formats (lists, data frames) into a graph data object.</p>
+<p>You can list available methods for <code>as_g6_data</code> with:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">as.list</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/utils/methods.html" class="external-link">methods</a></span><span class="op">(</span><span class="st">"as_g6_data"</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co">#&gt; [[1]]</span></span>
+<span><span class="co">#&gt; [1] "as_g6_data.g6_data"</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; [[2]]</span></span>
+<span><span class="co">#&gt; [1] "as_g6_data.list"</span></span></code></pre></div>
+</div>
+<p>Using these helpers ensures compatibility with all <a href="https://github.com/cynkra/g6R" class="external-link">g6R</a> features and is the recommended method for graph data creation.</p>
+<p>For example:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Create nodes and edges</span></span>
+<span><span class="va">my_nodes</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>id <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"A"</span>, <span class="st">"B"</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">my_edges</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>source <span class="op">=</span> <span class="st">"A"</span>, target <span class="op">=</span> <span class="st">"B"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Assemble graph data using g6_data()</span></span>
+<span><span class="va">graph</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/g6_data.html">g6_data</a></span><span class="op">(</span></span>
+<span>  nodes <span class="op">=</span> <span class="va">my_nodes</span>,</span>
+<span>  edges <span class="op">=</span> <span class="va">my_edges</span></span>
+<span><span class="op">)</span></span>
+<span><span class="va">graph</span></span>
+<span><span class="co">#&gt; $nodes</span></span>
+<span><span class="co">#&gt; [[1]]</span></span>
+<span><span class="co">#&gt; $id</span></span>
+<span><span class="co">#&gt; [1] "A"</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; attr(,"class")</span></span>
+<span><span class="co">#&gt; [1] "g6_node"    "g6_element"</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; [[2]]</span></span>
+<span><span class="co">#&gt; $id</span></span>
+<span><span class="co">#&gt; [1] "B"</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; attr(,"class")</span></span>
+<span><span class="co">#&gt; [1] "g6_node"    "g6_element"</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; attr(,"class")</span></span>
+<span><span class="co">#&gt; [1] "g6_nodes"</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; $edges</span></span>
+<span><span class="co">#&gt; [[1]]</span></span>
+<span><span class="co">#&gt; $source</span></span>
+<span><span class="co">#&gt; [1] "A"</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; $target</span></span>
+<span><span class="co">#&gt; [1] "B"</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; $id</span></span>
+<span><span class="co">#&gt; [1] "A-B"</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; attr(,"class")</span></span>
+<span><span class="co">#&gt; [1] "g6_edge"    "g6_element"</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; attr(,"class")</span></span>
+<span><span class="co">#&gt; [1] "g6_edges"</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; attr(,"class")</span></span>
+<span><span class="co">#&gt; [1] "g6_data"</span></span>
+<span></span>
+<span><span class="co"># Or use as_g6_data() directly with a list</span></span>
+<span><span class="va">lst</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
+<span>  nodes <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
+<span>    <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>id <span class="op">=</span> <span class="st">"A"</span><span class="op">)</span>,</span>
+<span>    <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>id <span class="op">=</span> <span class="st">"B"</span><span class="op">)</span></span>
+<span>  <span class="op">)</span>,</span>
+<span>  edges <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
+<span>    <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>source <span class="op">=</span> <span class="st">"A"</span>, target <span class="op">=</span> <span class="st">"B"</span><span class="op">)</span></span>
+<span>  <span class="op">)</span></span>
+<span><span class="op">)</span></span>
+<span><span class="va">graph2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/g6_data.html">as_g6_data</a></span><span class="op">(</span><span class="va">lst</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/all.equal.html" class="external-link">all.equal</a></span><span class="op">(</span><span class="va">graph</span>, <span class="va">graph2</span><span class="op">)</span></span>
+<span><span class="co">#&gt; [1] TRUE</span></span></code></pre></div>
+</div>
 </section><section class="level3"><h3 id="performance">Performance<a class="anchor" aria-label="anchor" href="#performance"></a>
 </h3>
 <p>If you are dealing with large graphs, you might want to use the <code>jsonUrl</code> parameter to <strong>fetch</strong> the graph data from a hosted JSON file instead. If so, then leave <code>nodes</code>, <code>edges</code> and <code>combos</code> <code>NULL</code>. This allows to bypass the serialization of the graph data to JavaScript, which can be slow for large graphs. That’s done in the <code>shinyAppDir(system.file("examples", "json", package = "g6R"))</code> example.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb5"><pre class="downlit sourceCode r">
+<div class="sourceCode cell-code" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/shiny/man/shinyApp.html" class="external-link">shinyAppDir</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"examples"</span>, <span class="st">"json"</span>, package <span class="op">=</span> <span class="st">"g6R"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="cell">
@@ -152,11 +230,11 @@
 </h2>
 <p>We leverage <code>g6</code> to create an <strong>instance</strong> of our network:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb6"><pre class="downlit sourceCode r">
+<div class="sourceCode cell-code" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/g6.html">g6</a></span><span class="op">(</span><span class="va">nodes</span>, <span class="va">edges</span>, width <span class="op">=</span> <span class="fl">200</span>, height <span class="op">=</span> <span class="fl">200</span><span class="op">)</span></span></code></pre></div>
 <div class="cell-output-display">
 <div id="htmlwidget-5affc4f25ab85bf888dc" style="width:200px;height:200px;" class="g6 html-widget"></div>
-<script type="application/json" data-for="htmlwidget-5affc4f25ab85bf888dc">{"x":{"data":{"nodes":[{"id":1,"label":1},{"id":2,"label":2},{"id":3,"label":3},{"id":4,"label":4},{"id":5,"label":5},{"id":6,"label":6},{"id":7,"label":7},{"id":8,"label":8},{"id":9,"label":9},{"id":10,"label":10}],"edges":[{"source":3,"target":5,"id":"35"},{"source":3,"target":4,"id":"34"},{"source":10,"target":6,"id":"106"},{"source":2,"target":9,"id":"29"},{"source":6,"target":10,"id":"610"}]},"jsonUrl":null,"iconsUrl":"//at.alicdn.com/t/font_2678727_za4qjydwkkh.js"},"evals":[],"jsHooks":[]}</script>
+<script type="application/json" data-for="htmlwidget-5affc4f25ab85bf888dc">{"x":{"data":{"nodes":[{"id":1},{"id":2},{"id":3},{"id":4},{"id":5},{"id":6},{"id":7},{"id":8},{"id":9},{"id":10}],"edges":[{"source":3,"target":5,"id":"35"},{"source":3,"target":4,"id":"34"},{"source":10,"target":6,"id":"106"},{"source":2,"target":9,"id":"29"},{"source":6,"target":10,"id":"610"}]},"jsonUrl":null,"iconsUrl":"//at.alicdn.com/t/font_2678727_za4qjydwkkh.js","mode":"prod"},"evals":[],"jsHooks":[]}</script>
 </div>
 </div>
 <p>As you can see, the nodes don’t render well yet. Let’s add it some layout.</p>
@@ -164,13 +242,13 @@
 </h2>
 <p><code><a href="../reference/g6_layout.html">g6_layout()</a></code> allows to pass any supported <a href="https://g6.antv.antgroup.com/en/manual/layout/overview" class="external-link">layout</a>. For this example, we select the <code><a href="../reference/d3_force_layout.html">d3_force_layout()</a></code>:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb7"><pre class="downlit sourceCode r">
+<div class="sourceCode cell-code" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">g</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/g6.html">g6</a></span><span class="op">(</span><span class="va">nodes</span>, <span class="va">edges</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="../reference/g6_layout.html">g6_layout</a></span><span class="op">(</span><span class="fu"><a href="../reference/d3_force_layout.html">d3_force_layout</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="va">g</span></span></code></pre></div>
 <div class="cell-output-display">
 <div id="htmlwidget-62471906a988fdd2a34d" style="width:100%;height:480px;" class="g6 html-widget"></div>
-<script type="application/json" data-for="htmlwidget-62471906a988fdd2a34d">{"x":{"data":{"nodes":[{"id":1,"label":1},{"id":2,"label":2},{"id":3,"label":3},{"id":4,"label":4},{"id":5,"label":5},{"id":6,"label":6},{"id":7,"label":7},{"id":8,"label":8},{"id":9,"label":9},{"id":10,"label":10}],"edges":[{"source":3,"target":5,"id":"35"},{"source":3,"target":4,"id":"34"},{"source":10,"target":6,"id":"106"},{"source":2,"target":9,"id":"29"},{"source":6,"target":10,"id":"610"}]},"jsonUrl":null,"iconsUrl":"//at.alicdn.com/t/font_2678727_za4qjydwkkh.js","layout":{"type":"d3-force","link":{"distance":100,"strength":2},"collide":{"radius":40}}},"evals":[],"jsHooks":[]}</script>
+<script type="application/json" data-for="htmlwidget-62471906a988fdd2a34d">{"x":{"data":{"nodes":[{"id":1},{"id":2},{"id":3},{"id":4},{"id":5},{"id":6},{"id":7},{"id":8},{"id":9},{"id":10}],"edges":[{"source":3,"target":5,"id":"35"},{"source":3,"target":4,"id":"34"},{"source":10,"target":6,"id":"106"},{"source":2,"target":9,"id":"29"},{"source":6,"target":10,"id":"610"}]},"jsonUrl":null,"iconsUrl":"//at.alicdn.com/t/font_2678727_za4qjydwkkh.js","mode":"prod","layout":{"type":"d3-force","link":{"distance":100,"strength":2},"collide":{"radius":40}}},"evals":[],"jsHooks":[]}</script>
 </div>
 </div>
 <p>That’s better! We could go further by displaying nodes <strong>label</strong>.</p>
@@ -178,7 +256,7 @@
 </h2>
 <p><code><a href="../reference/g6_options.html">g6_options()</a></code> is your to go tool when it comes to change the style of the graph element such as nodes. Properties are selected from the <a href="https://g6.antv.antgroup.com/en/manual/element/node/build-in/base-node#main-graphic-style" class="external-link">documentation</a>:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb8"><pre class="downlit sourceCode r">
+<div class="sourceCode cell-code" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">g</span> <span class="op">&lt;-</span> <span class="va">g</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="../reference/g6_options.html">g6_options</a></span><span class="op">(</span></span>
 <span>    node <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
@@ -199,13 +277,13 @@
 <span><span class="va">g</span></span></code></pre></div>
 <div class="cell-output-display">
 <div id="htmlwidget-502a66744b8e1fe96c06" style="width:100%;height:480px;" class="g6 html-widget"></div>
-<script type="application/json" data-for="htmlwidget-502a66744b8e1fe96c06">{"x":{"data":{"nodes":[{"id":1,"label":1},{"id":2,"label":2},{"id":3,"label":3},{"id":4,"label":4},{"id":5,"label":5},{"id":6,"label":6},{"id":7,"label":7},{"id":8,"label":8},{"id":9,"label":9},{"id":10,"label":10}],"edges":[{"source":3,"target":5,"id":"35"},{"source":3,"target":4,"id":"34"},{"source":10,"target":6,"id":"106"},{"source":2,"target":9,"id":"29"},{"source":6,"target":10,"id":"610"}]},"jsonUrl":null,"iconsUrl":"//at.alicdn.com/t/font_2678727_za4qjydwkkh.js","layout":{"type":"d3-force","link":{"distance":100,"strength":2},"collide":{"radius":40}},"node":{"style":{"labelBackground":true,"labelBackgroundFill":"#FFB6C1","labelBackgroundRadius":4,"labelFontFamily":"Arial","labelPadding":[0,4],"labelText":"(d) => {\n              return d.id\n            }"}},"animation":true,"autoResize":false,"cursor":"default","rotation":0,"zoom":1,"zoomRange":[0.01,10],"theme":"light"},"evals":["node.style.labelText"],"jsHooks":[]}</script>
+<script type="application/json" data-for="htmlwidget-502a66744b8e1fe96c06">{"x":{"data":{"nodes":[{"id":1},{"id":2},{"id":3},{"id":4},{"id":5},{"id":6},{"id":7},{"id":8},{"id":9},{"id":10}],"edges":[{"source":3,"target":5,"id":"35"},{"source":3,"target":4,"id":"34"},{"source":10,"target":6,"id":"106"},{"source":2,"target":9,"id":"29"},{"source":6,"target":10,"id":"610"}]},"jsonUrl":null,"iconsUrl":"//at.alicdn.com/t/font_2678727_za4qjydwkkh.js","mode":"prod","layout":{"type":"d3-force","link":{"distance":100,"strength":2},"collide":{"radius":40}},"node":{"style":{"labelBackground":true,"labelBackgroundFill":"#FFB6C1","labelBackgroundRadius":4,"labelFontFamily":"Arial","labelPadding":[0,4],"labelText":"(d) => {\n              return d.id\n            }"}},"animation":true,"autoResize":false,"cursor":"default","rotation":0,"zoom":1,"zoomRange":[0.01,10],"theme":"light"},"evals":["node.style.labelText"],"jsHooks":[]}</script>
 </div>
 </div>
 </section><section class="level2"><h2 id="plugins">Plugins<a class="anchor" aria-label="anchor" href="#plugins"></a>
 </h2>
 <p>Plugins allowing users to improve the user experience by adding graphical components to the canvas like <strong>minimaps</strong> or <strong>tooltips</strong>. We can pass them inside <code>g6_plugins</code> either as a character string with a reference to the plugin name or using the correponding function to pass more configuration options:</p>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Use defaults</span></span>
 <span><span class="fu"><a href="../reference/g6_plugins.html">g6_plugins</a></span><span class="op">(</span><span class="st">"minimap"</span><span class="op">)</span></span>
 <span></span>
@@ -214,7 +292,7 @@
 <span>  <span class="fu"><a href="../reference/minimap.html">minimap</a></span><span class="op">(</span>size <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">100</span>, <span class="fl">100</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="op">)</span></span></code></pre></div>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb10"><pre class="downlit sourceCode r">
+<div class="sourceCode cell-code" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">g</span> <span class="op">&lt;-</span> <span class="va">g</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="../reference/g6_plugins.html">g6_plugins</a></span><span class="op">(</span></span>
 <span>    <span class="fu"><a href="../reference/minimap.html">minimap</a></span><span class="op">(</span>size <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">100</span>, <span class="fl">100</span><span class="op">)</span><span class="op">)</span></span>
@@ -222,14 +300,14 @@
 <span><span class="va">g</span></span></code></pre></div>
 <div class="cell-output-display">
 <div id="htmlwidget-88a849169abb3486349a" style="width:100%;height:480px;" class="g6 html-widget"></div>
-<script type="application/json" data-for="htmlwidget-88a849169abb3486349a">{"x":{"data":{"nodes":[{"id":1,"label":1},{"id":2,"label":2},{"id":3,"label":3},{"id":4,"label":4},{"id":5,"label":5},{"id":6,"label":6},{"id":7,"label":7},{"id":8,"label":8},{"id":9,"label":9},{"id":10,"label":10}],"edges":[{"source":3,"target":5,"id":"35"},{"source":3,"target":4,"id":"34"},{"source":10,"target":6,"id":"106"},{"source":2,"target":9,"id":"29"},{"source":6,"target":10,"id":"610"}]},"jsonUrl":null,"iconsUrl":"//at.alicdn.com/t/font_2678727_za4qjydwkkh.js","layout":{"type":"d3-force","link":{"distance":100,"strength":2},"collide":{"radius":40}},"node":{"style":{"labelBackground":true,"labelBackgroundFill":"#FFB6C1","labelBackgroundRadius":4,"labelFontFamily":"Arial","labelPadding":[0,4],"labelText":"(d) => {\n              return d.id\n            }"}},"animation":true,"autoResize":false,"cursor":"default","rotation":0,"zoom":1,"zoomRange":[0.01,10],"theme":"light","plugins":[{"key":"minimap","delay":128,"padding":10,"position":"right-bottom","shape":"key","size":[100,100],"type":"minimap"}]},"evals":["node.style.labelText"],"jsHooks":[]}</script>
+<script type="application/json" data-for="htmlwidget-88a849169abb3486349a">{"x":{"data":{"nodes":[{"id":1},{"id":2},{"id":3},{"id":4},{"id":5},{"id":6},{"id":7},{"id":8},{"id":9},{"id":10}],"edges":[{"source":3,"target":5,"id":"35"},{"source":3,"target":4,"id":"34"},{"source":10,"target":6,"id":"106"},{"source":2,"target":9,"id":"29"},{"source":6,"target":10,"id":"610"}]},"jsonUrl":null,"iconsUrl":"//at.alicdn.com/t/font_2678727_za4qjydwkkh.js","mode":"prod","layout":{"type":"d3-force","link":{"distance":100,"strength":2},"collide":{"radius":40}},"node":{"style":{"labelBackground":true,"labelBackgroundFill":"#FFB6C1","labelBackgroundRadius":4,"labelFontFamily":"Arial","labelPadding":[0,4],"labelText":"(d) => {\n              return d.id\n            }"}},"animation":true,"autoResize":false,"cursor":"default","rotation":0,"zoom":1,"zoomRange":[0.01,10],"theme":"light","plugins":[{"key":"minimap","delay":128,"padding":10,"position":"right-bottom","shape":"key","size":[100,100],"type":"minimap"}]},"evals":["node.style.labelText"],"jsHooks":[]}</script>
 </div>
 </div>
 </section><section class="level2"><h2 id="behaviors">Behaviors<a class="anchor" aria-label="anchor" href="#behaviors"></a>
 </h2>
 <p>Behaviors correspond to interactions between users and the graph elements, such as dragging the nodes and selecting nodes. Be mindful that not all behaviors are compatible: dragging canvas and canvas elements would require to specify different triggers for each behavior. With <a href="https://github.com/cynkra/g6R" class="external-link">g6R</a> behaviors can be added with <code>g6_behaviors</code>, like plugins:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb11"><pre class="downlit sourceCode r">
+<div class="sourceCode cell-code" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">g</span> <span class="op">&lt;-</span> <span class="va">g</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="../reference/g6_behaviors.html">g6_behaviors</a></span><span class="op">(</span></span>
 <span>    <span class="st">"zoom-canvas"</span>,</span>
@@ -247,7 +325,7 @@
 <span><span class="va">g</span></span></code></pre></div>
 <div class="cell-output-display">
 <div id="htmlwidget-dfa5d821dc44474b3e8c" style="width:100%;height:480px;" class="g6 html-widget"></div>
-<script type="application/json" data-for="htmlwidget-dfa5d821dc44474b3e8c">{"x":{"data":{"nodes":[{"id":1,"label":1},{"id":2,"label":2},{"id":3,"label":3},{"id":4,"label":4},{"id":5,"label":5},{"id":6,"label":6},{"id":7,"label":7},{"id":8,"label":8},{"id":9,"label":9},{"id":10,"label":10}],"edges":[{"source":3,"target":5,"id":"35"},{"source":3,"target":4,"id":"34"},{"source":10,"target":6,"id":"106"},{"source":2,"target":9,"id":"29"},{"source":6,"target":10,"id":"610"}]},"jsonUrl":null,"iconsUrl":"//at.alicdn.com/t/font_2678727_za4qjydwkkh.js","layout":{"type":"d3-force","link":{"distance":100,"strength":2},"collide":{"radius":40}},"node":{"style":{"labelBackground":true,"labelBackgroundFill":"#FFB6C1","labelBackgroundRadius":4,"labelFontFamily":"Arial","labelPadding":[0,4],"labelText":"(d) => {\n              return d.id\n            }"}},"animation":true,"autoResize":false,"cursor":"default","rotation":0,"zoom":1,"zoomRange":[0.01,10],"theme":"light","plugins":[{"key":"minimap","delay":128,"padding":10,"position":"right-bottom","shape":"key","size":[100,100],"type":"minimap"}],"behaviors":[{"key":"zoom-canvas","animation":{"duration":200},"enable":true,"preventDefault":true,"sensitivity":1,"type":"zoom-canvas"},{"key":"drag-element-force","fixed":true,"enable":"(event) => {\n        return ['node', 'combo'].includes(event.targetType);\n      }","state":"selected","hideEdge":"none","type":"drag-element-force"},{"key":"click-select","animation":true,"degree":0,"enable":true,"multiple":true,"state":"selected","neighborState":"selected","onClick":"(e) => {\n            console.log(e);\n          }","trigger":["shift"],"type":"click-select"},{"key":"brush-select","animation":false,"enable":"(e) => {\n      return true\n    }","enableElements":["node"],"immediately":false,"mode":"default","state":"selected","trigger":"shift","type":"brush-select"}]},"evals":["node.style.labelText","behaviors.1.enable","behaviors.2.onClick","behaviors.3.enable"],"jsHooks":[]}</script>
+<script type="application/json" data-for="htmlwidget-dfa5d821dc44474b3e8c">{"x":{"data":{"nodes":[{"id":1},{"id":2},{"id":3},{"id":4},{"id":5},{"id":6},{"id":7},{"id":8},{"id":9},{"id":10}],"edges":[{"source":3,"target":5,"id":"35"},{"source":3,"target":4,"id":"34"},{"source":10,"target":6,"id":"106"},{"source":2,"target":9,"id":"29"},{"source":6,"target":10,"id":"610"}]},"jsonUrl":null,"iconsUrl":"//at.alicdn.com/t/font_2678727_za4qjydwkkh.js","mode":"prod","layout":{"type":"d3-force","link":{"distance":100,"strength":2},"collide":{"radius":40}},"node":{"style":{"labelBackground":true,"labelBackgroundFill":"#FFB6C1","labelBackgroundRadius":4,"labelFontFamily":"Arial","labelPadding":[0,4],"labelText":"(d) => {\n              return d.id\n            }"}},"animation":true,"autoResize":false,"cursor":"default","rotation":0,"zoom":1,"zoomRange":[0.01,10],"theme":"light","plugins":[{"key":"minimap","delay":128,"padding":10,"position":"right-bottom","shape":"key","size":[100,100],"type":"minimap"}],"behaviors":[{"key":"zoom-canvas","animation":{"duration":200},"enable":true,"preventDefault":true,"sensitivity":1,"type":"zoom-canvas"},{"key":"drag-element-force","fixed":true,"enable":"(event) => {\n        return ['node', 'combo'].includes(event.targetType);\n      }","state":"selected","hideEdge":"none","type":"drag-element-force"},{"key":"click-select","animation":true,"degree":0,"enable":true,"multiple":true,"state":"selected","neighborState":"selected","onClick":"(e) => {\n            console.log(e);\n          }","trigger":["shift"],"type":"click-select"},{"key":"brush-select","animation":false,"enable":"(e) => {\n      return true;\n    }","enableElements":["node"],"immediately":false,"mode":"default","state":"selected","trigger":"shift","type":"brush-select"}]},"evals":["node.style.labelText","behaviors.1.enable","behaviors.2.onClick","behaviors.3.enable"],"jsHooks":[]}</script>
 </div>
 </div>
 <p>Notice that we can pass <strong>callback</strong> functions from R to JavaScript. This is useful in combination with Shiny to set custom inputs, for instance.</p>
@@ -344,7 +422,7 @@
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.3.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
 </div>
 
     </footer>
