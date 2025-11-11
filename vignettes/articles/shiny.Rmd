@@ -268,6 +268,9 @@ g6_update_nodes(
   )
 ```
 
+The more challenging part is likely to find which propertie to update. For this you can look at the nodes [vignette](https://cynkra.github.io/g6R/articles/nodes.html) where we document
+the main options. To unleash the full power of G6, please look at the original [API](https://g6.antv.antgroup.com/en/manual/element/node/base-node).
+
 ### Example: change the state of nodes
 
 You can also change the state of nodes using the `g6_set_nodes()`. Here's an example:
@@ -390,6 +393,57 @@ server <- function(input, output, session) {
 shinyApp(ui, server)
 ```
 
+### Current element selection
+
+How to know which element is selected?
+You can retrieve the currently selected nodes, edges, and combos using the following pattern: `input[["<GRAPH_ID>-selected_<ELEMENT_TYPE>"]]`, where `<ELEMENT_TYPE>` can be `node`, `edge`, or `combo`. Here's an example that demonstrates how to capture selected elements in a graph:
+
+```r
+library(shiny)
+library(g6R)
+library(bslib)
+
+nodes <- data.frame(id = c("node1", "node2"))
+edges <- data.frame(source = "node1", target = "node2")
+combos <- data.frame(id = "combo1", type = "rect")
+
+ui <- page_fluid(
+  g6_output("graph"),
+  verbatimTextOutput("selected_elements")
+)
+
+server <- function(input, output, session) {
+  output$graph <- render_g6({
+    g6(
+      nodes = nodes,
+      edges = edges,
+      combos = combos
+    ) |>
+      g6_layout() |>
+      g6_behaviors(
+        click_select(multiple = TRUE),
+        brush_select(
+          enableElements = c("node", "edge", "combo"),
+          immediately = TRUE
+        )
+      )
+  })
+
+  output$selected_elements <- renderPrint({
+    list(
+      selected_nodes = input[["graph-selected_node"]],
+      selected_edges = input[["graph-selected_edge"]],
+      selected_combos = input[["graph-selected_combo"]]
+    )
+  })
+}
+
+shinyApp(ui, server)
+```
+
+In this example, you can select elements and multiselect by pressing shift key. The selected elements' IDs are be displayed in the verbatim text output. When you press shift and brush with the mouse, all elements within the brush area are selected. Maintaining
+shift again while clicking allows to unselect some elements.
+
 ### Graph state
 
 In Shiny applications, you can retrieve the current state of the graph using `input[["<GRAPH_ID>-state"]]`. This allows you to access information about nodes, edges, and combos dynamically, also be able to serialise and deserialise the graph state:
@@ -481,7 +535,7 @@ shinyApp(ui, server)
 
 Note that you can also add data to a graph using the `g6_add_data()` proxy function, which appends nodes, edges, and combos to the existing graph data.
 
-If you'd need to get only a subset of the graph state, you can also query nodes, edges or combos states:
+If you'd need to get only a subset of the graph state, you can also query nodes, edges or combos states. The pattern is `input[["<GRAPH_ID>-<ELEMENT_ID>-state"]]`, where `<ELEMENT_ID>` is the id of the node, edge or combo you want to query. Here's an example querying node states:
 
 ```r
 library(shiny)
@@ -514,6 +568,44 @@ server <- function(input, output, session) {
       node1_state = input[["graph-1-state"]],
       node2_state = input[["graph-2-state"]]
     )
+  })
+}
+
+shinyApp(ui, server)
+```
+
+### Handle right click: context menu
+
+If you enable the __context menu__ behavior, you can recover the __right clicked__ element by `input[["<GRAPH_ID>-contextmenu"]]` which contains the type and ID of right clicked element, except for the canvas where only the `type` is returned. Here's an example:
+
+
+```r
+library(shiny)
+library(g6R)
+library(bslib)
+
+nodes <- data.frame(id = c("node1", "node2"))
+edges <- data.frame(source = "node1", target = "node2")
+
+ui <- page_fluid(
+  g6_output("graph"),
+  verbatimTextOutput("contextmenu_info")
+)
+
+server <- function(input, output, session) {
+  output$graph <- render_g6({
+    g6(
+      nodes = nodes,
+      edges = edges
+    ) |>
+      g6_layout() |>
+      g6_plugins(
+        context_menu()
+      )
+  })
+
+  output$contextmenu_info <- renderPrint({
+    input[["graph-contextmenu"]]
   })
 }
 

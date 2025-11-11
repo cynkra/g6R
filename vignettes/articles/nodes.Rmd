@@ -392,3 +392,5 @@ These functions can only be used in a Shiny app context. They allow you to get o
 - `g6_remove_nodes()`: removes nodes from the graph.
 - `g6_set_nodes()`: set node state.
 - `g6_get_nodes()`: get nodes data from the graph.
+
+We provide more details and examples in the [Shiny integration vignette](https://cynkra.github.io/g6R/articles/shiny.html).

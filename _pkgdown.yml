@@ -4,7 +4,7 @@ template:
 
 navbar:
   structure:
-    left:  [intro, elements, behaviors, plugins, layout, others]
+    left:  [intro, elements, shiny, behaviors, plugins, layout, others]
     right: [search, reference, news, github]
   components:
     home: ~
