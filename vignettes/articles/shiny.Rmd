@@ -611,3 +611,104 @@ server <- function(input, output, session) {
 
 shinyApp(ui, server)
 ```
+
+### Modifying plugins and behaviors
+
+#### Plugins
+
+You can dynamically add or remove plugins using the `g6_add_plugins()` and `g6_update_plugins()` proxy functions. It is mandatory to initialise the plugin with a __key__ that serves as ID to identify it for later updates. By default, the __key__ is set to the element type, however, if you had to use multiple elements, you must pass unique keys. Here's an example:
+
+```r
+library(shiny)
+library(g6R)
+library(bslib)
+
+color_to_hex <- function(col) {
+  rgb <- col2rgb(col)
+  sprintf("#%02X%02X%02X", rgb[1], rgb[2], rgb[3])
+}
+
+nodes <- data.frame(id = c("node1", "node2", "node3"))
+edges <- data.frame(source = "node1", target = "node2")
+
+ui <- page_fluid(
+  g6_output("graph"),
+  actionButton("add_hull", "Add Hull Plugin"),
+  selectInput(
+    "hull_color",
+    "Hull Color",
+    choices = c("red", "blue", "green", "orange", "purple"),
+    selected = "red"
+  )
+)
+
+server <- function(input, output, session) {
+  output$graph <- render_g6({
+    g6(nodes = nodes, edges = edges) |> 
+      g6_layout() |>
+      g6_options(animation = FALSE)
+  })
+
+  observeEvent(input$add_hull, {
+    g6_add_plugin(
+      g6_proxy("graph"),
+      hull(
+        members = c("node1", "node2", "node3"),
+        fill = color_to_hex(input$hull_color),
+        fillOpacity = 0.2
+      )
+    )
+  })
+
+  observeEvent(input$hull_color, {
+    # Only update if hull plugin exists
+    g6_update_plugin(
+      g6_proxy("graph"),
+      key = "hull",
+      fill = color_to_hex(input$hull_color),
+      stroke = color_to_hex(input$hull_color)
+    )
+  })
+}
+
+shinyApp(ui, server)
+```
+
+#### Behaviors
+
+You can also dynamically add or remove behaviors using the `g6_add_behavior()` and `g6_update_behavior()` proxy functions. Here's an example:
+
+```r
+library(shiny)
+library(g6R)
+library(bslib)
+
+nodes <- data.frame(id = c("node1", "node2", "node3"))
+edges <- data.frame(source = "node1", target = "node2")
+
+ui <- page_fluid(
+  g6_output("graph"),
+  checkboxInput("enable_click_select", "Enable Click Select", value = TRUE)
+)
+
+server <- function(input, output, session) {
+  output$graph <- render_g6({
+    g6(nodes = nodes, edges = edges) |> 
+      g6_layout() |>
+      g6_options(animation = FALSE) |>
+      g6_behaviors(
+        click_select()
+      )
+  })
+
+  observeEvent(input$enable_click_select, {
+    g6_update_behavior(
+      g6_proxy("graph"),
+      key = "click-select",
+      enable = input$enable_click_select
+    )
+  })
+}
+
+shinyApp(ui, server)
+```
