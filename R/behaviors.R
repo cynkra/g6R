@@ -386,6 +386,50 @@ brush_select <- function(
 #'   unselectedState = "inactive",
 #'   trigger = c("Control")
 #' )
+#'
+#' # Example leveraging the input[["<GRAPH_ID>-selected_<ELEMENT_TYPE>"]]
+#' if (interactive()) {
+#'   library(shiny)
+#'   library(g6R)
+#'   library(bslib)
+#'
+#'   nodes <- data.frame(id = c("node1", "node2"))
+#'   edges <- data.frame(source = "node1", target = "node2")
+#'   combos <- data.frame(id = "combo1", type = "rect")
+#'
+#'   ui <- page_fluid(
+#'     g6_output("graph"),
+#'     verbatimTextOutput("selected_elements")
+#'   )
+#'
+#'   server <- function(input, output, session) {
+#'     output$graph <- render_g6({
+#'       g6(
+#'         nodes = nodes,
+#'         edges = edges,
+#'         combos = combos
+#'       ) |>
+#'         g6_layout() |>
+#'         g6_behaviors(
+#'           click_select(multiple = TRUE),
+#'           brush_select(
+#'             enableElements = c("node", "edge", "combo"),
+#'             immediately = TRUE
+#'           )
+#'         )
+#'     })
+#'
+#'     output$selected_elements <- renderPrint({
+#'       list(
+#'         selected_nodes = input[["graph-selected_node"]],
+#'         selected_edges = input[["graph-selected_edge"]],
+#'         selected_combos = input[["graph-selected_combo"]]
+#'       )
+#'     })
+#'   }
+#'
+#'   shinyApp(ui, server)
+#' }
 click_select <- function(
   key = "click-select",
   animation = TRUE,
@@ -544,6 +588,88 @@ collapse_expand <- function(
 #' @examples
 #' # Basic configuration
 #' config <- create_edge()
+#' if (interactive()) {
+#'   library(shiny)
+#'   library(bslib)
+#'   library(g6R)
+#'
+#'   nodes <- list(
+#'     list(
+#'       id = "node1"
+#'     ),
+#'     list(
+#'       id = "node2"
+#'     )
+#'   )
+#'
+#'   modUI <- function(id) {
+#'     ns <- NS(id)
+#'     tagList(
+#'       g6Output(ns("graph"))
+#'     )
+#'   }
+#'
+#'   modServer <- function(id) {
+#'     moduleServer(id, function(input, output, session) {
+#'       output$graph <- renderG6({
+#'         g6(nodes) |>
+#'           g6_options(
+#'             animation = FALSE,
+#'             edge = edge_options(
+#'               style = list(
+#'                 endArrow = TRUE
+#'               )
+#'             )
+#'           ) |>
+#'           g6_layout(d3_force_layout()) |>
+#'           g6_behaviors(
+#'             # avoid conflict with internal function
+#'             g6R::create_edge(
+#'               target = c("node", "combo", "canvas"),
+#'               enable = JS(
+#'                 "(e) => {
+#'                   return e.shiftKey;
+#'                 }"
+#'               ),
+#'               onFinish = JS(
+#'                 sprintf(
+#'                   "(edge) => {
+#'                     const graph = HTMLWidgets.find('#%s').getWidget();
+#'                     const targetType = graph.getElementType(edge.target);
+#'                     // Avoid to create edges in combos. If so, we remove it
+#'                     if (targetType === 'combo') {
+#'                       graph.removeEdgeData([edge.id]);
+#'                       return;
+#'                     }
+#'                     Shiny.setInputValue('%s', edge);
+#'                   }",
+#'                   session$ns("graph"),
+#'                   session$ns("added_edge")
+#'                 )
+#'               )
+#'             )
+#'           )
+#'       })
+#'
+#'       observeEvent(input[["added_edge"]], {
+#'         showNotification(
+#'           sprintf("Edge dropped on: %s", input[["added_edge"]]$targetType),
+#'           type = "message"
+#'         )
+#'       })
+#'     })
+#'   }
+#'
+#'   ui <- page_fluid(
+#'     modUI("test")
+#'   )
+#'
+#'   server <- function(input, output, session) {
+#'     modServer("test")
+#'   }
+#'
+#'   shinyApp(ui, server)
+#' }
 create_edge <- function(
   key = "create-edge",
   trigger = "drag",

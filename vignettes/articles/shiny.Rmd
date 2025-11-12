@@ -55,7 +55,6 @@ Why is the below example wrong? Looking at it carefully, we introduce a reactive
 
 ```r
 # Bad example of adding node the graph
-
 library(shiny)
 library(g6R)
 library(bslib)

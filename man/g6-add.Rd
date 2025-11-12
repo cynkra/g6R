@@ -46,58 +46,32 @@ See \url{https://g6.antv.antgroup.com/en/api/data#graphaddnodedata},
 \examples{
 if (interactive()) {
   library(shiny)
-  library(bslib)
   library(g6R)
+  library(bslib)
+
+  # Static data defined globally
+  nodes <- data.frame(id = 1:3)
+  edges <- data.frame(source = c(1, 2), target = c(2, 3))
+
   ui <- page_fluid(
-    titlePanel("g6_proxy Add Nodes/Data Examples"),
-    layout_sidebar(
-      sidebar = sidebar(
-        actionButton("old1", "Old: list(list(id = 'n1'), list(id = 'n2'))"),
-        actionButton("old2", "Old: list(id = 'n3'), list(id = 'n4')"),
-        actionButton("old3", "Old: g6_nodes(g6_node(id = 'n5'), g6_node(id = 'n6'))"),
-        actionButton("new1", "New: g6_node(id = 'n7'), g6_node(id = 'n8')"),
-        actionButton("new2", "New: data.frame(id = c('n9', 'n10'))"),
-        actionButton("add_data", "Add Data (nodes/edges/combos)"),
-        verbatimTextOutput("graph_data")
-      ),
-      g6Output("graph")
-    )
+    title = "Add Nodes Dynamically",
+    g6_output("graph"),
+    actionButton("add_node", "Add Node")
   )
+
   server <- function(input, output, session) {
-    output$graph <- renderG6({
-      g6() |>
-        g6_layout()
+    output$graph <- render_g6({
+      g6(nodes = nodes, edges = edges) |> g6_layout()
     })
-    proxy <- g6_proxy("graph")
-    observeEvent(input$old1, {
-      g6_add_nodes(proxy, list(list(id = "n1"), list(id = "n2")))
-    })
-    observeEvent(input$old2, {
-      g6_add_nodes(proxy, list(id = "n3"), list(id = "n4"))
-    })
-    observeEvent(input$old3, {
-      g6_add_nodes(proxy, g6_nodes(g6_node(id = "n5"), g6_node(id = "n6")))
-    })
-    observeEvent(input$new1, {
-      g6_add_nodes(proxy, g6_node(id = "n7"), g6_node(id = "n8"))
-    })
-    observeEvent(input$new2, {
-      g6_add_nodes(proxy, data.frame(id = c("n9", "n10")))
-    })
-    observeEvent(input$add_data, {
-      g6_add_data(
-        proxy,
-        list(
-          nodes = list(list(id = "n11"), list(id = "n12")),
-          edges = list(list(source = "n11", target = "n12", id = "e1")),
-          combos = list(list(id = "combo1"))
-        )
-      )
-    })
-    output$graph_data <- renderPrint({
-      "See graph updates in the visualization above."
+
+    next_id <- reactiveVal(max(nodes$id) + 1)
+
+    observeEvent(input$add_node, {
+      g6_add_nodes(g6_proxy("graph"), data.frame(id = next_id()))
+      next_id(next_id() + 1)
     })
   }
+
   shinyApp(ui, server)
 }
 }

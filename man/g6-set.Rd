@@ -44,6 +44,83 @@ It will not work with regular g6 objects outside of Shiny.
 If a node with the same ID already exists, it will not be added again.
 See \url{https://g6.antv.antgroup.com/en/api/element#graphsetelementstateid-state-options} for more details.
 }
+\examples{
+if (interactive()) {
+  # Example setting node states
+  library(shiny)
+  library(g6R)
+  library(bslib)
+
+  nodes <- data.frame(id = 1:2)
+  edges <- data.frame(source = 1, target = 2)
+
+  ui <- page_fluid(
+    g6_output("graph"),
+    actionButton("set_state", "Set Node States")
+  )
+
+  server <- function(input, output, session) {
+    output$graph <- render_g6({
+      g6(nodes = nodes, edges = edges) |> g6_layout()
+    })
+
+    observeEvent(input$set_state, {
+      g6_set_nodes(
+        g6_proxy("graph"),
+        list(`1` = "selected", `2` = "disabled")
+      )
+    })
+  }
+
+  shinyApp(ui, server)
+
+  # Replace data dynamically
+  ui <- page_fluid(
+    g6_output("graph"),
+    actionButton("remove", "Remove All"),
+    actionButton("reset", "Reset Graph"),
+    verbatimTextOutput("state")
+  )
+
+  server <- function(input, output, session) {
+    # Store initial state after first render
+    initial_state <- reactiveVal(NULL)
+
+    output$graph <- render_g6({
+      g6(nodes = nodes, edges = edges) |>
+        g6_layout() |>
+        g6_options(animation = FALSE)
+    })
+
+    # Save initial state once available
+    observe({
+      state <- input[["graph-state"]]
+      if (!is.null(state) && is.null(initial_state())) {
+        initial_state(state)
+      }
+    })
+
+    # Remove all nodes and edges
+    observeEvent(input$remove, {
+      g6_set_data(g6_proxy("graph"), list(nodes = list(), edges = list()))
+    })
+
+    # Reset graph to initial state
+    observeEvent(input$reset, {
+      state <- initial_state()
+      if (!is.null(state)) {
+        g6_set_data(g6_proxy("graph"), state)
+      }
+    })
+
+    output$state <- renderPrint({
+      input[["graph-state"]]
+    })
+  }
+
+  shinyApp(ui, server)
+}
+}
 \seealso{
 \code{\link{g6_proxy}}
 }

@@ -62,4 +62,48 @@ config <- click_select(
   unselectedState = "inactive",
   trigger = c("Control")
 )
+
+# Example leveraging the input[["<GRAPH_ID>-selected_<ELEMENT_TYPE>"]]
+if (interactive()) {
+  library(shiny)
+  library(g6R)
+  library(bslib)
+
+  nodes <- data.frame(id = c("node1", "node2"))
+  edges <- data.frame(source = "node1", target = "node2")
+  combos <- data.frame(id = "combo1", type = "rect")
+
+  ui <- page_fluid(
+    g6_output("graph"),
+    verbatimTextOutput("selected_elements")
+  )
+
+  server <- function(input, output, session) {
+    output$graph <- render_g6({
+      g6(
+        nodes = nodes,
+        edges = edges,
+        combos = combos
+      ) |>
+        g6_layout() |>
+        g6_behaviors(
+          click_select(multiple = TRUE),
+          brush_select(
+            enableElements = c("node", "edge", "combo"),
+            immediately = TRUE
+          )
+        )
+    })
+
+    output$selected_elements <- renderPrint({
+      list(
+        selected_nodes = input[["graph-selected_node"]],
+        selected_edges = input[["graph-selected_edge"]],
+        selected_combos = input[["graph-selected_combo"]]
+      )
+    })
+  }
+
+  shinyApp(ui, server)
+}
 }
