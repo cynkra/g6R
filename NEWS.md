@@ -6,6 +6,7 @@ Due to the new data validation for nodes, edges and combos, some existing code m
 
 ## New features and fixes
 
+- `create_edge()` behavior improved: when creating an edge and it is release on the canvas, the edge isn't cancelled and data are available. We added a `targetType` property which allows to know where the edge was dragged.
 - Added new elements API: `g6_node()`, `g6_edge()`, `g6_combo()` to create nodes, edges and combos respectively. We suggest to use them instead of passing lists or dataframes to g6 as they provide
 safety checks. We also added `g6_nodes()`, `g6_edges()` and `g6_combos()` which are internally used by some proxy functions like `g6_add_nodes()` to provide more flexibility.
 - New `options("g6R.mode)` that can be `dev` or `prod` (default). In `dev` mode, Shiny notifications are

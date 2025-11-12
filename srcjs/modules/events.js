@@ -1,5 +1,5 @@
 import { getBehavior, resetOtherElementTypes } from "./utils";
-import { GraphEvent, CanvasEvent } from '@antv/g6';
+import { GraphEvent, CommonEvent, CanvasEvent, EdgeEvent } from '@antv/g6';
 import { sendNotification } from "./utils";
 
 const setClickEvents = (events, graph) => {
@@ -70,8 +70,8 @@ const setGraphEvents = (events, graph) => {
       }
 
       // Canvas drop
-      if (event === CanvasEvent.DROP) {
-        Shiny.setInputValue(id + '-canvas_drop', e.targetType);
+      if (event === CommonEvent.POINTER_UP) {
+        Shiny.setInputValue(id + '-pointer_up', e.targetType);
       }
     })
   }
