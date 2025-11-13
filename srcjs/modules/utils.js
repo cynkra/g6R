@@ -46,9 +46,10 @@ const resetOtherElementTypes = (elementId, targetType) => {
   }
 }
 
-const checkIds = (data) => {
+const checkIds = (data, mode) => {
+  let nodeIds = [];
   if (data.nodes) {
-    data.nodes.map((node) => {
+    nodeIds = data.nodes.map((node) => {
       // Convert ID to string if not already
       if (typeof node.id !== 'string') {
         node.id = node.id.toString();
@@ -59,8 +60,9 @@ const checkIds = (data) => {
       return node.id
     });
   }
+  let edgesIds = [];
   if (data.edges) {
-    data.edges.map((edge) => {
+    edgesIds = data.edges.map((edge) => {
       if (typeof edge.source !== 'string') {
         edge.source = edge.source.toString();
       }
@@ -70,8 +72,9 @@ const checkIds = (data) => {
       return edge.id
     });
   }
+  let combosIds = [];
   if (data.combos) {
-    data.combos.map((combo) => {
+    combosIds = data.combos.map((combo) => {
       // Convert ID to string if not already
       if (typeof combo.id !== 'string') {
         combo.id = combo.id.toString();
@@ -79,7 +82,16 @@ const checkIds = (data) => {
       return combo.id
     });
   }
-  return data;
+  const allIds = nodeIds.concat(edgesIds).concat(combosIds);
+  const uniqueIds = new Set(allIds);
+  if (allIds.length !== uniqueIds.size) {
+    if (mode === "dev") {
+      sendNotification('Cannot initialize graph. Duplicated IDs found.')
+    }
+    throw new Error("Invalid graph data: execution aborted");
+  } else {
+    return (data)
+  }
 }
 
 const setupGraph = (graph, widget, mode) => {
@@ -137,7 +149,7 @@ let graph = null;
 const loadAndInitGraph = (config, widget) => {
   tryCatchDev(() => {
     const initialize = (data) => {
-      config.data = checkIds(data);
+      config.data = checkIds(data, config.mode);
       graph = new Graph(config);
       setupGraph(graph, widget, config.mode);
     };
