@@ -91,4 +91,86 @@ change the trigger to workaround this.
 ``` r
 # Basic configuration
 config <- create_edge()
+if (interactive()) {
+  library(shiny)
+  library(bslib)
+  library(g6R)
+
+  nodes <- list(
+    list(
+      id = "node1"
+    ),
+    list(
+      id = "node2"
+    )
+  )
+
+  modUI <- function(id) {
+    ns <- NS(id)
+    tagList(
+      g6Output(ns("graph"))
+    )
+  }
+
+  modServer <- function(id) {
+    moduleServer(id, function(input, output, session) {
+      output$graph <- renderG6({
+        g6(nodes) |>
+          g6_options(
+            animation = FALSE,
+            edge = edge_options(
+              style = list(
+                endArrow = TRUE
+              )
+            )
+          ) |>
+          g6_layout(d3_force_layout()) |>
+          g6_behaviors(
+            # avoid conflict with internal function
+            g6R::create_edge(
+              target = c("node", "combo", "canvas"),
+              enable = JS(
+                "(e) => {
+                  return e.shiftKey;
+                }"
+              ),
+              onFinish = JS(
+                sprintf(
+                  "(edge) => {
+                    const graph = HTMLWidgets.find('#%s').getWidget();
+                    const targetType = graph.getElementType(edge.target);
+                    // Avoid to create edges in combos. If so, we remove it
+                    if (targetType === 'combo') {
+                      graph.removeEdgeData([edge.id]);
+                      return;
+                    }
+                    Shiny.setInputValue('%s', edge);
+                  }",
+                  session$ns("graph"),
+                  session$ns("added_edge")
+                )
+              )
+            )
+          )
+      })
+
+      observeEvent(input[["added_edge"]], {
+        showNotification(
+          sprintf("Edge dropped on: %s", input[["added_edge"]]$targetType),
+          type = "message"
+        )
+      })
+    })
+  }
+
+  ui <- page_fluid(
+    modUI("test")
+  )
+
+  server <- function(input, output, session) {
+    modServer("test")
+  }
+
+  shinyApp(ui, server)
+}
 ```

@@ -42,3 +42,42 @@ reinitialize the graph.
 ## See also
 
 [`g6_proxy`](https://cynkra.github.io/g6R/reference/g6_proxy.md)
+
+## Examples
+
+``` r
+if (interactive()) {
+  library(shiny)
+  library(g6R)
+  library(bslib)
+
+  nodes <- data.frame(id = c("node1", "node2", "node3"))
+  edges <- data.frame(source = "node1", target = "node2")
+
+  ui <- page_fluid(
+    g6_output("graph"),
+    checkboxInput("enable_click_select", "Enable Click Select", value = TRUE)
+  )
+
+  server <- function(input, output, session) {
+    output$graph <- render_g6({
+      g6(nodes = nodes, edges = edges) |>
+        g6_layout() |>
+        g6_options(animation = FALSE) |>
+        g6_behaviors(
+          click_select()
+        )
+    })
+
+    observeEvent(input$enable_click_select, {
+      g6_update_behavior(
+        g6_proxy("graph"),
+        key = "click-select",
+        enable = input$enable_click_select
+      )
+    })
+  }
+
+  shinyApp(ui, server)
+}
+```

@@ -40,6 +40,101 @@ edges <- list(
 )
 ```
 
+In [g6R](https://github.com/cynkra/g6R), the preferred way to create
+edges is by using the helper functions
+[`g6_edge()`](https://cynkra.github.io/g6R/reference/g6_element.md) and
+[`g6_edges()`](https://cynkra.github.io/g6R/reference/g6_elements.md).  
+These functions provide a consistent and user-friendly interface for
+edge creation, supporting both simple and advanced customization.  
+[`g6_edge()`](https://cynkra.github.io/g6R/reference/g6_element.md)
+allows you to define a single edge with specific properties, while
+[`g6_edges()`](https://cynkra.github.io/g6R/reference/g6_elements.md)
+and
+[`as_g6_edges()`](https://cynkra.github.io/g6R/reference/g6_elements.md)
+can generate multiple edges from various input formats (data.frame,
+list):
+
+``` r
+as.list(methods("as_g6_edge"))
+#> [[1]]
+#> [1] "as_g6_edge.g6_edge"
+#> 
+#> [[2]]
+#> [1] "as_g6_edge.list"
+as.list(methods("as_g6_edges"))
+#> [[1]]
+#> [1] "as_g6_edges.data.frame"
+#> 
+#> [[2]]
+#> [1] "as_g6_edges.g6_edges"
+#> 
+#> [[3]]
+#> [1] "as_g6_edges.list"
+```
+
+Using these helpers ensures compatibility with all
+[g6R](https://github.com/cynkra/g6R) features and is the recommended
+method for edge creation.
+
+For example:
+
+``` r
+# Create a single edge
+edge <- g6_edge(source = "A", target = "B", type = "line", style = list(stroke = "blue"))
+
+# Create multiple edges from a data frame
+df <- data.frame(source = c("A", "B"), target = c("B", "C"), type = c("line", "cubic"))
+edges <- as_g6_edges(df)
+
+# With g6_edges()
+edges <- g6_edges(
+  g6_edge(source = "A", target = "B", type = "line"),
+  g6_edge(source = "B", target = "C", type = "cubic")
+)
+
+# with a list
+lst <- list(
+  list(source = "A", target = "B", type = "line"),
+  list(source = "B", target = "C", type = "cubic")
+)
+edges <- as_g6_edges(lst)
+edges
+#> [[1]]
+#> $source
+#> [1] "A"
+#> 
+#> $target
+#> [1] "B"
+#> 
+#> $id
+#> [1] "A-B"
+#> 
+#> $type
+#> [1] "line"
+#> 
+#> attr(,"class")
+#> [1] "g6_edge"    "g6_element"
+#> 
+#> [[2]]
+#> $source
+#> [1] "B"
+#> 
+#> $target
+#> [1] "C"
+#> 
+#> $id
+#> [1] "B-C"
+#> 
+#> $type
+#> [1] "cubic"
+#> 
+#> attr(,"class")
+#> [1] "g6_edge"    "g6_element"
+#> 
+#> attr(,"class")
+#> [1] "g6_edges"
+```
+
 ## Data properties
 
 [g6R](https://github.com/cynkra/g6R) edges are allowed to have the
@@ -315,97 +410,5 @@ The functions are:
 - [`g6_get_edges()`](https://cynkra.github.io/g6R/reference/g6-get.md):
   get edges data from the graph.
 
-In [g6R](https://github.com/cynkra/g6R), the preferred way to create
-edges is by using the helper functions
-[`g6_edge()`](https://cynkra.github.io/g6R/reference/g6_element.md) and
-[`g6_edges()`](https://cynkra.github.io/g6R/reference/g6_elements.md).  
-These functions provide a consistent and user-friendly interface for
-edge creation, supporting both simple and advanced customization.  
-[`g6_edge()`](https://cynkra.github.io/g6R/reference/g6_element.md)
-allows you to define a single edge with specific properties, while
-[`g6_edges()`](https://cynkra.github.io/g6R/reference/g6_elements.md)
-and
-[`as_g6_edges()`](https://cynkra.github.io/g6R/reference/g6_elements.md)
-can generate multiple edges from various input formats (data.frame,
-list):
-
-``` r
-as.list(methods("as_g6_edge"))
-#> [[1]]
-#> [1] "as_g6_edge.g6_edge"
-#> 
-#> [[2]]
-#> [1] "as_g6_edge.list"
-as.list(methods("as_g6_edges"))
-#> [[1]]
-#> [1] "as_g6_edges.data.frame"
-#> 
-#> [[2]]
-#> [1] "as_g6_edges.g6_edges"
-#> 
-#> [[3]]
-#> [1] "as_g6_edges.list"
-```
-
-Using these helpers ensures compatibility with all
-[g6R](https://github.com/cynkra/g6R) features and is the recommended
-method for edge creation.
-
-For example:
-
-``` r
-# Create a single edge
-edge <- g6_edge(source = "A", target = "B", type = "line", style = list(stroke = "blue"))
-
-# Create multiple edges from a data frame
-df <- data.frame(source = c("A", "B"), target = c("B", "C"), type = c("line", "cubic"))
-edges <- as_g6_edges(df)
-
-# With g6_edges()
-edges <- g6_edges(
-  g6_edge(source = "A", target = "B", type = "line"),
-  g6_edge(source = "B", target = "C", type = "cubic")
-)
-
-# with a list
-lst <- list(
-  list(source = "A", target = "B", type = "line"),
-  list(source = "B", target = "C", type = "cubic")
-)
-edges <- as_g6_edges(lst)
-edges
-#> [[1]]
-#> $source
-#> [1] "A"
-#> 
-#> $target
-#> [1] "B"
-#> 
-#> $id
-#> [1] "A-B"
-#> 
-#> $type
-#> [1] "line"
-#> 
-#> attr(,"class")
-#> [1] "g6_edge"    "g6_element"
-#> 
-#> [[2]]
-#> $source
-#> [1] "B"
-#> 
-#> $target
-#> [1] "C"
-#> 
-#> $id
-#> [1] "B-C"
-#> 
-#> $type
-#> [1] "cubic"
-#> 
-#> attr(,"class")
-#> [1] "g6_edge"    "g6_element"
-#> 
-#> attr(,"class")
-#> [1] "g6_edges"
-```
+We provide more details and examples in the [Shiny integration
+vignette](https://cynkra.github.io/g6R/articles/shiny.html).

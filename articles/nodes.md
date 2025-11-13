@@ -478,3 +478,6 @@ The functions are:
   set node state.
 - [`g6_get_nodes()`](https://cynkra.github.io/g6R/reference/g6-get.md):
   get nodes data from the graph.
+
+We provide more details and examples in the [Shiny integration
+vignette](https://cynkra.github.io/g6R/articles/shiny.html).

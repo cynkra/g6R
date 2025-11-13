@@ -23,6 +23,10 @@
     <li><a class="dropdown-item" href="../articles/combos.html">Combos</a></li>
   </ul></li>
 <li class="nav-item dropdown">
+  <button class="nav-link dropdown-toggle" type="button" id="dropdown-shiny" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Shiny</button>
+  <ul class="dropdown-menu" aria-labelledby="dropdown-shiny"><li><a class="dropdown-item" href="../articles/shiny.html">g6R and Shiny</a></li>
+  </ul></li>
+<li class="nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-behaviors" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Behaviors</button>
   <ul class="dropdown-menu" aria-labelledby="dropdown-behaviors"><li><a class="dropdown-item" href="../articles/behaviors.html">Behaviors list</a></li>
   </ul></li>
@@ -89,6 +93,160 @@ according to the documentation at <a href="https://g6.antv.antgroup.com/en/manua
     <div class="dont-index"><p><code><a href="g6_proxy.html">g6_proxy()</a></code></p></div>
     </div>
 
+    <div class="section level2">
+    <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/interactive.html" class="external-link">interactive</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span></span>
+<span class="r-in"><span>  <span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://shiny.posit.co/" class="external-link">shiny</a></span><span class="op">)</span></span></span>
+<span class="r-in"><span>  <span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://rstudio.github.io/bslib/" class="external-link">bslib</a></span><span class="op">)</span></span></span>
+<span class="r-in"><span>  <span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/cynkra/g6R" class="external-link">g6R</a></span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span>  <span class="va">themes</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>    <span class="st">"light"</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>      theme <span class="op">=</span> <span class="st">'light'</span>,</span></span>
+<span class="r-in"><span>      node <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>        style <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>          size <span class="op">=</span> <span class="fl">4</span></span></span>
+<span class="r-in"><span>        <span class="op">)</span>,</span></span>
+<span class="r-in"><span>        palette <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>          type <span class="op">=</span> <span class="st">'group'</span>,</span></span>
+<span class="r-in"><span>          field <span class="op">=</span> <span class="st">'cluster'</span></span></span>
+<span class="r-in"><span>        <span class="op">)</span></span></span>
+<span class="r-in"><span>      <span class="op">)</span>,</span></span>
+<span class="r-in"><span>      plugins <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>        <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>          type <span class="op">=</span> <span class="st">'background'</span>,</span></span>
+<span class="r-in"><span>          background <span class="op">=</span> <span class="st">'#fff'</span></span></span>
+<span class="r-in"><span>        <span class="op">)</span></span></span>
+<span class="r-in"><span>      <span class="op">)</span></span></span>
+<span class="r-in"><span>    <span class="op">)</span>,</span></span>
+<span class="r-in"><span>    <span class="st">"dark"</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>      theme <span class="op">=</span> <span class="st">'dark'</span>,</span></span>
+<span class="r-in"><span>      node <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>        style <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>          size <span class="op">=</span> <span class="fl">4</span></span></span>
+<span class="r-in"><span>        <span class="op">)</span>,</span></span>
+<span class="r-in"><span>        palette <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>          type <span class="op">=</span> <span class="st">'group'</span>,</span></span>
+<span class="r-in"><span>          field <span class="op">=</span> <span class="st">'cluster'</span></span></span>
+<span class="r-in"><span>        <span class="op">)</span></span></span>
+<span class="r-in"><span>      <span class="op">)</span>,</span></span>
+<span class="r-in"><span>      plugins <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>        <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>          type <span class="op">=</span> <span class="st">'background'</span>,</span></span>
+<span class="r-in"><span>          background <span class="op">=</span> <span class="st">'#000'</span></span></span>
+<span class="r-in"><span>        <span class="op">)</span></span></span>
+<span class="r-in"><span>      <span class="op">)</span></span></span>
+<span class="r-in"><span>    <span class="op">)</span>,</span></span>
+<span class="r-in"><span>    <span class="st">"blue"</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>      theme <span class="op">=</span> <span class="st">'light'</span>,</span></span>
+<span class="r-in"><span>      node <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>        style <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>          size <span class="op">=</span> <span class="fl">4</span></span></span>
+<span class="r-in"><span>        <span class="op">)</span>,</span></span>
+<span class="r-in"><span>        palette <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>          type <span class="op">=</span> <span class="st">'group'</span>,</span></span>
+<span class="r-in"><span>          field <span class="op">=</span> <span class="st">'cluster'</span>,</span></span>
+<span class="r-in"><span>          color <span class="op">=</span> <span class="st">"blues"</span>,</span></span>
+<span class="r-in"><span>          invert <span class="op">=</span> <span class="cn">TRUE</span></span></span>
+<span class="r-in"><span>        <span class="op">)</span></span></span>
+<span class="r-in"><span>      <span class="op">)</span>,</span></span>
+<span class="r-in"><span>      plugins <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>        <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>          type <span class="op">=</span> <span class="st">'background'</span>,</span></span>
+<span class="r-in"><span>          background <span class="op">=</span> <span class="st">'#f3faff'</span></span></span>
+<span class="r-in"><span>        <span class="op">)</span></span></span>
+<span class="r-in"><span>      <span class="op">)</span></span></span>
+<span class="r-in"><span>    <span class="op">)</span>,</span></span>
+<span class="r-in"><span>    <span class="st">"yellow"</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>      theme <span class="op">=</span> <span class="st">'light'</span>,</span></span>
+<span class="r-in"><span>      node <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>        style <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>          size <span class="op">=</span> <span class="fl">4</span></span></span>
+<span class="r-in"><span>        <span class="op">)</span>,</span></span>
+<span class="r-in"><span>        palette <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>          type <span class="op">=</span> <span class="st">'group'</span>,</span></span>
+<span class="r-in"><span>          field <span class="op">=</span> <span class="st">'cluster'</span>,</span></span>
+<span class="r-in"><span>          color <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>            <span class="st">'#ffe7ba'</span>,</span></span>
+<span class="r-in"><span>            <span class="st">'#ffd591'</span>,</span></span>
+<span class="r-in"><span>            <span class="st">'#ffc069'</span>,</span></span>
+<span class="r-in"><span>            <span class="st">'#ffa940'</span>,</span></span>
+<span class="r-in"><span>            <span class="st">'#fa8c16'</span>,</span></span>
+<span class="r-in"><span>            <span class="st">'#d46b08'</span>,</span></span>
+<span class="r-in"><span>            <span class="st">'#ad4e00'</span>,</span></span>
+<span class="r-in"><span>            <span class="st">'#873800'</span>,</span></span>
+<span class="r-in"><span>            <span class="st">'#612500'</span></span></span>
+<span class="r-in"><span>          <span class="op">)</span></span></span>
+<span class="r-in"><span>        <span class="op">)</span></span></span>
+<span class="r-in"><span>      <span class="op">)</span>,</span></span>
+<span class="r-in"><span>      plugins <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>        <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>          type <span class="op">=</span> <span class="st">'background'</span>,</span></span>
+<span class="r-in"><span>          background <span class="op">=</span> <span class="st">'#fcf9f1'</span></span></span>
+<span class="r-in"><span>        <span class="op">)</span></span></span>
+<span class="r-in"><span>      <span class="op">)</span></span></span>
+<span class="r-in"><span>    <span class="op">)</span></span></span>
+<span class="r-in"><span>  <span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span>  <span class="va">ui</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rstudio.github.io/bslib/reference/page.html" class="external-link">page_fluid</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>    <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/selectInput.html" class="external-link">selectInput</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>      <span class="st">"theme"</span>,</span></span>
+<span class="r-in"><span>      <span class="st">"Theme"</span>,</span></span>
+<span class="r-in"><span>      choices <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"light"</span>, <span class="st">"dark"</span>, <span class="st">"blue"</span>, <span class="st">"yellow"</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>      selected <span class="op">=</span> <span class="st">"default"</span></span></span>
+<span class="r-in"><span>    <span class="op">)</span>,</span></span>
+<span class="r-in"><span>    <span class="fu"><a href="g6-shiny.html">g6Output</a></span><span class="op">(</span><span class="st">"graph"</span>, height <span class="op">=</span> <span class="st">"100vh"</span><span class="op">)</span></span></span>
+<span class="r-in"><span>  <span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span>  <span class="va">server</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">input</span>, <span class="va">output</span>, <span class="va">session</span><span class="op">)</span> <span class="op">{</span></span></span>
+<span class="r-in"><span>    <span class="va">output</span><span class="op">$</span><span class="va">graph</span> <span class="op">&lt;-</span> <span class="fu"><a href="g6-shiny.html">renderG6</a></span><span class="op">(</span><span class="op">{</span></span></span>
+<span class="r-in"><span>      <span class="fu"><a href="g6.html">g6</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>        jsonUrl <span class="op">=</span> <span class="st">"https://assets.antv.antgroup.com/g6/20000.json"</span></span></span>
+<span class="r-in"><span>      <span class="op">)</span> <span class="op">|&gt;</span></span></span>
+<span class="r-in"><span>        <span class="fu"><a href="g6_options.html">g6_options</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>          animation <span class="op">=</span> <span class="cn">FALSE</span>,</span></span>
+<span class="r-in"><span>          autoFit <span class="op">=</span> <span class="st">"view"</span>,</span></span>
+<span class="r-in"><span>          padding <span class="op">=</span> <span class="fl">20</span>,</span></span>
+<span class="r-in"><span>          node <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>            style <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>size <span class="op">=</span> <span class="fl">4</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>            palette <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>              type <span class="op">=</span> <span class="st">"group"</span>,</span></span>
+<span class="r-in"><span>              field <span class="op">=</span> <span class="st">"cluster"</span></span></span>
+<span class="r-in"><span>            <span class="op">)</span></span></span>
+<span class="r-in"><span>          <span class="op">)</span></span></span>
+<span class="r-in"><span>        <span class="op">)</span> <span class="op">|&gt;</span></span></span>
+<span class="r-in"><span>        <span class="fu"><a href="g6_behaviors.html">g6_behaviors</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>          <span class="st">"zoom-canvas"</span>,</span></span>
+<span class="r-in"><span>          <span class="st">"drag-canvas"</span>,</span></span>
+<span class="r-in"><span>          <span class="st">"optimize-viewport-transform"</span></span></span>
+<span class="r-in"><span>        <span class="op">)</span></span></span>
+<span class="r-in"><span>    <span class="op">}</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span>    <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/observeEvent.html" class="external-link">observeEvent</a></span><span class="op">(</span><span class="va">input</span><span class="op">$</span><span class="va">theme</span>, <span class="op">{</span></span></span>
+<span class="r-in"><span>      <span class="fu"><a href="g6_proxy.html">g6_proxy</a></span><span class="op">(</span><span class="st">"graph"</span><span class="op">)</span> <span class="op">|&gt;</span></span></span>
+<span class="r-in"><span>        <span class="fu">g6_set_theme</span><span class="op">(</span><span class="va">themes</span><span class="op">[[</span><span class="va">input</span><span class="op">$</span><span class="va">theme</span><span class="op">]</span><span class="op">]</span><span class="op">)</span></span></span>
+<span class="r-in"><span>    <span class="op">}</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span>    <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/observeEvent.html" class="external-link">observeEvent</a></span><span class="op">(</span><span class="va">input</span><span class="op">[[</span><span class="st">"graph-initialized"</span><span class="op">]</span><span class="op">]</span>, <span class="op">{</span></span></span>
+<span class="r-in"><span>      <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/showNotification.html" class="external-link">showNotification</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>        <span class="st">"Graph initialized"</span>,</span></span>
+<span class="r-in"><span>        type <span class="op">=</span> <span class="st">"message"</span></span></span>
+<span class="r-in"><span>      <span class="op">)</span></span></span>
+<span class="r-in"><span>    <span class="op">}</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span>    <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/observeEvent.html" class="external-link">observeEvent</a></span><span class="op">(</span><span class="va">input</span><span class="op">[[</span><span class="st">"graph-state"</span><span class="op">]</span><span class="op">]</span>, <span class="op">{</span></span></span>
+<span class="r-in"><span>      <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/showNotification.html" class="external-link">showNotification</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>        <span class="st">"Graph state updated"</span>,</span></span>
+<span class="r-in"><span>        type <span class="op">=</span> <span class="st">"message"</span></span></span>
+<span class="r-in"><span>      <span class="op">)</span></span></span>
+<span class="r-in"><span>    <span class="op">}</span><span class="op">)</span></span></span>
+<span class="r-in"><span>  <span class="op">}</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/shinyApp.html" class="external-link">shinyApp</a></span><span class="op">(</span><span class="va">ui</span>, <span class="va">server</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="op">}</span></span></span>
+</code></pre></div>
+    </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside></div>
 

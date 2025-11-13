@@ -25,6 +25,10 @@ This allows users to create edges between nodes by clicking or dragging."></head
     <li><a class="dropdown-item" href="../articles/combos.html">Combos</a></li>
   </ul></li>
 <li class="nav-item dropdown">
+  <button class="nav-link dropdown-toggle" type="button" id="dropdown-shiny" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Shiny</button>
+  <ul class="dropdown-menu" aria-labelledby="dropdown-shiny"><li><a class="dropdown-item" href="../articles/shiny.html">g6R and Shiny</a></li>
+  </ul></li>
+<li class="nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-behaviors" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Behaviors</button>
   <ul class="dropdown-menu" aria-labelledby="dropdown-behaviors"><li><a class="dropdown-item" href="../articles/behaviors.html">Behaviors list</a></li>
   </ul></li>
@@ -140,6 +144,88 @@ as there triggers are the same. You can change the trigger to workaround this.</
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># Basic configuration</span></span></span>
 <span class="r-in"><span><span class="va">config</span> <span class="op">&lt;-</span> <span class="fu">create_edge</span><span class="op">(</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/interactive.html" class="external-link">interactive</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span></span>
+<span class="r-in"><span>  <span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://shiny.posit.co/" class="external-link">shiny</a></span><span class="op">)</span></span></span>
+<span class="r-in"><span>  <span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://rstudio.github.io/bslib/" class="external-link">bslib</a></span><span class="op">)</span></span></span>
+<span class="r-in"><span>  <span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/cynkra/g6R" class="external-link">g6R</a></span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span>  <span class="va">nodes</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>    <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>      id <span class="op">=</span> <span class="st">"node1"</span></span></span>
+<span class="r-in"><span>    <span class="op">)</span>,</span></span>
+<span class="r-in"><span>    <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>      id <span class="op">=</span> <span class="st">"node2"</span></span></span>
+<span class="r-in"><span>    <span class="op">)</span></span></span>
+<span class="r-in"><span>  <span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span>  <span class="va">modUI</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">id</span><span class="op">)</span> <span class="op">{</span></span></span>
+<span class="r-in"><span>    <span class="va">ns</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/NS.html" class="external-link">NS</a></span><span class="op">(</span><span class="va">id</span><span class="op">)</span></span></span>
+<span class="r-in"><span>    <span class="fu"><a href="https://rstudio.github.io/htmltools/reference/tagList.html" class="external-link">tagList</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>      <span class="fu"><a href="g6-shiny.html">g6Output</a></span><span class="op">(</span><span class="fu">ns</span><span class="op">(</span><span class="st">"graph"</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span>    <span class="op">)</span></span></span>
+<span class="r-in"><span>  <span class="op">}</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span>  <span class="va">modServer</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">id</span><span class="op">)</span> <span class="op">{</span></span></span>
+<span class="r-in"><span>    <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/moduleServer.html" class="external-link">moduleServer</a></span><span class="op">(</span><span class="va">id</span>, <span class="kw">function</span><span class="op">(</span><span class="va">input</span>, <span class="va">output</span>, <span class="va">session</span><span class="op">)</span> <span class="op">{</span></span></span>
+<span class="r-in"><span>      <span class="va">output</span><span class="op">$</span><span class="va">graph</span> <span class="op">&lt;-</span> <span class="fu"><a href="g6-shiny.html">renderG6</a></span><span class="op">(</span><span class="op">{</span></span></span>
+<span class="r-in"><span>        <span class="fu"><a href="g6.html">g6</a></span><span class="op">(</span><span class="va">nodes</span><span class="op">)</span> <span class="op">|&gt;</span></span></span>
+<span class="r-in"><span>          <span class="fu"><a href="g6_options.html">g6_options</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>            animation <span class="op">=</span> <span class="cn">FALSE</span>,</span></span>
+<span class="r-in"><span>            edge <span class="op">=</span> <span class="fu"><a href="edge_options.html">edge_options</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>              style <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>                endArrow <span class="op">=</span> <span class="cn">TRUE</span></span></span>
+<span class="r-in"><span>              <span class="op">)</span></span></span>
+<span class="r-in"><span>            <span class="op">)</span></span></span>
+<span class="r-in"><span>          <span class="op">)</span> <span class="op">|&gt;</span></span></span>
+<span class="r-in"><span>          <span class="fu"><a href="g6_layout.html">g6_layout</a></span><span class="op">(</span><span class="fu"><a href="d3_force_layout.html">d3_force_layout</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span></span>
+<span class="r-in"><span>          <span class="fu"><a href="g6_behaviors.html">g6_behaviors</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>            <span class="co"># avoid conflict with internal function</span></span></span>
+<span class="r-in"><span>            <span class="fu">g6R</span><span class="fu">::</span><span class="fu">create_edge</span><span class="op">(</span></span></span>
+<span class="r-in"><span>              target <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"node"</span>, <span class="st">"combo"</span>, <span class="st">"canvas"</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>              enable <span class="op">=</span> <span class="fu"><a href="JS.html">JS</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>                <span class="st">"(e) =&gt; {</span></span></span>
+<span class="r-in"><span><span class="st">                  return e.shiftKey;</span></span></span>
+<span class="r-in"><span><span class="st">                }"</span></span></span>
+<span class="r-in"><span>              <span class="op">)</span>,</span></span>
+<span class="r-in"><span>              onFinish <span class="op">=</span> <span class="fu"><a href="JS.html">JS</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>                <span class="fu"><a href="https://rdrr.io/r/base/sprintf.html" class="external-link">sprintf</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>                  <span class="st">"(edge) =&gt; {</span></span></span>
+<span class="r-in"><span><span class="st">                    const graph = HTMLWidgets.find('#%s').getWidget();</span></span></span>
+<span class="r-in"><span><span class="st">                    const targetType = graph.getElementType(edge.target);</span></span></span>
+<span class="r-in"><span><span class="st">                    // Avoid to create edges in combos. If so, we remove it</span></span></span>
+<span class="r-in"><span><span class="st">                    if (targetType === 'combo') {</span></span></span>
+<span class="r-in"><span><span class="st">                      graph.removeEdgeData([edge.id]);</span></span></span>
+<span class="r-in"><span><span class="st">                      return;</span></span></span>
+<span class="r-in"><span><span class="st">                    }</span></span></span>
+<span class="r-in"><span><span class="st">                    Shiny.setInputValue('%s', edge);</span></span></span>
+<span class="r-in"><span><span class="st">                  }"</span>,</span></span>
+<span class="r-in"><span>                  <span class="va">session</span><span class="op">$</span><span class="fu">ns</span><span class="op">(</span><span class="st">"graph"</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>                  <span class="va">session</span><span class="op">$</span><span class="fu">ns</span><span class="op">(</span><span class="st">"added_edge"</span><span class="op">)</span></span></span>
+<span class="r-in"><span>                <span class="op">)</span></span></span>
+<span class="r-in"><span>              <span class="op">)</span></span></span>
+<span class="r-in"><span>            <span class="op">)</span></span></span>
+<span class="r-in"><span>          <span class="op">)</span></span></span>
+<span class="r-in"><span>      <span class="op">}</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span>      <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/observeEvent.html" class="external-link">observeEvent</a></span><span class="op">(</span><span class="va">input</span><span class="op">[[</span><span class="st">"added_edge"</span><span class="op">]</span><span class="op">]</span>, <span class="op">{</span></span></span>
+<span class="r-in"><span>        <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/showNotification.html" class="external-link">showNotification</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>          <span class="fu"><a href="https://rdrr.io/r/base/sprintf.html" class="external-link">sprintf</a></span><span class="op">(</span><span class="st">"Edge dropped on: %s"</span>, <span class="va">input</span><span class="op">[[</span><span class="st">"added_edge"</span><span class="op">]</span><span class="op">]</span><span class="op">$</span><span class="va">targetType</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>          type <span class="op">=</span> <span class="st">"message"</span></span></span>
+<span class="r-in"><span>        <span class="op">)</span></span></span>
+<span class="r-in"><span>      <span class="op">}</span><span class="op">)</span></span></span>
+<span class="r-in"><span>    <span class="op">}</span><span class="op">)</span></span></span>
+<span class="r-in"><span>  <span class="op">}</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span>  <span class="va">ui</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rstudio.github.io/bslib/reference/page.html" class="external-link">page_fluid</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>    <span class="fu">modUI</span><span class="op">(</span><span class="st">"test"</span><span class="op">)</span></span></span>
+<span class="r-in"><span>  <span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span>  <span class="va">server</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">input</span>, <span class="va">output</span>, <span class="va">session</span><span class="op">)</span> <span class="op">{</span></span></span>
+<span class="r-in"><span>    <span class="fu">modServer</span><span class="op">(</span><span class="st">"test"</span><span class="op">)</span></span></span>
+<span class="r-in"><span>  <span class="op">}</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/shinyApp.html" class="external-link">shinyApp</a></span><span class="op">(</span><span class="va">ui</span>, <span class="va">server</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">}</span></span></span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>

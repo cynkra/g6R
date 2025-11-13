@@ -407,3 +407,23 @@ g6(poke$nodes, poke$edges, poke$combos) |>
     drag_element()
   )
 ```
+
+## Update combos data
+
+These functions can only be used in a Shiny app context. They allow you
+to get or update the combos data in the graph after it has been created.
+The functions are:
+
+- [`g6_add_combos()`](https://cynkra.github.io/g6R/reference/g6-add.md):
+  adds new combos to the graph.
+- [`g6_update_combos()`](https://cynkra.github.io/g6R/reference/g6-update.md):
+  updates existing combos in the graph.
+- [`g6_remove_combos()`](https://cynkra.github.io/g6R/reference/g6-remove.md):
+  removes combos from the graph.
+- [`g6_set_combos()`](https://cynkra.github.io/g6R/reference/g6-set.md):
+  set combos state.
+- [`g6_get_combos()`](https://cynkra.github.io/g6R/reference/g6-get.md):
+  get combos data from the graph.
+
+We provide more details and examples in the [Shiny integration
+vignette](https://cynkra.github.io/g6R/articles/shiny.html).

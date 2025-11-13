@@ -10,3 +10,4 @@
 - [Layouts](https://cynkra.github.io/g6R/articles/layouts.md):
 - [Nodes](https://cynkra.github.io/g6R/articles/nodes.md):
 - [Plugins](https://cynkra.github.io/g6R/articles/plugins.md):
+- [Shiny](https://cynkra.github.io/g6R/articles/shiny.md):

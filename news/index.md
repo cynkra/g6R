@@ -13,6 +13,10 @@ slot.
 
 ### New features and fixes
 
+- [`create_edge()`](https://cynkra.github.io/g6R/reference/create_edge.md)
+  behavior improved: when creating an edge and it is release on the
+  canvas, the edge isn’t cancelled and data are available. We added a
+  `targetType` property which allows to know where the edge was dragged.
 - Added new elements API:
   [`g6_node()`](https://cynkra.github.io/g6R/reference/g6_element.md),
   [`g6_edge()`](https://cynkra.github.io/g6R/reference/g6_element.md),

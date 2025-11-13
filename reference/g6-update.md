@@ -47,3 +47,39 @@ details.
 
 [`g6_proxy`](https://cynkra.github.io/g6R/reference/g6_proxy.md),
 [`g6_remove_nodes`](https://cynkra.github.io/g6R/reference/g6-remove.md)
+
+## Examples
+
+``` r
+if (interactive()) {
+  library(shiny)
+  library(g6R)
+  library(bslib)
+
+  # Static data defined globally
+  nodes <- data.frame(id = 1:3)
+  edges <- data.frame(source = c(1, 2), target = c(2, 3))
+
+  ui <- page_fluid(
+    title = "Update Nodes Dynamically",
+    g6_output("graph"),
+    actionButton("update_node", "Update Node 1 Label")
+  )
+
+  server <- function(input, output, session) {
+    output$graph <- render_g6({
+      g6(nodes = nodes, edges = edges) |> g6_layout()
+    })
+
+    observeEvent(input$update_node, {
+      # Update label for node 1
+      g6_update_nodes(
+        g6_proxy("graph"),
+        g6_node(id = 1, style = list(labelText = "Node label updated"))
+      )
+    })
+  }
+
+  shinyApp(ui, server)
+}
+```
