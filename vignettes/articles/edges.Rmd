@@ -46,6 +46,42 @@ edges <- list(
 )
 ```
 
+In `{g6R}`, the preferred way to create edges is by using the helper functions `g6_edge()` and `g6_edges()`.  
+These functions provide a consistent and user-friendly interface for edge creation, supporting both simple and advanced customization.  
+`g6_edge()` allows you to define a single edge with specific properties, while `g6_edges()` and `as_g6_edges()` can generate multiple edges from various input formats (data.frame, list):
+
+```{r}
+as.list(methods("as_g6_edge"))
+as.list(methods("as_g6_edges"))
+```
+
+Using these helpers ensures compatibility with all `{g6R}` features and is the recommended method for edge creation.
+
+For example:
+
+```{r}
+# Create a single edge
+edge <- g6_edge(source = "A", target = "B", type = "line", style = list(stroke = "blue"))
+
+# Create multiple edges from a data frame
+df <- data.frame(source = c("A", "B"), target = c("B", "C"), type = c("line", "cubic"))
+edges <- as_g6_edges(df)
+
+# With g6_edges()
+edges <- g6_edges(
+  g6_edge(source = "A", target = "B", type = "line"),
+  g6_edge(source = "B", target = "C", type = "cubic")
+)
+
+# with a list
+lst <- list(
+  list(source = "A", target = "B", type = "line"),
+  list(source = "B", target = "C", type = "cubic")
+)
+edges <- as_g6_edges(lst)
+edges
+```
+
 ## Data properties
 
 `{g6R}` edges are allowed to have the following properties:
@@ -284,38 +320,4 @@ These functions can only be used in a Shiny app context. They allow you to get o
 - `g6_set_edges()`: set edges state.
 - `g6_get_edges()`: get edges data from the graph.
 
-In `{g6R}`, the preferred way to create edges is by using the helper functions `g6_edge()` and `g6_edges()`.  
-These functions provide a consistent and user-friendly interface for edge creation, supporting both simple and advanced customization.  
-`g6_edge()` allows you to define a single edge with specific properties, while `g6_edges()` and `as_g6_edges()` can generate multiple edges from various input formats (data.frame, list):
-
-```{r}
-as.list(methods("as_g6_edge"))
-as.list(methods("as_g6_edges"))
-```
-
-Using these helpers ensures compatibility with all `{g6R}` features and is the recommended method for edge creation.
-
-For example:
-
-```{r}
-# Create a single edge
-edge <- g6_edge(source = "A", target = "B", type = "line", style = list(stroke = "blue"))
-
-# Create multiple edges from a data frame
-df <- data.frame(source = c("A", "B"), target = c("B", "C"), type = c("line", "cubic"))
-edges <- as_g6_edges(df)
-
-# With g6_edges()
-edges <- g6_edges(
-  g6_edge(source = "A", target = "B", type = "line"),
-  g6_edge(source = "B", target = "C", type = "cubic")
-)
-
-# with a list
-lst <- list(
-  list(source = "A", target = "B", type = "line"),
-  list(source = "B", target = "C", type = "cubic")
-)
-edges <- as_g6_edges(lst)
-edges
-```
+We provide more details and examples in the [Shiny integration vignette](https://cynkra.github.io/g6R/articles/shiny.html).

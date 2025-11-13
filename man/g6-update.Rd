@@ -36,6 +36,40 @@ See \url{https://g6.antv.antgroup.com/en/api/data#graphupdatenodedata},
 \url{https://g6.antv.antgroup.com/en/api/data#graphupdateedgedata} and
 \url{https://g6.antv.antgroup.com/en/api/data#graphupdatecombodata} for more details.
 }
+\examples{
+if (interactive()) {
+  library(shiny)
+  library(g6R)
+  library(bslib)
+
+  # Static data defined globally
+  nodes <- data.frame(id = 1:3)
+  edges <- data.frame(source = c(1, 2), target = c(2, 3))
+
+  ui <- page_fluid(
+    title = "Update Nodes Dynamically",
+    g6_output("graph"),
+    actionButton("update_node", "Update Node 1 Label")
+  )
+
+  server <- function(input, output, session) {
+    output$graph <- render_g6({
+      g6(nodes = nodes, edges = edges) |> g6_layout()
+    })
+
+    observeEvent(input$update_node, {
+      # Update label for node 1
+      g6_update_nodes(
+        g6_proxy("graph"),
+        g6_node(id = 1, style = list(labelText = "Node label updated"))
+      )
+    })
+  }
+
+  shinyApp(ui, server)
+}
+
+}
 \seealso{
 \code{\link{g6_proxy}}, \code{\link{g6_remove_nodes}}
 }

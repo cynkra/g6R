@@ -74,4 +74,36 @@ config <- context_menu(
       // do stuff
   }")
 )
+if (interactive()) {
+  library(shiny)
+  library(g6R)
+  library(bslib)
+
+  nodes <- data.frame(id = c("node1", "node2"))
+  edges <- data.frame(source = "node1", target = "node2")
+
+  ui <- page_fluid(
+    g6_output("graph"),
+    verbatimTextOutput("contextmenu_info")
+  )
+
+  server <- function(input, output, session) {
+    output$graph <- render_g6({
+      g6(
+        nodes = nodes,
+        edges = edges
+      ) |>
+        g6_layout() |>
+        g6_plugins(
+          context_menu()
+        )
+    })
+
+    output$contextmenu_info <- renderPrint({
+      input[["graph-contextmenu"]]
+    })
+  }
+
+  shinyApp(ui, server)
+}
 }

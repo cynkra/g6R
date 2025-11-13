@@ -176,6 +176,82 @@ g6_get_combos <- function(graph, combos) {
 #' @seealso \code{\link{g6_proxy}}
 #' @rdname g6-set
 #' @export
+#' @examples
+#' if (interactive()) {
+#'   # Example setting node states
+#'   library(shiny)
+#'   library(g6R)
+#'   library(bslib)
+#'
+#'   nodes <- data.frame(id = 1:2)
+#'   edges <- data.frame(source = 1, target = 2)
+#'
+#'   ui <- page_fluid(
+#'     g6_output("graph"),
+#'     actionButton("set_state", "Set Node States")
+#'   )
+#'
+#'   server <- function(input, output, session) {
+#'     output$graph <- render_g6({
+#'       g6(nodes = nodes, edges = edges) |> g6_layout()
+#'     })
+#'
+#'     observeEvent(input$set_state, {
+#'       g6_set_nodes(
+#'         g6_proxy("graph"),
+#'         list(`1` = "selected", `2` = "disabled")
+#'       )
+#'     })
+#'   }
+#'
+#'   shinyApp(ui, server)
+#'
+#'   # Replace data dynamically
+#'   ui <- page_fluid(
+#'     g6_output("graph"),
+#'     actionButton("remove", "Remove All"),
+#'     actionButton("reset", "Reset Graph"),
+#'     verbatimTextOutput("state")
+#'   )
+#'
+#'   server <- function(input, output, session) {
+#'     # Store initial state after first render
+#'     initial_state <- reactiveVal(NULL)
+#'
+#'     output$graph <- render_g6({
+#'       g6(nodes = nodes, edges = edges) |>
+#'         g6_layout() |>
+#'         g6_options(animation = FALSE)
+#'     })
+#'
+#'     # Save initial state once available
+#'     observe({
+#'       state <- input[["graph-state"]]
+#'       if (!is.null(state) && is.null(initial_state())) {
+#'         initial_state(state)
+#'       }
+#'     })
+#'
+#'     # Remove all nodes and edges
+#'     observeEvent(input$remove, {
+#'       g6_set_data(g6_proxy("graph"), list(nodes = list(), edges = list()))
+#'     })
+#'
+#'     # Reset graph to initial state
+#'     observeEvent(input$reset, {
+#'       state <- initial_state()
+#'       if (!is.null(state)) {
+#'         g6_set_data(g6_proxy("graph"), state)
+#'       }
+#'     })
+#'
+#'     output$state <- renderPrint({
+#'       input[["graph-state"]]
+#'     })
+#'   }
+#'
+#'   shinyApp(ui, server)
+#' }
 g6_set_nodes <- function(graph, nodes) {
   g6_set(graph, nodes, type = "Node")
 }
@@ -239,58 +315,32 @@ g6_set_data <- function(graph, data) {
 #' @examples
 #' if (interactive()) {
 #'   library(shiny)
-#'   library(bslib)
 #'   library(g6R)
+#'   library(bslib)
+#'
+#'   # Static data defined globally
+#'   nodes <- data.frame(id = 1:3)
+#'   edges <- data.frame(source = c(1, 2), target = c(2, 3))
+#'
 #'   ui <- page_fluid(
-#'     titlePanel("g6_proxy Add Nodes/Data Examples"),
-#'     layout_sidebar(
-#'       sidebar = sidebar(
-#'         actionButton("old1", "Old: list(list(id = 'n1'), list(id = 'n2'))"),
-#'         actionButton("old2", "Old: list(id = 'n3'), list(id = 'n4')"),
-#'         actionButton("old3", "Old: g6_nodes(g6_node(id = 'n5'), g6_node(id = 'n6'))"),
-#'         actionButton("new1", "New: g6_node(id = 'n7'), g6_node(id = 'n8')"),
-#'         actionButton("new2", "New: data.frame(id = c('n9', 'n10'))"),
-#'         actionButton("add_data", "Add Data (nodes/edges/combos)"),
-#'         verbatimTextOutput("graph_data")
-#'       ),
-#'       g6Output("graph")
-#'     )
+#'     title = "Add Nodes Dynamically",
+#'     g6_output("graph"),
+#'     actionButton("add_node", "Add Node")
 #'   )
+#'
 #'   server <- function(input, output, session) {
-#'     output$graph <- renderG6({
-#'       g6() |>
-#'         g6_layout()
+#'     output$graph <- render_g6({
+#'       g6(nodes = nodes, edges = edges) |> g6_layout()
 #'     })
-#'     proxy <- g6_proxy("graph")
-#'     observeEvent(input$old1, {
-#'       g6_add_nodes(proxy, list(list(id = "n1"), list(id = "n2")))
-#'     })
-#'     observeEvent(input$old2, {
-#'       g6_add_nodes(proxy, list(id = "n3"), list(id = "n4"))
-#'     })
-#'     observeEvent(input$old3, {
-#'       g6_add_nodes(proxy, g6_nodes(g6_node(id = "n5"), g6_node(id = "n6")))
-#'     })
-#'     observeEvent(input$new1, {
-#'       g6_add_nodes(proxy, g6_node(id = "n7"), g6_node(id = "n8"))
-#'     })
-#'     observeEvent(input$new2, {
-#'       g6_add_nodes(proxy, data.frame(id = c("n9", "n10")))
-#'     })
-#'     observeEvent(input$add_data, {
-#'       g6_add_data(
-#'         proxy,
-#'         list(
-#'           nodes = list(list(id = "n11"), list(id = "n12")),
-#'           edges = list(list(source = "n11", target = "n12", id = "e1")),
-#'           combos = list(list(id = "combo1"))
-#'         )
-#'       )
-#'     })
-#'     output$graph_data <- renderPrint({
-#'       "See graph updates in the visualization above."
+#'
+#'     next_id <- reactiveVal(max(nodes$id) + 1)
+#'
+#'     observeEvent(input$add_node, {
+#'       g6_add_nodes(g6_proxy("graph"), data.frame(id = next_id()))
+#'       next_id(next_id() + 1)
 #'     })
 #'   }
+#'
 #'   shinyApp(ui, server)
 #' }
 g6_add_nodes <- function(graph, ...) {
@@ -354,6 +404,43 @@ g6_add_data <- function(graph, data) {
 #' @seealso \code{\link{g6_proxy}}
 #' @rdname g6-remove
 #' @export
+#' @examples
+#' if (interactive()) {
+#'   library(shiny)
+#'   library(g6R)
+#'   library(bslib)
+#'
+#'   # Static data defined globally
+#'   nodes <- data.frame(id = 1:3)
+#'   edges <- data.frame(source = c(1, 2), target = c(2, 3))
+#'
+#'   ui <- page_fluid(
+#'     title = "Remove Nodes Dynamically",
+#'     g6_output("graph"),
+#'     actionButton("remove_node", "Remove Last Node")
+#'   )
+#'
+#'   server <- function(input, output, session) {
+#'     output$graph <- render_g6({
+#'       g6(nodes = nodes, edges = edges) |> g6_layout()
+#'     })
+#'
+#'     # Track the next node id and current node ids
+#'     current_ids <- reactiveVal(nodes$id)
+#'
+#'     observeEvent(input$remove_node, {
+#'       ids <- current_ids()
+#'       if (length(ids) > 0) {
+#'         remove_id <- tail(ids, 1)
+#'         g6_remove_nodes(g6_proxy("graph"), remove_id)
+#'         current_ids(ids[-length(ids)])
+#'       }
+#'     })
+#'   }
+#'
+#'   shinyApp(ui, server)
+#'
+#' }
 g6_remove_nodes <- function(graph, ids) {
   g6_remove(graph, ids, type = "Node")
 }
@@ -395,6 +482,39 @@ g6_remove_combos <- function(graph, ids) {
 #' @seealso \code{\link{g6_proxy}}, \code{\link{g6_remove_nodes}}
 #' @rdname g6-update
 #' @export
+#' @examples
+#' if (interactive()) {
+#'   library(shiny)
+#'   library(g6R)
+#'   library(bslib)
+#'
+#'   # Static data defined globally
+#'   nodes <- data.frame(id = 1:3)
+#'   edges <- data.frame(source = c(1, 2), target = c(2, 3))
+#'
+#'   ui <- page_fluid(
+#'     title = "Update Nodes Dynamically",
+#'     g6_output("graph"),
+#'     actionButton("update_node", "Update Node 1 Label")
+#'   )
+#'
+#'   server <- function(input, output, session) {
+#'     output$graph <- render_g6({
+#'       g6(nodes = nodes, edges = edges) |> g6_layout()
+#'     })
+#'
+#'     observeEvent(input$update_node, {
+#'       # Update label for node 1
+#'       g6_update_nodes(
+#'         g6_proxy("graph"),
+#'         g6_node(id = 1, style = list(labelText = "Node label updated"))
+#'       )
+#'     })
+#'   }
+#'
+#'   shinyApp(ui, server)
+#' }
+#'
 g6_update_nodes <- function(graph, ...) {
   nodes <- as_g6_elements(..., coerc_func = as_g6_nodes)
   g6_update(graph, nodes, type = "Node")
@@ -744,6 +864,62 @@ g6_set_options <- function(graph, ...) {
 #'
 #' @seealso \code{\link{g6_proxy}}, \code{\link{g6_add_plugin}}
 #' @export
+#' @examples
+#' if (interactive()) {
+#'   library(shiny)
+#'   library(g6R)
+#'   library(bslib)
+#'
+#'   color_to_hex <- function(col) {
+#'     rgb <- col2rgb(col)
+#'     sprintf("#%02X%02X%02X", rgb[1], rgb[2], rgb[3])
+#'   }
+#'
+#'   nodes <- data.frame(id = c("node1", "node2", "node3"))
+#'   edges <- data.frame(source = "node1", target = "node2")
+#'
+#'   ui <- page_fluid(
+#'     g6_output("graph"),
+#'     actionButton("add_hull", "Add Hull Plugin"),
+#'     selectInput(
+#'       "hull_color",
+#'       "Hull Color",
+#'       choices = c("red", "blue", "green", "orange", "purple"),
+#'       selected = "red"
+#'     )
+#'   )
+#'
+#'   server <- function(input, output, session) {
+#'     output$graph <- render_g6({
+#'       g6(nodes = nodes, edges = edges) |>
+#'         g6_layout() |>
+#'         g6_options(animation = FALSE)
+#'     })
+#'
+#'     observeEvent(input$add_hull, {
+#'       g6_add_plugin(
+#'         g6_proxy("graph"),
+#'         hull(
+#'           members = c("node1", "node2", "node3"),
+#'           fill = color_to_hex(input$hull_color),
+#'           fillOpacity = 0.2
+#'         )
+#'       )
+#'     })
+#'
+#'     observeEvent(input$hull_color, {
+#'       # Only update if hull plugin exists
+#'       g6_update_plugin(
+#'         g6_proxy("graph"),
+#'         key = "hull",
+#'         fill = color_to_hex(input$hull_color),
+#'         stroke = color_to_hex(input$hull_color)
+#'       )
+#'     })
+#'   }
+#'
+#'   shinyApp(ui, server)
+#' }
 g6_update_plugin <- function(graph, key, ...) {
   if (!any(class(graph) %in% "g6_proxy")) {
     stop(
@@ -817,6 +993,42 @@ g6_add_plugin <- function(graph, ...) {
 #'
 #' @seealso \code{\link{g6_proxy}}
 #' @export
+#' @examples
+#' if (interactive()) {
+#'   library(shiny)
+#'   library(g6R)
+#'   library(bslib)
+#'
+#'   nodes <- data.frame(id = c("node1", "node2", "node3"))
+#'   edges <- data.frame(source = "node1", target = "node2")
+#'
+#'   ui <- page_fluid(
+#'     g6_output("graph"),
+#'     checkboxInput("enable_click_select", "Enable Click Select", value = TRUE)
+#'   )
+#'
+#'   server <- function(input, output, session) {
+#'     output$graph <- render_g6({
+#'       g6(nodes = nodes, edges = edges) |>
+#'         g6_layout() |>
+#'         g6_options(animation = FALSE) |>
+#'         g6_behaviors(
+#'           click_select()
+#'         )
+#'     })
+#'
+#'     observeEvent(input$enable_click_select, {
+#'       g6_update_behavior(
+#'         g6_proxy("graph"),
+#'         key = "click-select",
+#'         enable = input$enable_click_select
+#'       )
+#'     })
+#'   }
+#'
+#'   shinyApp(ui, server)
+#' }
+#'
 g6_update_behavior <- function(graph, key, ...) {
   if (!any(class(graph) %in% "g6_proxy")) {
     stop(
@@ -846,6 +1058,157 @@ g6_update_behavior <- function(graph, key, ...) {
 #' @return The g6_proxy object (invisibly), allowing for method chaining.
 #' @seealso [g6_proxy()]
 #' @export
+#' @examples
+#' if (interactive()) {
+#'   library(shiny)
+#'   library(bslib)
+#'   library(g6R)
+#'
+#'   themes <- list(
+#'     "light" = list(
+#'       theme = 'light',
+#'       node = list(
+#'         style = list(
+#'           size = 4
+#'         ),
+#'         palette = list(
+#'           type = 'group',
+#'           field = 'cluster'
+#'         )
+#'       ),
+#'       plugins = list(
+#'         list(
+#'           type = 'background',
+#'           background = '#fff'
+#'         )
+#'       )
+#'     ),
+#'     "dark" = list(
+#'       theme = 'dark',
+#'       node = list(
+#'         style = list(
+#'           size = 4
+#'         ),
+#'         palette = list(
+#'           type = 'group',
+#'           field = 'cluster'
+#'         )
+#'       ),
+#'       plugins = list(
+#'         list(
+#'           type = 'background',
+#'           background = '#000'
+#'         )
+#'       )
+#'     ),
+#'     "blue" = list(
+#'       theme = 'light',
+#'       node = list(
+#'         style = list(
+#'           size = 4
+#'         ),
+#'         palette = list(
+#'           type = 'group',
+#'           field = 'cluster',
+#'           color = "blues",
+#'           invert = TRUE
+#'         )
+#'       ),
+#'       plugins = list(
+#'         list(
+#'           type = 'background',
+#'           background = '#f3faff'
+#'         )
+#'       )
+#'     ),
+#'     "yellow" = list(
+#'       theme = 'light',
+#'       node = list(
+#'         style = list(
+#'           size = 4
+#'         ),
+#'         palette = list(
+#'           type = 'group',
+#'           field = 'cluster',
+#'           color = c(
+#'             '#ffe7ba',
+#'             '#ffd591',
+#'             '#ffc069',
+#'             '#ffa940',
+#'             '#fa8c16',
+#'             '#d46b08',
+#'             '#ad4e00',
+#'             '#873800',
+#'             '#612500'
+#'           )
+#'         )
+#'       ),
+#'       plugins = list(
+#'         list(
+#'           type = 'background',
+#'           background = '#fcf9f1'
+#'         )
+#'       )
+#'     )
+#'   )
+#'
+#'   ui <- page_fluid(
+#'     selectInput(
+#'       "theme",
+#'       "Theme",
+#'       choices = c("light", "dark", "blue", "yellow"),
+#'       selected = "default"
+#'     ),
+#'     g6Output("graph", height = "100vh")
+#'   )
+#'
+#'   server <- function(input, output, session) {
+#'     output$graph <- renderG6({
+#'       g6(
+#'         jsonUrl = "https://assets.antv.antgroup.com/g6/20000.json"
+#'       ) |>
+#'         g6_options(
+#'           animation = FALSE,
+#'           autoFit = "view",
+#'           padding = 20,
+#'           node = list(
+#'             style = list(size = 4),
+#'             palette = list(
+#'               type = "group",
+#'               field = "cluster"
+#'             )
+#'           )
+#'         ) |>
+#'         g6_behaviors(
+#'           "zoom-canvas",
+#'           "drag-canvas",
+#'           "optimize-viewport-transform"
+#'         )
+#'     })
+#'
+#'     observeEvent(input$theme, {
+#'       g6_proxy("graph") |>
+#'         g6_set_theme(themes[[input$theme]])
+#'     })
+#'
+#'     observeEvent(input[["graph-initialized"]], {
+#'       showNotification(
+#'         "Graph initialized",
+#'         type = "message"
+#'       )
+#'     })
+#'
+#'     observeEvent(input[["graph-state"]], {
+#'       showNotification(
+#'         "Graph state updated",
+#'         type = "message"
+#'       )
+#'     })
+#'   }
+#'
+#'   shinyApp(ui, server)
+#'
+#' }
 g6_set_theme <- function(graph, theme) {
   if (!any(class(graph) %in% "g6_proxy")) {
     stop(

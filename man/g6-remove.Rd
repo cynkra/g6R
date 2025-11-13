@@ -38,6 +38,44 @@ See \url{https://g6.antv.antgroup.com/en/api/data#graphremovenodedata},
 \note{
 When a node is removed, its connected edges are also removed.
 }
+\examples{
+if (interactive()) {
+  library(shiny)
+  library(g6R)
+  library(bslib)
+
+  # Static data defined globally
+  nodes <- data.frame(id = 1:3)
+  edges <- data.frame(source = c(1, 2), target = c(2, 3))
+
+  ui <- page_fluid(
+    title = "Remove Nodes Dynamically",
+    g6_output("graph"),
+    actionButton("remove_node", "Remove Last Node")
+  )
+
+  server <- function(input, output, session) {
+    output$graph <- render_g6({
+      g6(nodes = nodes, edges = edges) |> g6_layout()
+    })
+
+    # Track the next node id and current node ids
+    current_ids <- reactiveVal(nodes$id)
+
+    observeEvent(input$remove_node, {
+      ids <- current_ids()
+      if (length(ids) > 0) {
+        remove_id <- tail(ids, 1)
+        g6_remove_nodes(g6_proxy("graph"), remove_id)
+        current_ids(ids[-length(ids)])
+      }
+    })
+  }
+
+  shinyApp(ui, server)
+
+}
+}
 \seealso{
 \code{\link{g6_proxy}}
 }

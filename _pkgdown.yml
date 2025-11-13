@@ -4,7 +4,7 @@ template:
 
 navbar:
   structure:
-    left:  [intro, elements, behaviors, plugins, layout, others]
+    left:  [intro, elements, shiny, behaviors, plugins, layout, others]
     right: [search, reference, news, github]
   components:
     home: ~
@@ -18,6 +18,12 @@ navbar:
           href: articles/edges.html
         - text: Combos
           href: articles/combos.html
+
+    shiny:
+      text: Shiny
+      menu:
+        - text: g6R and Shiny
+          href: articles/shiny.html      
     behaviors:
       text: Behaviors
       menu:
