@@ -9,7 +9,10 @@ const setClickEvents = (events, graph) => {
   for (let event of events) {
     graph.on(event, (e) => {
       const { target } = e; // Get the ID of the clicked node
-      const inputName = `${id}-selected_${target.type}`;
+      // Get correct type: target.type would not work as it may
+      // possibly return node instead of combo ...
+      const type = graph.getElementType(target.id);
+      const inputName = `${id}-selected_${type}`;
       const clickSelect = getBehavior(graph.getBehaviors(), "click-select");
       if (!clickSelect.length) return;
       const isMultiple = clickSelect[0].multiple;
