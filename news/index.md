@@ -13,6 +13,9 @@ slot.
 
 ### New features and fixes
 
+- Get correct element type on click: it was possible that whenclicking a
+  combo it appeared under `input$<graph_ID>-selected_node` instead of
+  `input$<graph_ID>-selected_combo`. This is now fixed.
 - [`create_edge()`](https://cynkra.github.io/g6R/reference/create_edge.md)
   behavior improved: when creating an edge and it is release on the
   canvas, the edge isn’t cancelled and data are available. We added a

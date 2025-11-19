@@ -67,7 +67,8 @@
 </div>
 <div class="section level3">
 <h3 id="new-features-and-fixes-0-5-0">New features and fixes<a class="anchor" aria-label="anchor" href="#new-features-and-fixes-0-5-0"></a></h3>
-<ul><li>
+<ul><li>Get correct element type on click: it was possible that whenclicking a combo it appeared under <code>input$&lt;graph_ID&gt;-selected_node</code> instead of <code>input$&lt;graph_ID&gt;-selected_combo</code>. This is now fixed.</li>
+<li>
 <code><a href="../reference/create_edge.html">create_edge()</a></code> behavior improved: when creating an edge and it is release on the canvas, the edge isn’t cancelled and data are available. We added a <code>targetType</code> property which allows to know where the edge was dragged.</li>
 <li>Added new elements API: <code><a href="../reference/g6_element.html">g6_node()</a></code>, <code><a href="../reference/g6_element.html">g6_edge()</a></code>, <code><a href="../reference/g6_element.html">g6_combo()</a></code> to create nodes, edges and combos respectively. We suggest to use them instead of passing lists or dataframes to g6 as they provide safety checks. We also added <code><a href="../reference/g6_elements.html">g6_nodes()</a></code>, <code><a href="../reference/g6_elements.html">g6_edges()</a></code> and <code><a href="../reference/g6_elements.html">g6_combos()</a></code> which are internally used by some proxy functions like <code><a href="../reference/g6-add.html">g6_add_nodes()</a></code> to provide more flexibility.</li>
 <li>New <code>options("g6R.mode)</code> that can be <code>dev</code> or <code>prod</code> (default). In <code>dev</code> mode, Shiny notifications are displayed in the UI whenever a JavaScript error happens (they are still available in the JS console).</li>
