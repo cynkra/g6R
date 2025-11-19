@@ -335,9 +335,9 @@ brush_select <- function(
             else if (type === 'edge') edges.push(id);
             else if (type === 'combo') combos.push(id);
           });
-          Shiny.setInputValue('%s-selected_node', nodes, {priority: 'event'});
-          Shiny.setInputValue('%s-selected_edge', edges, {priority: 'event'});
-          Shiny.setInputValue('%s-selected_combo', combos, {priority: 'event'});
+          Shiny.setInputValue('%s-selected_node:g6R.brush_select', nodes, {priority: 'event'});
+          Shiny.setInputValue('%s-selected_edge:g6R.brush_select', edges, {priority: 'event'});
+          Shiny.setInputValue('%s-selected_combo:g6R.brush_select', combos, {priority: 'event'});
           return states;
         }",
         config$outputId,

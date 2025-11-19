@@ -6,6 +6,17 @@ Due to the new data validation for nodes, edges and combos, some existing code m
 
 ## New features and fixes
 
+- Elements selected via `brush_select()` have a custom input handler. This may give:
+
+```r
+input[["<graph_ID>-selected_combo"]]
+[1] "1" "2"
+attr(,"eventType")
+[1] "brush_select"
+```
+
+Notice the extra attribute, which allows to make a difference between `click_select()` and `brush_select()` events.
+
 - Get correct element type on click: it was possible that whenclicking a combo it appeared under `input$<graph_ID>-selected_node` instead of `input$<graph_ID>-selected_combo`. This is now fixed.
 - `create_edge()` behavior improved: when creating an edge and it is release on the canvas, the edge isn't cancelled and data are available. We added a `targetType` property which allows to know where the edge was dragged.
 - Added new elements API: `g6_node()`, `g6_edge()`, `g6_combo()` to create nodes, edges and combos respectively. We suggest to use them instead of passing lists or dataframes to g6 as they provide

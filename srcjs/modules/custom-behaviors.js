@@ -1,6 +1,7 @@
 import { CreateEdge, CanvasEvent, ComboEvent, CommonEvent, EdgeEvent, NodeEvent } from '@antv/g6';
 import { uniqueId } from '@antv/util';
 
+const ASSIST_EDGE_ID = 'g6-create-edge-assist-edge-id';
 const ASSIST_NODE_ID = 'g6-create-edge-assist-node-id';
 
 class CustomCreateEdge extends CreateEdge {
@@ -10,13 +11,13 @@ class CustomCreateEdge extends CreateEdge {
     this.unbindEvents();
 
     if (trigger === 'click') {
-      graph.on(NodeEvent.CLICK, this.handleCreateEdge.bind(this));
-      graph.on(ComboEvent.CLICK, this.handleCreateEdge.bind(this));
+      graph.on(NodeEvent.CLICK, this.customHandleCreateEdge.bind(this));
+      graph.on(ComboEvent.CLICK, this.customHandleCreateEdge.bind(this));
       graph.on(CanvasEvent.CLICK, this.cancelEdge.bind(this));
       graph.on(EdgeEvent.CLICK, this.cancelEdge.bind(this));
     } else {
-      graph.on(NodeEvent.DRAG_START, this.handleCreateEdge.bind(this));
-      graph.on(ComboEvent.DRAG_START, this.handleCreateEdge.bind(this));
+      graph.on(NodeEvent.DRAG_START, this.customHandleCreateEdge.bind(this));
+      graph.on(ComboEvent.DRAG_START, this.customHandleCreateEdge.bind(this));
       // Bind to custom drop method
       graph.on(CommonEvent.POINTER_UP, this.customDrop.bind(this));
     }
@@ -40,7 +41,7 @@ class CustomCreateEdge extends CreateEdge {
         this.cancelEdge();
         return;
       }
-      this.handleCreateEdge(event);
+      this.customHandleCreateEdge(event);
     } else {
       this.cancelEdge();
     }
@@ -61,6 +62,53 @@ class CustomCreateEdge extends CreateEdge {
       onFinish(edgeData);
     }
   };
+
+  // JS conversion of handleCreateEdge
+  async customHandleCreateEdge(event) {
+    if (!this.validate(event)) return;
+    const { graph, canvas, batch, element } = this.context;
+    const { style } = this.options;
+
+    if (this.source) {
+      this.customCreateEdge(event);
+      await this.cancelEdge();
+      return;
+    }
+
+    if (batch) batch.startBatch();
+    if (canvas) canvas.setCursor('crosshair');
+    const selectedIds = this.getSelectedNodeIDs([event.target.id]);
+    this.source = selectedIds && selectedIds[0];
+    const sourceNode = graph.getElementData(this.source);
+
+    graph.addNodeData([
+      {
+        id: ASSIST_NODE_ID,
+        style: {
+          visibility: 'hidden',
+          ports: [{ key: 'port-1', placement: [0.5, 0.5] }],
+          x: sourceNode && sourceNode.style ? sourceNode.style.x : undefined,
+          y: sourceNode && sourceNode.style ? sourceNode.style.y : undefined,
+        },
+      },
+    ]);
+
+    graph.addEdgeData([
+      {
+        id: ASSIST_EDGE_ID,
+        source: this.source,
+        target: ASSIST_NODE_ID,
+        style: Object.assign(
+          { pointerEvents: 'none' },
+          style
+        ),
+      },
+    ]);
+    if (element && element.draw) {
+      const result = element.draw({ animation: false });
+      if (result && result.finished) await result.finished;
+    }
+  }
 }
 
 export { CustomCreateEdge };
