@@ -13,6 +13,23 @@ slot.
 
 ### New features and fixes
 
+- Elements selected via
+  [`brush_select()`](https://cynkra.github.io/g6R/reference/brush_select.md)
+  have a custom input handler. This may give:
+
+``` r
+input[["<graph_ID>-selected_combo"]]
+[1] "1" "2"
+attr(,"eventType")
+[1] "brush_select"
+```
+
+Notice the extra attribute, which allows to make a difference between
+[`click_select()`](https://cynkra.github.io/g6R/reference/click_select.md)
+and
+[`brush_select()`](https://cynkra.github.io/g6R/reference/brush_select.md)
+events.
+
 - Get correct element type on click: it was possible that whenclicking a
   combo it appeared under `input$<graph_ID>-selected_node` instead of
   `input$<graph_ID>-selected_combo`. This is now fixed.

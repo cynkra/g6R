@@ -67,6 +67,12 @@
 </div>
 <div class="section level3">
 <h3 id="new-features-and-fixes-0-5-0">New features and fixes<a class="anchor" aria-label="anchor" href="#new-features-and-fixes-0-5-0"></a></h3>
+<ul><li>Elements selected via <code><a href="../reference/brush_select.html">brush_select()</a></code> have a custom input handler. This may give:</li>
+</ul><div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a>input[[<span class="st">"&lt;graph_ID&gt;-selected_combo"</span>]]</span>
+<span id="cb1-2"><a href="#cb1-2" tabindex="-1"></a>[<span class="dv">1</span>] <span class="st">"1"</span> <span class="st">"2"</span></span>
+<span id="cb1-3"><a href="#cb1-3" tabindex="-1"></a><span class="fu">attr</span>(,<span class="st">"eventType"</span>)</span>
+<span id="cb1-4"><a href="#cb1-4" tabindex="-1"></a>[<span class="dv">1</span>] <span class="st">"brush_select"</span></span></code></pre></div>
+<p>Notice the extra attribute, which allows to make a difference between <code><a href="../reference/click_select.html">click_select()</a></code> and <code><a href="../reference/brush_select.html">brush_select()</a></code> events.</p>
 <ul><li>Get correct element type on click: it was possible that whenclicking a combo it appeared under <code>input$&lt;graph_ID&gt;-selected_node</code> instead of <code>input$&lt;graph_ID&gt;-selected_combo</code>. This is now fixed.</li>
 <li>
 <code><a href="../reference/create_edge.html">create_edge()</a></code> behavior improved: when creating an edge and it is release on the canvas, the edge isn’t cancelled and data are available. We added a <code>targetType</code> property which allows to know where the edge was dragged.</li>
