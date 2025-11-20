@@ -1,6 +1,5 @@
 import { getBehavior, resetOtherElementTypes } from "./utils";
-import { GraphEvent, CommonEvent, CanvasEvent, EdgeEvent } from '@antv/g6';
-import { sendNotification } from "./utils";
+import { GraphEvent } from '@antv/g6';
 
 const setClickEvents = (events, graph) => {
   // Loop over events
@@ -71,13 +70,46 @@ const setGraphEvents = (events, graph) => {
       if (Shiny.shinyapp.$inputValues[id + '-initialized']) {
         Shiny.setInputValue(id + '-state', graph.getData());
       }
-
-      // Canvas drop
-      if (event === CommonEvent.POINTER_UP) {
-        Shiny.setInputValue(id + '-pointer_up', e.targetType);
-      }
     })
   }
 }
 
-export { setClickEvents, setGraphEvents };
+const preserveElementsPosition = (graph) => {
+  let oldPositions = {};
+
+  const forEachElementType = (graph, callback) => {
+    const data = graph.getData();
+    if (data.nodes) callback(data.nodes, node => node.id);
+    if (data.combos) callback(data.combos, combo => combo.id);
+  };
+
+  const storePositions = (elements, getId) => {
+    elements.forEach(el => {
+      try {
+        graph.getElementRenderStyle(getId(el));
+        const pos = graph.getElementPosition(getId(el));
+        oldPositions[getId(el)] = [pos[0], pos[1]];
+      } catch (e) {
+        // Element not rendered, skip
+      }
+    });
+  };
+
+  const restorePositions = (elements, getId) => {
+    elements.forEach(el => {
+      const pos = oldPositions[getId(el)];
+      if (!pos) return;
+      graph.translateElementTo(getId(el), pos, false);
+    });
+  };
+
+  graph.on(GraphEvent.BEFORE_LAYOUT, () => {
+    forEachElementType(graph, storePositions);
+  });
+
+  graph.on(GraphEvent.AFTER_LAYOUT, () => {
+    forEachElementType(graph, restorePositions);
+  });
+}
+
+export { setClickEvents, setGraphEvents, preserveElementsPosition };

@@ -90,10 +90,20 @@ const registerShinyHandlers = (graph, mode) => {
           return;
         }
 
-        // Redraw and layout if needed
+        // Redraw
         graph.draw();
-        if (m.action !== 'update') {
+        // Layout for add and update. Only
+        // layout for new elements
+        if (['add', 'update'].includes(m.action) && m.type === 'Node') {
+          graph.setLayout((prevLayout) => {
+            return {
+              ...prevLayout,
+              // avoid reordering nodes in dagre layouts
+              nodeOrder: graph.getData().nodes.map(n => n.id),
+            }
+          });
           graph.layout();
+          // Positions are restored by event handlers in utils.js
         }
       }
     }, mode);
@@ -149,7 +159,7 @@ const registerShinyHandlers = (graph, mode) => {
         window.HTMLWidgets.evaluateStringMember(m.opts, m.evals[i]);
       }
       graph.updatePlugin(m.opts);
-      graph.render();
+      graph.draw();
     }, mode);
   })
 
