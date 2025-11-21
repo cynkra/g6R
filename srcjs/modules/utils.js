@@ -8,7 +8,7 @@ import {
   Graph
 } from '@antv/g6';
 
-import { setClickEvents, setGraphEvents } from './events';
+import { setClickEvents, setGraphEvents, captureMousePosition } from './events';
 import { tryCatchDev, registerShinyHandlers } from './handlers';
 
 const sendNotification = (message, type = "error", duration = null) => {
@@ -46,7 +46,7 @@ const resetOtherElementTypes = (elementId, targetType) => {
   }
 }
 
-const checkIds = (data, mode) => {
+const checkIds = (data) => {
   let nodeIds = [];
   if (data.nodes) {
     nodeIds = data.nodes.map((node) => {
@@ -69,6 +69,11 @@ const checkIds = (data, mode) => {
       if (typeof edge.target !== 'string') {
         edge.target = edge.target.toString();
       }
+      // needed if data are passed from JSON
+      // as g6_edge will be bypassed in that case
+      if (edge.id == null) {
+        edge.id = `${edge.source}-${edge.target}`;
+      }
       return edge.id
     });
   }
@@ -85,16 +90,14 @@ const checkIds = (data, mode) => {
   const allIds = nodeIds.concat(edgesIds).concat(combosIds);
   const uniqueIds = new Set(allIds);
   if (allIds.length !== uniqueIds.size) {
-    if (mode === "dev") {
-      sendNotification('Cannot initialize graph. Duplicated IDs found.')
-    }
+    sendNotification('Cannot initialize graph. Duplicated IDs found.')
     throw new Error("Invalid graph data: execution aborted");
   } else {
     return (data)
   }
 }
 
-const setupGraph = (graph, widget, mode) => {
+const setupGraph = (graph, widget, config) => {
   const id = graph.options.container;
 
   if (HTMLWidgets.shinyMode) {
@@ -134,7 +137,11 @@ const setupGraph = (graph, widget, mode) => {
       Shiny.setInputValue(id + '-contextmenu', { type: targetType, id: target.id })
     });
 
-    registerShinyHandlers(graph, mode);
+    // Capture mouse position for clever placement of
+    // new nodes
+    captureMousePosition(graph);
+
+    registerShinyHandlers(graph, config.mode);
   }
 
   graph.render();
@@ -149,9 +156,9 @@ let graph = null;
 const loadAndInitGraph = (config, widget) => {
   tryCatchDev(() => {
     const initialize = (data) => {
-      config.data = checkIds(data, config.mode);
+      config.data = checkIds(data);
       graph = new Graph(config);
-      setupGraph(graph, widget, config.mode);
+      setupGraph(graph, widget, config);
     };
 
     if (config.jsonUrl !== null) {

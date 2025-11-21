@@ -65,8 +65,14 @@ const registerShinyHandlers = (graph, mode) => {
           // For other actions like update or add ...
           m.el = m.el.map((e) => {
             e.id = e.id.toString();
+            if (e.source != null && typeof e.source !== 'string') {
+              e.source = e.source.toString();
+            }
+            if (e.target != null && typeof e.target !== 'string') {
+              e.target = e.target.toString();
+            }
             // Also process combo
-            if (e.combo != null) {
+            if (e.combo != null && typeof e.combo !== 'string') {
               e.combo = e.combo.toString();
             }
             return e;
@@ -90,13 +96,28 @@ const registerShinyHandlers = (graph, mode) => {
           return;
         }
 
-        // Redraw and layout if needed
+        // draw only (no layout called here)
         graph.draw();
-        if (m.action !== 'update') {
-          graph.layout();
-        }
       }
     }, mode);
+  })
+
+  // Layout update and execution
+  Shiny.addCustomMessageHandler(id + '_g6-update-layout', (m) => {
+    tryCatchDev(() => {
+      graph.setLayout((prevLayout) => {
+        if ('nodeOrder' in prevLayout) {
+          return prevLayout;
+        }
+        return {
+          ...prevLayout,
+          ...m,
+          // avoid reordering nodes in dagre layouts
+          nodeOrder: graph.getData().nodes.map(n => n.id),
+        }
+      });
+      graph.layout();
+    })
   })
 
   // Canvas resize
@@ -149,7 +170,7 @@ const registerShinyHandlers = (graph, mode) => {
         window.HTMLWidgets.evaluateStringMember(m.opts, m.evals[i]);
       }
       graph.updatePlugin(m.opts);
-      graph.render();
+      graph.draw();
     }, mode);
   })
 

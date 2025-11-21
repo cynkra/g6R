@@ -842,6 +842,31 @@ g6_set_options <- function(graph, ...) {
   graph
 }
 
+#' Execute layout for a g6 graph via proxy
+#'
+#' This function order the execution of the layout of the current
+#' graph. It can also update layout options before running it.
+#'
+#' @param graph A g6_proxy object created with \code{\link{g6_proxy}}.
+#' @param ... Any option to pass to the layout. If so, the layout is updated
+#' before running it.
+#'
+#' @return The g6_proxy object (invisibly), allowing for method chaining.
+#'
+#' @details
+#' This function can only be used with a g6_proxy object within a Shiny application.
+#' It will not work with regular g6 objects outside of Shiny.
+#'
+#' @seealso \code{\link{g6_proxy}}
+#' @export
+g6_update_layout <- function(graph, ...) {
+  graph$session$sendCustomMessage(
+    sprintf("%s_g6-update-layout", graph$id),
+    list(...)
+  )
+  graph
+}
+
 #' Update a plugin in a g6 graph via proxy
 #'
 #' This function allows updating the configuration of an existing plugin in a g6 graph

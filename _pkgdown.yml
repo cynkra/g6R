@@ -158,6 +158,7 @@ reference:
     desc: Graph layout
     contents:
       - g6_layout
+      - g6_update_layout
       - antv_dagre_layout
       - circular_layout
       - compact_box_layout

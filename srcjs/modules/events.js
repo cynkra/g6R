@@ -1,6 +1,5 @@
 import { getBehavior, resetOtherElementTypes } from "./utils";
-import { GraphEvent, CommonEvent, CanvasEvent, EdgeEvent } from '@antv/g6';
-import { sendNotification } from "./utils";
+import { GraphEvent, CanvasEvent, CommonEvent } from '@antv/g6';
 
 const setClickEvents = (events, graph) => {
   // Loop over events
@@ -71,13 +70,20 @@ const setGraphEvents = (events, graph) => {
       if (Shiny.shinyapp.$inputValues[id + '-initialized']) {
         Shiny.setInputValue(id + '-state', graph.getData());
       }
-
-      // Canvas drop
-      if (event === CommonEvent.POINTER_UP) {
-        Shiny.setInputValue(id + '-pointer_up', e.targetType);
-      }
     })
   }
 }
 
-export { setClickEvents, setGraphEvents };
+const captureMousePosition = (graph) => {
+  const id = graph.options.container;
+  const events = [CommonEvent.CONTEXT_MENU, CommonEvent.POINTER_UP];
+  const handler = (e) => {
+    if (e.type === 'contextmenu') {
+      e.preventDefault();
+    }
+    Shiny.setInputValue(id + '-mouse_position', { x: e.canvas.x, y: e.canvas.y });
+  };
+  events.forEach(event => graph.on(event, handler));
+}
+
+export { setClickEvents, setGraphEvents, captureMousePosition };
