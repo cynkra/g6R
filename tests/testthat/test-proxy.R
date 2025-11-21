@@ -237,3 +237,21 @@ test_that("as_g6_elements flattens any level of nesting and errors on excessive 
     "Input is too deeply nested"
   )
 })
+
+test_that("g6_update_layout proxy call works and errors on invalid proxy", {
+  session <- list(
+    sendCustomMessage = function(type, message) {
+      list(type = type, message = message)
+    }
+  )
+  class(session) <- "ShinySession"
+  proxy <- g6_proxy("test_id", session)
+
+  # should not error for a valid proxy
+  expect_error(g6_update_layout(proxy, type = "grid"), NA)
+
+  # invalid proxy (not a g6_proxy) should error
+  expect_snapshot(error = TRUE, {
+    g6_update_layout(list(), type = "grid")
+  })
+})

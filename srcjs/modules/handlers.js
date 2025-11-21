@@ -102,6 +102,24 @@ const registerShinyHandlers = (graph, mode) => {
     }, mode);
   })
 
+  // Layout update and execution
+  Shiny.addCustomMessageHandler(id + '_g6-update-layout', (m) => {
+    tryCatchDev(() => {
+      graph.setLayout((prevLayout) => {
+        if ('nodeOrder' in prevLayout) {
+          return prevLayout;
+        }
+        return {
+          ...prevLayout,
+          ...m,
+          // avoid reordering nodes in dagre layouts
+          nodeOrder: graph.getData().nodes.map(n => n.id),
+        }
+      });
+      graph.layout();
+    })
+  })
+
   // Canvas resize
   Shiny.addCustomMessageHandler(id + '_g6-canvas-resize', (m) => {
     tryCatchDev(() => graph.setSize(m.width, m.height), mode);
