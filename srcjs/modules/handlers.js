@@ -96,24 +96,8 @@ const registerShinyHandlers = (graph, mode) => {
           return;
         }
 
-        // Redraw
+        // draw only (no layout called here)
         graph.draw();
-        // Layout for add and update. Only
-        // layout for new elements
-        if (['add', 'update'].includes(m.action) && m.type === 'Node') {
-          graph.setLayout((prevLayout) => {
-            if ('nodeOrder' in prevLayout) {
-              return prevLayout;
-            }
-            return {
-              ...prevLayout,
-              // avoid reordering nodes in dagre layouts
-              nodeOrder: graph.getData().nodes.map(n => n.id),
-            }
-          });
-          graph.layout();
-          // Positions are restored by event handlers in utils.js
-        }
       }
     }, mode);
   })

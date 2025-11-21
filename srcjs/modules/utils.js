@@ -8,7 +8,7 @@ import {
   Graph
 } from '@antv/g6';
 
-import { setClickEvents, setGraphEvents, preserveElementsPosition, captureMousePosition } from './events';
+import { setClickEvents, setGraphEvents, captureMousePosition } from './events';
 import { tryCatchDev, registerShinyHandlers } from './handlers';
 
 const sendNotification = (message, type = "error", duration = null) => {
@@ -97,7 +97,7 @@ const checkIds = (data) => {
   }
 }
 
-const setupGraph = (graph, widget, mode) => {
+const setupGraph = (graph, widget, config) => {
   const id = graph.options.container;
 
   if (HTMLWidgets.shinyMode) {
@@ -137,12 +137,11 @@ const setupGraph = (graph, widget, mode) => {
       Shiny.setInputValue(id + '-contextmenu', { type: targetType, id: target.id })
     });
 
-    // Maintain elements position
-    preserveElementsPosition(graph);
-
+    // Capture mouse position for clever placement of
+    // new nodes
     captureMousePosition(graph);
 
-    registerShinyHandlers(graph, mode);
+    registerShinyHandlers(graph, config.mode);
   }
 
   graph.render();
@@ -159,7 +158,7 @@ const loadAndInitGraph = (config, widget) => {
     const initialize = (data) => {
       config.data = checkIds(data);
       graph = new Graph(config);
-      setupGraph(graph, widget, config.mode);
+      setupGraph(graph, widget, config);
     };
 
     if (config.jsonUrl !== null) {
