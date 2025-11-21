@@ -96,6 +96,9 @@ const registerShinyHandlers = (graph, mode) => {
         // layout for new elements
         if (['add', 'update'].includes(m.action) && m.type === 'Node') {
           graph.setLayout((prevLayout) => {
+            if ('nodeOrder' in prevLayout) {
+              return prevLayout;
+            }
             return {
               ...prevLayout,
               // avoid reordering nodes in dagre layouts

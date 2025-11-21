@@ -88,7 +88,9 @@ const preserveElementsPosition = (graph) => {
       try {
         graph.getElementRenderStyle(getId(el));
         const pos = graph.getElementPosition(getId(el));
-        oldPositions[getId(el)] = [pos[0], pos[1]];
+        if (!(pos[0] === 0 && pos[1] === 0)) {
+          oldPositions[getId(el)] = [pos[0], pos[1]];
+        }
       } catch (e) {
         // Element not rendered, skip
       }
