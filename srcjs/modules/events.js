@@ -1,5 +1,5 @@
 import { getBehavior, resetOtherElementTypes } from "./utils";
-import { GraphEvent } from '@antv/g6';
+import { GraphEvent, CanvasEvent, CommonEvent } from '@antv/g6';
 
 const setClickEvents = (events, graph) => {
   // Loop over events
@@ -74,6 +74,18 @@ const setGraphEvents = (events, graph) => {
   }
 }
 
+const captureMousePosition = (graph) => {
+  const id = graph.options.container;
+  const events = [CommonEvent.CONTEXT_MENU, CommonEvent.POINTER_UP];
+  const handler = (e) => {
+    if (e.type === 'contextmenu') {
+      e.preventDefault();
+    }
+    Shiny.setInputValue(id + '-mouse_position', { x: e.canvas.x, y: e.canvas.y });
+  };
+  events.forEach(event => graph.on(event, handler));
+}
+
 const preserveElementsPosition = (graph) => {
   let oldPositions = {};
 
@@ -114,4 +126,4 @@ const preserveElementsPosition = (graph) => {
   });
 }
 
-export { setClickEvents, setGraphEvents, preserveElementsPosition };
+export { setClickEvents, setGraphEvents, preserveElementsPosition, captureMousePosition };

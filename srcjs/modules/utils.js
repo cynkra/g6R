@@ -8,7 +8,7 @@ import {
   Graph
 } from '@antv/g6';
 
-import { setClickEvents, setGraphEvents, preserveElementsPosition } from './events';
+import { setClickEvents, setGraphEvents, preserveElementsPosition, captureMousePosition } from './events';
 import { tryCatchDev, registerShinyHandlers } from './handlers';
 
 const sendNotification = (message, type = "error", duration = null) => {
@@ -139,6 +139,8 @@ const setupGraph = (graph, widget, mode) => {
 
     // Maintain elements position
     preserveElementsPosition(graph);
+
+    captureMousePosition(graph);
 
     registerShinyHandlers(graph, mode);
   }
