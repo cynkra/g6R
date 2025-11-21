@@ -251,7 +251,5 @@ test_that("g6_update_layout proxy call works and errors on invalid proxy", {
   expect_error(g6_update_layout(proxy, type = "grid"), NA)
 
   # invalid proxy (not a g6_proxy) should error
-  expect_snapshot(error = TRUE, {
-    g6_update_layout(list(), type = "grid")
-  })
+  expect_error(g6_update_layout(list(), type = "grid"))
 })

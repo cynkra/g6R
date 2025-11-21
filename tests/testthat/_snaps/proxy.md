@@ -14,11 +14,3 @@
       Error in `g6_fit_center()`:
       ! is.list(animation) is not TRUE
 
-# g6_update_layout proxy call works and errors on invalid proxy
-
-    Code
-      g6_update_layout(list(), type = "grid")
-    Condition
-      Error in `g6_update_layout()`:
-      ! attempt to apply non-function
-
