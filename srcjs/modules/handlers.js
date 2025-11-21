@@ -65,8 +65,14 @@ const registerShinyHandlers = (graph, mode) => {
           // For other actions like update or add ...
           m.el = m.el.map((e) => {
             e.id = e.id.toString();
+            if (e.source != null && typeof e.source !== 'string') {
+              e.source = e.source.toString();
+            }
+            if (e.target != null && typeof e.target !== 'string') {
+              e.target = e.target.toString();
+            }
             // Also process combo
-            if (e.combo != null) {
+            if (e.combo != null && typeof e.combo !== 'string') {
               e.combo = e.combo.toString();
             }
             return e;

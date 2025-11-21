@@ -6,6 +6,7 @@ Due to the new data validation for nodes, edges and combos, some existing code m
 
 ## New features and fixes
 
+- New `input[["<graph_ID>-mouse_position"]]`: any click/right click or drag release event captures the mouse position. `input[["<graph_ID>-mouse_position"]]` contains the x and y coordinates of the mouse relative to the canvas. This is useful to add a node where the mouse was clicked, a context menu was triggered or the create edge was released on the canvas without a specific target.
 - Elements selected via `brush_select()` have a custom input handler. This may give:
 
 ```r
