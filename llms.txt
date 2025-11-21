@@ -262,6 +262,8 @@ Graph layout
 
 - [`g6_layout()`](https://cynkra.github.io/g6R/reference/g6_layout.md) :
   Set the layout algorithm for a g6 graph
+- [`g6_update_layout()`](https://cynkra.github.io/g6R/reference/g6_update_layout.md)
+  : Execute layout for a g6 graph via proxy
 - [`antv_dagre_layout()`](https://cynkra.github.io/g6R/reference/antv_dagre_layout.md)
   : Generate G6 AntV Dagre layout configuration
 - [`circular_layout()`](https://cynkra.github.io/g6R/reference/circular_layout.md)

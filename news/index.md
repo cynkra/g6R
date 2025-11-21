@@ -13,6 +13,16 @@ slot.
 
 ### New features and fixes
 
+- New
+  [`g6_update_layout()`](https://cynkra.github.io/g6R/reference/g6_update_layout.md)
+  proxy function to order the layout re-execution and optionally update
+  its parameters.
+- New `input[["<graph_ID>-mouse_position"]]`: any click/right click or
+  drag release event captures the mouse position.
+  `input[["<graph_ID>-mouse_position"]]` contains the x and y
+  coordinates of the mouse relative to the canvas. This is useful to add
+  a node where the mouse was clicked, a context menu was triggered or
+  the create edge was released on the canvas without a specific target.
 - Elements selected via
   [`brush_select()`](https://cynkra.github.io/g6R/reference/brush_select.md)
   have a custom input handler. This may give:

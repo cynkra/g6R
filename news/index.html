@@ -67,7 +67,9 @@
 </div>
 <div class="section level3">
 <h3 id="new-features-and-fixes-0-5-0">New features and fixes<a class="anchor" aria-label="anchor" href="#new-features-and-fixes-0-5-0"></a></h3>
-<ul><li>Elements selected via <code><a href="../reference/brush_select.html">brush_select()</a></code> have a custom input handler. This may give:</li>
+<ul><li>New <code><a href="../reference/g6_update_layout.html">g6_update_layout()</a></code> proxy function to order the layout re-execution and optionally update its parameters.</li>
+<li>New <code>input[["&lt;graph_ID&gt;-mouse_position"]]</code>: any click/right click or drag release event captures the mouse position. <code>input[["&lt;graph_ID&gt;-mouse_position"]]</code> contains the x and y coordinates of the mouse relative to the canvas. This is useful to add a node where the mouse was clicked, a context menu was triggered or the create edge was released on the canvas without a specific target.</li>
+<li>Elements selected via <code><a href="../reference/brush_select.html">brush_select()</a></code> have a custom input handler. This may give:</li>
 </ul><div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a>input[[<span class="st">"&lt;graph_ID&gt;-selected_combo"</span>]]</span>
 <span id="cb1-2"><a href="#cb1-2" tabindex="-1"></a>[<span class="dv">1</span>] <span class="st">"1"</span> <span class="st">"2"</span></span>
 <span id="cb1-3"><a href="#cb1-3" tabindex="-1"></a><span class="fu">attr</span>(,<span class="st">"eventType"</span>)</span>

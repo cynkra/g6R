@@ -669,6 +669,125 @@ server <- function(input, output, session) {
 shinyApp(ui, server)
 ```
 
+### Mouse position
+
+#### Insert a node where the mouse is clicked
+
+You can retrieve the mouse position on the graph using
+`input[["<GRAPH_ID>-mouse_position"]]`. This input provides the `x` and
+`y` coordinates of the mouse relative to the graph canvas. Here’s an
+example that demonstrates how to insert a new node at the mouse click
+position:
+
+``` r
+library(shiny)
+library(g6R)
+library(bslib)
+
+nodes <- data.frame(id = 1)
+
+ui <- page_fluid(
+  g6_output("graph")
+)
+
+server <- function(input, output, session) {
+  output$graph <- render_g6({
+    g6(nodes = nodes) |> 
+      g6_layout() |>
+      g6_options(animation = FALSE)
+  })
+
+  next_id <- reactiveVal(2)
+
+  observeEvent(input[["graph-mouse_position"]], {
+    pos <- input[["graph-mouse_position"]]
+    g6_proxy("graph") |>
+    g6_add_nodes(
+      g6_node(
+        id = next_id(), 
+        style = list(x = pos$x, y = pos$y)
+      )
+    )
+    next_id(next_id() + 1)
+  })
+}
+
+shinyApp(ui, server)
+```
+
+Be mindful of the canvas borders. Clicking outside the borders won’t do
+anything.
+
+#### Create a node at the drop edge position
+
+We can lerevage the
+[`create_edge()`](https://cynkra.github.io/g6R/reference/create_edge.md)
+behavior to create an edge on drag from a node by maintaining the shift
+key:
+
+``` r
+library(shiny)
+library(g6R)
+library(bslib)
+
+nodes <- data.frame(id = 1)
+
+ui <- page_fluid(
+  g6_output("graph")
+)
+
+server <- function(input, output, session) {
+  output$graph <- render_g6({
+    g6(nodes = nodes) |>
+      g6_layout() |>
+      g6_behaviors(
+        create_edge(
+          enable = JS("
+            (e) => { return e.shiftKey; }"
+          ),
+          onFinish = JS(
+            "(edge) => {
+              const graph = HTMLWidgets.find('#graph').getWidget();
+              const targetType = graph.getElementType(edge.target);
+              if (targetType !== 'node') {
+                graph.removeEdgeData([edge.id]);
+              } else {
+                Shiny.setInputValue('added_edge', edge);
+              }
+            }"
+          )
+        )
+      )
+  })
+
+  next_id <- reactiveVal(2)
+
+  observeEvent(input$added_edge, {
+    edge <- input$added_edge
+    pos <- input[["graph-mouse_position"]]
+    # Only add node if released on canvas
+    if (edge$targetType == "canvas") {
+      # Add new node at drop position
+      g6_proxy("graph") |>
+      g6_add_nodes(
+        g6_node(
+          id = next_id(), 
+          style = list(x = pos$x, y = pos$y)
+        )
+      )
+      # Connect source node to new node
+      g6_proxy("graph") |>
+      g6_add_edges(
+        g6_edge(source = edge$source, target = next_id())
+      )
+      next_id(next_id() + 1)
+    }
+  })
+}
+
+shinyApp(ui, server)
+```
+
 ### Modifying plugins and behaviors
 
 #### Plugins

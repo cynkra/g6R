@@ -34,7 +34,8 @@ grep("_layout$", ls("package:g6R"), value = TRUE)
 #>  [1] "antv_dagre_layout"     "circular_layout"       "combo_combined_layout"
 #>  [4] "compact_box_layout"    "concentric_layout"     "d3_force_layout"      
 #>  [7] "dagre_layout"          "dendrogram_layout"     "force_atlas2_layout"  
-#> [10] "fruchterman_layout"    "g6_layout"             "radial_layout"
+#> [10] "fruchterman_layout"    "g6_layout"             "g6_update_layout"     
+#> [13] "radial_layout"
 ```
 
 ## Force directed layouts
