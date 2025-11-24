@@ -197,4 +197,5 @@ opts <- g6_options(
   ),
   autoFit = auto_fit_config(duration = 300, easing = "ease-out")
 )
+#> Error in animation && get_g6_preserve_position(): invalid 'x' type in 'x && y'
 ```
