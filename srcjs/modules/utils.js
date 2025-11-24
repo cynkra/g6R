@@ -8,7 +8,7 @@ import {
   Graph
 } from '@antv/g6';
 
-import { setClickEvents, setGraphEvents, captureMousePosition } from './events';
+import { setClickEvents, setGraphEvents, captureMousePosition, preserveElementsPosition } from './events';
 import { tryCatchDev, registerShinyHandlers } from './handlers';
 
 const sendNotification = (message, type = "error", duration = null) => {
@@ -140,6 +140,11 @@ const setupGraph = (graph, widget, config) => {
     // Capture mouse position for clever placement of
     // new nodes
     captureMousePosition(graph);
+
+    // TO DO: check why animation breaks position preservation ...
+    if (!config.animation && config.preservePosition) {
+      preserveElementsPosition(graph);
+    }
 
     registerShinyHandlers(graph, config.mode);
   }

@@ -25,13 +25,14 @@
       str(g6_plugins(g6(), plugin))
     Output
       List of 8
-       $ x            :List of 5
-        ..$ data    : list()
+       $ x            :List of 6
+        ..$ data            : list()
         .. ..- attr(*, "class")= chr "g6_data"
-        ..$ jsonUrl : NULL
-        ..$ iconsUrl: chr "//at.alicdn.com/t/font_2678727_za4qjydwkkh.js"
-        ..$ mode    : chr "prod"
-        ..$ plugins :List of 1
+        ..$ jsonUrl         : NULL
+        ..$ iconsUrl        : chr "//at.alicdn.com/t/font_2678727_za4qjydwkkh.js"
+        ..$ mode            : chr "prod"
+        ..$ preservePosition: logi FALSE
+        ..$ plugins         :List of 1
         .. ..$ :List of 6
         .. .. ..$ width         : chr "100%"
         .. .. ..$ height        : chr "100%"
@@ -84,13 +85,14 @@
       str(g6_plugins(g6(), plugin))
     Output
       List of 8
-       $ x            :List of 5
-        ..$ data    : list()
+       $ x            :List of 6
+        ..$ data            : list()
         .. ..- attr(*, "class")= chr "g6_data"
-        ..$ jsonUrl : NULL
-        ..$ iconsUrl: chr "//at.alicdn.com/t/font_2678727_za4qjydwkkh.js"
-        ..$ mode    : chr "prod"
-        ..$ plugins :List of 1
+        ..$ jsonUrl         : NULL
+        ..$ iconsUrl        : chr "//at.alicdn.com/t/font_2678727_za4qjydwkkh.js"
+        ..$ mode            : chr "prod"
+        ..$ preservePosition: logi FALSE
+        ..$ plugins         :List of 1
         .. ..$ :List of 8
         .. .. ..$ key      : chr "contextmenu"
         .. .. ..$ className: chr "g6-contextmenu"
@@ -137,13 +139,14 @@
       str(g6_plugins(g6(), plugin))
     Output
       List of 8
-       $ x            :List of 5
-        ..$ data    : list()
+       $ x            :List of 6
+        ..$ data            : list()
         .. ..- attr(*, "class")= chr "g6_data"
-        ..$ jsonUrl : NULL
-        ..$ iconsUrl: chr "//at.alicdn.com/t/font_2678727_za4qjydwkkh.js"
-        ..$ mode    : chr "prod"
-        ..$ plugins :List of 1
+        ..$ jsonUrl         : NULL
+        ..$ iconsUrl        : chr "//at.alicdn.com/t/font_2678727_za4qjydwkkh.js"
+        ..$ mode            : chr "prod"
+        ..$ preservePosition: logi FALSE
+        ..$ plugins         :List of 1
         .. ..$ :List of 10
         .. .. ..$ key            : chr "edge-bundling"
         .. .. ..$ bundleThreshold: num 0.6
@@ -192,13 +195,14 @@
       str(g6_plugins(g6(), plugin))
     Output
       List of 8
-       $ x            :List of 5
-        ..$ data    : list()
+       $ x            :List of 6
+        ..$ data            : list()
         .. ..- attr(*, "class")= chr "g6_data"
-        ..$ jsonUrl : NULL
-        ..$ iconsUrl: chr "//at.alicdn.com/t/font_2678727_za4qjydwkkh.js"
-        ..$ mode    : chr "prod"
-        ..$ plugins :List of 1
+        ..$ jsonUrl         : NULL
+        ..$ iconsUrl        : chr "//at.alicdn.com/t/font_2678727_za4qjydwkkh.js"
+        ..$ mode            : chr "prod"
+        ..$ preservePosition: logi FALSE
+        ..$ plugins         :List of 1
         .. ..$ :List of 10
         .. .. ..$ key           : chr "edge-filter-lens"
         .. .. ..$ trigger       : chr "pointermove"
@@ -249,13 +253,14 @@
       str(g6_plugins(g6(), plugin))
     Output
       List of 8
-       $ x            :List of 5
-        ..$ data    : list()
+       $ x            :List of 6
+        ..$ data            : list()
         .. ..- attr(*, "class")= chr "g6_data"
-        ..$ jsonUrl : NULL
-        ..$ iconsUrl: chr "//at.alicdn.com/t/font_2678727_za4qjydwkkh.js"
-        ..$ mode    : chr "prod"
-        ..$ plugins :List of 1
+        ..$ jsonUrl         : NULL
+        ..$ iconsUrl        : chr "//at.alicdn.com/t/font_2678727_za4qjydwkkh.js"
+        ..$ mode            : chr "prod"
+        ..$ preservePosition: logi FALSE
+        ..$ plugins         :List of 1
         .. ..$ :List of 11
         .. .. ..$ key           : chr "fish-eye"
         .. .. ..$ trigger       : chr "pointermove"
@@ -306,13 +311,14 @@
       str(g6_plugins(g6(), plugin))
     Output
       List of 8
-       $ x            :List of 5
-        ..$ data    : list()
+       $ x            :List of 6
+        ..$ data            : list()
         .. ..- attr(*, "class")= chr "g6_data"
-        ..$ jsonUrl : NULL
-        ..$ iconsUrl: chr "//at.alicdn.com/t/font_2678727_za4qjydwkkh.js"
-        ..$ mode    : chr "prod"
-        ..$ plugins :List of 1
+        ..$ jsonUrl         : NULL
+        ..$ iconsUrl        : chr "//at.alicdn.com/t/font_2678727_za4qjydwkkh.js"
+        ..$ mode            : chr "prod"
+        ..$ preservePosition: logi FALSE
+        ..$ plugins         :List of 1
         .. ..$ :List of 3
         .. .. ..$ key    : chr "fullscreen"
         .. .. ..$ autoFit: logi TRUE
@@ -354,13 +360,14 @@
       str(g6_plugins(g6(), plugin))
     Output
       List of 8
-       $ x            :List of 5
-        ..$ data    : list()
+       $ x            :List of 6
+        ..$ data            : list()
         .. ..- attr(*, "class")= chr "g6_data"
-        ..$ jsonUrl : NULL
-        ..$ iconsUrl: chr "//at.alicdn.com/t/font_2678727_za4qjydwkkh.js"
-        ..$ mode    : chr "prod"
-        ..$ plugins :List of 1
+        ..$ jsonUrl         : NULL
+        ..$ iconsUrl        : chr "//at.alicdn.com/t/font_2678727_za4qjydwkkh.js"
+        ..$ mode            : chr "prod"
+        ..$ preservePosition: logi FALSE
+        ..$ plugins         :List of 1
         .. ..$ :List of 10
         .. .. ..$ key            : chr "grid-line"
         .. .. ..$ border         : logi TRUE
@@ -409,13 +416,14 @@
       str(g6_plugins(g6(), plugin))
     Output
       List of 8
-       $ x            :List of 5
-        ..$ data    : list()
+       $ x            :List of 6
+        ..$ data            : list()
         .. ..- attr(*, "class")= chr "g6_data"
-        ..$ jsonUrl : NULL
-        ..$ iconsUrl: chr "//at.alicdn.com/t/font_2678727_za4qjydwkkh.js"
-        ..$ mode    : chr "prod"
-        ..$ plugins :List of 1
+        ..$ jsonUrl         : NULL
+        ..$ iconsUrl        : chr "//at.alicdn.com/t/font_2678727_za4qjydwkkh.js"
+        ..$ mode            : chr "prod"
+        ..$ preservePosition: logi FALSE
+        ..$ plugins         :List of 1
         .. ..$ :List of 3
         .. .. ..$ key      : chr "history"
         .. .. ..$ stackSize: num 0
@@ -465,13 +473,14 @@
       str(g6_plugins(g6(), plugin))
     Output
       List of 8
-       $ x            :List of 5
-        ..$ data    : list()
+       $ x            :List of 6
+        ..$ data            : list()
         .. ..- attr(*, "class")= chr "g6_data"
-        ..$ jsonUrl : NULL
-        ..$ iconsUrl: chr "//at.alicdn.com/t/font_2678727_za4qjydwkkh.js"
-        ..$ mode    : chr "prod"
-        ..$ plugins :List of 1
+        ..$ jsonUrl         : NULL
+        ..$ iconsUrl        : chr "//at.alicdn.com/t/font_2678727_za4qjydwkkh.js"
+        ..$ mode            : chr "prod"
+        ..$ preservePosition: logi FALSE
+        ..$ plugins         :List of 1
         .. ..$ :List of 15
         .. .. ..$ key              : chr "legend"
         .. .. ..$ trigger          : chr "hover"
@@ -525,13 +534,14 @@
       str(g6_plugins(g6(), plugin))
     Output
       List of 8
-       $ x            :List of 5
-        ..$ data    : list()
+       $ x            :List of 6
+        ..$ data            : list()
         .. ..- attr(*, "class")= chr "g6_data"
-        ..$ jsonUrl : NULL
-        ..$ iconsUrl: chr "//at.alicdn.com/t/font_2678727_za4qjydwkkh.js"
-        ..$ mode    : chr "prod"
-        ..$ plugins :List of 1
+        ..$ jsonUrl         : NULL
+        ..$ iconsUrl        : chr "//at.alicdn.com/t/font_2678727_za4qjydwkkh.js"
+        ..$ mode            : chr "prod"
+        ..$ preservePosition: logi FALSE
+        ..$ plugins         :List of 1
         .. ..$ :List of 7
         .. .. ..$ key     : chr "minimap"
         .. .. ..$ delay   : num 128
@@ -577,13 +587,14 @@
       str(g6_plugins(g6(), plugin))
     Output
       List of 8
-       $ x            :List of 5
-        ..$ data    : list()
+       $ x            :List of 6
+        ..$ data            : list()
         .. ..- attr(*, "class")= chr "g6_data"
-        ..$ jsonUrl : NULL
-        ..$ iconsUrl: chr "//at.alicdn.com/t/font_2678727_za4qjydwkkh.js"
-        ..$ mode    : chr "prod"
-        ..$ plugins :List of 1
+        ..$ jsonUrl         : NULL
+        ..$ iconsUrl        : chr "//at.alicdn.com/t/font_2678727_za4qjydwkkh.js"
+        ..$ mode            : chr "prod"
+        ..$ preservePosition: logi FALSE
+        ..$ plugins         :List of 1
         .. ..$ :List of 8
         .. .. ..$ key                : chr "snapline"
         .. .. ..$ tolerance          : num 5
@@ -640,13 +651,14 @@
       str(g6_plugins(g6(), plugin))
     Output
       List of 8
-       $ x            :List of 5
-        ..$ data    : list()
+       $ x            :List of 6
+        ..$ data            : list()
         .. ..- attr(*, "class")= chr "g6_data"
-        ..$ jsonUrl : NULL
-        ..$ iconsUrl: chr "//at.alicdn.com/t/font_2678727_za4qjydwkkh.js"
-        ..$ mode    : chr "prod"
-        ..$ plugins :List of 1
+        ..$ jsonUrl         : NULL
+        ..$ iconsUrl        : chr "//at.alicdn.com/t/font_2678727_za4qjydwkkh.js"
+        ..$ mode            : chr "prod"
+        ..$ preservePosition: logi FALSE
+        ..$ plugins         :List of 1
         .. ..$ :List of 5
         .. .. ..$ getItems: 'JS_EVAL' chr "( ) => [\n        { id : 'zoom-in' , value : 'zoom-in' },\n        { id : 'zoom-out' , value : 'zoom-out' },\n "| __truncated__
         .. .. ..$ key     : chr "toolbar"
@@ -690,13 +702,14 @@
       str(g6_plugins(g6(), plugin))
     Output
       List of 8
-       $ x            :List of 5
-        ..$ data    : list()
+       $ x            :List of 6
+        ..$ data            : list()
         .. ..- attr(*, "class")= chr "g6_data"
-        ..$ jsonUrl : NULL
-        ..$ iconsUrl: chr "//at.alicdn.com/t/font_2678727_za4qjydwkkh.js"
-        ..$ mode    : chr "prod"
-        ..$ plugins :List of 1
+        ..$ jsonUrl         : NULL
+        ..$ iconsUrl        : chr "//at.alicdn.com/t/font_2678727_za4qjydwkkh.js"
+        ..$ mode            : chr "prod"
+        ..$ preservePosition: logi FALSE
+        ..$ plugins         :List of 1
         .. ..$ :List of 7
         .. .. ..$ key      : chr "tooltip"
         .. .. ..$ position : chr "top-right"
@@ -745,13 +758,14 @@
       Neither 'imageURL' nor 'text' is provided; watermark may not be visible
     Output
       List of 8
-       $ x            :List of 5
-        ..$ data    : list()
+       $ x            :List of 6
+        ..$ data            : list()
         .. ..- attr(*, "class")= chr "g6_data"
-        ..$ jsonUrl : NULL
-        ..$ iconsUrl: chr "//at.alicdn.com/t/font_2678727_za4qjydwkkh.js"
-        ..$ mode    : chr "prod"
-        ..$ plugins :List of 1
+        ..$ jsonUrl         : NULL
+        ..$ iconsUrl        : chr "//at.alicdn.com/t/font_2678727_za4qjydwkkh.js"
+        ..$ mode            : chr "prod"
+        ..$ preservePosition: logi FALSE
+        ..$ plugins         :List of 1
         .. ..$ :List of 11
         .. .. ..$ key             : chr "watermark"
         .. .. ..$ width           : num 200

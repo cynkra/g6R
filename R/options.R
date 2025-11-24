@@ -141,6 +141,13 @@ g6_options <- function(
     stop("g6_options must be called on a g6 instance")
   }
 
+  if (animation && get_g6_preserve_position()) {
+    warning(
+      "'g6R.preserve_elements_position' 
+      only works when animation is FALSE. It will be ignored."
+    )
+  }
+
   cursor <- match.arg(cursor)
 
   arg_names <- names(formals())

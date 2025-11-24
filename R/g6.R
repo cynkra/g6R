@@ -128,7 +128,8 @@ g6 <- function(
     data = dat,
     jsonUrl = jsonUrl,
     iconsUrl = iconsUrl,
-    mode = get_g6_mode()
+    mode = get_g6_mode(),
+    preservePosition = get_g6_preserve_position()
   )
 
   # In case we need it ...
@@ -163,6 +164,22 @@ validate_g6_mode <- function(mode) {
 get_g6_mode <- function() {
   mode <- getOption("g6R.mode", "prod")
   validate_g6_mode(mode)
+}
+
+#' @keywords internal
+validate_g6_preserve_position <- function(val) {
+  if (!is.logical(val) || length(val) != 1) {
+    stop(
+      "`g6R.preserve_elements_position` option must be a single logical value (TRUE or FALSE)."
+    )
+  }
+  invisible(val)
+}
+
+#' @keywords internal
+get_g6_preserve_position <- function() {
+  val <- getOption("g6R.preserve_elements_position", FALSE)
+  validate_g6_preserve_position(val)
 }
 
 #' Shiny bindings for g6

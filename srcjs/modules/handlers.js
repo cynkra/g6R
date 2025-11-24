@@ -98,6 +98,10 @@ const registerShinyHandlers = (graph, mode) => {
 
         // draw only (no layout called here)
         graph.draw();
+        // Layout if needed
+        if (m.layout) {
+          graph.layout();
+        }
       }
     }, mode);
   })
@@ -111,9 +115,7 @@ const registerShinyHandlers = (graph, mode) => {
         }
         return {
           ...prevLayout,
-          ...m,
-          // avoid reordering nodes in dagre layouts
-          nodeOrder: graph.getData().nodes.map(n => n.id),
+          ...m
         }
       });
       graph.layout();

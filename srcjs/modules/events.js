@@ -74,6 +74,44 @@ const setGraphEvents = (events, graph) => {
   }
 }
 
+const preserveElementsPosition = (graph) => {
+  let oldPositions = {};
+
+  const forEachElementType = (graph, callback) => {
+    const data = graph.getData();
+    if (data.nodes) callback(data.nodes, node => node.id);
+    if (data.combos) callback(data.combos, combo => combo.id);
+  };
+
+  const storePositions = (elements, getId) => {
+    elements.forEach(el => {
+      try {
+        graph.getElementRenderStyle(getId(el));
+        const pos = graph.getElementPosition(getId(el));
+        oldPositions[getId(el)] = [pos[0], pos[1]];
+      } catch (e) {
+        // Element not rendered, skip
+      }
+    });
+  };
+
+  const restorePositions = (elements, getId) => {
+    elements.forEach(el => {
+      const pos = oldPositions[getId(el)];
+      if (!pos) return;
+      graph.translateElementTo(getId(el), pos, false);
+    });
+  };
+
+  graph.on(GraphEvent.BEFORE_LAYOUT, () => {
+    forEachElementType(graph, storePositions);
+  });
+
+  graph.on(GraphEvent.AFTER_LAYOUT, () => {
+    forEachElementType(graph, restorePositions);
+  });
+}
+
 const captureMousePosition = (graph) => {
   const id = graph.options.container;
   const events = [CommonEvent.CONTEXT_MENU, CommonEvent.POINTER_UP];
@@ -86,4 +124,4 @@ const captureMousePosition = (graph) => {
   events.forEach(event => graph.on(event, handler));
 }
 
-export { setClickEvents, setGraphEvents, captureMousePosition };
+export { setClickEvents, setGraphEvents, captureMousePosition, preserveElementsPosition };

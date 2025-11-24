@@ -48,9 +48,30 @@ g6_data_proxy <- function(graph, el, action, type) {
 
   graph$session$sendCustomMessage(
     sprintf("%s_g6-data", graph$id),
-    list(el = el, action = action, type = type)
+    list(
+      el = el,
+      action = action, 
+      type = type,
+      layout = get_g6_layout_on_data_change()
+    )
   )
   graph
+}
+
+#' @keywords internal
+validate_g6_layout_on_data_change <- function(val) {
+  if (!is.logical(val) || length(val) != 1) {
+    stop(
+      "`g6R.layout_on_data_change` option must be a single logical value (TRUE or FALSE)."
+    )
+  }
+  invisible(val)
+}
+
+#' @keywords internal
+get_g6_layout_on_data_change <- function() {
+  val <- getOption("g6R.layout_on_data_change", FALSE)
+  validate_g6_layout_on_data_change(val)
 }
 
 #' @keywords internal

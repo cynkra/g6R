@@ -6,6 +6,8 @@ Due to the new data validation for nodes, edges and combos, some existing code m
 
 ## New features and fixes
 
+- Layout is not recomputed when calling data proxy functions, except if `options("g6R.layout_on_data_change" = TRUE)`. In the later case, the layout is recomputed after drawing.
+- New option `g6R.preserve_elements_position`. If TRUE, and only if `g6_options(animation = FALSE)`, the elements (nodes and combos) coordinates are preserved when updating the layout to avoid elements from jumping to new positions. Default is FALSE. A warning is raised if this option is TRUE and animation is TRUE to tell the user that the option will be ignored.
 - New `g6_update_layout()` proxy function to order the layout re-execution and optionally update its parameters.
 - New `input[["<graph_ID>-mouse_position"]]`: any click/right click or drag release event captures the mouse position. `input[["<graph_ID>-mouse_position"]]` contains the x and y coordinates of the mouse relative to the canvas. This is useful to add a node where the mouse was clicked, a context menu was triggered or the create edge was released on the canvas without a specific target.
 - Elements selected via `brush_select()` have a custom input handler. This may give:
