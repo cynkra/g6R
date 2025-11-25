@@ -13,6 +13,7 @@ slot.
 
 ### New features and fixes
 
+- Fix issue which was preventing from removing a node from a combo.
 - Layout is not recomputed when calling data proxy functions, except if
   `options("g6R.layout_on_data_change" = TRUE)`. In the later case, the
   layout is recomputed after drawing.

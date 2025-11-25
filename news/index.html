@@ -67,7 +67,8 @@
 </div>
 <div class="section level3">
 <h3 id="new-features-and-fixes-0-5-0">New features and fixes<a class="anchor" aria-label="anchor" href="#new-features-and-fixes-0-5-0"></a></h3>
-<ul><li>Layout is not recomputed when calling data proxy functions, except if <code>options("g6R.layout_on_data_change" = TRUE)</code>. In the later case, the layout is recomputed after drawing.</li>
+<ul><li>Fix issue which was preventing from removing a node from a combo.</li>
+<li>Layout is not recomputed when calling data proxy functions, except if <code>options("g6R.layout_on_data_change" = TRUE)</code>. In the later case, the layout is recomputed after drawing.</li>
 <li>New option <code>g6R.preserve_elements_position</code>. If TRUE, and only if <code>g6_options(animation = FALSE)</code>, the elements (nodes and combos) coordinates are preserved when updating the layout to avoid elements from jumping to new positions. Default is FALSE. A warning is raised if this option is TRUE and animation is TRUE to tell the user that the option will be ignored.</li>
 <li>New <code><a href="../reference/g6_update_layout.html">g6_update_layout()</a></code> proxy function to order the layout re-execution and optionally update its parameters.</li>
 <li>New <code>input[["&lt;graph_ID&gt;-mouse_position"]]</code>: any click/right click or drag release event captures the mouse position. <code>input[["&lt;graph_ID&gt;-mouse_position"]]</code> contains the x and y coordinates of the mouse relative to the canvas. This is useful to add a node where the mouse was clicked, a context menu was triggered or the create edge was released on the canvas without a specific target.</li>
