@@ -369,6 +369,15 @@ as_g6_node.g6_node <- function(x, ...) {
 #' @export
 #' @rdname g6_element
 as_g6_node.list <- function(x, ...) {
+  if ("combo" %in% names(x)) {
+    # Drop nulls except for combo field
+    node <- dropNulls(x, except = "combo")
+    node <- structure(node, class = c("g6_node", "g6_element"))
+    validate_element(node)
+    return(node)
+  }
+  
+  # Default behavior
   do.call(g6_node, x)
 }
 
@@ -467,6 +476,13 @@ as_g6_combo.g6_combo <- function(x, ...) {
 #' @export
 #' @rdname g6_element
 as_g6_combo.list <- function(x, ...) {
+  if ("combo" %in% names(x)) {
+    # Drop nulls except for combo field
+    combo <- dropNulls(x, except = "combo")
+    combo <- structure(combo, class = c("g6_combo", "g6_element"))
+    validate_element(combo)
+    return(combo)
+  }
   do.call(g6_combo, x)
 }
 

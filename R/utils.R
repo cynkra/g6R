@@ -1,6 +1,7 @@
 #' @keywords internal
-dropNulls <- function(x) {
-  x[!vapply(x, is.null, FUN.VALUE = logical(1))]
+dropNulls <- function(x, except = character()) {
+  keep <- !vapply(x, is.null, logical(1)) | names(x) %in% except
+  x[keep]
 }
 
 #' Marks as string to be processed as a JS function
