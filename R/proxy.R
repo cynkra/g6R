@@ -32,6 +32,11 @@ g6_data_proxy <- function(graph, el, action, type) {
       "Can't use g6_add_* with g6 object. Only within shiny and using g6_proxy."
     )
   }
+  # No elements to process
+  if (length(el) == 0) {
+    return(graph)
+  }
+
   if (action != "remove") {
     if (inherits(el, "data.frame")) {
       el <- lapply(seq_len(nrow(el)), \(i) {
