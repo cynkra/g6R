@@ -11,7 +11,7 @@ Due to the new data validation for nodes, edges and combos, some existing code m
 - New option `g6R.preserve_elements_position`. If TRUE, and only if `g6_options(animation = FALSE)`, the elements (nodes and combos) coordinates are preserved when updating the layout to avoid elements from jumping to new positions. Default is FALSE. A warning is raised if this option is TRUE and animation is TRUE to tell the user that the option will be ignored.
 - New `g6_update_layout()` proxy function to order the layout re-execution and optionally update its parameters.
 - New `input[["<graph_ID>-mouse_position"]]`: any click/right click or drag release event captures the mouse position. `input[["<graph_ID>-mouse_position"]]` contains the x and y coordinates of the mouse relative to the canvas. This is useful to add a node where the mouse was clicked, a context menu was triggered or the create edge was released on the canvas without a specific target.
-- Elements selected via `brush_select()` have a custom input handler. This may give:
+- Elements selected via `brush_select()` or `lasso_select()` have a custom input handler. This may give:
 
 ```r
 input[["<graph_ID>-selected_combo"]]
@@ -22,8 +22,8 @@ attr(,"eventType")
 
 Notice the extra attribute, which allows to make a difference between `click_select()` and `brush_select()` events.
 
-- Get correct element type on click: it was possible that whenclicking a combo it appeared under `input$<graph_ID>-selected_node` instead of `input$<graph_ID>-selected_combo`. This is now fixed.
-- `create_edge()` behavior improved: when creating an edge and it is release on the canvas, the edge isn't cancelled and data are available. We added a `targetType` property which allows to know where the edge was dragged.
+- Get correct element type on click: it was possible that when clicking a combo, it appeared under `input$<graph_ID>-selected_node` instead of `input$<graph_ID>-selected_combo`.
+- `create_edge()` behavior improved: when creating an edge and it is release on the canvas, the edge isn't cancelled and data are available. We added a `targetType` property which allows to know where the edge was dropped.
 - Added new elements API: `g6_node()`, `g6_edge()`, `g6_combo()` to create nodes, edges and combos respectively. We suggest to use them instead of passing lists or dataframes to g6 as they provide
 safety checks. We also added `g6_nodes()`, `g6_edges()` and `g6_combos()` which are internally used by some proxy functions like `g6_add_nodes()` to provide more flexibility.
 - New `options("g6R.mode)` that can be `dev` or `prod` (default). In `dev` mode, Shiny notifications are

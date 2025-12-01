@@ -172,7 +172,7 @@ const registerShinyHandlers = (graph, mode) => {
         window.HTMLWidgets.evaluateStringMember(m.opts, m.evals[i]);
       }
       graph.updatePlugin(m.opts);
-      graph.draw();
+      graph.render();
     }, mode);
   })
 

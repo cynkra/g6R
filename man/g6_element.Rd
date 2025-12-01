@@ -4,23 +4,11 @@
 \alias{g6_node}
 \alias{g6_edge}
 \alias{g6_combo}
-\alias{is_g6_node}
-\alias{is_g6_edge}
-\alias{is_g6_combo}
 \alias{validate_element}
 \alias{validate_element.g6_element}
 \alias{validate_element.g6_node}
 \alias{validate_element.g6_edge}
 \alias{validate_element.g6_combo}
-\alias{as_g6_node}
-\alias{as_g6_node.g6_node}
-\alias{as_g6_node.list}
-\alias{as_g6_edge}
-\alias{as_g6_edge.g6_edge}
-\alias{as_g6_edge.list}
-\alias{as_g6_combo}
-\alias{as_g6_combo.g6_combo}
-\alias{as_g6_combo.list}
 \title{G6 Graph Elements}
 \usage{
 g6_node(
@@ -52,12 +40,6 @@ g6_combo(
   combo = NULL
 )
 
-is_g6_node(x)
-
-is_g6_edge(x)
-
-is_g6_combo(x)
-
 validate_element(x, ...)
 
 \method{validate_element}{g6_element}(x, ...)
@@ -67,24 +49,6 @@ validate_element(x, ...)
 \method{validate_element}{g6_edge}(x, ...)
 
 \method{validate_element}{g6_combo}(x, ...)
-
-as_g6_node(x, ...)
-
-\method{as_g6_node}{g6_node}(x, ...)
-
-\method{as_g6_node}{list}(x, ...)
-
-as_g6_edge(x, ...)
-
-\method{as_g6_edge}{g6_edge}(x, ...)
-
-\method{as_g6_edge}{list}(x, ...)
-
-as_g6_combo(x, ...)
-
-\method{as_g6_combo}{g6_combo}(x, ...)
-
-\method{as_g6_combo}{list}(x, ...)
 }
 \arguments{
 \item{id}{Character. Unique identifier for the node or combo (required).

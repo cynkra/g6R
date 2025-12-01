@@ -1,8 +1,4 @@
 .onLoad <- function(...) {
-  shiny::registerInputHandler("g6R.brush_select", function(data, ...) {
-    if (!length(data)) return(NULL)
-    data <- unlist(data)
-    attr(data, "eventType") <- "brush_select"
-    data
-  }, force = TRUE)
+  register_selection_handler("brush_select")
+  register_selection_handler("lasso_select")
 }
