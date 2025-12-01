@@ -130,7 +130,7 @@ the helper functions <code><a href="../reference/g6_element.html">g6_node()</a><
 These functions provide a consistent and user-friendly interface for
 node creation, supporting both simple and advanced customization.
 <code><a href="../reference/g6_element.html">g6_node()</a></code> allows you to define a single node with specific
-properties, while <code><a href="../reference/g6_elements.html">g6_nodes()</a></code> and <code><a href="../reference/g6_elements.html">as_g6_nodes()</a></code>
+properties, while <code><a href="../reference/g6_elements.html">g6_nodes()</a></code> and <code><a href="../reference/as_g6_elements.html">as_g6_nodes()</a></code>
 can generate multiple nodes from various input format (data.frame,
 list):</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
@@ -158,7 +158,7 @@ features and is the recommended method for node creation.</p>
 <span></span>
 <span><span class="co"># Create multiple nodes from a data frame</span></span>
 <span><span class="va">df</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>id <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"A"</span>, <span class="st">"B"</span><span class="op">)</span>, type <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"circle"</span>, <span class="st">"rect"</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="va">nodes</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/g6_elements.html">as_g6_nodes</a></span><span class="op">(</span><span class="va">df</span><span class="op">)</span></span>
+<span><span class="va">nodes</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/as_g6_elements.html">as_g6_nodes</a></span><span class="op">(</span><span class="va">df</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># With g6_nodes()</span></span>
 <span><span class="va">nodes</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/g6_elements.html">g6_nodes</a></span><span class="op">(</span></span>
@@ -171,7 +171,7 @@ features and is the recommended method for node creation.</p>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>id <span class="op">=</span> <span class="st">"A"</span>, type <span class="op">=</span> <span class="st">"circle"</span><span class="op">)</span>,</span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>id <span class="op">=</span> <span class="st">"B"</span>, type <span class="op">=</span> <span class="st">"rect"</span><span class="op">)</span></span>
 <span><span class="op">)</span></span>
-<span><span class="va">nodes</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/g6_elements.html">as_g6_nodes</a></span><span class="op">(</span><span class="va">lst</span><span class="op">)</span></span>
+<span><span class="va">nodes</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/as_g6_elements.html">as_g6_nodes</a></span><span class="op">(</span><span class="va">lst</span><span class="op">)</span></span>
 <span><span class="va">nodes</span></span>
 <span><span class="co">#&gt; [[1]]</span></span>
 <span><span class="co">#&gt; $id</span></span>

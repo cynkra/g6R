@@ -50,7 +50,7 @@ edge creation, supporting both simple and advanced customization.
 allows you to define a single edge with specific properties, while
 [`g6_edges()`](https://cynkra.github.io/g6R/reference/g6_elements.md)
 and
-[`as_g6_edges()`](https://cynkra.github.io/g6R/reference/g6_elements.md)
+[`as_g6_edges()`](https://cynkra.github.io/g6R/reference/as_g6_elements.md)
 can generate multiple edges from various input formats (data.frame,
 list):
 

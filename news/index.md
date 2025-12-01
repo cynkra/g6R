@@ -35,6 +35,8 @@ slot.
   the create edge was released on the canvas without a specific target.
 - Elements selected via
   [`brush_select()`](https://cynkra.github.io/g6R/reference/brush_select.md)
+  or
+  [`lasso_select()`](https://cynkra.github.io/g6R/reference/lasso_select.md)
   have a custom input handler. This may give:
 
 ``` r
@@ -50,13 +52,13 @@ and
 [`brush_select()`](https://cynkra.github.io/g6R/reference/brush_select.md)
 events.
 
-- Get correct element type on click: it was possible that whenclicking a
-  combo it appeared under `input$<graph_ID>-selected_node` instead of
-  `input$<graph_ID>-selected_combo`. This is now fixed.
+- Get correct element type on click: it was possible that when clicking
+  a combo, it appeared under `input$<graph_ID>-selected_node` instead of
+  `input$<graph_ID>-selected_combo`.
 - [`create_edge()`](https://cynkra.github.io/g6R/reference/create_edge.md)
   behavior improved: when creating an edge and it is release on the
   canvas, the edge isn’t cancelled and data are available. We added a
-  `targetType` property which allows to know where the edge was dragged.
+  `targetType` property which allows to know where the edge was dropped.
 - Added new elements API:
   [`g6_node()`](https://cynkra.github.io/g6R/reference/g6_element.md),
   [`g6_edge()`](https://cynkra.github.io/g6R/reference/g6_element.md),

@@ -121,7 +121,7 @@ the helper functions <code><a href="../reference/g6_element.html">g6_combo()</a>
 These functions provide a consistent and user-friendly interface for
 combo creation, supporting both simple and advanced customization.<br><code><a href="../reference/g6_element.html">g6_combo()</a></code> allows you to define a single combo with
 specific properties, while <code><a href="../reference/g6_elements.html">g6_combos()</a></code> and
-<code><a href="../reference/g6_elements.html">as_g6_combos()</a></code> can generate multiple combos from various
+<code><a href="../reference/as_g6_elements.html">as_g6_combos()</a></code> can generate multiple combos from various
 input formats (data.frame, list):</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">as.list</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/utils/methods.html" class="external-link">methods</a></span><span class="op">(</span><span class="st">"as_g6_combo"</span><span class="op">)</span><span class="op">)</span></span>
@@ -148,7 +148,7 @@ features and is the recommended method for combo creation.</p>
 <span></span>
 <span><span class="co"># Create multiple combos from a data frame</span></span>
 <span><span class="va">df</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>id <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"combo1"</span>, <span class="st">"combo2"</span><span class="op">)</span>, type <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"rect"</span>, <span class="st">"circle"</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="va">combos</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/g6_elements.html">as_g6_combos</a></span><span class="op">(</span><span class="va">df</span><span class="op">)</span></span>
+<span><span class="va">combos</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/as_g6_elements.html">as_g6_combos</a></span><span class="op">(</span><span class="va">df</span><span class="op">)</span></span>
 <span><span class="va">combos</span></span>
 <span><span class="co">#&gt; [[1]]</span></span>
 <span><span class="co">#&gt; $id</span></span>
@@ -184,7 +184,7 @@ features and is the recommended method for combo creation.</p>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>id <span class="op">=</span> <span class="st">"combo1"</span>, type <span class="op">=</span> <span class="st">"rect"</span><span class="op">)</span>,</span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>id <span class="op">=</span> <span class="st">"combo2"</span>, type <span class="op">=</span> <span class="st">"circle"</span><span class="op">)</span></span>
 <span><span class="op">)</span></span>
-<span><span class="va">combos</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/g6_elements.html">as_g6_combos</a></span><span class="op">(</span><span class="va">lst</span><span class="op">)</span></span>
+<span><span class="va">combos</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/as_g6_elements.html">as_g6_combos</a></span><span class="op">(</span><span class="va">lst</span><span class="op">)</span></span>
 <span><span class="va">combos</span></span>
 <span><span class="co">#&gt; [[1]]</span></span>
 <span><span class="co">#&gt; $id</span></span>

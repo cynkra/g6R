@@ -34,12 +34,6 @@ g6_combo(
   combo = NULL
 )
 
-is_g6_node(x)
-
-is_g6_edge(x)
-
-is_g6_combo(x)
-
 validate_element(x, ...)
 
 # S3 method for class 'g6_element'
@@ -53,30 +47,6 @@ validate_element(x, ...)
 
 # S3 method for class 'g6_combo'
 validate_element(x, ...)
-
-as_g6_node(x, ...)
-
-# S3 method for class 'g6_node'
-as_g6_node(x, ...)
-
-# S3 method for class 'list'
-as_g6_node(x, ...)
-
-as_g6_edge(x, ...)
-
-# S3 method for class 'g6_edge'
-as_g6_edge(x, ...)
-
-# S3 method for class 'list'
-as_g6_edge(x, ...)
-
-as_g6_combo(x, ...)
-
-# S3 method for class 'g6_combo'
-as_g6_combo(x, ...)
-
-# S3 method for class 'list'
-as_g6_combo(x, ...)
 ```
 
 ## Arguments

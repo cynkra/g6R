@@ -35,32 +35,40 @@ Create g6 data structures and validate them
 - [`g6_node()`](https://cynkra.github.io/g6R/reference/g6_element.md)
   [`g6_edge()`](https://cynkra.github.io/g6R/reference/g6_element.md)
   [`g6_combo()`](https://cynkra.github.io/g6R/reference/g6_element.md)
-  [`is_g6_node()`](https://cynkra.github.io/g6R/reference/g6_element.md)
-  [`is_g6_edge()`](https://cynkra.github.io/g6R/reference/g6_element.md)
-  [`is_g6_combo()`](https://cynkra.github.io/g6R/reference/g6_element.md)
   [`validate_element()`](https://cynkra.github.io/g6R/reference/g6_element.md)
-  [`as_g6_node()`](https://cynkra.github.io/g6R/reference/g6_element.md)
-  [`as_g6_edge()`](https://cynkra.github.io/g6R/reference/g6_element.md)
-  [`as_g6_combo()`](https://cynkra.github.io/g6R/reference/g6_element.md)
   : G6 Graph Elements
+- [`is_g6_node()`](https://cynkra.github.io/g6R/reference/is_g6_element.md)
+  [`is_g6_edge()`](https://cynkra.github.io/g6R/reference/is_g6_element.md)
+  [`is_g6_combo()`](https://cynkra.github.io/g6R/reference/is_g6_element.md)
+  : Check if an object is a G6 element
+- [`as_g6_node()`](https://cynkra.github.io/g6R/reference/as_g6_element.md)
+  [`as_g6_edge()`](https://cynkra.github.io/g6R/reference/as_g6_element.md)
+  [`as_g6_combo()`](https://cynkra.github.io/g6R/reference/as_g6_element.md)
+  : Coerce to a g6 element object
 
 ### Create list of g6 elements
 
 - [`g6_data()`](https://cynkra.github.io/g6R/reference/g6_data.md)
-  [`is_g6_data()`](https://cynkra.github.io/g6R/reference/g6_data.md)
   [`as_g6_data()`](https://cynkra.github.io/g6R/reference/g6_data.md) :
   Create a g6_data object
+- [`is_g6_data()`](https://cynkra.github.io/g6R/reference/is_g6_data.md)
+  : Check if an object is a g6_data object
 - [`g6_nodes()`](https://cynkra.github.io/g6R/reference/g6_elements.md)
   [`g6_edges()`](https://cynkra.github.io/g6R/reference/g6_elements.md)
   [`g6_combos()`](https://cynkra.github.io/g6R/reference/g6_elements.md)
-  [`is_g6_nodes()`](https://cynkra.github.io/g6R/reference/g6_elements.md)
-  [`is_g6_edges()`](https://cynkra.github.io/g6R/reference/g6_elements.md)
-  [`is_g6_combos()`](https://cynkra.github.io/g6R/reference/g6_elements.md)
   [`validate_elements()`](https://cynkra.github.io/g6R/reference/g6_elements.md)
-  [`as_g6_nodes()`](https://cynkra.github.io/g6R/reference/g6_elements.md)
-  [`as_g6_edges()`](https://cynkra.github.io/g6R/reference/g6_elements.md)
-  [`as_g6_combos()`](https://cynkra.github.io/g6R/reference/g6_elements.md)
+  [`as_g6_nodes(`*`<g6_nodes>`*`)`](https://cynkra.github.io/g6R/reference/g6_elements.md)
+  [`as_g6_nodes(`*`<data.frame>`*`)`](https://cynkra.github.io/g6R/reference/g6_elements.md)
+  [`as_g6_nodes(`*`<list>`*`)`](https://cynkra.github.io/g6R/reference/g6_elements.md)
   : Create and validate lists of G6 elements
+- [`is_g6_nodes()`](https://cynkra.github.io/g6R/reference/is_g6_elements.md)
+  [`is_g6_edges()`](https://cynkra.github.io/g6R/reference/is_g6_elements.md)
+  [`is_g6_combos()`](https://cynkra.github.io/g6R/reference/is_g6_elements.md)
+  : Check if an object is a list of G6 elements
+- [`as_g6_nodes()`](https://cynkra.github.io/g6R/reference/as_g6_elements.md)
+  [`as_g6_edges()`](https://cynkra.github.io/g6R/reference/as_g6_elements.md)
+  [`as_g6_combos()`](https://cynkra.github.io/g6R/reference/as_g6_elements.md)
+  : Coerce to a list of g6_elements objects
 
 ## Proxy
 

@@ -15,12 +15,6 @@ g6_edges(...)
 
 g6_combos(...)
 
-is_g6_nodes(x)
-
-is_g6_edges(x)
-
-is_g6_combos(x)
-
 validate_elements(x, ...)
 
 # S3 method for class 'g6_nodes'
@@ -32,8 +26,6 @@ validate_elements(x, ...)
 # S3 method for class 'g6_combos'
 validate_elements(x, ...)
 
-as_g6_nodes(x, ...)
-
 # S3 method for class 'g6_nodes'
 as_g6_nodes(x, ...)
 
@@ -42,28 +34,6 @@ as_g6_nodes(x, ...)
 
 # S3 method for class 'list'
 as_g6_nodes(x, ...)
-
-as_g6_edges(x, ...)
-
-# S3 method for class 'g6_edges'
-as_g6_edges(x, ...)
-
-# S3 method for class 'data.frame'
-as_g6_edges(x, ...)
-
-# S3 method for class 'list'
-as_g6_edges(x, ...)
-
-as_g6_combos(x, ...)
-
-# S3 method for class 'g6_combos'
-as_g6_combos(x, ...)
-
-# S3 method for class 'data.frame'
-as_g6_combos(x, ...)
-
-# S3 method for class 'list'
-as_g6_combos(x, ...)
 ```
 
 ## Arguments

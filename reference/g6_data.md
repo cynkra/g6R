@@ -10,8 +10,6 @@ simply [`g6()`](https://cynkra.github.io/g6R/reference/g6.md).
 ``` r
 g6_data(nodes = NULL, edges = NULL, combos = NULL)
 
-is_g6_data(x)
-
 as_g6_data(x, ...)
 
 # S3 method for class 'g6_data'
@@ -42,3 +40,7 @@ as_g6_data(x, ...)
 - ...:
 
   Additional arguments (unused).
+
+## Value
+
+An object of class `g6_data`.
