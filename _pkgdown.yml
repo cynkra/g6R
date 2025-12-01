@@ -84,6 +84,9 @@ reference:
       - g6_edges
       - g6_combos
       - validate_elements
+      - is_g6_nodes
+      - is_g6_edges
+      - is_g6_combos
       - as_g6_nodes
       - as_g6_edges
       - as_g6_combos
