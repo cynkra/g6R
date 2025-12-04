@@ -22,3 +22,4 @@
 ^cran-comments\.md$
 ^vignettes/articles$
 ^CRAN-SUBMISSION$
+^codecov\.yml$

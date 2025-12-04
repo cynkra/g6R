@@ -1,0 +1,11 @@
+test_that("register_selection_handler works", {
+  res <- register_selection_handler("test")
+  expect_type(res, "closure")
+  expect_null(res(list()))
+  processed <- res(list(a = "res"))
+  expect_named(processed, "a")
+  expect_type(processed, "character")
+  expect_identical(attr(processed, "eventType"), "test")
+  expect_identical(processed[["a"]], "res")
+  shiny::removeInputHandler("g6R.test")
+})
