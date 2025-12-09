@@ -13,7 +13,7 @@
 ## Citation
 
 Source:
-[`DESCRIPTION`](https://github.com/cynkra/g6R/blob/main/DESCRIPTION)
+[`DESCRIPTION`](https://github.com/cynkra/g6R/blob/v0.5.0/DESCRIPTION)
 
 Granjon D, Schoch D (2025). *g6R: Graph Visualisation Engine Widget for
 R and 'shiny' Apps*. R package version 0.5.0,
