@@ -154,7 +154,8 @@ Default: NULL.</p></dd>
 
 
 <dt id="arg-renderer">renderer<a class="anchor" aria-label="anchor" href="#arg-renderer"></a></dt>
-<dd><p>Rendering engine to use. Options: "canvas", "svg", "webgl", or "webgpu".
+<dd><p>Rendering engine to use. A JS function. To render
+as svg, you can pass <code>() =&gt; new SVGRenderer()</code>.
 Default: NULL (G6 will choose the appropriate renderer).</p></dd>
 
 

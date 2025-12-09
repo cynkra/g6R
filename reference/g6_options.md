@@ -98,8 +98,9 @@ g6_options(
 
 - renderer:
 
-  Rendering engine to use. Options: "canvas", "svg", "webgl", or
-  "webgpu". Default: NULL (G6 will choose the appropriate renderer).
+  Rendering engine to use. A JS function. To render as svg, you can pass
+  `() => new SVGRenderer()`. Default: NULL (G6 will choose the
+  appropriate renderer).
 
 - padding:
 
