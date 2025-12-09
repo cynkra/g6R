@@ -7,6 +7,12 @@ import { AntLine, FlyMarkerCubic, CircleComboWithExtraButton } from '../modules/
 import { setupIcons, loadAndInitGraph, getGraph } from '../modules/utils';
 import { CustomCreateEdge } from '../modules/custom-behaviors';
 
+import { Renderer as SVGRenderer } from '@antv/g-svg';
+
+if (typeof window !== 'undefined') {
+  window.SVGRenderer = SVGRenderer;
+}
+
 // Ant lines
 register(ExtensionCategory.EDGE, 'ant-line', AntLine);
 // Animated lines

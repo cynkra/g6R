@@ -62,7 +62,8 @@ Default: "default".}
 the browser's default device pixel ratio will be used.
 Default: NULL.}
 
-\item{renderer}{Rendering engine to use. Options: "canvas", "svg", "webgl", or "webgpu".
+\item{renderer}{Rendering engine to use. A JS function. To render
+as svg, you can pass \verb{() => new SVGRenderer()}.
 Default: NULL (G6 will choose the appropriate renderer).}
 
 \item{padding}{Padding around the graph content in pixels. Can be a single number for equal padding
