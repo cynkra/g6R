@@ -143,8 +143,7 @@ const setupGraph = (graph, widget, config) => {
 
     graph.on('node:pointerdown', function (e) {
       if (e.originalTarget && e.originalTarget.key) {
-        console.log('Clicked port key:', e.originalTarget.key);
-        // Use e.originalTarget.key as the port identifier
+        console.log(e.originalTarget);
       }
     });
 

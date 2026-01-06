@@ -206,13 +206,14 @@ get_g6_preserve_position <- function() {
 #'
 #' @export
 g6Output <- function(outputId, width = "100%", height = "400px") {
+  #nocov start
   htmlwidgets::shinyWidgetOutput(
     outputId,
     "g6",
     width,
     height,
     package = "g6R"
-  )
+  ) #nocov end
 }
 
 #' Alias to \link{g6Output}
@@ -223,11 +224,12 @@ g6_output <- g6Output
 #' @rdname g6-shiny
 #' @export
 renderG6 <- function(expr, env = parent.frame(), quoted = FALSE) {
+  #nocov start
   if (!quoted) {
     expr <- substitute(expr)
   } # force quoted
   htmlwidgets::shinyRenderWidget(expr, g6Output, env, quoted = TRUE)
-}
+} #nocov end
 
 #' Alias to \link{renderG6}
 #' @export

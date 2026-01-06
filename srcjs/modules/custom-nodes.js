@@ -8,6 +8,8 @@ class CustomCircleNode extends Circle {
     const portsStyle = this.getPortsStyle(attributes);
 
     Object.keys(portsStyle).forEach((key) => {
+      // TBD: initialise the number of connections
+      // this is linked to multiple param on the R side.
       const style = portsStyle[key];
       const shapeKey = `port-${key}`;
       // Draw the port shape (circle)
