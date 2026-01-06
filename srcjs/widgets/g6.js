@@ -6,6 +6,7 @@ import {
 import { AntLine, FlyMarkerCubic, CircleComboWithExtraButton } from '../modules/extensions';
 import { setupIcons, loadAndInitGraph, getGraph } from '../modules/utils';
 import { CustomCreateEdge } from '../modules/custom-behaviors';
+import { CustomCircleNode } from '../modules/custom-nodes';
 
 import { Renderer as SVGRenderer } from '@antv/g-svg';
 
@@ -22,6 +23,9 @@ register(ExtensionCategory.COMBO, 'circle-combo-with-extra-button', CircleComboW
 
 // Custom create edge
 register(ExtensionCategory.BEHAVIOR, 'create-edge', CustomCreateEdge);
+
+// Register the custom node with G6
+register(ExtensionCategory.NODE, 'custom-circle-node', CustomCircleNode);
 
 HTMLWidgets.widget({
 

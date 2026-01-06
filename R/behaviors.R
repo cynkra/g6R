@@ -734,24 +734,24 @@ create_edge <- function(
                 }
               )
             }
-          } else {
-            // Then we reset the behaviors so there is no conflict
-            graph.updateBehavior({
-              key: 'create-edge', // Specify the behavior to update
-              enable: false,
-            });
-            // Re-enable drag element bahaviors
-            graph.updateBehavior({ key: 'drag-element', enable: true });
-            graph.updateBehavior({ key: 'drag-element-force', enable: true });
-            if (notify) {
-              Shiny.notifications.show(
-                { 
-                  html: 'Edge successfuly created',
-                  type: 'success' 
-                }
-              )
-            }
-          }
+          } //else {
+            //// Then we reset the behaviors so there is no conflict
+            //graph.updateBehavior({
+            //  key: 'create-edge', // Specify the behavior to update
+            //  enable: false,
+            //});
+            //// Re-enable drag element bahaviors
+            //graph.updateBehavior({ key: 'drag-element', enable: true });
+            //graph.updateBehavior({ key: 'drag-element-force', enable: true });
+            //if (notify) {
+            //  Shiny.notifications.show(
+            //    { 
+            //      html: 'Edge successfuly created',
+            //      type: 'success' 
+            //    }
+            //  )
+            //}
+          //}
         }",
         as.numeric(notify),
         config$outputId

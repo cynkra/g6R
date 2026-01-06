@@ -16,8 +16,8 @@ class CustomCreateEdge extends CreateEdge {
       graph.on(CanvasEvent.CLICK, this.cancelEdge.bind(this));
       graph.on(EdgeEvent.CLICK, this.cancelEdge.bind(this));
     } else {
-      graph.on(NodeEvent.DRAG_START, this.customHandleCreateEdge.bind(this));
-      graph.on(ComboEvent.DRAG_START, this.customHandleCreateEdge.bind(this));
+      graph.on(NodeEvent.POINTER_DOWN, this.customHandleCreateEdge.bind(this));
+      graph.on(ComboEvent.POINTER_DOWN, this.customHandleCreateEdge.bind(this));
       // Bind to custom drop method
       graph.on(CommonEvent.POINTER_UP, this.customDrop.bind(this));
     }
@@ -56,11 +56,28 @@ class CustomCreateEdge extends CreateEdge {
     const target = this.getSelectedNodeIDs([event.target.id])?.[0];
     const id = `${this.source}-${target}-${uniqueId()}`;
 
-    const edgeData = onCreate({ id, source: this.source, targetType: event.targetType, target, style });
+    // Capture target port key: that does not work all the time ...
+    const targetPort = event.originalTarget && event.originalTarget.key ? event.originalTarget.key : null;
+
+    // Add sourcePort and targetPort into style
+    const edgeStyle = Object.assign({}, style, {
+      sourcePort: this.sourcePort,
+      targetPort: targetPort
+    });
+
+    const edgeData = onCreate({
+      id,
+      source: this.source,
+      targetType: event.targetType,
+      target,
+      style: edgeStyle
+    });
     if (edgeData) {
       graph.addEdgeData([edgeData]);
       onFinish(edgeData);
     }
+    // Reset sourcePort after edge creation
+    this.sourcePort = null;
   };
 
   // JS conversion of handleCreateEdge
@@ -79,6 +96,10 @@ class CustomCreateEdge extends CreateEdge {
     if (canvas) canvas.setCursor('crosshair');
     const selectedIds = this.getSelectedNodeIDs([event.target.id]);
     this.source = selectedIds && selectedIds[0];
+
+    // Capture source port key: this works all the time ...
+    this.sourcePort = event.originalTarget && event.originalTarget.key ? event.originalTarget.key : null;
+
     const sourceNode = graph.getElementData(this.source);
 
     graph.addNodeData([
@@ -99,7 +120,9 @@ class CustomCreateEdge extends CreateEdge {
         source: this.source,
         target: ASSIST_NODE_ID,
         style: Object.assign(
-          { pointerEvents: 'none' },
+          // added sourcePort so that the edge does not change
+          // port when we move the cursor around.
+          { pointerEvents: 'none', sourcePort: this.sourcePort },
           style
         ),
       },
