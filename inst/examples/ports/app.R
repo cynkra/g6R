@@ -8,23 +8,27 @@ ui <- fluidPage(
 server <- function(input, output, session) {
   output$dag <- render_g6(
     g6(
-      nodes = list(
-        list(
+      nodes = g6_nodes(
+        g6_node(
           id = 1,
           type = "custom-circle-node",
           style = list(
             labelText = "Node 1",
-            ports = list(
-              list(
+            ports = g6_ports(
+              g6_port(
                 key = "input-1",
+                type = "input",
                 placement = "left",
                 fill = "#52C41A",
+                label = "port 1",
                 r = 4,
                 isBillboard = TRUE
               ),
-              list(
+              g6_port(
                 key = "output-1",
+                type = "output",
                 placement = "right",
+                label = "port 2",
                 fill = "#FF4D4F",
                 r = 4,
                 isBillboard = TRUE
@@ -32,20 +36,22 @@ server <- function(input, output, session) {
             )
           )
         ),
-        list(
+        g6_node(
           id = 2,
           type = "custom-circle-node",
           style = list(
             labelText = "Node 2",
-            ports = list(
-              list(
+            ports = g6_ports(
+              g6_port(
                 key = "input-2",
+                type = "input",
                 placement = "left",
                 fill = "#52C41A",
                 r = 4
               ),
-              list(
+              g6_port(
                 key = "output-2",
+                type = "output",
                 placement = "right",
                 fill = "#FF4D4F",
                 r = 4
@@ -53,14 +59,14 @@ server <- function(input, output, session) {
             )
           )
         )
-      ) #,
-      #edges = list(
-      #  list(
-      #    source = 1,
-      #    target = 2,
-      #    style = list(sourcePort = "output-1", targetPort = "input-2")
-      #  )
-      #)
+      )
+      # edges = g6_edges(
+      #   g6_edge(
+      #     source = 1,
+      #     target = 2,
+      #     style = list(sourcePort = "output-1", targetPort = "input-2")
+      #   )
+      # )
     ) |>
       g6_layout() |>
       g6_options(animation = FALSE) |>
