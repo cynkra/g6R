@@ -26,7 +26,7 @@ test_that("g6_port validation fails for missing or invalid key/type/multiple", {
     g6_port(key = "x", type = "foo")
   })
   expect_snapshot(error = TRUE, {
-    g6_port(key = "x", type = "input", multiple = "yes")
+    g6_port(key = "x", type = "input", arity = -1)
   })
 })
 
@@ -56,5 +56,5 @@ test_that("is_g6_port and coercion functions work", {
     list(key = "b", type = "output")
   ))
   expect_s3_class(ports, "g6_ports")
-  expect_true(all(vapply(ports, is_g6_port, logical(1))))
+  expect_true(all(lgl_ply(ports, is_g6_port)))
 })

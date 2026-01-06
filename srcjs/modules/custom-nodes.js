@@ -9,7 +9,7 @@ class CustomCircleNode extends Circle {
 
     Object.keys(portsStyle).forEach((key) => {
       // TBD: initialise the number of connections
-      // this is linked to multiple param on the R side.
+      // this is linked to arity param on the R side.
       const style = portsStyle[key];
       const shapeKey = `port-${key}`;
       // Draw the port shape (circle)

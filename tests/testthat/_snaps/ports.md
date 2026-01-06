@@ -17,10 +17,10 @@
 ---
 
     Code
-      g6_port(key = "x", type = "input", multiple = "yes")
+      g6_port(key = "x", type = "input", arity = -1)
     Condition
       Error in `validate_port.g6_port()`:
-      ! 'multiple' must be a single logical value.
+      ! 'arity' must be a single non-negative number (0, Inf, or positive integer).
 
 # g6_ports fails if keys are not unique or elements are not g6_port
 

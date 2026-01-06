@@ -4,14 +4,14 @@
 \alias{g6_port}
 \title{Create a G6 Port}
 \usage{
-g6_port(key, type, multiple = FALSE, ...)
+g6_port(key, type, arity = 1, ...)
 }
 \arguments{
 \item{key}{Character. Unique identifier for the port (required).}
 
 \item{type}{Character. Either "input" or "output" (required).}
 
-\item{multiple}{Logical. If TRUE, port can receive multiple connections (default: FALSE).}
+\item{arity}{Numeric. Maximum number of connections this port can accept (default: 1). Use 0, Inf, or any non-negative integer.}
 
 \item{...}{Additional port style parameters. See
 \url{https://g6.antv.antgroup.com/en/manual/element/node/base-node#portstyleprops}.}
@@ -23,6 +23,6 @@ An S3 object of class 'g6_port'.
 Create a G6 Port
 }
 \examples{
-g6_port("input-1", type = "input", placement = "left", fill = "#52C41A", r = 4)
-g6_port("output-1", type = "output", placement = "right", fill = "#FF4D4F", r = 4, multiple = TRUE)
+g6_port("input-1", type = "input", arity = 1, placement = "left")
+g6_port("output-1", type = "output", arity = Inf, placement = "right")
 }

@@ -16,21 +16,21 @@ is_g6_port <- function(x) {
 #'
 #' @param key Character. Unique identifier for the port (required).
 #' @param type Character. Either "input" or "output" (required).
-#' @param multiple Logical. If TRUE, port can receive multiple connections (default: FALSE).
+#' @param arity Numeric. Maximum number of connections this port can accept (default: 1). Use 0, Inf, or any non-negative integer.
 #' @param ... Additional port style parameters. See
 #' \url{https://g6.antv.antgroup.com/en/manual/element/node/base-node#portstyleprops}.
 #' @return An S3 object of class 'g6_port'.
 #' @examples
-#' g6_port("input-1", type = "input", placement = "left", fill = "#52C41A", r = 4)
-#' g6_port("output-1", type = "output", placement = "right", fill = "#FF4D4F", r = 4, multiple = TRUE)
+#' g6_port("input-1", type = "input", arity = 1, placement = "left")
+#' g6_port("output-1", type = "output", arity = Inf, placement = "right")
 #' @export
-g6_port <- function(key, type, multiple = FALSE, ...) {
+g6_port <- function(key, type, arity = 1, ...) {
   port <- structure(
     c(
       list(
         key = key,
         type = type,
-        multiple = multiple
+        arity = arity
       ),
       list(...)
     ),
@@ -61,8 +61,15 @@ validate_port.g6_port <- function(x, ...) {
   if (!(x$type %in% c("input", "output"))) {
     stop("'type' must be either 'input' or 'output'.")
   }
-  if (!is.logical(x$multiple) || length(x$multiple) != 1) {
-    stop("'multiple' must be a single logical value.")
+  if (
+    !is.numeric(x$arity) ||
+      length(x$arity) != 1 ||
+      is.na(x$arity) ||
+      x$arity < 0
+  ) {
+    stop(
+      "'arity' must be a single non-negative number (0, Inf, or positive integer)."
+    )
   }
   x
 }
