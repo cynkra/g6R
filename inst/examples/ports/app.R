@@ -2,7 +2,8 @@ library(shiny)
 library(g6R)
 
 ui <- fluidPage(
-  g6_output("dag")
+  g6_output("dag"),
+  verbatimTextOutput("clicked_port")
 )
 
 server <- function(input, output, session) {
@@ -95,6 +96,10 @@ server <- function(input, output, session) {
         )
       )
   )
+
+  output$clicked_port <- renderPrint({
+    input[["dag-selected_port"]]
+  })
 }
 
 shinyApp(ui, server)
