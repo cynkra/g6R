@@ -18,7 +18,7 @@ class CustomCircleNode extends Circle {
 
       this.addPortEvents(portShape, portLabelShape, style);
 
-      this.createHoverElements(key, style, x, y, container, graphId, this.id);
+      this.createConnectionGuides(key, style, x, y, container, graphId, this.id);
     });
   }
 
@@ -73,7 +73,7 @@ class CustomCircleNode extends Circle {
     });
   }
 
-  createHoverElements(key, style, x, y, container, graphId, nodeId) {
+  createConnectionGuides(key, style, x, y, container, graphId, nodeId) {
     const lineLength = 50;
     const rectWidth = 12;
     const rectHeight = 12;
@@ -161,6 +161,8 @@ class CustomCircleNode extends Circle {
         { node: nodeId, port: key },
         { priority: 'event' }
       );
+      // Avoid to click on the node.
+      e.stopPropagation();
     });
   }
 
