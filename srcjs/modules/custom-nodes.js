@@ -3,14 +3,34 @@ import { Circle as GCircle } from '@antv/g';
 
 // Custom rectangle node with port key attachment
 class CustomCircleNode extends Circle {
+  // count initial connections for each port of this node
+  getPortConnections(nodeId) {
+    const edges = this.context.graph.getEdgeData();
+    const portConnections = {};
+
+    edges.forEach(edge => {
+      const style = edge.style || {};
+
+      if (edge.source === nodeId && style.sourcePort) {
+        portConnections[style.sourcePort] = (portConnections[style.sourcePort] || 0) + 1;
+      }
+      if (edge.target === nodeId && style.targetPort) {
+        portConnections[style.targetPort] = (portConnections[style.targetPort] || 0) + 1;
+      }
+    });
+
+    return portConnections;
+  }
   // Override to attach port key to each port shape
   drawPortShapes(attributes, container) {
     const portsStyle = this.getPortsStyle(attributes);
     const graphId = this.context.graph.options.container;
+    const portConnections = this.getPortConnections(this.id);
 
     Object.keys(portsStyle).forEach((key) => {
       const style = portsStyle[key];
       const [x, y] = this.getPortXY(attributes, style);
+      style.connections = portConnections[key] || 0;
 
       const portShape = this.createPortShape(`port-${key}`, style, container, key);
       const portLabelShape = this.createPortLabel(key, style, x, y, container);
@@ -58,7 +78,7 @@ class CustomCircleNode extends Circle {
       portLabelShape.attr('visibility', 'visible');
       portShape.attr('lineWidth', 2);
       portShape.attr('cursor', portShape.connections >= portShape.arity ? 'not-allowed' : cursorMap[style.placement]);
-      if (guide) this.showGuide(guide);
+      if (guide && portShape.connections < portShape.arity) this.showGuide(guide);
     });
 
     portShape.addEventListener('mouseleave', (e) => {
@@ -77,13 +97,23 @@ class CustomCircleNode extends Circle {
 
     // Guide elements: keep visible on hover, hide only when leaving all
     if (guide) {
-      portShape.addEventListener('mouseenter', () => this.showGuide(guide));
-      portShape.addEventListener('mouseleave', (e) => this.handleGuideMouseLeave(e, guide));
-
-      // Guide elements: keep visible on hover, hide only when leaving all
-      ['line', 'rect', 'plus'].forEach(el => {
-        guide[el].addEventListener('mouseenter', () => this.showGuide(guide));
-        guide[el].addEventListener('mouseleave', (e) => this.handleGuideMouseLeave(e, guide));
+      ['line', 'rect', 'plus', 'bbox'].forEach(el => {
+        if (guide[el]) {
+          guide[el].addEventListener('mouseenter', () => {
+            if (portShape.connections < portShape.arity) {
+              this.showGuide(guide);
+            } else {
+              this.hideGuide(guide);
+            }
+          });
+          guide[el].addEventListener('mouseleave', (e) => {
+            // Hide only if not entering another guide element
+            const related = e.relatedTarget;
+            if (!related || !Object.values(guide).includes(related)) {
+              this.hideGuide(guide);
+            }
+          });
+        }
       });
     }
   }
@@ -92,7 +122,7 @@ class CustomCircleNode extends Circle {
     const portShape = this.upsert(shapeKey, GCircle, { ...style }, container);
     if (portShape) {
       portShape.key = key;
-      portShape.connections = 0;
+      portShape.connections = style.connections;
       portShape.arity = style.arity;
     }
     return portShape;
@@ -259,7 +289,7 @@ class CustomCircleNode extends Circle {
     bbox.attr('visibility', 'hidden');
 
     // Return references for event logic
-    return { line, rect, plus };
+    return { line, rect, plus, bbox };
   }
 
   // Render method: rectangle and ports

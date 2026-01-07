@@ -25,10 +25,17 @@ is_g6_port <- function(x) {
 #' \url{https://g6.antv.antgroup.com/en/manual/element/node/base-node#portstyleprops}.
 #' @return An S3 object of class 'g6_port'.
 #' @examples
-#' g6_port("input-1", type = "input", arity = 1, placement = "left")
-#' g6_port("output-1", type = "output", arity = Inf, placement = "right")
+#' g6_port("input-1", type = "input", arity = 2, placement = "left")
+#' g6_port("output-1", type = "output", placement = "right")
 #' @export
-g6_port <- function(key, type, arity = 1, showGuides = TRUE, ...) {
+g6_port <- function(
+  key,
+  type = c("input", "output"),
+  arity = 1,
+  showGuides = TRUE,
+  ...
+) {
+  type <- match.arg(type)
   port <- structure(
     c(
       list(
