@@ -16,7 +16,11 @@ is_g6_port <- function(x) {
 #'
 #' @param key Character. Unique identifier for the port (required).
 #' @param type Character. Either "input" or "output" (required).
-#' @param arity Numeric. Maximum number of connections this port can accept (default: 1). Use 0, Inf, or any non-negative integer.
+#' @param arity Numeric. Maximum number of
+#' connections this port can accept (default: 1).
+#' Use 0, Inf, or any non-negative integer.
+#' @param showGuides Logical. Whether to show connection
+#' guides when hovering over the port (default: TRUE).
 #' @param ... Additional port style parameters. See
 #' \url{https://g6.antv.antgroup.com/en/manual/element/node/base-node#portstyleprops}.
 #' @return An S3 object of class 'g6_port'.
@@ -24,13 +28,14 @@ is_g6_port <- function(x) {
 #' g6_port("input-1", type = "input", arity = 1, placement = "left")
 #' g6_port("output-1", type = "output", arity = Inf, placement = "right")
 #' @export
-g6_port <- function(key, type, arity = 1, ...) {
+g6_port <- function(key, type, arity = 1, showGuides = TRUE, ...) {
   port <- structure(
     c(
       list(
         key = key,
         type = type,
-        arity = arity
+        arity = arity,
+        showGuides = showGuides
       ),
       list(...)
     ),

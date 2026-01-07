@@ -4,14 +4,19 @@
 \alias{g6_port}
 \title{Create a G6 Port}
 \usage{
-g6_port(key, type, arity = 1, ...)
+g6_port(key, type, arity = 1, showGuides = TRUE, ...)
 }
 \arguments{
 \item{key}{Character. Unique identifier for the port (required).}
 
 \item{type}{Character. Either "input" or "output" (required).}
 
-\item{arity}{Numeric. Maximum number of connections this port can accept (default: 1). Use 0, Inf, or any non-negative integer.}
+\item{arity}{Numeric. Maximum number of
+connections this port can accept (default: 1).
+Use 0, Inf, or any non-negative integer.}
+
+\item{showGuides}{Logical. Whether to show connection
+guides when hovering over the port (default: TRUE).}
 
 \item{...}{Additional port style parameters. See
 \url{https://g6.antv.antgroup.com/en/manual/element/node/base-node#portstyleprops}.}

@@ -10,16 +10,49 @@ class CustomCircleNode extends Circle {
 
     Object.keys(portsStyle).forEach((key) => {
       const style = portsStyle[key];
-      const shapeKey = `port-${key}`;
       const [x, y] = this.getPortXY(attributes, style);
 
-      const portShape = this.createPortShape(shapeKey, style, container, key);
+      const portShape = this.createPortShape(`port-${key}`, style, container, key);
       const portLabelShape = this.createPortLabel(key, style, x, y, container);
 
-      this.addPortEvents(portShape, portLabelShape, style);
+      // Create guide elements but keep them hidden initially
+      if (style.showGuides) {
+        const guide = this.createConnectionGuide(key, style, x, y, container, graphId, this.id);
+        this._activeGuide = guide; // Store reference for event logic
 
-      this.createConnectionGuides(key, style, x, y, container, graphId, this.id);
+        // Show guide on port hover
+        portShape.addEventListener('mouseenter', () => this.showGuide(guide));
+        portShape.addEventListener('mouseleave', (e) => this.handleGuideMouseLeave(e, guide));
+
+        // Guide elements: keep visible on hover, hide only when leaving all
+        ['line', 'rect', 'plus'].forEach(el => {
+          guide[el].addEventListener('mouseenter', () => this.showGuide(guide));
+          guide[el].addEventListener('mouseleave', (e) => this.handleGuideMouseLeave(e, guide));
+        });
+      }
     });
+  }
+
+  showGuide(guide) {
+    guide.line.attr('visibility', 'visible');
+    guide.rect.attr('visibility', 'visible');
+    guide.plus.attr('visibility', 'visible');
+    if (guide.bbox) guide.bbox.attr('visibility', 'visible');
+  }
+
+  hideGuide(guide) {
+    guide.line.attr('visibility', 'hidden');
+    guide.rect.attr('visibility', 'hidden');
+    guide.plus.attr('visibility', 'hidden');
+    if (guide.bbox) guide.bbox.attr('visibility', 'hidden');
+  }
+
+  handleGuideMouseLeave(e, guide) {
+    // Only hide if not entering another guide element
+    const related = e.relatedTarget;
+    if (!related || !Object.values(guide).includes(related)) {
+      this.hideGuide(guide);
+    }
   }
 
   createPortShape(shapeKey, style, container, key) {
@@ -51,29 +84,7 @@ class CustomCircleNode extends Circle {
     return this.upsert(`label-${key}`, 'text', portLabelStyle, container);
   }
 
-  addPortEvents(portShape, portLabelShape, style) {
-    const cursorMap = {
-      left: 'w-resize',
-      right: 'e-resize',
-      top: 'n-resize',
-      bottom: 's-resize'
-    };
-
-    portShape.addEventListener('mouseenter', (e) => {
-      const cursor = cursorMap[style.placement] || 'pointer';
-      portShape.attr('cursor', cursor);
-      portShape.attr('lineWidth', 2);
-      portLabelShape.attr('visibility', 'visible');
-    });
-
-    portShape.addEventListener('mouseleave', (e) => {
-      portShape.attr('cursor', 'default');
-      portShape.attr('lineWidth', e.currentTarget.config.style.lineWidth);
-      portLabelShape.attr('visibility', 'hidden');
-    });
-  }
-
-  createConnectionGuides(key, style, x, y, container, graphId, nodeId) {
+  createConnectionGuide(key, style, x, y, container, graphId, nodeId) {
     const lineLength = 50;
     const rectWidth = 12;
     const rectHeight = 12;
@@ -106,20 +117,21 @@ class CustomCircleNode extends Circle {
     }
 
     // Dashed line
-    this.upsert(
+    const line = this.upsert(
       `hover-line-${key}`,
       'line',
       {
         x1, y1, x2, y2,
         stroke: '#000',
         lineWidth: 2,
-        zIndex: 10
+        zIndex: 10,
+        visibility: 'hidden' // Initially hidden
       },
       container
     );
 
     // Rectangle at end
-    this.upsert(
+    const rect = this.upsert(
       `hover-rect-${key}`,
       'rect',
       {
@@ -130,13 +142,14 @@ class CustomCircleNode extends Circle {
         fill: '#fff',
         stroke: '#000',
         radius: 2,
-        zIndex: 11
+        zIndex: 11,
+        visibility: 'hidden' // Initially hidden
       },
       container
     );
 
     // Plus sign in rectangle
-    const plusShape = this.upsert(
+    const plus = this.upsert(
       `hover-plus-${key}`,
       'text',
       {
@@ -149,13 +162,14 @@ class CustomCircleNode extends Circle {
         textAlign: 'center',
         textBaseline: 'middle',
         zIndex: 12,
-        cursor: 'copy'
+        cursor: 'copy',
+        visibility: 'hidden' // Initially hidden
       },
       container
     );
 
     // Add click event listener to set shiny input
-    plusShape.addEventListener('click', () => {
+    plus.addEventListener('click', (e) => {
       Shiny.setInputValue(
         `${graphId}-selected_port`,
         { node: nodeId, port: key },
@@ -164,6 +178,54 @@ class CustomCircleNode extends Circle {
       // Avoid to click on the node.
       e.stopPropagation();
     });
+
+    // Calculate bounding box coordinates
+    const bboxPadding = 12; // Adjust for larger detection area
+    const minX = Math.min(x1, x2, rectX) - bboxPadding;
+    const maxX = Math.max(x1, x2, rectX + rectWidth) + bboxPadding;
+    const minY = Math.min(y1, y2, rectY) - bboxPadding;
+    const maxY = Math.max(y1, y2, rectY + rectHeight) + bboxPadding;
+
+    // Invisible bounding box for easier hover
+    const bbox = this.upsert(
+      `hover-guide-bbox-${key}`,
+      'rect',
+      {
+        x: minX,
+        y: minY,
+        width: maxX - minX,
+        height: maxY - minY,
+        fill: 'transparent',
+        stroke: 'none',
+        pointerEvents: 'all',
+        zIndex: 9,
+        visibility: 'hidden'
+      },
+      container
+    );
+
+    // Add listeners to the bounding box
+    bbox.addEventListener('mouseenter', () => {
+      line.attr('visibility', 'visible');
+      rect.attr('visibility', 'visible');
+      plus.attr('visibility', 'visible');
+      bbox.attr('visibility', 'visible');
+    });
+    bbox.addEventListener('mouseleave', (e) => {
+      line.attr('visibility', 'hidden');
+      rect.attr('visibility', 'hidden');
+      plus.attr('visibility', 'hidden');
+      bbox.attr('visibility', 'hidden');
+    });
+
+    // Also show/hide bbox with the rest of the guide
+    line.attr('visibility', 'hidden');
+    rect.attr('visibility', 'hidden');
+    plus.attr('visibility', 'hidden');
+    bbox.attr('visibility', 'hidden');
+
+    // Return references for event logic
+    return { line, rect, plus };
   }
 
   // Render method: rectangle and ports
