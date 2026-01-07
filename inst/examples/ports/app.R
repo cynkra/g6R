@@ -23,6 +23,7 @@ server <- function(input, output, session) {
                 fill = "#52C41A",
                 label = "port 1",
                 r = 4,
+                #showGuides = FALSE,
                 isBillboard = TRUE
               ),
               g6_port(
@@ -60,14 +61,20 @@ server <- function(input, output, session) {
             )
           )
         )
+      ),
+      edges = g6_edges(
+        g6_edge(
+          source = 1,
+          target = 2,
+          style = list(
+            sourcePort = "output-1",
+            targetPort = "input-2",
+            endArrow = TRUE,
+            startArrow = FALSE,
+            endArrowType = "vee"
+          )
+        )
       )
-      # edges = g6_edges(
-      #   g6_edge(
-      #     source = 1,
-      #     target = 2,
-      #     style = list(sourcePort = "output-1", targetPort = "input-2")
-      #   )
-      # )
     ) |>
       g6_layout() |>
       g6_options(animation = FALSE) |>

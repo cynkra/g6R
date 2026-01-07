@@ -16,20 +16,11 @@ class CustomCircleNode extends Circle {
       const portLabelShape = this.createPortLabel(key, style, x, y, container);
 
       // Create guide elements but keep them hidden initially
-      if (style.showGuides) {
-        const guide = this.createConnectionGuide(key, style, x, y, container, graphId, this.id);
-        this._activeGuide = guide; // Store reference for event logic
+      const guide = style.showGuides
+        ? this.createConnectionGuide(key, style, x, y, container, graphId, this.id)
+        : null;
 
-        // Show guide on port hover
-        portShape.addEventListener('mouseenter', () => this.showGuide(guide));
-        portShape.addEventListener('mouseleave', (e) => this.handleGuideMouseLeave(e, guide));
-
-        // Guide elements: keep visible on hover, hide only when leaving all
-        ['line', 'rect', 'plus'].forEach(el => {
-          guide[el].addEventListener('mouseenter', () => this.showGuide(guide));
-          guide[el].addEventListener('mouseleave', (e) => this.handleGuideMouseLeave(e, guide));
-        });
-      }
+      this.addPortEvents(portShape, portLabelShape, style, guide);
     });
   }
 
@@ -55,11 +46,54 @@ class CustomCircleNode extends Circle {
     }
   }
 
+  addPortEvents(portShape, portLabelShape, style, guide = null) {
+    const cursorMap = {
+      left: 'w-resize',
+      right: 'e-resize',
+      top: 'n-resize',
+      bottom: 's-resize'
+    };
+
+    portShape.addEventListener('mouseenter', (e) => {
+      portLabelShape.attr('visibility', 'visible');
+      portShape.attr('lineWidth', 2);
+      portShape.attr('cursor', portShape.connections >= portShape.arity ? 'not-allowed' : cursorMap[style.placement]);
+      if (guide) this.showGuide(guide);
+    });
+
+    portShape.addEventListener('mouseleave', (e) => {
+      portLabelShape.attr('visibility', 'hidden');
+      portShape.attr('lineWidth', e.currentTarget.config.style.lineWidth);
+      portShape.attr('cursor', 'default');
+      if (guide) this.handleGuideMouseLeave(e, guide);
+    });
+
+    portShape.addEventListener('mousedown', (e) => {
+      if (portShape.connections >= portShape.arity) {
+        e.stopPropagation();
+        return false;
+      }
+    });
+
+    // Guide elements: keep visible on hover, hide only when leaving all
+    if (guide) {
+      portShape.addEventListener('mouseenter', () => this.showGuide(guide));
+      portShape.addEventListener('mouseleave', (e) => this.handleGuideMouseLeave(e, guide));
+
+      // Guide elements: keep visible on hover, hide only when leaving all
+      ['line', 'rect', 'plus'].forEach(el => {
+        guide[el].addEventListener('mouseenter', () => this.showGuide(guide));
+        guide[el].addEventListener('mouseleave', (e) => this.handleGuideMouseLeave(e, guide));
+      });
+    }
+  }
+
   createPortShape(shapeKey, style, container, key) {
     const portShape = this.upsert(shapeKey, GCircle, { ...style }, container);
     if (portShape) {
       portShape.key = key;
       portShape.connections = 0;
+      portShape.arity = style.arity;
     }
     return portShape;
   }
@@ -180,7 +214,7 @@ class CustomCircleNode extends Circle {
     });
 
     // Calculate bounding box coordinates
-    const bboxPadding = 12; // Adjust for larger detection area
+    const bboxPadding = 2; // Adjust for larger detection area
     const minX = Math.min(x1, x2, rectX) - bboxPadding;
     const maxX = Math.max(x1, x2, rectX + rectWidth) + bboxPadding;
     const minY = Math.min(y1, y2, rectY) - bboxPadding;
