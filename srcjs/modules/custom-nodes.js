@@ -1,6 +1,16 @@
 import { Circle } from '@antv/g6';
 import { Circle as GCircle } from '@antv/g';
 
+// To add event listener only once because of re-renders
+// we don't want to rebind the same events.
+const addUniqueEventListener = (element, type, listener) => {
+  const flag = `_hasListener_${type}`;
+  if (!element[flag]) {
+    element.addEventListener(type, listener);
+    element[flag] = true;
+  }
+}
+
 // Custom rectangle node with port key attachment
 class CustomCircleNode extends Circle {
   // count initial connections for each port of this node
@@ -88,13 +98,13 @@ class CustomCircleNode extends Circle {
       }
     };
 
-    portShape.addEventListener('mouseenter', (e) => {
+    addUniqueEventListener(portShape, 'mouseenter', (e) => {
       portLabelShape.attr('visibility', 'visible');
       portShape.attr('lineWidth', 2);
       handlePortHover();
     });
 
-    portShape.addEventListener('mouseleave', (e) => {
+    addUniqueEventListener(portShape, 'mouseleave', (e) => {
       portLabelShape.attr('visibility', 'hidden');
       portShape.attr('lineWidth', e.currentTarget.config.style.lineWidth);
       portShape.attr('cursor', 'default');
@@ -105,8 +115,8 @@ class CustomCircleNode extends Circle {
     if (guide) {
       ['line', 'rect', 'plus', 'bbox'].forEach(el => {
         if (guide[el]) {
-          guide[el].addEventListener('mouseenter', handlePortHover);
-          guide[el].addEventListener('mouseleave', (e) => {
+          addUniqueEventListener(guide[el], 'mouseenter', handlePortHover);
+          addUniqueEventListener(guide[el], 'mouseleave', (e) => {
             const related = e.relatedTarget;
             if (!related || !Object.values(guide).includes(related)) {
               this.hideGuide(guide);
@@ -232,13 +242,12 @@ class CustomCircleNode extends Circle {
     );
 
     // Add click event listener to set shiny input
-    plus.addEventListener('click', (e) => {
+    addUniqueEventListener(plus, 'click', (e) => {
       Shiny.setInputValue(
         `${graphId}-selected_port`,
-        { node: nodeId, port: key, type: style.type }//,
-        //{ priority: 'event' }
+        { node: nodeId, port: key, type: style.type },
+        { priority: 'event' }
       );
-      // Avoid to click on the node.
       e.stopPropagation();
     });
 
@@ -268,13 +277,13 @@ class CustomCircleNode extends Circle {
     );
 
     // Add listeners to the bounding box
-    bbox.addEventListener('mouseenter', () => {
+    addUniqueEventListener(bbox, 'mouseenter', () => {
       line.attr('visibility', 'visible');
       rect.attr('visibility', 'visible');
       plus.attr('visibility', 'visible');
       bbox.attr('visibility', 'visible');
     });
-    bbox.addEventListener('mouseleave', (e) => {
+    addUniqueEventListener(bbox, 'mouseleave', (e) => {
       line.attr('visibility', 'hidden');
       rect.attr('visibility', 'hidden');
       plus.attr('visibility', 'hidden');
