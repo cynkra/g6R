@@ -2,7 +2,8 @@ library(shiny)
 library(g6R)
 
 options(
-  "g6R.mode" = "dev"
+  "g6R.mode" = "dev",
+  "g6R.layout_on_data_change" = TRUE
 )
 
 ui <- fluidPage(

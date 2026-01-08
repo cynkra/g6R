@@ -25,7 +25,7 @@ class CustomCircleNode extends Circle {
   drawPortShapes(attributes, container) {
     const portsStyle = this.getPortsStyle(attributes);
     const graphId = this.context.graph.options.container;
-    const portConnections = this.getPortConnections(this.id);
+    let portConnections = this.getPortConnections(this.id);
 
     Object.keys(portsStyle).forEach((key) => {
       const style = portsStyle[key];
@@ -74,11 +74,24 @@ class CustomCircleNode extends Circle {
       bottom: 's-resize'
     };
 
+    // Helper to update connections and guide visibility
+    const handlePortHover = () => {
+      const portConnections = this.getPortConnections(this.id);
+      portShape.connections = portConnections[portShape.key] || 0;
+      portShape.attr('cursor', portShape.connections >= portShape.arity ? 'not-allowed' : cursorMap[style.placement]);
+      if (guide) {
+        if (portShape.connections < portShape.arity) {
+          this.showGuide(guide);
+        } else {
+          this.hideGuide(guide);
+        }
+      }
+    };
+
     portShape.addEventListener('mouseenter', (e) => {
       portLabelShape.attr('visibility', 'visible');
       portShape.attr('lineWidth', 2);
-      portShape.attr('cursor', portShape.connections >= portShape.arity ? 'not-allowed' : cursorMap[style.placement]);
-      if (guide && portShape.connections < portShape.arity) this.showGuide(guide);
+      handlePortHover();
     });
 
     portShape.addEventListener('mouseleave', (e) => {
@@ -88,26 +101,12 @@ class CustomCircleNode extends Circle {
       if (guide) this.handleGuideMouseLeave(e, guide);
     });
 
-    portShape.addEventListener('mousedown', (e) => {
-      if (portShape.connections >= portShape.arity) {
-        e.stopPropagation();
-        return false;
-      }
-    });
-
     // Guide elements: keep visible on hover, hide only when leaving all
     if (guide) {
       ['line', 'rect', 'plus', 'bbox'].forEach(el => {
         if (guide[el]) {
-          guide[el].addEventListener('mouseenter', () => {
-            if (portShape.connections < portShape.arity) {
-              this.showGuide(guide);
-            } else {
-              this.hideGuide(guide);
-            }
-          });
+          guide[el].addEventListener('mouseenter', handlePortHover);
           guide[el].addEventListener('mouseleave', (e) => {
-            // Hide only if not entering another guide element
             const related = e.relatedTarget;
             if (!related || !Object.values(guide).includes(related)) {
               this.hideGuide(guide);
@@ -236,8 +235,8 @@ class CustomCircleNode extends Circle {
     plus.addEventListener('click', (e) => {
       Shiny.setInputValue(
         `${graphId}-selected_port`,
-        { node: nodeId, port: key, type: style.type },
-        { priority: 'event' }
+        { node: nodeId, port: key, type: style.type }//,
+        //{ priority: 'event' }
       );
       // Avoid to click on the node.
       e.stopPropagation();

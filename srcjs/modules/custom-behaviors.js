@@ -61,6 +61,12 @@ class CustomCreateEdge extends CreateEdge {
     const sourcePort = this.sourcePort;
     const targetPort = event.originalTarget;
 
+    // prevent edge creation if source port is hidden
+    if (targetPort?.attributes.visibility == 'hidden') {
+      this.sourcePort = null;
+      return
+    }
+
     // Prevent edge creation if both ports are of the same type
     if (
       sourcePort?.attributes.type &&
