@@ -236,7 +236,7 @@ class CustomCircleNode extends Circle {
     plus.addEventListener('click', (e) => {
       Shiny.setInputValue(
         `${graphId}-selected_port`,
-        { node: nodeId, port: key },
+        { node: nodeId, port: key, type: style.type },
         { priority: 'event' }
       );
       // Avoid to click on the node.
