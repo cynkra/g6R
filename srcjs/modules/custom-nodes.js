@@ -113,9 +113,19 @@ class CustomCircleNode extends Circle {
 
     // Guide elements: keep visible on hover, hide only when leaving all
     if (guide) {
+      // Only show guide if arity not reached, otherwise always hide
+      const guideHover = () => {
+        const portConnections = this.getPortConnections(this.id);
+        const connections = portConnections[portShape.key] || 0;
+        if (connections < portShape.arity) {
+          this.showGuide(guide);
+        } else {
+          this.hideGuide(guide);
+        }
+      };
       ['line', 'rect', 'plus', 'bbox'].forEach(el => {
         if (guide[el]) {
-          addUniqueEventListener(guide[el], 'mouseenter', handlePortHover);
+          addUniqueEventListener(guide[el], 'mouseenter', guideHover);
           addUniqueEventListener(guide[el], 'mouseleave', (e) => {
             const related = e.relatedTarget;
             if (!related || !Object.values(guide).includes(related)) {
@@ -276,18 +286,31 @@ class CustomCircleNode extends Circle {
       container
     );
 
-    // Add listeners to the bounding box
-    addUniqueEventListener(bbox, 'mouseenter', () => {
-      line.attr('visibility', 'visible');
-      rect.attr('visibility', 'visible');
-      plus.attr('visibility', 'visible');
-      bbox.attr('visibility', 'visible');
-    });
-    addUniqueEventListener(bbox, 'mouseleave', (e) => {
-      line.attr('visibility', 'hidden');
-      rect.attr('visibility', 'hidden');
-      plus.attr('visibility', 'hidden');
-      bbox.attr('visibility', 'hidden');
+    // Add listeners to the bounding box and guide elements
+    const showGuideIfAllowed = () => {
+      const portConnections = this.getPortConnections(nodeId);
+      const connections = portConnections[key] || 0;
+      if (connections < (style.arity ?? Infinity)) {
+        line.attr('visibility', 'visible');
+        rect.attr('visibility', 'visible');
+        plus.attr('visibility', 'visible');
+        bbox.attr('visibility', 'visible');
+      } else {
+        line.attr('visibility', 'hidden');
+        rect.attr('visibility', 'hidden');
+        plus.attr('visibility', 'hidden');
+        bbox.attr('visibility', 'hidden');
+      }
+    };
+
+    ['bbox', 'line', 'rect', 'plus'].forEach(el => {
+      addUniqueEventListener(eval(el), 'mouseenter', showGuideIfAllowed);
+      addUniqueEventListener(eval(el), 'mouseleave', (e) => {
+        line.attr('visibility', 'hidden');
+        rect.attr('visibility', 'hidden');
+        plus.attr('visibility', 'hidden');
+        bbox.attr('visibility', 'hidden');
+      });
     });
 
     // Also show/hide bbox with the rest of the guide
