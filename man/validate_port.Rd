@@ -11,6 +11,8 @@ validate_port(x, ...)
 }
 \arguments{
 \item{x}{An object of class 'g6_port'.}
+
+\item{...}{Generic consistency.}
 }
 \value{
 The validated port (invisibly).

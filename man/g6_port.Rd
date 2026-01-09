@@ -8,16 +8,16 @@
 \usage{
 g6_port(
   key,
-  label = character(0),
+  label = key,
   type = c("input", "output"),
   arity = 1,
   showGuides = TRUE,
   ...
 )
 
-g6_input_port(key, label = character(0), arity = 1, fill = "#52C41A", ...)
+g6_input_port(key, label = key, arity = 1, fill = "#52C41A", ...)
 
-g6_output_port(key, label = character(0), arity = 1, fill = "#FF4D4F", ...)
+g6_output_port(key, label = key, arity = 1, fill = "#FF4D4F", ...)
 }
 \arguments{
 \item{key}{Character. Unique identifier for the port (required).}
@@ -31,7 +31,8 @@ connections this port can accept (default: 1).
 Use 0, Inf, or any non-negative integer.}
 
 \item{showGuides}{Logical. Whether to show connection
-guides when hovering over the port (default: TRUE).}
+guides when hovering over the port (default: TRUE). Only works
+when used within a Shiny app.}
 
 \item{...}{Additional port style parameters. See
 \url{https://g6.antv.antgroup.com/en/manual/element/node/base-node#portstyleprops}.}

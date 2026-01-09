@@ -129,6 +129,7 @@ g6_output_port <- function(
 #' Validate a single G6 port
 #'
 #' @param x An object of class 'g6_port'.
+#' @param ... Generic consistency.
 #' @return The validated port (invisibly).
 #' @examples
 #' validate_port(g6_port("input-1", type = "input"))
@@ -192,6 +193,7 @@ g6_ports <- function(...) {
 #' Validate a list of G6 ports
 #'
 #' @param x A list of g6_port objects.
+#' @param ... Generic consistency.
 #' @return The validated list (invisibly).
 #' @examples
 #' validate_ports(list(

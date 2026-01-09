@@ -14,6 +14,8 @@ validate_ports(x, ...)
 }
 \arguments{
 \item{x}{A list of g6_port objects.}
+
+\item{...}{Generic consistency.}
 }
 \value{
 The validated list (invisibly).
