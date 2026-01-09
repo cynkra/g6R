@@ -24,24 +24,17 @@ server <- function(input, output, session) {
               g6_input_port(
                 key = "input-1",
                 placement = "left",
-                fill = "#52C41A",
-                label = "port 1",
-                r = 4
-                #showGuides = FALSE,
+                label = "port 1"
               ),
               g6_output_port(
                 key = "output-1",
                 placement = "right",
-                label = "port 2",
-                fill = "#FF4D4F",
-                r = 4
+                label = "port 2"
               ),
               g6_input_port(
                 key = "input-12",
                 placement = "top",
-                label = "port 3",
-                fill = "#52C41A",
-                r = 4
+                label = "port 3"
               )
             )
           )
@@ -54,15 +47,11 @@ server <- function(input, output, session) {
             ports = g6_ports(
               g6_input_port(
                 key = "input-2",
-                placement = "left",
-                fill = "#52C41A",
-                r = 4
+                placement = "left"
               ),
               g6_output_port(
                 key = "output-2",
-                placement = "right",
-                fill = "#FF4D4F",
-                r = 4
+                placement = "right"
               )
             )
           )

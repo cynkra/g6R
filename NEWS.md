@@ -1,3 +1,20 @@
+# g6R 0.6.0.9000
+
+## New feature
+
+- Added better port support for nodes __ports__:
+
+  - `g6_node()` get a new `ports` argument to define ports for each node. In the g6 JS library, ports are normally defined inside `style` but we consider they are too important to be hidden there. Now you can define ports directly in the node data, g6R automatically moves them to `style.ports` when rendering the graph.
+  - New `g6_port()` function to create ports easily and wrap them inside `g6_ports()`. A port has a unique __key__, an __arity__ that is the number of connections it can make or take and other style parameters inherited from [g6](https://g6.antv.antgroup.com/en/manual/element/node/base-node#portstyleprops).
+  - 2 kind of ports have been designed:
+    - __input__ ports (`g6_input_port()`): they can only be the target of an edge.
+    - __output__ ports (`g6_output_port()`): they can only be the source of an edge.
+  - When creating edges, if you provide `sourcePort` and/or `targetPort` within the `style` list, the edge will be connected to the corresponding ports. Validation is made so we don't connect incompatible ports (e.g. connecting an output port to another output port) or connecting a port to itself.
+  - `create_edge()` behavior was improved to work better with ports. For instance, you can't drag from a port that is already at its arity limit.
+  You can't drag from a node if it has ports (drag from the ports instead).
+  - Ports gain a `label` parameter to display text on the port.
+  - In a Shiny context, `showGuides` allows to display connection __guides__ when hovering over a port. Combined with `input[["<GRAPH_ID>-selected_port"]]` and `input[["<graph_ID>-mouse_position"]]`, this allows to add and connect nodes on the fly at the guide location.
+
 # g6R 0.5.0
 
 ## Potential breaking changes

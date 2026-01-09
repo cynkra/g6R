@@ -99,6 +99,7 @@ reference:
       - g6_output_port
       - g6_ports
       - is_g6_port
+      - is_g6_ports
       - as_g6_port
       - as_g6_ports
       - validate_port

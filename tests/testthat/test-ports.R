@@ -30,6 +30,51 @@ test_that("g6_port validation fails for missing or invalid key/type/multiple", {
   })
 })
 
+test_that("validate_port.g6_port handles 'r' (radius) correctly", {
+  # Default: r is NULL, should be set to 4
+  p <- structure(list(key = "x", type = "input", arity = 1), class = "g6_port")
+  res <- validate_port.g6_port(p)
+  expect_equal(res$r, 4)
+
+  # Valid: r is a positive number
+  p <- structure(
+    list(key = "x", type = "input", arity = 1, r = 10),
+    class = "g6_port"
+  )
+  res <- validate_port.g6_port(p)
+  expect_equal(res$r, 10)
+
+  # Invalid: r is negative
+  p <- structure(
+    list(key = "x", type = "input", arity = 1, r = -1),
+    class = "g6_port"
+  )
+  expect_error(
+    validate_port.g6_port(p),
+    "'r' \\(radius\\) must be a single positive number."
+  )
+
+  # Invalid: r is NA
+  p <- structure(
+    list(key = "x", type = "input", arity = 1, r = NA_real_),
+    class = "g6_port"
+  )
+  expect_error(
+    validate_port.g6_port(p),
+    "'r' \\(radius\\) must be a single positive number."
+  )
+
+  # Invalid: r is not numeric
+  p <- structure(
+    list(key = "x", type = "input", arity = 1, r = "foo"),
+    class = "g6_port"
+  )
+  expect_error(
+    validate_port.g6_port(p),
+    "'r' \\(radius\\) must be a single positive number."
+  )
+})
+
 test_that("g6_ports fails if keys are not unique or elements are not g6_port", {
   expect_snapshot(error = TRUE, {
     g6_ports(
@@ -57,6 +102,23 @@ test_that("is_g6_port and coercion functions work", {
   ))
   expect_s3_class(ports, "g6_ports")
   expect_true(all(lgl_ply(ports, is_g6_port)))
+})
+
+test_that("is_g6_ports works", {
+  ports <- g6_ports(
+    g6_port("a", type = "input"),
+    g6_port("b", type = "output")
+  )
+  expect_true(is_g6_ports(ports))
+})
+
+test_that("g6_input_port and g6_output_port construct ports", {
+  inp <- g6_input_port("in1")
+  out <- g6_output_port("out1")
+  expect_s3_class(inp, "g6_port")
+  expect_equal(inp$type, "input")
+  expect_s3_class(out, "g6_port")
+  expect_equal(out$type, "output")
 })
 
 test_that("validate_edges_ports allows only input-output connections", {

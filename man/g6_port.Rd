@@ -6,14 +6,23 @@
 \alias{g6_output_port}
 \title{Create a G6 Port}
 \usage{
-g6_port(key, type = c("input", "output"), arity = 1, showGuides = TRUE, ...)
+g6_port(
+  key,
+  label = character(0),
+  type = c("input", "output"),
+  arity = 1,
+  showGuides = TRUE,
+  ...
+)
 
-g6_input_port(key, arity = 1, fill = "#52C41A", ...)
+g6_input_port(key, label = character(0), arity = 1, fill = "#52C41A", ...)
 
-g6_output_port(key, arity = 1, fill = "#FF4D4F", ...)
+g6_output_port(key, label = character(0), arity = 1, fill = "#FF4D4F", ...)
 }
 \arguments{
 \item{key}{Character. Unique identifier for the port (required).}
+
+\item{label}{Character. Label text for the port (optional).}
 
 \item{type}{Character. Either "input" or "output" (required).}
 
@@ -46,6 +55,6 @@ To create an (input/output) port with multiple connections,
 simply set the arity to \code{Inf} or any positive integer.
 }
 \examples{
-g6_port("input-1", type = "input", arity = 2, placement = "left")
-g6_port("output-1", type = "output", placement = "right")
+g6_port("input-1", label = "port 1", type = "input", arity = 2, placement = "left")
+g6_port("output-1", label = "port 2", type = "output", placement = "right")
 }

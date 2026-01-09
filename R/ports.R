@@ -1,3 +1,6 @@
+.g6R_env <- new.env(parent = emptyenv())
+.g6R_env$showGuides_warned <- FALSE
+
 #' Check if an object is a g6_port
 #'
 #' @param x An object to check.
@@ -8,39 +11,66 @@
 #' is_g6_port(list(key = "input-1", type = "input"))
 #' is_g6_port(as_g6_port(list(key = "input-1", type = "input")))
 #' @export
+#' @rdname is_g6_port
 is_g6_port <- function(x) {
   inherits(x, "g6_port")
+}
+
+#' @export
+#' @rdname is_g6_port
+#' @examples
+#' is_g6_ports(g6_ports(
+#'   g6_port("input-1", type = "input"),
+#'   g6_port("output-1", type = "output")
+#' ))
+is_g6_ports <- function(x) {
+  inherits(x, "g6_ports")
 }
 
 #' Create a G6 Port
 #'
 #' @param key Character. Unique identifier for the port (required).
+#' @param label Character. Label text for the port (optional).
 #' @param type Character. Either "input" or "output" (required).
 #' @param arity Numeric. Maximum number of
 #' connections this port can accept (default: 1).
 #' Use 0, Inf, or any non-negative integer.
 #' @param showGuides Logical. Whether to show connection
-#' guides when hovering over the port (default: TRUE).
+#' guides when hovering over the port (default: TRUE). Only works
+#' when used within a Shiny app.
 #' @param ... Additional port style parameters. See
 #' \url{https://g6.antv.antgroup.com/en/manual/element/node/base-node#portstyleprops}.
 #' @return An S3 object of class 'g6_port'.
 #' @examples
-#' g6_port("input-1", type = "input", arity = 2, placement = "left")
-#' g6_port("output-1", type = "output", placement = "right")
+#' g6_port("input-1", label = "port 1", type = "input", arity = 2, placement = "left")
+#' g6_port("output-1", label = "port 2", type = "output", placement = "right")
 #' @export
 g6_port <- function(
   key,
+  label = key,
   type = c("input", "output"),
   arity = 1,
   showGuides = TRUE,
   ...
 ) {
+  # Guides won't work outside Shiny (for now ...)
+  if (!shiny::isRunning() && showGuides && !.g6R_env$showGuides_warned) {
+    warning(
+      "'showGuides' is set to TRUE, but Shiny app is not running. ",
+      "Connection guides will not be displayed.",
+      call. = FALSE
+    )
+    .g6R_env$showGuides_warned <- TRUE
+    showGuides <- FALSE
+  }
+
   type <- match.arg(type)
   port <- structure(
     c(
       list(
         key = key,
         type = type,
+        label = label,
         arity = arity,
         showGuides = showGuides
       ),
@@ -59,15 +89,41 @@ g6_port <- function(
 #' @rdname g6_port
 #' @note To create an (input/output) port with multiple connections,
 #' simply set the arity to \code{Inf} or any positive integer.
-g6_input_port <- function(key, arity = 1, fill = "#52C41A", ...) {
-  g6_port(key = key, type = "input", arity = arity, fill = fill, ...)
+g6_input_port <- function(
+  key,
+  label = key,
+  arity = 1,
+  fill = "#52C41A",
+  ...
+) {
+  g6_port(
+    key = key,
+    label = label,
+    type = "input",
+    arity = arity,
+    fill = fill,
+    ...
+  )
 }
 
 #' Create an output port (single connection by default)
 #' @export
 #' @rdname g6_port
-g6_output_port <- function(key, arity = 1, fill = "#FF4D4F", ...) {
-  g6_port(key = key, type = "output", arity = arity, fill = fill, ...)
+g6_output_port <- function(
+  key,
+  label = key,
+  arity = 1,
+  fill = "#FF4D4F",
+  ...
+) {
+  g6_port(
+    key = key,
+    label = label,
+    type = "output",
+    arity = arity,
+    fill = fill,
+    ...
+  )
 }
 
 #' Validate a single G6 port
@@ -98,6 +154,21 @@ validate_port.g6_port <- function(x, ...) {
     stop(
       "'arity' must be a single non-negative number (0, Inf, or positive integer)."
     )
+  }
+  # Ensure ports are displayed: doc says
+  # If set to undefined, the port is treated as a point,
+  # not displayed on canvas. Default is set to 4.
+  if (is.null(x[["r"]])) {
+    x[["r"]] <- 4
+  } else {
+    if (
+      !is.numeric(x[["r"]]) ||
+        length(x[["r"]]) != 1 ||
+        is.na(x[["r"]]) ||
+        x[["r"]] <= 0
+    ) {
+      stop("'r' (radius) must be a single positive number.")
+    }
   }
   x
 }

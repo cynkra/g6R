@@ -2,9 +2,12 @@
 % Please edit documentation in R/ports.R
 \name{is_g6_port}
 \alias{is_g6_port}
+\alias{is_g6_ports}
 \title{Check if an object is a g6_port}
 \usage{
 is_g6_port(x)
+
+is_g6_ports(x)
 }
 \arguments{
 \item{x}{An object to check.}
@@ -20,4 +23,8 @@ p <- g6_port("input-1", type = "input")
 is_g6_port(p)
 is_g6_port(list(key = "input-1", type = "input"))
 is_g6_port(as_g6_port(list(key = "input-1", type = "input")))
+is_g6_ports(g6_ports(
+  g6_port("input-1", type = "input"),
+  g6_port("output-1", type = "output")
+))
 }

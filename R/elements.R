@@ -10,6 +10,8 @@
 #' @param states Character vector. Initial states for the element (optional).
 #' @param combo Character or NULL. Combo ID or parent combo ID (optional).
 #' @param children Character vector. Child node IDs (optional, nodes only).
+#' @param ports List. Ports definition (optional, nodes only).
+#' See \link{g6_ports} and \link{g6_port} for details.
 #' @param source Character. Source node ID (required, edges only).
 #' @param target Character. Target node ID (required, edges only).
 #' @param ... Additional arguments (unused).
@@ -57,7 +59,8 @@ g6_node <- function(
   style = NULL,
   states = NULL,
   combo = NULL,
-  children = NULL
+  children = NULL,
+  ports = NULL
 ) {
   node <- dropNulls(list(
     id = id,
@@ -66,7 +69,8 @@ g6_node <- function(
     style = style,
     states = states,
     combo = combo,
-    children = children
+    children = children,
+    ports = ports
   ))
   node <- structure(node, class = c("g6_node", "g6_element"))
   validate_element(node)
@@ -206,6 +210,13 @@ validate_element.g6_node <- function(x, ...) {
   }
   if (!is.null(x$children) && !is.character(x$children)) {
     stop("Node 'children' must be a character vector if provided.")
+  }
+  if (length(x$ports)) {
+    if (!is_g6_ports(x$ports)) {
+      stop("Node 'ports' must be of class 'g6_ports'.")
+    }
+    x$style$ports <- x$ports
+    x$ports <- NULL
   }
   NextMethod()
 }
@@ -379,6 +390,11 @@ as_g6_node.g6_node <- function(x, ...) {
 #' @export
 #' @rdname as_g6_element
 as_g6_node.list <- function(x, ...) {
+  # Coerce ports if present
+  if (length(x$style$ports)) {
+    x$ports <- as_g6_ports(x$style$ports)
+  }
+
   if ("combo" %in% names(x)) {
     # Drop nulls except for combo field
     node <- dropNulls(x, except = "combo")
@@ -386,7 +402,7 @@ as_g6_node.list <- function(x, ...) {
     validate_element(node)
     return(node)
   }
-  
+
   # Default behavior
   do.call(g6_node, x)
 }

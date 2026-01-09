@@ -237,11 +237,13 @@ class CustomCircleNode extends Circle {
 
     // Add click event listener to set shiny input
     addUniqueEventListener(plus, 'click', (e) => {
-      Shiny.setInputValue(
-        `${graphId}-selected_port`,
-        { node: nodeId, port: key, type: style.type },
-        { priority: 'event' }
-      );
+      if (HTMLWidgets.shinyMode) {
+        Shiny.setInputValue(
+          `${graphId}-selected_port`,
+          { node: nodeId, port: key, type: style.type },
+          { priority: 'event' }
+        );
+      }
       e.stopPropagation();
     });
 
