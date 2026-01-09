@@ -17,8 +17,9 @@ server <- function(input, output, session) {
       nodes = g6_nodes(
         g6_node(
           id = 1,
-          type = "custom-circle-node",
+          type = "custom-image-node",
           style = list(
+            src = "https://gw.alipayobjects.com/mdn/rms_6ae20b/afts/img/A*N4ZMS7gHsUIAAAAAAAAAAABkARQnAQ",
             labelText = "Node 1",
             ports = g6_ports(
               g6_input_port(

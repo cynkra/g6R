@@ -3,7 +3,7 @@
 ## New feature
 
 - Added better port support for nodes __ports__:
-
+  - To enable it, you must pass a custom type to `g6_node()` such as `custom-circle-node`, `custom-rect-node` (We support 9 [shapes](https://g6.antv.antgroup.com/en/manual/element/node/overview#built-in-nodes), except HTML which does not handle port in the g6 library)
   - `g6_node()` get a new `ports` argument to define ports for each node. In the g6 JS library, ports are normally defined inside `style` but we consider they are too important to be hidden there. Now you can define ports directly in the node data, g6R automatically moves them to `style.ports` when rendering the graph.
   - New `g6_port()` function to create ports easily and wrap them inside `g6_ports()`. A port has a unique __key__, an __arity__ that is the number of connections it can make or take and other style parameters inherited from [g6](https://g6.antv.antgroup.com/en/manual/element/node/base-node#portstyleprops).
   - 2 kind of ports have been designed:
