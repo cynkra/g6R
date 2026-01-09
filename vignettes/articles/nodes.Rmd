@@ -363,20 +363,20 @@ g6(
       id = 1,
       type = "custom-circle-node",
       style = list(
-        labelText = "Node 1",
-        ports = g6_ports(
-          g6_input_port(
-            key = "input-1",
-            placement = "left"
-          ),
-          g6_output_port(
-            key = "output-1",
-            placement = "right"
-          ),
-          g6_input_port(
-            key = "input-12",
-            placement = "top"
-          )
+        labelText = "Node 1"
+      ),
+      ports = g6_ports(
+        g6_input_port(
+          key = "input-1",
+          placement = "left"
+        ),
+        g6_output_port(
+          key = "output-1",
+          placement = "right"
+        ),
+        g6_input_port(
+          key = "input-12",
+          placement = "top"
         )
       )
     ),
@@ -384,16 +384,16 @@ g6(
       id = 2,
       type = "custom-circle-node",
       style = list(
-        labelText = "Node 2",
-        ports = g6_ports(
-          g6_input_port(
-            key = "input-2",
-            placement = "left"
-          ),
-          g6_output_port(
-            key = "output-2",
-            placement = "right"
-          )
+        labelText = "Node 2"
+      ),
+      ports = g6_ports(
+        g6_input_port(
+          key = "input-2",
+          placement = "left"
+        ),
+        g6_output_port(
+          key = "output-2",
+          placement = "right"
         )
       )
     )

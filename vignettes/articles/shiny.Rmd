@@ -749,20 +749,20 @@ server <- function(input, output, session) {
           id = 1,
           type = "custom-circle-node",
           style = list(
-            labelText = "Node 1",
-            ports = g6_ports(
-              g6_input_port(
-                key = "input-1",
-                placement = "left"
-              ),
-              g6_output_port(
-                key = "output-1",
-                placement = "right"
-              ),
-              g6_input_port(
-                key = "input-12",
-                placement = "top"
-              )
+            labelText = "Node 1"
+          ),
+          ports = g6_ports(
+            g6_input_port(
+              key = "input-1",
+              placement = "left"
+            ),
+            g6_output_port(
+              key = "output-1",
+              placement = "right"
+            ),
+            g6_input_port(
+              key = "input-12",
+              placement = "top"
             )
           )
         ),
@@ -770,16 +770,16 @@ server <- function(input, output, session) {
           id = 2,
           type = "custom-circle-node",
           style = list(
-            labelText = "Node 2",
-            ports = g6_ports(
-              g6_input_port(
-                key = "input-2",
-                placement = "left"
-              ),
-              g6_output_port(
-                key = "output-2",
-                placement = "right"
-              )
+            labelText = "Node 2"
+          ),
+          ports = g6_ports(
+            g6_input_port(
+              key = "input-2",
+              placement = "left"
+            ),
+            g6_output_port(
+              key = "output-2",
+              placement = "right"
             )
           )
         )
@@ -875,22 +875,22 @@ server <- function(input, output, session) {
         style = list(
           x = pos$x + 50, # avoids overlapping with the guide.
           y = pos$y,
-          labelText = paste("Node", new_id),
-          ports = g6_ports(
-            g6_port(
-              key = sprintf("input-%s", new_id),
-              type = "input",
-              placement = "left",
-              fill = "#52C41A",
-              r = 4
-            ),
-            g6_port(
-              key = sprintf("output-%s", new_id),
-              type = "output",
-              placement = "right",
-              fill = "#FF4D4F",
-              r = 4
-            )
+          labelText = paste("Node", new_id)
+        ),
+        ports = g6_ports(
+          g6_port(
+            key = sprintf("input-%s", new_id),
+            type = "input",
+            placement = "left",
+            fill = "#52C41A",
+            r = 4
+          ),
+          g6_port(
+            key = sprintf("output-%s", new_id),
+            type = "output",
+            placement = "right",
+            fill = "#FF4D4F",
+            r = 4
           )
         )
       )) |>

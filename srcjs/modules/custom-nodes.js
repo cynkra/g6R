@@ -137,13 +137,14 @@ const createCustomNode = (BaseShape) => {
       const r = style.r || 4;
       const labelX = x;
       const labelY = (style.placement === 'bottom') ? y + r + gap : y - r - gap;
+      const nodeStyle = container.config.style;
 
       const portLabelStyle = {
         x: labelX,
         y: labelY,
         text: style.label,
         fontSize: 7,
-        fill: '#262626',
+        fill: nodeStyle.stroke,
         fontWeight: 'bold',
         textAlign: 'center',
         textBaseline: 'middle',
@@ -159,30 +160,52 @@ const createCustomNode = (BaseShape) => {
       const plusFontSize = 7;
       const r = style.r || 4;
 
+      let direction = style.placement;
+      // If placement is an array, infer direction from coordinates
+      if (!['left', 'right', 'top', 'bottom'].includes(direction) && Array.isArray(style.placement)) {
+        const [relX, relY] = style.placement;
+        // Use strict equality for corners, otherwise pick the closest side
+        if (relY === 0) direction = 'top';
+        else if (relY === 1) direction = 'bottom';
+        else if (relX === 0) direction = 'left';
+        else if (relX === 1) direction = 'right';
+        else {
+          // If not exactly on a side, pick the closest
+          if (relY > 0.75) direction = 'bottom';
+          else if (relY < 0.25) direction = 'top';
+          else if (relX > 0.75) direction = 'right';
+          else if (relX < 0.25) direction = 'left';
+          else direction = 'right'; // fallback
+        }
+      }
+
+      // Use the absolute port position (x, y) for guide start
       let x1 = x, y1 = y, x2 = x, y2 = y;
       let rectX = x, rectY = y;
 
-      if (style.placement === 'left') {
+      if (direction === 'left') {
         x1 = x - r;
         x2 = x1 - lineLength;
         rectX = x2 - rectWidth / 2;
         rectY = y - rectHeight / 2;
-      } else if (style.placement === 'right') {
+      } else if (direction === 'right') {
         x1 = x + r;
         x2 = x1 + lineLength;
         rectX = x2 - rectWidth / 2;
         rectY = y - rectHeight / 2;
-      } else if (style.placement === 'top') {
+      } else if (direction === 'top') {
         y1 = y - r;
         y2 = y1 - lineLength;
         rectX = x - rectWidth / 2;
         rectY = y2 - rectHeight / 2;
-      } else if (style.placement === 'bottom') {
+      } else if (direction === 'bottom') {
         y1 = y + r;
         y2 = y1 + lineLength;
         rectX = x - rectWidth / 2;
         rectY = y2 - rectHeight / 2;
       }
+
+      const nodeStyle = container.config.style;
 
       // Dashed line
       const line = this.upsert(
@@ -190,10 +213,10 @@ const createCustomNode = (BaseShape) => {
         'line',
         {
           x1, y1, x2, y2,
-          stroke: '#000',
+          stroke: nodeStyle.stroke,
           lineWidth: 2,
           zIndex: 10,
-          visibility: 'hidden' // Initially hidden
+          visibility: 'hidden'
         },
         container
       );
@@ -207,11 +230,11 @@ const createCustomNode = (BaseShape) => {
           y: rectY,
           width: rectWidth,
           height: rectHeight,
-          fill: '#fff',
-          stroke: '#000',
+          fill: this.context.graph.options.background || '#ffffff',
+          stroke: nodeStyle.stroke,
           radius: 2,
           zIndex: 11,
-          visibility: 'hidden' // Initially hidden
+          visibility: 'hidden'
         },
         container
       );
@@ -225,13 +248,13 @@ const createCustomNode = (BaseShape) => {
           y: Math.round(rectY + rectHeight / 2),
           text: '+',
           fontSize: plusFontSize,
-          fill: '#000',
+          fill: nodeStyle.stroke,
           fontWeight: 'bold',
           textAlign: 'center',
           textBaseline: 'middle',
           zIndex: 12,
           cursor: 'copy',
-          visibility: 'hidden' // Initially hidden
+          visibility: 'hidden'
         },
         container
       );
@@ -249,13 +272,12 @@ const createCustomNode = (BaseShape) => {
       });
 
       // Calculate bounding box coordinates
-      const bboxPadding = 2; // Adjust for larger detection area
+      const bboxPadding = 2;
       const minX = Math.min(x1, x2, rectX) - bboxPadding;
       const maxX = Math.max(x1, x2, rectX + rectWidth) + bboxPadding;
       const minY = Math.min(y1, y2, rectY) - bboxPadding;
       const maxY = Math.max(y1, y2, rectY + rectHeight) + bboxPadding;
 
-      // Invisible bounding box for easier hover
       const bbox = this.upsert(
         `hover-guide-bbox-${key}`,
         'rect',
@@ -300,13 +322,11 @@ const createCustomNode = (BaseShape) => {
         });
       });
 
-      // Also show/hide bbox with the rest of the guide
       line.attr('visibility', 'hidden');
       rect.attr('visibility', 'hidden');
       plus.attr('visibility', 'hidden');
       bbox.attr('visibility', 'hidden');
 
-      // Return references for event logic
       return { line, rect, plus, bbox };
     }
 

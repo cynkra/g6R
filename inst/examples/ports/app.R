@@ -20,23 +20,23 @@ server <- function(input, output, session) {
           type = "custom-image-node",
           style = list(
             src = "https://gw.alipayobjects.com/mdn/rms_6ae20b/afts/img/A*N4ZMS7gHsUIAAAAAAAAAAABkARQnAQ",
-            labelText = "Node 1",
-            ports = g6_ports(
-              g6_input_port(
-                key = "input-1",
-                placement = "left",
-                label = "port 1"
-              ),
-              g6_output_port(
-                key = "output-1",
-                placement = "right",
-                label = "port 2"
-              ),
-              g6_input_port(
-                key = "input-12",
-                placement = "top",
-                label = "port 3"
-              )
+            labelText = "Node 1"
+          ),
+          ports = g6_ports(
+            g6_input_port(
+              key = "input-1",
+              placement = "left",
+              label = "port 1"
+            ),
+            g6_output_port(
+              key = "output-1",
+              placement = "right",
+              label = "port 2"
+            ),
+            g6_input_port(
+              key = "input-12",
+              placement = "top",
+              label = "port 3"
             )
           )
         ),
@@ -44,16 +44,16 @@ server <- function(input, output, session) {
           id = 2,
           type = "custom-circle-node",
           style = list(
-            labelText = "Node 2",
-            ports = g6_ports(
-              g6_input_port(
-                key = "input-2",
-                placement = "left"
-              ),
-              g6_output_port(
-                key = "output-2",
-                placement = "right"
-              )
+            labelText = "Node 2"
+          ),
+          ports = g6_ports(
+            g6_input_port(
+              key = "input-2",
+              placement = "left"
+            ),
+            g6_output_port(
+              key = "output-2",
+              placement = "right"
             )
           )
         )
