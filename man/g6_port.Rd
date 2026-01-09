@@ -2,9 +2,15 @@
 % Please edit documentation in R/ports.R
 \name{g6_port}
 \alias{g6_port}
+\alias{g6_input_port}
+\alias{g6_output_port}
 \title{Create a G6 Port}
 \usage{
-g6_port(key, type, arity = 1, showGuides = TRUE, ...)
+g6_port(key, type = c("input", "output"), arity = 1, showGuides = TRUE, ...)
+
+g6_input_port(key, arity = 1, fill = "#52C41A", ...)
+
+g6_output_port(key, arity = 1, fill = "#FF4D4F", ...)
 }
 \arguments{
 \item{key}{Character. Unique identifier for the port (required).}
@@ -20,14 +26,26 @@ guides when hovering over the port (default: TRUE).}
 
 \item{...}{Additional port style parameters. See
 \url{https://g6.antv.antgroup.com/en/manual/element/node/base-node#portstyleprops}.}
+
+\item{fill}{Character. Color of the port
+(default: "#52C41A" for input ports,
+"#FF4D4F" for output ports).}
 }
 \value{
 An S3 object of class 'g6_port'.
 }
 \description{
 Create a G6 Port
+
+Create a single-connection input port
+
+Create an output port (single connection by default)
+}
+\note{
+To create an (input/output) port with multiple connections,
+simply set the arity to \code{Inf} or any positive integer.
 }
 \examples{
-g6_port("input-1", type = "input", arity = 1, placement = "left")
-g6_port("output-1", type = "output", arity = Inf, placement = "right")
+g6_port("input-1", type = "input", arity = 2, placement = "left")
+g6_port("output-1", type = "output", placement = "right")
 }

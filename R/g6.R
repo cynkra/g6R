@@ -121,6 +121,7 @@ g6 <- function(
   if (is.null(jsonUrl)) {
     # Convert data frames to lists of records
     dat <- g6_data(nodes, edges, combos)
+    validate_edges_ports(dat[["edges"]], dat[["nodes"]])
   }
 
   # Build properly named list of parameters to pass to widget

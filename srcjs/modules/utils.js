@@ -97,6 +97,21 @@ const checkIds = (data) => {
   }
 }
 
+// count initial connections for each port of this node
+const getPortConnections = (graph, nodeId) => {
+  const edges = graph.getEdgeData();
+  const portConnections = {};
+  edges.forEach(edge => {
+    if (edge.style && edge.style.sourcePort && edge.source === nodeId) {
+      portConnections[edge.style.sourcePort] = (portConnections[edge.style.sourcePort] || 0) + 1;
+    }
+    if (edge.style && edge.style.targetPort && edge.target === nodeId) {
+      portConnections[edge.style.targetPort] = (portConnections[edge.style.targetPort] || 0) + 1;
+    }
+  });
+  return portConnections;
+}
+
 const setupGraph = (graph, widget, config) => {
   const id = graph.options.container;
 
@@ -209,4 +224,4 @@ const setupIcons = (url) => {
   })
 }
 
-export { getBehavior, setupIcons, sendNotification, resetOtherElementTypes, loadAndInitGraph, getGraph };
+export { getBehavior, setupIcons, sendNotification, resetOtherElementTypes, loadAndInitGraph, getGraph, getPortConnections };

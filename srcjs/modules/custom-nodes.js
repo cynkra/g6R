@@ -1,5 +1,7 @@
 import { Circle } from '@antv/g6';
 import { Circle as GCircle } from '@antv/g';
+import { getPortConnections } from './utils';
+
 
 // To add event listener only once because of re-renders
 // we don't want to rebind the same events.
@@ -13,29 +15,11 @@ const addUniqueEventListener = (element, type, listener) => {
 
 // Custom rectangle node with port key attachment
 class CustomCircleNode extends Circle {
-  // count initial connections for each port of this node
-  getPortConnections(nodeId) {
-    const edges = this.context.graph.getEdgeData();
-    const portConnections = {};
-
-    edges.forEach(edge => {
-      const style = edge.style || {};
-
-      if (edge.source === nodeId && style.sourcePort) {
-        portConnections[style.sourcePort] = (portConnections[style.sourcePort] || 0) + 1;
-      }
-      if (edge.target === nodeId && style.targetPort) {
-        portConnections[style.targetPort] = (portConnections[style.targetPort] || 0) + 1;
-      }
-    });
-
-    return portConnections;
-  }
   // Override to attach port key to each port shape
   drawPortShapes(attributes, container) {
     const portsStyle = this.getPortsStyle(attributes);
     const graphId = this.context.graph.options.container;
-    let portConnections = this.getPortConnections(this.id);
+    let portConnections = getPortConnections(this.context.graph, this.id);
 
     Object.keys(portsStyle).forEach((key) => {
       const style = portsStyle[key];
@@ -86,7 +70,7 @@ class CustomCircleNode extends Circle {
 
     // Helper to update connections and guide visibility
     const handlePortHover = () => {
-      const portConnections = this.getPortConnections(this.id);
+      const portConnections = getPortConnections(this.context.graph, this.id);
       portShape.connections = portConnections[portShape.key] || 0;
       portShape.attr('cursor', portShape.connections >= portShape.arity ? 'not-allowed' : cursorMap[style.placement]);
       if (guide) {
@@ -115,7 +99,7 @@ class CustomCircleNode extends Circle {
     if (guide) {
       // Only show guide if arity not reached, otherwise always hide
       const guideHover = () => {
-        const portConnections = this.getPortConnections(this.id);
+        const portConnections = getPortConnections(this.context.graph, this.id);
         const connections = portConnections[portShape.key] || 0;
         if (connections < portShape.arity) {
           this.showGuide(guide);
@@ -288,7 +272,7 @@ class CustomCircleNode extends Circle {
 
     // Add listeners to the bounding box and guide elements
     const showGuideIfAllowed = () => {
-      const portConnections = this.getPortConnections(nodeId);
+      const portConnections = getPortConnections(this.context.graph, this.id);
       const connections = portConnections[key] || 0;
       if (connections < (style.arity ?? Infinity)) {
         line.attr('visibility', 'visible');

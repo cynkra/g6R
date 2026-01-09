@@ -95,12 +95,15 @@ reference:
     desc: Create and validate G6 ports
     contents:
       - g6_port
+      - g6_input_port
+      - g6_output_port
       - g6_ports
       - is_g6_port
       - as_g6_port
       - as_g6_ports
       - validate_port
       - validate_ports
+      - validate_edges_ports
 
   - title: Proxy
     desc: Update a g6 instance from the server function of a Shiny app

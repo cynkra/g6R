@@ -21,31 +21,27 @@ server <- function(input, output, session) {
           style = list(
             labelText = "Node 1",
             ports = g6_ports(
-              g6_port(
+              g6_input_port(
                 key = "input-1",
-                type = "input",
                 placement = "left",
                 fill = "#52C41A",
                 label = "port 1",
                 r = 4
                 #showGuides = FALSE,
               ),
-              g6_port(
+              g6_output_port(
                 key = "output-1",
-                type = "output",
                 placement = "right",
                 label = "port 2",
                 fill = "#FF4D4F",
                 r = 4
               ),
-              g6_port(
+              g6_input_port(
                 key = "input-12",
-                type = "input",
                 placement = "top",
                 label = "port 3",
-                fill = "#FF4D4F",
-                r = 4,
-                isBillboard = TRUE
+                fill = "#52C41A",
+                r = 4
               )
             )
           )
@@ -56,16 +52,14 @@ server <- function(input, output, session) {
           style = list(
             labelText = "Node 2",
             ports = g6_ports(
-              g6_port(
+              g6_input_port(
                 key = "input-2",
-                type = "input",
                 placement = "left",
                 fill = "#52C41A",
                 r = 4
               ),
-              g6_port(
+              g6_output_port(
                 key = "output-2",
-                type = "output",
                 placement = "right",
                 fill = "#FF4D4F",
                 r = 4

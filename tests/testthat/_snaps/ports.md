@@ -11,8 +11,8 @@
     Code
       g6_port(key = "x", type = "foo")
     Condition
-      Error in `validate_port.g6_port()`:
-      ! 'type' must be either 'input' or 'output'.
+      Error in `match.arg()`:
+      ! 'arg' should be one of "input", "output"
 
 ---
 

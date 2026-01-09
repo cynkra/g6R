@@ -1,6 +1,6 @@
 import { CreateEdge, CanvasEvent, ComboEvent, CommonEvent, EdgeEvent, NodeEvent } from '@antv/g6';
 import { uniqueId } from '@antv/util';
-import { sendNotification } from './utils';
+import { sendNotification, getPortConnections } from './utils';
 
 const ASSIST_EDGE_ID = 'g6-create-edge-assist-edge-id';
 const ASSIST_NODE_ID = 'g6-create-edge-assist-node-id';
@@ -26,13 +26,35 @@ class CustomCreateEdge extends CreateEdge {
   }
 
   customDrop(event) {
+    const mode = this.context.graph.options.mode;
     const targetType = event.targetType;
+    const sourcePort = this.sourcePort;
+    const targetPort = event.originalTarget;
+
     if (['node', 'combo', 'canvas'].indexOf(targetType) !== -1 && this.source) {
       // Prevent edge to self
       if (event.target && event.target.id === this.source) {
         this.cancelEdge();
         return;
       }
+
+      // Prevent edge creation if both ports are of the same type
+      if (
+        sourcePort?.attributes?.type &&
+        targetPort?.attributes?.type &&
+        sourcePort.attributes.type === targetPort.attributes.type
+      ) {
+        if (mode === "dev") {
+          sendNotification(
+            "Edge creation failed: source and target ports must be of different types.",
+            "warning",
+            5000
+          );
+        }
+        this.cancelEdge();
+        return;
+      }
+
       // If dropped on canvas, create edge to ASSIST_NODE_ID
       if (targetType === 'canvas') {
         this.customCreateEdge({
@@ -42,7 +64,7 @@ class CustomCreateEdge extends CreateEdge {
         this.cancelEdge();
         return;
       }
-      this.customHandleCreateEdge(event);
+      this.customCreateEdge(event);
     } else {
       this.cancelEdge();
     }
@@ -52,7 +74,6 @@ class CustomCreateEdge extends CreateEdge {
     const { graph } = this.context;
     const { style, onFinish, onCreate } = this.options;
     const targetId = event.target?.id;
-    const mode = this.context.graph.options.mode;
     if (targetId === undefined || this.source === undefined) return;
 
     const target = this.getSelectedNodeIDs([event.target.id])?.[0];
@@ -65,17 +86,6 @@ class CustomCreateEdge extends CreateEdge {
     if (targetPort?.attributes.visibility == 'hidden') {
       this.sourcePort = null;
       return
-    }
-
-    // Prevent edge creation if both ports are of the same type
-    if (
-      sourcePort?.attributes.type &&
-      targetPort?.attributes.type &&
-      sourcePort.attributes.type === targetPort.attributes.type
-    ) {
-      if (mode === "dev") sendNotification("Edge creation failed: source and target ports must be of different types.", "warning");
-      this.sourcePort = null;
-      return;
     }
 
     const edgeStyle = Object.assign({}, style, {
@@ -106,6 +116,30 @@ class CustomCreateEdge extends CreateEdge {
 
   // JS conversion of handleCreateEdge
   async customHandleCreateEdge(event) {
+    const mode = this.context.graph.options.mode;
+    const node = this.context.graph.getElementData(event.target?.id);
+    this.sourcePort = event.originalTarget;
+
+    if (node && node.style && Array.isArray(node.style.ports) && node.style.ports.length > 0) {
+      if (!this.sourcePort.key) {
+        return;
+      }
+      // Always recompute current connections for this port
+      const portConnections = getPortConnections(this.context.graph, node.id);
+      const currentConnections = portConnections[this.sourcePort.key] || 0;
+      if (currentConnections >= this.sourcePort.arity) {
+        if (mode === "dev") {
+          sendNotification(
+            "Current port has reached its maximum arity, can't drag.",
+            "warning",
+            5000
+          );
+        }
+        return;
+      }
+    }
+    // If node has no ports, allow drag from node as usual
+
     if (!this.validate(event)) return;
     const { graph, canvas, batch, element } = this.context;
     const { style } = this.options;
@@ -120,9 +154,6 @@ class CustomCreateEdge extends CreateEdge {
     if (canvas) canvas.setCursor('crosshair');
     const selectedIds = this.getSelectedNodeIDs([event.target.id]);
     this.source = selectedIds && selectedIds[0];
-
-    // Capture source port (key + other info like connections)
-    this.sourcePort = event.originalTarget;
 
     const sourceNode = graph.getElementData(this.source);
 
@@ -144,8 +175,6 @@ class CustomCreateEdge extends CreateEdge {
         source: this.source,
         target: ASSIST_NODE_ID,
         style: Object.assign(
-          // added sourcePort so that the edge does not change
-          // port when we move the cursor around.
           { pointerEvents: 'none', sourcePort: this.sourcePort.key },
           style
         ),

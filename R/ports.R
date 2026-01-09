@@ -51,6 +51,25 @@ g6_port <- function(
   validate_port(port)
 }
 
+#' Create a single-connection input port
+#' @export
+#' @param fill Character. Color of the port
+#' (default: "#52C41A" for input ports,
+#' "#FF4D4F" for output ports).
+#' @rdname g6_port
+#' @note To create an (input/output) port with multiple connections,
+#' simply set the arity to \code{Inf} or any positive integer.
+g6_input_port <- function(key, arity = 1, fill = "#52C41A", ...) {
+  g6_port(key = key, type = "input", arity = arity, fill = fill, ...)
+}
+
+#' Create an output port (single connection by default)
+#' @export
+#' @rdname g6_port
+g6_output_port <- function(key, arity = 1, fill = "#FF4D4F", ...) {
+  g6_port(key = key, type = "output", arity = arity, fill = fill, ...)
+}
+
 #' Validate a single G6 port
 #'
 #' @param x An object of class 'g6_port'.
@@ -69,9 +88,6 @@ validate_port.g6_port <- function(x, ...) {
     !is.character(x$key) || length(x$key) != 1 || is.na(x$key) || x$key == ""
   ) {
     stop("'key' must be a non-empty character string.")
-  }
-  if (!(x$type %in% c("input", "output"))) {
-    stop("'type' must be either 'input' or 'output'.")
   }
   if (
     !is.numeric(x$arity) ||
@@ -196,4 +212,61 @@ as_g6_ports.g6_ports <- function(x, ...) {
 as_g6_ports.list <- function(x, ...) {
   ports <- lapply(x, as_g6_port)
   do.call(g6_ports, ports)
+}
+
+#' Validate that all edges connect input/output ports
+#'
+#' @param nodes List of g6_node objects.
+#' @param edges List of g6_edge objects.
+#' @return Invisibly TRUE if all edges are valid, otherwise stops with an error.
+#' @export
+validate_edges_ports <- function(edges, nodes) {
+  # Build port key -> type lookup table, skipping nodes with no ports
+  port_types <- unlist(
+    lapply(nodes, function(node) {
+      ports <- node$style$ports
+      if (is.null(ports) || length(ports) == 0) {
+        return(NULL)
+      }
+      setNames(
+        vapply(ports, function(port) port$type, character(1)),
+        vapply(ports, function(port) port$key, character(1))
+      )
+    }),
+    use.names = TRUE
+  )
+
+  # If there are no ports at all, skip validation
+  if (length(port_types) == 0) {
+    return(invisible(TRUE))
+  }
+
+  # Extract source/target ports for all edges
+  source_ports <- vapply(edges, function(e) e$style$sourcePort, character(1))
+  target_ports <- vapply(edges, function(e) e$style$targetPort, character(1))
+
+  # Lookup types
+  type1 <- port_types[source_ports]
+  type2 <- port_types[target_ports]
+
+  # Check for missing ports
+  if (anyNA(type1) || anyNA(type2)) {
+    stop("Edge refers to unknown port key.")
+  }
+
+  # Check for invalid connections (same type)
+  same_type <- type1 == type2
+  if (any(same_type)) {
+    idx <- which(same_type)[1]
+    stop(
+      sprintf(
+        "Invalid edge: cannot connect two '%s' ports ('%s' <-> '%s').",
+        type1[idx],
+        source_ports[idx],
+        target_ports[idx]
+      )
+    )
+  }
+
+  invisible(TRUE)
 }
