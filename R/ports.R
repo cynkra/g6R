@@ -54,13 +54,15 @@ g6_port <- function(
   ...
 ) {
   # Guides won't work outside Shiny (for now ...)
-  if (!shiny::isRunning() && showGuides && !.g6R_env$showGuides_warned) {
-    warning(
-      "'showGuides' is set to TRUE, but Shiny app is not running. ",
-      "Connection guides will not be displayed.",
-      call. = FALSE
-    )
-    .g6R_env$showGuides_warned <- TRUE
+  if (!shiny::isRunning() && showGuides) {
+    if (!.g6R_env$showGuides_warned) {
+      warning(
+        "'showGuides' is set to TRUE, but Shiny app is not running. ",
+        "Connection guides will not be displayed.",
+        call. = FALSE
+      )
+      .g6R_env$showGuides_warned <- TRUE
+    }
     showGuides <- FALSE
   }
 
@@ -269,7 +271,16 @@ as_g6_port.g6_port <- function(x, ...) {
 #' @rdname as_g6_port
 #' @export
 as_g6_port.list <- function(x, ...) {
-  do.call(g6_port, x)
+  port_ctor <- g6_port
+  if (length(x[["type"]])) {
+    port_ctor <- switch(
+      x[["type"]],
+      "input" = g6_input_port,
+      "output" = g6_output_port
+    )
+    x[["type"]] <- NULL
+  }
+  do.call(port_ctor, x)
 }
 
 #' Coerce to a list of g6_port objects (g6_ports)

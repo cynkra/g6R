@@ -57,6 +57,14 @@ const checkIds = (data) => {
       if (node.combo != null && typeof node.combo !== 'string') {
         node.combo = node.combo.toString();
       }
+      // Prefix port keys
+      if (node.style.ports) {
+        node.style.ports.forEach(port => {
+          if (!port.key.startsWith(node.id + "-")) {
+            port.key = `${node.id}-${port.key}`;
+          }
+        });
+      }
       return node.id
     });
   }
@@ -74,6 +82,19 @@ const checkIds = (data) => {
       if (edge.id == null) {
         edge.id = `${edge.source}-${edge.target}`;
       }
+      // Prefix sourcePort and targetPort
+      if (edge.style) {
+        if (edge.style.sourcePort && edge.source) {
+          if (!edge.style.sourcePort.startsWith(edge.source + "-")) {
+            edge.style.sourcePort = `${edge.source}-${edge.style.sourcePort}`;
+          }
+        }
+        if (edge.style.targetPort && edge.target) {
+          if (!edge.style.targetPort.startsWith(edge.target + "-")) {
+            edge.style.targetPort = `${edge.target}-${edge.style.targetPort}`;
+          }
+        }
+      }
       return edge.id
     });
   }
@@ -87,6 +108,7 @@ const checkIds = (data) => {
       return combo.id
     });
   }
+  // Check for duplicate IDs
   const allIds = nodeIds.concat(edgesIds).concat(combosIds);
   const uniqueIds = new Set(allIds);
   if (allIds.length !== uniqueIds.size) {

@@ -399,7 +399,7 @@ as_g6_node.list <- function(x, ...) {
     # Drop nulls except for combo field
     node <- dropNulls(x, except = "combo")
     node <- structure(node, class = c("g6_node", "g6_element"))
-    validate_element(node)
+    node <- validate_element(node)
     return(node)
   }
 
