@@ -140,20 +140,20 @@ validate_port <- function(x, ...) {
 
 #' @rdname validate_port
 #' @export
-validate_port.g6_port <- function(port) {
+validate_port.g6_port <- function(x, ...) {
   if (
-    !is.character(port$key) ||
-      length(port$key) != 1 ||
-      is.na(port$key) ||
-      port$key == ""
+    !is.character(x$key) ||
+      length(x$key) != 1 ||
+      is.na(x$key) ||
+      x$key == ""
   ) {
     stop("'key' must be a non-empty character string.")
   }
   if (
-    !is.numeric(port$arity) ||
-      length(port$arity) != 1 ||
-      is.na(port$arity) ||
-      port$arity < 0
+    !is.numeric(x$arity) ||
+      length(x$arity) != 1 ||
+      is.na(x$arity) ||
+      x$arity < 0
   ) {
     stop(
       "'arity' must be a single non-negative number (0, Inf, or positive integer)."
@@ -162,21 +162,21 @@ validate_port.g6_port <- function(port) {
   # Ensure ports are displayed: doc says
   # If set to undefined, the port is treated as a point,
   # not displayed on canvas. Default is set to 4.
-  if (is.null(port[["r"]])) {
-    port[["r"]] <- 4
+  if (is.null(x[["r"]])) {
+    x[["r"]] <- 4
   } else {
     if (
-      !is.numeric(port[["r"]]) ||
-        length(port[["r"]]) != 1 ||
-        is.na(port[["r"]]) ||
-        port[["r"]] <= 0
+      !is.numeric(x[["r"]]) ||
+        length(x[["r"]]) != 1 ||
+        is.na(x[["r"]]) ||
+        x[["r"]] <= 0
     ) {
       stop("'r' (radius) must be a single positive number.")
     }
   }
 
   # Ensure ports are on the node border (avoids 0.5/0.5)
-  placement <- port$placement
+  placement <- x$placement
   if (is.numeric(placement) && length(placement) == 2) {
     # Must be on an edge: at least one value is exactly 0 or 1
     if (!any(placement == 0 | placement == 1)) {
@@ -188,7 +188,7 @@ validate_port.g6_port <- function(port) {
       )
     }
   }
-  port
+  x
 }
 
 #' Create a List of G6 Ports
