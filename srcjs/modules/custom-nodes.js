@@ -61,19 +61,35 @@ const createCustomNode = (BaseShape) => {
       }
     }
 
-    addPortEvents(portShape, portLabelShape, style, guide = null) {
-      const cursorMap = {
-        left: 'w-resize',
-        right: 'e-resize',
-        top: 'n-resize',
-        bottom: 's-resize'
-      };
+    getCursorForPlacement(placement) {
+      if (typeof placement === "string") {
+        if (placement === "left" || placement === "right") return "ew-resize";
+        if (placement === "top" || placement === "bottom") return "ns-resize";
+        return "pointer";
+      }
+      if (Array.isArray(placement)) {
+        const [x, y] = placement;
+        const near = (val, target) => Math.abs(val - target) < 0.2;
+        if (x === 1 && y === 1) return "se-resize";
+        if (x === 0 && y === 0) return "nw-resize";
+        if (x === 1 && y === 0) return "ne-resize";
+        if (x === 0 && y === 1) return "se-resize";
+        // Prioritize vertical edges
+        if (near(y, 0)) return "ns-resize";      // top
+        if (near(y, 1)) return "ns-resize";      // bottom
+        if (near(x, 0)) return "ew-resize";      // left
+        if (near(x, 1)) return "ew-resize";      // right
+        return "pointer";
+      }
+      return "pointer";
+    }
 
+    addPortEvents(portShape, portLabelShape, style, guide = null) {
       // Helper to update connections and guide visibility
       const handlePortHover = () => {
         const portConnections = getPortConnections(this.context.graph, this.id);
         portShape.connections = portConnections[portShape.key] || 0;
-        portShape.attr('cursor', portShape.connections >= portShape.arity ? 'not-allowed' : cursorMap[style.placement]);
+        portShape.attr('cursor', portShape.connections >= portShape.arity ? 'not-allowed' : this.getCursorForPlacement(style.placement));
         if (guide) {
           if (portShape.connections < portShape.arity) {
             this.showGuide(guide);

@@ -171,3 +171,10 @@ test_that("validate_edges_ports allows only input-output connections", {
   )
   expect_error(validate_edges_ports(edges_unknown, nodes), "unknown port key")
 })
+
+test_that("numeric placement must be on node edge", {
+  expect_error(
+    g6_input_port(key = "bad", placement = c(0.5, 0.5)),
+    "at least one value must be 0 or 1"
+  )
+})
