@@ -57,6 +57,14 @@ const checkIds = (data) => {
       if (node.combo != null && typeof node.combo !== 'string') {
         node.combo = node.combo.toString();
       }
+      // Prefix port keys
+      if (node.style.ports) {
+        node.style.ports.forEach(port => {
+          if (!port.key.startsWith(node.id + "-")) {
+            port.key = `${node.id}-${port.key}`;
+          }
+        });
+      }
       return node.id
     });
   }
@@ -74,6 +82,19 @@ const checkIds = (data) => {
       if (edge.id == null) {
         edge.id = `${edge.source}-${edge.target}`;
       }
+      // Prefix sourcePort and targetPort
+      if (edge.style) {
+        if (edge.style.sourcePort && edge.source) {
+          if (!edge.style.sourcePort.startsWith(edge.source + "-")) {
+            edge.style.sourcePort = `${edge.source}-${edge.style.sourcePort}`;
+          }
+        }
+        if (edge.style.targetPort && edge.target) {
+          if (!edge.style.targetPort.startsWith(edge.target + "-")) {
+            edge.style.targetPort = `${edge.target}-${edge.style.targetPort}`;
+          }
+        }
+      }
       return edge.id
     });
   }
@@ -87,6 +108,7 @@ const checkIds = (data) => {
       return combo.id
     });
   }
+  // Check for duplicate IDs
   const allIds = nodeIds.concat(edgesIds).concat(combosIds);
   const uniqueIds = new Set(allIds);
   if (allIds.length !== uniqueIds.size) {
@@ -95,6 +117,21 @@ const checkIds = (data) => {
   } else {
     return (data)
   }
+}
+
+// count initial connections for each port of this node
+const getPortConnections = (graph, nodeId) => {
+  const edges = graph.getEdgeData();
+  const portConnections = {};
+  edges.forEach(edge => {
+    if (edge.style && edge.style.sourcePort && edge.source === nodeId) {
+      portConnections[edge.style.sourcePort] = (portConnections[edge.style.sourcePort] || 0) + 1;
+    }
+    if (edge.style && edge.style.targetPort && edge.target === nodeId) {
+      portConnections[edge.style.targetPort] = (portConnections[edge.style.targetPort] || 0) + 1;
+    }
+  });
+  return portConnections;
 }
 
 const setupGraph = (graph, widget, config) => {
@@ -135,6 +172,16 @@ const setupGraph = (graph, widget, config) => {
       const { targetType, target } = e;
       // If target is canvas, id will be null.
       Shiny.setInputValue(id + '-contextmenu', { type: targetType, id: target.id })
+    });
+
+    //graph.on(CommonEvent.POINTER_DOWN, (e) => {
+    //  console.log(e);
+    //})
+
+    graph.on('node:pointerdown', function (e) {
+      if (e.originalTarget && e.originalTarget.key) {
+        console.log(e.originalTarget);
+      }
     });
 
     // Capture mouse position for clever placement of
@@ -199,4 +246,4 @@ const setupIcons = (url) => {
   })
 }
 
-export { getBehavior, setupIcons, sendNotification, resetOtherElementTypes, loadAndInitGraph, getGraph };
+export { getBehavior, setupIcons, sendNotification, resetOtherElementTypes, loadAndInitGraph, getGraph, getPortConnections };
