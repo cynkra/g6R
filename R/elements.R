@@ -212,6 +212,12 @@ validate_element.g6_node <- function(x, ...) {
     stop("Node 'children' must be a character vector if provided.")
   }
   if (length(x$ports)) {
+    if (length(x[["type"]]) && !grepl("custom", x[["type"]])) {
+      stop(
+        "Node 'ports' are typically used with custom node types. ",
+        "Ensure the node type supports ports like 'custom-<TYPE>-node.'"
+      )
+    }
     if (!is_g6_ports(x$ports)) {
       stop("Node 'ports' must be of class 'g6_ports'.")
     }
