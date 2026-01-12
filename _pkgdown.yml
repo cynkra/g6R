@@ -171,6 +171,7 @@ reference:
       - g6_set_options
       - g6_update_plugin
       - g6_update_behavior
+      - g6_update_ports
 
   - title: Layout
     desc: Graph layout

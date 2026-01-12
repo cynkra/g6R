@@ -14,6 +14,7 @@
   You can't drag from a node if it has ports (drag from the ports instead).
   - Ports gain a `label` parameter to display text on the port.
   - In a Shiny context, `showGuides` allows to display connection __guides__ when hovering over a port. Combined with `input[["<GRAPH_ID>-selected_port"]]` and `input[["<graph_ID>-mouse_position"]]`, this allows to add and connect nodes on the fly at the guide location.
+  - Use `g6_update_ports()` to update (3 possible actions: remove/add/update) ports of existing nodes.
 
 # g6R 0.5.0
 

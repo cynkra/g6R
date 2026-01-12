@@ -253,3 +253,59 @@ test_that("g6_update_layout proxy call works and errors on invalid proxy", {
   # invalid proxy (not a g6_proxy) should error
   expect_error(g6_update_layout(list(), type = "grid"))
 })
+
+test_that("g6_update_ports validates and sends correct structure", {
+  session <- list(
+    sendCustomMessage = function(type, message) {
+      list(type = type, message = message)
+    }
+  )
+  class(session) <- "ShinySession"
+  proxy <- g6_proxy("graph1", session)
+
+  # Valid: add and remove
+  expect_error(
+    g6_update_ports(
+      proxy,
+      ids = c("A", "B"),
+      ops = list(
+        A = list(add = g6_ports(g6_port("out1")), remove = c("in1")),
+        B = list(
+          update = g6_ports(g6_port("in2", label = "lbl")),
+          remove = character()
+        )
+      )
+    ),
+    NA
+  )
+
+  # Error: ids and ops names mismatch
+  expect_error(
+    g6_update_ports(
+      proxy,
+      ids = c("A", "B"),
+      ops = list(A = list(remove = "x"))
+    ),
+    "The names of 'ops' must exactly match the 'ids' vector"
+  )
+
+  # Error: remove not character
+  expect_error(
+    g6_update_ports(
+      proxy,
+      ids = "A",
+      ops = list(A = list(remove = 123))
+    ),
+    "remove' must be a character vector"
+  )
+
+  # Error: add not valid ports
+  expect_error(
+    g6_update_ports(
+      proxy,
+      ids = "A",
+      ops = list(A = list(add = list(list(type = "input")))) # missing key
+    ),
+    "key"
+  )
+})
