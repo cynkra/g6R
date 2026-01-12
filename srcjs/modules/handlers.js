@@ -37,17 +37,16 @@ const updateNodePorts = (graph, ids, ops) => {
     let style = node.style ? { ...node.style } : {};
     let ports = Array.isArray(style.ports) ? [...style.ports] : [];
 
-    // Node-specific operations
     const nodeOps = ops[nid] || {};
 
-    // Remove ports (always prefix)
+    // Remove ports
     if (nodeOps.remove) {
       const keysToRemove = nodeOps.remove.map(k => k.startsWith(nid + "-") ? k : `${nid}-${k}`);
       ports = ports.filter(port => !keysToRemove.includes(port.key));
       keysToRemove.forEach(k => removedPortKeys.add(k));
     }
 
-    // Add ports (always prefix)
+    // Add ports
     if (nodeOps.add) {
       const portsToAdd = nodeOps.add.map(port => ({
         ...port,
@@ -56,7 +55,7 @@ const updateNodePorts = (graph, ids, ops) => {
       ports = ports.concat(portsToAdd);
     }
 
-    // Update ports (always prefix)
+    // Update ports
     if (nodeOps.update) {
       nodeOps.update.forEach(updateObj => {
         const updateKey = updateObj.key.startsWith(nid + "-") ? updateObj.key : `${nid}-${updateObj.key}`;

@@ -14,19 +14,24 @@ g6_update_ports(graph, ids, ops)
 \item{ops}{A named list of operations for each node.
 Each entry can contain:
 \itemize{
-\item \code{add}: a list of port objects to add
+\item \code{add}: a list of port objects to add.
 \item \code{remove}: a character vector of port keys to remove
 \item \code{update}: a list of port objects (with key) to update
 }}
 }
 \value{
-The g6_proxy object (invisibly).
+The g6_proxy object.
 }
 \description{
 This function sends a message to the client
 to update (add, remove, or modify) ports
 for one or more nodes. The actual update is handled
 on the JS side.
+}
+\details{
+Removing a port that is currently used by an edge
+removes the edge as well. Conversely, removing an edge
+does not remove the ports it was using.
 }
 \examples{
 if (interactive()) {

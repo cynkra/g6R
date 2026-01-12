@@ -1280,6 +1280,10 @@ g6_set_theme <- function(graph, theme) {
 #' for one or more nodes. The actual update is handled
 #' on the JS side.
 #'
+#' Removing a port that is currently used by an edge
+#' removes the edge as well. Conversely, removing an edge
+#' does not remove the ports it was using.
+#'
 #' @param graph A g6_proxy object.
 #' @param ids Character vector of node IDs to update.
 #' @param ops A named list of operations for each node.
@@ -1289,7 +1293,7 @@ g6_set_theme <- function(graph, theme) {
 #'     \item \code{remove}: a character vector of port keys to remove
 #'     \item \code{update}: a list of port objects (with key) to update
 #'   }
-#' @return The g6_proxy object (invisibly).
+#' @return The g6_proxy object.
 #' @export
 #' @examples
 #' if (interactive()) {
