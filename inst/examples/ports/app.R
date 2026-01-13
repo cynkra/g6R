@@ -53,7 +53,8 @@ server <- function(input, output, session) {
             ),
             g6_output_port(
               key = "output-2",
-              placement = "right"
+              placement = "right",
+              arity = Inf
             )
           )
         )

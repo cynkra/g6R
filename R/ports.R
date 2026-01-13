@@ -161,6 +161,10 @@ validate_port.g6_port <- function(x, ...) {
       "'arity' must be a single non-negative number (0, Inf, or positive integer)."
     )
   }
+  # Inf gives null is JS so we convert it
+  if (is.infinite(x$arity)) {
+    x$arity <- JS("Infinity")
+  }
   # Ensure ports are displayed: doc says
   # If set to undefined, the port is treated as a point,
   # not displayed on canvas. Default is set to 4.
