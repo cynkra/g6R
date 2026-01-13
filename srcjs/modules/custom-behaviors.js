@@ -59,6 +59,7 @@ class CustomCreateEdge extends CreateEdge {
       if (targetType === 'canvas') {
         this.customCreateEdge({
           target: { id: ASSIST_NODE_ID },
+          sourcePort: sourcePort?.key,
           targetType: 'canvas'
         });
         this.cancelEdge();

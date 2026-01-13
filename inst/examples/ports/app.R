@@ -99,7 +99,8 @@ server <- function(input, output, session) {
           enable = JS(
             "(e) => {
         return e.shiftKey}"
-          )
+          ),
+          onFinish = NULL
         )
       ) |>
       # Allow to dynamically remove an edge

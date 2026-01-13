@@ -24,6 +24,9 @@ const createCustomNode = (BaseShape) => {
 
       Object.keys(portsStyle).forEach((key) => {
         const style = portsStyle[key];
+        // TBD: understand why sometimes style isn't valid.
+        // I could not reproduce this reliably.
+        if (!style) return;
         const [x, y] = this.getPortXY(attributes, style);
         style.connections = portConnections[key] || 0;
 
