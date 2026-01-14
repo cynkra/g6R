@@ -42,7 +42,7 @@ const createCustomNode = (BaseShape) => {
         const [x, y] = this.getPortXY(attributes, style);
         style.connections = portConnections[key] || 0;
 
-        const portShape = this.createPortShape(`port-${key}`, style, container, key);
+        const portShape = this.createPortShape(`port-${key}`, style, x, y, container, key);
 
         // Create guide elements but keep them hidden initially
         const guide = style.showGuides
@@ -179,30 +179,55 @@ const createCustomNode = (BaseShape) => {
       }
     }
 
-    createPortShape(shapeKey, style, container, key) {
+    createInfinitySymbol(key, x, y, style, container, fill) {
+      let px = 0.5, py = 0.5;
+      const placement = style.placement;
+      if (Array.isArray(placement)) {
+        [px, py] = placement;
+      } else if (placement) {
+        if (placement === 'top') py = 0;
+        else if (placement === 'bottom') py = 1;
+        else if (placement === 'left') px = 0;
+        else if (placement === 'right') px = 1;
+      }
+      const r = style.r;
+      const infX = (py === 0 || py === 1) ? x - r * 2.2 : x;
+      const infY = (py === 0 || py === 1) ? y : y - r * 2.2;
+      return this.upsert(
+        `inf-symbol-${key}`,
+        'text',
+        {
+          x: infX,
+          y: infY,
+          text: '∞',
+          fontWeight: 'bold',
+          fontSize: r * 2,
+          fill: fill,
+          textAlign: 'center',
+          textBaseline: 'middle',
+          zIndex: 20
+        },
+        container
+      );
+    }
+
+    createPortShape(shapeKey, style, x, y, container, key) {
       const portShape = this.upsert(shapeKey, GCircle, { ...style }, container);
       if (portShape) {
         portShape.key = key;
         portShape.connections = style.connections;
         portShape.arity = style.arity;
 
-        // Draw infinity symbol if arity is infinite
+        // Infinity symbol placement logic
         if (portShape.arity === Infinity) {
           const nodeStyle = container.config.style;
-          this.upsert(
-            `inf-symbol-${key}`,
-            'text',
-            {
-              x: style.x,
-              y: style.y,
-              text: '∞',
-              fontSize: style.r * 1.5, // scale font size to port size
-              fill: nodeStyle.stroke,
-              textAlign: 'center',
-              textBaseline: 'middle',
-              zIndex: 20
-            },
-            portShape
+          this.createInfinitySymbol(
+            key,
+            x,
+            y,
+            style,
+            container,
+            nodeStyle.stroke
           );
         }
 
