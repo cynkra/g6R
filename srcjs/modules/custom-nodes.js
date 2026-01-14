@@ -147,6 +147,27 @@ const createCustomNode = (BaseShape) => {
         portShape.key = key;
         portShape.connections = style.connections;
         portShape.arity = style.arity;
+
+        // Draw infinity symbol if arity is infinite
+        if (portShape.arity === Infinity) {
+          const nodeStyle = container.config.style;
+          this.upsert(
+            `inf-symbol-${key}`,
+            'text',
+            {
+              x: style.x,
+              y: style.y,
+              text: '∞',
+              fontSize: style.r * 1.5, // scale font size to port size
+              fill: nodeStyle.stroke,
+              textAlign: 'center',
+              textBaseline: 'middle',
+              zIndex: 20
+            },
+            portShape
+          );
+        }
+
       }
       return portShape;
     }
