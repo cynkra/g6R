@@ -13,6 +13,18 @@ const addUniqueEventListener = (element, type, listener) => {
   }
 }
 
+const getContrastColor = (bg) => {
+  // Accepts hex color string, e.g. "#444"
+  let c = bg.replace('#', '');
+  if (c.length === 3) c = c.split('').map(x => x + x).join('');
+  const r = parseInt(c.substr(0, 2), 16);
+  const g = parseInt(c.substr(2, 2), 16);
+  const b = parseInt(c.substr(4, 2), 16);
+  // Perceptual luminance formula
+  const luminance = (0.299 * r + 0.587 * g + 0.114 * b) / 255;
+  return luminance > 0.5 ? '#000' : '#fff';
+}
+
 // Factory to create custom nodes with port key attachment
 const createCustomNode = (BaseShape) => {
   return class CustomNode extends BaseShape {
@@ -31,14 +43,13 @@ const createCustomNode = (BaseShape) => {
         style.connections = portConnections[key] || 0;
 
         const portShape = this.createPortShape(`port-${key}`, style, container, key);
-        const portLabelShape = this.createPortLabel(key, style, x, y, container);
 
         // Create guide elements but keep them hidden initially
         const guide = style.showGuides
           ? this.createConnectionGuide(key, style, x, y, container, graphId, this.id)
           : null;
 
-        this.addPortEvents(portShape, portLabelShape, style, guide);
+        this.addPortEvents(portShape, style, guide);
       });
     }
 
@@ -87,7 +98,7 @@ const createCustomNode = (BaseShape) => {
       return "pointer";
     }
 
-    addPortEvents(portShape, portLabelShape, style, guide = null) {
+    addPortEvents(portShape, style, guide = null) {
       // Helper to update connections and guide visibility
       const handlePortHover = () => {
         const portConnections = getPortConnections(this.context.graph, this.id);
@@ -100,18 +111,45 @@ const createCustomNode = (BaseShape) => {
             this.hideGuide(guide);
           }
         }
+      }
+
+      // Tooltip logic
+      const showTooltip = (e) => {
+        let tooltip = document.getElementById('g6-port-tooltip');
+        if (!tooltip) {
+          tooltip = document.createElement('div');
+          tooltip.id = 'g6-port-tooltip';
+          tooltip.style.position = 'fixed';
+          tooltip.style.pointerEvents = 'none';
+          tooltip.style.background = style.stroke;
+          tooltip.style.color = getContrastColor(style.stroke);
+          tooltip.style.borderRadius = '6px';
+          tooltip.style.padding = '4px 10px';
+          tooltip.style.fontSize = '12px';
+          tooltip.style.zIndex = '9999';
+          document.body.appendChild(tooltip);
+        }
+        tooltip.textContent = style.label || '';
+        tooltip.style.left = (e.clientX + 12) + 'px';
+        tooltip.style.top = (e.clientY - 12) + 'px';
+        tooltip.style.display = 'block';
+      };
+
+      const hideTooltip = () => {
+        const tooltip = document.getElementById('g6-port-tooltip');
+        if (tooltip) tooltip.style.display = 'none';
       };
 
       addUniqueEventListener(portShape, 'mouseenter', (e) => {
-        portLabelShape.attr('visibility', 'visible');
         portShape.attr('lineWidth', 2);
         handlePortHover();
+        showTooltip(e);
       });
 
       addUniqueEventListener(portShape, 'mouseleave', (e) => {
-        portLabelShape.attr('visibility', 'hidden');
         portShape.attr('lineWidth', e.currentTarget.config.style.lineWidth);
         portShape.attr('cursor', 'default');
+        hideTooltip();
         if (guide) this.handleGuideMouseLeave(e, guide);
       });
 
@@ -172,29 +210,8 @@ const createCustomNode = (BaseShape) => {
       return portShape;
     }
 
-    createPortLabel(key, style, x, y, container) {
-      const gap = 8;
-      const r = style.r || 4;
-      const labelX = x;
-      const labelY = (style.placement === 'bottom') ? y + r + gap : y - r - gap;
-      const nodeStyle = container.config.style;
-
-      const portLabelStyle = {
-        x: labelX,
-        y: labelY,
-        text: style.label,
-        fontSize: 7,
-        fill: nodeStyle.stroke,
-        fontWeight: 'bold',
-        textAlign: 'center',
-        textBaseline: 'middle',
-        visibility: 'hidden'
-      };
-      return this.upsert(`label-${key}`, 'text', portLabelStyle, container);
-    }
-
     createConnectionGuide(key, style, x, y, container, graphId, nodeId) {
-      const lineLength = 50;
+      const lineLength = 25;
       const rectWidth = 12;
       const rectHeight = 12;
       const plusFontSize = 7;

@@ -2,8 +2,7 @@ library(shiny)
 library(g6R)
 
 ui <- fluidPage(
-  g6_output("dag", height = "800px"),
-  icon("gears")
+  g6_output("dag", height = "800px")
 )
 
 server <- function(input, output, session) {
