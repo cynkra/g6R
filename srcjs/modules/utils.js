@@ -174,16 +174,6 @@ const setupGraph = (graph, widget, config) => {
       Shiny.setInputValue(id + '-contextmenu', { type: targetType, id: target.id })
     });
 
-    //graph.on(CommonEvent.POINTER_DOWN, (e) => {
-    //  console.log(e);
-    //})
-
-    graph.on('node:pointerdown', function (e) {
-      if (e.originalTarget && e.originalTarget.key) {
-        console.log(e.originalTarget);
-      }
-    });
-
     // Capture mouse position for clever placement of
     // new nodes
     captureMousePosition(graph);
