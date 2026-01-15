@@ -1398,8 +1398,6 @@ g6_update_ports <- function(graph, ids, ops) {
 #' accessed via a g6_proxy object. Ports are grouped by node and can be filtered by type.
 #'
 #' @param graph A g6_proxy object.
-#' @param type Character. Port type ("input" or "output") for filtering (only for \code{g6_get_type_ports}).
-#'
 #' @return A named list of ports for each node, optionally filtered by type.
 #'
 #' @rdname get-ports

@@ -14,8 +14,6 @@ g6_get_output_ports(graph)
 }
 \arguments{
 \item{graph}{A g6_proxy object.}
-
-\item{type}{Character. Port type ("input" or "output") for filtering (only for \code{g6_get_type_ports}).}
 }
 \value{
 A named list of ports for each node, optionally filtered by type.
