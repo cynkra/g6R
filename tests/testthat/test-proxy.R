@@ -315,6 +315,7 @@ test_that("g6_get_ports returns all ports grouped by node", {
     list(
       id = "graph1",
       session = list(
+        ns = function(x = "") "",
         input = list(
           "graph1-state" = list(
             nodes = list(
@@ -352,6 +353,7 @@ test_that("g6_get_type_ports filters ports by type", {
     list(
       id = "graph1",
       session = list(
+        ns = function(x = "") "",
         input = list(
           "graph1-state" = list(
             nodes = list(
@@ -393,6 +395,7 @@ test_that("g6_get_ports returns empty list if no nodes", {
     list(
       id = "graph1",
       session = list(
+        ns = function(x = "") "",
         input = list(
           "graph1-state" = list(nodes = NULL)
         )
@@ -409,6 +412,7 @@ test_that("g6_get_type_ports errors on invalid type", {
     list(
       id = "graph1",
       session = list(
+        ns = function(x = "") "",
         input = list(
           "graph1-state" = list(
             nodes = list(
