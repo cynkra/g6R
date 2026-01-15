@@ -172,6 +172,9 @@ reference:
       - g6_update_plugin
       - g6_update_behavior
       - g6_update_ports
+      - g6_get_ports
+      - g6_get_input_ports
+      - g6_get_output_ports
 
   - title: Layout
     desc: Graph layout

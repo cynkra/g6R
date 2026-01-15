@@ -1391,3 +1391,46 @@ g6_update_ports <- function(graph, ids, ops) {
   )
   graph
 }
+
+#' Extract ports from a g6 graph state via proxy
+#'
+#' These helpers extract ports from the graph state stored in Shiny input,
+#' accessed via a g6_proxy object. Ports are grouped by node and can be filtered by type.
+#'
+#' @param graph A g6_proxy object.
+#' @param type Character. Port type ("input" or "output") for filtering (only for \code{g6_get_type_ports}).
+#'
+#' @return A named list of ports for each node, optionally filtered by type.
+#'
+#' @rdname get-ports
+#' @export
+g6_get_ports <- function(graph) {
+  stopifnot(inherits(graph, "g6_proxy"))
+  state <- graph$session$input[[sprintf("%s-state", graph$id)]]
+  nodes <- state$nodes
+  if (is.null(nodes)) {
+    return(list())
+  }
+  ports <- lapply(nodes, function(node) node$style$ports)
+  ports[!vapply(ports, is.null, logical(1))]
+}
+
+g6_get_type_ports <- function(graph, type = c("input", "output")) {
+  type <- match.arg(type)
+  all_ports <- g6_get_ports(graph)
+  lapply(all_ports, function(port_list) {
+    Filter(function(port) identical(port$type, type), port_list)
+  })
+}
+
+#' @rdname get-ports
+#' @export
+g6_get_input_ports <- function(graph) {
+  g6_get_type_ports(graph, "input")
+}
+
+#' @rdname get-ports
+#' @export
+g6_get_output_ports <- function(graph) {
+  g6_get_type_ports(graph, "output")
+}

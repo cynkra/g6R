@@ -309,3 +309,122 @@ test_that("g6_update_ports validates and sends correct structure", {
     "key"
   )
 })
+
+test_that("g6_get_ports returns all ports grouped by node", {
+  proxy <- structure(
+    list(
+      id = "graph1",
+      session = list(
+        input = list(
+          "graph1-state" = list(
+            nodes = list(
+              nodeA = list(
+                style = list(
+                  ports = list(
+                    port1 = list(type = "input"),
+                    port2 = list(type = "output")
+                  )
+                )
+              ),
+              nodeB = list(
+                style = list(
+                  ports = list(
+                    port3 = list(type = "input")
+                  )
+                )
+              )
+            )
+          )
+        )
+      )
+    ),
+    class = "g6_proxy"
+  )
+  ports <- g6_get_ports(proxy)
+  expect_type(ports, "list")
+  expect_named(ports, c("nodeA", "nodeB"))
+  expect_true(all(c("port1", "port2") %in% names(ports$nodeA)))
+  expect_true("port3" %in% names(ports$nodeB))
+})
+
+test_that("g6_get_type_ports filters ports by type", {
+  proxy <- structure(
+    list(
+      id = "graph1",
+      session = list(
+        input = list(
+          "graph1-state" = list(
+            nodes = list(
+              nodeA = list(
+                style = list(
+                  ports = list(
+                    port1 = list(type = "input"),
+                    port2 = list(type = "output")
+                  )
+                )
+              ),
+              nodeB = list(
+                style = list(
+                  ports = list(
+                    port3 = list(type = "input")
+                  )
+                )
+              )
+            )
+          )
+        )
+      )
+    ),
+    class = "g6_proxy"
+  )
+  input_ports <- g6_get_input_ports(proxy)
+  expect_true("port1" %in% names(input_ports$nodeA))
+  expect_false("port2" %in% names(input_ports$nodeA))
+  expect_true("port3" %in% names(input_ports$nodeB))
+
+  output_ports <- g6_get_output_ports(proxy)
+  expect_true("port2" %in% names(output_ports$nodeA))
+  expect_false("port1" %in% names(output_ports$nodeA))
+  expect_length(output_ports$nodeB, 0)
+})
+
+test_that("g6_get_ports returns empty list if no nodes", {
+  proxy <- structure(
+    list(
+      id = "graph1",
+      session = list(
+        input = list(
+          "graph1-state" = list(nodes = NULL)
+        )
+      )
+    ),
+    class = "g6_proxy"
+  )
+  ports <- g6_get_ports(proxy)
+  expect_equal(ports, list())
+})
+
+test_that("g6_get_type_ports errors on invalid type", {
+  proxy <- structure(
+    list(
+      id = "graph1",
+      session = list(
+        input = list(
+          "graph1-state" = list(
+            nodes = list(
+              nodeA = list(
+                style = list(
+                  ports = list(
+                    port1 = list(type = "input")
+                  )
+                )
+              )
+            )
+          )
+        )
+      )
+    ),
+    class = "g6_proxy"
+  )
+  expect_error(g6_get_type_ports(proxy, "foo"))
+})

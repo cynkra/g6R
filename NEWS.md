@@ -16,6 +16,7 @@
   - Ports gain a `label` parameter to display text on the port.
   - In a Shiny context, `showGuides` allows to display connection __guides__ when hovering over a port. Combined with `input[["<GRAPH_ID>-selected_port"]]` and `input[["<graph_ID>-mouse_position"]]`, this allows to add and connect nodes on the fly at the guide location.
   - Use `g6_update_ports()` to update port (3 possible actions: remove/add/update) ports of existing nodes.
+  - Use `g6_get_ports()` to get the ports of existing nodes. Specifically, you can call `g6_get_input_ports()` and `g6_get_output_ports()` to get only input or output ports respectively. This are only convenience functions.
 
 # g6R 0.5.0
 
