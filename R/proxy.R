@@ -1404,7 +1404,15 @@ g6_update_ports <- function(graph, ids, ops) {
 #' @export
 g6_get_ports <- function(graph) {
   stopifnot(inherits(graph, "g6_proxy"))
-  state <- graph$session$input[[sprintf("%s-state", graph$id)]]
+  ns_prefix <- graph$session$ns("")
+  id <- graph$id
+  if (!is.null(ns_prefix) && nzchar(ns_prefix)) {
+    # Remove namespace prefix if present
+    if (startsWith(id, ns_prefix)) {
+      id <- sub(paste0("^", ns_prefix), "", id)
+    }
+  }
+  state <- graph$session$input[[sprintf("%s-state", id)]]
   nodes <- state$nodes
   if (is.null(nodes)) {
     return(list())

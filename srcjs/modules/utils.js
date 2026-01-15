@@ -58,7 +58,7 @@ const checkIds = (data) => {
         node.combo = node.combo.toString();
       }
       // Prefix port keys
-      if (node.style.ports) {
+      if (node.style && Array.isArray(node.style.ports)) {
         node.style.ports.forEach(port => {
           if (!port.key.startsWith(node.id + "-")) {
             port.key = `${node.id}-${port.key}`;
