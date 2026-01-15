@@ -219,7 +219,7 @@ const createCustomNode = (BaseShape) => {
         portShape.arity = style.arity;
 
         // Infinity symbol placement logic
-        if (portShape.arity === Infinity) {
+        if (portShape.arity === Infinity || portShape.arity === 'Infinity') {
           const nodeStyle = container.config.style;
           this.createInfinitySymbol(
             key,

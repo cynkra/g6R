@@ -162,6 +162,12 @@ validate_port.g6_port <- function(x, ...) {
     )
   }
   # Inf gives null is JS so we convert it
+  # Note: on the JS side when node is passed
+  # to g6_add_node, this won't work because
+  # session$sendCustomMessage does not preserve
+  # the JS class unlike the htmlwidgets JSON conversion.
+  # That's fine for now, we can add an extra check
+  # JS side. portShape.arity === Infinity || portShape.arity === 'Infinity'
   if (is.infinite(x$arity)) {
     x$arity <- JS("Infinity")
   }

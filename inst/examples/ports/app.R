@@ -145,31 +145,28 @@ server <- function(input, output, session) {
     pos <- input[["dag-mouse_position"]]
 
     proxy |>
-      g6_add_nodes(g6_node(
-        id = new_id,
-        type = "custom-circle-node",
-        style = list(
-          x = pos$x + 50, # avoids overlapping with the guide.
-          y = pos$y,
-          labelText = paste("Node", new_id),
+      g6_add_nodes(
+        g6_node(
+          id = new_id,
+          type = "custom-circle-node",
+          style = list(
+            x = pos$x + 50, # avoids overlapping with the guide.
+            y = pos$y,
+            labelText = paste("Node", new_id)
+          ),
           ports = g6_ports(
-            g6_port(
+            g6_input_port(
               key = sprintf("input-%s", new_id),
-              type = "input",
-              placement = "left",
-              fill = "#52C41A",
-              r = 4
+              placement = "left"
             ),
-            g6_port(
+            g6_output_port(
               key = sprintf("output-%s", new_id),
-              type = "output",
               placement = "right",
-              fill = "#FF4D4F",
-              r = 4
+              arity = Inf
             )
           )
         )
-      )) |>
+      ) |>
       g6_add_edges(
         g6_edge(
           source = input[["dag-selected_port"]][["node"]],
