@@ -151,6 +151,11 @@ validate_port.g6_port <- function(x, ...) {
   ) {
     stop("'key' must be a non-empty character string.")
   }
+  # Coerce "Infinity" string to Inf in case it comes
+  # from fromJSON
+  if (is.character(x$arity) && x$arity == "Infinity") {
+    x$arity <- Inf
+  }
   if (
     !is.numeric(x$arity) ||
       length(x$arity) != 1 ||
