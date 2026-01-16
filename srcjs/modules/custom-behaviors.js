@@ -113,6 +113,7 @@ class CustomCreateEdge extends CreateEdge {
       }
     }
     this.sourcePort = null;
+    this.cancelEdge();
   }
 
   // JS conversion of handleCreateEdge
