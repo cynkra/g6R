@@ -103,7 +103,10 @@ const createCustomNode = (BaseShape) => {
       const handlePortHover = () => {
         const portConnections = getPortConnections(this.context.graph, this.id);
         portShape.connections = portConnections[portShape.key] || 0;
-        portShape.attr('cursor', portShape.connections >= portShape.arity ? 'not-allowed' : this.getCursorForPlacement(style.placement));
+        portShape.attr('cursor', portShape.connections >= (
+          portShape.arity === "Infinity" ? Infinity : portShape.arity
+        )
+          ? 'not-allowed' : this.getCursorForPlacement(style.placement));
         if (guide) {
           if (portShape.connections < portShape.arity) {
             this.showGuide(guide);
@@ -216,10 +219,10 @@ const createCustomNode = (BaseShape) => {
       if (portShape) {
         portShape.key = key;
         portShape.connections = style.connections;
-        portShape.arity = style.arity;
+        portShape.arity = (style.arity === "Infinity") ? Infinity : style.arity;
 
         // Infinity symbol placement logic
-        if (portShape.arity === Infinity || portShape.arity === 'Infinity') {
+        if (portShape.arity === Infinity) {
           const nodeStyle = container.config.style;
           this.createInfinitySymbol(
             key,
@@ -381,7 +384,7 @@ const createCustomNode = (BaseShape) => {
       const showGuideIfAllowed = () => {
         const portConnections = getPortConnections(this.context.graph, this.id);
         const connections = portConnections[key] || 0;
-        if (connections < (style.arity ?? Infinity)) {
+        if (connections < (style.arity === "Infinity" ? Infinity : style.arity)) {
           line.attr('visibility', 'visible');
           rect.attr('visibility', 'visible');
           plus.attr('visibility', 'visible');

@@ -89,6 +89,7 @@ nodes
 - `states`: initial [states](https://g6.antv.antgroup.com/en/manual/element/node/build-in/base-node#state). An unnamed list of valid states.
 - `combo`: id of the [combo](https://g6.antv.antgroup.com/en/manual/element/combo/overview) the node belongs to. Combo are describes in another vignette (TBD link).
 - `children`: nodes ids for tree.
+- `ports`: ports definition for the node (since `{g6R}` 0.6.0). See the [Ports](#ports) section for more details.
 
 ### Node type
 

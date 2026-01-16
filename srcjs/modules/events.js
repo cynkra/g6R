@@ -33,7 +33,7 @@ const preprocessGraphState = (graphState) => {
       : {};
 
   // Deep copy to avoid mutating original
-  const state = JSON.parse(JSON.stringify(graphState));
+  const state = structuredClone(graphState);
 
   if (Array.isArray(state.nodes)) {
     state.nodes = arrayToObject(state.nodes, "id");

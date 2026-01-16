@@ -151,31 +151,23 @@ validate_port.g6_port <- function(x, ...) {
   ) {
     stop("'key' must be a non-empty character string.")
   }
-  # Coerce "Infinity" string to Inf in case it comes
-  # from fromJSON
-  if (is.character(x$arity) && x$arity == "Infinity") {
-    x$arity <- Inf
+
+  # Avoid issues with JSON conversion of Inf
+  if (is.infinite(x$arity) || identical(x$arity, "Infinity")) {
+    x$arity <- "Infinity"
+  } else {
+    if (
+      !is.numeric(x$arity) ||
+        length(x$arity) != 1 ||
+        is.na(x$arity) ||
+        x$arity < 0
+    ) {
+      stop(
+        "'arity' must be a single non-negative number (0, Inf, or positive integer)."
+      )
+    }
   }
-  if (
-    !is.numeric(x$arity) ||
-      length(x$arity) != 1 ||
-      is.na(x$arity) ||
-      x$arity < 0
-  ) {
-    stop(
-      "'arity' must be a single non-negative number (0, Inf, or positive integer)."
-    )
-  }
-  # Inf gives null is JS so we convert it
-  # Note: on the JS side when node is passed
-  # to g6_add_node, this won't work because
-  # session$sendCustomMessage does not preserve
-  # the JS class unlike the htmlwidgets JSON conversion.
-  # That's fine for now, we can add an extra check
-  # JS side. portShape.arity === Infinity || portShape.arity === 'Infinity'
-  if (is.infinite(x$arity)) {
-    x$arity <- JS("Infinity")
-  }
+
   # Ensure ports are displayed: doc says
   # If set to undefined, the port is treated as a point,
   # not displayed on canvas. Default is set to 4.
