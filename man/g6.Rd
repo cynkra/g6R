@@ -72,6 +72,7 @@ for each node. Additional fields can include:
 \item \code{style}: List of style attributes (color, size, etc.).
 \item \code{states}: String. Initial states for the node, such as selected, active, hover, etc.
 \item \code{combo}: ID of the combo this node belongs to.
+\item \code{ports}: Node ports. Can also be passed inside the style field.
 }}
 
 \subsection{Edges}{

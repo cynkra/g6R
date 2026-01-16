@@ -91,6 +91,21 @@ reference:
       - as_g6_edges
       - as_g6_combos
 
+  - title: Ports
+    desc: Create and validate G6 ports
+    contents:
+      - g6_port
+      - g6_input_port
+      - g6_output_port
+      - g6_ports
+      - is_g6_port
+      - is_g6_ports
+      - as_g6_port
+      - as_g6_ports
+      - validate_port
+      - validate_ports
+      - validate_edges_ports
+
   - title: Proxy
     desc: Update a g6 instance from the server function of a Shiny app
   - subtitle: Setup
@@ -156,6 +171,10 @@ reference:
       - g6_set_options
       - g6_update_plugin
       - g6_update_behavior
+      - g6_update_ports
+      - g6_get_ports
+      - g6_get_input_ports
+      - g6_get_output_ports
 
   - title: Layout
     desc: Graph layout

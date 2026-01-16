@@ -7,42 +7,29 @@ options("g6R.mode" = "dev")
 nodes <- list(
   list(
     id = "node1",
+    type = "custom-circle-node",
     combo = "combo1",
     style = list(
-      halo = FALSE, # Whether to display the node halo
-      port = TRUE,
       ports = list(
         list(
-          key = "top",
-          placement = c(0.5, 1),
-          fill = "#7E92B5"
-        ),
-        list(
-          key = "right",
-          placement = c(1, 0.5),
-          fill = "#F4664A"
-        ),
-        list(
-          key = "bottom",
-          placement = c(0.5, 0),
-          fill = "#FFBE3A"
-        ),
-        list(
-          key = "left",
-          placement = c(0, 0.5),
-          fill = "#D580FF"
+          key = "output1",
+          type = "output",
+          placement = c(1, 0.5)
         )
-      ),
-      portR = 3,
-      portLineWidth = 1,
-      portStroke = "#fff"
+      )
     )
   ),
   list(
     id = "node2",
+    type = "custom-circle-node",
     style = list(
-      x = 150,
-      y = 50,
+      ports = list(
+        list(
+          key = "input2",
+          type = "input",
+          placement = c(0.5, 1)
+        )
+      ),
       badge = TRUE, # Whether to display the badge
       badges = list(
         list(
@@ -66,7 +53,11 @@ nodes <- list(
 )
 
 edges <- list(
-  list(source = "node1", target = "node2")
+  list(
+    source = "node1",
+    target = "node2",
+    style = list(sourcePort = "output1", targetPort = "input2")
+  )
 )
 combos <- list(
   list(

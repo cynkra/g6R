@@ -723,6 +723,260 @@ server <- function(input, output, session) {
 shinyApp(ui, server)
 ```
 
+#### Node ports playground
+
+In a Shiny context, using `g6_port()`, `showGuides` allows to display connection __guides__ when hovering over a port. Combined with `input[["<GRAPH_ID>-selected_port"]]` and `input[["<graph_ID>-mouse_position"]]`, this allows to add and connect nodes on the fly at the guide location. When giving a key to a port, don't worry if key names collide between nodes, g6R automatically makes them unique by prefixing them with the node ID on the JS side.
+
+```r
+library(shiny)
+library(g6R)
+
+options(
+  "g6R.mode" = "dev",
+  "g6R.layout_on_data_change" = TRUE
+)
+
+ui <- fluidPage(
+  g6_output("dag"),
+  verbatimTextOutput("clicked_port")
+)
+
+server <- function(input, output, session) {
+  output$dag <- render_g6(
+    g6(
+      nodes = g6_nodes(
+        g6_node(
+          id = 1,
+          type = "custom-circle-node",
+          style = list(
+            labelText = "Node 1"
+          ),
+          ports = g6_ports(
+            g6_input_port(
+              key = "input-1",
+              placement = "left"
+            ),
+            g6_output_port(
+              key = "output-1",
+              placement = "right"
+            ),
+            g6_input_port(
+              key = "input-12",
+              placement = "top"
+            )
+          )
+        ),
+        g6_node(
+          id = 2,
+          type = "custom-circle-node",
+          style = list(
+            labelText = "Node 2"
+          ),
+          ports = g6_ports(
+            g6_input_port(
+              key = "input-2",
+              placement = "left"
+            ),
+            g6_output_port(
+              key = "output-2",
+              placement = "right"
+            )
+          )
+        )
+      ),
+      edges = g6_edges(
+        g6_edge(
+          source = 1,
+          target = 2,
+          style = list(
+            sourcePort = "output-1",
+            targetPort = "input-2",
+            endArrow = TRUE,
+            startArrow = FALSE,
+            endArrowType = "vee"
+          )
+        )
+      )
+    ) |>
+      g6_layout() |>
+      g6_options(
+        animation = FALSE,
+        edge = list(style = list(endArrow = TRUE))
+      ) |>
+      g6_behaviors(
+        click_select(multiple = TRUE),
+        drag_element(
+          enable = JS(
+            "(e) => {
+          return !e.shiftKey && !e.altKey;
+        }"
+          )
+        ),
+        drag_canvas(
+          enable = JS(
+            "(e) => {
+          return e.targetType === 'canvas' && !e.shiftKey && !e.altKey;
+        }"
+          )
+        ),
+        zoom_canvas(),
+        create_edge(
+          enable = JS(
+            "(e) => {
+        return e.shiftKey}"
+          )
+        )
+      ) |>
+      # Allow to dynamically remove an edge
+      g6_plugins(
+        context_menu(
+          enable = JS("(e) => e.targetType === 'edge'"),
+          getItems = JS(
+            "() => {
+              return [
+                { name: 'Remove edge', value: 'remove_edge' }
+              ];
+            }"
+          ),
+          onClick = JS(
+            "(value, target, current) => {
+              const graph = HTMLWidgets
+                .find(`#${target.closest('.g6').id}`)
+                .getWidget();
+              console.log(current.id);
+              if (current.id === undefined) return;
+              if (value === 'remove_edge') {
+                graph.removeEdgeData([current.id]);
+                graph.draw();
+              }
+            }
+          "
+          )
+        )
+      )
+  )
+
+  output$clicked_port <- renderPrint({
+    input[["dag-selected_port"]]
+  })
+
+  proxy <- g6_proxy("dag")
+
+  # Add a new node when a port is clicked from the guide
+  # at the mouse position (close to the guide)
+  observeEvent(input[["dag-selected_port"]], {
+    new_id <- round(as.numeric(Sys.time()))
+    pos <- input[["dag-mouse_position"]]
+
+    proxy |>
+      g6_add_nodes(g6_node(
+        id = new_id,
+        type = "custom-circle-node",
+        style = list(
+          x = pos$x + 50, # avoids overlapping with the guide.
+          y = pos$y,
+          labelText = paste("Node", new_id)
+        ),
+        ports = g6_ports(
+          g6_port(
+            key = sprintf("input-%s", new_id),
+            type = "input",
+            placement = "left",
+            fill = "#52C41A",
+            r = 4
+          ),
+          g6_port(
+            key = sprintf("output-%s", new_id),
+            type = "output",
+            placement = "right",
+            fill = "#FF4D4F",
+            r = 4
+          )
+        )
+      )) |>
+      g6_add_edges(
+        g6_edge(
+          source = input[["dag-selected_port"]][["node"]],
+          target = new_id,
+          style = list(
+            sourcePort = input[["dag-selected_port"]][["port"]],
+            targetPort = sprintf("input-%s", new_id),
+            endArrow = TRUE
+          )
+        )
+      )
+  })
+}
+
+shinyApp(ui, server)
+```
+
+To update ports dynamically, we leverahe the `g6_update_ports()` proxy function. In short, this function accepts three arguments:
+
+- A vector of node IDs to update.
+- A list of lists specifying ports to add, remove, or update for each node.  Each sub-list can contain:
+  - `add`: A list of `g6_port()` objects to add.
+  - `remove`: A vector of port keys to remove.
+  - `update`: A list of `g6_port()` objects with updated properties.
+
+Here's an example where we remove some ports from nodes and add/update others when a button is clicked. Note that removing ports that are used by edges will also remove those edges from the graph. Conversely, removing an edge does not remove the associated ports.
+
+```r
+library(shiny)
+library(g6R)
+
+ui <- fluidPage(
+  g6_output("graph", height = "500px"),
+  actionButton("update_ports", "Update Ports")
+)
+
+  server <- function(input, output, session) {
+    output$graph <- render_g6({
+      g6(
+        nodes = g6_nodes(
+          g6_node(
+            id = "A",
+            ports = g6_ports(
+              g6_input_port(key = "in1", label = "in1", placement = "left"),
+              g6_output_port(key = "out1", label = "out1", placement = "right"),
+              g6_output_port(key = "out2", label = "out2", placement = c(1, 0.7))
+            ),
+            style = list(x = 100, y = 200, labelText = "Node A")
+          ),
+          g6_node(
+            id = "B",
+            ports = g6_ports(
+              g6_input_port(key = "in2", label = "in2", placement = "left"),
+              g6_output_port(key = "out3", label = "out3", placement = "right"),
+              g6_output_port(key = "out4", label = "out4", placement = c(1, 0.3))
+            ),
+            style = list(x = 300, y = 200, labelText = "Node B")
+          )
+        ),
+        edges = g6_edges(
+          g6_edge(source = "A", target = "B", style = list(sourcePort = "out1", targetPort = "in2"))
+        )
+      ) |> g6_behaviors(click_select(), drag_element(), drag_canvas())
+    })
+
+    observeEvent(input$update_ports, {
+      g6_update_ports(
+        g6_proxy("graph"),
+        c("A", "B"),
+        list(
+          A = list(remove = c("out1", "out2")),
+          B = list(
+            add = list(g6_port(key = "new", label = "new", placement = "top")),
+            update = list(g6_port(key = "in2", label = "Updated label"))
+          )
+        )
+      )
+    })
+  }
+
+shinyApp(ui, server)
+```
+
 ### Modifying plugins and behaviors
 
 #### Plugins

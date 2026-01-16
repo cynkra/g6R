@@ -1,6 +1,53 @@
 import { getBehavior, resetOtherElementTypes } from "./utils";
 import { GraphEvent, CanvasEvent, CommonEvent } from '@antv/g6';
 
+// Helper to allows for better graph state:
+//{
+//  nodes: {
+//    1: {id: 1, ...},
+//    2: {id: 2, ...}
+//  },
+//  edges: {
+//    1: {id: 1, ...},
+//    2: {id: 2, ...}
+//  },
+//  combos: {
+//    1: {id: 1, ...},
+//    2: {id: 2, ...}
+//  }
+//}
+// On the R side, instead of getting unnamed lists
+// for nodes, edges and combos, list is named by elements
+// IDs.
+const preprocessGraphState = (graphState) => {
+  const arrayToObject = (arr, key = "id") =>
+    arr
+      ? arr.reduce((acc, item) => {
+        // For ports, use 'key'
+        if (item.style && Array.isArray(item.style.ports)) {
+          item.style.ports = arrayToObject(item.style.ports, "key");
+        }
+        acc[item[key]] = item;
+        return acc;
+      }, {})
+      : {};
+
+  // Deep copy to avoid mutating original
+  const state = structuredClone(graphState);
+
+  if (Array.isArray(state.nodes)) {
+    state.nodes = arrayToObject(state.nodes, "id");
+  }
+  if (Array.isArray(state.edges)) {
+    state.edges = arrayToObject(state.edges, "id");
+  }
+  if (Array.isArray(state.combos)) {
+    state.combos = arrayToObject(state.combos, "id");
+  }
+
+  return state;
+}
+
 const setClickEvents = (events, graph) => {
   // Loop over events
   const id = graph.options.container;
@@ -63,12 +110,12 @@ const setGraphEvents = (events, graph) => {
       // Set an input to set that the graph is rendered
       if (event === GraphEvent.AFTER_RENDER) {
         Shiny.setInputValue(id + '-initialized', true);
-        Shiny.setInputValue(id + '-state', graph.getData());
+        Shiny.setInputValue(id + '-state', preprocessGraphState(graph.getData()));
       }
       // Update the state any time there is a change.
       // Useful to serialise and restore. Only do it when initialized.
       if (Shiny.shinyapp.$inputValues[id + '-initialized']) {
-        Shiny.setInputValue(id + '-state', graph.getData());
+        Shiny.setInputValue(id + '-state', preprocessGraphState(graph.getData()));
       }
     })
   }

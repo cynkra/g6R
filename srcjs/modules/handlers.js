@@ -1,4 +1,4 @@
-import { sendNotification } from './utils';
+import { sendNotification, getPortConnections } from './utils';
 
 const tryCatchDev = (expr, mode = "prod") => {
   try {
@@ -24,6 +24,76 @@ const tryCatchDev = (expr, mode = "prod") => {
     throw error;
   }
 }
+
+const updateNodePorts = (graph, ids, ops) => {
+  const nodeData = graph.getNodeData();
+  const edgeData = graph.getEdgeData();
+  const updates = [];
+  let removedPortKeys = new Set();
+
+  ids.forEach(nid => {
+    const node = nodeData.find(n => n.id === nid);
+    if (!node) return;
+    let style = node.style ? { ...node.style } : {};
+    let ports = Array.isArray(style.ports) ? [...style.ports] : [];
+
+    const nodeOps = ops[nid] || {};
+
+    // Remove ports
+    if (nodeOps.remove) {
+      const keysToRemove = nodeOps.remove.map(k => k.startsWith(nid + "-") ? k : `${nid}-${k}`);
+      ports = ports.filter(port => !keysToRemove.includes(port.key));
+      keysToRemove.forEach(k => removedPortKeys.add(k));
+    }
+
+    // Add ports
+    if (nodeOps.add) {
+      const portsToAdd = nodeOps.add.map(port => ({
+        ...port,
+        key: port.key.startsWith(nid + "-") ? port.key : `${nid}-${port.key}`
+      }));
+      ports = ports.concat(portsToAdd);
+    }
+
+    // Update ports
+    if (nodeOps.update) {
+      nodeOps.update.forEach(updateObj => {
+        const updateKey = updateObj.key.startsWith(nid + "-") ? updateObj.key : `${nid}-${updateObj.key}`;
+        const idx = ports.findIndex(port => port.key === updateKey);
+        if (idx !== -1) {
+          ports[idx] = { ...ports[idx], ...updateObj, key: updateKey };
+        }
+      });
+    }
+
+    style.ports = ports;
+    updates.push({ id: nid, style });
+  });
+
+  if (updates.length > 0) {
+    graph.updateNodeData(updates);
+    graph.draw();
+  }
+
+  // Remove edges connected to removed ports (prefix by node id)
+  if (removedPortKeys.size > 0) {
+    const edgeIdsToRemove = edgeData
+      .filter(edge => {
+        const srcPort = edge.style?.sourcePort;
+        const tgtPort = edge.style?.targetPort;
+        return (
+          (srcPort && removedPortKeys.has(srcPort)) ||
+          (tgtPort && removedPortKeys.has(tgtPort))
+        );
+      })
+      .map(edge => edge.id);
+
+    if (edgeIdsToRemove.length > 0) {
+      graph.removeEdgeData(edgeIdsToRemove);
+      graph.draw();
+    }
+  }
+};
 
 const registerShinyHandlers = (graph, mode) => {
   const id = graph.options.container;
@@ -104,6 +174,12 @@ const registerShinyHandlers = (graph, mode) => {
         }
       }
     }, mode);
+  })
+
+  Shiny.addCustomMessageHandler(id + '_g6-update-ports', (m) => {
+    // m.ops: { add, remove, update } see R API
+    // m.ids: array of node ids
+    updateNodePorts(graph, m.ids, m.ops);
   })
 
   // Layout update and execution
