@@ -46,6 +46,39 @@ const resetOtherElementTypes = (elementId, targetType) => {
   }
 }
 
+// Converts { id: {...}, ... } to [{...}, ...] recursively for nodes, edges, combos
+// Does the opposite of preprocessGraphState
+const normalizeGraphState = (state) => {
+  const objectToArray = (obj, portKey = false) => {
+    if (!obj) return [];
+    return Object.values(obj).map(item => {
+      // Recursively handle ports if present
+      if (item.style && item.style.ports && !Array.isArray(item.style.ports)) {
+        item.style.ports = objectToArray(item.style.ports, true);
+      }
+      return item;
+    });
+  };
+
+  const result = {};
+  if (state.nodes && !Array.isArray(state.nodes)) {
+    result.nodes = objectToArray(state.nodes);
+  } else if (state.nodes) {
+    result.nodes = state.nodes;
+  }
+  if (state.edges && !Array.isArray(state.edges)) {
+    result.edges = objectToArray(state.edges);
+  } else if (state.edges) {
+    result.edges = state.edges;
+  }
+  if (state.combos && !Array.isArray(state.combos)) {
+    result.combos = objectToArray(state.combos);
+  } else if (state.combos) {
+    result.combos = state.combos;
+  }
+  return result;
+};
+
 const checkIds = (data) => {
   let nodeIds = [];
   if (data.nodes) {
@@ -198,7 +231,7 @@ let graph = null;
 const loadAndInitGraph = (config, widget) => {
   tryCatchDev(() => {
     const initialize = (data) => {
-      config.data = checkIds(data);
+      config.data = checkIds(normalizeGraphState(data));
       graph = new Graph(config);
       setupGraph(graph, widget, config);
     };

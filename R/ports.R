@@ -330,6 +330,19 @@ as_g6_ports.list <- function(x, ...) {
   do.call(g6_ports, ports)
 }
 
+extract_port_field <- function(nodes, field) {
+  unlist(
+    lapply(nodes, function(node) {
+      ports <- node$style$ports
+      if (is.null(ports) || length(ports) == 0) {
+        return(NULL)
+      }
+      vapply(ports, function(port) port[[field]], character(1))
+    }),
+    use.names = FALSE
+  )
+}
+
 #' Validate that all edges connect input/output ports
 #'
 #' @param nodes List of g6_node objects.
@@ -337,40 +350,36 @@ as_g6_ports.list <- function(x, ...) {
 #' @return Invisibly TRUE if all edges are valid, otherwise stops with an error.
 #' @export
 validate_edges_ports <- function(edges, nodes) {
-  # Build port key -> type lookup table, skipping nodes with no ports
-  port_types <- unlist(
-    lapply(nodes, function(node) {
-      ports <- node$style$ports
-      if (is.null(ports) || length(ports) == 0) {
-        return(NULL)
-      }
-      setNames(
-        vapply(ports, function(port) port$type, character(1)),
-        vapply(ports, function(port) port$key, character(1))
-      )
-    }),
-    use.names = TRUE
-  )
+  keys <- extract_port_field(nodes, "key")
+  types <- extract_port_field(nodes, "type")
+  port_types <- setNames(types, keys)
 
-  # If there are no ports at all, skip validation
   if (length(port_types) == 0) {
     return(invisible(TRUE))
   }
 
-  # Extract source/target ports for all edges
-  source_ports <- vapply(edges, function(e) e$style$sourcePort, character(1))
-  target_ports <- vapply(edges, function(e) e$style$targetPort, character(1))
+  source_ports <- vapply(
+    edges,
+    function(e) e$style$sourcePort,
+    character(1)
+  )
+  target_ports <- vapply(
+    edges,
+    function(e) e$style$targetPort,
+    character(1)
+  )
 
-  # Lookup types
+  if (length(source_ports) == 0 || length(target_ports) == 0) {
+    return(invisible(TRUE))
+  }
+
   type1 <- port_types[source_ports]
   type2 <- port_types[target_ports]
 
-  # Check for missing ports
   if (anyNA(type1) || anyNA(type2)) {
     stop("Edge refers to unknown port key.")
   }
 
-  # Check for invalid connections (same type)
   same_type <- type1 == type2
   if (any(same_type)) {
     idx <- which(same_type)[1]
