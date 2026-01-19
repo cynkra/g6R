@@ -38,6 +38,26 @@ class CustomCreateEdge extends CreateEdge {
         return;
       }
 
+      // Check that drop target is a port.
+      // 'port' is the prefix we give when we create
+      // the port shape.
+      if (
+        !targetPort ||
+        !targetPort.attributes ||
+        !targetPort.attributes.class ||
+        !targetPort.attributes.class.includes('port')
+      ) {
+        if (mode === "dev") {
+          sendNotification(
+            "Please release the connecting edge on a port.",
+            "warning",
+            5000
+          );
+        }
+        this.cancelEdge();
+        return;
+      }
+
       // Prevent edge creation if both ports are of the same type
       if (
         sourcePort?.attributes?.type &&
