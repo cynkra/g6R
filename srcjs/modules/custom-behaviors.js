@@ -38,9 +38,18 @@ class CustomCreateEdge extends CreateEdge {
         return;
       }
 
-      // Check that drop target is a port.
-      // 'port' is the prefix we give when we create
-      // the port shape.
+      // If dropped on canvas, allow and handle as before
+      if (targetType === 'canvas') {
+        this.customCreateEdge({
+          target: { id: ASSIST_NODE_ID },
+          sourcePort: sourcePort?.key,
+          targetType: 'canvas'
+        });
+        this.cancelEdge();
+        return;
+      }
+
+      // Otherwise, must be a port
       if (
         !targetPort ||
         !targetPort.attributes ||
@@ -75,16 +84,23 @@ class CustomCreateEdge extends CreateEdge {
         return;
       }
 
-      // If dropped on canvas, create edge to ASSIST_NODE_ID
-      if (targetType === 'canvas') {
-        this.customCreateEdge({
-          target: { id: ASSIST_NODE_ID },
-          sourcePort: sourcePort?.key,
-          targetType: 'canvas'
-        });
+      // Don't allow drop when target has reached max arity
+      const targetConnections = targetPort.attributes.connections || 0;
+      const targetArity = targetPort.attributes.arity === "Infinity"
+        ? Infinity
+        : targetPort.attributes.arity;
+      if (targetConnections >= targetArity) {
+        if (mode === "dev") {
+          sendNotification(
+            "Target port has reached its maximum arity, can't connect.",
+            "warning",
+            5000
+          );
+        }
         this.cancelEdge();
         return;
       }
+
       this.customCreateEdge(event);
     } else {
       this.cancelEdge();

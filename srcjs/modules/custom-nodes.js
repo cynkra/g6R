@@ -190,58 +190,12 @@ const createCustomNode = (BaseShape) => {
       }
     }
 
-    createInfinitySymbol(key, x, y, style, container, fill) {
-      let px = 0.5, py = 0.5;
-      const placement = style.placement;
-      if (Array.isArray(placement)) {
-        [px, py] = placement;
-      } else if (placement) {
-        if (placement === 'top') py = 0;
-        else if (placement === 'bottom') py = 1;
-        else if (placement === 'left') px = 0;
-        else if (placement === 'right') px = 1;
-      }
-      const r = style.r;
-      const infX = (py === 0 || py === 1) ? x - r * 2.2 : x;
-      const infY = (py === 0 || py === 1) ? y : y - r * 2.2;
-      return this.upsert(
-        `inf-symbol-${key}`,
-        'text',
-        {
-          x: infX,
-          y: infY,
-          text: '∞',
-          fontWeight: 'bold',
-          fontSize: r * 2,
-          fill: fill,
-          textAlign: 'center',
-          textBaseline: 'middle',
-          zIndex: 20
-        },
-        container
-      );
-    }
-
     createPortShape(shapeKey, style, x, y, container, key) {
       const portShape = this.upsert(shapeKey, GCircle, { ...style }, container);
       if (portShape) {
         portShape.key = key;
         portShape.connections = style.connections;
         portShape.arity = (style.arity === "Infinity") ? Infinity : style.arity;
-
-        // Infinity symbol placement logic
-        if (portShape.arity === Infinity) {
-          const nodeStyle = container.config.style;
-          this.createInfinitySymbol(
-            key,
-            x,
-            y,
-            style,
-            container,
-            nodeStyle.stroke
-          );
-        }
-
       }
       return portShape;
     }
