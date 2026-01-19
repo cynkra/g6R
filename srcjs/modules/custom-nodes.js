@@ -77,22 +77,30 @@ const createCustomNode = (BaseShape) => {
 
     getCursorForPlacement(placement) {
       if (typeof placement === "string") {
-        if (placement === "left" || placement === "right") return "ew-resize";
-        if (placement === "top" || placement === "bottom") return "ns-resize";
-        return "pointer";
+        switch (placement) {
+          case "left": return "w-resize";
+          case "right": return "e-resize";
+          case "top": return "n-resize";
+          case "bottom": return "s-resize";
+          case "top-left": return "nw-resize";
+          case "top-right": return "ne-resize";
+          case "bottom-left": return "sw-resize";
+          case "bottom-right": return "se-resize";
+          default: return "pointer";
+        }
       }
       if (Array.isArray(placement)) {
         const [x, y] = placement;
-        const near = (val, target) => Math.abs(val - target) < 0.2;
-        if (x === 1 && y === 1) return "se-resize";
+        // Corners
         if (x === 0 && y === 0) return "nw-resize";
         if (x === 1 && y === 0) return "ne-resize";
-        if (x === 0 && y === 1) return "se-resize";
-        // Prioritize vertical edges
-        if (near(y, 0)) return "ns-resize";      // top
-        if (near(y, 1)) return "ns-resize";      // bottom
-        if (near(x, 0)) return "ew-resize";      // left
-        if (near(x, 1)) return "ew-resize";      // right
+        if (x === 0 && y === 1) return "sw-resize";
+        if (x === 1 && y === 1) return "se-resize";
+        // Sides
+        if (y === 0) return "n-resize";
+        if (y === 1) return "s-resize";
+        if (x === 0) return "w-resize";
+        if (x === 1) return "e-resize";
         return "pointer";
       }
       return "pointer";
