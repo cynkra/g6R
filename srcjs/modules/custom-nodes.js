@@ -204,20 +204,25 @@ const createCustomNode = (BaseShape) => {
       const lineLength = 25;
       const rectWidth = 12;
       const rectHeight = 12;
-      const plusFontSize = 7;
+      const plusFontSize = 14;
       const r = style.r || 4;
 
       let direction = style.placement;
       // If placement is an array, infer direction from coordinates
-      if (!['left', 'right', 'top', 'bottom'].includes(direction) && Array.isArray(style.placement)) {
+      if (!['left', 'right', 'top', 'bottom', 'top-left', 'top-right', 'bottom-left', 'bottom-right'].includes(direction) && Array.isArray(style.placement)) {
         const [relX, relY] = style.placement;
-        // Use strict equality for corners, otherwise pick the closest side
-        if (relY === 0) direction = 'top';
+        // Handle corners first
+        if (relX === 0 && relY === 0) direction = 'top-left';
+        else if (relX === 1 && relY === 0) direction = 'top-right';
+        else if (relX === 0 && relY === 1) direction = 'bottom-left';
+        else if (relX === 1 && relY === 1) direction = 'bottom-right';
+        // Then handle sides
+        else if (relY === 0) direction = 'top';
         else if (relY === 1) direction = 'bottom';
         else if (relX === 0) direction = 'left';
         else if (relX === 1) direction = 'right';
+        // Otherwise pick the closest
         else {
-          // If not exactly on a side, pick the closest
           if (relY > 0.75) direction = 'bottom';
           else if (relY < 0.25) direction = 'top';
           else if (relX > 0.75) direction = 'right';
@@ -249,6 +254,34 @@ const createCustomNode = (BaseShape) => {
         y1 = y + r;
         y2 = y1 + lineLength;
         rectX = x - rectWidth / 2;
+        rectY = y2 - rectHeight / 2;
+      } else if (direction === 'top-left') {
+        x1 = x - r * 0.7071;
+        y1 = y - r * 0.7071;
+        x2 = x1 - lineLength * 0.7071;
+        y2 = y1 - lineLength * 0.7071;
+        rectX = x2 - rectWidth / 2;
+        rectY = y2 - rectHeight / 2;
+      } else if (direction === 'top-right') {
+        x1 = x + r * 0.7071;
+        y1 = y - r * 0.7071;
+        x2 = x1 + lineLength * 0.7071;
+        y2 = y1 - lineLength * 0.7071;
+        rectX = x2 - rectWidth / 2;
+        rectY = y2 - rectHeight / 2;
+      } else if (direction === 'bottom-left') {
+        x1 = x - r * 0.7071;
+        y1 = y + r * 0.7071;
+        x2 = x1 - lineLength * 0.7071;
+        y2 = y1 + lineLength * 0.7071;
+        rectX = x2 - rectWidth / 2;
+        rectY = y2 - rectHeight / 2;
+      } else if (direction === 'bottom-right') {
+        x1 = x + r * 0.7071;
+        y1 = y + r * 0.7071;
+        x2 = x1 + lineLength * 0.7071;
+        y2 = y1 + lineLength * 0.7071;
+        rectX = x2 - rectWidth / 2;
         rectY = y2 - rectHeight / 2;
       }
 
@@ -291,8 +324,8 @@ const createCustomNode = (BaseShape) => {
         `hover-plus-${key}`,
         'text',
         {
-          x: Math.round(rectX + rectWidth / 2),
-          y: Math.round(rectY + rectHeight / 2),
+          x: rectX + rectWidth / 2 - 0.5,
+          y: rectY + rectHeight / 2 - 0.5,
           text: '+',
           fontSize: plusFontSize,
           fill: nodeStyle.stroke,
@@ -319,7 +352,7 @@ const createCustomNode = (BaseShape) => {
       });
 
       // Calculate bounding box coordinates
-      const bboxPadding = 2;
+      const bboxPadding = 3;
       const minX = Math.min(x1, x2, rectX) - bboxPadding;
       const maxX = Math.max(x1, x2, rectX + rectWidth) + bboxPadding;
       const minY = Math.min(y1, y2, rectY) - bboxPadding;

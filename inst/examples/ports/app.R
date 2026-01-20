@@ -25,7 +25,7 @@ server <- function(input, output, session) {
           ports = g6_ports(
             g6_input_port(
               key = "input-1",
-              placement = "left",
+              placement = c(0, 1),
               label = "port 1"
             ),
             g6_output_port(
