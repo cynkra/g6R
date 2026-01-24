@@ -69,6 +69,10 @@ HTMLWidgets.widget({
         // Don't change the container
         config.container = el.id;
 
+        // Prevent text selection during drag
+        el.style.userSelect = 'none';
+        el.style.webkitUserSelect = 'none';
+
         // This is to be able to use custom icons.
         setupIcons(config.iconsUrl);
 
