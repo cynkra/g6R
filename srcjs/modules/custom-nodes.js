@@ -32,7 +32,6 @@ const createCustomNode = (BaseShape) => {
     drawPortShapes(attributes, container) {
       const portsStyle = this.getPortsStyle(attributes);
       const graphId = this.context.graph.options.container;
-      let portConnections = getPortConnections(this.context.graph, this.id);
 
       Object.keys(portsStyle).forEach((key) => {
         const style = portsStyle[key];
@@ -40,7 +39,8 @@ const createCustomNode = (BaseShape) => {
         // I could not reproduce this reliably.
         if (!style) return;
         const [x, y] = this.getPortXY(attributes, style);
-        style.connections = portConnections[key] || 0;
+
+        // REMOVE: style.connections = portConnections[key] || 0;
 
         const portShape = this.createPortShape(`port-${key}`, style, x, y, container, key);
 
@@ -109,14 +109,13 @@ const createCustomNode = (BaseShape) => {
     addPortEvents(portShape, style, guide = null) {
       // Helper to update connections and guide visibility
       const handlePortHover = () => {
-        const portConnections = getPortConnections(this.context.graph, this.id);
-        portShape.connections = portConnections[portShape.key] || 0;
-        portShape.attr('cursor', portShape.connections >= (
+        const connections = getPortConnections(this.context.graph, this.id)?.[portShape.key] ?? 0;
+        portShape.attr('cursor', connections >= (
           portShape.arity === "Infinity" ? Infinity : portShape.arity
         )
           ? 'not-allowed' : this.getCursorForPlacement(style.placement));
         if (guide) {
-          if (portShape.connections < portShape.arity) {
+          if (connections < portShape.arity) {
             this.showGuide(guide);
           } else {
             this.hideGuide(guide);
@@ -174,8 +173,7 @@ const createCustomNode = (BaseShape) => {
       if (guide) {
         // Only show guide if arity not reached, otherwise always hide
         const guideHover = () => {
-          const portConnections = getPortConnections(this.context.graph, this.id);
-          const connections = portConnections[portShape.key] || 0;
+          const connections = getPortConnections(this.context.graph, this.id)?.[portShape.key] ?? 0;
           if (connections < portShape.arity) {
             this.showGuide(guide);
           } else {
@@ -200,7 +198,7 @@ const createCustomNode = (BaseShape) => {
       const portShape = this.upsert(shapeKey, GCircle, { ...style }, container);
       if (portShape) {
         portShape.key = key;
-        portShape.connections = style.connections;
+        // REMOVE: portShape.connections = style.connections;
         portShape.arity = (style.arity === "Infinity") ? Infinity : style.arity;
       }
       return portShape;
@@ -413,8 +411,7 @@ const createCustomNode = (BaseShape) => {
 
       // Add listeners to the bounding box and guide elements
       const showGuideIfAllowed = () => {
-        const portConnections = getPortConnections(this.context.graph, this.id);
-        const connections = portConnections[key] || 0;
+        const connections = getPortConnections(this.context.graph, this.id)?.[key] ?? 0;
         if (connections < (style.arity === "Infinity" ? Infinity : style.arity)) {
           line.attr('visibility', 'visible');
           rect.attr('visibility', 'visible');

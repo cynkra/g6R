@@ -49,58 +49,65 @@ class CustomCreateEdge extends CreateEdge {
         return;
       }
 
-      // Otherwise, must be a port
-      if (
-        !targetPort ||
-        !targetPort.attributes ||
-        !targetPort.attributes.class ||
-        !targetPort.attributes.class.includes('port')
-      ) {
-        if (mode === "dev") {
-          sendNotification(
-            "Please release the connecting edge on a port.",
-            "warning",
-            5000
-          );
-        }
-        this.cancelEdge();
-        return;
-      }
+      // Check if the target node has ports
+      const targetNode = this.context.graph.getElementData(event.target?.id);
+      const targetHasPorts = targetNode && targetNode.style && Array.isArray(targetNode.style.ports) && targetNode.style.ports.length > 0;
 
-      // Prevent edge creation if both ports are of the same type
-      if (
-        sourcePort?.attributes?.type &&
-        targetPort?.attributes?.type &&
-        sourcePort.attributes.type === targetPort.attributes.type
-      ) {
-        if (mode === "dev") {
-          sendNotification(
-            "Edge creation failed: source and target ports must be of different types.",
-            "warning",
-            5000
-          );
+      if (targetHasPorts) {
+        // Must drop on a port
+        if (
+          !targetPort ||
+          !targetPort.attributes ||
+          !targetPort.attributes.class ||
+          !targetPort.attributes.class.includes('port')
+        ) {
+          if (mode === "dev") {
+            sendNotification(
+              "Please release the connecting edge on a port.",
+              "warning",
+              5000
+            );
+          }
+          this.cancelEdge();
+          return;
         }
-        this.cancelEdge();
-        return;
-      }
 
-      // Don't allow drop when target has reached max arity
-      const targetConnections = targetPort.attributes.connections || 0;
-      const targetArity = targetPort.attributes.arity === "Infinity"
-        ? Infinity
-        : targetPort.attributes.arity;
-      if (targetConnections >= targetArity) {
-        if (mode === "dev") {
-          sendNotification(
-            "Target port has reached its maximum arity, can't connect.",
-            "warning",
-            5000
-          );
+        // Prevent edge creation if both ports are of the same type
+        if (
+          sourcePort?.attributes?.type &&
+          targetPort?.attributes?.type &&
+          sourcePort.attributes.type === targetPort.attributes.type
+        ) {
+          if (mode === "dev") {
+            sendNotification(
+              "Edge creation failed: source and target ports must be of different types.",
+              "warning",
+              5000
+            );
+          }
+          this.cancelEdge();
+          return;
         }
-        this.cancelEdge();
-        return;
-      }
 
+        // Don't allow drop when target has reached max arity
+        const portConnections = getPortConnections(this.context.graph, event.target?.id);
+        const currentConnections = portConnections?.[targetPort.key] ?? 0;
+        const targetArity = targetPort.attributes.arity === "Infinity"
+          ? Infinity
+          : targetPort.attributes.arity;
+        if (currentConnections >= targetArity) {
+          if (mode === "dev") {
+            sendNotification(
+              "Target port has reached its maximum arity, can't connect.",
+              "warning",
+              5000
+            );
+          }
+          this.cancelEdge();
+          return;
+        }
+      }
+      // If here: either target has no ports, or all port checks passed
       this.customCreateEdge(event);
     } else {
       this.cancelEdge();
@@ -119,16 +126,19 @@ class CustomCreateEdge extends CreateEdge {
     const sourcePort = this.sourcePort;
     const targetPort = event.originalTarget;
 
-    // prevent edge creation if source port is hidden
-    if (targetPort?.attributes.visibility == 'hidden') {
+    // Only check port visibility if ports exist
+    if (sourcePort && targetPort && targetPort?.attributes?.visibility == 'hidden') {
       this.sourcePort = null;
-      return
+      return;
     }
 
-    const edgeStyle = Object.assign({}, style, {
-      sourcePort: sourcePort?.key,
-      targetPort: targetPort?.key
-    });
+    // Only add port keys if ports exist
+    const edgeStyle = Object.assign(
+      {},
+      style,
+      sourcePort ? { sourcePort: sourcePort.key } : {},
+      targetPort ? { targetPort: targetPort.key } : {}
+    );
 
     const edgeData = onCreate({
       id,
@@ -140,13 +150,6 @@ class CustomCreateEdge extends CreateEdge {
     if (edgeData) {
       graph.addEdgeData([edgeData]);
       onFinish(edgeData);
-
-      if (sourcePort && targetPort) {
-        sourcePort.connections = (sourcePort.connections || 0) + 1;
-      }
-      if (targetPort) {
-        targetPort.connections = (targetPort.connections || 0) + 1;
-      }
     }
     this.sourcePort = null;
     this.cancelEdge();
@@ -156,10 +159,12 @@ class CustomCreateEdge extends CreateEdge {
   async customHandleCreateEdge(event) {
     const mode = this.context.graph.options.mode;
     const node = this.context.graph.getElementData(event.target?.id);
-    this.sourcePort = event.originalTarget;
 
-    if (node && node.style && Array.isArray(node.style.ports) && node.style.ports.length > 0) {
-      if (!this.sourcePort.key) {
+    // Only set sourcePort if node has ports
+    let hasPorts = node && node.style && Array.isArray(node.style.ports) && node.style.ports.length > 0;
+    if (hasPorts) {
+      this.sourcePort = event.originalTarget;
+      if (!this.sourcePort || !this.sourcePort.key) {
         return;
       }
       // Always recompute current connections for this port
@@ -175,6 +180,8 @@ class CustomCreateEdge extends CreateEdge {
         }
         return;
       }
+    } else {
+      this.sourcePort = null;
     }
     // If node has no ports, allow drag from node as usual
 
@@ -213,7 +220,8 @@ class CustomCreateEdge extends CreateEdge {
         source: this.source,
         target: ASSIST_NODE_ID,
         style: Object.assign(
-          { pointerEvents: 'none', sourcePort: this.sourcePort.key },
+          { pointerEvents: 'none' },
+          hasPorts && this.sourcePort ? { sourcePort: this.sourcePort.key } : {},
           style
         ),
       },
