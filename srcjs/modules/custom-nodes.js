@@ -152,13 +152,19 @@ const createCustomNode = (BaseShape) => {
       };
 
       addUniqueEventListener(portShape, 'mouseenter', (e) => {
-        portShape.attr('lineWidth', 2);
+        portShape.attr({
+          stroke: '#ff9800', // highlight color
+          lineWidth: 4
+        });
         handlePortHover();
         showTooltip(e);
       });
 
       addUniqueEventListener(portShape, 'mouseleave', (e) => {
-        portShape.attr('lineWidth', e.currentTarget.config.style.lineWidth);
+        portShape.attr({
+          lineWidth: e.currentTarget.config.style.lineWidth,
+          stroke: e.currentTarget.config.style.stroke
+        });
         portShape.attr('cursor', 'default');
         hideTooltip();
         if (guide) this.handleGuideMouseLeave(e, guide);
