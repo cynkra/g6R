@@ -46,6 +46,39 @@ const resetOtherElementTypes = (elementId, targetType) => {
   }
 }
 
+// Converts { id: {...}, ... } to [{...}, ...] recursively for nodes, edges, combos
+// Does the opposite of preprocessGraphState
+const normalizeGraphState = (state) => {
+  const objectToArray = (obj, portKey = false) => {
+    if (!obj) return [];
+    return Object.values(obj).map(item => {
+      // Recursively handle ports if present
+      if (item.style && item.style.ports && !Array.isArray(item.style.ports)) {
+        item.style.ports = objectToArray(item.style.ports, true);
+      }
+      return item;
+    });
+  };
+
+  const result = {};
+  if (state.nodes && !Array.isArray(state.nodes)) {
+    result.nodes = objectToArray(state.nodes);
+  } else if (state.nodes) {
+    result.nodes = state.nodes;
+  }
+  if (state.edges && !Array.isArray(state.edges)) {
+    result.edges = objectToArray(state.edges);
+  } else if (state.edges) {
+    result.edges = state.edges;
+  }
+  if (state.combos && !Array.isArray(state.combos)) {
+    result.combos = objectToArray(state.combos);
+  } else if (state.combos) {
+    result.combos = state.combos;
+  }
+  return result;
+};
+
 const checkIds = (data) => {
   let nodeIds = [];
   if (data.nodes) {
@@ -56,6 +89,14 @@ const checkIds = (data) => {
       }
       if (node.combo != null && typeof node.combo !== 'string') {
         node.combo = node.combo.toString();
+      }
+      // Prefix port keys
+      if (node.style && Array.isArray(node.style.ports)) {
+        node.style.ports.forEach(port => {
+          if (!port.key.startsWith(node.id + "-")) {
+            port.key = `${node.id}-${port.key}`;
+          }
+        });
       }
       return node.id
     });
@@ -74,6 +115,19 @@ const checkIds = (data) => {
       if (edge.id == null) {
         edge.id = `${edge.source}-${edge.target}`;
       }
+      // Prefix sourcePort and targetPort
+      if (edge.style) {
+        if (edge.style.sourcePort && edge.source) {
+          if (!edge.style.sourcePort.startsWith(edge.source + "-")) {
+            edge.style.sourcePort = `${edge.source}-${edge.style.sourcePort}`;
+          }
+        }
+        if (edge.style.targetPort && edge.target) {
+          if (!edge.style.targetPort.startsWith(edge.target + "-")) {
+            edge.style.targetPort = `${edge.target}-${edge.style.targetPort}`;
+          }
+        }
+      }
       return edge.id
     });
   }
@@ -87,6 +141,7 @@ const checkIds = (data) => {
       return combo.id
     });
   }
+  // Check for duplicate IDs
   const allIds = nodeIds.concat(edgesIds).concat(combosIds);
   const uniqueIds = new Set(allIds);
   if (allIds.length !== uniqueIds.size) {
@@ -95,6 +150,21 @@ const checkIds = (data) => {
   } else {
     return (data)
   }
+}
+
+// count initial connections for each port of this node
+const getPortConnections = (graph, nodeId) => {
+  const edges = graph.getEdgeData();
+  const portConnections = {};
+  edges.forEach(edge => {
+    if (edge.style && edge.style.sourcePort && edge.source === nodeId) {
+      portConnections[edge.style.sourcePort] = (portConnections[edge.style.sourcePort] || 0) + 1;
+    }
+    if (edge.style && edge.style.targetPort && edge.target === nodeId) {
+      portConnections[edge.style.targetPort] = (portConnections[edge.style.targetPort] || 0) + 1;
+    }
+  });
+  return portConnections;
 }
 
 const setupGraph = (graph, widget, config) => {
@@ -161,7 +231,7 @@ let graph = null;
 const loadAndInitGraph = (config, widget) => {
   tryCatchDev(() => {
     const initialize = (data) => {
-      config.data = checkIds(data);
+      config.data = checkIds(normalizeGraphState(data));
       graph = new Graph(config);
       setupGraph(graph, widget, config);
     };
@@ -199,4 +269,4 @@ const setupIcons = (url) => {
   })
 }
 
-export { getBehavior, setupIcons, sendNotification, resetOtherElementTypes, loadAndInitGraph, getGraph };
+export { getBehavior, setupIcons, sendNotification, resetOtherElementTypes, loadAndInitGraph, getGraph, getPortConnections };

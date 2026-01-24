@@ -734,7 +734,7 @@ create_edge <- function(
                 }
               )
             }
-          } else {
+          } //else {
             // Then we reset the behaviors so there is no conflict
             graph.updateBehavior({
               key: 'create-edge', // Specify the behavior to update
@@ -751,7 +751,7 @@ create_edge <- function(
                 }
               )
             }
-          }
+          //}
         }",
         as.numeric(notify),
         config$outputId

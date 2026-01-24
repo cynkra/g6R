@@ -89,6 +89,7 @@ nodes
 - `states`: initial [states](https://g6.antv.antgroup.com/en/manual/element/node/build-in/base-node#state). An unnamed list of valid states.
 - `combo`: id of the [combo](https://g6.antv.antgroup.com/en/manual/element/combo/overview) the node belongs to. Combo are describes in another vignette (TBD link).
 - `children`: nodes ids for tree.
+- `ports`: ports definition for the node (since `{g6R}` 0.6.0). See the [Ports](#ports) section for more details.
 
 ### Node type
 
@@ -316,7 +317,7 @@ nodes <- list(
       port = TRUE,
       ports = list(
         list(
-          key = "top",
+          key = "bottom",
           placement = c(0.5, 1),
           fill = "#7E92B5"
         ),
@@ -326,7 +327,7 @@ nodes <- list(
           fill = "#F4664A"
         ),
         list(
-          key = "bottom",
+          key = "top",
           placement = c(0.5, 0),
           fill = "#FFBE3A"
         ),
@@ -345,6 +346,127 @@ nodes <- list(
 
 g6(nodes, height = "200px") |>
   g6_layout(d3_force_layout())
+```
+
+Since, `{g6R}` 0.6.0, we offer a better support for ports. To enable it, you must pass a custom type to `g6_node()` such as `custom-circle-node`, `custom-rect-node` (We support 9 [shapes](https://g6.antv.antgroup.com/en/manual/element/node/overview#built-in-nodes), except HTML which does not handle port in the g6 library). `g6_node()` get a new `ports` argument to define ports for each node. In the g6 JS library, ports are normally defined inside `style` but we consider they are too important to be hidden there. Now you can define ports directly in the node data, g6R automatically moves them to `style.ports` when rendering the graph. We expose a new `g6_port()` function to create ports easily and wrap them inside `g6_ports()`. A port has a unique __key__, an __arity__ that is the number of connections it can make or take and other style parameters inherited from [g6](https://g6.antv.antgroup.com/en/manual/element/node/base-node#portstyleprops). When giving a key to a port, don't worry if key names collide between nodes, g6R automatically makes them unique by prefixing them with the node ID on the JS side.
+
+  - 2 kind of ports have been designed:
+    - __input__ ports (`g6_input_port()`): they can only be the target of an edge.
+    - __output__ ports (`g6_output_port()`): they can only be the source of an edge.
+
+When creating edges, if you provide `sourcePort` and/or `targetPort` within the `style` list, the edge will be connected to the corresponding ports. Validation is made so we don't connect incompatible ports (e.g. connecting an output port to another output port) or connecting a port to itself.
+Finally `create_edge()` behavior was improved to work better with ports. For instance, you can't drag from a port that is already at its arity limit. You can't drag from a node if it has ports (drag from the ports instead). For instance, you can also do:
+
+```{r}
+g6(
+  nodes = g6_nodes(
+    g6_node(
+      id = 1,
+      type = "custom-circle-node",
+      style = list(
+        labelText = "Node 1"
+      ),
+      ports = g6_ports(
+        g6_input_port(
+          key = "input-1",
+          placement = "left"
+        ),
+        g6_output_port(
+          key = "output-1",
+          placement = "right"
+        ),
+        g6_input_port(
+          key = "input-12",
+          placement = "top"
+        )
+      )
+    ),
+    g6_node(
+      id = 2,
+      type = "custom-circle-node",
+      style = list(
+        labelText = "Node 2"
+      ),
+      ports = g6_ports(
+        g6_input_port(
+          key = "input-2",
+          placement = "left"
+        ),
+        g6_output_port(
+          key = "output-2",
+          placement = "right"
+        )
+      )
+    )
+  ),
+  edges = g6_edges(
+    g6_edge(
+      source = 1,
+      target = 2,
+      style = list(
+        sourcePort = "output-1",
+        targetPort = "input-2",
+        endArrow = TRUE
+      )
+    )
+  )
+) |>
+  g6_layout() |>
+  g6_options(
+    animation = FALSE,
+    edge = list(style = list(endArrow = TRUE))
+  ) |>
+  g6_behaviors(
+    click_select(),
+    drag_element(
+      enable = JS(
+        "(e) => {
+          return !e.shiftKey && !e.altKey;
+        }"
+      )
+    ),
+    drag_canvas(
+      enable = JS(
+        "(e) => {
+          return e.targetType === 'canvas' && !e.shiftKey && !e.altKey;
+        }"
+      )
+    ),
+    zoom_canvas(),
+    create_edge(
+      enable = JS(
+        "(e) => {
+        return e.shiftKey}"
+      )
+    )
+  ) |>
+  # Allow to dynamically remove an edge
+  g6_plugins(
+    context_menu(
+      enable = JS("(e) => e.targetType === 'edge'"),
+      getItems = JS(
+        "() => {
+              return [
+                { name: 'Remove edge', value: 'remove_edge' }
+              ];
+            }"
+      ),
+      onClick = JS(
+        "(value, target, current) => {
+              const graph = HTMLWidgets
+                .find(`#${target.closest('.g6').id}`)
+                .getWidget();
+              console.log(current.id);
+              if (current.id === undefined) return;
+              if (value === 'remove_edge') {
+                graph.removeEdgeData([current.id]);
+                graph.draw();
+              }
+            }
+          "
+      )
+    )
+  )
 ```
 
 ### States

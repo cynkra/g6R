@@ -18,7 +18,8 @@ g6_node(
   style = NULL,
   states = NULL,
   combo = NULL,
-  children = NULL
+  children = NULL,
+  ports = NULL
 )
 
 g6_edge(
@@ -65,6 +66,9 @@ For edges, this is optional (id is constructed as source-target if not provided)
 \item{combo}{Character or NULL. Combo ID or parent combo ID (optional).}
 
 \item{children}{Character vector. Child node IDs (optional, nodes only).}
+
+\item{ports}{List. Ports definition (optional, nodes only).
+See \link{g6_ports} and \link{g6_port} for details.}
 
 \item{source}{Character. Source node ID (required, edges only).}
 
