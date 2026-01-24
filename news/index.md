@@ -1,6 +1,73 @@
 # Changelog
 
+## g6R 0.6.0.9000
+
+### New feature
+
+- `input[["<graph_ID>-state"]]` now does not return unnamed lists for
+  nodes, edges and combos. Instead, each sublist is named with the
+  corresponding element IDs. This makes it easier to retrieve the state
+  of a specific element when we know the ID.
+- Added better port support for nodes **ports**:
+  - To enable it, you must pass a custom type to
+    [`g6_node()`](https://cynkra.github.io/g6R/reference/g6_element.md)
+    such as `custom-circle-node`, `custom-rect-node` (We support 9
+    [shapes](https://g6.antv.antgroup.com/en/manual/element/node/overview#built-in-nodes),
+    except HTML which does not handle port in the g6 library)
+  - [`g6_node()`](https://cynkra.github.io/g6R/reference/g6_element.md)
+    get a new `ports` argument to define ports for each node. In the g6
+    JS library, ports are normally defined inside `style` but we
+    consider they are too important to be hidden there. Now you can
+    define ports directly in the node data, g6R automatically moves them
+    to `style.ports` when rendering the graph.
+  - New [`g6_port()`](https://cynkra.github.io/g6R/reference/g6_port.md)
+    function to create ports easily and wrap them inside
+    [`g6_ports()`](https://cynkra.github.io/g6R/reference/g6_ports.md).
+    A port has a unique **key**, an **arity** that is the number of
+    connections it can make or take and other style parameters inherited
+    from
+    [g6](https://g6.antv.antgroup.com/en/manual/element/node/base-node#portstyleprops).
+    When giving a key to a port, don’t worry if key names collide
+    between nodes, g6R automatically makes them unique by prefixing them
+    with the node ID on the JS side.
+  - 2 kind of ports have been designed:
+    - **input** ports
+      ([`g6_input_port()`](https://cynkra.github.io/g6R/reference/g6_port.md)):
+      they can only be the target of an edge.
+    - **output** ports
+      ([`g6_output_port()`](https://cynkra.github.io/g6R/reference/g6_port.md)):
+      they can only be the source of an edge.
+  - When creating edges, if you provide `sourcePort` and/or `targetPort`
+    within the `style` list, the edge will be connected to the
+    corresponding ports. Validation is made so we don’t connect
+    incompatible ports (e.g. connecting an output port to another output
+    port) or connecting a port to itself.
+  - [`create_edge()`](https://cynkra.github.io/g6R/reference/create_edge.md)
+    behavior was improved to work better with ports. For instance, you
+    can’t drag from a port that is already at its arity limit. You can’t
+    drag from a node if it has ports (drag from the ports instead).
+  - Ports gain a `label` parameter to display text on the port.
+  - In a Shiny context, `showGuides` allows to display connection
+    **guides** when hovering over a port. Combined with
+    `input[["<GRAPH_ID>-selected_port"]]` and
+    `input[["<graph_ID>-mouse_position"]]`, this allows to add and
+    connect nodes on the fly at the guide location.
+  - Use
+    [`g6_update_ports()`](https://cynkra.github.io/g6R/reference/g6_update_ports.md)
+    to update port (3 possible actions: remove/add/update) ports of
+    existing nodes.
+  - Use
+    [`g6_get_ports()`](https://cynkra.github.io/g6R/reference/get-ports.md)
+    to get the ports of existing nodes. Specifically, you can call
+    [`g6_get_input_ports()`](https://cynkra.github.io/g6R/reference/get-ports.md)
+    and
+    [`g6_get_output_ports()`](https://cynkra.github.io/g6R/reference/get-ports.md)
+    to get only input or output ports respectively. This are only
+    convenience functions.
+
 ## g6R 0.5.0
+
+CRAN release: 2025-12-09
 
 ### Potential breaking changes
 

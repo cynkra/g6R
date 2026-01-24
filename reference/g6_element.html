@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">g6R</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.5.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.6.0.9000</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -56,7 +56,7 @@
   <main id="main" class="col-md-9"><div class="page-header">
 
       <h1>G6 Graph Elements</h1>
-      <small class="dont-index">Source: <a href="https://github.com/cynkra/g6R/blob/v0.5.0/R/elements.R" class="external-link"><code>R/elements.R</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/cynkra/g6R/blob/main/R/elements.R" class="external-link"><code>R/elements.R</code></a></small>
       <div class="d-none name"><code>g6_element.Rd</code></div>
     </div>
 
@@ -73,7 +73,8 @@
 <span>  style <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  states <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  combo <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  children <span class="op">=</span> <span class="cn">NULL</span></span>
+<span>  children <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  ports <span class="op">=</span> <span class="cn">NULL</span></span>
 <span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu">g6_edge</span><span class="op">(</span></span>
@@ -141,6 +142,11 @@ For edges, this is optional (id is constructed as source-target if not provided)
 
 <dt id="arg-children">children<a class="anchor" aria-label="anchor" href="#arg-children"></a></dt>
 <dd><p>Character vector. Child node IDs (optional, nodes only).</p></dd>
+
+
+<dt id="arg-ports">ports<a class="anchor" aria-label="anchor" href="#arg-ports"></a></dt>
+<dd><p>List. Ports definition (optional, nodes only).
+See <a href="g6_ports.html">g6_ports</a> and <a href="g6_port.html">g6_port</a> for details.</p></dd>
 
 
 <dt id="arg-source">source<a class="anchor" aria-label="anchor" href="#arg-source"></a></dt>

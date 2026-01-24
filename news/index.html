@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">g6R</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.5.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.6.0.9000</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -56,11 +56,38 @@
   <main id="main" class="col-md-9"><div class="page-header">
 
       <h1>Changelog</h1>
-      <small>Source: <a href="https://github.com/cynkra/g6R/blob/v0.5.0/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
+      <small>Source: <a href="https://github.com/cynkra/g6R/blob/main/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
     </div>
 
     <div class="section level2">
-<h2 class="pkg-version" data-toc-text="0.5.0" id="g6r-050">g6R 0.5.0<a class="anchor" aria-label="anchor" href="#g6r-050"></a></h2>
+<h2 class="pkg-version" data-toc-text="0.6.0.9000" id="g6r-0609000">g6R 0.6.0.9000<a class="anchor" aria-label="anchor" href="#g6r-0609000"></a></h2>
+<div class="section level3">
+<h3 id="new-feature-0-6-0-9000">New feature<a class="anchor" aria-label="anchor" href="#new-feature-0-6-0-9000"></a></h3>
+<ul><li>
+<code>input[["&lt;graph_ID&gt;-state"]]</code> now does not return unnamed lists for nodes, edges and combos. Instead, each sublist is named with the corresponding element IDs. This makes it easier to retrieve the state of a specific element when we know the ID.</li>
+<li>Added better port support for nodes <strong>ports</strong>:
+<ul><li>To enable it, you must pass a custom type to <code><a href="../reference/g6_element.html">g6_node()</a></code> such as <code>custom-circle-node</code>, <code>custom-rect-node</code> (We support 9 <a href="https://g6.antv.antgroup.com/en/manual/element/node/overview#built-in-nodes" class="external-link">shapes</a>, except HTML which does not handle port in the g6 library)</li>
+<li>
+<code><a href="../reference/g6_element.html">g6_node()</a></code> get a new <code>ports</code> argument to define ports for each node. In the g6 JS library, ports are normally defined inside <code>style</code> but we consider they are too important to be hidden there. Now you can define ports directly in the node data, g6R automatically moves them to <code>style.ports</code> when rendering the graph.</li>
+<li>New <code><a href="../reference/g6_port.html">g6_port()</a></code> function to create ports easily and wrap them inside <code><a href="../reference/g6_ports.html">g6_ports()</a></code>. A port has a unique <strong>key</strong>, an <strong>arity</strong> that is the number of connections it can make or take and other style parameters inherited from <a href="https://g6.antv.antgroup.com/en/manual/element/node/base-node#portstyleprops" class="external-link">g6</a>. When giving a key to a port, don’t worry if key names collide between nodes, g6R automatically makes them unique by prefixing them with the node ID on the JS side.</li>
+<li>2 kind of ports have been designed:
+<ul><li>
+<strong>input</strong> ports (<code><a href="../reference/g6_port.html">g6_input_port()</a></code>): they can only be the target of an edge.</li>
+<li>
+<strong>output</strong> ports (<code><a href="../reference/g6_port.html">g6_output_port()</a></code>): they can only be the source of an edge.</li>
+</ul></li>
+<li>When creating edges, if you provide <code>sourcePort</code> and/or <code>targetPort</code> within the <code>style</code> list, the edge will be connected to the corresponding ports. Validation is made so we don’t connect incompatible ports (e.g. connecting an output port to another output port) or connecting a port to itself.</li>
+<li>
+<code><a href="../reference/create_edge.html">create_edge()</a></code> behavior was improved to work better with ports. For instance, you can’t drag from a port that is already at its arity limit. You can’t drag from a node if it has ports (drag from the ports instead).</li>
+<li>Ports gain a <code>label</code> parameter to display text on the port.</li>
+<li>In a Shiny context, <code>showGuides</code> allows to display connection <strong>guides</strong> when hovering over a port. Combined with <code>input[["&lt;GRAPH_ID&gt;-selected_port"]]</code> and <code>input[["&lt;graph_ID&gt;-mouse_position"]]</code>, this allows to add and connect nodes on the fly at the guide location.</li>
+<li>Use <code><a href="../reference/g6_update_ports.html">g6_update_ports()</a></code> to update port (3 possible actions: remove/add/update) ports of existing nodes.</li>
+<li>Use <code><a href="../reference/get-ports.html">g6_get_ports()</a></code> to get the ports of existing nodes. Specifically, you can call <code><a href="../reference/get-ports.html">g6_get_input_ports()</a></code> and <code><a href="../reference/get-ports.html">g6_get_output_ports()</a></code> to get only input or output ports respectively. This are only convenience functions.</li>
+</ul></li>
+</ul></div>
+</div>
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.5.0" id="g6r-050">g6R 0.5.0<a class="anchor" aria-label="anchor" href="#g6r-050"></a></h2><p class="text-muted">CRAN release: 2025-12-09</p>
 <div class="section level3">
 <h3 id="potential-breaking-changes-0-5-0">Potential breaking changes<a class="anchor" aria-label="anchor" href="#potential-breaking-changes-0-5-0"></a></h3>
 <p>Due to the new data validation for nodes, edges and combos, some existing code might break if the data provided to g6R functions is not valid. See the corresponding <a href="https://cynkra.github.io/g6R/articles/nodes.html#data-properties">documentation</a> section. If you had to pass custom data you can do it in the <code>data</code> slot.</p>

@@ -20,7 +20,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">g6R</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.5.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.6.0.9000</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -92,7 +92,7 @@
       <h1>Shiny</h1>
             
       
-      <small class="dont-index">Source: <a href="https://github.com/cynkra/g6R/blob/v0.5.0/vignettes/articles/shiny.Rmd" class="external-link"><code>vignettes/articles/shiny.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/cynkra/g6R/blob/main/vignettes/articles/shiny.Rmd" class="external-link"><code>vignettes/articles/shiny.Rmd</code></a></small>
       <div class="d-none name"><code>shiny.Rmd</code></div>
     </div>
 
@@ -838,6 +838,278 @@ edge on drag from a node by maintaining the shift key:</p>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/pkg/shiny/man/shinyApp.html" class="external-link">shinyApp</a></span><span class="op">(</span><span class="va">ui</span>, <span class="va">server</span><span class="op">)</span></span></code></pre></div>
 </div>
+<div class="section level4">
+<h4 id="node-ports-playground">Node ports playground<a class="anchor" aria-label="anchor" href="#node-ports-playground"></a>
+</h4>
+<p>In a Shiny context, using <code><a href="../reference/g6_port.html">g6_port()</a></code>,
+<code>showGuides</code> allows to display connection
+<strong>guides</strong> when hovering over a port. Combined with
+<code>input[["&lt;GRAPH_ID&gt;-selected_port"]]</code> and
+<code>input[["&lt;graph_ID&gt;-mouse_position"]]</code>, this allows to
+add and connect nodes on the fly at the guide location. When giving a
+key to a port, don’t worry if key names collide between nodes, g6R
+automatically makes them unique by prefixing them with the node ID on
+the JS side.</p>
+<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://shiny.posit.co/" class="external-link">shiny</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/cynkra/g6R" class="external-link">g6R</a></span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">options</a></span><span class="op">(</span></span>
+<span>  <span class="st">"g6R.mode"</span> <span class="op">=</span> <span class="st">"dev"</span>,</span>
+<span>  <span class="st">"g6R.layout_on_data_change"</span> <span class="op">=</span> <span class="cn">TRUE</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">ui</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/fluidPage.html" class="external-link">fluidPage</a></span><span class="op">(</span></span>
+<span>  <span class="fu"><a href="../reference/g6-shiny.html">g6_output</a></span><span class="op">(</span><span class="st">"dag"</span><span class="op">)</span>,</span>
+<span>  <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/textOutput.html" class="external-link">verbatimTextOutput</a></span><span class="op">(</span><span class="st">"clicked_port"</span><span class="op">)</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">server</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">input</span>, <span class="va">output</span>, <span class="va">session</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="va">output</span><span class="op">$</span><span class="va">dag</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/g6-shiny.html">render_g6</a></span><span class="op">(</span></span>
+<span>    <span class="fu"><a href="../reference/g6.html">g6</a></span><span class="op">(</span></span>
+<span>      nodes <span class="op">=</span> <span class="fu"><a href="../reference/g6_elements.html">g6_nodes</a></span><span class="op">(</span></span>
+<span>        <span class="fu"><a href="../reference/g6_element.html">g6_node</a></span><span class="op">(</span></span>
+<span>          id <span class="op">=</span> <span class="fl">1</span>,</span>
+<span>          type <span class="op">=</span> <span class="st">"custom-circle-node"</span>,</span>
+<span>          style <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
+<span>            labelText <span class="op">=</span> <span class="st">"Node 1"</span></span>
+<span>          <span class="op">)</span>,</span>
+<span>          ports <span class="op">=</span> <span class="fu"><a href="../reference/g6_ports.html">g6_ports</a></span><span class="op">(</span></span>
+<span>            <span class="fu"><a href="../reference/g6_port.html">g6_input_port</a></span><span class="op">(</span></span>
+<span>              key <span class="op">=</span> <span class="st">"input-1"</span>,</span>
+<span>              placement <span class="op">=</span> <span class="st">"left"</span></span>
+<span>            <span class="op">)</span>,</span>
+<span>            <span class="fu"><a href="../reference/g6_port.html">g6_output_port</a></span><span class="op">(</span></span>
+<span>              key <span class="op">=</span> <span class="st">"output-1"</span>,</span>
+<span>              placement <span class="op">=</span> <span class="st">"right"</span></span>
+<span>            <span class="op">)</span>,</span>
+<span>            <span class="fu"><a href="../reference/g6_port.html">g6_input_port</a></span><span class="op">(</span></span>
+<span>              key <span class="op">=</span> <span class="st">"input-12"</span>,</span>
+<span>              placement <span class="op">=</span> <span class="st">"top"</span></span>
+<span>            <span class="op">)</span></span>
+<span>          <span class="op">)</span></span>
+<span>        <span class="op">)</span>,</span>
+<span>        <span class="fu"><a href="../reference/g6_element.html">g6_node</a></span><span class="op">(</span></span>
+<span>          id <span class="op">=</span> <span class="fl">2</span>,</span>
+<span>          type <span class="op">=</span> <span class="st">"custom-circle-node"</span>,</span>
+<span>          style <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
+<span>            labelText <span class="op">=</span> <span class="st">"Node 2"</span></span>
+<span>          <span class="op">)</span>,</span>
+<span>          ports <span class="op">=</span> <span class="fu"><a href="../reference/g6_ports.html">g6_ports</a></span><span class="op">(</span></span>
+<span>            <span class="fu"><a href="../reference/g6_port.html">g6_input_port</a></span><span class="op">(</span></span>
+<span>              key <span class="op">=</span> <span class="st">"input-2"</span>,</span>
+<span>              placement <span class="op">=</span> <span class="st">"left"</span></span>
+<span>            <span class="op">)</span>,</span>
+<span>            <span class="fu"><a href="../reference/g6_port.html">g6_output_port</a></span><span class="op">(</span></span>
+<span>              key <span class="op">=</span> <span class="st">"output-2"</span>,</span>
+<span>              placement <span class="op">=</span> <span class="st">"right"</span></span>
+<span>            <span class="op">)</span></span>
+<span>          <span class="op">)</span></span>
+<span>        <span class="op">)</span></span>
+<span>      <span class="op">)</span>,</span>
+<span>      edges <span class="op">=</span> <span class="fu"><a href="../reference/g6_elements.html">g6_edges</a></span><span class="op">(</span></span>
+<span>        <span class="fu"><a href="../reference/g6_element.html">g6_edge</a></span><span class="op">(</span></span>
+<span>          source <span class="op">=</span> <span class="fl">1</span>,</span>
+<span>          target <span class="op">=</span> <span class="fl">2</span>,</span>
+<span>          style <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
+<span>            sourcePort <span class="op">=</span> <span class="st">"output-1"</span>,</span>
+<span>            targetPort <span class="op">=</span> <span class="st">"input-2"</span>,</span>
+<span>            endArrow <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>            startArrow <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>            endArrowType <span class="op">=</span> <span class="st">"vee"</span></span>
+<span>          <span class="op">)</span></span>
+<span>        <span class="op">)</span></span>
+<span>      <span class="op">)</span></span>
+<span>    <span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>      <span class="fu"><a href="../reference/g6_layout.html">g6_layout</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>      <span class="fu"><a href="../reference/g6_options.html">g6_options</a></span><span class="op">(</span></span>
+<span>        animation <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>        edge <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>style <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>endArrow <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span></span>
+<span>      <span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>      <span class="fu"><a href="../reference/g6_behaviors.html">g6_behaviors</a></span><span class="op">(</span></span>
+<span>        <span class="fu"><a href="../reference/click_select.html">click_select</a></span><span class="op">(</span>multiple <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>,</span>
+<span>        <span class="fu"><a href="../reference/drag_element.html">drag_element</a></span><span class="op">(</span></span>
+<span>          enable <span class="op">=</span> <span class="fu"><a href="../reference/JS.html">JS</a></span><span class="op">(</span></span>
+<span>            <span class="st">"(e) =&gt; {</span></span>
+<span><span class="st">          return !e.shiftKey &amp;&amp; !e.altKey;</span></span>
+<span><span class="st">        }"</span></span>
+<span>          <span class="op">)</span></span>
+<span>        <span class="op">)</span>,</span>
+<span>        <span class="fu"><a href="../reference/drag_canvas.html">drag_canvas</a></span><span class="op">(</span></span>
+<span>          enable <span class="op">=</span> <span class="fu"><a href="../reference/JS.html">JS</a></span><span class="op">(</span></span>
+<span>            <span class="st">"(e) =&gt; {</span></span>
+<span><span class="st">          return e.targetType === 'canvas' &amp;&amp; !e.shiftKey &amp;&amp; !e.altKey;</span></span>
+<span><span class="st">        }"</span></span>
+<span>          <span class="op">)</span></span>
+<span>        <span class="op">)</span>,</span>
+<span>        <span class="fu"><a href="../reference/zoom_canvas.html">zoom_canvas</a></span><span class="op">(</span><span class="op">)</span>,</span>
+<span>        <span class="fu"><a href="../reference/create_edge.html">create_edge</a></span><span class="op">(</span></span>
+<span>          enable <span class="op">=</span> <span class="fu"><a href="../reference/JS.html">JS</a></span><span class="op">(</span></span>
+<span>            <span class="st">"(e) =&gt; {</span></span>
+<span><span class="st">        return e.shiftKey}"</span></span>
+<span>          <span class="op">)</span></span>
+<span>        <span class="op">)</span></span>
+<span>      <span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>      <span class="co"># Allow to dynamically remove an edge</span></span>
+<span>      <span class="fu"><a href="../reference/g6_plugins.html">g6_plugins</a></span><span class="op">(</span></span>
+<span>        <span class="fu"><a href="../reference/context_menu.html">context_menu</a></span><span class="op">(</span></span>
+<span>          enable <span class="op">=</span> <span class="fu"><a href="../reference/JS.html">JS</a></span><span class="op">(</span><span class="st">"(e) =&gt; e.targetType === 'edge'"</span><span class="op">)</span>,</span>
+<span>          getItems <span class="op">=</span> <span class="fu"><a href="../reference/JS.html">JS</a></span><span class="op">(</span></span>
+<span>            <span class="st">"() =&gt; {</span></span>
+<span><span class="st">              return [</span></span>
+<span><span class="st">                { name: 'Remove edge', value: 'remove_edge' }</span></span>
+<span><span class="st">              ];</span></span>
+<span><span class="st">            }"</span></span>
+<span>          <span class="op">)</span>,</span>
+<span>          onClick <span class="op">=</span> <span class="fu"><a href="../reference/JS.html">JS</a></span><span class="op">(</span></span>
+<span>            <span class="st">"(value, target, current) =&gt; {</span></span>
+<span><span class="st">              const graph = HTMLWidgets</span></span>
+<span><span class="st">                .find(`#${target.closest('.g6').id}`)</span></span>
+<span><span class="st">                .getWidget();</span></span>
+<span><span class="st">              console.log(current.id);</span></span>
+<span><span class="st">              if (current.id === undefined) return;</span></span>
+<span><span class="st">              if (value === 'remove_edge') {</span></span>
+<span><span class="st">                graph.removeEdgeData([current.id]);</span></span>
+<span><span class="st">                graph.draw();</span></span>
+<span><span class="st">              }</span></span>
+<span><span class="st">            }</span></span>
+<span><span class="st">          "</span></span>
+<span>          <span class="op">)</span></span>
+<span>        <span class="op">)</span></span>
+<span>      <span class="op">)</span></span>
+<span>  <span class="op">)</span></span>
+<span></span>
+<span>  <span class="va">output</span><span class="op">$</span><span class="va">clicked_port</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/renderPrint.html" class="external-link">renderPrint</a></span><span class="op">(</span><span class="op">{</span></span>
+<span>    <span class="va">input</span><span class="op">[[</span><span class="st">"dag-selected_port"</span><span class="op">]</span><span class="op">]</span></span>
+<span>  <span class="op">}</span><span class="op">)</span></span>
+<span></span>
+<span>  <span class="va">proxy</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/g6_proxy.html">g6_proxy</a></span><span class="op">(</span><span class="st">"dag"</span><span class="op">)</span></span>
+<span></span>
+<span>  <span class="co"># Add a new node when a port is clicked from the guide</span></span>
+<span>  <span class="co"># at the mouse position (close to the guide)</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/observeEvent.html" class="external-link">observeEvent</a></span><span class="op">(</span><span class="va">input</span><span class="op">[[</span><span class="st">"dag-selected_port"</span><span class="op">]</span><span class="op">]</span>, <span class="op">{</span></span>
+<span>    <span class="va">new_id</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/numeric.html" class="external-link">as.numeric</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Sys.time.html" class="external-link">Sys.time</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
+<span>    <span class="va">pos</span> <span class="op">&lt;-</span> <span class="va">input</span><span class="op">[[</span><span class="st">"dag-mouse_position"</span><span class="op">]</span><span class="op">]</span></span>
+<span></span>
+<span>    <span class="va">proxy</span> <span class="op">|&gt;</span></span>
+<span>      <span class="fu"><a href="../reference/g6-add.html">g6_add_nodes</a></span><span class="op">(</span><span class="fu"><a href="../reference/g6_element.html">g6_node</a></span><span class="op">(</span></span>
+<span>        id <span class="op">=</span> <span class="va">new_id</span>,</span>
+<span>        type <span class="op">=</span> <span class="st">"custom-circle-node"</span>,</span>
+<span>        style <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
+<span>          x <span class="op">=</span> <span class="va">pos</span><span class="op">$</span><span class="va">x</span> <span class="op">+</span> <span class="fl">50</span>, <span class="co"># avoids overlapping with the guide.</span></span>
+<span>          y <span class="op">=</span> <span class="va">pos</span><span class="op">$</span><span class="va">y</span>,</span>
+<span>          labelText <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="st">"Node"</span>, <span class="va">new_id</span><span class="op">)</span></span>
+<span>        <span class="op">)</span>,</span>
+<span>        ports <span class="op">=</span> <span class="fu"><a href="../reference/g6_ports.html">g6_ports</a></span><span class="op">(</span></span>
+<span>          <span class="fu"><a href="../reference/g6_port.html">g6_port</a></span><span class="op">(</span></span>
+<span>            key <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sprintf.html" class="external-link">sprintf</a></span><span class="op">(</span><span class="st">"input-%s"</span>, <span class="va">new_id</span><span class="op">)</span>,</span>
+<span>            type <span class="op">=</span> <span class="st">"input"</span>,</span>
+<span>            placement <span class="op">=</span> <span class="st">"left"</span>,</span>
+<span>            fill <span class="op">=</span> <span class="st">"#52C41A"</span>,</span>
+<span>            r <span class="op">=</span> <span class="fl">4</span></span>
+<span>          <span class="op">)</span>,</span>
+<span>          <span class="fu"><a href="../reference/g6_port.html">g6_port</a></span><span class="op">(</span></span>
+<span>            key <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sprintf.html" class="external-link">sprintf</a></span><span class="op">(</span><span class="st">"output-%s"</span>, <span class="va">new_id</span><span class="op">)</span>,</span>
+<span>            type <span class="op">=</span> <span class="st">"output"</span>,</span>
+<span>            placement <span class="op">=</span> <span class="st">"right"</span>,</span>
+<span>            fill <span class="op">=</span> <span class="st">"#FF4D4F"</span>,</span>
+<span>            r <span class="op">=</span> <span class="fl">4</span></span>
+<span>          <span class="op">)</span></span>
+<span>        <span class="op">)</span></span>
+<span>      <span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>      <span class="fu"><a href="../reference/g6-add.html">g6_add_edges</a></span><span class="op">(</span></span>
+<span>        <span class="fu"><a href="../reference/g6_element.html">g6_edge</a></span><span class="op">(</span></span>
+<span>          source <span class="op">=</span> <span class="va">input</span><span class="op">[[</span><span class="st">"dag-selected_port"</span><span class="op">]</span><span class="op">]</span><span class="op">[[</span><span class="st">"node"</span><span class="op">]</span><span class="op">]</span>,</span>
+<span>          target <span class="op">=</span> <span class="va">new_id</span>,</span>
+<span>          style <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
+<span>            sourcePort <span class="op">=</span> <span class="va">input</span><span class="op">[[</span><span class="st">"dag-selected_port"</span><span class="op">]</span><span class="op">]</span><span class="op">[[</span><span class="st">"port"</span><span class="op">]</span><span class="op">]</span>,</span>
+<span>            targetPort <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sprintf.html" class="external-link">sprintf</a></span><span class="op">(</span><span class="st">"input-%s"</span>, <span class="va">new_id</span><span class="op">)</span>,</span>
+<span>            endArrow <span class="op">=</span> <span class="cn">TRUE</span></span>
+<span>          <span class="op">)</span></span>
+<span>        <span class="op">)</span></span>
+<span>      <span class="op">)</span></span>
+<span>  <span class="op">}</span><span class="op">)</span></span>
+<span><span class="op">}</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/pkg/shiny/man/shinyApp.html" class="external-link">shinyApp</a></span><span class="op">(</span><span class="va">ui</span>, <span class="va">server</span><span class="op">)</span></span></code></pre></div>
+<p>To update ports dynamically, we leverahe the
+<code><a href="../reference/g6_update_ports.html">g6_update_ports()</a></code> proxy function. In short, this function
+accepts three arguments:</p>
+<ul>
+<li>A vector of node IDs to update.</li>
+<li>A list of lists specifying ports to add, remove, or update for each
+node. Each sub-list can contain:
+<ul>
+<li>
+<code>add</code>: A list of <code><a href="../reference/g6_port.html">g6_port()</a></code> objects to
+add.</li>
+<li>
+<code>remove</code>: A vector of port keys to remove.</li>
+<li>
+<code>update</code>: A list of <code><a href="../reference/g6_port.html">g6_port()</a></code> objects with
+updated properties.</li>
+</ul>
+</li>
+</ul>
+<p>Here’s an example where we remove some ports from nodes and
+add/update others when a button is clicked. Note that removing ports
+that are used by edges will also remove those edges from the graph.
+Conversely, removing an edge does not remove the associated ports.</p>
+<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://shiny.posit.co/" class="external-link">shiny</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/cynkra/g6R" class="external-link">g6R</a></span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">ui</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/fluidPage.html" class="external-link">fluidPage</a></span><span class="op">(</span></span>
+<span>  <span class="fu"><a href="../reference/g6-shiny.html">g6_output</a></span><span class="op">(</span><span class="st">"graph"</span>, height <span class="op">=</span> <span class="st">"500px"</span><span class="op">)</span>,</span>
+<span>  <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/actionButton.html" class="external-link">actionButton</a></span><span class="op">(</span><span class="st">"update_ports"</span>, <span class="st">"Update Ports"</span><span class="op">)</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span>  <span class="va">server</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">input</span>, <span class="va">output</span>, <span class="va">session</span><span class="op">)</span> <span class="op">{</span></span>
+<span>    <span class="va">output</span><span class="op">$</span><span class="va">graph</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/g6-shiny.html">render_g6</a></span><span class="op">(</span><span class="op">{</span></span>
+<span>      <span class="fu"><a href="../reference/g6.html">g6</a></span><span class="op">(</span></span>
+<span>        nodes <span class="op">=</span> <span class="fu"><a href="../reference/g6_elements.html">g6_nodes</a></span><span class="op">(</span></span>
+<span>          <span class="fu"><a href="../reference/g6_element.html">g6_node</a></span><span class="op">(</span></span>
+<span>            id <span class="op">=</span> <span class="st">"A"</span>,</span>
+<span>            ports <span class="op">=</span> <span class="fu"><a href="../reference/g6_ports.html">g6_ports</a></span><span class="op">(</span></span>
+<span>              <span class="fu"><a href="../reference/g6_port.html">g6_input_port</a></span><span class="op">(</span>key <span class="op">=</span> <span class="st">"in1"</span>, label <span class="op">=</span> <span class="st">"in1"</span>, placement <span class="op">=</span> <span class="st">"left"</span><span class="op">)</span>,</span>
+<span>              <span class="fu"><a href="../reference/g6_port.html">g6_output_port</a></span><span class="op">(</span>key <span class="op">=</span> <span class="st">"out1"</span>, label <span class="op">=</span> <span class="st">"out1"</span>, placement <span class="op">=</span> <span class="st">"right"</span><span class="op">)</span>,</span>
+<span>              <span class="fu"><a href="../reference/g6_port.html">g6_output_port</a></span><span class="op">(</span>key <span class="op">=</span> <span class="st">"out2"</span>, label <span class="op">=</span> <span class="st">"out2"</span>, placement <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">0.7</span><span class="op">)</span><span class="op">)</span></span>
+<span>            <span class="op">)</span>,</span>
+<span>            style <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>x <span class="op">=</span> <span class="fl">100</span>, y <span class="op">=</span> <span class="fl">200</span>, labelText <span class="op">=</span> <span class="st">"Node A"</span><span class="op">)</span></span>
+<span>          <span class="op">)</span>,</span>
+<span>          <span class="fu"><a href="../reference/g6_element.html">g6_node</a></span><span class="op">(</span></span>
+<span>            id <span class="op">=</span> <span class="st">"B"</span>,</span>
+<span>            ports <span class="op">=</span> <span class="fu"><a href="../reference/g6_ports.html">g6_ports</a></span><span class="op">(</span></span>
+<span>              <span class="fu"><a href="../reference/g6_port.html">g6_input_port</a></span><span class="op">(</span>key <span class="op">=</span> <span class="st">"in2"</span>, label <span class="op">=</span> <span class="st">"in2"</span>, placement <span class="op">=</span> <span class="st">"left"</span><span class="op">)</span>,</span>
+<span>              <span class="fu"><a href="../reference/g6_port.html">g6_output_port</a></span><span class="op">(</span>key <span class="op">=</span> <span class="st">"out3"</span>, label <span class="op">=</span> <span class="st">"out3"</span>, placement <span class="op">=</span> <span class="st">"right"</span><span class="op">)</span>,</span>
+<span>              <span class="fu"><a href="../reference/g6_port.html">g6_output_port</a></span><span class="op">(</span>key <span class="op">=</span> <span class="st">"out4"</span>, label <span class="op">=</span> <span class="st">"out4"</span>, placement <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">0.3</span><span class="op">)</span><span class="op">)</span></span>
+<span>            <span class="op">)</span>,</span>
+<span>            style <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>x <span class="op">=</span> <span class="fl">300</span>, y <span class="op">=</span> <span class="fl">200</span>, labelText <span class="op">=</span> <span class="st">"Node B"</span><span class="op">)</span></span>
+<span>          <span class="op">)</span></span>
+<span>        <span class="op">)</span>,</span>
+<span>        edges <span class="op">=</span> <span class="fu"><a href="../reference/g6_elements.html">g6_edges</a></span><span class="op">(</span></span>
+<span>          <span class="fu"><a href="../reference/g6_element.html">g6_edge</a></span><span class="op">(</span>source <span class="op">=</span> <span class="st">"A"</span>, target <span class="op">=</span> <span class="st">"B"</span>, style <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>sourcePort <span class="op">=</span> <span class="st">"out1"</span>, targetPort <span class="op">=</span> <span class="st">"in2"</span><span class="op">)</span><span class="op">)</span></span>
+<span>        <span class="op">)</span></span>
+<span>      <span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="../reference/g6_behaviors.html">g6_behaviors</a></span><span class="op">(</span><span class="fu"><a href="../reference/click_select.html">click_select</a></span><span class="op">(</span><span class="op">)</span>, <span class="fu"><a href="../reference/drag_element.html">drag_element</a></span><span class="op">(</span><span class="op">)</span>, <span class="fu"><a href="../reference/drag_canvas.html">drag_canvas</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
+<span>    <span class="op">}</span><span class="op">)</span></span>
+<span></span>
+<span>    <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/observeEvent.html" class="external-link">observeEvent</a></span><span class="op">(</span><span class="va">input</span><span class="op">$</span><span class="va">update_ports</span>, <span class="op">{</span></span>
+<span>      <span class="fu"><a href="../reference/g6_update_ports.html">g6_update_ports</a></span><span class="op">(</span></span>
+<span>        <span class="fu"><a href="../reference/g6_proxy.html">g6_proxy</a></span><span class="op">(</span><span class="st">"graph"</span><span class="op">)</span>,</span>
+<span>        <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"A"</span>, <span class="st">"B"</span><span class="op">)</span>,</span>
+<span>        <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
+<span>          A <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>remove <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"out1"</span>, <span class="st">"out2"</span><span class="op">)</span><span class="op">)</span>,</span>
+<span>          B <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
+<span>            add <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="fu"><a href="../reference/g6_port.html">g6_port</a></span><span class="op">(</span>key <span class="op">=</span> <span class="st">"new"</span>, label <span class="op">=</span> <span class="st">"new"</span>, placement <span class="op">=</span> <span class="st">"top"</span><span class="op">)</span><span class="op">)</span>,</span>
+<span>            update <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="fu"><a href="../reference/g6_port.html">g6_port</a></span><span class="op">(</span>key <span class="op">=</span> <span class="st">"in2"</span>, label <span class="op">=</span> <span class="st">"Updated label"</span><span class="op">)</span><span class="op">)</span></span>
+<span>          <span class="op">)</span></span>
+<span>        <span class="op">)</span></span>
+<span>      <span class="op">)</span></span>
+<span>    <span class="op">}</span><span class="op">)</span></span>
+<span>  <span class="op">}</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/pkg/shiny/man/shinyApp.html" class="external-link">shinyApp</a></span><span class="op">(</span><span class="va">ui</span>, <span class="va">server</span><span class="op">)</span></span></code></pre></div>
+</div>
 </div>
 <div class="section level3">
 <h3 id="modifying-plugins-and-behaviors">Modifying plugins and behaviors<a class="anchor" aria-label="anchor" href="#modifying-plugins-and-behaviors"></a>
@@ -852,7 +1124,7 @@ functions. It is mandatory to initialise the plugin with a
 By default, the <strong>key</strong> is set to the element type,
 however, if you had to use multiple elements, you must pass unique keys.
 Here’s an example:</p>
-<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://shiny.posit.co/" class="external-link">shiny</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/cynkra/g6R" class="external-link">g6R</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://rstudio.github.io/bslib/" class="external-link">bslib</a></span><span class="op">)</span></span>
@@ -913,7 +1185,7 @@ Here’s an example:</p>
 <p>You can also dynamically add or remove behaviors using the
 <code>g6_add_behavior()</code> and <code><a href="../reference/g6_update_behavior.html">g6_update_behavior()</a></code>
 proxy functions. Here’s an example:</p>
-<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://shiny.posit.co/" class="external-link">shiny</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/cynkra/g6R" class="external-link">g6R</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://rstudio.github.io/bslib/" class="external-link">bslib</a></span><span class="op">)</span></span>

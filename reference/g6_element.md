@@ -12,7 +12,8 @@ g6_node(
   style = NULL,
   states = NULL,
   combo = NULL,
-  children = NULL
+  children = NULL,
+  ports = NULL
 )
 
 g6_edge(
@@ -80,6 +81,13 @@ validate_element(x, ...)
 - children:
 
   Character vector. Child node IDs (optional, nodes only).
+
+- ports:
+
+  List. Ports definition (optional, nodes only). See
+  [g6_ports](https://cynkra.github.io/g6R/reference/g6_ports.md) and
+  [g6_port](https://cynkra.github.io/g6R/reference/g6_port.md) for
+  details.
 
 - source:
 

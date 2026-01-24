@@ -160,6 +160,30 @@ Create g6 data structures and validate them
   [`as_g6_combos()`](https://cynkra.github.io/g6R/reference/as_g6_elements.md)
   : Coerce to a list of g6_elements objects
 
+## Ports
+
+Create and validate G6 ports
+
+- [`g6_port()`](https://cynkra.github.io/g6R/reference/g6_port.md)
+  [`g6_input_port()`](https://cynkra.github.io/g6R/reference/g6_port.md)
+  [`g6_output_port()`](https://cynkra.github.io/g6R/reference/g6_port.md)
+  : Create a G6 Port
+- [`g6_ports()`](https://cynkra.github.io/g6R/reference/g6_ports.md) :
+  Create a List of G6 Ports
+- [`is_g6_port()`](https://cynkra.github.io/g6R/reference/is_g6_port.md)
+  [`is_g6_ports()`](https://cynkra.github.io/g6R/reference/is_g6_port.md)
+  : Check if an object is a g6_port
+- [`as_g6_port()`](https://cynkra.github.io/g6R/reference/as_g6_port.md)
+  : Coerce to a g6_port object
+- [`as_g6_ports()`](https://cynkra.github.io/g6R/reference/as_g6_ports.md)
+  : Coerce to a list of g6_port objects (g6_ports)
+- [`validate_port()`](https://cynkra.github.io/g6R/reference/validate_port.md)
+  : Validate a single G6 port
+- [`validate_ports()`](https://cynkra.github.io/g6R/reference/validate_ports.md)
+  : Validate a list of G6 ports
+- [`validate_edges_ports()`](https://cynkra.github.io/g6R/reference/validate_edges_ports.md)
+  : Validate that all edges connect input/output ports
+
 ## Proxy
 
 Update a g6 instance from the server function of a Shiny app
@@ -263,6 +287,12 @@ Others
   : Update a plugin in a g6 graph via proxy
 - [`g6_update_behavior()`](https://cynkra.github.io/g6R/reference/g6_update_behavior.md)
   : Update a behavior in a g6 graph via proxy
+- [`g6_update_ports()`](https://cynkra.github.io/g6R/reference/g6_update_ports.md)
+  : Update ports for one or more nodes in a g6 graph via proxy
+- [`g6_get_ports()`](https://cynkra.github.io/g6R/reference/get-ports.md)
+  [`g6_get_input_ports()`](https://cynkra.github.io/g6R/reference/get-ports.md)
+  [`g6_get_output_ports()`](https://cynkra.github.io/g6R/reference/get-ports.md)
+  : Extract ports from a g6 graph state via proxy
 
 ## Layout
 

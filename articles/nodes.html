@@ -20,7 +20,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">g6R</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.5.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.6.0.9000</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -85,13 +85,13 @@
 
 
 
-<script src="nodes_files/htmlwidgets-1.6.4/htmlwidgets.js"></script><script src="nodes_files/g6-binding-0.5.0/g6.js"></script><div class="row">
+<script src="nodes_files/htmlwidgets-1.6.4/htmlwidgets.js"></script><script src="nodes_files/g6-binding-0.6.0.9000/g6.js"></script><div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
 
       <h1>Nodes</h1>
             
       
-      <small class="dont-index">Source: <a href="https://github.com/cynkra/g6R/blob/v0.5.0/vignettes/articles/nodes.Rmd" class="external-link"><code>vignettes/articles/nodes.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/cynkra/g6R/blob/main/vignettes/articles/nodes.Rmd" class="external-link"><code>vignettes/articles/nodes.Rmd</code></a></small>
       <div class="d-none name"><code>nodes.Rmd</code></div>
     </div>
 
@@ -221,6 +221,10 @@ the node belongs to. Combo are describes in another vignette (TBD
 link).</li>
 <li>
 <code>children</code>: nodes ids for tree.</li>
+<li>
+<code>ports</code>: ports definition for the node (since
+<a href="https://github.com/cynkra/g6R" class="external-link">g6R</a> 0.6.0). See the <a href="#ports">Ports</a> section
+for more details.</li>
 </ul>
 <div class="section level3">
 <h3 id="node-type">Node type<a class="anchor" aria-label="anchor" href="#node-type"></a>
@@ -485,7 +489,7 @@ can specify the position and other properties of each port:</p>
 <span>      port <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>      ports <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
 <span>        <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
-<span>          key <span class="op">=</span> <span class="st">"top"</span>,</span>
+<span>          key <span class="op">=</span> <span class="st">"bottom"</span>,</span>
 <span>          placement <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.5</span>, <span class="fl">1</span><span class="op">)</span>,</span>
 <span>          fill <span class="op">=</span> <span class="st">"#7E92B5"</span></span>
 <span>        <span class="op">)</span>,</span>
@@ -495,7 +499,7 @@ can specify the position and other properties of each port:</p>
 <span>          fill <span class="op">=</span> <span class="st">"#F4664A"</span></span>
 <span>        <span class="op">)</span>,</span>
 <span>        <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
-<span>          key <span class="op">=</span> <span class="st">"bottom"</span>,</span>
+<span>          key <span class="op">=</span> <span class="st">"top"</span>,</span>
 <span>          placement <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.5</span>, <span class="fl">0</span><span class="op">)</span>,</span>
 <span>          fill <span class="op">=</span> <span class="st">"#FFBE3A"</span></span>
 <span>        <span class="op">)</span>,</span>
@@ -513,9 +517,161 @@ can specify the position and other properties of each port:</p>
 <span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="../reference/g6.html">g6</a></span><span class="op">(</span><span class="va">nodes</span>, height <span class="op">=</span> <span class="st">"200px"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="../reference/g6_layout.html">g6_layout</a></span><span class="op">(</span><span class="fu"><a href="../reference/d3_force_layout.html">d3_force_layout</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<span>  <span class="fu"><a href="../reference/g6_layout.html">g6_layout</a></span><span class="op">(</span><span class="fu"><a href="../reference/d3_force_layout.html">d3_force_layout</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Warning: 'showGuides' is set to TRUE, but Shiny app is not running. Connection</span></span>
+<span><span class="co">#&gt; guides will not be displayed.</span></span></code></pre></div>
 <div id="htmlwidget-5b1b2f4ad92281566982" style="width:100%;height:200px;" class="g6 html-widget"></div>
-<script type="application/json" data-for="htmlwidget-5b1b2f4ad92281566982">{"x":{"data":{"nodes":[{"id":1,"style":{"port":true,"ports":[{"key":"top","placement":[0.5,1],"fill":"#7E92B5"},{"key":"right","placement":[1,0.5],"fill":"#F4664A"},{"key":"bottom","placement":[0.5,0],"fill":"#FFBE3A"},{"key":"left","placement":[0,0.5],"fill":"#D580FF"}],"portR":3,"portLineWidth":1,"portStroke":"#fff"}}]},"jsonUrl":null,"iconsUrl":"//at.alicdn.com/t/font_2678727_za4qjydwkkh.js","mode":"prod","preservePosition":false,"layout":{"type":"d3-force","link":{"distance":100,"strength":2},"collide":{"radius":40}}},"evals":[],"jsHooks":[]}</script>
+<script type="application/json" data-for="htmlwidget-5b1b2f4ad92281566982">{"x":{"data":{"nodes":[{"id":1,"style":{"port":true,"ports":[{"key":"bottom","type":"input","label":"bottom","arity":1,"showGuides":false,"placement":[0.5,1],"fill":"#7E92B5","r":4},{"key":"right","type":"input","label":"right","arity":1,"showGuides":false,"placement":[1,0.5],"fill":"#F4664A","r":4},{"key":"top","type":"input","label":"top","arity":1,"showGuides":false,"placement":[0.5,0],"fill":"#FFBE3A","r":4},{"key":"left","type":"input","label":"left","arity":1,"showGuides":false,"placement":[0,0.5],"fill":"#D580FF","r":4}],"portR":3,"portLineWidth":1,"portStroke":"#fff"}}]},"jsonUrl":null,"iconsUrl":"//at.alicdn.com/t/font_2678727_za4qjydwkkh.js","mode":"prod","preservePosition":false,"layout":{"type":"d3-force","link":{"distance":100,"strength":2},"collide":{"radius":40}}},"evals":[],"jsHooks":[]}</script><p>Since, <a href="https://github.com/cynkra/g6R" class="external-link">g6R</a> 0.6.0, we offer a better support for ports.
+To enable it, you must pass a custom type to <code><a href="../reference/g6_element.html">g6_node()</a></code> such
+as <code>custom-circle-node</code>, <code>custom-rect-node</code> (We
+support 9 <a href="https://g6.antv.antgroup.com/en/manual/element/node/overview#built-in-nodes" class="external-link">shapes</a>,
+except HTML which does not handle port in the g6 library).
+<code><a href="../reference/g6_element.html">g6_node()</a></code> get a new <code>ports</code> argument to define
+ports for each node. In the g6 JS library, ports are normally defined
+inside <code>style</code> but we consider they are too important to be
+hidden there. Now you can define ports directly in the node data, g6R
+automatically moves them to <code>style.ports</code> when rendering the
+graph. We expose a new <code><a href="../reference/g6_port.html">g6_port()</a></code> function to create ports
+easily and wrap them inside <code><a href="../reference/g6_ports.html">g6_ports()</a></code>. A port has a unique
+<strong>key</strong>, an <strong>arity</strong> that is the number of
+connections it can make or take and other style parameters inherited
+from <a href="https://g6.antv.antgroup.com/en/manual/element/node/base-node#portstyleprops" class="external-link">g6</a>.
+When giving a key to a port, don’t worry if key names collide between
+nodes, g6R automatically makes them unique by prefixing them with the
+node ID on the JS side.</p>
+<ul>
+<li>2 kind of ports have been designed:
+<ul>
+<li>
+<strong>input</strong> ports (<code><a href="../reference/g6_port.html">g6_input_port()</a></code>): they
+can only be the target of an edge.</li>
+<li>
+<strong>output</strong> ports (<code><a href="../reference/g6_port.html">g6_output_port()</a></code>): they
+can only be the source of an edge.</li>
+</ul>
+</li>
+</ul>
+<p>When creating edges, if you provide <code>sourcePort</code> and/or
+<code>targetPort</code> within the <code>style</code> list, the edge
+will be connected to the corresponding ports. Validation is made so we
+don’t connect incompatible ports (e.g. connecting an output port to
+another output port) or connecting a port to itself. Finally
+<code><a href="../reference/create_edge.html">create_edge()</a></code> behavior was improved to work better with
+ports. For instance, you can’t drag from a port that is already at its
+arity limit. You can’t drag from a node if it has ports (drag from the
+ports instead). For instance, you can also do:</p>
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/g6.html">g6</a></span><span class="op">(</span></span>
+<span>  nodes <span class="op">=</span> <span class="fu"><a href="../reference/g6_elements.html">g6_nodes</a></span><span class="op">(</span></span>
+<span>    <span class="fu"><a href="../reference/g6_element.html">g6_node</a></span><span class="op">(</span></span>
+<span>      id <span class="op">=</span> <span class="fl">1</span>,</span>
+<span>      type <span class="op">=</span> <span class="st">"custom-circle-node"</span>,</span>
+<span>      style <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
+<span>        labelText <span class="op">=</span> <span class="st">"Node 1"</span></span>
+<span>      <span class="op">)</span>,</span>
+<span>      ports <span class="op">=</span> <span class="fu"><a href="../reference/g6_ports.html">g6_ports</a></span><span class="op">(</span></span>
+<span>        <span class="fu"><a href="../reference/g6_port.html">g6_input_port</a></span><span class="op">(</span></span>
+<span>          key <span class="op">=</span> <span class="st">"input-1"</span>,</span>
+<span>          placement <span class="op">=</span> <span class="st">"left"</span></span>
+<span>        <span class="op">)</span>,</span>
+<span>        <span class="fu"><a href="../reference/g6_port.html">g6_output_port</a></span><span class="op">(</span></span>
+<span>          key <span class="op">=</span> <span class="st">"output-1"</span>,</span>
+<span>          placement <span class="op">=</span> <span class="st">"right"</span></span>
+<span>        <span class="op">)</span>,</span>
+<span>        <span class="fu"><a href="../reference/g6_port.html">g6_input_port</a></span><span class="op">(</span></span>
+<span>          key <span class="op">=</span> <span class="st">"input-12"</span>,</span>
+<span>          placement <span class="op">=</span> <span class="st">"top"</span></span>
+<span>        <span class="op">)</span></span>
+<span>      <span class="op">)</span></span>
+<span>    <span class="op">)</span>,</span>
+<span>    <span class="fu"><a href="../reference/g6_element.html">g6_node</a></span><span class="op">(</span></span>
+<span>      id <span class="op">=</span> <span class="fl">2</span>,</span>
+<span>      type <span class="op">=</span> <span class="st">"custom-circle-node"</span>,</span>
+<span>      style <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
+<span>        labelText <span class="op">=</span> <span class="st">"Node 2"</span></span>
+<span>      <span class="op">)</span>,</span>
+<span>      ports <span class="op">=</span> <span class="fu"><a href="../reference/g6_ports.html">g6_ports</a></span><span class="op">(</span></span>
+<span>        <span class="fu"><a href="../reference/g6_port.html">g6_input_port</a></span><span class="op">(</span></span>
+<span>          key <span class="op">=</span> <span class="st">"input-2"</span>,</span>
+<span>          placement <span class="op">=</span> <span class="st">"left"</span></span>
+<span>        <span class="op">)</span>,</span>
+<span>        <span class="fu"><a href="../reference/g6_port.html">g6_output_port</a></span><span class="op">(</span></span>
+<span>          key <span class="op">=</span> <span class="st">"output-2"</span>,</span>
+<span>          placement <span class="op">=</span> <span class="st">"right"</span></span>
+<span>        <span class="op">)</span></span>
+<span>      <span class="op">)</span></span>
+<span>    <span class="op">)</span></span>
+<span>  <span class="op">)</span>,</span>
+<span>  edges <span class="op">=</span> <span class="fu"><a href="../reference/g6_elements.html">g6_edges</a></span><span class="op">(</span></span>
+<span>    <span class="fu"><a href="../reference/g6_element.html">g6_edge</a></span><span class="op">(</span></span>
+<span>      source <span class="op">=</span> <span class="fl">1</span>,</span>
+<span>      target <span class="op">=</span> <span class="fl">2</span>,</span>
+<span>      style <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
+<span>        sourcePort <span class="op">=</span> <span class="st">"output-1"</span>,</span>
+<span>        targetPort <span class="op">=</span> <span class="st">"input-2"</span>,</span>
+<span>        endArrow <span class="op">=</span> <span class="cn">TRUE</span></span>
+<span>      <span class="op">)</span></span>
+<span>    <span class="op">)</span></span>
+<span>  <span class="op">)</span></span>
+<span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="../reference/g6_layout.html">g6_layout</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="../reference/g6_options.html">g6_options</a></span><span class="op">(</span></span>
+<span>    animation <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>    edge <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>style <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>endArrow <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span></span>
+<span>  <span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="../reference/g6_behaviors.html">g6_behaviors</a></span><span class="op">(</span></span>
+<span>    <span class="fu"><a href="../reference/click_select.html">click_select</a></span><span class="op">(</span><span class="op">)</span>,</span>
+<span>    <span class="fu"><a href="../reference/drag_element.html">drag_element</a></span><span class="op">(</span></span>
+<span>      enable <span class="op">=</span> <span class="fu"><a href="../reference/JS.html">JS</a></span><span class="op">(</span></span>
+<span>        <span class="st">"(e) =&gt; {</span></span>
+<span><span class="st">          return !e.shiftKey &amp;&amp; !e.altKey;</span></span>
+<span><span class="st">        }"</span></span>
+<span>      <span class="op">)</span></span>
+<span>    <span class="op">)</span>,</span>
+<span>    <span class="fu"><a href="../reference/drag_canvas.html">drag_canvas</a></span><span class="op">(</span></span>
+<span>      enable <span class="op">=</span> <span class="fu"><a href="../reference/JS.html">JS</a></span><span class="op">(</span></span>
+<span>        <span class="st">"(e) =&gt; {</span></span>
+<span><span class="st">          return e.targetType === 'canvas' &amp;&amp; !e.shiftKey &amp;&amp; !e.altKey;</span></span>
+<span><span class="st">        }"</span></span>
+<span>      <span class="op">)</span></span>
+<span>    <span class="op">)</span>,</span>
+<span>    <span class="fu"><a href="../reference/zoom_canvas.html">zoom_canvas</a></span><span class="op">(</span><span class="op">)</span>,</span>
+<span>    <span class="fu"><a href="../reference/create_edge.html">create_edge</a></span><span class="op">(</span></span>
+<span>      enable <span class="op">=</span> <span class="fu"><a href="../reference/JS.html">JS</a></span><span class="op">(</span></span>
+<span>        <span class="st">"(e) =&gt; {</span></span>
+<span><span class="st">        return e.shiftKey}"</span></span>
+<span>      <span class="op">)</span></span>
+<span>    <span class="op">)</span></span>
+<span>  <span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="co"># Allow to dynamically remove an edge</span></span>
+<span>  <span class="fu"><a href="../reference/g6_plugins.html">g6_plugins</a></span><span class="op">(</span></span>
+<span>    <span class="fu"><a href="../reference/context_menu.html">context_menu</a></span><span class="op">(</span></span>
+<span>      enable <span class="op">=</span> <span class="fu"><a href="../reference/JS.html">JS</a></span><span class="op">(</span><span class="st">"(e) =&gt; e.targetType === 'edge'"</span><span class="op">)</span>,</span>
+<span>      getItems <span class="op">=</span> <span class="fu"><a href="../reference/JS.html">JS</a></span><span class="op">(</span></span>
+<span>        <span class="st">"() =&gt; {</span></span>
+<span><span class="st">              return [</span></span>
+<span><span class="st">                { name: 'Remove edge', value: 'remove_edge' }</span></span>
+<span><span class="st">              ];</span></span>
+<span><span class="st">            }"</span></span>
+<span>      <span class="op">)</span>,</span>
+<span>      onClick <span class="op">=</span> <span class="fu"><a href="../reference/JS.html">JS</a></span><span class="op">(</span></span>
+<span>        <span class="st">"(value, target, current) =&gt; {</span></span>
+<span><span class="st">              const graph = HTMLWidgets</span></span>
+<span><span class="st">                .find(`#${target.closest('.g6').id}`)</span></span>
+<span><span class="st">                .getWidget();</span></span>
+<span><span class="st">              console.log(current.id);</span></span>
+<span><span class="st">              if (current.id === undefined) return;</span></span>
+<span><span class="st">              if (value === 'remove_edge') {</span></span>
+<span><span class="st">                graph.removeEdgeData([current.id]);</span></span>
+<span><span class="st">                graph.draw();</span></span>
+<span><span class="st">              }</span></span>
+<span><span class="st">            }</span></span>
+<span><span class="st">          "</span></span>
+<span>      <span class="op">)</span></span>
+<span>    <span class="op">)</span></span>
+<span>  <span class="op">)</span></span></code></pre></div>
+<div id="htmlwidget-25c3e940e6859592f801" style="width:100%;height:432.632880098888px;" class="g6 html-widget"></div>
+<script type="application/json" data-for="htmlwidget-25c3e940e6859592f801">{"x":{"data":{"nodes":[{"id":1,"type":"custom-circle-node","style":{"labelText":"Node 1","ports":[{"key":"input-1","type":"input","label":"input-1","arity":1,"showGuides":false,"fill":"#52C41A","placement":"left","r":4},{"key":"output-1","type":"output","label":"output-1","arity":1,"showGuides":false,"fill":"#FF4D4F","placement":"right","r":4},{"key":"input-12","type":"input","label":"input-12","arity":1,"showGuides":false,"fill":"#52C41A","placement":"top","r":4}]}},{"id":2,"type":"custom-circle-node","style":{"labelText":"Node 2","ports":[{"key":"input-2","type":"input","label":"input-2","arity":1,"showGuides":false,"fill":"#52C41A","placement":"left","r":4},{"key":"output-2","type":"output","label":"output-2","arity":1,"showGuides":false,"fill":"#FF4D4F","placement":"right","r":4}]}}],"edges":[{"source":1,"target":2,"id":"1-2","style":{"sourcePort":"output-1","targetPort":"input-2","endArrow":true}}]},"jsonUrl":null,"iconsUrl":"//at.alicdn.com/t/font_2678727_za4qjydwkkh.js","mode":"prod","preservePosition":false,"layout":{"type":"d3-force","link":{"distance":100,"strength":2},"collide":{"radius":40}},"edge":{"style":{"endArrow":true}},"animation":false,"autoResize":false,"cursor":"default","rotation":0,"zoom":1,"zoomRange":[0.01,10],"theme":"light","behaviors":[{"key":"click-select","animation":true,"degree":0,"enable":true,"multiple":false,"state":"selected","neighborState":"selected","trigger":["shift"],"type":"click-select"},{"key":"drag-element","enable":"(e) => {\n          return !e.shiftKey && !e.altKey;\n        }","animation":true,"state":"selected","dropEffect":"move","hideEdge":"none","shadow":false,"type":"drag-element"},{"key":"drag-canvas","enable":"(e) => {\n          return e.targetType === 'canvas' && !e.shiftKey && !e.altKey;\n        }","direction":"both","sensitivity":10,"type":"drag-canvas"},{"key":"zoom-canvas","animation":{"duration":200},"enable":true,"preventDefault":true,"sensitivity":1,"type":"zoom-canvas"},{"key":"create-edge","trigger":"drag","enable":"(e) => {\n        return e.shiftKey}","notify":false,"type":"create-edge"}],"plugins":[{"key":"contextmenu","className":"g6-contextmenu","trigger":"contextmenu","offset":[4,4],"onClick":"(value, target, current) => {\n              const graph = HTMLWidgets\n                .find(`#${target.closest('.g6').id}`)\n                .getWidget();\n              console.log(current.id);\n              if (current.id === undefined) return;\n              if (value === 'remove_edge') {\n                graph.removeEdgeData([current.id]);\n                graph.draw();\n              }\n            }\n          ","getItems":"() => {\n              return [\n                { name: 'Remove edge', value: 'remove_edge' }\n              ];\n            }","enable":"(e) => e.targetType === 'edge'","type":"contextmenu"}]},"evals":["behaviors.1.enable","behaviors.2.enable","behaviors.4.enable","plugins.0.onClick","plugins.0.getItems","plugins.0.enable"],"jsHooks":[]}</script>
 </div>
 </div>
 <div class="section level3">
@@ -525,7 +681,7 @@ can specify the position and other properties of each port:</p>
 that can be used to indicate different conditions or interactions.
 States can be set in the <code>states</code> property of the node
 data:</p>
-<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">states</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span>
 <span>  <span class="st">"default"</span>,</span>
 <span>  <span class="st">"selected"</span>,</span>
@@ -551,8 +707,8 @@ data:</p>
 <span>      <span class="op">)</span></span>
 <span>    <span class="op">)</span></span>
 <span>  <span class="op">)</span></span></code></pre></div>
-<div id="htmlwidget-25c3e940e6859592f801" style="width:100%;height:432.632880098888px;" class="g6 html-widget"></div>
-<script type="application/json" data-for="htmlwidget-25c3e940e6859592f801">{"x":{"data":{"nodes":[{"id":1,"data":{"state":"default"},"states":["default"]},{"id":2,"data":{"state":"selected"},"states":["selected"]},{"id":3,"data":{"state":"highlight"},"states":["highlight"]},{"id":4,"data":{"state":"active"},"states":["active"]},{"id":5,"data":{"state":"inactive"},"states":["inactive"]},{"id":6,"data":{"state":"disabled"},"states":["disabled"]}]},"jsonUrl":null,"iconsUrl":"//at.alicdn.com/t/font_2678727_za4qjydwkkh.js","mode":"prod","preservePosition":false,"layout":{"type":"d3-force","link":{"distance":100,"strength":2},"collide":{"radius":40}},"node":{"style":{"labelText":"(d) => {\n            return d.data.state\n          }"}},"animation":false,"autoResize":false,"cursor":"default","rotation":0,"zoom":1,"zoomRange":[0.01,10],"theme":"light"},"evals":["node.style.labelText"],"jsHooks":[]}</script>
+<div id="htmlwidget-3f27c09be0c60bb52829" style="width:100%;height:432.632880098888px;" class="g6 html-widget"></div>
+<script type="application/json" data-for="htmlwidget-3f27c09be0c60bb52829">{"x":{"data":{"nodes":[{"id":1,"data":{"state":"default"},"states":["default"]},{"id":2,"data":{"state":"selected"},"states":["selected"]},{"id":3,"data":{"state":"highlight"},"states":["highlight"]},{"id":4,"data":{"state":"active"},"states":["active"]},{"id":5,"data":{"state":"inactive"},"states":["inactive"]},{"id":6,"data":{"state":"disabled"},"states":["disabled"]}]},"jsonUrl":null,"iconsUrl":"//at.alicdn.com/t/font_2678727_za4qjydwkkh.js","mode":"prod","preservePosition":false,"layout":{"type":"d3-force","link":{"distance":100,"strength":2},"collide":{"radius":40}},"node":{"style":{"labelText":"(d) => {\n            return d.data.state\n          }"}},"animation":false,"autoResize":false,"cursor":"default","rotation":0,"zoom":1,"zoomRange":[0.01,10],"theme":"light"},"evals":["node.style.labelText"],"jsHooks":[]}</script>
 </div>
 <div class="section level3">
 <h3 id="color-palette">Color palette<a class="anchor" aria-label="anchor" href="#color-palette"></a>

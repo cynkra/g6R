@@ -20,6 +20,8 @@
 <url><loc>https://cynkra.github.io/g6R/reference/antv_dagre_layout.html</loc></url>
 <url><loc>https://cynkra.github.io/g6R/reference/as_g6_element.html</loc></url>
 <url><loc>https://cynkra.github.io/g6R/reference/as_g6_elements.html</loc></url>
+<url><loc>https://cynkra.github.io/g6R/reference/as_g6_port.html</loc></url>
+<url><loc>https://cynkra.github.io/g6R/reference/as_g6_ports.html</loc></url>
 <url><loc>https://cynkra.github.io/g6R/reference/auto_adapt_label.html</loc></url>
 <url><loc>https://cynkra.github.io/g6R/reference/auto_fit_config.html</loc></url>
 <url><loc>https://cynkra.github.io/g6R/reference/background.html</loc></url>
@@ -74,12 +76,16 @@
 <url><loc>https://cynkra.github.io/g6R/reference/g6_layout.html</loc></url>
 <url><loc>https://cynkra.github.io/g6R/reference/g6_options.html</loc></url>
 <url><loc>https://cynkra.github.io/g6R/reference/g6_plugins.html</loc></url>
+<url><loc>https://cynkra.github.io/g6R/reference/g6_port.html</loc></url>
+<url><loc>https://cynkra.github.io/g6R/reference/g6_ports.html</loc></url>
 <url><loc>https://cynkra.github.io/g6R/reference/g6_proxy.html</loc></url>
 <url><loc>https://cynkra.github.io/g6R/reference/g6_set_options.html</loc></url>
 <url><loc>https://cynkra.github.io/g6R/reference/g6_set_theme.html</loc></url>
 <url><loc>https://cynkra.github.io/g6R/reference/g6_update_behavior.html</loc></url>
 <url><loc>https://cynkra.github.io/g6R/reference/g6_update_layout.html</loc></url>
 <url><loc>https://cynkra.github.io/g6R/reference/g6_update_plugin.html</loc></url>
+<url><loc>https://cynkra.github.io/g6R/reference/g6_update_ports.html</loc></url>
+<url><loc>https://cynkra.github.io/g6R/reference/get-ports.html</loc></url>
 <url><loc>https://cynkra.github.io/g6R/reference/grid_line.html</loc></url>
 <url><loc>https://cynkra.github.io/g6R/reference/history.html</loc></url>
 <url><loc>https://cynkra.github.io/g6R/reference/hover_activate.html</loc></url>
@@ -88,6 +94,7 @@
 <url><loc>https://cynkra.github.io/g6R/reference/is_g6_data.html</loc></url>
 <url><loc>https://cynkra.github.io/g6R/reference/is_g6_element.html</loc></url>
 <url><loc>https://cynkra.github.io/g6R/reference/is_g6_elements.html</loc></url>
+<url><loc>https://cynkra.github.io/g6R/reference/is_g6_port.html</loc></url>
 <url><loc>https://cynkra.github.io/g6R/reference/lasso_select.html</loc></url>
 <url><loc>https://cynkra.github.io/g6R/reference/legend.html</loc></url>
 <url><loc>https://cynkra.github.io/g6R/reference/lesmis.html</loc></url>
@@ -104,6 +111,9 @@
 <url><loc>https://cynkra.github.io/g6R/reference/toolbar.html</loc></url>
 <url><loc>https://cynkra.github.io/g6R/reference/tooltips.html</loc></url>
 <url><loc>https://cynkra.github.io/g6R/reference/tree.html</loc></url>
+<url><loc>https://cynkra.github.io/g6R/reference/validate_edges_ports.html</loc></url>
+<url><loc>https://cynkra.github.io/g6R/reference/validate_port.html</loc></url>
+<url><loc>https://cynkra.github.io/g6R/reference/validate_ports.html</loc></url>
 <url><loc>https://cynkra.github.io/g6R/reference/watermark.html</loc></url>
 <url><loc>https://cynkra.github.io/g6R/reference/zoom_canvas.html</loc></url>
 </urlset>
