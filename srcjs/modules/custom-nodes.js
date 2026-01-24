@@ -359,10 +359,40 @@ const createCustomNode = (BaseShape) => {
 
       // Calculate bounding box coordinates
       const bboxPadding = 3;
-      const minX = Math.min(x1, x2, rectX) - bboxPadding;
-      const maxX = Math.max(x1, x2, rectX + rectWidth) + bboxPadding;
-      const minY = Math.min(y1, y2, rectY) - bboxPadding;
-      const maxY = Math.max(y1, y2, rectY + rectHeight) + bboxPadding;
+      const bboxOffset = 10;
+
+      // Compute direction vector (dx, dy) for offset
+      let dx = 0, dy = 0;
+      if (Array.isArray(style.placement)) {
+        // Normalize to [-1, 1]
+        dx = (style.placement[0] - 0.5) * 2;
+        dy = (style.placement[1] - 0.5) * 2;
+        // If exactly center, fallback to direction string
+        if (dx === 0 && dy === 0 && typeof direction === "string") {
+          if (direction.includes("left")) dx = -1;
+          if (direction.includes("right")) dx = 1;
+          if (direction.includes("top")) dy = -1;
+          if (direction.includes("bottom")) dy = 1;
+        }
+      } else if (typeof direction === "string") {
+        if (direction.includes("left")) dx = -1;
+        if (direction.includes("right")) dx = 1;
+        if (direction.includes("top")) dy = -1;
+        if (direction.includes("bottom")) dy = 1;
+      }
+
+      // Normalize diagonal
+      if (dx !== 0 && dy !== 0) {
+        const norm = Math.sqrt(dx * dx + dy * dy);
+        dx /= norm;
+        dy /= norm;
+      }
+
+      // Offset the bbox start point away from the port
+      const minX = Math.min(x1, x2, rectX) - bboxPadding + dx * bboxOffset;
+      const maxX = Math.max(x1, x2, rectX + rectWidth) + bboxPadding + dx * bboxOffset;
+      const minY = Math.min(y1, y2, rectY) - bboxPadding + dy * bboxOffset;
+      const maxY = Math.max(y1, y2, rectY + rectHeight) + bboxPadding + dy * bboxOffset;
 
       const bbox = this.upsert(
         `hover-guide-bbox-${key}`,
