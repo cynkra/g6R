@@ -13,6 +13,9 @@ const addUniqueEventListener = (element, type, listener) => {
   }
 }
 
+// Track currently hovered node to hide others when switching
+let currentlyHoveredNode = null;
+
 const getContrastColor = (bg) => {
   // Accepts hex color string, e.g. "#444"
   let c = bg.replace('#', '');
@@ -45,14 +48,14 @@ const createCustomNode = (BaseShape) => {
 
         const baseRadius = style.r || 4;
 
-        // Clean port outline with icon color
+        // Solid filled port circle for occupied ports
         const portStyle = {
           ...style,
           zIndex: 1,
           r: baseRadius,
-          fill: 'transparent',
-          stroke: style.fill,
-          lineWidth: 1,
+          fill: style.fill,
+          stroke: 'transparent',
+          lineWidth: 0,
           visibility: 'hidden'
         };
         const portShape = this.createPortShape(`port-${key}`, portStyle, x, y, container, key);
@@ -79,36 +82,134 @@ const createCustomNode = (BaseShape) => {
       if (!keyShape || keyShape._hasZIndexHover) return;
       keyShape._hasZIndexHover = true;
 
-      addUniqueEventListener(keyShape, 'mouseenter', () => {
-        if (!this._portShapes) return;
-        this._portShapes.forEach(({ shape }) => {
-          shape.attr({
-            visibility: 'visible',
-            zIndex: 10
-          });
-        });
-      });
+      // Track if we're hovering node or any port/indicator
+      let hideTimeout = null;
+      let isHoveringNode = false;
 
-      addUniqueEventListener(keyShape, 'mouseleave', () => {
-        // Hide tooltip when leaving node
-        const tooltip = document.getElementById('g6-port-tooltip');
-        if (tooltip) tooltip.style.display = 'none';
+      const showPorts = () => {
+        isHoveringNode = true;
+        if (hideTimeout) {
+          clearTimeout(hideTimeout);
+          hideTimeout = null;
+        }
+
+        // Hide previous node's indicators immediately
+        if (currentlyHoveredNode && currentlyHoveredNode !== this) {
+          currentlyHoveredNode._hidePortsImmediately?.();
+        }
+        currentlyHoveredNode = this;
 
         if (!this._portShapes) return;
+
+        const portConnections = getPortConnections(this.context.graph, this.id) || {};
+
+        // Check if already showing (to avoid flicker on re-enter)
+        let needsAnimation = false;
+
+        // Show + indicators for available ports, small circles for occupied ports
         this._portShapes.forEach(({ shape, indicator }) => {
-          shape.attr({
-            visibility: 'hidden',
-            zIndex: 1,
-            r: shape._baseRadius
-          });
-          if (indicator) {
-            this.stopRotationAnimation(indicator.circle);
-            indicator.circle.attr('visibility', 'hidden');
-            indicator.innerCircle.attr('visibility', 'hidden');
-            indicator.plus.attr('visibility', 'hidden');
+          const connections = portConnections[shape.key] ?? 0;
+          const arity = shape.arity === "Infinity" ? Infinity : (shape.arity || 1);
+          const atCapacity = connections >= arity;
+
+          if (!atCapacity && indicator) {
+            // Show + indicator for ports that can accept connections
+            shape.attr({ visibility: 'hidden' });
+            // Only reset opacity if not already visible
+            if (indicator.circle.attr('visibility') !== 'visible') {
+              if (indicator.hitArea) indicator.hitArea.attr({ visibility: 'visible' });
+              indicator.circle.attr({ visibility: 'visible', opacity: 0 });
+              indicator.innerCircle.attr({ visibility: 'visible', opacity: 0 });
+              indicator.plus.attr({ visibility: 'visible', opacity: 0 });
+              needsAnimation = true;
+            }
+            this.startRotationAnimation(indicator.circle);
+          } else {
+            // Show small port circle for occupied ports
+            if (shape.attr('visibility') !== 'visible') {
+              shape.attr({
+                visibility: 'visible',
+                zIndex: 10,
+                opacity: 0
+              });
+              needsAnimation = true;
+            }
           }
         });
-      });
+
+        if (needsAnimation) {
+          this.animateAllIn();
+        }
+      };
+
+      const hidePorts = () => {
+        isHoveringNode = false;
+        // Delay hiding to allow moving to indicators
+        hideTimeout = setTimeout(() => {
+          const tooltip = document.getElementById('g6-port-tooltip');
+          if (tooltip) tooltip.style.display = 'none';
+
+          if (!this._portShapes) return;
+          if (this._portsAnimation) {
+            cancelAnimationFrame(this._portsAnimation);
+            this._portsAnimation = null;
+          }
+          this._portShapes.forEach(({ shape, indicator }) => {
+            shape.attr({
+              visibility: 'hidden',
+              zIndex: 1,
+              r: shape._baseRadius,
+              opacity: 1
+            });
+            if (indicator) {
+              this.stopRotationAnimation(indicator.circle);
+              if (indicator.hitArea) indicator.hitArea.attr({ visibility: 'hidden' });
+              indicator.circle.attr({ visibility: 'hidden', opacity: 1 });
+              indicator.innerCircle.attr({ visibility: 'hidden', opacity: 1 });
+              indicator.plus.attr({ visibility: 'hidden', opacity: 1 });
+            }
+          });
+        }, 400); // 400ms delay before hiding
+      };
+
+      // Immediately hide all ports/indicators (no delay)
+      const hidePortsImmediately = () => {
+        isHoveringNode = false;
+        if (hideTimeout) {
+          clearTimeout(hideTimeout);
+          hideTimeout = null;
+        }
+        if (this._portsAnimation) {
+          cancelAnimationFrame(this._portsAnimation);
+          this._portsAnimation = null;
+        }
+        if (!this._portShapes) return;
+        this._portShapes.forEach(({ shape, indicator }) => {
+          shape.attr({ visibility: 'hidden', opacity: 1 });
+          if (indicator) {
+            this.stopRotationAnimation(indicator.circle);
+            if (indicator.hitArea) indicator.hitArea.attr({ visibility: 'hidden' });
+            indicator.circle.attr({ visibility: 'hidden', opacity: 1 });
+            indicator.innerCircle.attr({ visibility: 'hidden', opacity: 1 });
+            indicator.plus.attr({ visibility: 'hidden', opacity: 1 });
+          }
+        });
+      };
+
+      // Store functions for ports/indicators to call
+      this._showPorts = showPorts;
+      this._hidePorts = hidePorts;
+      this._hidePortsImmediately = hidePortsImmediately;
+      this._cancelHide = () => {
+        if (hideTimeout) {
+          clearTimeout(hideTimeout);
+          hideTimeout = null;
+        }
+      };
+      this._isHoveringNode = () => isHoveringNode;
+
+      addUniqueEventListener(keyShape, 'mouseenter', showPorts);
+      addUniqueEventListener(keyShape, 'mouseleave', hidePorts);
     }
 
     // Lighten a hex color by mixing with white
@@ -182,23 +283,21 @@ const createCustomNode = (BaseShape) => {
     }
 
     addPortEvents(portShape, style, indicator = null, graphId = null, nodeId = null) {
-      // Helper to show add indicator on hover
+      // Helper to show add indicator on hover with pop animation
       const handlePortHover = () => {
         const connections = getPortConnections(this.context.graph, this.id)?.[portShape.key] ?? 0;
         const atCapacity = connections >= (portShape.arity === "Infinity" ? Infinity : portShape.arity);
 
         if (!atCapacity && indicator) {
-          // Hide port, show rotating dashed circle + solid circle + plus
+          // Hide port, show rotating dashed circle + solid circle + plus with animation
           portShape.attr('visibility', 'hidden');
-          indicator.circle.attr('visibility', 'visible');
-          indicator.innerCircle.attr('visibility', 'visible');
-          indicator.plus.attr('visibility', 'visible');
+          this.showIndicatorWithAnimation(indicator);
           this.startRotationAnimation(indicator.circle);
         }
       }
 
-      // Add click handler to indicator circles
-      if (indicator && graphId && nodeId && style.showGuides) {
+      // Add event handlers to indicator hitArea (covers entire indicator)
+      if (indicator && indicator.hitArea && graphId && nodeId && style.showGuides) {
         const handleIndicatorClick = (e) => {
           if (HTMLWidgets.shinyMode) {
             Shiny.setInputValue(
@@ -210,41 +309,17 @@ const createCustomNode = (BaseShape) => {
           e.stopPropagation();
         };
 
-        addUniqueEventListener(indicator.circle, 'click', handleIndicatorClick);
-        addUniqueEventListener(indicator.innerCircle, 'click', handleIndicatorClick);
+        addUniqueEventListener(indicator.hitArea, 'click', handleIndicatorClick);
 
-        // Keep indicator visible while hovering it
-        addUniqueEventListener(indicator.circle, 'mouseenter', () => {
+        addUniqueEventListener(indicator.hitArea, 'mouseenter', () => {
+          if (this._cancelHide) this._cancelHide();
           portShape.attr('visibility', 'hidden');
-          indicator.circle.attr('visibility', 'visible');
-          indicator.innerCircle.attr('visibility', 'visible');
-          indicator.plus.attr('visibility', 'visible');
+          this.showIndicatorWithAnimation(indicator);
           this.startRotationAnimation(indicator.circle);
         });
 
-        addUniqueEventListener(indicator.circle, 'mouseleave', () => {
-          this.stopRotationAnimation(indicator.circle);
-          indicator.circle.attr('visibility', 'hidden');
-          indicator.innerCircle.attr('visibility', 'hidden');
-          indicator.plus.attr('visibility', 'hidden');
-          portShape.attr('visibility', 'visible');
-        });
-
-        // Also handle hover on inner circle
-        addUniqueEventListener(indicator.innerCircle, 'mouseenter', () => {
-          portShape.attr('visibility', 'hidden');
-          indicator.circle.attr('visibility', 'visible');
-          indicator.innerCircle.attr('visibility', 'visible');
-          indicator.plus.attr('visibility', 'visible');
-          this.startRotationAnimation(indicator.circle);
-        });
-
-        addUniqueEventListener(indicator.innerCircle, 'mouseleave', () => {
-          this.stopRotationAnimation(indicator.circle);
-          indicator.circle.attr('visibility', 'hidden');
-          indicator.innerCircle.attr('visibility', 'hidden');
-          indicator.plus.attr('visibility', 'hidden');
-          portShape.attr('visibility', 'visible');
+        addUniqueEventListener(indicator.hitArea, 'mouseleave', (e) => {
+          // Don't trigger hide - let keyShape mouseleave handle it
         });
       }
 
@@ -290,6 +365,8 @@ const createCustomNode = (BaseShape) => {
       };
 
       addUniqueEventListener(portShape, 'mouseenter', (e) => {
+        // Cancel any pending hide
+        if (this._cancelHide) this._cancelHide();
         handlePortHover();
         // Only show tooltip for input ports (output names are auto-generated)
         if (style.type === 'input') {
@@ -298,19 +375,12 @@ const createCustomNode = (BaseShape) => {
       });
 
       addUniqueEventListener(portShape, 'mouseleave', (e) => {
-        // Hide indicator, show port again
-        if (indicator) {
-          this.stopRotationAnimation(indicator.circle);
-          indicator.circle.attr('visibility', 'hidden');
-          indicator.innerCircle.attr('visibility', 'hidden');
-          indicator.plus.attr('visibility', 'hidden');
-        }
-        portShape.attr('visibility', 'visible');
-        portShape.attr('cursor', 'default');
+        // Don't hide indicator on port leave - node mouseleave handles that
+        // This prevents the + from reverting to small circle
         hideTooltip();
       });
 
-      // Add click handler on port itself to trigger add action
+      // Add click handler on port to trigger add action
       if (graphId && nodeId && style.showGuides) {
         addUniqueEventListener(portShape, 'click', (e) => {
           const connections = getPortConnections(this.context.graph, this.id)?.[portShape.key] ?? 0;
@@ -339,7 +409,24 @@ const createCustomNode = (BaseShape) => {
 
     // Creates an "add" indicator with rotating dashed circle and solid inner circle
     createAddIndicator(key, x, y, radius, accentColor, container) {
-      const innerRadius = radius * 0.7;
+      const innerRadius = radius * 0.75;
+
+      // Large invisible hit area to catch all pointer events
+      const hitArea = this.upsert(
+        `add-hitarea-${key}`,
+        GCircle,
+        {
+          cx: x,
+          cy: y,
+          r: radius + 2,
+          fill: 'transparent',
+          stroke: 'transparent',
+          zIndex: 14,
+          cursor: 'pointer',
+          visibility: 'hidden'
+        },
+        container
+      );
 
       // Outer dashed circle that will rotate
       const circle = this.upsert(
@@ -356,7 +443,8 @@ const createCustomNode = (BaseShape) => {
           zIndex: 15,
           cursor: 'pointer',
           visibility: 'hidden',
-          transformOrigin: 'center'
+          transformOrigin: 'center',
+          pointerEvents: 'none'
         },
         container
       );
@@ -373,7 +461,8 @@ const createCustomNode = (BaseShape) => {
           stroke: 'transparent',
           zIndex: 16,
           cursor: 'pointer',
-          visibility: 'hidden'
+          visibility: 'hidden',
+          pointerEvents: 'none'
         },
         container
       );
@@ -383,10 +472,10 @@ const createCustomNode = (BaseShape) => {
         `add-plus-${key}`,
         'text',
         {
-          x: x,
-          y: y,
+          x: x - 0.5,
+          y: y - 0.5,
           text: '+',
-          fontSize: innerRadius * 1.5,
+          fontSize: innerRadius * 1.6,
           fill: '#fff',
           fontWeight: '400',
           textAlign: 'center',
@@ -401,7 +490,7 @@ const createCustomNode = (BaseShape) => {
       // Store animation reference
       circle._rotationAnimation = null;
 
-      return { circle, innerCircle, plus };
+      return { circle, innerCircle, plus, hitArea };
     }
 
     // Start rotation animation on circle
@@ -424,6 +513,158 @@ const createCustomNode = (BaseShape) => {
         circle._rotationAnimation = null;
         circle.attr('transform', 'rotate(0deg)');
       }
+    }
+
+    // Show indicator with fade-in animation (opacity only to avoid flicker)
+    showIndicatorWithAnimation(indicator) {
+      const { circle, innerCircle, plus } = indicator;
+
+      // Cancel any ongoing hide animation
+      if (indicator._hideAnimation) {
+        cancelAnimationFrame(indicator._hideAnimation);
+        indicator._hideAnimation = null;
+      }
+
+      // Don't reset if already visible with full opacity
+      if (circle.attr('visibility') === 'visible' && circle.attr('opacity') >= 0.9) {
+        return;
+      }
+
+      // Make visible first at zero opacity
+      circle.attr({ visibility: 'visible', opacity: 0 });
+      innerCircle.attr({ visibility: 'visible', opacity: 0 });
+      plus.attr({ visibility: 'visible', opacity: 0 });
+
+      // Animate opacity from 0 to 1
+      const duration = 500; // ms
+      const startTime = performance.now();
+
+      const animate = (currentTime) => {
+        const progress = Math.min((currentTime - startTime) / duration, 1);
+        // Ease out
+        const eased = 1 - Math.pow(1 - progress, 2);
+
+        circle.attr('opacity', eased);
+        innerCircle.attr('opacity', eased);
+        plus.attr('opacity', eased);
+
+        if (progress < 1) {
+          indicator._showAnimation = requestAnimationFrame(animate);
+        } else {
+          indicator._showAnimation = null;
+        }
+      };
+
+      indicator._showAnimation = requestAnimationFrame(animate);
+    }
+
+    // Hide indicator with fade-out animation
+    hideIndicatorWithAnimation(indicator, callback) {
+      const { circle, innerCircle, plus } = indicator;
+
+      // Cancel any ongoing show animation
+      if (indicator._showAnimation) {
+        cancelAnimationFrame(indicator._showAnimation);
+        indicator._showAnimation = null;
+      }
+
+      const duration = 400; // ms
+      const startTime = performance.now();
+
+      const animate = (currentTime) => {
+        const progress = Math.min((currentTime - startTime) / duration, 1);
+        const opacity = 1 - progress;
+
+        circle.attr('opacity', opacity);
+        innerCircle.attr('opacity', opacity);
+        plus.attr('opacity', opacity);
+
+        if (progress < 1) {
+          indicator._hideAnimation = requestAnimationFrame(animate);
+        } else {
+          indicator._hideAnimation = null;
+          // Hide completely and reset
+          circle.attr({ visibility: 'hidden', opacity: 1 });
+          innerCircle.attr({ visibility: 'hidden', opacity: 1 });
+          plus.attr({ visibility: 'hidden', opacity: 1 });
+          if (callback) callback();
+        }
+      };
+
+      indicator._hideAnimation = requestAnimationFrame(animate);
+    }
+
+    // Animate port circles fading in
+    animatePortsIn() {
+      if (!this._portShapes) return;
+
+      // Cancel any ongoing animation
+      if (this._portsAnimation) {
+        cancelAnimationFrame(this._portsAnimation);
+      }
+
+      const duration = 500; // ms
+      const startTime = performance.now();
+
+      const animate = (currentTime) => {
+        const progress = Math.min((currentTime - startTime) / duration, 1);
+        // Ease out
+        const eased = 1 - Math.pow(1 - progress, 2);
+
+        this._portShapes.forEach(({ shape }) => {
+          if (shape.attr('visibility') === 'visible') {
+            shape.attr('opacity', eased);
+          }
+        });
+
+        if (progress < 1) {
+          this._portsAnimation = requestAnimationFrame(animate);
+        } else {
+          this._portsAnimation = null;
+        }
+      };
+
+      this._portsAnimation = requestAnimationFrame(animate);
+    }
+
+    // Animate both ports and indicators fading in together
+    animateAllIn() {
+      if (!this._portShapes) return;
+
+      // Cancel any ongoing animation
+      if (this._portsAnimation) {
+        cancelAnimationFrame(this._portsAnimation);
+      }
+
+      const duration = 500; // ms
+      const startTime = performance.now();
+
+      const animate = (currentTime) => {
+        const progress = Math.min((currentTime - startTime) / duration, 1);
+        // Ease out
+        const eased = 1 - Math.pow(1 - progress, 2);
+
+        this._portShapes.forEach(({ shape, indicator }) => {
+          // Animate port circles
+          if (shape.attr('visibility') === 'visible') {
+            shape.attr('opacity', eased);
+          }
+          // Animate indicators
+          if (indicator && indicator.circle.attr('visibility') === 'visible') {
+            indicator.circle.attr('opacity', eased);
+            indicator.innerCircle.attr('opacity', eased);
+            indicator.plus.attr('opacity', eased);
+          }
+        });
+
+        if (progress < 1) {
+          this._portsAnimation = requestAnimationFrame(animate);
+        } else {
+          this._portsAnimation = null;
+        }
+      };
+
+      this._portsAnimation = requestAnimationFrame(animate);
     }
 
     // Creates a rectangular "+" button indicator for the port (legacy)
