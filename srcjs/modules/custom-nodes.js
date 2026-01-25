@@ -56,7 +56,8 @@ const createCustomNode = (BaseShape) => {
           fill: style.fill,
           stroke: 'transparent',
           lineWidth: 0,
-          visibility: 'hidden'
+          visibility: 'hidden',
+          class: 'port'  // Required for edge creation validation
         };
         const portShape = this.createPortShape(`port-${key}`, portStyle, x, y, container, key);
 
@@ -66,7 +67,8 @@ const createCustomNode = (BaseShape) => {
         portShape._originalFill = style.fill;
 
         // Create add indicator with block's accent color
-        const addIndicator = this.createAddIndicator(key, x, y, baseRadius * 2.5, style.fill, container);
+        // Pass style for arity/type needed for edge creation
+        const addIndicator = this.createAddIndicator(key, x, y, baseRadius * 2.5, style.fill, container, style);
 
         this._portShapes.push({ shape: portShape, indicator: addIndicator });
 
@@ -408,12 +410,13 @@ const createCustomNode = (BaseShape) => {
     }
 
     // Creates an "add" indicator with rotating dashed circle and solid inner circle
-    createAddIndicator(key, x, y, radius, accentColor, container) {
+    createAddIndicator(key, x, y, radius, accentColor, container, portStyle = {}) {
       const innerRadius = radius * 0.75;
 
       // Large invisible hit area to catch all pointer events
+      // Also serves as the port target for edge creation (shift+drag)
       const hitArea = this.upsert(
-        `add-hitarea-${key}`,
+        `port-hitarea-${key}`,
         GCircle,
         {
           cx: x,
@@ -423,10 +426,16 @@ const createCustomNode = (BaseShape) => {
           stroke: 'transparent',
           zIndex: 14,
           cursor: 'pointer',
-          visibility: 'hidden'
+          visibility: 'hidden',
+          class: 'port',  // Required for edge creation validation
+          type: portStyle.type || 'input',  // For port type validation
+          arity: portStyle.arity || 1  // For arity checking
         },
         container
       );
+      // Add port properties for edge creation behavior
+      hitArea.key = key;
+      hitArea.arity = portStyle.arity === "Infinity" ? Infinity : (portStyle.arity || 1);
 
       // Outer dashed circle that will rotate
       const circle = this.upsert(
