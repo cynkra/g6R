@@ -28,9 +28,68 @@ const getContrastColor = (bg) => {
   return luminance > 0.5 ? '#000' : '#fff';
 }
 
+// Generate themed label colors from accent color
+const getThemedLabelColors = (accentColor) => {
+  if (!accentColor) return null;
+
+  let c = accentColor.replace('#', '');
+  if (c.length === 3) c = c.split('').map(x => x + x).join('');
+  const r = parseInt(c.substr(0, 2), 16);
+  const g = parseInt(c.substr(2, 2), 16);
+  const b = parseInt(c.substr(4, 2), 16);
+
+  // Light background (like bg-color-50): mix with white ~90%
+  const bgR = Math.round(r + (255 - r) * 0.88);
+  const bgG = Math.round(g + (255 - g) * 0.88);
+  const bgB = Math.round(b + (255 - b) * 0.88);
+
+  // Border (like border-color-200): mix with white ~70%
+  const borderR = Math.round(r + (255 - r) * 0.7);
+  const borderG = Math.round(g + (255 - g) * 0.7);
+  const borderB = Math.round(b + (255 - b) * 0.7);
+
+  // Text (like text-color-700): darken the color
+  const textR = Math.round(r * 0.55);
+  const textG = Math.round(g * 0.55);
+  const textB = Math.round(b * 0.55);
+
+  const toHex = (r, g, b) => '#' + [r, g, b].map(x => x.toString(16).padStart(2, '0')).join('');
+
+  return {
+    background: toHex(bgR, bgG, bgB),
+    border: toHex(borderR, borderG, borderB),
+    text: toHex(textR, textG, textB)
+  };
+}
+
 // Factory to create custom nodes with port key attachment
 const createCustomNode = (BaseShape) => {
   return class CustomNode extends BaseShape {
+    // Override to apply themed label colors based on node's accent color
+    drawLabelShape(attributes, container) {
+      // Get accent color from stroke or fill
+      const accentColor = attributes.stroke || attributes.fill;
+      const colors = getThemedLabelColors(accentColor);
+
+      if (colors && attributes.labelText) {
+        // Override label style with themed colors
+        attributes = {
+          ...attributes,
+          labelFill: colors.text,
+          labelBackground: true,
+          labelBackgroundFill: colors.background,
+          labelBackgroundStroke: colors.border,
+          labelBackgroundLineWidth: 1,
+          labelBackgroundRadius: 6,
+          labelPadding: [4, 10, 4, 10],
+          labelFontSize: 12,
+          labelFontWeight: 500
+        };
+      }
+
+      super.drawLabelShape(attributes, container);
+    }
+
     // Override to attach port key to each port shape
     drawPortShapes(attributes, container) {
       const portsStyle = this.getPortsStyle(attributes);
