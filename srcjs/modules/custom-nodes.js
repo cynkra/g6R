@@ -1,5 +1,5 @@
 import { Circle, Rect, Ellipse, Diamond, Triangle, Star, Hexagon, Image, Donut } from '@antv/g6';
-import { Circle as GCircle } from '@antv/g';
+import { Circle as GCircle, Rect as GRect } from '@antv/g';
 import { getPortConnections } from './utils';
 
 
@@ -962,12 +962,6 @@ const createCustomNode = (BaseShape) => {
       bbox.attr('visibility', 'hidden');
 
       return { line, rect, plus, bbox };
-    }
-
-    // Render method: rectangle and ports
-    render(attributes = this.parsedAttributes, container) {
-      // Draw base rectangle and main label, and ports with our override
-      super.render(attributes, container);
     }
   };
 }
