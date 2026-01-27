@@ -28,56 +28,24 @@ const getContrastColor = (bg) => {
   return luminance > 0.5 ? '#000' : '#fff';
 }
 
-// Generate themed label colors from accent color (very muted, grey-ish)
-const getThemedLabelColors = (accentColor) => {
-  if (!accentColor) return null;
-
-  let c = accentColor.replace('#', '');
-  if (c.length === 3) c = c.split('').map(x => x + x).join('');
-  const r = parseInt(c.substr(0, 2), 16);
-  const g = parseInt(c.substr(2, 2), 16);
-  const b = parseInt(c.substr(4, 2), 16);
-
-  // Base grey values
-  const greyBg = 245;      // #f5f5f5
-  const greyBorder = 220;  // #dcdcdc
-  const greyText = 100;    // #646464
-
-  // Very subtle color hint: 95% grey, 5% color for background
-  const bgR = Math.round(greyBg * 0.95 + r * 0.05);
-  const bgG = Math.round(greyBg * 0.95 + g * 0.05);
-  const bgB = Math.round(greyBg * 0.95 + b * 0.05);
-
-  // Border: 90% grey, 10% color
-  const borderR = Math.round(greyBorder * 0.9 + r * 0.1);
-  const borderG = Math.round(greyBorder * 0.9 + g * 0.1);
-  const borderB = Math.round(greyBorder * 0.9 + b * 0.1);
-
-  // Text: 85% grey, 15% color hint
-  const textR = Math.round(greyText * 0.85 + r * 0.15 * 0.5);
-  const textG = Math.round(greyText * 0.85 + g * 0.15 * 0.5);
-  const textB = Math.round(greyText * 0.85 + b * 0.15 * 0.5);
-
-  const toHex = (r, g, b) => '#' + [r, g, b].map(x => Math.min(255, Math.max(0, x)).toString(16).padStart(2, '0')).join('');
-
+// Label colors matching blockr.dock design system
+const getLabelColors = () => {
   return {
-    background: toHex(bgR, bgG, bgB),
-    border: toHex(borderR, borderG, borderB),
-    text: toHex(textR, textG, textB)
+    background: '#f3f4f6',  // --blockr-grey-100
+    border: '#e5e7eb',      // --blockr-grey-200
+    text: '#6b7280'         // --blockr-grey-500
   };
 }
 
 // Factory to create custom nodes with port key attachment
 const createCustomNode = (BaseShape) => {
   return class CustomNode extends BaseShape {
-    // Override to apply themed label colors based on node's accent color
+    // Override to apply label colors matching blockr.dock design system
     drawLabelShape(attributes, container) {
-      // Get accent color from stroke or fill
-      const accentColor = attributes.stroke || attributes.fill;
-      const colors = getThemedLabelColors(accentColor);
+      const colors = getLabelColors();
 
-      if (colors && attributes.labelText) {
-        // Override label style with themed colors (muted, smaller)
+      if (attributes.labelText) {
+        // Override label style with blockr.dock grey styling
         attributes = {
           ...attributes,
           labelFill: colors.text,
@@ -86,7 +54,8 @@ const createCustomNode = (BaseShape) => {
           labelBackgroundStroke: colors.border,
           labelBackgroundLineWidth: 1,
           labelBackgroundRadius: 4,
-          labelPadding: [2, 6, 2, 6],
+          labelBackgroundOpacity: 1,
+          labelPadding: [1, 6, 1, 6],
           labelFontSize: 11,
           labelFontWeight: 500
         };
