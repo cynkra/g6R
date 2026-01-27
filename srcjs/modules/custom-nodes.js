@@ -28,7 +28,7 @@ const getContrastColor = (bg) => {
   return luminance > 0.5 ? '#000' : '#fff';
 }
 
-// Generate themed label colors from accent color
+// Generate themed label colors from accent color (very muted, grey-ish)
 const getThemedLabelColors = (accentColor) => {
   if (!accentColor) return null;
 
@@ -38,22 +38,27 @@ const getThemedLabelColors = (accentColor) => {
   const g = parseInt(c.substr(2, 2), 16);
   const b = parseInt(c.substr(4, 2), 16);
 
-  // Light background (like bg-color-50): mix with white ~90%
-  const bgR = Math.round(r + (255 - r) * 0.88);
-  const bgG = Math.round(g + (255 - g) * 0.88);
-  const bgB = Math.round(b + (255 - b) * 0.88);
+  // Base grey values
+  const greyBg = 245;      // #f5f5f5
+  const greyBorder = 220;  // #dcdcdc
+  const greyText = 100;    // #646464
 
-  // Border (like border-color-200): mix with white ~70%
-  const borderR = Math.round(r + (255 - r) * 0.7);
-  const borderG = Math.round(g + (255 - g) * 0.7);
-  const borderB = Math.round(b + (255 - b) * 0.7);
+  // Very subtle color hint: 95% grey, 5% color for background
+  const bgR = Math.round(greyBg * 0.95 + r * 0.05);
+  const bgG = Math.round(greyBg * 0.95 + g * 0.05);
+  const bgB = Math.round(greyBg * 0.95 + b * 0.05);
 
-  // Text (like text-color-700): darken the color
-  const textR = Math.round(r * 0.55);
-  const textG = Math.round(g * 0.55);
-  const textB = Math.round(b * 0.55);
+  // Border: 90% grey, 10% color
+  const borderR = Math.round(greyBorder * 0.9 + r * 0.1);
+  const borderG = Math.round(greyBorder * 0.9 + g * 0.1);
+  const borderB = Math.round(greyBorder * 0.9 + b * 0.1);
 
-  const toHex = (r, g, b) => '#' + [r, g, b].map(x => x.toString(16).padStart(2, '0')).join('');
+  // Text: 85% grey, 15% color hint
+  const textR = Math.round(greyText * 0.85 + r * 0.15 * 0.5);
+  const textG = Math.round(greyText * 0.85 + g * 0.15 * 0.5);
+  const textB = Math.round(greyText * 0.85 + b * 0.15 * 0.5);
+
+  const toHex = (r, g, b) => '#' + [r, g, b].map(x => Math.min(255, Math.max(0, x)).toString(16).padStart(2, '0')).join('');
 
   return {
     background: toHex(bgR, bgG, bgB),
@@ -72,7 +77,7 @@ const createCustomNode = (BaseShape) => {
       const colors = getThemedLabelColors(accentColor);
 
       if (colors && attributes.labelText) {
-        // Override label style with themed colors
+        // Override label style with themed colors (muted, smaller)
         attributes = {
           ...attributes,
           labelFill: colors.text,
@@ -80,9 +85,9 @@ const createCustomNode = (BaseShape) => {
           labelBackgroundFill: colors.background,
           labelBackgroundStroke: colors.border,
           labelBackgroundLineWidth: 1,
-          labelBackgroundRadius: 6,
-          labelPadding: [4, 10, 4, 10],
-          labelFontSize: 12,
+          labelBackgroundRadius: 4,
+          labelPadding: [2, 6, 2, 6],
+          labelFontSize: 11,
           labelFontWeight: 500
         };
       }
