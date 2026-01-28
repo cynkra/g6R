@@ -195,7 +195,9 @@ class CustomCreateEdge extends CreateEdge {
         this.customCreateEdge({
           target: { id: ASSIST_NODE_ID },
           sourcePort: sourcePort?.key,
-          targetType: 'canvas'
+          targetType: 'canvas',
+          // Include drop position for placing new nodes
+          dropPosition: { x: endX, y: endY }
         });
         this.cancelEdge();
         return;
@@ -297,11 +299,14 @@ class CustomCreateEdge extends CreateEdge {
       source: this.source,
       targetType: event.targetType,
       target,
-      style: edgeStyle
+      style: edgeStyle,
+      // Include drop position if available (for canvas drops)
+      dropPosition: event.dropPosition
     });
     if (edgeData) {
       graph.addEdgeData([edgeData]);
-      onFinish(edgeData);
+      // Pass edge data with drop position to onFinish
+      onFinish({ ...edgeData, dropPosition: event.dropPosition });
     }
     this.sourcePort = null;
     window._g6EdgeCreationActive = false;
