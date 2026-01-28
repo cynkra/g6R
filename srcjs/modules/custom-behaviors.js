@@ -4,6 +4,10 @@ import { sendNotification, getPortConnections } from './utils';
 
 const ASSIST_EDGE_ID = 'g6-create-edge-assist-edge-id';
 const ASSIST_NODE_ID = 'g6-create-edge-assist-node-id';
+const MIN_DRAG_DISTANCE = 10; // Minimum pixels to consider it a drag vs click
+
+// Global flag to indicate edge creation is active (port was clicked)
+window._g6EdgeCreationActive = false;
 
 class CustomCreateEdge extends CreateEdge {
   bindEvents() {
@@ -32,13 +36,29 @@ class CustomCreateEdge extends CreateEdge {
     const targetPort = event.originalTarget;
 
     if (['node', 'combo', 'canvas'].indexOf(targetType) !== -1 && this.source) {
+      // Calculate distance from start position to detect click vs drag
+      const startX = this.startX ?? 0;
+      const startY = this.startY ?? 0;
+      const endX = event.canvas?.x ?? event.client?.x ?? 0;
+      const endY = event.canvas?.y ?? event.client?.y ?? 0;
+      const dx = endX - startX;
+      const dy = endY - startY;
+      const distance = Math.sqrt(dx * dx + dy * dy);
+
+      // If user didn't drag (just clicked), cancel without doing anything
+      if (distance < MIN_DRAG_DISTANCE) {
+        window._g6EdgeCreationActive = false;
+        this.cancelEdge();
+        return;
+      }
+
       // Prevent edge to self
       if (event.target && event.target.id === this.source) {
         this.cancelEdge();
         return;
       }
 
-      // If dropped on canvas, allow and handle as before
+      // If dropped on canvas, trigger add block dialog
       if (targetType === 'canvas') {
         this.customCreateEdge({
           target: { id: ASSIST_NODE_ID },
@@ -152,11 +172,16 @@ class CustomCreateEdge extends CreateEdge {
       onFinish(edgeData);
     }
     this.sourcePort = null;
+    window._g6EdgeCreationActive = false;
     this.cancelEdge();
   }
 
   // JS conversion of handleCreateEdge
   async customHandleCreateEdge(event) {
+    // Store start position to detect click vs drag
+    this.startX = event.canvas.x;
+    this.startY = event.canvas.y;
+
     const mode = this.context.graph.options.mode;
     const node = this.context.graph.getElementData(event.target?.id);
 
@@ -167,6 +192,8 @@ class CustomCreateEdge extends CreateEdge {
       if (!this.sourcePort || !this.sourcePort.key) {
         return;
       }
+      // Set global flag to indicate edge creation from port (disables drag_element)
+      window._g6EdgeCreationActive = true;
       // Always recompute current connections for this port
       const portConnections = getPortConnections(this.context.graph, node.id);
       const currentConnections = portConnections[this.sourcePort.key] || 0;

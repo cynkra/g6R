@@ -332,20 +332,8 @@ const createCustomNode = (BaseShape) => {
       }
 
       // Add event handlers to indicator hitArea (covers entire indicator)
+      // Note: Click handlers removed - edge creation now handles port interactions via drag
       if (indicator && indicator.hitArea && graphId && nodeId && style.showGuides) {
-        const handleIndicatorClick = (e) => {
-          if (HTMLWidgets.shinyMode) {
-            Shiny.setInputValue(
-              `${graphId}-selected_port`,
-              { node: nodeId, port: portShape.key, type: style.type },
-              { priority: 'event' }
-            );
-          }
-          e.stopPropagation();
-        };
-
-        addUniqueEventListener(indicator.hitArea, 'click', handleIndicatorClick);
-
         addUniqueEventListener(indicator.hitArea, 'mouseenter', () => {
           if (this._cancelHide) this._cancelHide();
           portShape.attr('visibility', 'hidden');
@@ -415,21 +403,8 @@ const createCustomNode = (BaseShape) => {
         hideTooltip();
       });
 
-      // Add click handler on port to trigger add action
-      if (graphId && nodeId && style.showGuides) {
-        addUniqueEventListener(portShape, 'click', (e) => {
-          const connections = getPortConnections(this.context.graph, this.id)?.[portShape.key] ?? 0;
-          const atCapacity = connections >= (portShape.arity === "Infinity" ? Infinity : portShape.arity);
-          if (!atCapacity && HTMLWidgets.shinyMode) {
-            Shiny.setInputValue(
-              `${graphId}-selected_port`,
-              { node: nodeId, port: portShape.key, type: style.type },
-              { priority: 'event' }
-            );
-          }
-          e.stopPropagation();
-        });
-      }
+      // Note: Click handler removed - edge creation now handles port interactions via drag
+      // Dropping on canvas triggers append_block_action, dropping on port creates edge
     }
 
     createPortShape(shapeKey, style, x, y, container, key) {
