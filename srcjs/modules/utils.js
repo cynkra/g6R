@@ -8,7 +8,7 @@ import {
   Graph
 } from '@antv/g6';
 
-import { setClickEvents, setGraphEvents, captureMousePosition, preserveElementsPosition } from './events';
+import { setClickEvents, setGraphEvents, captureMousePosition, preserveElementsPosition, clearNodeSelectionStyling } from './events';
 import { tryCatchDev, registerShinyHandlers } from './handlers';
 
 const sendNotification = (message, type = "error", duration = null) => {
@@ -198,6 +198,8 @@ const setupGraph = (graph, widget, config) => {
       Shiny.setInputValue(id + '-selected_node', null);
       Shiny.setInputValue(id + '-selected_edge', null);
       Shiny.setInputValue(id + '-selected_combo', null);
+      // Clear node selection styling
+      clearNodeSelectionStyling(graph);
     });
 
     // Recover the target of a right click event

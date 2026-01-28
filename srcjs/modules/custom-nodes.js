@@ -44,20 +44,30 @@ const createCustomNode = (BaseShape) => {
     drawLabelShape(attributes, container) {
       const colors = getLabelColors();
 
+      // Selection style constants (must match events.js SELECTED_LABEL_STYLE)
+      const SELECTION_BG_FILL = '#dbeafe';
+      const SELECTION_BG_STROKE = '#0D99FF';
+      const SELECTION_FONT_WEIGHT = 700;
+
       if (attributes.labelText) {
-        // Override label style with blockr.dock grey styling
+        // Check if this node has selection styling applied
+        // G6 puts updateNodeData style values directly on attributes
+        const isSelected = attributes.labelBackgroundFill === SELECTION_BG_FILL ||
+                          attributes.labelFontWeight === SELECTION_FONT_WEIGHT;
+
+        // Apply selection style if selected, otherwise use defaults
         attributes = {
           ...attributes,
           labelFill: colors.text,
           labelBackground: true,
-          labelBackgroundFill: colors.background,
-          labelBackgroundStroke: colors.border,
+          labelBackgroundFill: isSelected ? SELECTION_BG_FILL : colors.background,
+          labelBackgroundStroke: isSelected ? SELECTION_BG_STROKE : colors.border,
           labelBackgroundLineWidth: 1,
           labelBackgroundRadius: 4,
           labelBackgroundOpacity: 1,
           labelPadding: [1, 6, 1, 6],
           labelFontSize: 11,
-          labelFontWeight: 500
+          labelFontWeight: isSelected ? SELECTION_FONT_WEIGHT : 500
         };
       }
 
