@@ -48,6 +48,52 @@ const preprocessGraphState = (graphState) => {
   return state;
 }
 
+// Track currently selected nodes and their original styles
+// Map: nodeId -> { labelFontWeight, labelBackgroundFill, labelBackgroundStroke }
+let currentSelectedNodes = new Map();
+
+// Style constants for selection
+const SELECTED_LABEL_STYLE = {
+  labelFontWeight: 700,
+  labelBackgroundFill: '#dbeafe',
+  labelBackgroundStroke: '#0D99FF'
+};
+
+const updateNodeSelectionStyle = (graph, nodeId, isSelected) => {
+  try {
+    if (isSelected) {
+      // Store original style before selecting
+      const nodeData = graph.getNodeData(nodeId);
+      const originalStyle = {
+        labelFontWeight: nodeData?.style?.labelFontWeight,
+        labelBackgroundFill: nodeData?.style?.labelBackgroundFill,
+        labelBackgroundStroke: nodeData?.style?.labelBackgroundStroke
+      };
+      currentSelectedNodes.set(nodeId, originalStyle);
+
+      // Apply selection style
+      graph.updateNodeData([{ id: nodeId, style: SELECTED_LABEL_STYLE }]);
+    } else {
+      // Restore original style (undefined values will use defaults in drawLabelShape)
+      const originalStyle = currentSelectedNodes.get(nodeId) || {};
+      graph.updateNodeData([{ id: nodeId, style: originalStyle }]);
+      currentSelectedNodes.delete(nodeId);
+    }
+    graph.draw();
+  } catch (err) {
+    console.error('[selection] Failed to update node style:', err);
+  }
+};
+
+// Clear all selection styling (called on canvas click)
+const clearNodeSelectionStyling = (graph) => {
+  currentSelectedNodes.forEach((originalStyle, nodeId) => {
+    updateNodeSelectionStyle(graph, nodeId, false);
+  });
+  // Map is cleared by updateNodeSelectionStyle via delete, but clear anyway
+  currentSelectedNodes.clear();
+};
+
 const setClickEvents = (events, graph) => {
   // Loop over events
   const id = graph.options.container;
@@ -65,6 +111,26 @@ const setClickEvents = (events, graph) => {
 
       if (!e.shiftKey) {
         resetOtherElementTypes(id, target.type);
+      }
+
+      // Handle node selection styling
+      if (type === 'node') {
+        if (!e.shiftKey) {
+          // Clear previous selection styling (except for the clicked node)
+          currentSelectedNodes.forEach((originalStyle, nodeId) => {
+            if (nodeId !== target.id) {
+              updateNodeSelectionStyle(graph, nodeId, false);
+            }
+          });
+        }
+
+        // Toggle selection for clicked node
+        const wasSelected = currentSelectedNodes.has(target.id);
+        if (wasSelected) {
+          updateNodeSelectionStyle(graph, target.id, false);
+        } else {
+          updateNodeSelectionStyle(graph, target.id, true);
+        }
       }
 
       // If multiclick is allowed ...
@@ -173,4 +239,4 @@ const captureMousePosition = (graph) => {
   events.forEach(event => graph.on(event, handler));
 }
 
-export { setClickEvents, setGraphEvents, captureMousePosition, preserveElementsPosition };
+export { setClickEvents, setGraphEvents, captureMousePosition, preserveElementsPosition, clearNodeSelectionStyling };
