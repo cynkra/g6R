@@ -48,7 +48,7 @@ is_g6_ports <- function(x) {
 #' @export
 g6_port <- function(
   key,
-  label = key,
+  label = NULL,
   type = c("input", "output"),
   arity = 1,
   visibility = c("visible", "hover", "hidden"),
@@ -61,10 +61,10 @@ g6_port <- function(
       list(
         key = key,
         type = type,
-        label = label,
         arity = arity,
         visibility = visibility
       ),
+      if (!is.null(label)) list(label = label),
       list(...)
     ),
     class = "g6_port"
@@ -82,7 +82,7 @@ g6_port <- function(
 #' simply set the arity to \code{Inf} or any positive integer.
 g6_input_port <- function(
   key,
-  label = key,
+  label = NULL,
   arity = 1,
   visibility = c("visible", "hover", "hidden"),
   fill = "#52C41A",
@@ -105,7 +105,7 @@ g6_input_port <- function(
 #' @rdname g6_port
 g6_output_port <- function(
   key,
-  label = key,
+  label = NULL,
   arity = 1,
   visibility = c("visible", "hover", "hidden"),
   fill = "#FF4D4F",

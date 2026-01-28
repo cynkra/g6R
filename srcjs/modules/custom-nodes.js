@@ -423,8 +423,8 @@ const createCustomNode = (BaseShape) => {
         // Cancel any pending hide
         if (this._cancelHide) this._cancelHide();
         handlePortHover();
-        // Only show tooltip for input ports (output names are auto-generated)
-        if (style.type === 'input') {
+        // Only show tooltip for input ports with labels
+        if (style.type === 'input' && style.label) {
           showTooltip(e);
         }
       });
