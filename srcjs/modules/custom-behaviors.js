@@ -366,14 +366,18 @@ class CustomCreateEdge extends CreateEdge {
 
     const sourceNode = graph.getElementData(this.source);
 
+    // Position assist node at cursor to avoid zero-length vertical line
+    const cursorX = event.canvas?.x ?? (sourceNode?.style?.x || 0);
+    const cursorY = event.canvas?.y ?? (sourceNode?.style?.y || 0);
+
     graph.addNodeData([
       {
         id: ASSIST_NODE_ID,
         style: {
           visibility: 'hidden',
           ports: [{ key: 'port-1', placement: [0.5, 0.5] }],
-          x: sourceNode && sourceNode.style ? sourceNode.style.x : undefined,
-          y: sourceNode && sourceNode.style ? sourceNode.style.y : undefined,
+          x: cursorX,
+          y: cursorY,
         },
       },
     ]);
