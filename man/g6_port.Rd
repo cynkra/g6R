@@ -11,13 +11,27 @@ g6_port(
   label = key,
   type = c("input", "output"),
   arity = 1,
-  showGuides = TRUE,
+  visibility = c("visible", "hover", "hidden"),
   ...
 )
 
-g6_input_port(key, label = key, arity = 1, fill = "#52C41A", ...)
+g6_input_port(
+  key,
+  label = key,
+  arity = 1,
+  visibility = c("visible", "hover", "hidden"),
+  fill = "#52C41A",
+  ...
+)
 
-g6_output_port(key, label = key, arity = 1, fill = "#FF4D4F", ...)
+g6_output_port(
+  key,
+  label = key,
+  arity = 1,
+  visibility = c("visible", "hover", "hidden"),
+  fill = "#FF4D4F",
+  ...
+)
 }
 \arguments{
 \item{key}{Character. Unique identifier for the port (required).}
@@ -30,9 +44,12 @@ g6_output_port(key, label = key, arity = 1, fill = "#FF4D4F", ...)
 connections this port can accept (default: 1).
 Use 0, Inf, or any non-negative integer.}
 
-\item{showGuides}{Logical. Whether to show connection
-guides when hovering over the port (default: TRUE). Only works
-when used within a Shiny app.}
+\item{visibility}{Character. Controls port visibility behavior:
+\itemize{
+\item \code{"visible"}: Ports are always shown (default).
+\item \code{"hover"}: Ports appear only when hovering over the node.
+\item \code{"hidden"}: Ports are never visible.
+}}
 
 \item{...}{Additional port style parameters. See
 \url{https://g6.antv.antgroup.com/en/manual/element/node/base-node#portstyleprops}.}
@@ -58,4 +75,5 @@ simply set the arity to \code{Inf} or any positive integer.
 \examples{
 g6_port("input-1", label = "port 1", type = "input", arity = 2, placement = "left")
 g6_port("output-1", label = "port 2", type = "output", placement = "right")
+g6_port("input-2", type = "input", visibility = "hover")
 }
