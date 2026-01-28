@@ -81,6 +81,11 @@ const createCustomNode = (BaseShape) => {
 
         const baseRadius = style.r || 4;
 
+        // Determine initial visibility based on visibility parameter
+        // "visible" = always shown, "hover" = show on hover, "hidden" = never shown
+        const portVisibility = style.visibility || 'visible';
+        const initiallyVisible = portVisibility === 'visible';
+
         // Solid filled port circle for occupied ports
         const portStyle = {
           ...style,
@@ -89,7 +94,7 @@ const createCustomNode = (BaseShape) => {
           fill: style.fill,
           stroke: 'transparent',
           lineWidth: 0,
-          visibility: 'hidden',
+          visibility: initiallyVisible ? 'visible' : 'hidden',
           class: 'port'  // Required for edge creation validation
         };
         const portShape = this.createPortShape(`port-${key}`, portStyle, x, y, container, key);
@@ -98,10 +103,12 @@ const createCustomNode = (BaseShape) => {
         portShape._baseRadius = baseRadius;
         portShape._expandedRadius = baseRadius * 2.5;
         portShape._originalFill = style.fill;
+        portShape._visibility = portVisibility;  // Store visibility mode
 
         // Create add indicator with block's accent color
         // Pass style for arity/type needed for edge creation
         const addIndicator = this.createAddIndicator(key, x, y, baseRadius * 2.5, style.fill, container, style);
+        addIndicator._visibility = portVisibility;  // Store visibility mode on indicator too
 
         this._portShapes.push({ shape: portShape, indicator: addIndicator });
 
@@ -143,6 +150,12 @@ const createCustomNode = (BaseShape) => {
 
         // Show + indicators for available ports, small circles for occupied ports
         this._portShapes.forEach(({ shape, indicator }) => {
+          // Skip ports with visibility "hidden" or "visible" (visible ports are always shown)
+          const visibilityMode = shape._visibility || 'visible';
+          if (visibilityMode === 'hidden') return;  // Never show hidden ports
+          if (visibilityMode === 'visible') return;  // Already visible, no hover behavior needed
+
+          // Only "hover" mode ports need show/hide on hover
           const connections = portConnections[shape.key] ?? 0;
           const arity = shape.arity === "Infinity" ? Infinity : (shape.arity || 1);
           const atCapacity = connections >= arity;
@@ -190,6 +203,10 @@ const createCustomNode = (BaseShape) => {
             this._portsAnimation = null;
           }
           this._portShapes.forEach(({ shape, indicator }) => {
+            // Only hide "hover" mode ports; "visible" ports stay visible
+            const visibilityMode = shape._visibility || 'visible';
+            if (visibilityMode !== 'hover') return;
+
             shape.attr({
               visibility: 'hidden',
               zIndex: 1,
@@ -220,6 +237,10 @@ const createCustomNode = (BaseShape) => {
         }
         if (!this._portShapes) return;
         this._portShapes.forEach(({ shape, indicator }) => {
+          // Only hide "hover" mode ports; "visible" ports stay visible
+          const visibilityMode = shape._visibility || 'visible';
+          if (visibilityMode !== 'hover') return;
+
           shape.attr({ visibility: 'hidden', opacity: 1 });
           if (indicator) {
             this.stopRotationAnimation(indicator.circle);
@@ -333,7 +354,8 @@ const createCustomNode = (BaseShape) => {
 
       // Add event handlers to indicator hitArea (covers entire indicator)
       // Note: Click handlers removed - edge creation now handles port interactions via drag
-      if (indicator && indicator.hitArea && graphId && nodeId && style.showGuides) {
+      // Only add hover events if port is not hidden
+      if (indicator && indicator.hitArea && graphId && nodeId && style.visibility !== 'hidden') {
         addUniqueEventListener(indicator.hitArea, 'mouseenter', () => {
           if (this._cancelHide) this._cancelHide();
           portShape.attr('visibility', 'hidden');

@@ -1,6 +1,3 @@
-.g6R_env <- new.env(parent = emptyenv())
-.g6R_env$showGuides_warned <- FALSE
-
 #' Check if an object is a g6_port
 #'
 #' @param x An object to check.
@@ -35,38 +32,30 @@ is_g6_ports <- function(x) {
 #' @param arity Numeric. Maximum number of
 #' connections this port can accept (default: 1).
 #' Use 0, Inf, or any non-negative integer.
-#' @param showGuides Logical. Whether to show connection
-#' guides when hovering over the port (default: TRUE). Only works
-#' when used within a Shiny app.
+#' @param visibility Character. Controls port visibility behavior:
+#' \itemize{
+#'   \item \code{"visible"}: Ports are always shown (default).
+#'   \item \code{"hover"}: Ports appear only when hovering over the node.
+#'   \item \code{"hidden"}: Ports are never visible.
+#' }
 #' @param ... Additional port style parameters. See
 #' \url{https://g6.antv.antgroup.com/en/manual/element/node/base-node#portstyleprops}.
 #' @return An S3 object of class 'g6_port'.
 #' @examples
 #' g6_port("input-1", label = "port 1", type = "input", arity = 2, placement = "left")
 #' g6_port("output-1", label = "port 2", type = "output", placement = "right")
+#' g6_port("input-2", type = "input", visibility = "hover")
 #' @export
 g6_port <- function(
   key,
   label = key,
   type = c("input", "output"),
   arity = 1,
-  showGuides = TRUE,
+  visibility = c("visible", "hover", "hidden"),
   ...
 ) {
-  # Guides won't work outside Shiny (for now ...)
-  if (!shiny::isRunning() && showGuides) {
-    if (!.g6R_env$showGuides_warned) {
-      warning(
-        "'showGuides' is set to TRUE, but Shiny app is not running. ",
-        "Connection guides will not be displayed.",
-        call. = FALSE
-      )
-      .g6R_env$showGuides_warned <- TRUE
-    }
-    showGuides <- FALSE
-  }
-
   type <- match.arg(type)
+  visibility <- match.arg(visibility)
   port <- structure(
     c(
       list(
@@ -74,7 +63,7 @@ g6_port <- function(
         type = type,
         label = label,
         arity = arity,
-        showGuides = showGuides
+        visibility = visibility
       ),
       list(...)
     ),
@@ -95,14 +84,17 @@ g6_input_port <- function(
   key,
   label = key,
   arity = 1,
+  visibility = c("visible", "hover", "hidden"),
   fill = "#52C41A",
   ...
 ) {
+  visibility <- match.arg(visibility)
   g6_port(
     key = key,
     label = label,
     type = "input",
     arity = arity,
+    visibility = visibility,
     fill = fill,
     ...
   )
@@ -115,14 +107,17 @@ g6_output_port <- function(
   key,
   label = key,
   arity = 1,
+  visibility = c("visible", "hover", "hidden"),
   fill = "#FF4D4F",
   ...
 ) {
+  visibility <- match.arg(visibility)
   g6_port(
     key = key,
     label = label,
     type = "output",
     arity = arity,
+    visibility = visibility,
     fill = fill,
     ...
   )
