@@ -720,6 +720,8 @@ create_edge <- function(
     config$onFinish <- JS(
       sprintf(
         "(edge) => {
+          // Canvas drops don't have a real target node, skip processing
+          if (edge.targetType === 'canvas') return;
           const notify = %s;
           const graph = HTMLWidgets.find('#%s').getWidget();
           const targetType = graph.getElementType(edge.target);
