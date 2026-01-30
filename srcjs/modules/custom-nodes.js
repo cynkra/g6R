@@ -391,6 +391,19 @@ const createCustomNode = (BaseShape) => {
 
       // Add event handlers to indicator hitArea
       if (indicator && indicator.hitArea && graphId && nodeId && style.visibility !== 'hidden') {
+        // Click handler to trigger selected_port Shiny input
+        const handleIndicatorClick = (e) => {
+          if (HTMLWidgets.shinyMode) {
+            Shiny.setInputValue(
+              `${graphId}-selected_port`,
+              { node: nodeId, port: portShape.key, type: style.type },
+              { priority: 'event' }
+            );
+          }
+          e.stopPropagation();
+        };
+        addUniqueEventListener(indicator.hitArea, 'click', handleIndicatorClick);
+
         addUniqueEventListener(indicator.hitArea, 'mouseenter', () => {
           if (this._cancelHide) this._cancelHide();
           portShape.attr({ visibility: 'hidden' });
@@ -460,8 +473,6 @@ const createCustomNode = (BaseShape) => {
         hideTooltip();
       });
 
-      // Note: Click handler removed - edge creation now handles port interactions via drag
-      // Dropping on canvas triggers append_block_action, dropping on port creates edge
     }
 
     createPortShape(shapeKey, style, x, y, container, key) {
