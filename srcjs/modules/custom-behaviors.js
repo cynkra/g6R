@@ -277,7 +277,7 @@ class CustomCreateEdge extends CreateEdge {
     const targetPort = event.originalTarget;
 
     if (sourcePort && targetPort && targetPort?.attributes?.visibility == 'hidden') {
-      this.sourcePort = null;
+      await this.cancelEdge();
       return;
     }
 
@@ -332,16 +332,18 @@ class CustomCreateEdge extends CreateEdge {
       // Check if user clicked on a port (has key property)
       if (clickedPort && clickedPort.key) {
         this.sourcePort = clickedPort;
-        this.isCreatingEdge = true;
-        window._g6EdgeCreationActive = true;
         const portConnections = getPortConnections(this.context.graph, node.id);
         const currentConnections = portConnections[this.sourcePort.key] || 0;
         if (currentConnections >= this.sourcePort.arity) {
           if (mode === "dev") {
             sendNotification("Current port has reached its maximum arity, can't drag.", "warning", 5000);
           }
+          this.sourcePort = null;
           return;
         }
+        // Only set flags after arity check passes
+        this.isCreatingEdge = true;
+        window._g6EdgeCreationActive = true;
       } else {
         // User clicked on node body, not on a port - don't start edge creation
         return;
