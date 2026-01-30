@@ -85,9 +85,12 @@ server <- function(input, output, session) {
         click_select(multiple = TRUE),
         drag_element(
           enable = JS(
-            "function(e) {
-              // Disable drag when edge creation is active
-              if (window._g6EdgeCreationActive) return false;
+            "(e) => {
+              const target = e.nativeEvent?.target;
+              const graph = HTMLWidgets.find(`#${target?.closest?.('.g6')?.id}`)?.getWidget();
+              try {
+                if (graph?.getNodeData?.('g6-create-edge-assist-node-id')) return false;
+              } catch (err) {}
               return true;
             }"
           )
