@@ -191,6 +191,13 @@ const createCustomNode = (BaseShape) => {
             }
             this.startRotationAnimation(indicator.circle);
           } else {
+            // Port is at capacity - hide + indicator, show small port circle
+            if (indicator) {
+              this.stopRotationAnimation(indicator.circle);
+              indicator.circle.attr({ visibility: 'hidden' });
+              indicator.innerCircle.attr({ visibility: 'hidden' });
+              indicator.plus.attr({ visibility: 'hidden' });
+            }
             // Show small port circle for occupied ports
             if (shape.attr('visibility') !== 'visible') {
               shape.attr({
@@ -199,6 +206,8 @@ const createCustomNode = (BaseShape) => {
                 opacity: 0
               });
               needsAnimation = true;
+            } else {
+              shape.attr({ opacity: 1 });
             }
           }
         });
@@ -302,6 +311,18 @@ const createCustomNode = (BaseShape) => {
 
       addUniqueEventListener(keyShape, 'mouseenter', showPorts);
       addUniqueEventListener(keyShape, 'mouseleave', hidePorts);
+
+      // Listen for edge creation to refresh port visuals
+      const nodeId = this.id;
+      if (!this._edgeCreatedHandler) {
+        this._edgeCreatedHandler = (event) => {
+          const { sourceId, targetId } = event.detail || {};
+          if (String(nodeId) === String(sourceId) || String(nodeId) === String(targetId)) {
+            showPorts();
+          }
+        };
+        window.addEventListener('g6-edge-created', this._edgeCreatedHandler);
+      }
     }
 
     // Lighten a hex color by mixing with white

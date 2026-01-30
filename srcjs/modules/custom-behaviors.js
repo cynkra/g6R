@@ -11,6 +11,8 @@ class CustomCreateEdge extends CreateEdge {
   snappedPort = null;
   snappedPortOriginalStyle = null;
   _resetSnappedPortTimeout = null;
+  _processingPointerDown = false;
+  _processingPointerUp = false;
 
   validate(event) {
     return true;
@@ -21,6 +23,10 @@ class CustomCreateEdge extends CreateEdge {
     this.isCreatingEdge = false;
     this.source = undefined;
     this.sourcePort = null;
+    // Re-enable drag-element behavior
+    try {
+      graph.updateBehavior({ key: 'drag-element', enable: true });
+    } catch (e) { }
     try {
       graph.removeEdgeData([ASSIST_EDGE_ID]);
       graph.removeNodeData([ASSIST_NODE_ID]);
@@ -152,6 +158,11 @@ class CustomCreateEdge extends CreateEdge {
   }
 
   async customDrop(event) {
+    // Prevent re-entry from event bubbling
+    if (this._processingPointerUp) return;
+    this._processingPointerUp = true;
+    setTimeout(() => { this._processingPointerUp = false; }, 0);
+
     // Clear any pending reset timeout
     if (this._resetSnappedPortTimeout) {
       clearTimeout(this._resetSnappedPortTimeout);
@@ -205,6 +216,7 @@ class CustomCreateEdge extends CreateEdge {
         this.sourcePort = null;
         try {
           const graph = this.context.graph;
+          graph.updateBehavior({ key: 'drag-element', enable: true });
           graph.removeEdgeData([ASSIST_EDGE_ID]);
           graph.removeNodeData([ASSIST_NODE_ID]);
           await graph.draw();
@@ -292,8 +304,15 @@ class CustomCreateEdge extends CreateEdge {
     };
 
     const edgeData = typeof onCreate === 'function' ? onCreate(rawEdgeData) : rawEdgeData;
+
     if (edgeData) {
       graph.addEdgeData([edgeData]);
+
+      // Emit event to refresh port visuals on affected nodes
+      window.dispatchEvent(new CustomEvent('g6-edge-created', {
+        detail: { sourceId: this.source, targetId: target }
+      }));
+
       if (typeof onFinish === 'function') {
         onFinish(edgeData);
       }
@@ -302,6 +321,10 @@ class CustomCreateEdge extends CreateEdge {
     this.isCreatingEdge = false;
     this.source = undefined;
     this.sourcePort = null;
+    // Re-enable drag-element behavior
+    try {
+      graph.updateBehavior({ key: 'drag-element', enable: true });
+    } catch (e) { }
     try {
       graph.removeEdgeData([ASSIST_EDGE_ID]);
       graph.removeNodeData([ASSIST_NODE_ID]);
@@ -310,8 +333,14 @@ class CustomCreateEdge extends CreateEdge {
   }
 
   async customHandleCreateEdge(event) {
+    // Prevent re-entry from event bubbling
+    if (this._processingPointerDown) return;
+    this._processingPointerDown = true;
+    setTimeout(() => { this._processingPointerDown = false; }, 0);
+
+    // Handle invalid state - reset if isCreatingEdge but no source
     if (this.isCreatingEdge && !this.source) {
-      return;
+      this.isCreatingEdge = false;
     }
 
     this.startX = event.canvas.x;
@@ -337,6 +366,10 @@ class CustomCreateEdge extends CreateEdge {
         }
         // Only set flag after arity check passes
         this.isCreatingEdge = true;
+        // Disable drag-element to prevent node dragging during edge creation
+        try {
+          this.context.graph.updateBehavior({ key: 'drag-element', enable: false });
+        } catch (e) { }
       } else {
         // User clicked on node body, not on a port - don't start edge creation
         return;
