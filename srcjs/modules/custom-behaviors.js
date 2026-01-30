@@ -6,8 +6,10 @@ const ASSIST_EDGE_ID = 'g6-create-edge-assist-edge-id';
 const ASSIST_NODE_ID = 'g6-create-edge-assist-node-id';
 const MIN_DRAG_DISTANCE = 10;
 
+// Global flag for edge creation state (used by drag_element to disable dragging during edge creation)
+window._g6EdgeCreationActive = false;
+
 class CustomCreateEdge extends CreateEdge {
-  // Track edge creation state as class property (accessible via graph.getBehaviors())
   isCreatingEdge = false;
   snappedPort = null;
   snappedPortOriginalStyle = null;
@@ -20,6 +22,7 @@ class CustomCreateEdge extends CreateEdge {
   async cancelEdge() {
     const { graph } = this.context;
     this.isCreatingEdge = false;
+    window._g6EdgeCreationActive = false;
     this.source = undefined;
     this.sourcePort = null;
     try {
@@ -202,6 +205,7 @@ class CustomCreateEdge extends CreateEdge {
 
         // Cleanup
         this.isCreatingEdge = false;
+        window._g6EdgeCreationActive = false;
         this.source = undefined;
         this.sourcePort = null;
         try {
@@ -301,6 +305,7 @@ class CustomCreateEdge extends CreateEdge {
     }
 
     this.isCreatingEdge = false;
+    window._g6EdgeCreationActive = false;
     this.source = undefined;
     this.sourcePort = null;
     try {
@@ -328,6 +333,7 @@ class CustomCreateEdge extends CreateEdge {
       if (clickedPort && clickedPort.key) {
         this.sourcePort = clickedPort;
         this.isCreatingEdge = true;
+        window._g6EdgeCreationActive = true;
         const portConnections = getPortConnections(this.context.graph, node.id);
         const currentConnections = portConnections[this.sourcePort.key] || 0;
         if (currentConnections >= this.sourcePort.arity) {

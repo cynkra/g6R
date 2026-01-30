@@ -86,10 +86,8 @@ server <- function(input, output, session) {
         drag_element(
           enable = JS(
             "function(e) {
-              // Access create-edge behavior via graph to check if edge creation is active
-              const behaviors = this.context.graph.getBehaviors();
-              const createEdge = behaviors.find(b => b[0] === 'create-edge');
-              if (createEdge && createEdge[1]?.isCreatingEdge) return false;
+              // Disable drag when edge creation is active
+              if (window._g6EdgeCreationActive) return false;
               return true;
             }"
           )
