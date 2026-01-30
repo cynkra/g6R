@@ -406,6 +406,10 @@ const createCustomNode = (BaseShape) => {
 
         addUniqueEventListener(indicator.hitArea, 'mouseenter', () => {
           if (this._cancelHide) this._cancelHide();
+          // Check if port is at capacity before showing indicator
+          const connections = getPortConnections(this.context.graph, this.id)?.[portShape.key] ?? 0;
+          const atCapacity = connections >= (portShape.arity === "Infinity" ? Infinity : portShape.arity);
+          if (atCapacity) return;
           portShape.attr({ visibility: 'hidden' });
           this.showIndicatorWithAnimation(indicator);
           this.startRotationAnimation(indicator.circle);
