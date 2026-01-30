@@ -26,17 +26,20 @@ server <- function(input, output, session) {
             g6_input_port(
               key = "input-1",
               placement = c(0, 1),
-              label = "port 1"
+              label = "port 1 (visible)"
+              # visibility = "visible" is default
             ),
             g6_output_port(
               key = "output-1",
               placement = "right",
-              label = "port 2"
+              label = "port 2 (hover)",
+              visibility = "hover"
             ),
             g6_input_port(
               key = "input-12",
               placement = "top",
-              label = "port 3"
+              label = "port 3 (hidden)",
+              visibility = "hidden"
             )
           )
         ),
@@ -83,8 +86,9 @@ server <- function(input, output, session) {
         drag_element(
           enable = JS(
             "(e) => {
-          return !e.shiftKey && !e.altKey;
-        }"
+              if (window._g6EdgeCreationActive) return false;
+              return true;
+            }"
           )
         ),
         drag_canvas(
@@ -96,10 +100,7 @@ server <- function(input, output, session) {
         ),
         zoom_canvas(),
         create_edge(
-          enable = JS(
-            "(e) => {
-        return e.shiftKey}"
-          ),
+          enable = JS("(e) => true"),
           onFinish = NULL
         )
       ) |>
