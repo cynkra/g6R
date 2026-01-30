@@ -48,7 +48,10 @@ const preprocessGraphState = (graphState) => {
   return state;
 }
 
-// Track currently selected nodes and their original styles
+// Track selected nodes' original styles for restoration on deselection.
+// This is separate from input$selected_node which tracks selection state.
+// Here we store the original label styles that were applied before selection
+// so we can restore them when the node is deselected.
 // Map: nodeId -> { labelFontWeight, labelBackgroundFill, labelBackgroundStroke }
 let currentSelectedNodes = new Map();
 

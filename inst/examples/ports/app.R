@@ -85,8 +85,11 @@ server <- function(input, output, session) {
         click_select(multiple = TRUE),
         drag_element(
           enable = JS(
-            "(e) => {
-              if (window._g6EdgeCreationActive) return false;
+            "function(e) {
+              // Access create-edge behavior via graph to check if edge creation is active
+              const behaviors = this.context.graph.getBehaviors();
+              const createEdge = behaviors.find(b => b[0] === 'create-edge');
+              if (createEdge && createEdge[1]?.isCreatingEdge) return false;
               return true;
             }"
           )

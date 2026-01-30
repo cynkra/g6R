@@ -6,9 +6,9 @@ const ASSIST_EDGE_ID = 'g6-create-edge-assist-edge-id';
 const ASSIST_NODE_ID = 'g6-create-edge-assist-node-id';
 const MIN_DRAG_DISTANCE = 10;
 
-window._g6EdgeCreationActive = false;
-
 class CustomCreateEdge extends CreateEdge {
+  // Track edge creation state as class property (accessible via graph.getBehaviors())
+  isCreatingEdge = false;
   snappedPort = null;
   snappedPortOriginalStyle = null;
   _resetSnappedPortTimeout = null;
@@ -19,7 +19,7 @@ class CustomCreateEdge extends CreateEdge {
 
   async cancelEdge() {
     const { graph } = this.context;
-    window._g6EdgeCreationActive = false;
+    this.isCreatingEdge = false;
     this.source = undefined;
     this.sourcePort = null;
     try {
@@ -175,7 +175,7 @@ class CustomCreateEdge extends CreateEdge {
       const distance = Math.sqrt(dx * dx + dy * dy);
 
       if (distance < MIN_DRAG_DISTANCE) {
-        window._g6EdgeCreationActive = false;
+        this.isCreatingEdge = false;
         await this.cancelEdge();
         return;
       }
@@ -196,13 +196,12 @@ class CustomCreateEdge extends CreateEdge {
           source: savedSource,
           target: ASSIST_NODE_ID,
           targetType: 'canvas',
-          style: Object.assign({}, style, { sourcePort: savedSourcePort }),
-          dropPosition: { x: endX, y: endY }
+          style: Object.assign({}, style, { sourcePort: savedSourcePort })
         };
         const edgeData = typeof onCreate === 'function' ? onCreate(rawEdgeData) : rawEdgeData;
 
         // Cleanup
-        window._g6EdgeCreationActive = false;
+        this.isCreatingEdge = false;
         this.source = undefined;
         this.sourcePort = null;
         try {
@@ -214,7 +213,7 @@ class CustomCreateEdge extends CreateEdge {
 
         // Notify via onFinish (for blockr.dag to create new block)
         if (edgeData && typeof onFinish === 'function') {
-          onFinish({ ...edgeData, dropPosition: { x: endX, y: endY } });
+          onFinish(edgeData);
         }
         return;
       }
@@ -290,19 +289,18 @@ class CustomCreateEdge extends CreateEdge {
       source: this.source,
       targetType: event.targetType,
       target,
-      style: edgeStyle,
-      dropPosition: event.dropPosition
+      style: edgeStyle
     };
 
     const edgeData = typeof onCreate === 'function' ? onCreate(rawEdgeData) : rawEdgeData;
     if (edgeData) {
       graph.addEdgeData([edgeData]);
       if (typeof onFinish === 'function') {
-        onFinish({ ...edgeData, dropPosition: event.dropPosition });
+        onFinish(edgeData);
       }
     }
 
-    window._g6EdgeCreationActive = false;
+    this.isCreatingEdge = false;
     this.source = undefined;
     this.sourcePort = null;
     try {
@@ -313,7 +311,7 @@ class CustomCreateEdge extends CreateEdge {
   }
 
   async customHandleCreateEdge(event) {
-    if (window._g6EdgeCreationActive && !this.source) {
+    if (this.isCreatingEdge && !this.source) {
       return;
     }
 
@@ -325,20 +323,25 @@ class CustomCreateEdge extends CreateEdge {
 
     let hasPorts = node?.style?.ports?.length > 0;
     if (hasPorts) {
-      this.sourcePort = event.originalTarget;
-      if (!this.sourcePort || !this.sourcePort.key) {
-        return;
-      }
-      window._g6EdgeCreationActive = true;
-      const portConnections = getPortConnections(this.context.graph, node.id);
-      const currentConnections = portConnections[this.sourcePort.key] || 0;
-      if (currentConnections >= this.sourcePort.arity) {
-        if (mode === "dev") {
-          sendNotification("Current port has reached its maximum arity, can't drag.", "warning", 5000);
+      const clickedPort = event.originalTarget;
+      // Check if user clicked on a port (has key property)
+      if (clickedPort && clickedPort.key) {
+        this.sourcePort = clickedPort;
+        this.isCreatingEdge = true;
+        const portConnections = getPortConnections(this.context.graph, node.id);
+        const currentConnections = portConnections[this.sourcePort.key] || 0;
+        if (currentConnections >= this.sourcePort.arity) {
+          if (mode === "dev") {
+            sendNotification("Current port has reached its maximum arity, can't drag.", "warning", 5000);
+          }
+          return;
         }
+      } else {
+        // User clicked on node body, not on a port - don't start edge creation
         return;
       }
     } else {
+      // Node has no ports - allow edge creation from anywhere on node
       this.sourcePort = null;
     }
 
