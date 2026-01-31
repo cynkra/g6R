@@ -437,7 +437,8 @@ const createCustomNode = (BaseShape) => {
         });
 
         addUniqueEventListener(indicator.hitArea, 'mouseleave', (e) => {
-          // Don't trigger hide - let keyShape mouseleave handle it
+          // Trigger hide when leaving the hitArea
+          if (this._hidePorts) this._hidePorts();
         });
       }
 
