@@ -1,6 +1,9 @@
-import { Circle, Rect, Ellipse, Diamond, Triangle, Star, Hexagon, Image, Donut } from '@antv/g6';
+import { Circle, Rect, Ellipse, Diamond, Triangle, Star, Hexagon, Image, Donut, GraphEvent } from '@antv/g6';
 import { Circle as GCircle, Rect as GRect } from '@antv/g';
 import { getPortConnections } from './utils';
+
+// Map to store node port refresh functions for edge creation events
+const nodePortRefreshFunctions = new Map();
 
 // Animation constants
 const ANIMATION_DURATION_MS = 500;
@@ -312,16 +315,27 @@ const createCustomNode = (BaseShape) => {
       addUniqueEventListener(keyShape, 'mouseenter', showPorts);
       addUniqueEventListener(keyShape, 'mouseleave', hidePorts);
 
-      // Listen for edge creation to refresh port visuals
+      // Register showPorts function for edge creation events
       const nodeId = this.id;
-      if (!this._edgeCreatedHandler) {
-        this._edgeCreatedHandler = (event) => {
-          const { sourceId, targetId } = event.detail || {};
-          if (String(nodeId) === String(sourceId) || String(nodeId) === String(targetId)) {
-            showPorts();
+      nodePortRefreshFunctions.set(String(nodeId), showPorts);
+
+      // Set up graph-level listener for edge creation (once per graph)
+      const graph = this.context.graph;
+      if (!graph._hasEdgeCreatedListener) {
+        graph._hasEdgeCreatedListener = true;
+        graph.on(GraphEvent.AFTER_ELEMENT_CREATE, (evt) => {
+          if (evt.elementType === 'edge') {
+            const edgeData = evt.data;
+            const sourceId = String(edgeData.source);
+            const targetId = String(edgeData.target);
+            if (nodePortRefreshFunctions.has(sourceId)) {
+              nodePortRefreshFunctions.get(sourceId)();
+            }
+            if (nodePortRefreshFunctions.has(targetId)) {
+              nodePortRefreshFunctions.get(targetId)();
+            }
           }
-        };
-        window.addEventListener('g6-edge-created', this._edgeCreatedHandler);
+        });
       }
     }
 

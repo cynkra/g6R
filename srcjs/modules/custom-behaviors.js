@@ -308,11 +308,6 @@ class CustomCreateEdge extends CreateEdge {
     if (edgeData) {
       graph.addEdgeData([edgeData]);
 
-      // Emit event to refresh port visuals on affected nodes
-      window.dispatchEvent(new CustomEvent('g6-edge-created', {
-        detail: { sourceId: this.source, targetId: target }
-      }));
-
       if (typeof onFinish === 'function') {
         onFinish(edgeData);
       }
