@@ -414,6 +414,16 @@ const createCustomNode = (BaseShape) => {
       if (indicator && indicator.hitArea && graphId && nodeId && style.visibility !== 'hidden') {
         // Click handler to trigger selected_port Shiny input
         const handleIndicatorClick = (e) => {
+          // Check if port is at capacity before triggering
+          const connections = getPortConnections(this.context.graph, this.id)?.[portShape.key] ?? 0;
+          const arity = portShape.arity === "Infinity" ? Infinity : (portShape.arity || 1);
+          const atCapacity = connections >= arity;
+
+          if (atCapacity) {
+            e.stopPropagation();
+            return;
+          }
+
           if (HTMLWidgets.shinyMode) {
             Shiny.setInputValue(
               `${graphId}-selected_port`,
