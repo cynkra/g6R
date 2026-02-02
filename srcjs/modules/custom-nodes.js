@@ -37,52 +37,9 @@ const getContrastColor = (bg) => {
   return luminance > 0.5 ? '#000' : '#fff';
 }
 
-// Label colors matching blockr.dock design system
-const getLabelColors = () => {
-  return {
-    background: '#f3f4f6',  // --blockr-grey-100
-    border: '#e5e7eb',      // --blockr-grey-200
-    text: '#6b7280'         // --blockr-grey-500
-  };
-}
-
 // Factory to create custom nodes with port key attachment
 const createCustomNode = (BaseShape) => {
   return class CustomNode extends BaseShape {
-    // Override to apply label colors matching blockr.dock design system
-    drawLabelShape(attributes, container) {
-      const colors = getLabelColors();
-
-      // Selection style constants (must match events.js SELECTED_LABEL_STYLE)
-      const SELECTION_BG_FILL = '#dbeafe';
-      const SELECTION_BG_STROKE = '#0D99FF';
-      const SELECTION_FONT_WEIGHT = 700;
-
-      if (attributes.labelText) {
-        // Check if this node has selection styling applied
-        // G6 puts updateNodeData style values directly on attributes
-        const isSelected = attributes.labelBackgroundFill === SELECTION_BG_FILL ||
-                          attributes.labelFontWeight === SELECTION_FONT_WEIGHT;
-
-        // Apply selection style if selected, otherwise use defaults
-        attributes = {
-          ...attributes,
-          labelFill: colors.text,
-          labelBackground: true,
-          labelBackgroundFill: isSelected ? SELECTION_BG_FILL : colors.background,
-          labelBackgroundStroke: isSelected ? SELECTION_BG_STROKE : colors.border,
-          labelBackgroundLineWidth: 1,
-          labelBackgroundRadius: 4,
-          labelBackgroundOpacity: 1,
-          labelPadding: [1, 6, 1, 6],
-          labelFontSize: 11,
-          labelFontWeight: isSelected ? SELECTION_FONT_WEIGHT : 500
-        };
-      }
-
-      super.drawLabelShape(attributes, container);
-    }
-
     // Override to attach port key to each port shape
     drawPortShapes(attributes, container) {
       const portsStyle = this.getPortsStyle(attributes);
@@ -117,7 +74,7 @@ const createCustomNode = (BaseShape) => {
           pointerEvents: 'none',  // hitArea handles all clicks
           class: 'port'
         };
-        const portShape = this.createPortShape(`port-${key}`, portStyle, x, y, container, key);
+        const portShape = this.createPortShape(`port-${key}`, portStyle, container, key);
 
         // Store for hover expansion
         portShape._baseRadius = baseRadius;
@@ -224,9 +181,6 @@ const createCustomNode = (BaseShape) => {
         isHoveringNode = false;
         // Delay hiding to allow moving to indicators
         hideTimeout = setTimeout(() => {
-          const tooltip = document.getElementById('g6-port-tooltip');
-          if (tooltip) tooltip.style.display = 'none';
-
           if (!this._portShapes) return;
           if (this._portsAnimation) {
             cancelAnimationFrame(this._portsAnimation);
@@ -339,91 +293,7 @@ const createCustomNode = (BaseShape) => {
       }
     }
 
-    // Lighten a hex color by mixing with white
-    lightenColor(hex, amount) {
-      if (!hex) return '#cccccc';
-      let c = hex.replace('#', '');
-      if (c.length === 3) c = c.split('').map(x => x + x).join('');
-      const r = parseInt(c.substr(0, 2), 16);
-      const g = parseInt(c.substr(2, 2), 16);
-      const b = parseInt(c.substr(4, 2), 16);
-      // Mix with white
-      const newR = Math.round(r + (255 - r) * amount);
-      const newG = Math.round(g + (255 - g) * amount);
-      const newB = Math.round(b + (255 - b) * amount);
-      return `#${newR.toString(16).padStart(2, '0')}${newG.toString(16).padStart(2, '0')}${newB.toString(16).padStart(2, '0')}`;
-    }
-
-    showGuide(guide) {
-      if (guide.plus) guide.plus.attr('visibility', 'visible');
-      // Legacy support for old guide structure
-      if (guide.line) guide.line.attr('visibility', 'visible');
-      if (guide.rect) guide.rect.attr('visibility', 'visible');
-      if (guide.bbox) guide.bbox.attr('visibility', 'visible');
-    }
-
-    hideGuide(guide) {
-      if (guide.plus) guide.plus.attr('visibility', 'hidden');
-      // Legacy support for old guide structure
-      if (guide.line) guide.line.attr('visibility', 'hidden');
-      if (guide.rect) guide.rect.attr('visibility', 'hidden');
-      if (guide.bbox) guide.bbox.attr('visibility', 'hidden');
-    }
-
-    handleGuideMouseLeave(e, guide) {
-      // Only hide if not entering another guide element
-      const related = e.relatedTarget;
-      if (!related || !Object.values(guide).includes(related)) {
-        this.hideGuide(guide);
-      }
-    }
-
-    getCursorForPlacement(placement) {
-      if (typeof placement === "string") {
-        switch (placement) {
-          case "left": return "w-resize";
-          case "right": return "e-resize";
-          case "top": return "n-resize";
-          case "bottom": return "s-resize";
-          case "top-left": return "nw-resize";
-          case "top-right": return "ne-resize";
-          case "bottom-left": return "sw-resize";
-          case "bottom-right": return "se-resize";
-          default: return "pointer";
-        }
-      }
-      if (Array.isArray(placement)) {
-        const [x, y] = placement;
-        // Corners
-        if (x === 0 && y === 0) return "nw-resize";
-        if (x === 1 && y === 0) return "ne-resize";
-        if (x === 0 && y === 1) return "sw-resize";
-        if (x === 1 && y === 1) return "se-resize";
-        // Sides
-        if (y === 0) return "n-resize";
-        if (y === 1) return "s-resize";
-        if (x === 0) return "w-resize";
-        if (x === 1) return "e-resize";
-        return "pointer";
-      }
-      return "pointer";
-    }
-
     addPortEvents(portShape, style, indicator = null, graphId = null, nodeId = null) {
-      // Helper to show add indicator on hover with pop animation
-      const handlePortHover = () => {
-        const connections = getPortConnections(this.context.graph, this.id)?.[portShape.key] ?? 0;
-        const atCapacity = connections >= (portShape.arity === "Infinity" ? Infinity : portShape.arity);
-
-        if (!atCapacity && indicator) {
-          // Hide port shape, show indicator
-          portShape.attr({ visibility: 'hidden' });
-          if (indicator.hitArea) indicator.hitArea.attr({ visibility: 'visible' });
-          this.showIndicatorWithAnimation(indicator);
-          this.startRotationAnimation(indicator.circle);
-        }
-      }
-
       // Add event handlers to indicator hitArea
       if (indicator && indicator.hitArea && graphId && nodeId && style.visibility !== 'hidden') {
         // Click handler to trigger selected_port Shiny input
@@ -449,8 +319,9 @@ const createCustomNode = (BaseShape) => {
         };
         addUniqueEventListener(indicator.hitArea, 'click', handleIndicatorClick);
 
-        addUniqueEventListener(indicator.hitArea, 'mouseenter', () => {
+        addUniqueEventListener(indicator.hitArea, 'mouseenter', (e) => {
           if (this._cancelHide) this._cancelHide();
+          showTooltip(e);
           // Check if port is at capacity before showing indicator
           const connections = getPortConnections(this.context.graph, this.id)?.[portShape.key] ?? 0;
           const atCapacity = connections >= (portShape.arity === "Infinity" ? Infinity : portShape.arity);
@@ -462,6 +333,7 @@ const createCustomNode = (BaseShape) => {
 
         addUniqueEventListener(indicator.hitArea, 'mouseleave', (e) => {
           // Trigger hide when leaving the hitArea
+          hideTooltip();
           if (this._hidePorts) this._hidePorts();
         });
       }
@@ -482,14 +354,11 @@ const createCustomNode = (BaseShape) => {
           tooltip.id = 'g6-port-tooltip';
           tooltip.style.position = 'fixed';
           tooltip.style.pointerEvents = 'none';
-          tooltip.style.background = '#f5f5f5';
-          tooltip.style.color = '#666';
-          tooltip.style.border = '1px solid #ddd';
-          tooltip.style.borderRadius = '4px';
-          tooltip.style.padding = '3px 8px';
-          tooltip.style.fontSize = '11px';
-          tooltip.style.fontWeight = 'normal';
-          tooltip.style.boxShadow = '0 1px 3px rgba(0,0,0,0.1)';
+          tooltip.style.background = style.stroke;
+          tooltip.style.color = getContrastColor(style.stroke);
+          tooltip.style.borderRadius = '6px';
+          tooltip.style.padding = '4px 10px';
+          tooltip.style.fontSize = '12px';
           tooltip.style.zIndex = '9999';
           document.body.appendChild(tooltip);
         }
@@ -506,26 +375,9 @@ const createCustomNode = (BaseShape) => {
         const tooltip = document.getElementById('g6-port-tooltip');
         if (tooltip) tooltip.style.display = 'none';
       };
-
-      addUniqueEventListener(portShape, 'mouseenter', (e) => {
-        // Cancel any pending hide
-        if (this._cancelHide) this._cancelHide();
-        handlePortHover();
-        // Only show tooltip for input ports with labels
-        if (style.type === 'input' && style.label) {
-          showTooltip(e);
-        }
-      });
-
-      addUniqueEventListener(portShape, 'mouseleave', (e) => {
-        // Don't hide indicator on port leave - node mouseleave handles that
-        // This prevents the + from reverting to small circle
-        hideTooltip();
-      });
-
     }
 
-    createPortShape(shapeKey, style, x, y, container, key) {
+    createPortShape(shapeKey, style, container, key) {
       const portShape = this.upsert(shapeKey, GCircle, { ...style }, container);
       if (portShape) {
         portShape.key = key;
