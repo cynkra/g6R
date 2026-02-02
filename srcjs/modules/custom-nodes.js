@@ -316,6 +316,12 @@ const createCustomNode = (BaseShape) => {
             );
           }
           e.stopPropagation();
+
+          // Re-enable drag-element behavior as the create edge is also triggered
+          // when clicking on the indicator and it disables the drag-element temporarily.
+          if (this.context?.graph?.updateBehavior) {
+            this.context.graph.updateBehavior({ key: 'drag-element', enable: true });
+          }
         };
         addUniqueEventListener(indicator.hitArea, 'click', handleIndicatorClick);
 
