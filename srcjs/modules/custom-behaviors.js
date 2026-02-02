@@ -206,7 +206,7 @@ class CustomCreateEdge extends CreateEdge {
           source: savedSource,
           target: ASSIST_NODE_ID,
           targetType: 'canvas',
-          style: Object.assign({}, style, { sourcePort: savedSourcePort })
+          style: Object.assign({}, style, { sourcePort: savedSourcePort, portType: sourcePort?.attributes.type })
         };
         const edgeData = typeof onCreate === 'function' ? onCreate(rawEdgeData) : rawEdgeData;
 
@@ -242,7 +242,7 @@ class CustomCreateEdge extends CreateEdge {
         }
 
         if (sourcePort?.attributes?.type && targetPort?.attributes?.type &&
-            sourcePort.attributes.type === targetPort.attributes.type) {
+          sourcePort.attributes.type === targetPort.attributes.type) {
           if (mode === "dev") {
             sendNotification("Edge creation failed: source and target ports must be of different types.", "warning", 5000);
           }
