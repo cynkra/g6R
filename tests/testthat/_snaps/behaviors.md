@@ -354,7 +354,7 @@
         ..$ behaviors       :List of 1
         .. ..$ :List of 8
         .. .. ..$ key       : chr "drag-element"
-        .. .. ..$ enable    : logi TRUE
+        .. .. ..$ enable    : 'JS_EVAL' chr "(e) => {\n        const target = e.nativeEvent?.target;\n        const graph = HTMLWidgets.find(`#${target?.clo"| __truncated__
         .. .. ..$ animation : logi TRUE
         .. .. ..$ state     : chr "selected"
         .. .. ..$ dropEffect: chr "move"
@@ -409,7 +409,7 @@
         .. ..$ :List of 6
         .. .. ..$ key     : chr "drag-element-force"
         .. .. ..$ fixed   : logi FALSE
-        .. .. ..$ enable  : 'JS_EVAL' chr "(event) => {\n        return ['node', 'combo'].includes(event.targetType);\n      }"
+        .. .. ..$ enable  : 'JS_EVAL' chr "(e) => {\n        const target = e.nativeEvent?.target;\n        const graph = HTMLWidgets.find(`#${target?.clo"| __truncated__
         .. .. ..$ state   : chr "selected"
         .. .. ..$ hideEdge: chr "none"
         .. .. ..$ type    : chr "drag-element-force"

@@ -282,9 +282,6 @@ const handlePortIndicatorClick = (self, portShape, style, indicator, graphId, no
     );
   }
   e.stopPropagation();
-  if (self.context?.graph?.updateBehavior) {
-    self.context.graph.updateBehavior({ key: 'drag-element', enable: true });
-  }
 };
 
 const handlePortIndicatorMouseEnter = (self, portShape, style, indicator) => (e) => {

@@ -178,8 +178,7 @@ g6(jsonUrl = "https://assets.antv.antgroup.com/g6/5000.json") |>
 ## Create edge
 
 It enables interactive creation of new edges between nodes. You can drag from one node to another to create an edge and also change
-the trigger if you want to press another key to start the edge creation. Not that this may be incompatible with other behaviors such as `drag-canvas`.
-By default, the `create-edge` behavior is disabled, so you need to enable it explicitly. This is to avoid accidental edge creation when dragging nodes or panning the canvas. In practice, you can use it it in combination with the `contextmenu()` plugin which allows you to right-click on a node to create an edge.
+the trigger if you want to press another key to start the edge creation. By default, the `create-edge` behavior is disabled, so you need to enable it explicitly. This is to avoid accidental edge creation when dragging nodes or panning the canvas. In practice, you can use it it in combination with the `contextmenu()` plugin which allows you to right-click on a node to create an edge.
 
 ### Manual activation
 

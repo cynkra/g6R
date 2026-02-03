@@ -144,7 +144,7 @@ server <- function(input, output, session) {
         minimap(),
         fullscreen(),
         #tooltips()
-        toolbar(),
+        g6R::toolbar(),
         context_menu()
       )
   })

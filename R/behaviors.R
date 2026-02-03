@@ -579,9 +579,6 @@ collapse_expand <- function(
 #' to ensure this also works in modules.
 #' @param ... Extra parameters. See \url{https://g6.antv.antgroup.com/en/manual/behavior/create-edge}.
 #'
-#' @note \link{create_edge}, \link{drag_element} and \link{drag_element_force} are incompatible by default,
-#' as there triggers are the same. You can change the trigger to workaround this.
-#'
 #' @return A list with the configuration settings for the create-edge behavior.
 #' @export
 #'
@@ -635,9 +632,8 @@ collapse_expand <- function(
 #'                 sprintf(
 #'                   "(edge) => {
 #'                     const graph = HTMLWidgets.find('#%s').getWidget();
-#'                     const targetType = graph.getElementType(edge.target);
 #'                     // Avoid to create edges in combos. If so, we remove it
-#'                     if (targetType === 'combo') {
+#'                     if (edge.targetType === 'combo') {
 #'                       graph.removeEdgeData([edge.id]);
 #'                       return;
 #'                     }
@@ -721,12 +717,10 @@ create_edge <- function(
       sprintf(
         "(edge) => {
           // Canvas drops don't have a real target node, skip processing
-          if (edge.targetType === 'canvas') return;
           const notify = %s;
           const graph = HTMLWidgets.find('#%s').getWidget();
-          const targetType = graph.getElementType(edge.target);
           // Avoid to create edges in combos. If so, we remove it
-          if (targetType !== 'node') {
+          if (edge.targetType === 'combo') {
             graph.removeEdgeData([edge.id]);
             if (notify) {
               Shiny.notifications.show(
@@ -736,15 +730,9 @@ create_edge <- function(
                 }
               )
             }
-          } //else {
-            // Then we reset the behaviors so there is no conflict
-            graph.updateBehavior({
-              key: 'create-edge', // Specify the behavior to update
-              enable: false,
-            });
-            // Re-enable drag element bahaviors
-            graph.updateBehavior({ key: 'drag-element', enable: true });
-            graph.updateBehavior({ key: 'drag-element-force', enable: true });
+          } else {
+            // Re-enable drag element behaviors is done from the custom behavior class
+            // in the customDrop method.
             if (notify) {
               Shiny.notifications.show(
                 { 
@@ -753,7 +741,7 @@ create_edge <- function(
                 }
               )
             }
-          //}
+          }
         }",
         as.numeric(notify),
         config$outputId
@@ -898,7 +886,7 @@ drag_canvas <- function(
 #' )
 drag_element <- function(
   key = "drag-element",
-  enable = TRUE,
+  enable = NULL,
   animation = TRUE,
   state = "selected",
   dropEffect = c("move", "link", "none"),
@@ -908,6 +896,18 @@ drag_element <- function(
   ...
 ) {
   # Validate inputs
+  if (is.null(enable)) {
+    enable <- JS(
+      "(e) => {
+        const target = e.nativeEvent?.target;
+        const graph = HTMLWidgets.find(`#${target?.closest?.('.g6')?.id}`)?.getWidget();
+        try {
+          if (graph?.getNodeData?.('g6-create-edge-assist-node-id')) return false;
+        } catch (err) {}
+        return true;
+      }"
+    )
+  }
   if (!is.logical(enable) && !is_js(enable)) {
     stop("'enable' should be a boolean or a JS function")
   }
@@ -991,8 +991,13 @@ drag_element_force <- function(
   # Enable default
   if (is.null(enable)) {
     enable <- JS(
-      "(event) => {
-        return ['node', 'combo'].includes(event.targetType);
+      "(e) => {
+        const target = e.nativeEvent?.target;
+        const graph = HTMLWidgets.find(`#${target?.closest?.('.g6')?.id}`)?.getWidget();
+        try {
+          if (graph?.getNodeData?.('g6-create-edge-assist-node-id')) return false;
+        } catch (err) {}
+        return ['node', 'combo'].includes(e.targetType);
       }"
     )
   }

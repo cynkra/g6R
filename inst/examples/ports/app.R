@@ -83,18 +83,7 @@ server <- function(input, output, session) {
       ) |>
       g6_behaviors(
         click_select(multiple = TRUE),
-        drag_element(
-          enable = JS(
-            "(e) => {
-              const target = e.nativeEvent?.target;
-              const graph = HTMLWidgets.find(`#${target?.closest?.('.g6')?.id}`)?.getWidget();
-              try {
-                if (graph?.getNodeData?.('g6-create-edge-assist-node-id')) return false;
-              } catch (err) {}
-              return true;
-            }"
-          )
-        ),
+        drag_element(),
         drag_canvas(
           enable = JS(
             "(e) => {

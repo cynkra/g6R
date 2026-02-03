@@ -18,22 +18,6 @@ class CustomCreateEdge extends CreateEdge {
     return true;
   }
 
-  async cancelEdge() {
-    const { graph } = this.context;
-    this.isCreatingEdge = false;
-    this.source = undefined;
-    this.sourcePort = null;
-    // Re-enable drag-element behavior
-    try {
-      graph.updateBehavior({ key: 'drag-element', enable: true });
-    } catch (e) { }
-    try {
-      graph.removeEdgeData([ASSIST_EDGE_ID]);
-      graph.removeNodeData([ASSIST_NODE_ID]);
-      await graph.draw();
-    } catch (e) { }
-  }
-
   bindEvents() {
     const graph = this.context.graph;
     const trigger = this.options.trigger;
@@ -170,10 +154,19 @@ class CustomCreateEdge extends CreateEdge {
     }
     this.resetSnappedPort();
 
-    const mode = this.context.graph.options.mode;
+    const { graph } = this.context;
+    const mode = graph.options.mode;
     const targetType = event.targetType;
     const sourcePort = this.sourcePort;
     const targetPort = event.originalTarget;
+
+    // Re-enable drag-element behavior
+    graph.updateBehavior(
+      [
+        { key: 'drag-element', enable: true },
+        { key: 'drag-element-force', enable: true }
+      ]
+    );
 
     if (['node', 'combo', 'canvas'].indexOf(targetType) !== -1 && this.source) {
       const startX = this.startX ?? 0;
@@ -210,22 +203,20 @@ class CustomCreateEdge extends CreateEdge {
         };
         const edgeData = typeof onCreate === 'function' ? onCreate(rawEdgeData) : rawEdgeData;
 
+        // Notify via onFinish (for blockr.dag to create new block)
+        if (edgeData && typeof onFinish === 'function') {
+          onFinish(edgeData);
+        }
         // Cleanup
         this.isCreatingEdge = false;
         this.source = undefined;
         this.sourcePort = null;
         try {
-          const graph = this.context.graph;
-          graph.updateBehavior({ key: 'drag-element', enable: true });
           graph.removeEdgeData([ASSIST_EDGE_ID]);
           graph.removeNodeData([ASSIST_NODE_ID]);
           await graph.draw();
         } catch (e) { }
 
-        // Notify via onFinish (for blockr.dag to create new block)
-        if (edgeData && typeof onFinish === 'function') {
-          onFinish(edgeData);
-        }
         return;
       }
 
@@ -316,10 +307,7 @@ class CustomCreateEdge extends CreateEdge {
     this.isCreatingEdge = false;
     this.source = undefined;
     this.sourcePort = null;
-    // Re-enable drag-element behavior
-    try {
-      graph.updateBehavior({ key: 'drag-element', enable: true });
-    } catch (e) { }
+
     try {
       graph.removeEdgeData([ASSIST_EDGE_ID]);
       graph.removeNodeData([ASSIST_NODE_ID]);
@@ -328,6 +316,8 @@ class CustomCreateEdge extends CreateEdge {
   }
 
   async customHandleCreateEdge(event) {
+    // Don't allow if behavior is disabled by end user
+    if (!this.options.enable) return;
     // Prevent re-entry from event bubbling
     if (this._processingPointerDown) return;
     this._processingPointerDown = true;
@@ -363,7 +353,12 @@ class CustomCreateEdge extends CreateEdge {
         this.isCreatingEdge = true;
         // Disable drag-element to prevent node dragging during edge creation
         try {
-          this.context.graph.updateBehavior({ key: 'drag-element', enable: false });
+          this.context.graph.updateBehavior(
+            [
+              { key: 'drag-element', enable: false },
+              { key: 'drag-element-force', enable: false }
+            ]
+          );
         } catch (e) { }
       } else {
         // User clicked on node body, not on a port - don't start edge creation

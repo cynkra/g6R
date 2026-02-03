@@ -6,7 +6,7 @@
 \usage{
 drag_element(
   key = "drag-element",
-  enable = TRUE,
+  enable = NULL,
   animation = TRUE,
   state = "selected",
   dropEffect = c("move", "link", "none"),

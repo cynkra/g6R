@@ -8,7 +8,7 @@
 \usage{
 g6_port(
   key,
-  label = NULL,
+  label = key,
   type = c("input", "output"),
   arity = 1,
   visibility = c("visible", "hover", "hidden"),
@@ -17,7 +17,7 @@ g6_port(
 
 g6_input_port(
   key,
-  label = NULL,
+  label = key,
   arity = 1,
   visibility = c("visible", "hover", "hidden"),
   fill = "#52C41A",
@@ -26,7 +26,7 @@ g6_input_port(
 
 g6_output_port(
   key,
-  label = NULL,
+  label = key,
   arity = 1,
   visibility = c("visible", "hover", "hidden"),
   fill = "#FF4D4F",

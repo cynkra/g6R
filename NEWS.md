@@ -1,8 +1,15 @@
 # g6R 0.6.0.9000
 
+## Breaking changes
+
+- Not a g6R change but `{bslib}` recently introduced the `toolbar()` function which unfortunately overlaps with the `{g6R}` one. From now, you'll have to use `g6R::toolbar()` to avoid conflicts. In later releases, we'll provide more prefixed functions like `g6_toolbar`.
+
 ## New feature
 
+- Improvements to how `drag_element()` and `drag_element_force()` work with `create_edge()`. Now, the `create_edge()` can be `drag` and work with `drag_element()` as we handle the behavior conflicts/priorities JS side.
+
 - `input[["<graph_ID>-state"]]` now does not return unnamed lists for nodes, edges and combos. Instead, each sublist is named with the corresponding element IDs. This makes it easier to retrieve the state of a specific element when we know the ID.
+
 - Added better port support for nodes __ports__:
   - To enable it, you must pass a custom type to `g6_node()` such as `custom-circle-node`, `custom-rect-node` (We support 9 [shapes](https://g6.antv.antgroup.com/en/manual/element/node/overview#built-in-nodes), except HTML which does not handle port in the g6 library)
   - `g6_node()` get a new `ports` argument to define ports for each node. In the g6 JS library, ports are normally defined inside `style` but we consider they are too important to be hidden there. Now you can define ports directly in the node data, g6R automatically moves them to `style.ports` when rendering the graph.
