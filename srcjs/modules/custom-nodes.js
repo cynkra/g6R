@@ -13,7 +13,6 @@ const INNER_CIRCLE_RATIO = 0.75;
 const PLUS_FONT_RATIO = 1.6;
 
 // To add event listener only once because of re-renders
-// we don't want to rebind the same events.
 const addUniqueEventListener = (element, type, listener) => {
   const flag = `_hasListener_${type}`;
   if (!element[flag]) {
@@ -22,365 +21,441 @@ const addUniqueEventListener = (element, type, listener) => {
   }
 }
 
-// Track currently hovered node to hide others when switching
 let currentlyHoveredNode = null;
 
 const getContrastColor = (bg) => {
-  // Accepts hex color string, e.g. "#444"
   let c = bg.replace('#', '');
   if (c.length === 3) c = c.split('').map(x => x + x).join('');
   const r = parseInt(c.substr(0, 2), 16);
   const g = parseInt(c.substr(2, 2), 16);
   const b = parseInt(c.substr(4, 2), 16);
-  // Perceptual luminance formula
   const luminance = (0.299 * r + 0.587 * g + 0.114 * b) / 255;
   return luminance > 0.5 ? '#000' : '#fff';
-}
+};
 
-// Factory to create custom nodes with port key attachment
+const createShowPortsHandler = (ctx) => () => {
+  ctx.isHoveringNode = true;
+  if (ctx.hideTimeout) {
+    clearTimeout(ctx.hideTimeout);
+    ctx.hideTimeout = null;
+  }
+  if (currentlyHoveredNode && currentlyHoveredNode !== ctx.self) {
+    currentlyHoveredNode._hidePortsImmediately?.();
+  }
+  currentlyHoveredNode = ctx.self;
+  if (!ctx.self._portShapes) return;
+  const portConnections = getPortConnections(ctx.self.context.graph, ctx.self.id) || {};
+  let needsAnimation = false;
+  ctx.self._portShapes.forEach(({ shape, indicator }) => {
+    const visibilityMode = shape._visibility || 'visible';
+    if (visibilityMode === 'hidden') return;
+    const connections = portConnections[shape.key] ?? 0;
+    const arity = shape.arity === "Infinity" ? Infinity : (shape.arity || 1);
+    const atCapacity = connections >= arity;
+    if (!atCapacity && indicator) {
+      shape.attr({ visibility: 'hidden' });
+      if (indicator.circle.attr('visibility') !== 'visible') {
+        if (indicator.hitArea) indicator.hitArea.attr({ visibility: 'visible' });
+        indicator.circle.attr({ visibility: 'visible', opacity: 0 });
+        indicator.innerCircle.attr({ visibility: 'visible', opacity: 0 });
+        indicator.plus.attr({ visibility: 'visible', opacity: 0 });
+        needsAnimation = true;
+      }
+      ctx.self.startRotationAnimation(indicator.circle);
+    } else {
+      if (indicator) {
+        ctx.self.stopRotationAnimation(indicator.circle);
+        indicator.circle.attr({ visibility: 'hidden' });
+        indicator.innerCircle.attr({ visibility: 'hidden' });
+        indicator.plus.attr({ visibility: 'hidden' });
+      }
+      if (shape.attr('visibility') !== 'visible') {
+        shape.attr({
+          visibility: 'visible',
+          zIndex: 10,
+          opacity: 0
+        });
+        needsAnimation = true;
+      } else {
+        shape.attr({ opacity: 1 });
+      }
+    }
+  });
+  if (needsAnimation) {
+    ctx.self.animateAllIn();
+  }
+};
+
+const createHidePortsHandler = (ctx) => () => {
+  ctx.isHoveringNode = false;
+  ctx.hideTimeout = setTimeout(() => {
+    if (!ctx.self._portShapes) return;
+    if (ctx.self._portsAnimation) {
+      cancelAnimationFrame(ctx.self._portsAnimation);
+      ctx.self._portsAnimation = null;
+    }
+    ctx.self._portShapes.forEach(({ shape, indicator }) => {
+      const visibilityMode = shape._visibility || 'visible';
+      if (visibilityMode === 'hover') {
+        shape.attr({
+          visibility: 'hidden',
+          zIndex: 1,
+          r: shape._baseRadius,
+          opacity: 1
+        });
+        if (indicator?.hitArea) indicator.hitArea.attr({ visibility: 'hidden' });
+      } else if (visibilityMode === 'visible') {
+        shape.attr({
+          visibility: 'visible',
+          zIndex: 1,
+          r: shape._baseRadius,
+          opacity: 1
+        });
+      }
+      if (indicator) {
+        ctx.self.stopRotationAnimation(indicator.circle);
+        indicator.circle.attr({ visibility: 'hidden', opacity: 1 });
+        indicator.innerCircle.attr({ visibility: 'hidden', opacity: 1 });
+        indicator.plus.attr({ visibility: 'hidden', opacity: 1 });
+      }
+    });
+  }, HIDE_DELAY_MS);
+};
+
+const createHidePortsImmediateHandler = (ctx) => () => {
+  ctx.isHoveringNode = false;
+  if (ctx.hideTimeout) {
+    clearTimeout(ctx.hideTimeout);
+    ctx.hideTimeout = null;
+  }
+  if (ctx.self._portsAnimation) {
+    cancelAnimationFrame(ctx.self._portsAnimation);
+    ctx.self._portsAnimation = null;
+  }
+  if (!ctx.self._portShapes) return;
+  ctx.self._portShapes.forEach(({ shape, indicator }) => {
+    const visibilityMode = shape._visibility || 'visible';
+    if (visibilityMode === 'hover') {
+      shape.attr({ visibility: 'hidden', opacity: 1 });
+      if (indicator?.hitArea) indicator.hitArea.attr({ visibility: 'hidden' });
+    } else if (visibilityMode === 'visible') {
+      shape.attr({ visibility: 'visible', opacity: 1 });
+    }
+    if (indicator) {
+      ctx.self.stopRotationAnimation(indicator.circle);
+      indicator.circle.attr({ visibility: 'hidden', opacity: 1 });
+      indicator.innerCircle.attr({ visibility: 'hidden', opacity: 1 });
+      indicator.plus.attr({ visibility: 'hidden', opacity: 1 });
+    }
+  });
+};
+
+// --- Extracted helpers for addPortEvents ---
+
+const showTooltip = (e, style) => {
+  if (showTooltip.timeout) {
+    clearTimeout(showTooltip.timeout);
+    showTooltip.timeout = null;
+  }
+  let tooltip = document.getElementById('g6-port-tooltip');
+  if (!tooltip) {
+    tooltip = document.createElement('div');
+    tooltip.id = 'g6-port-tooltip';
+    tooltip.style.position = 'fixed';
+    tooltip.style.pointerEvents = 'none';
+    tooltip.style.background = style.stroke;
+    tooltip.style.color = getContrastColor(style.stroke);
+    tooltip.style.borderRadius = '6px';
+    tooltip.style.padding = '4px 10px';
+    tooltip.style.fontSize = '12px';
+    tooltip.style.zIndex = '9999';
+    document.body.appendChild(tooltip);
+  }
+  tooltip.textContent = style.label || '';
+  tooltip.style.left = (e.clientX + 12) + 'px';
+  tooltip.style.top = (e.clientY - 12) + 'px';
+  tooltip.style.display = 'block';
+  showTooltip.timeout = setTimeout(hideTooltip, 2000);
+};
+
+const hideTooltip = () => {
+  const tooltip = document.getElementById('g6-port-tooltip');
+  if (tooltip) tooltip.style.display = 'none';
+};
+
+// --- Helpers to create indicator shapes ---
+
+const createIndicatorHitArea = (self, key, x, y, radius, container, portStyle) =>
+  self.upsert(
+    `port-hitarea-${key}`,
+    GCircle,
+    {
+      cx: x,
+      cy: y,
+      r: radius + 2,
+      fill: 'transparent',
+      stroke: 'transparent',
+      zIndex: 14,
+      cursor: 'pointer',
+      visibility: 'hidden',
+      class: 'port',
+      type: portStyle.type || 'input',
+      arity: portStyle.arity || 1
+    },
+    container
+  );
+
+const createIndicatorCircle = (self, key, x, y, radius, accentColor, container) =>
+  self.upsert(
+    `add-circle-${key}`,
+    GCircle,
+    {
+      cx: x,
+      cy: y,
+      r: radius,
+      fill: 'transparent',
+      stroke: accentColor,
+      lineWidth: 1.5,
+      lineDash: [4, 4],
+      zIndex: 15,
+      cursor: 'pointer',
+      visibility: 'hidden',
+      transformOrigin: 'center',
+      pointerEvents: 'none'
+    },
+    container
+  );
+
+const createIndicatorInnerCircle = (self, key, x, y, innerRadius, accentColor, container) =>
+  self.upsert(
+    `add-inner-${key}`,
+    GCircle,
+    {
+      cx: x,
+      cy: y,
+      r: innerRadius,
+      fill: accentColor,
+      stroke: 'transparent',
+      zIndex: 16,
+      cursor: 'pointer',
+      visibility: 'hidden',
+      pointerEvents: 'none'
+    },
+    container
+  );
+
+const createIndicatorPlus = (self, key, x, y, innerRadius, container) =>
+  self.upsert(
+    `add-plus-${key}`,
+    'text',
+    {
+      x: x - 0.5,
+      y: y - 0.5,
+      text: '+',
+      fontSize: innerRadius * PLUS_FONT_RATIO,
+      fill: '#fff',
+      fontWeight: '400',
+      textAlign: 'center',
+      textBaseline: 'middle',
+      zIndex: 17,
+      pointerEvents: 'none',
+      visibility: 'hidden'
+    },
+    container
+  );
+
+// --- Port events helpers ---
+
+const handlePortIndicatorClick = (self, portShape, style, indicator, graphId, nodeId) => (e) => {
+  const connections = getPortConnections(self.context.graph, self.id)?.[portShape.key] ?? 0;
+  const arity = portShape.arity === "Infinity" ? Infinity : (portShape.arity || 1);
+  const atCapacity = connections >= arity;
+  if (atCapacity) {
+    e.stopPropagation();
+    return;
+  }
+  if (HTMLWidgets.shinyMode) {
+    Shiny.setInputValue(
+      `${graphId}-selected_port`,
+      { node: nodeId, port: portShape.key, type: style.type },
+      { priority: 'event' }
+    );
+  }
+  e.stopPropagation();
+  if (self.context?.graph?.updateBehavior) {
+    self.context.graph.updateBehavior({ key: 'drag-element', enable: true });
+  }
+};
+
+const handlePortIndicatorMouseEnter = (self, portShape, style, indicator) => (e) => {
+  if (self._cancelHide) self._cancelHide();
+  showTooltip(e, style);
+  const connections = getPortConnections(self.context.graph, self.id)?.[portShape.key] ?? 0;
+  const atCapacity = connections >= (portShape.arity === "Infinity" ? Infinity : portShape.arity);
+  if (atCapacity) return;
+  portShape.attr({ visibility: 'hidden' });
+  self.showIndicatorWithAnimation(indicator);
+  self.startRotationAnimation(indicator.circle);
+};
+
+const handlePortIndicatorMouseLeave = (self) => (e) => {
+  hideTooltip();
+  if (self._hidePorts) self._hidePorts();
+};
+
+// --- Hover Handlers ---
+
+const getKeyShape = (container) =>
+  container.querySelector('[class*="key"]') || container.children?.[0];
+
+const setupNodeHoverContext = (self) => ({
+  self,
+  hideTimeout: null,
+  isHoveringNode: false
+});
+
+const registerNodePortRefresh = (nodeId, showPorts) => {
+  nodePortRefreshFunctions.set(String(nodeId), showPorts);
+};
+
+const ensureEdgeCreatedListener = (graph) => {
+  if (!graph._hasEdgeCreatedListener) {
+    graph._hasEdgeCreatedListener = true;
+    graph.on(GraphEvent.AFTER_ELEMENT_CREATE, (evt) => {
+      if (evt.elementType === 'edge') {
+        const edgeData = evt.data;
+        const sourceId = String(edgeData.source);
+        const targetId = String(edgeData.target);
+        if (nodePortRefreshFunctions.has(sourceId)) {
+          nodePortRefreshFunctions.get(sourceId)();
+        }
+        if (nodePortRefreshFunctions.has(targetId)) {
+          nodePortRefreshFunctions.get(targetId)();
+        }
+      }
+    });
+  }
+};
+
+const makeCancelHide = (ctx) => () => {
+  if (ctx.hideTimeout) {
+    clearTimeout(ctx.hideTimeout);
+    ctx.hideTimeout = null;
+  }
+};
+
+const makeIsHoveringNode = (ctx) => () => ctx.isHoveringNode;
+
+// --- Port shape helpers ---
+
+const createPortShapeForKey = (self, key, style, baseRadius, container, portVisibility) => {
+  const portStyle = {
+    ...style,
+    zIndex: 1,
+    r: baseRadius,
+    fill: style.fill,
+    stroke: 'transparent',
+    lineWidth: 0,
+    visibility: portVisibility === 'visible' ? 'visible' : 'hidden',
+    pointerEvents: 'none',
+    class: 'port'
+  };
+  const portShape = self.createPortShape(`port-${key}`, portStyle, container, key);
+  portShape._baseRadius = baseRadius;
+  portShape._expandedRadius = baseRadius * INDICATOR_RADIUS_MULTIPLIER;
+  portShape._originalFill = style.fill;
+  portShape._visibility = portVisibility;
+  return portShape;
+};
+
+const createIndicatorForKey = (self, key, x, y, baseRadius, style, container, portVisibility) => {
+  const indicator = self.createAddIndicator(
+    key,
+    x,
+    y,
+    baseRadius * INDICATOR_RADIUS_MULTIPLIER,
+    style.fill,
+    container,
+    style
+  );
+  indicator._visibility = portVisibility;
+  return indicator;
+};
+
+// --- Main class ---
+
 const createCustomNode = (BaseShape) => {
   return class CustomNode extends BaseShape {
-    // Override to attach port key to each port shape
+    // inside your CustomNode class
     drawPortShapes(attributes, container) {
       const portsStyle = this.getPortsStyle(attributes);
       const graphId = this.context.graph.options.container;
-
-      // Store port shapes for z-index manipulation on hover
       this._portShapes = [];
 
       Object.keys(portsStyle).forEach((key) => {
         const style = portsStyle[key];
-        // TBD: understand why sometimes style isn't valid.
-        // I could not reproduce this reliably.
         if (!style) return;
         const [x, y] = this.getPortXY(attributes, style);
-
         const baseRadius = style.r || 4;
-
-        // Determine initial visibility based on visibility parameter
-        // "visible" = always shown, "hover" = show on hover, "hidden" = never shown
         const portVisibility = style.visibility || 'visible';
         const initiallyVisible = portVisibility === 'visible';
 
-        // Solid filled port circle - visual only, hitArea handles clicks
-        const portStyle = {
-          ...style,
-          zIndex: 1,
-          r: baseRadius,
-          fill: style.fill,
-          stroke: 'transparent',
-          lineWidth: 0,
-          visibility: initiallyVisible ? 'visible' : 'hidden',
-          pointerEvents: 'none',  // hitArea handles all clicks
-          class: 'port'
-        };
-        const portShape = this.createPortShape(`port-${key}`, portStyle, container, key);
+        const portShape = createPortShapeForKey(this, key, style, baseRadius, container, portVisibility);
+        const indicator = createIndicatorForKey(this, key, x, y, baseRadius, style, container, portVisibility);
 
-        // Store for hover expansion
-        portShape._baseRadius = baseRadius;
-        portShape._expandedRadius = baseRadius * INDICATOR_RADIUS_MULTIPLIER;
-        portShape._originalFill = style.fill;
-        portShape._visibility = portVisibility;  // Store visibility mode
-
-        // Create add indicator with block's accent color
-        // Pass style for arity/type needed for edge creation
-        const addIndicator = this.createAddIndicator(key, x, y, baseRadius * INDICATOR_RADIUS_MULTIPLIER, style.fill, container, style);
-        addIndicator._visibility = portVisibility;  // Store visibility mode on indicator too
-
-        // For 'visible' mode ports, make hitArea visible immediately so clicking/dragging works
-        if (initiallyVisible && addIndicator.hitArea) {
-          addIndicator.hitArea.attr({ visibility: 'visible' });
+        if (initiallyVisible && indicator.hitArea) {
+          indicator.hitArea.attr({ visibility: 'visible' });
         }
-
-        this._portShapes.push({ shape: portShape, indicator: addIndicator });
-
-        this.addPortEvents(portShape, style, addIndicator, graphId, this.id);
+        this._portShapes.push({ shape: portShape, indicator });
+        this.addPortEvents(portShape, style, indicator, graphId, this.id);
       });
 
-      // Add node hover to bring ports to front
-      this.addNodeHoverForZIndex(container);
+      this.addNodeHoverHandlers(container);
     }
 
-    addNodeHoverForZIndex(container) {
-      const keyShape = container.querySelector('[class*="key"]') || container.children?.[0];
+    // inside your CustomNode class
+
+    addNodeHoverHandlers(container) {
+      const keyShape = getKeyShape(container);
       if (!keyShape || keyShape._hasZIndexHover) return;
       keyShape._hasZIndexHover = true;
 
-      // Track if we're hovering node or any port/indicator
-      let hideTimeout = null;
-      let isHoveringNode = false;
+      const ctx = setupNodeHoverContext(this);
+      const showPorts = createShowPortsHandler(ctx);
+      const hidePorts = createHidePortsHandler(ctx);
+      const hidePortsImmediately = createHidePortsImmediateHandler(ctx);
 
-      const showPorts = () => {
-        isHoveringNode = true;
-        if (hideTimeout) {
-          clearTimeout(hideTimeout);
-          hideTimeout = null;
-        }
-
-        // Hide previous node's indicators immediately
-        if (currentlyHoveredNode && currentlyHoveredNode !== this) {
-          currentlyHoveredNode._hidePortsImmediately?.();
-        }
-        currentlyHoveredNode = this;
-
-        if (!this._portShapes) return;
-
-        const portConnections = getPortConnections(this.context.graph, this.id) || {};
-
-        // Check if already showing (to avoid flicker on re-enter)
-        let needsAnimation = false;
-
-        // Show + indicators for available ports, small circles for occupied ports
-        this._portShapes.forEach(({ shape, indicator }) => {
-          const visibilityMode = shape._visibility || 'visible';
-          if (visibilityMode === 'hidden') return;  // Never show hidden ports
-
-          const connections = portConnections[shape.key] ?? 0;
-          const arity = shape.arity === "Infinity" ? Infinity : (shape.arity || 1);
-          const atCapacity = connections >= arity;
-
-          if (!atCapacity && indicator) {
-            // Show + indicator for ports that can accept connections
-            shape.attr({ visibility: 'hidden' });
-            if (indicator.circle.attr('visibility') !== 'visible') {
-              if (indicator.hitArea) indicator.hitArea.attr({ visibility: 'visible' });
-              indicator.circle.attr({ visibility: 'visible', opacity: 0 });
-              indicator.innerCircle.attr({ visibility: 'visible', opacity: 0 });
-              indicator.plus.attr({ visibility: 'visible', opacity: 0 });
-              needsAnimation = true;
-            }
-            this.startRotationAnimation(indicator.circle);
-          } else {
-            // Port is at capacity - hide + indicator, show small port circle
-            if (indicator) {
-              this.stopRotationAnimation(indicator.circle);
-              indicator.circle.attr({ visibility: 'hidden' });
-              indicator.innerCircle.attr({ visibility: 'hidden' });
-              indicator.plus.attr({ visibility: 'hidden' });
-            }
-            // Show small port circle for occupied ports
-            if (shape.attr('visibility') !== 'visible') {
-              shape.attr({
-                visibility: 'visible',
-                zIndex: 10,
-                opacity: 0
-              });
-              needsAnimation = true;
-            } else {
-              shape.attr({ opacity: 1 });
-            }
-          }
-        });
-
-        if (needsAnimation) {
-          this.animateAllIn();
-        }
-      };
-
-      const hidePorts = () => {
-        isHoveringNode = false;
-        // Delay hiding to allow moving to indicators
-        hideTimeout = setTimeout(() => {
-          if (!this._portShapes) return;
-          if (this._portsAnimation) {
-            cancelAnimationFrame(this._portsAnimation);
-            this._portsAnimation = null;
-          }
-          this._portShapes.forEach(({ shape, indicator }) => {
-            const visibilityMode = shape._visibility || 'visible';
-
-            if (visibilityMode === 'hover') {
-              // Hide "hover" mode ports completely
-              shape.attr({
-                visibility: 'hidden',
-                zIndex: 1,
-                r: shape._baseRadius,
-                opacity: 1
-              });
-              // Also hide hitArea for hover mode
-              if (indicator?.hitArea) indicator.hitArea.attr({ visibility: 'hidden' });
-            } else if (visibilityMode === 'visible') {
-              // Restore "visible" mode ports to their visible state
-              shape.attr({
-                visibility: 'visible',
-                zIndex: 1,
-                r: shape._baseRadius,
-                opacity: 1
-              });
-              // Keep hitArea visible for interaction
-            }
-            // Hide indicator visuals
-            if (indicator) {
-              this.stopRotationAnimation(indicator.circle);
-              indicator.circle.attr({ visibility: 'hidden', opacity: 1 });
-              indicator.innerCircle.attr({ visibility: 'hidden', opacity: 1 });
-              indicator.plus.attr({ visibility: 'hidden', opacity: 1 });
-            }
-          });
-        }, HIDE_DELAY_MS);
-      };
-
-      // Immediately hide all ports/indicators (no delay)
-      const hidePortsImmediately = () => {
-        isHoveringNode = false;
-        if (hideTimeout) {
-          clearTimeout(hideTimeout);
-          hideTimeout = null;
-        }
-        if (this._portsAnimation) {
-          cancelAnimationFrame(this._portsAnimation);
-          this._portsAnimation = null;
-        }
-        if (!this._portShapes) return;
-        this._portShapes.forEach(({ shape, indicator }) => {
-          const visibilityMode = shape._visibility || 'visible';
-
-          if (visibilityMode === 'hover') {
-            // Hide "hover" mode ports completely
-            shape.attr({ visibility: 'hidden', opacity: 1 });
-            if (indicator?.hitArea) indicator.hitArea.attr({ visibility: 'hidden' });
-          } else if (visibilityMode === 'visible') {
-            // Restore "visible" mode ports
-            shape.attr({ visibility: 'visible', opacity: 1 });
-            // Keep hitArea visible for interaction
-          }
-          // Hide indicator visuals
-          if (indicator) {
-            this.stopRotationAnimation(indicator.circle);
-            indicator.circle.attr({ visibility: 'hidden', opacity: 1 });
-            indicator.innerCircle.attr({ visibility: 'hidden', opacity: 1 });
-            indicator.plus.attr({ visibility: 'hidden', opacity: 1 });
-          }
-        });
-      };
-
-      // Store functions for ports/indicators to call
       this._showPorts = showPorts;
       this._hidePorts = hidePorts;
       this._hidePortsImmediately = hidePortsImmediately;
-      this._cancelHide = () => {
-        if (hideTimeout) {
-          clearTimeout(hideTimeout);
-          hideTimeout = null;
-        }
-      };
-      this._isHoveringNode = () => isHoveringNode;
+      this._cancelHide = makeCancelHide(ctx);
+      this._isHoveringNode = makeIsHoveringNode(ctx);
 
       addUniqueEventListener(keyShape, 'mouseenter', showPorts);
       addUniqueEventListener(keyShape, 'mouseleave', hidePorts);
 
-      // Register showPorts function for edge creation events
-      const nodeId = this.id;
-      nodePortRefreshFunctions.set(String(nodeId), showPorts);
-
-      // Set up graph-level listener for edge creation (once per graph)
-      const graph = this.context.graph;
-      if (!graph._hasEdgeCreatedListener) {
-        graph._hasEdgeCreatedListener = true;
-        graph.on(GraphEvent.AFTER_ELEMENT_CREATE, (evt) => {
-          if (evt.elementType === 'edge') {
-            const edgeData = evt.data;
-            const sourceId = String(edgeData.source);
-            const targetId = String(edgeData.target);
-            if (nodePortRefreshFunctions.has(sourceId)) {
-              nodePortRefreshFunctions.get(sourceId)();
-            }
-            if (nodePortRefreshFunctions.has(targetId)) {
-              nodePortRefreshFunctions.get(targetId)();
-            }
-          }
-        });
-      }
+      registerNodePortRefresh(this.id, showPorts);
+      ensureEdgeCreatedListener(this.context.graph);
     }
 
     addPortEvents(portShape, style, indicator = null, graphId = null, nodeId = null) {
-      // Add event handlers to indicator hitArea
       if (indicator && indicator.hitArea && graphId && nodeId && style.visibility !== 'hidden') {
-        // Click handler to trigger selected_port Shiny input
-        const handleIndicatorClick = (e) => {
-          // Check if port is at capacity before triggering
-          const connections = getPortConnections(this.context.graph, this.id)?.[portShape.key] ?? 0;
-          const arity = portShape.arity === "Infinity" ? Infinity : (portShape.arity || 1);
-          const atCapacity = connections >= arity;
-
-          if (atCapacity) {
-            e.stopPropagation();
-            return;
-          }
-
-          if (HTMLWidgets.shinyMode) {
-            Shiny.setInputValue(
-              `${graphId}-selected_port`,
-              { node: nodeId, port: portShape.key, type: style.type },
-              { priority: 'event' }
-            );
-          }
-          e.stopPropagation();
-
-          // Re-enable drag-element behavior as the create edge is also triggered
-          // when clicking on the indicator and it disables the drag-element temporarily.
-          if (this.context?.graph?.updateBehavior) {
-            this.context.graph.updateBehavior({ key: 'drag-element', enable: true });
-          }
-        };
-        addUniqueEventListener(indicator.hitArea, 'click', handleIndicatorClick);
-
-        addUniqueEventListener(indicator.hitArea, 'mouseenter', (e) => {
-          if (this._cancelHide) this._cancelHide();
-          showTooltip(e);
-          // Check if port is at capacity before showing indicator
-          const connections = getPortConnections(this.context.graph, this.id)?.[portShape.key] ?? 0;
-          const atCapacity = connections >= (portShape.arity === "Infinity" ? Infinity : portShape.arity);
-          if (atCapacity) return;
-          portShape.attr({ visibility: 'hidden' });
-          this.showIndicatorWithAnimation(indicator);
-          this.startRotationAnimation(indicator.circle);
-        });
-
-        addUniqueEventListener(indicator.hitArea, 'mouseleave', (e) => {
-          // Trigger hide when leaving the hitArea
-          hideTooltip();
-          if (this._hidePorts) this._hidePorts();
-        });
+        addUniqueEventListener(
+          indicator.hitArea,
+          'click',
+          handlePortIndicatorClick(this, portShape, style, indicator, graphId, nodeId)
+        );
+        addUniqueEventListener(
+          indicator.hitArea,
+          'mouseenter',
+          handlePortIndicatorMouseEnter(this, portShape, style, indicator)
+        );
+        addUniqueEventListener(
+          indicator.hitArea,
+          'mouseleave',
+          handlePortIndicatorMouseLeave(this)
+        );
       }
-
-      // Tooltip logic with auto-hide safety
-      let tooltipTimeout = null;
-
-      const showTooltip = (e) => {
-        // Clear any pending hide
-        if (tooltipTimeout) {
-          clearTimeout(tooltipTimeout);
-          tooltipTimeout = null;
-        }
-
-        let tooltip = document.getElementById('g6-port-tooltip');
-        if (!tooltip) {
-          tooltip = document.createElement('div');
-          tooltip.id = 'g6-port-tooltip';
-          tooltip.style.position = 'fixed';
-          tooltip.style.pointerEvents = 'none';
-          tooltip.style.background = style.stroke;
-          tooltip.style.color = getContrastColor(style.stroke);
-          tooltip.style.borderRadius = '6px';
-          tooltip.style.padding = '4px 10px';
-          tooltip.style.fontSize = '12px';
-          tooltip.style.zIndex = '9999';
-          document.body.appendChild(tooltip);
-        }
-        tooltip.textContent = style.label || '';
-        tooltip.style.left = (e.clientX + 12) + 'px';
-        tooltip.style.top = (e.clientY - 12) + 'px';
-        tooltip.style.display = 'block';
-
-        // Auto-hide after 2 seconds as safety
-        tooltipTimeout = setTimeout(hideTooltip, 2000);
-      };
-
-      const hideTooltip = () => {
-        const tooltip = document.getElementById('g6-port-tooltip');
-        if (tooltip) tooltip.style.display = 'none';
-      };
     }
 
     createPortShape(shapeKey, style, container, key) {
@@ -392,103 +467,22 @@ const createCustomNode = (BaseShape) => {
       return portShape;
     }
 
-    // Creates an "add" indicator with rotating dashed circle and solid inner circle
     createAddIndicator(key, x, y, radius, accentColor, container, portStyle = {}) {
       const innerRadius = radius * INNER_CIRCLE_RATIO;
-
-      // Large invisible hit area to catch all pointer events
-      // Also serves as the port target for edge creation (shift+drag)
-      const hitArea = this.upsert(
-        `port-hitarea-${key}`,
-        GCircle,
-        {
-          cx: x,
-          cy: y,
-          r: radius + 2,
-          fill: 'transparent',
-          stroke: 'transparent',
-          zIndex: 14,
-          cursor: 'pointer',
-          visibility: 'hidden',
-          class: 'port',  // Required for edge creation validation
-          type: portStyle.type || 'input',  // For port type validation
-          arity: portStyle.arity || 1  // For arity checking
-        },
-        container
-      );
-      // Add port properties for edge creation behavior
+      const hitArea = createIndicatorHitArea(this, key, x, y, radius, container, portStyle);
       hitArea.key = key;
       hitArea.arity = portStyle.arity === "Infinity" ? Infinity : (portStyle.arity || 1);
 
-      // Outer dashed circle that will rotate
-      const circle = this.upsert(
-        `add-circle-${key}`,
-        GCircle,
-        {
-          cx: x,
-          cy: y,
-          r: radius,
-          fill: 'transparent',
-          stroke: accentColor,
-          lineWidth: 1.5,
-          lineDash: [4, 4],
-          zIndex: 15,
-          cursor: 'pointer',
-          visibility: 'hidden',
-          transformOrigin: 'center',
-          pointerEvents: 'none'
-        },
-        container
-      );
+      const circle = createIndicatorCircle(this, key, x, y, radius, accentColor, container);
+      const innerCircle = createIndicatorInnerCircle(this, key, x, y, innerRadius, accentColor, container);
+      const plus = createIndicatorPlus(this, key, x, y, innerRadius, container);
 
-      // Inner solid circle
-      const innerCircle = this.upsert(
-        `add-inner-${key}`,
-        GCircle,
-        {
-          cx: x,
-          cy: y,
-          r: innerRadius,
-          fill: accentColor,
-          stroke: 'transparent',
-          zIndex: 16,
-          cursor: 'pointer',
-          visibility: 'hidden',
-          pointerEvents: 'none'
-        },
-        container
-      );
-
-      // Light plus sign on top of solid circle
-      const plus = this.upsert(
-        `add-plus-${key}`,
-        'text',
-        {
-          x: x - 0.5,
-          y: y - 0.5,
-          text: '+',
-          fontSize: innerRadius * PLUS_FONT_RATIO,
-          fill: '#fff',
-          fontWeight: '400',
-          textAlign: 'center',
-          textBaseline: 'middle',
-          zIndex: 17,
-          pointerEvents: 'none',
-          visibility: 'hidden'
-        },
-        container
-      );
-
-      // Store animation reference
       circle._rotationAnimation = null;
-
       return { circle, innerCircle, plus, hitArea };
     }
 
-    // Start rotation animation on circle
     startRotationAnimation(circle) {
       if (circle._rotationAnimation) return;
-
       let rotation = 0;
       const animate = () => {
         rotation = (rotation + 1) % 360;
@@ -498,7 +492,6 @@ const createCustomNode = (BaseShape) => {
       circle._rotationAnimation = requestAnimationFrame(animate);
     }
 
-    // Stop rotation animation
     stopRotationAnimation(circle) {
       if (circle._rotationAnimation) {
         cancelAnimationFrame(circle._rotationAnimation);
@@ -507,128 +500,93 @@ const createCustomNode = (BaseShape) => {
       }
     }
 
-    // Show indicator with fade-in animation (opacity only to avoid flicker)
     showIndicatorWithAnimation(indicator) {
       const { circle, innerCircle, plus } = indicator;
-
-      // Cancel any ongoing hide animation
       if (indicator._hideAnimation) {
         cancelAnimationFrame(indicator._hideAnimation);
         indicator._hideAnimation = null;
       }
-
-      // Don't reset if already visible with full opacity
       if (circle.attr('visibility') === 'visible' && circle.attr('opacity') >= 0.9) {
         return;
       }
-
-      // Make visible first at zero opacity
       circle.attr({ visibility: 'visible', opacity: 0 });
       innerCircle.attr({ visibility: 'visible', opacity: 0 });
       plus.attr({ visibility: 'visible', opacity: 0 });
-
-      // Animate opacity from 0 to 1
       const duration = ANIMATION_DURATION_MS;
       const startTime = performance.now();
-
       const animate = (currentTime) => {
         const progress = Math.min((currentTime - startTime) / duration, 1);
-        // Ease out
         const eased = 1 - Math.pow(1 - progress, 2);
-
         circle.attr('opacity', eased);
         innerCircle.attr('opacity', eased);
         plus.attr('opacity', eased);
-
         if (progress < 1) {
           indicator._showAnimation = requestAnimationFrame(animate);
         } else {
           indicator._showAnimation = null;
         }
       };
-
       indicator._showAnimation = requestAnimationFrame(animate);
     }
 
-    // Hide indicator with fade-out animation
     hideIndicatorWithAnimation(indicator, callback) {
       const { circle, innerCircle, plus } = indicator;
-
-      // Cancel any ongoing show animation
       if (indicator._showAnimation) {
         cancelAnimationFrame(indicator._showAnimation);
         indicator._showAnimation = null;
       }
-
       const duration = HIDE_DELAY_MS;
       const startTime = performance.now();
-
       const animate = (currentTime) => {
         const progress = Math.min((currentTime - startTime) / duration, 1);
         const opacity = 1 - progress;
-
         circle.attr('opacity', opacity);
         innerCircle.attr('opacity', opacity);
         plus.attr('opacity', opacity);
-
         if (progress < 1) {
           indicator._hideAnimation = requestAnimationFrame(animate);
         } else {
           indicator._hideAnimation = null;
-          // Hide completely and reset
           circle.attr({ visibility: 'hidden', opacity: 1 });
           innerCircle.attr({ visibility: 'hidden', opacity: 1 });
           plus.attr({ visibility: 'hidden', opacity: 1 });
           if (callback) callback();
         }
       };
-
       indicator._hideAnimation = requestAnimationFrame(animate);
     }
 
-    // Animate both ports and indicators fading in together
     animateAllIn() {
       if (!this._portShapes) return;
-
-      // Cancel any ongoing animation
       if (this._portsAnimation) {
         cancelAnimationFrame(this._portsAnimation);
       }
-
       const duration = ANIMATION_DURATION_MS;
       const startTime = performance.now();
-
       const animate = (currentTime) => {
         const progress = Math.min((currentTime - startTime) / duration, 1);
-        // Ease out
         const eased = 1 - Math.pow(1 - progress, 2);
-
         this._portShapes.forEach(({ shape, indicator }) => {
-          // Animate port circles
           if (shape.attr('visibility') === 'visible') {
             shape.attr('opacity', eased);
           }
-          // Animate indicators
           if (indicator && indicator.circle.attr('visibility') === 'visible') {
             indicator.circle.attr('opacity', eased);
             indicator.innerCircle.attr('opacity', eased);
             indicator.plus.attr('opacity', eased);
           }
         });
-
         if (progress < 1) {
           this._portsAnimation = requestAnimationFrame(animate);
         } else {
           this._portsAnimation = null;
         }
       };
-
       this._portsAnimation = requestAnimationFrame(animate);
     }
   };
-}
+};
 
-// Build custom classes from factory
 const CustomCircleNode = createCustomNode(Circle);
 const CustomRectNode = createCustomNode(Rect);
 const CustomEllipseNode = createCustomNode(Ellipse);
