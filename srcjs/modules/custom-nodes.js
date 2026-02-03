@@ -286,7 +286,7 @@ const handlePortIndicatorClick = (self, portShape, style, indicator, graphId, no
 
 const handlePortIndicatorMouseEnter = (self, portShape, style, indicator) => (e) => {
   if (self._cancelHide) self._cancelHide();
-  showTooltip(e, style);
+  if (style.label) showTooltip(e, style);
   const connections = getPortConnections(self.context.graph, self.id)?.[portShape.key] ?? 0;
   const atCapacity = connections >= (portShape.arity === "Infinity" ? Infinity : portShape.arity);
   if (atCapacity) return;
