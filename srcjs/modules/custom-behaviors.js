@@ -63,8 +63,7 @@ class CustomCreateEdge extends CreateEdge {
           shadowBlur: this.snappedPortOriginalStyle.shadowBlur || 0,
           shadowColor: this.snappedPortOriginalStyle.shadowColor || 'transparent',
           visibility: this.snappedPortOriginalStyle.visibility,
-          fill: this.snappedPortOriginalStyle.fill,
-          zIndex: this.snappedPortOriginalStyle.zIndex
+          fill: this.snappedPortOriginalStyle.fill
         });
       }
     } catch (e) { }
@@ -95,8 +94,7 @@ class CustomCreateEdge extends CreateEdge {
         shadowBlur: targetPort.attr('shadowBlur'),
         shadowColor: targetPort.attr('shadowColor'),
         visibility: targetPort.attr('visibility'),
-        fill: targetPort.attr('fill'),
-        zIndex: targetPort.attr('zIndex')
+        fill: targetPort.attr('fill')
       };
 
       const nodeData = graph.getElementData(targetNodeId);
@@ -112,8 +110,7 @@ class CustomCreateEdge extends CreateEdge {
           fill: 'transparent',
           stroke: portColor,
           lineWidth: 3,
-          r: originalR - 2,
-          zIndex: 20
+          r: originalR - 2
         });
       } catch (e) { }
 

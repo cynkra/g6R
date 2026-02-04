@@ -7,7 +7,7 @@ const nodePortRefreshFunctions = new Map();
 
 // Animation constants
 const ANIMATION_DURATION_MS = 500;
-const HIDE_DELAY_MS = 400;
+const HIDE_DELAY_MS = 0;
 const INDICATOR_RADIUS_MULTIPLIER = 2.5;
 const INNER_CIRCLE_RATIO = 0.75;
 const PLUS_FONT_RATIO = 1.6;
@@ -185,7 +185,12 @@ const hideTooltip = () => {
 
 // --- Helpers to create indicator shapes ---
 
-const createIndicatorHitArea = (self, key, x, y, radius, container, portStyle) =>
+// Helper to get port zIndex from attributes, with fallback
+const getPortZIndex = (attributes) => {
+  return typeof attributes.portZIndex === 'number' ? attributes.portZIndex : 10;
+}
+
+const createIndicatorHitArea = (self, key, x, y, radius, container, portStyle, portZIndex) =>
   self.upsert(
     `port-hitarea-${key}`,
     GCircle,
@@ -195,7 +200,7 @@ const createIndicatorHitArea = (self, key, x, y, radius, container, portStyle) =
       r: radius + 2,
       fill: 'transparent',
       stroke: 'transparent',
-      zIndex: 14,
+      zIndex: portZIndex + 1,
       cursor: 'pointer',
       visibility: 'hidden',
       class: 'port',
@@ -205,7 +210,7 @@ const createIndicatorHitArea = (self, key, x, y, radius, container, portStyle) =
     container
   );
 
-const createIndicatorCircle = (self, key, x, y, radius, accentColor, container) =>
+const createIndicatorCircle = (self, key, x, y, radius, accentColor, container, portZIndex) =>
   self.upsert(
     `add-circle-${key}`,
     GCircle,
@@ -217,7 +222,7 @@ const createIndicatorCircle = (self, key, x, y, radius, accentColor, container) 
       stroke: accentColor,
       lineWidth: 1.5,
       lineDash: [4, 4],
-      zIndex: 15,
+      zIndex: portZIndex + 2,
       cursor: 'pointer',
       visibility: 'hidden',
       transformOrigin: 'center',
@@ -226,7 +231,7 @@ const createIndicatorCircle = (self, key, x, y, radius, accentColor, container) 
     container
   );
 
-const createIndicatorInnerCircle = (self, key, x, y, innerRadius, accentColor, container) =>
+const createIndicatorInnerCircle = (self, key, x, y, innerRadius, accentColor, container, portZIndex) =>
   self.upsert(
     `add-inner-${key}`,
     GCircle,
@@ -236,7 +241,7 @@ const createIndicatorInnerCircle = (self, key, x, y, innerRadius, accentColor, c
       r: innerRadius,
       fill: accentColor,
       stroke: 'transparent',
-      zIndex: 16,
+      zIndex: portZIndex + 3,
       cursor: 'pointer',
       visibility: 'hidden',
       pointerEvents: 'none'
@@ -244,7 +249,7 @@ const createIndicatorInnerCircle = (self, key, x, y, innerRadius, accentColor, c
     container
   );
 
-const createIndicatorPlus = (self, key, x, y, innerRadius, container) =>
+const createIndicatorPlus = (self, key, x, y, innerRadius, container, portZIndex) =>
   self.upsert(
     `add-plus-${key}`,
     'text',
@@ -257,7 +262,7 @@ const createIndicatorPlus = (self, key, x, y, innerRadius, container) =>
       fontWeight: '400',
       textAlign: 'center',
       textBaseline: 'middle',
-      zIndex: 17,
+      zIndex: portZIndex + 4,
       pointerEvents: 'none',
       visibility: 'hidden'
     },
@@ -345,10 +350,10 @@ const makeIsHoveringNode = (ctx) => () => ctx.isHoveringNode;
 
 // --- Port shape helpers ---
 
-const createPortShapeForKey = (self, key, style, baseRadius, container, portVisibility) => {
+const createPortShapeForKey = (self, key, style, baseRadius, container, portVisibility, portZIndex) => {
   const portStyle = {
     ...style,
-    zIndex: 1,
+    zIndex: portZIndex,
     r: baseRadius,
     fill: style.fill,
     stroke: 'transparent',
@@ -365,7 +370,7 @@ const createPortShapeForKey = (self, key, style, baseRadius, container, portVisi
   return portShape;
 };
 
-const createIndicatorForKey = (self, key, x, y, baseRadius, style, container, portVisibility) => {
+const createIndicatorForKey = (self, key, x, y, baseRadius, style, container, portVisibility, portZIndex) => {
   const indicator = self.createAddIndicator(
     key,
     x,
@@ -373,7 +378,8 @@ const createIndicatorForKey = (self, key, x, y, baseRadius, style, container, po
     baseRadius * INDICATOR_RADIUS_MULTIPLIER,
     style.fill,
     container,
-    style
+    style,
+    portZIndex
   );
   indicator._visibility = portVisibility;
   return indicator;
@@ -384,10 +390,12 @@ const createIndicatorForKey = (self, key, x, y, baseRadius, style, container, po
 const createCustomNode = (BaseShape) => {
   return class CustomNode extends BaseShape {
     // inside your CustomNode class
+    // inside CustomNode class
     drawPortShapes(attributes, container) {
       const portsStyle = this.getPortsStyle(attributes);
       const graphId = this.context.graph.options.container;
       this._portShapes = [];
+      const portZIndex = getPortZIndex(attributes);
 
       Object.keys(portsStyle).forEach((key) => {
         const style = portsStyle[key];
@@ -397,8 +405,8 @@ const createCustomNode = (BaseShape) => {
         const portVisibility = style.visibility || 'visible';
         const initiallyVisible = portVisibility === 'visible';
 
-        const portShape = createPortShapeForKey(this, key, style, baseRadius, container, portVisibility);
-        const indicator = createIndicatorForKey(this, key, x, y, baseRadius, style, container, portVisibility);
+        const portShape = createPortShapeForKey(this, key, style, baseRadius, container, portVisibility, portZIndex);
+        const indicator = createIndicatorForKey(this, key, x, y, baseRadius, style, container, portVisibility, portZIndex);
 
         if (initiallyVisible && indicator.hitArea) {
           indicator.hitArea.attr({ visibility: 'visible' });
@@ -464,15 +472,15 @@ const createCustomNode = (BaseShape) => {
       return portShape;
     }
 
-    createAddIndicator(key, x, y, radius, accentColor, container, portStyle = {}) {
+    createAddIndicator(key, x, y, radius, accentColor, container, portStyle = {}, portZIndex = 10) {
       const innerRadius = radius * INNER_CIRCLE_RATIO;
-      const hitArea = createIndicatorHitArea(this, key, x, y, radius, container, portStyle);
+      const hitArea = createIndicatorHitArea(this, key, x, y, radius, container, portStyle, portZIndex);
       hitArea.key = key;
       hitArea.arity = portStyle.arity === "Infinity" ? Infinity : (portStyle.arity || 1);
 
-      const circle = createIndicatorCircle(this, key, x, y, radius, accentColor, container);
-      const innerCircle = createIndicatorInnerCircle(this, key, x, y, innerRadius, accentColor, container);
-      const plus = createIndicatorPlus(this, key, x, y, innerRadius, container);
+      const circle = createIndicatorCircle(this, key, x, y, radius, accentColor, container, portZIndex);
+      const innerCircle = createIndicatorInnerCircle(this, key, x, y, innerRadius, accentColor, container, portZIndex);
+      const plus = createIndicatorPlus(this, key, x, y, innerRadius, container, portZIndex);
 
       circle._rotationAnimation = null;
       return { circle, innerCircle, plus, hitArea };
