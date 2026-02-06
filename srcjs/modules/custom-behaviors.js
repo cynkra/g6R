@@ -328,8 +328,9 @@ class CustomCreateEdge extends CreateEdge {
     this.startX = event.canvas.x;
     this.startY = event.canvas.y;
 
-    const mode = this.context.graph.options.mode;
-    const node = this.context.graph.getElementData(event.target?.id);
+    const { graph, canvas, batch } = this.context;
+    const mode = graph.options.mode;
+    const node = graph.getElementData(event.target?.id);
 
     let hasPorts = node?.style?.ports?.length > 0;
     if (hasPorts) {
@@ -337,7 +338,7 @@ class CustomCreateEdge extends CreateEdge {
       // Check if user clicked on a port (has key property)
       if (clickedPort && clickedPort.key) {
         this.sourcePort = clickedPort;
-        const portConnections = getPortConnections(this.context.graph, node.id);
+        const portConnections = getPortConnections(graph, node.id);
         const currentConnections = portConnections[this.sourcePort.key] || 0;
         if (currentConnections >= this.sourcePort.arity) {
           if (mode === "dev") {
@@ -350,7 +351,7 @@ class CustomCreateEdge extends CreateEdge {
         this.isCreatingEdge = true;
         // Disable drag-element to prevent node dragging during edge creation
         try {
-          this.context.graph.updateBehavior(
+          graph.updateBehavior(
             [
               { key: 'drag-element', enable: false },
               { key: 'drag-element-force', enable: false }
@@ -368,7 +369,6 @@ class CustomCreateEdge extends CreateEdge {
 
     if (!this.validate(event)) return;
 
-    const { graph, canvas, batch } = this.context;
     const { style } = this.options;
 
     if (this.source) {
@@ -396,7 +396,7 @@ class CustomCreateEdge extends CreateEdge {
     }]);
 
     const assistEdgeStyle = Object.assign(
-      { pointerEvents: 'none' },
+      { pointerEvents: 'none', zIndex: graph.options.edge.style.zIndex },
       hasPorts && this.sourcePort ? { sourcePort: this.sourcePort.key } : {},
       style || {}
     );
