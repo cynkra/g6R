@@ -50,10 +50,6 @@ A list with the configuration settings for the create-edge behavior.
 Creates a configuration object for the create-edge behavior in G6.
 This allows users to create edges between nodes by clicking or dragging.
 }
-\note{
-\link{create_edge}, \link{drag_element} and \link{drag_element_force} are incompatible by default,
-as there triggers are the same. You can change the trigger to workaround this.
-}
 \examples{
 # Basic configuration
 config <- create_edge()
@@ -104,9 +100,8 @@ if (interactive()) {
                 sprintf(
                   "(edge) => {
                     const graph = HTMLWidgets.find('#\%s').getWidget();
-                    const targetType = graph.getElementType(edge.target);
                     // Avoid to create edges in combos. If so, we remove it
-                    if (targetType === 'combo') {
+                    if (edge.targetType === 'combo') {
                       graph.removeEdgeData([edge.id]);
                       return;
                     }

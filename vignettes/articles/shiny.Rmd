@@ -683,8 +683,7 @@ server <- function(input, output, session) {
           onFinish = JS(
             "(edge) => {
               const graph = HTMLWidgets.find('#graph').getWidget();
-              const targetType = graph.getElementType(edge.target);
-              if (targetType !== 'node') {
+              if (edge.targetType === 'combo') {
                 graph.removeEdgeData([edge.id]);
               } else {
                 Shiny.setInputValue('added_edge', edge);
