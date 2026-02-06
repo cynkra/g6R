@@ -42,14 +42,14 @@ as_g6_ports(list(
 #> $type
 #> [1] "input"
 #> 
-#> $label
-#> [1] "input-1"
-#> 
 #> $arity
 #> [1] 1
 #> 
-#> $showGuides
-#> [1] FALSE
+#> $visibility
+#> [1] "visible"
+#> 
+#> $label
+#> [1] "input-1"
 #> 
 #> $fill
 #> [1] "#52C41A"
@@ -70,14 +70,14 @@ as_g6_ports(list(
 #> $type
 #> [1] "output"
 #> 
-#> $label
-#> [1] "output-1"
-#> 
 #> $arity
 #> [1] 1
 #> 
-#> $showGuides
-#> [1] FALSE
+#> $visibility
+#> [1] "visible"
+#> 
+#> $label
+#> [1] "output-1"
 #> 
 #> $fill
 #> [1] "#FF4D4F"
@@ -104,14 +104,14 @@ as_g6_ports(g6_ports(
 #> $type
 #> [1] "input"
 #> 
-#> $label
-#> [1] "input-1"
-#> 
 #> $arity
 #> [1] 1
 #> 
-#> $showGuides
-#> [1] FALSE
+#> $visibility
+#> [1] "visible"
+#> 
+#> $label
+#> [1] "input-1"
 #> 
 #> $r
 #> [1] 4
@@ -126,14 +126,14 @@ as_g6_ports(g6_ports(
 #> $type
 #> [1] "output"
 #> 
-#> $label
-#> [1] "output-1"
-#> 
 #> $arity
 #> [1] 1
 #> 
-#> $showGuides
-#> [1] FALSE
+#> $visibility
+#> [1] "visible"
+#> 
+#> $label
+#> [1] "output-1"
 #> 
 #> $r
 #> [1] 4

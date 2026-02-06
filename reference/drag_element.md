@@ -8,7 +8,7 @@ allows users to drag nodes and combos in the graph.
 ``` r
 drag_element(
   key = "drag-element",
-  enable = TRUE,
+  enable = NULL,
   animation = TRUE,
   state = "selected",
   dropEffect = c("move", "link", "none"),

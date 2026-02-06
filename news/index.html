@@ -62,10 +62,15 @@
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.6.0.9000" id="g6r-0609000">g6R 0.6.0.9000<a class="anchor" aria-label="anchor" href="#g6r-0609000"></a></h2>
 <div class="section level3">
+<h3 id="breaking-changes-0-6-0-9000">Breaking changes<a class="anchor" aria-label="anchor" href="#breaking-changes-0-6-0-9000"></a></h3>
+<ul><li>Not a g6R change but <a href="https://rstudio.github.io/bslib/" class="external-link">bslib</a> recently introduced the <code><a href="../reference/toolbar.html">toolbar()</a></code> function which unfortunately overlaps with the <a href="https://github.com/cynkra/g6R" class="external-link">g6R</a> one. From now, you’ll have to use <code><a href="../reference/toolbar.html">g6R::toolbar()</a></code> to avoid conflicts. In later releases, we’ll provide more prefixed functions like <code>g6_toolbar</code>.</li>
+</ul></div>
+<div class="section level3">
 <h3 id="new-feature-0-6-0-9000">New feature<a class="anchor" aria-label="anchor" href="#new-feature-0-6-0-9000"></a></h3>
-<ul><li>
-<code>input[["&lt;graph_ID&gt;-state"]]</code> now does not return unnamed lists for nodes, edges and combos. Instead, each sublist is named with the corresponding element IDs. This makes it easier to retrieve the state of a specific element when we know the ID.</li>
-<li>Added better port support for nodes <strong>ports</strong>:
+<ul><li><p>Improvements to how <code><a href="../reference/drag_element.html">drag_element()</a></code> and <code><a href="../reference/drag_element_force.html">drag_element_force()</a></code> work with <code><a href="../reference/create_edge.html">create_edge()</a></code>. Now, the <code><a href="../reference/create_edge.html">create_edge()</a></code> can be <code>drag</code> and work with <code><a href="../reference/drag_element.html">drag_element()</a></code> as we handle the behavior conflicts/priorities JS side.</p></li>
+<li><p><code>input[["&lt;graph_ID&gt;-state"]]</code> now does not return unnamed lists for nodes, edges and combos. Instead, each sublist is named with the corresponding element IDs. This makes it easier to retrieve the state of a specific element when we know the ID.</p></li>
+<li>
+<p>Added better port support for nodes <strong>ports</strong>:</p>
 <ul><li>To enable it, you must pass a custom type to <code><a href="../reference/g6_element.html">g6_node()</a></code> such as <code>custom-circle-node</code>, <code>custom-rect-node</code> (We support 9 <a href="https://g6.antv.antgroup.com/en/manual/element/node/overview#built-in-nodes" class="external-link">shapes</a>, except HTML which does not handle port in the g6 library)</li>
 <li>
 <code><a href="../reference/g6_element.html">g6_node()</a></code> get a new <code>ports</code> argument to define ports for each node. In the g6 JS library, ports are normally defined inside <code>style</code> but we consider they are too important to be hidden there. Now you can define ports directly in the node data, g6R automatically moves them to <code>style.ports</code> when rendering the graph.</li>

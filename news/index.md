@@ -2,13 +2,38 @@
 
 ## g6R 0.6.0.9000
 
+### Breaking changes
+
+- Not a g6R change but [bslib](https://rstudio.github.io/bslib/)
+  recently introduced the
+  [`toolbar()`](https://cynkra.github.io/g6R/reference/toolbar.md)
+  function which unfortunately overlaps with the
+  [g6R](https://github.com/cynkra/g6R) one. From now, you’ll have to use
+  [`g6R::toolbar()`](https://cynkra.github.io/g6R/reference/toolbar.md)
+  to avoid conflicts. In later releases, we’ll provide more prefixed
+  functions like `g6_toolbar`.
+
 ### New feature
+
+- Improvements to how
+  [`drag_element()`](https://cynkra.github.io/g6R/reference/drag_element.md)
+  and
+  [`drag_element_force()`](https://cynkra.github.io/g6R/reference/drag_element_force.md)
+  work with
+  [`create_edge()`](https://cynkra.github.io/g6R/reference/create_edge.md).
+  Now, the
+  [`create_edge()`](https://cynkra.github.io/g6R/reference/create_edge.md)
+  can be `drag` and work with
+  [`drag_element()`](https://cynkra.github.io/g6R/reference/drag_element.md)
+  as we handle the behavior conflicts/priorities JS side.
 
 - `input[["<graph_ID>-state"]]` now does not return unnamed lists for
   nodes, edges and combos. Instead, each sublist is named with the
   corresponding element IDs. This makes it easier to retrieve the state
   of a specific element when we know the ID.
+
 - Added better port support for nodes **ports**:
+
   - To enable it, you must pass a custom type to
     [`g6_node()`](https://cynkra.github.io/g6R/reference/g6_element.md)
     such as `custom-circle-node`, `custom-rect-node` (We support 9

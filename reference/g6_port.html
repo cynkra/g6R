@@ -77,13 +77,27 @@ Create an output port (single connection by default)"></head><body>
 <span>  label <span class="op">=</span> <span class="va">key</span>,</span>
 <span>  type <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"input"</span>, <span class="st">"output"</span><span class="op">)</span>,</span>
 <span>  arity <span class="op">=</span> <span class="fl">1</span>,</span>
-<span>  showGuides <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  visibility <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"visible"</span>, <span class="st">"hover"</span>, <span class="st">"hidden"</span><span class="op">)</span>,</span>
 <span>  <span class="va">...</span></span>
 <span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu">g6_input_port</span><span class="op">(</span><span class="va">key</span>, label <span class="op">=</span> <span class="va">key</span>, arity <span class="op">=</span> <span class="fl">1</span>, fill <span class="op">=</span> <span class="st">"#52C41A"</span>, <span class="va">...</span><span class="op">)</span></span>
+<span><span class="fu">g6_input_port</span><span class="op">(</span></span>
+<span>  <span class="va">key</span>,</span>
+<span>  label <span class="op">=</span> <span class="va">key</span>,</span>
+<span>  arity <span class="op">=</span> <span class="fl">1</span>,</span>
+<span>  visibility <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"visible"</span>, <span class="st">"hover"</span>, <span class="st">"hidden"</span><span class="op">)</span>,</span>
+<span>  fill <span class="op">=</span> <span class="st">"#52C41A"</span>,</span>
+<span>  <span class="va">...</span></span>
+<span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu">g6_output_port</span><span class="op">(</span><span class="va">key</span>, label <span class="op">=</span> <span class="va">key</span>, arity <span class="op">=</span> <span class="fl">1</span>, fill <span class="op">=</span> <span class="st">"#FF4D4F"</span>, <span class="va">...</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu">g6_output_port</span><span class="op">(</span></span>
+<span>  <span class="va">key</span>,</span>
+<span>  label <span class="op">=</span> <span class="va">key</span>,</span>
+<span>  arity <span class="op">=</span> <span class="fl">1</span>,</span>
+<span>  visibility <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"visible"</span>, <span class="st">"hover"</span>, <span class="st">"hidden"</span><span class="op">)</span>,</span>
+<span>  fill <span class="op">=</span> <span class="st">"#FF4D4F"</span>,</span>
+<span>  <span class="va">...</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -108,10 +122,11 @@ connections this port can accept (default: 1).
 Use 0, Inf, or any non-negative integer.</p></dd>
 
 
-<dt id="arg-showguides">showGuides<a class="anchor" aria-label="anchor" href="#arg-showguides"></a></dt>
-<dd><p>Logical. Whether to show connection
-guides when hovering over the port (default: TRUE). Only works
-when used within a Shiny app.</p></dd>
+<dt id="arg-visibility">visibility<a class="anchor" aria-label="anchor" href="#arg-visibility"></a></dt>
+<dd><p>Character. Controls port visibility behavior:</p><ul><li><p><code>"visible"</code>: Ports are always shown (default).</p></li>
+<li><p><code>"hover"</code>: Ports appear only when hovering over the node.</p></li>
+<li><p><code>"hidden"</code>: Ports are never visible.</p></li>
+</ul></dd>
 
 
 <dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>
@@ -144,14 +159,14 @@ simply set the arity to <code>Inf</code> or any positive integer.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $type</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "input"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $label</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "port 1"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $arity</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] 2</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $showGuides</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] FALSE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $visibility</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "visible"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $label</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "port 1"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $placement</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "left"</span>
@@ -168,17 +183,38 @@ simply set the arity to <code>Inf</code> or any positive integer.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $type</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "output"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $arity</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $visibility</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "visible"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $label</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "port 2"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $placement</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "right"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $r</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 4</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> attr(,"class")</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "g6_port"</span>
+<span class="r-in"><span><span class="fu">g6_port</span><span class="op">(</span><span class="st">"input-2"</span>, type <span class="op">=</span> <span class="st">"input"</span>, visibility <span class="op">=</span> <span class="st">"hover"</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $key</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "input-2"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $type</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "input"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $arity</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] 1</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $showGuides</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] FALSE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $visibility</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "hover"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $placement</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "right"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $label</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "input-2"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $r</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] 4</span>

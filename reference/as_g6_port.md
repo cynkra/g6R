@@ -32,21 +32,20 @@ An object of class `g6_port`.
 
 ``` r
 as_g6_port(list(key = "input-1", type = "input", placement = "left"))
-#> Warning: 'showGuides' is set to TRUE, but Shiny app is not running. Connection guides will not be displayed.
 #> $key
 #> [1] "input-1"
 #> 
 #> $type
 #> [1] "input"
 #> 
-#> $label
-#> [1] "input-1"
-#> 
 #> $arity
 #> [1] 1
 #> 
-#> $showGuides
-#> [1] FALSE
+#> $visibility
+#> [1] "visible"
+#> 
+#> $label
+#> [1] "input-1"
 #> 
 #> $fill
 #> [1] "#52C41A"
@@ -66,14 +65,14 @@ as_g6_port(g6_port("input-1", type = "input"))
 #> $type
 #> [1] "input"
 #> 
-#> $label
-#> [1] "input-1"
-#> 
 #> $arity
 #> [1] 1
 #> 
-#> $showGuides
-#> [1] FALSE
+#> $visibility
+#> [1] "visible"
+#> 
+#> $label
+#> [1] "input-1"
 #> 
 #> $r
 #> [1] 4

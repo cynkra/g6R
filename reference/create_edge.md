@@ -77,15 +77,6 @@ create_edge(
 
 A list with the configuration settings for the create-edge behavior.
 
-## Note
-
-create_edge,
-[drag_element](https://cynkra.github.io/g6R/reference/drag_element.md)
-and
-[drag_element_force](https://cynkra.github.io/g6R/reference/drag_element_force.md)
-are incompatible by default, as there triggers are the same. You can
-change the trigger to workaround this.
-
 ## Examples
 
 ``` r
@@ -138,9 +129,8 @@ if (interactive()) {
                 sprintf(
                   "(edge) => {
                     const graph = HTMLWidgets.find('#%s').getWidget();
-                    const targetType = graph.getElementType(edge.target);
                     // Avoid to create edges in combos. If so, we remove it
-                    if (targetType === 'combo') {
+                    if (edge.targetType === 'combo') {
                       graph.removeEdgeData([edge.id]);
                       return;
                     }

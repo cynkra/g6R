@@ -14,13 +14,27 @@ g6_port(
   label = key,
   type = c("input", "output"),
   arity = 1,
-  showGuides = TRUE,
+  visibility = c("visible", "hover", "hidden"),
   ...
 )
 
-g6_input_port(key, label = key, arity = 1, fill = "#52C41A", ...)
+g6_input_port(
+  key,
+  label = key,
+  arity = 1,
+  visibility = c("visible", "hover", "hidden"),
+  fill = "#52C41A",
+  ...
+)
 
-g6_output_port(key, label = key, arity = 1, fill = "#FF4D4F", ...)
+g6_output_port(
+  key,
+  label = key,
+  arity = 1,
+  visibility = c("visible", "hover", "hidden"),
+  fill = "#FF4D4F",
+  ...
+)
 ```
 
 ## Arguments
@@ -42,10 +56,15 @@ g6_output_port(key, label = key, arity = 1, fill = "#FF4D4F", ...)
   Numeric. Maximum number of connections this port can accept (default:
   1). Use 0, Inf, or any non-negative integer.
 
-- showGuides:
+- visibility:
 
-  Logical. Whether to show connection guides when hovering over the port
-  (default: TRUE). Only works when used within a Shiny app.
+  Character. Controls port visibility behavior:
+
+  - `"visible"`: Ports are always shown (default).
+
+  - `"hover"`: Ports appear only when hovering over the node.
+
+  - `"hidden"`: Ports are never visible.
 
 - ...:
 
@@ -76,14 +95,14 @@ g6_port("input-1", label = "port 1", type = "input", arity = 2, placement = "lef
 #> $type
 #> [1] "input"
 #> 
-#> $label
-#> [1] "port 1"
-#> 
 #> $arity
 #> [1] 2
 #> 
-#> $showGuides
-#> [1] FALSE
+#> $visibility
+#> [1] "visible"
+#> 
+#> $label
+#> [1] "port 1"
 #> 
 #> $placement
 #> [1] "left"
@@ -100,17 +119,38 @@ g6_port("output-1", label = "port 2", type = "output", placement = "right")
 #> $type
 #> [1] "output"
 #> 
+#> $arity
+#> [1] 1
+#> 
+#> $visibility
+#> [1] "visible"
+#> 
 #> $label
 #> [1] "port 2"
+#> 
+#> $placement
+#> [1] "right"
+#> 
+#> $r
+#> [1] 4
+#> 
+#> attr(,"class")
+#> [1] "g6_port"
+g6_port("input-2", type = "input", visibility = "hover")
+#> $key
+#> [1] "input-2"
+#> 
+#> $type
+#> [1] "input"
 #> 
 #> $arity
 #> [1] 1
 #> 
-#> $showGuides
-#> [1] FALSE
+#> $visibility
+#> [1] "hover"
 #> 
-#> $placement
-#> [1] "right"
+#> $label
+#> [1] "input-2"
 #> 
 #> $r
 #> [1] 4

@@ -424,8 +424,6 @@ nodes <- list(
 
 g6(nodes, height = "200px") |>
   g6_layout(d3_force_layout())
-#> Warning: 'showGuides' is set to TRUE, but Shiny app is not running. Connection
-#> guides will not be displayed.
 ```
 
 Since, [g6R](https://github.com/cynkra/g6R) 0.6.0, we offer a better

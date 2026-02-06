@@ -35,14 +35,14 @@ validate_port(g6_port("input-1", type = "input"))
 #> $type
 #> [1] "input"
 #> 
-#> $label
-#> [1] "input-1"
-#> 
 #> $arity
 #> [1] 1
 #> 
-#> $showGuides
-#> [1] FALSE
+#> $visibility
+#> [1] "visible"
+#> 
+#> $label
+#> [1] "input-1"
 #> 
 #> $r
 #> [1] 4

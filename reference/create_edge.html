@@ -134,11 +134,6 @@ to ensure this also works in modules.</p></dd>
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
     <p>A list with the configuration settings for the create-edge behavior.</p>
     </div>
-    <div class="section level2">
-    <h2 id="note">Note<a class="anchor" aria-label="anchor" href="#note"></a></h2>
-    <p>create_edge, <a href="drag_element.html">drag_element</a> and <a href="drag_element_force.html">drag_element_force</a> are incompatible by default,
-as there triggers are the same. You can change the trigger to workaround this.</p>
-    </div>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
@@ -191,9 +186,8 @@ as there triggers are the same. You can change the trigger to workaround this.</
 <span class="r-in"><span>                <span class="fu"><a href="https://rdrr.io/r/base/sprintf.html" class="external-link">sprintf</a></span><span class="op">(</span></span></span>
 <span class="r-in"><span>                  <span class="st">"(edge) =&gt; {</span></span></span>
 <span class="r-in"><span><span class="st">                    const graph = HTMLWidgets.find('#%s').getWidget();</span></span></span>
-<span class="r-in"><span><span class="st">                    const targetType = graph.getElementType(edge.target);</span></span></span>
 <span class="r-in"><span><span class="st">                    // Avoid to create edges in combos. If so, we remove it</span></span></span>
-<span class="r-in"><span><span class="st">                    if (targetType === 'combo') {</span></span></span>
+<span class="r-in"><span><span class="st">                    if (edge.targetType === 'combo') {</span></span></span>
 <span class="r-in"><span><span class="st">                      graph.removeEdgeData([edge.id]);</span></span></span>
 <span class="r-in"><span><span class="st">                      return;</span></span></span>
 <span class="r-in"><span><span class="st">                    }</span></span></span>

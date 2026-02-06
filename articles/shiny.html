@@ -799,8 +799,7 @@ edge on drag from a node by maintaining the shift key:</p>
 <span>          onFinish <span class="op">=</span> <span class="fu"><a href="../reference/JS.html">JS</a></span><span class="op">(</span></span>
 <span>            <span class="st">"(edge) =&gt; {</span></span>
 <span><span class="st">              const graph = HTMLWidgets.find('#graph').getWidget();</span></span>
-<span><span class="st">              const targetType = graph.getElementType(edge.target);</span></span>
-<span><span class="st">              if (targetType !== 'node') {</span></span>
+<span><span class="st">              if (edge.targetType === 'combo') {</span></span>
 <span><span class="st">                graph.removeEdgeData([edge.id]);</span></span>
 <span><span class="st">              } else {</span></span>
 <span><span class="st">                Shiny.setInputValue('added_edge', edge);</span></span>

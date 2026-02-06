@@ -32,14 +32,14 @@ g6_ports(
 #> $type
 #> [1] "input"
 #> 
-#> $label
-#> [1] "input-1"
-#> 
 #> $arity
 #> [1] 1
 #> 
-#> $showGuides
-#> [1] FALSE
+#> $visibility
+#> [1] "visible"
+#> 
+#> $label
+#> [1] "input-1"
 #> 
 #> $placement
 #> [1] "left"
@@ -57,14 +57,14 @@ g6_ports(
 #> $type
 #> [1] "output"
 #> 
-#> $label
-#> [1] "output-1"
-#> 
 #> $arity
 #> [1] 1
 #> 
-#> $showGuides
-#> [1] FALSE
+#> $visibility
+#> [1] "visible"
+#> 
+#> $label
+#> [1] "output-1"
 #> 
 #> $placement
 #> [1] "right"
