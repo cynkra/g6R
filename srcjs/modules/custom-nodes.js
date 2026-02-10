@@ -499,9 +499,12 @@ const createCustomNode = (BaseShape) => {
         cursor: collapseConfig.cursor || 'pointer',
         zIndex: (collapseConfig.zIndex || 999) + 1
       }, this.shapeMap['collapse-hit-area']);
+
+      // Bind click listener (only once)
+      this.bindCollapseListener();
     }
 
-    onCreate() {
+    bindCollapseListener() {
       const hitArea = this.shapeMap['collapse-hit-area'];
       if (hitArea && !hitArea._collapseListenerBound) {
         hitArea._collapseListenerBound = true;
@@ -513,15 +516,20 @@ const createCustomNode = (BaseShape) => {
           else graph.collapseElement(this.id);
           e.stopPropagation();
         });
+      }
+    }
 
-        // If node is initially collapsed, trigger collapse
-        const collapseConfig = this.attributes.collapse || {};
-        if (collapseConfig.collapsed || this.attributes.collapsed) {
-          // Use setTimeout to ensure graph is fully initialized
-          setTimeout(() => {
-            graph.collapseElement(this.id);
-          }, 0);
-        }
+    onCreate() {
+      this.bindCollapseListener();
+
+      // If node is initially collapsed, trigger collapse
+      const collapseConfig = this.attributes.collapse || {};
+      if (collapseConfig.collapsed || this.attributes.collapsed) {
+        const { graph } = this.context;
+        // Use setTimeout to ensure graph is fully initialized
+        setTimeout(() => {
+          graph.collapseElement(this.id);
+        }, 0);
       }
     }
 
