@@ -398,7 +398,21 @@ const createCustomNode = (BaseShape) => {
 
     drawCollapseButton(attributes) {
       const children = this.childrenData();
-      if (children.length === 0) return;
+
+      // If no children, remove collapse button if it exists
+      if (children.length === 0) {
+        const existingButton = this.shapeMap['collapse-button'];
+        const existingHitArea = this.shapeMap['collapse-hit-area'];
+        if (existingButton) {
+          existingButton.remove();
+          delete this.shapeMap['collapse-button'];
+        }
+        if (existingHitArea) {
+          existingHitArea.remove();
+          delete this.shapeMap['collapse-hit-area'];
+        }
+        return;
+      }
 
       // Get collapse configuration from attributes
       const collapseConfig = attributes.collapse || {};
