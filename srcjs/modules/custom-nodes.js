@@ -403,7 +403,7 @@ const createCustomNode = (BaseShape) => {
       // Get collapse configuration from attributes
       const collapseConfig = attributes.collapse || {};
 
-      const collapsed = collapseConfig.collapsed || attributes.collapsed || false;
+      const collapsed = attributes.collapsed || false;
       const [width, height] = this.getSize(attributes);
 
       // Get position from placement
