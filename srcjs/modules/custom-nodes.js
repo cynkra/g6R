@@ -1,5 +1,7 @@
-import { Circle, Rect, Ellipse, Diamond, Triangle, Star, Hexagon, Image, Donut, GraphEvent } from '@antv/g6';
-import { Circle as GCircle, Rect as GRect } from '@antv/g';
+import {
+  Circle, Rect, Ellipse, Diamond, Triangle, Star, Hexagon, Image, Donut, GraphEvent, Badge, CommonEvent
+} from '@antv/g6';
+import { Circle as GCircle, Rect as GRect, Group } from '@antv/g';
 import { getPortConnections } from './utils';
 
 // Map to store node port refresh functions for edge creation events
@@ -389,8 +391,130 @@ const createIndicatorForKey = (self, key, x, y, baseRadius, style, container, po
 
 const createCustomNode = (BaseShape) => {
   return class CustomNode extends BaseShape {
-    // inside your CustomNode class
-    // inside CustomNode class
+
+    childrenData() {
+      return this.context.model.getChildrenData(this.id) || [];
+    }
+
+    drawCollapseButton(attributes) {
+      const children = this.childrenData();
+      if (children.length === 0) return;
+
+      // Get collapse configuration from attributes
+      const collapseConfig = attributes.collapse || {};
+      if (collapseConfig.enable === false) return;
+
+      const { collapsed } = attributes;
+      const [width, height] = this.getSize(attributes);
+
+      // Get position from placement
+      const placement = collapseConfig.placement || 'right-top';
+      let x, y;
+
+      if (Array.isArray(placement)) {
+        // Custom coordinates [x, y] where values are between 0-1
+        x = (placement[0] - 0.5) * width;
+        y = (placement[1] - 0.5) * height;
+      } else {
+        // Named placement
+        switch (placement) {
+          case 'top':
+            x = 0;
+            y = -height / 2;
+            break;
+          case 'right':
+            x = width / 2;
+            y = 0;
+            break;
+          case 'bottom':
+            x = 0;
+            y = height / 2;
+            break;
+          case 'left':
+            x = -width / 2;
+            y = 0;
+            break;
+          case 'right-top':
+            x = width / 2;
+            y = -height / 2;
+            break;
+          case 'right-bottom':
+            x = width / 2;
+            y = height / 2;
+            break;
+          case 'left-top':
+            x = -width / 2;
+            y = -height / 2;
+            break;
+          case 'left-bottom':
+            x = -width / 2;
+            y = height / 2;
+            break;
+          default:
+            x = width / 2;
+            y = -height / 2;
+        }
+      }
+
+      const btnR = collapseConfig.r || 8;
+
+      // Path for minus sign
+      const collapsePath = [
+        ['M', x - btnR, y],
+        ['a', btnR, btnR, 0, 1, 0, btnR * 2, 0],
+        ['a', btnR, btnR, 0, 1, 0, -btnR * 2, 0],
+        ['M', x - btnR + 4, y],
+        ['L', x + btnR - 4, y]
+      ];
+
+      // Path for plus sign
+      const expandPath = [
+        ['M', x - btnR, y],
+        ['a', btnR, btnR, 0, 1, 0, btnR * 2, 0],
+        ['a', btnR, btnR, 0, 1, 0, -btnR * 2, 0],
+        ['M', x - btnR + 4, y],
+        ['L', x + btnR - 4, y],
+        ['M', x, y - btnR + 4],
+        ['L', x, y + btnR - 4]
+      ];
+
+      const d = collapsed ? expandPath : collapsePath;
+
+      // Clickable area with config options
+      this.upsert('collapse-hit-area', 'circle', {
+        cx: x,
+        cy: y,
+        r: btnR,
+        fill: collapseConfig.fill || '#fff',
+        stroke: collapseConfig.stroke || '#CED4D9',
+        lineWidth: collapseConfig.lineWidth || 1,
+        cursor: collapseConfig.cursor || 'pointer',
+        zIndex: collapseConfig.zIndex || 999
+      }, this);
+
+      // Button graphic with config options
+      this.upsert('collapse-button', 'path', {
+        d: d,
+        stroke: collapseConfig.iconStroke || '#000',
+        lineWidth: collapseConfig.iconLineWidth || 1.4,
+        cursor: collapseConfig.cursor || 'pointer',
+        zIndex: (collapseConfig.zIndex || 999) + 1
+      }, this.shapeMap['collapse-hit-area']);
+    }
+
+    onCreate() {
+      const hitArea = this.shapeMap['collapse-hit-area'];
+      if (hitArea && !hitArea._collapseListenerBound) {
+        hitArea._collapseListenerBound = true;
+        hitArea.addEventListener('click', () => {
+          const { collapsed } = this.attributes;
+          const { graph } = this.context;
+          if (collapsed) graph.expandElement(this.id);
+          else graph.collapseElement(this.id);
+        });
+      }
+    }
+
     drawPortShapes(attributes, container) {
       const portsStyle = this.getPortsStyle(attributes);
       const graphId = this.context.graph.options.container;
@@ -588,6 +712,11 @@ const createCustomNode = (BaseShape) => {
         }
       };
       this._portsAnimation = requestAnimationFrame(animate);
+    }
+
+    render(attributes = this.parsedAttributes, container) {
+      super.render(attributes, container);
+      this.drawCollapseButton(attributes);
     }
   };
 };

@@ -19,7 +19,8 @@ g6_node(
   states = NULL,
   combo = NULL,
   children = NULL,
-  ports = NULL
+  ports = NULL,
+  collapse = g6_collapse_options()
 )
 
 g6_edge(
@@ -69,6 +70,9 @@ For edges, this is optional (id is constructed as source-target if not provided)
 
 \item{ports}{List. Ports definition (optional, nodes only).
 See \link{g6_ports} and \link{g6_port} for details.}
+
+\item{collapse}{List. Collapse button configuration (optional, nodes only).
+See \link{g6_collapse_options} for details. Only used when node has children.}
 
 \item{source}{Character. Source node ID (required, edges only).}
 
