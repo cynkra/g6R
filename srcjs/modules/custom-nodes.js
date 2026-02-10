@@ -542,8 +542,6 @@ const createCustomNode = (BaseShape) => {
       this.addNodeHoverHandlers(container);
     }
 
-    // inside your CustomNode class
-
     addNodeHoverHandlers(container) {
       const keyShape = getKeyShape(container);
       if (!keyShape || keyShape._hasZIndexHover) return;
