@@ -44,28 +44,32 @@ g6_collapse_options <- function(
   zIndex = 999
 ) {
   # Validate placement
-  valid_placements <- c(
-    "top",
-    "right",
-    "bottom",
-    "left",
-    "right-top",
-    "right-bottom",
-    "left-top",
-    "left-bottom"
-  )
-
   if (is.character(placement)) {
-    if (!placement %in% valid_placements) {
-      stop(
-        "Invalid placement. Must be one of: ",
-        paste(valid_placements, collapse = ", "),
-        " or a numeric vector of length 2."
+    placement <- match.arg(
+      placement,
+      choices = c(
+        "top",
+        "right",
+        "bottom",
+        "left",
+        "right-top",
+        "right-bottom",
+        "left-top",
+        "left-bottom"
       )
-    }
+    )
   } else if (is.numeric(placement)) {
     if (length(placement) != 2) {
       stop("Numeric placement must be a vector of length 2.")
+    }
+    # At least one coordinate must be 0 or 1 (on the edge)
+    if (!any(placement %in% c(0, 1))) {
+      stop(
+        "Invalid collapse button placement: at least one coordinate must be 0 or 1 (i.e., on the node edge). ",
+        "You supplied: c(",
+        paste(placement, collapse = ", "),
+        ")"
+      )
     }
   } else {
     stop("placement must be a character string or numeric vector of length 2.")
