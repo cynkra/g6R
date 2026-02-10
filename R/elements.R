@@ -29,7 +29,7 @@
 #' )
 #'
 #' # Collapse button with custom coordinates
-#' g6_collapse_options(placement = c(0.8, 0.2))
+#' g6_collapse_options(placement = c(1, 0.2))
 #' @rdname g6_collapse_options
 g6_collapse_options <- function(
   collapsed = FALSE,
