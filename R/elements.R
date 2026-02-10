@@ -1,6 +1,6 @@
 #' Configure collapse button for nodes
 #'
-#' @param enable Logical. Whether to enable the collapse button. Default is TRUE.
+#' @param collapsed Logical. Whether the node should be collapsed initially. Default is FALSE.
 #' @param placement Character or numeric vector. Position of the collapse button.
 #'   Can be one of: "top", "right", "bottom", "left", "right-top", "right-bottom",
 #'   "left-top", "left-bottom", or a numeric vector of length 2 for custom coordinates.
@@ -32,7 +32,7 @@
 #' g6_collapse_options(placement = c(0.8, 0.2))
 #' @rdname g6_collapse_options
 g6_collapse_options <- function(
-  enable = TRUE,
+  collapsed = FALSE,
   placement = "right-top",
   r = 6,
   fill = "#fff",
@@ -73,7 +73,7 @@ g6_collapse_options <- function(
 
   structure(
     list(
-      enable = enable,
+      collapsed = collapsed,
       placement = placement,
       r = r,
       fill = fill,

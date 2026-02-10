@@ -6,9 +6,9 @@
 \title{Configure collapse button for nodes}
 \usage{
 g6_collapse_options(
-  enable = TRUE,
+  collapsed = FALSE,
   placement = "right-top",
-  r = 5,
+  r = 6,
   fill = "#fff",
   stroke = "#CED4D9",
   lineWidth = 1,
@@ -21,7 +21,7 @@ g6_collapse_options(
 is_g6_collapse_options(x)
 }
 \arguments{
-\item{enable}{Logical. Whether to enable the collapse button. Default is TRUE.}
+\item{collapsed}{Logical. Whether the node should be collapsed initially. Default is FALSE.}
 
 \item{placement}{Character or numeric vector. Position of the collapse button.
 Can be one of: "top", "right", "bottom", "left", "right-top", "right-bottom",

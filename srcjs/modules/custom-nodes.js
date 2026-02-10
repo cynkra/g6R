@@ -402,9 +402,8 @@ const createCustomNode = (BaseShape) => {
 
       // Get collapse configuration from attributes
       const collapseConfig = attributes.collapse || {};
-      if (collapseConfig.enable === false) return;
 
-      const { collapsed } = attributes;
+      const collapsed = collapseConfig.collapsed || attributes.collapsed || false;
       const [width, height] = this.getSize(attributes);
 
       // Get position from placement
@@ -506,12 +505,22 @@ const createCustomNode = (BaseShape) => {
       const hitArea = this.shapeMap['collapse-hit-area'];
       if (hitArea && !hitArea._collapseListenerBound) {
         hitArea._collapseListenerBound = true;
+        const { graph } = this.context;
+
         hitArea.addEventListener('click', () => {
           const { collapsed } = this.attributes;
-          const { graph } = this.context;
           if (collapsed) graph.expandElement(this.id);
           else graph.collapseElement(this.id);
         });
+
+        // If node is initially collapsed, trigger collapse
+        const collapseConfig = this.attributes.collapse || {};
+        if (collapseConfig.collapsed || this.attributes.collapsed) {
+          // Use setTimeout to ensure graph is fully initialized
+          setTimeout(() => {
+            graph.collapseElement(this.id);
+          }, 0);
+        }
       }
     }
 
