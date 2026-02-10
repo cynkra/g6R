@@ -507,10 +507,11 @@ const createCustomNode = (BaseShape) => {
         hitArea._collapseListenerBound = true;
         const { graph } = this.context;
 
-        hitArea.addEventListener('click', () => {
+        hitArea.addEventListener('click', (e) => {
           const { collapsed } = this.attributes;
           if (collapsed) graph.expandElement(this.id);
           else graph.collapseElement(this.id);
+          e.stopPropagation();
         });
 
         // If node is initially collapsed, trigger collapse
