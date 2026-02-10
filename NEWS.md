@@ -6,6 +6,8 @@
 
 ## New feature
 
+- Added new `collapse` parameter to nodes. Now if a node has `children` (vector of character node IDs), it can be collapsed or uncollapsed. `collapse` accepts a list of options via `g6_collapse_options()`.
+
 - Improvements to how `drag_element()` and `drag_element_force()` work with `create_edge()`. Now, the `create_edge()` can be `drag` and work with `drag_element()` as we handle the behavior conflicts/priorities JS side.
 
 - `input[["<graph_ID>-state"]]` now does not return unnamed lists for nodes, edges and combos. Instead, each sublist is named with the corresponding element IDs. This makes it easier to retrieve the state of a specific element when we know the ID.

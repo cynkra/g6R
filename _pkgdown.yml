@@ -75,6 +75,7 @@ reference:
       - as_g6_node
       - as_g6_edge
       - as_g6_combo
+      - g6_collapse_options
   - subtitle: Create list of g6 elements
     contents:
       - g6_data
