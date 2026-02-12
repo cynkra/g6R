@@ -131,7 +131,8 @@ g6 <- function(
     jsonUrl = jsonUrl,
     iconsUrl = iconsUrl,
     mode = get_g6_mode(),
-    preservePosition = get_g6_preserve_position()
+    preservePosition = get_g6_preserve_position(),
+    directed = get_g6_directed_graph()
   )
 
   # In case we need it ...
@@ -182,6 +183,29 @@ validate_g6_preserve_position <- function(val) {
 get_g6_preserve_position <- function() {
   val <- getOption("g6R.preserve_elements_position", FALSE)
   validate_g6_preserve_position(val)
+}
+
+#' @keywords internal
+validate_g6_directed_graph <- function(val) {
+  if (!is.logical(val) || length(val) != 1) {
+    stop(
+      "`g6R.directed_graph` option must be a single logical value (TRUE or FALSE)."
+    )
+  }
+  invisible(val)
+}
+
+#' @keywords internal
+get_g6_directed_graph <- function() {
+  val <- getOption("g6R.directed_graph", FALSE)
+  validate_g6_directed_graph(val)
+}
+
+#' @keywords internal
+set_g6_directed_graph <- function(val) {
+  validate_g6_directed_graph(val)
+  options("g6R.directed_graph" = val)
+  invisible(val)
 }
 
 #' Shiny bindings for g6

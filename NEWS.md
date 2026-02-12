@@ -6,7 +6,17 @@
 
 ## New feature
 
-- Added new `collapse` parameter to nodes. Now if a node has `children` (vector of character node IDs), it can be collapsed or uncollapsed. `collapse` accepts a list of options via `g6_collapse_options()`.
+- Added new `collapse` parameter to nodes. This will only work if you use any of the `custom-*-node` node types (see below). Now if a node has `children` (vector of character node IDs), it can be collapsed or uncollapsed. `collapse` accepts a list of options via `g6_collapse_options()`. When a node has `children` set (character vector/list of node IDs expected),
+an option `g6R.directed_graph` is set to TRUE so that, when a connection is created between 2 nodes, we automatically establish parent/child relation and inversely when an edge or node is removed. You can also manually opt-in for this setup by setting `options(g6R.directed_graph = TRUE)`. Importantly, the parent/child relations are only maintained if you use the g6R proxy functions. Using the direct JS G6 API yourself (like with `graph.removeEdgeData(...)` won't do anything to keep the tree state in sync!
+
+```r
+g6_node(
+  id = 1,
+  type = "custom-rect-node", # to enable use custom class
+  children = c(2, 3),
+  collapse = g6_collapse_options(collapsed = TRUE)
+)
+```
 
 - Improvements to how `drag_element()` and `drag_element_force()` work with `create_edge()`. Now, the `create_edge()` can be `drag` and work with `drag_element()` as we handle the behavior conflicts/priorities JS side.
 

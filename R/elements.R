@@ -316,9 +316,29 @@ validate_element.g6_node <- function(x, ...) {
   ) {
     stop("Node 'combo' must be a character string or NULL.")
   }
-  #if (!is.null(x$children) && !is.character(x$children)) {
-  #  stop("Node 'children' must be a character vector if provided.")
-  #}
+  if (!is.null(x$children)) {
+    if (!is.vector(x$children) && !is.list(x$children)) {
+      stop("Node 'children' must be a character vector or list if provided.")
+    }
+
+    # Convert to character vector for validation and processing
+    children_vec <- as.character(unlist(x$children))
+
+    # Check if node includes itself as a child
+    if (as.character(x$id) %in% children_vec) {
+      stop("Node 'children' cannot include the node itself (id: ", x$id, ").")
+    }
+
+    # Auto-enable directed graph mode when children are present
+    if (
+      length(children_vec) > 0 && !("g6R.directed_graph" %in% names(options()))
+    ) {
+      set_g6_directed_graph(TRUE)
+    }
+
+    # Convert to list for JavaScript
+    x$children <- as.list(children_vec)
+  }
   if (length(x$ports)) {
     if (length(x[["type"]]) && !grepl("custom", x[["type"]])) {
       stop(
