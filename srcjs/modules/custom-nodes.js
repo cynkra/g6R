@@ -672,6 +672,19 @@ const createCustomNode = (BaseShape) => {
             // Update sibling nodes' collapse buttons to reflect
             // the actual visibility of their children
             this.refreshCollapseStates();
+
+            // Reset port indicators on all visible nodes
+            // (hideElement/showElement + upsert in refreshCollapseStates
+            // can trigger re-renders that expose port indicators)
+            const visibleNodes = graph.getNodeData().filter(
+              n => n.style?.visibility !== 'hidden'
+            );
+            for (const n of visibleNodes) {
+              try {
+                const el = graph.context.element?.getElement(n.id);
+                if (el?._hidePortsImmediately) el._hidePortsImmediately();
+              } catch (_) { /* element may not exist */ }
+            }
           } finally {
             graph._g6rCollapseInProgress = false;
           }
@@ -902,6 +915,17 @@ const createCustomNode = (BaseShape) => {
         }
       };
       this._portsAnimation = requestAnimationFrame(animate);
+    }
+
+    update(attr) {
+      super.update(attr);
+      // G6's BaseShape.update() calls setVisibility() after render(),
+      // which sets ALL child shapes to the node's visibility ('visible'),
+      // overriding the per-port 'hidden' visibility for hover ports.
+      // Re-hide ports that should only show on hover.
+      if (this._hidePortsImmediately && !this._isHoveringNode?.()) {
+        this._hidePortsImmediately();
+      }
     }
 
     render(attributes = this.parsedAttributes, container) {
