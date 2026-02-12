@@ -7,6 +7,10 @@ import { getPortConnections } from './utils';
 // Map to store node port refresh functions for edge creation events
 const nodePortRefreshFunctions = new Map();
 
+// Track DAG-collapsed nodes independently from G6's tree model
+// (G6's tree model only supports one parent per node, which breaks DAG collapse)
+const dagCollapsedNodes = new Set();
+
 // Animation constants
 const ANIMATION_DURATION_MS = 500;
 const HIDE_DELAY_MS = 0;
@@ -424,7 +428,7 @@ const createCustomNode = (BaseShape) => {
       // Get collapse configuration from attributes
       const collapseConfig = attributes.collapse || {};
 
-      const collapsed = attributes.collapsed || false;
+      const collapsed = dagCollapsedNodes.has(this.id) || attributes.collapsed || false;
       const [width, height] = this.getSize(attributes);
 
       // Get position from placement
@@ -519,17 +523,115 @@ const createCustomNode = (BaseShape) => {
       this.bindCollapseListener();
     }
 
+    // Collect all DAG descendants of nodeId via outgoing edges
+    collectDAGDescendants(nodeId) {
+      const { graph } = this.context;
+      const allEdges = graph.getEdgeData();
+      const descendants = [];
+      const visited = new Set();
+      const collect = (id) => {
+        allEdges.forEach(edge => {
+          if (edge.source === id && !visited.has(edge.target)) {
+            visited.add(edge.target);
+            descendants.push(edge.target);
+            collect(edge.target);
+          }
+        });
+      };
+      collect(nodeId);
+      return { descendants, allEdges };
+    }
+
     bindCollapseListener() {
       const hitArea = this.shapeMap['collapse-hit-area'];
       if (hitArea && !hitArea._collapseListenerBound) {
         hitArea._collapseListenerBound = true;
         const { graph } = this.context;
 
-        hitArea.addEventListener('click', (e) => {
-          const { collapsed } = this.attributes;
-          if (collapsed) graph.expandElement(this.id);
-          else graph.collapseElement(this.id);
+        hitArea.addEventListener('click', async (e) => {
           e.stopPropagation();
+
+          // Guard against concurrent collapse/expand
+          if (graph._g6rCollapseInProgress) return;
+          graph._g6rCollapseInProgress = true;
+
+          try {
+            const isCollapsed = dagCollapsedNodes.has(this.id);
+            const { descendants, allEdges } = this.collectDAGDescendants(this.id);
+
+            if (descendants.length === 0) return;
+
+            const descendantSet = new Set(descendants);
+
+            if (isCollapsed) {
+              // === EXPAND ===
+              dagCollapsedNodes.delete(this.id);
+              // Recursive expand: also clear any nested collapsed descendants
+              descendants.forEach(dId => dagCollapsedNodes.delete(dId));
+
+              // Compute nodes that should REMAIN hidden (collapsed by other
+              // ancestors that are NOT in our subtree)
+              const stillHidden = new Set();
+              for (const cId of dagCollapsedNodes) {
+                const { descendants: cDesc } = this.collectDAGDescendants(cId);
+                cDesc.forEach(d => stillHidden.add(d));
+              }
+
+              // Only show descendants not hidden by other collapses
+              const toShow = descendants.filter(d => !stillHidden.has(d));
+              const toShowSet = new Set(toShow);
+              const elementsToShow = [...toShow];
+
+              // Show edges where both endpoints will be visible after expand
+              allEdges.forEach(edge => {
+                if (!edge.id) return;
+                if (toShowSet.has(edge.source) || toShowSet.has(edge.target)) {
+                  const srcOk = toShowSet.has(edge.source) ||
+                    edge.source === this.id ||
+                    (graph.getNodeData(edge.source)?.style?.visibility !== 'hidden');
+                  const tgtOk = toShowSet.has(edge.target) ||
+                    edge.target === this.id ||
+                    (graph.getNodeData(edge.target)?.style?.visibility !== 'hidden');
+                  if (srcOk && tgtOk) {
+                    elementsToShow.push(edge.id);
+                  }
+                }
+              });
+
+              if (elementsToShow.length > 0) {
+                await graph.showElement(elementsToShow, false);
+
+                // Reset port indicators to hidden on shown descendants
+                // (showElement re-renders nodes which can expose port indicators)
+                for (const dId of toShow) {
+                  try {
+                    const el = graph.context.element?.getElement(dId);
+                    if (el?._hidePortsImmediately) el._hidePortsImmediately();
+                  } catch (_) { /* element may not exist */ }
+                }
+              }
+            } else {
+              // === COLLAPSE ===
+              dagCollapsedNodes.add(this.id);
+
+              const elementsToHide = [...descendants];
+              allEdges.forEach(edge => {
+                if (!edge.id) return;
+                if (descendantSet.has(edge.source) || descendantSet.has(edge.target)) {
+                  elementsToHide.push(edge.id);
+                }
+              });
+
+              if (elementsToHide.length > 0) {
+                await graph.hideElement(elementsToHide, false);
+              }
+            }
+
+            // Update the button visual (+/-)
+            this.drawCollapseButton(this.parsedAttributes);
+          } finally {
+            graph._g6rCollapseInProgress = false;
+          }
         });
       }
     }
@@ -537,13 +639,27 @@ const createCustomNode = (BaseShape) => {
     onCreate() {
       this.bindCollapseListener();
 
-      // If node is initially collapsed, trigger collapse
+      // If node is initially collapsed, trigger collapse using DAG-aware hide
       const collapseConfig = this.attributes.collapse || {};
       if (collapseConfig.collapsed || this.attributes.collapsed) {
         const { graph } = this.context;
-        // Use setTimeout to ensure graph is fully initialized
-        setTimeout(() => {
-          graph.collapseElement(this.id);
+        setTimeout(async () => {
+          dagCollapsedNodes.add(this.id);
+          const { descendants, allEdges } = this.collectDAGDescendants(this.id);
+          if (descendants.length === 0) return;
+
+          const descendantSet = new Set(descendants);
+          const elementsToHide = [...descendants];
+          allEdges.forEach(edge => {
+            if (!edge.id) return;
+            if (descendantSet.has(edge.source) || descendantSet.has(edge.target)) {
+              elementsToHide.push(edge.id);
+            }
+          });
+
+          if (elementsToHide.length > 0) {
+            await graph.hideElement(elementsToHide, false);
+          }
         }, 0);
       }
     }

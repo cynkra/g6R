@@ -380,7 +380,6 @@ server <- function(input, output, session) {
         edge = list(style = list(endArrow = TRUE))
       ) |>
       g6_behaviors(
-        collapse_expand(),
         click_select(multiple = TRUE),
         drag_element(),
         drag_canvas(
