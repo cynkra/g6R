@@ -44,7 +44,14 @@ server <- function(input, output, session) {
             )
           ),
           children = c(2),
-          collapse = g6_collapse_options(collapsed = TRUE)
+          collapse = g6_collapse_options(
+            collapsed = TRUE,
+            stroke = "#67ba1eff",
+            iconStroke = "#d82fa0ff",
+            placement = "left-top",
+            lineWidth = 1.4,
+            iconLineWidth = 1,
+          )
         ),
         g6_node(
           id = 2,

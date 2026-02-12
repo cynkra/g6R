@@ -473,18 +473,12 @@ const createCustomNode = (BaseShape) => {
 
       // Path for minus sign
       const collapsePath = [
-        ['M', x - btnR, y],
-        ['a', btnR, btnR, 0, 1, 0, btnR * 2, 0],
-        ['a', btnR, btnR, 0, 1, 0, -btnR * 2, 0],
         ['M', x - btnR + 4, y],
         ['L', x + btnR - 4, y]
       ];
 
       // Path for plus sign
       const expandPath = [
-        ['M', x - btnR, y],
-        ['a', btnR, btnR, 0, 1, 0, btnR * 2, 0],
-        ['a', btnR, btnR, 0, 1, 0, -btnR * 2, 0],
         ['M', x - btnR + 4, y],
         ['L', x + btnR - 4, y],
         ['M', x, y - btnR + 4],
