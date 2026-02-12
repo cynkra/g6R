@@ -542,6 +542,54 @@ const createCustomNode = (BaseShape) => {
       return { descendants, allEdges };
     }
 
+    // After collapse/expand, update all visible nodes' collapse buttons
+    // to reflect the actual visibility of their children.
+    // This handles sibling nodes whose shared descendants were hidden/shown.
+    refreshCollapseStates() {
+      const { graph } = this.context;
+      const allNodes = graph.getNodeData();
+      const allEdges = graph.getEdgeData();
+
+      // Build parent→children map from edges
+      const childrenOf = {};
+      allEdges.forEach(edge => {
+        if (!childrenOf[edge.source]) childrenOf[edge.source] = [];
+        childrenOf[edge.source].push(edge.target);
+      });
+
+      allNodes.forEach(node => {
+        const children = childrenOf[node.id] || [];
+        if (children.length === 0) return;
+
+        // Skip hidden nodes
+        if (node.style?.visibility === 'hidden') return;
+
+        const allChildrenHidden = children.every(childId => {
+          const childNode = graph.getNodeData(childId);
+          return childNode?.style?.visibility === 'hidden';
+        });
+
+        const anyChildVisible = children.some(childId => {
+          const childNode = graph.getNodeData(childId);
+          return childNode?.style?.visibility !== 'hidden';
+        });
+
+        if (allChildrenHidden && !dagCollapsedNodes.has(node.id)) {
+          dagCollapsedNodes.add(node.id);
+        } else if (anyChildVisible && dagCollapsedNodes.has(node.id)) {
+          dagCollapsedNodes.delete(node.id);
+        }
+
+        // Redraw the collapse button for this node
+        try {
+          const el = graph.context.element?.getElement(node.id);
+          if (el?.drawCollapseButton && el?.parsedAttributes) {
+            el.drawCollapseButton(el.parsedAttributes);
+          }
+        } catch (_) { /* element may not exist */ }
+      });
+    }
+
     bindCollapseListener() {
       const hitArea = this.shapeMap['collapse-hit-area'];
       if (hitArea && !hitArea._collapseListenerBound) {
@@ -569,27 +617,18 @@ const createCustomNode = (BaseShape) => {
               // Recursive expand: also clear any nested collapsed descendants
               descendants.forEach(dId => dagCollapsedNodes.delete(dId));
 
-              // Compute nodes that should REMAIN hidden (collapsed by other
-              // ancestors that are NOT in our subtree)
-              const stillHidden = new Set();
-              for (const cId of dagCollapsedNodes) {
-                const { descendants: cDesc } = this.collectDAGDescendants(cId);
-                cDesc.forEach(d => stillHidden.add(d));
-              }
-
-              // Only show descendants not hidden by other collapses
-              const toShow = descendants.filter(d => !stillHidden.has(d));
-              const toShowSet = new Set(toShow);
-              const elementsToShow = [...toShow];
+              // Show ALL descendants unconditionally (overrides sibling collapses
+              // on shared nodes — refreshCollapseStates will fix sibling buttons)
+              const elementsToShow = [...descendants];
 
               // Show edges where both endpoints will be visible after expand
               allEdges.forEach(edge => {
                 if (!edge.id) return;
-                if (toShowSet.has(edge.source) || toShowSet.has(edge.target)) {
-                  const srcOk = toShowSet.has(edge.source) ||
+                if (descendantSet.has(edge.source) || descendantSet.has(edge.target)) {
+                  const srcOk = descendantSet.has(edge.source) ||
                     edge.source === this.id ||
                     (graph.getNodeData(edge.source)?.style?.visibility !== 'hidden');
-                  const tgtOk = toShowSet.has(edge.target) ||
+                  const tgtOk = descendantSet.has(edge.target) ||
                     edge.target === this.id ||
                     (graph.getNodeData(edge.target)?.style?.visibility !== 'hidden');
                   if (srcOk && tgtOk) {
@@ -603,7 +642,7 @@ const createCustomNode = (BaseShape) => {
 
                 // Reset port indicators to hidden on shown descendants
                 // (showElement re-renders nodes which can expose port indicators)
-                for (const dId of toShow) {
+                for (const dId of descendants) {
                   try {
                     const el = graph.context.element?.getElement(dId);
                     if (el?._hidePortsImmediately) el._hidePortsImmediately();
@@ -629,6 +668,10 @@ const createCustomNode = (BaseShape) => {
 
             // Update the button visual (+/-)
             this.drawCollapseButton(this.parsedAttributes);
+
+            // Update sibling nodes' collapse buttons to reflect
+            // the actual visibility of their children
+            this.refreshCollapseStates();
           } finally {
             graph._g6rCollapseInProgress = false;
           }
