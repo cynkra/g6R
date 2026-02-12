@@ -164,7 +164,7 @@ server <- function(input, output, session) {
               label = "data"
             )
           ),
-          children = c("g"),
+          children = c("e", "g"),
           collapse = g6_collapse_options(
             collapsed = FALSE,
             placement = "right-top"
