@@ -36,9 +36,9 @@ g6_collapse_options <- function(
   placement = "right-top",
   r = 6,
   fill = "#fff",
-  stroke = "#CED4D9",
+  stroke = "#9cabd4",
   lineWidth = 1,
-  iconStroke = "#000",
+  iconStroke = "#9cabd4",
   iconLineWidth = 1.4,
   cursor = "pointer",
   zIndex = 999
