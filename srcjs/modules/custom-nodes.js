@@ -397,10 +397,17 @@ const createCustomNode = (BaseShape) => {
     }
 
     drawCollapseButton(attributes) {
-      const children = this.childrenData();
+      // Check both the attributes and the node data for children
+      const childrenFromAttributes = attributes.children || [];
+      const nodeData = this.context.graph.getNodeData(this.id);
+      const childrenFromNodeData = nodeData?.children || [];
+      const childrenFromModel = this.childrenData();
+      const hasChildren = childrenFromAttributes.length > 0 ||
+        childrenFromNodeData.length > 0 ||
+        childrenFromModel.length > 0;
 
       // If no children, remove collapse button if it exists
-      if (children.length === 0) {
+      if (!hasChildren) {
         const existingButton = this.shapeMap['collapse-button'];
         const existingHitArea = this.shapeMap['collapse-hit-area'];
         if (existingButton) {

@@ -8,7 +8,7 @@ options(
 )
 
 ui <- fluidPage(
-  g6_output("dag"),
+  g6_output("dag", height = "1000px"),
   verbatimTextOutput("clicked_port"),
   verbatimTextOutput("removed_node")
 )
@@ -17,68 +17,349 @@ server <- function(input, output, session) {
   output$dag <- render_g6(
     g6(
       nodes = g6_nodes(
+        # a = dataset_block("iris")
         g6_node(
-          id = 1,
+          id = "a",
           type = "custom-rect-node",
           style = list(
-            src = "https://gw.alipayobjects.com/mdn/rms_6ae20b/afts/img/A*N4ZMS7gHsUIAAAAAAAAAAABkARQnAQ",
-            labelText = "Node 1"
+            labelText = "dataset: iris"
           ),
           ports = g6_ports(
-            g6_input_port(
-              key = "input-1",
-              placement = "top",
-              label = "port 1 (visible)"
-              # visibility = "visible" is default
-            ),
             g6_output_port(
-              key = "output-1",
+              key = "output-a",
               placement = "bottom",
-              label = "port 2 (hover)"
-            ),
-            g6_input_port(
-              key = "input-12",
-              placement = "top",
-              label = "port 3 (hidden)",
-              visibility = "hidden"
+              label = "data"
             )
           ),
-          children = c(2),
+          children = c("b"),
           collapse = g6_collapse_options(
-            collapsed = TRUE,
-            stroke = "#67ba1eff",
-            iconStroke = "#d82fa0ff",
-            placement = "left-top",
-            lineWidth = 1.4,
-            iconLineWidth = 1,
+            collapsed = FALSE,
+            placement = "right-top"
           )
         ),
+        # b = head_block(n = 10)
         g6_node(
-          id = 2,
-          type = "custom-circle-node",
+          id = "b",
+          type = "custom-rect-node",
           style = list(
-            labelText = "Node 2"
+            labelText = "head(n=10)"
           ),
           ports = g6_ports(
             g6_input_port(
-              key = "input-2",
-              placement = "left"
+              key = "input-b",
+              placement = "top",
+              label = "data"
             ),
             g6_output_port(
-              key = "output-2",
+              key = "output-b",
+              placement = "bottom",
+              label = "data"
+            )
+          ),
+          children = c("c", "f"),
+          collapse = g6_collapse_options(
+            collapsed = FALSE,
+            placement = "right-top"
+          )
+        ),
+        # c = subset_block()
+        g6_node(
+          id = "c",
+          type = "custom-rect-node",
+          style = list(
+            labelText = "subset"
+          ),
+          ports = g6_ports(
+            g6_input_port(
+              key = "input-c",
               placement = "top",
+              label = "data"
+            ),
+            g6_output_port(
+              key = "output-c",
+              placement = "bottom",
+              label = "data"
+            )
+          ),
+          children = c("d"),
+          collapse = g6_collapse_options(
+            collapsed = FALSE,
+            placement = "right-top"
+          )
+        ),
+        # d = head_block(n = 5)
+        g6_node(
+          id = "d",
+          type = "custom-rect-node",
+          style = list(
+            labelText = "head(n=5)"
+          ),
+          ports = g6_ports(
+            g6_input_port(
+              key = "input-d",
+              placement = "top",
+              label = "data"
+            ),
+            g6_output_port(
+              key = "output-d",
+              placement = "bottom",
+              label = "data"
+            )
+          ),
+          children = c("e"),
+          collapse = g6_collapse_options(
+            collapsed = FALSE,
+            placement = "right-top"
+          )
+        ),
+        # e = rbind_block()
+        g6_node(
+          id = "e",
+          type = "custom-rect-node",
+          style = list(
+            labelText = "rbind"
+          ),
+          ports = g6_ports(
+            g6_input_port(
+              key = "input-e-1",
+              placement = "top",
+              label = "1",
               arity = Inf
+            ),
+            g6_input_port(
+              key = "input-e-2",
+              placement = "top",
+              label = "2",
+              arity = Inf
+            ),
+            g6_output_port(
+              key = "output-e",
+              placement = "bottom",
+              label = "data",
+              arity = Inf
+            )
+          ),
+          children = c("g"),
+          collapse = g6_collapse_options(
+            collapsed = FALSE,
+            placement = "right-top"
+          )
+        ),
+        # f = subset_block()
+        g6_node(
+          id = "f",
+          type = "custom-rect-node",
+          style = list(
+            labelText = "subset"
+          ),
+          ports = g6_ports(
+            g6_input_port(
+              key = "input-f",
+              placement = "top",
+              label = "data"
+            ),
+            g6_output_port(
+              key = "output-f",
+              placement = "bottom",
+              label = "data"
+            )
+          ),
+          children = c("g"),
+          collapse = g6_collapse_options(
+            collapsed = FALSE,
+            placement = "right-top"
+          )
+        ),
+        # g = rbind_block()
+        g6_node(
+          id = "g",
+          type = "custom-rect-node",
+          style = list(
+            labelText = "rbind"
+          ),
+          ports = g6_ports(
+            g6_input_port(
+              key = "input-g-1",
+              placement = "top",
+              label = "1",
+              arity = Inf
+            ),
+            g6_input_port(
+              key = "input-g-2",
+              placement = "top",
+              label = "2",
+              arity = Inf
+            ),
+            g6_output_port(
+              key = "output-g",
+              placement = "bottom",
+              label = "data",
+              arity = Inf
+            )
+          ),
+          children = c("h"),
+          collapse = g6_collapse_options(
+            collapsed = FALSE,
+            placement = "right-top"
+          )
+        ),
+        # h = head_block(n = 3)
+        g6_node(
+          id = "h",
+          type = "custom-rect-node",
+          style = list(
+            labelText = "head(n=3)"
+          ),
+          ports = g6_ports(
+            g6_input_port(
+              key = "input-h",
+              placement = "top",
+              label = "data"
+            ),
+            g6_output_port(
+              key = "output-h",
+              placement = "bottom",
+              label = "data"
+            )
+          ),
+          children = c("i"),
+          collapse = g6_collapse_options(
+            collapsed = FALSE,
+            placement = "right-top"
+          )
+        ),
+        # i = scatter_block(x = "Sepal.Length", y = "Sepal.Width")
+        g6_node(
+          id = "i",
+          type = "custom-rect-node",
+          style = list(
+            labelText = "scatter plot"
+          ),
+          ports = g6_ports(
+            g6_input_port(
+              key = "input-i",
+              placement = "top",
+              label = "data"
             )
           )
         )
       ),
       edges = g6_edges(
+        # a -> b (data)
         g6_edge(
-          source = 1,
-          target = 2,
+          source = "a",
+          target = "b",
           style = list(
-            sourcePort = "output-1",
-            targetPort = "input-2",
+            sourcePort = "output-a",
+            targetPort = "input-b",
+            endArrow = TRUE,
+            startArrow = FALSE,
+            endArrowType = "vee"
+          )
+        ),
+        # b -> c (data)
+        g6_edge(
+          source = "b",
+          target = "c",
+          style = list(
+            sourcePort = "output-b",
+            targetPort = "input-c",
+            endArrow = TRUE,
+            startArrow = FALSE,
+            endArrowType = "vee"
+          )
+        ),
+        # c -> d (data)
+        g6_edge(
+          source = "c",
+          target = "d",
+          style = list(
+            sourcePort = "output-c",
+            targetPort = "input-d",
+            endArrow = TRUE,
+            startArrow = FALSE,
+            endArrowType = "vee"
+          )
+        ),
+        # b -> f (data)
+        g6_edge(
+          source = "b",
+          target = "f",
+          style = list(
+            sourcePort = "output-b",
+            targetPort = "input-f",
+            endArrow = TRUE,
+            startArrow = FALSE,
+            endArrowType = "vee"
+          )
+        ),
+        # d -> e (input 1)
+        g6_edge(
+          source = "d",
+          target = "e",
+          style = list(
+            sourcePort = "output-d",
+            targetPort = "input-e-1",
+            endArrow = TRUE,
+            startArrow = FALSE,
+            endArrowType = "vee"
+          )
+        ),
+        # f -> e (input 2)
+        g6_edge(
+          source = "f",
+          target = "e",
+          style = list(
+            sourcePort = "output-f",
+            targetPort = "input-e-2",
+            endArrow = TRUE,
+            startArrow = FALSE,
+            endArrowType = "vee"
+          )
+        ),
+        # e -> g (input 1)
+        g6_edge(
+          source = "e",
+          target = "g",
+          style = list(
+            sourcePort = "output-e",
+            targetPort = "input-g-1",
+            endArrow = TRUE,
+            startArrow = FALSE,
+            endArrowType = "vee"
+          )
+        ),
+        # f -> g (input 2)
+        g6_edge(
+          source = "f",
+          target = "g",
+          style = list(
+            sourcePort = "output-f",
+            targetPort = "input-g-2",
+            endArrow = TRUE,
+            startArrow = FALSE,
+            endArrowType = "vee"
+          )
+        ),
+        # g -> h (data)
+        g6_edge(
+          source = "g",
+          target = "h",
+          style = list(
+            sourcePort = "output-g",
+            targetPort = "input-h",
+            endArrow = TRUE,
+            startArrow = FALSE,
+            endArrowType = "vee"
+          )
+        ),
+        # h -> i (data)
+        g6_edge(
+          source = "h",
+          target = "i",
+          style = list(
+            sourcePort = "output-h",
+            targetPort = "input-i",
             endArrow = TRUE,
             startArrow = FALSE,
             endArrowType = "vee"
@@ -86,7 +367,7 @@ server <- function(input, output, session) {
         )
       )
     ) |>
-      g6_layout() |>
+      g6_layout(antv_dagre_layout()) |>
       g6_options(
         animation = FALSE,
         node = list(
@@ -99,6 +380,7 @@ server <- function(input, output, session) {
         edge = list(style = list(endArrow = TRUE))
       ) |>
       g6_behaviors(
+        collapse_expand(),
         click_select(multiple = TRUE),
         drag_element(),
         drag_canvas(
@@ -179,7 +461,8 @@ server <- function(input, output, session) {
           ports = g6_ports(
             g6_input_port(
               key = sprintf("input-%s", new_id),
-              placement = "left"
+              placement = "left",
+              arity = Inf
             ),
             g6_output_port(
               key = sprintf("output-%s", new_id),
