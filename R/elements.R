@@ -396,6 +396,11 @@ as_g6_node.g6_node <- function(x, ...) {
 #' @export
 #' @rdname as_g6_element
 as_g6_node.list <- function(x, ...) {
+  # Coerce states to unnamed list (survives JSON round-trip, fixes #41)
+  if (!is.null(x$states)) {
+    x$states <- as.list(unname(x$states))
+  }
+
   # Coerce ports if present
   if (length(x$style$ports)) {
     x$ports <- as_g6_ports(x$style$ports)
@@ -460,6 +465,11 @@ as_g6_edge.g6_edge <- function(x, ...) {
 #' @export
 #' @rdname as_g6_element
 as_g6_edge.list <- function(x, ...) {
+  # Coerce states to unnamed list (survives JSON round-trip, fixes #41)
+  if (!is.null(x$states)) {
+    x$states <- as.list(unname(x$states))
+  }
+
   if (!is.null(x$id) && is.null(x$source) && is.null(x$target)) {
     do.call(g6_edge_update, x)
   } else {
