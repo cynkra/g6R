@@ -90,6 +90,7 @@ const createShowPortsHandler = (ctx) => () => {
   if (needsAnimation) {
     ctx.self.animateAllIn();
   }
+  ctx.self.showCollapseButton?.();
 };
 
 const createHidePortsHandler = (ctx) => () => {
@@ -125,6 +126,7 @@ const createHidePortsHandler = (ctx) => () => {
         indicator.plus.attr({ visibility: 'hidden', opacity: 1 });
       }
     });
+    ctx.self.hideCollapseButton?.();
   }, HIDE_DELAY_MS);
 };
 
@@ -154,6 +156,7 @@ const createHidePortsImmediateHandler = (ctx) => () => {
       indicator.plus.attr({ visibility: 'hidden', opacity: 1 });
     }
   });
+  ctx.self.hideCollapseButtonImmediate?.();
 };
 
 // --- Extracted helpers for addPortEvents ---
@@ -498,6 +501,12 @@ const createCustomNode = (BaseShape) => {
 
       const d = collapsed ? expandPath : collapsePath;
 
+      // Determine collapse button visibility mode
+      const collapseVisibility = collapseConfig.visibility || 'visible';
+      this._collapseVisibility = collapseVisibility;
+      const initiallyVisible = collapseVisibility === 'visible' ||
+        (collapseVisibility === 'hover' && this._isHoveringNode?.());
+
       // Clickable area with config options
       this.upsert('collapse-hit-area', 'circle', {
         cx: x,
@@ -507,7 +516,9 @@ const createCustomNode = (BaseShape) => {
         stroke: collapseConfig.stroke || '#CED4D9',
         lineWidth: collapseConfig.lineWidth || 1,
         cursor: collapseConfig.cursor || 'pointer',
-        zIndex: collapseConfig.zIndex || 999
+        zIndex: collapseConfig.zIndex || 999,
+        visibility: initiallyVisible ? 'visible' : 'hidden',
+        opacity: initiallyVisible ? 1 : 0
       }, this);
 
       // Button graphic with config options
@@ -516,11 +527,27 @@ const createCustomNode = (BaseShape) => {
         stroke: collapseConfig.iconStroke || '#000',
         lineWidth: collapseConfig.iconLineWidth || 1.4,
         cursor: collapseConfig.cursor || 'pointer',
-        zIndex: (collapseConfig.zIndex || 999) + 1
+        zIndex: (collapseConfig.zIndex || 999) + 1,
+        visibility: initiallyVisible ? 'visible' : 'hidden',
+        opacity: initiallyVisible ? 1 : 0
       }, this.shapeMap['collapse-hit-area']);
 
       // Bind click listener (only once)
       this.bindCollapseListener();
+
+      // When hover mode, ensure hover handlers exist even without ports,
+      // and add mouseenter/mouseleave on the hit-area to prevent flickering
+      // (same pattern ports use to keep the node "hovered" while over the indicator)
+      if (collapseVisibility === 'hover') {
+        this.addNodeHoverHandlers(this._renderContainer || this);
+        const hitArea = this.shapeMap['collapse-hit-area'];
+        addUniqueEventListener(hitArea, 'mouseenter', () => {
+          if (this._showPorts) this._showPorts();
+        });
+        addUniqueEventListener(hitArea, 'mouseleave', () => {
+          if (this._hidePorts) this._hidePorts();
+        });
+      }
     }
 
     // Collect all DAG descendants of nodeId via outgoing edges
@@ -684,6 +711,11 @@ const createCustomNode = (BaseShape) => {
                 const el = graph.context.element?.getElement(n.id);
                 if (el?._hidePortsImmediately) el._hidePortsImmediately();
               } catch (_) { /* element may not exist */ }
+            }
+
+            // Re-show collapse button on this node since the user is still hovering it
+            if (this._collapseVisibility === 'hover') {
+              this.showCollapseButton();
             }
           } finally {
             graph._g6rCollapseInProgress = false;
@@ -917,6 +949,76 @@ const createCustomNode = (BaseShape) => {
       this._portsAnimation = requestAnimationFrame(animate);
     }
 
+    showCollapseButton() {
+      if (this._collapseVisibility !== 'hover') return;
+      const hitArea = this.shapeMap['collapse-hit-area'];
+      const button = this.shapeMap['collapse-button'];
+      if (!hitArea) return;
+      // Cancel any pending debounced hide
+      if (this._collapseHideTimeout) {
+        clearTimeout(this._collapseHideTimeout);
+        this._collapseHideTimeout = null;
+      }
+      // Already fully visible — nothing to do
+      if (hitArea.attr('visibility') === 'visible' && hitArea.attr('opacity') >= 1) return;
+      // Already animating in — let it continue
+      if (this._collapseShowAnimation) return;
+      hitArea.attr({ visibility: 'visible', opacity: 0 });
+      if (button) button.attr({ visibility: 'visible', opacity: 0 });
+      const startTime = performance.now();
+      const animate = (currentTime) => {
+        const progress = Math.min((currentTime - startTime) / ANIMATION_DURATION_MS, 1);
+        const eased = 1 - Math.pow(1 - progress, 2);
+        hitArea.attr('opacity', eased);
+        if (button) button.attr('opacity', eased);
+        if (progress < 1) {
+          this._collapseShowAnimation = requestAnimationFrame(animate);
+        } else {
+          this._collapseShowAnimation = null;
+        }
+      };
+      this._collapseShowAnimation = requestAnimationFrame(animate);
+    }
+
+    hideCollapseButton() {
+      if (this._collapseVisibility !== 'hover') return;
+      if (!this.shapeMap['collapse-hit-area']) return;
+      // Cancel any pending hide to avoid stacking
+      if (this._collapseHideTimeout) {
+        clearTimeout(this._collapseHideTimeout);
+      }
+      // Debounce: wait a short period before actually hiding,
+      // so brief mouse boundary crossings don't cause flicker
+      this._collapseHideTimeout = setTimeout(() => {
+        this._collapseHideTimeout = null;
+        if (this._collapseShowAnimation) {
+          cancelAnimationFrame(this._collapseShowAnimation);
+          this._collapseShowAnimation = null;
+        }
+        const hitArea = this.shapeMap['collapse-hit-area'];
+        const button = this.shapeMap['collapse-button'];
+        if (hitArea) hitArea.attr({ visibility: 'hidden', opacity: 0 });
+        if (button) button.attr({ visibility: 'hidden', opacity: 0 });
+      }, 150);
+    }
+
+    hideCollapseButtonImmediate() {
+      if (this._collapseVisibility !== 'hover') return;
+      // Cancel any pending debounced hide
+      if (this._collapseHideTimeout) {
+        clearTimeout(this._collapseHideTimeout);
+        this._collapseHideTimeout = null;
+      }
+      if (this._collapseShowAnimation) {
+        cancelAnimationFrame(this._collapseShowAnimation);
+        this._collapseShowAnimation = null;
+      }
+      const hitArea = this.shapeMap['collapse-hit-area'];
+      const button = this.shapeMap['collapse-button'];
+      if (hitArea) hitArea.attr({ visibility: 'hidden', opacity: 0 });
+      if (button) button.attr({ visibility: 'hidden', opacity: 0 });
+    }
+
     update(attr) {
       super.update(attr);
       // G6's BaseShape.update() calls setVisibility() after render(),
@@ -926,10 +1028,15 @@ const createCustomNode = (BaseShape) => {
       if (this._hidePortsImmediately && !this._isHoveringNode?.()) {
         this._hidePortsImmediately();
       }
+      // Re-hide collapse button that should only show on hover
+      if (this._collapseVisibility === 'hover' && !this._isHoveringNode?.()) {
+        this.hideCollapseButtonImmediate?.();
+      }
     }
 
     render(attributes = this.parsedAttributes, container) {
       super.render(attributes, container);
+      this._renderContainer = container;
       this.drawCollapseButton(attributes);
     }
   };

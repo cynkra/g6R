@@ -6,6 +6,7 @@ test_that("g6_collapse_options constructs with defaults", {
   expect_s3_class(collapse, "g6_collapse_options")
   expect_true(is_g6_collapse_options(collapse))
   expect_equal(collapse$collapsed, FALSE)
+  expect_equal(collapse$visibility, "visible")
   expect_equal(collapse$placement, "right-top")
   expect_equal(collapse$r, 6)
   expect_equal(collapse$fill, "#fff")
@@ -15,6 +16,17 @@ test_that("g6_collapse_options constructs with defaults", {
   expect_equal(collapse$iconLineWidth, 1.4)
   expect_equal(collapse$cursor, "pointer")
   expect_equal(collapse$zIndex, 999)
+})
+
+test_that("g6_collapse_options accepts visibility = 'hover'", {
+  collapse <- g6_collapse_options(visibility = "hover")
+  expect_equal(collapse$visibility, "hover")
+})
+
+test_that("g6_collapse_options rejects invalid visibility", {
+  expect_snapshot(error = TRUE, {
+    g6_collapse_options(visibility = "invalid")
+  })
 })
 
 test_that("g6_collapse_options validates placement with match.arg", {

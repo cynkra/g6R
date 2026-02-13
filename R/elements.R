@@ -1,6 +1,9 @@
 #' Configure collapse button for nodes
 #'
 #' @param collapsed Logical. Whether the node should be collapsed initially. Default is FALSE.
+#' @param visibility Character. Visibility mode of the collapse button.
+#'   Either `"visible"` (always shown when children exist) or `"hover"`
+#'   (shown only on mouse hover). Default is `"visible"`.
 #' @param placement Character or numeric vector. Position of the collapse button.
 #'   Can be one of: "top", "right", "bottom", "left", "right-top", "right-bottom",
 #'   "left-top", "left-bottom", or a numeric vector of length 2 for custom coordinates.
@@ -33,6 +36,7 @@
 #' @rdname g6_collapse_options
 g6_collapse_options <- function(
   collapsed = FALSE,
+  visibility = c("visible", "hover"),
   placement = "right-top",
   r = 6,
   fill = "#fff",
@@ -43,6 +47,8 @@ g6_collapse_options <- function(
   cursor = "pointer",
   zIndex = 999
 ) {
+  visibility <- match.arg(visibility)
+
   # Validate placement
   if (is.character(placement)) {
     placement <- match.arg(
@@ -78,6 +84,7 @@ g6_collapse_options <- function(
   structure(
     list(
       collapsed = collapsed,
+      visibility = visibility,
       placement = placement,
       r = r,
       fill = fill,

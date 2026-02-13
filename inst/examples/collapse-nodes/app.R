@@ -34,6 +34,7 @@ server <- function(input, output, session) {
           children = c("b"),
           collapse = g6_collapse_options(
             collapsed = FALSE,
+            visibility = "hover",
             placement = "right-top"
           )
         ),

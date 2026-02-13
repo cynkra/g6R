@@ -1,3 +1,11 @@
+# g6_collapse_options rejects invalid visibility
+
+    Code
+      g6_collapse_options(visibility = "invalid")
+    Condition
+      Error in `match.arg()`:
+      ! 'arg' should be one of "visible", "hover"
+
 # g6_collapse_options validates placement with match.arg
 
     Code
