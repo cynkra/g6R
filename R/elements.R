@@ -568,8 +568,9 @@ as_g6_nodes.g6_nodes <- function(x, ...) {
 #' @export
 #' @rdname g6_elements
 as_g6_nodes.data.frame <- function(x, ...) {
-  lst <- unname(split(x, seq(nrow(x))))
-  lst <- lapply(lst, as.list)
+  lst <- lapply(seq_len(nrow(x)), function(i) {
+    lapply(x[i, , drop = FALSE], `[[`, 1)
+  })
   as_g6_nodes(lst)
 }
 
@@ -617,8 +618,9 @@ as_g6_edges.g6_edges <- function(x, ...) {
 #' @export
 #' @rdname as_g6_elements
 as_g6_edges.data.frame <- function(x, ...) {
-  lst <- unname(split(x, seq(nrow(x))))
-  lst <- lapply(lst, as.list)
+  lst <- lapply(seq_len(nrow(x)), function(i) {
+    lapply(x[i, , drop = FALSE], `[[`, 1)
+  })
   as_g6_edges(lst)
 }
 
@@ -669,8 +671,9 @@ as_g6_combos.g6_combos <- function(x, ...) {
 #' @export
 #' @rdname as_g6_elements
 as_g6_combos.data.frame <- function(x, ...) {
-  lst <- unname(split(x, seq(nrow(x))))
-  lst <- lapply(lst, as.list)
+  lst <- lapply(seq_len(nrow(x)), function(i) {
+    lapply(x[i, , drop = FALSE], `[[`, 1)
+  })
   as_g6_combos(lst)
 }
 
