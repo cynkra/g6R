@@ -7,6 +7,7 @@
 \usage{
 g6_collapse_options(
   collapsed = FALSE,
+  visibility = c("visible", "hover"),
   placement = "right-top",
   r = 6,
   fill = "#fff",
@@ -22,6 +23,10 @@ is_g6_collapse_options(x)
 }
 \arguments{
 \item{collapsed}{Logical. Whether the node should be collapsed initially. Default is FALSE.}
+
+\item{visibility}{Character. Visibility mode of the collapse button.
+Either \code{"visible"} (always shown when children exist) or \code{"hover"}
+(shown only on mouse hover). Default is \code{"visible"}.}
 
 \item{placement}{Character or numeric vector. Position of the collapse button.
 Can be one of: "top", "right", "bottom", "left", "right-top", "right-bottom",
