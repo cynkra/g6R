@@ -3,6 +3,7 @@ library(g6R)
 
 options(
   "g6R.mode" = "dev",
+  #"g6R.max_collapse_depth" = Inf,
   # In theory this is automatically set whenever a g6_node has some children ...
   "g6R.directed_graph" = TRUE
 )

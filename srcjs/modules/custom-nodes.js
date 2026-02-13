@@ -403,6 +403,40 @@ const createCustomNode = (BaseShape) => {
       return this.context.model.getChildrenData(this.id) || [];
     }
 
+    getNodeDepth() {
+      const allEdges = this.context.graph.getEdgeData();
+      const parentMap = {};
+      allEdges.forEach(edge => {
+        if (!parentMap[edge.target]) parentMap[edge.target] = [];
+        parentMap[edge.target].push(edge.source);
+      });
+      let depth = 0;
+      let current = new Set([this.id]);
+      const visited = new Set([this.id]);
+      while (current.size > 0) {
+        let foundRoot = false;
+        for (const id of current) {
+          if (!parentMap[id] || parentMap[id].length === 0) {
+            foundRoot = true;
+            break;
+          }
+        }
+        if (foundRoot) return depth;
+        depth++;
+        const next = new Set();
+        for (const id of current) {
+          for (const p of (parentMap[id] || [])) {
+            if (!visited.has(p)) {
+              visited.add(p);
+              next.add(p);
+            }
+          }
+        }
+        current = next;
+      }
+      return 0;
+    }
+
     drawCollapseButton(attributes) {
       // Check both the attributes and the node data for children
       const childrenFromAttributes = attributes.children || [];
@@ -415,6 +449,22 @@ const createCustomNode = (BaseShape) => {
 
       // If no children, remove collapse button if it exists
       if (!hasChildren) {
+        const existingButton = this.shapeMap['collapse-button'];
+        const existingHitArea = this.shapeMap['collapse-hit-area'];
+        if (existingButton) {
+          existingButton.remove();
+          delete this.shapeMap['collapse-button'];
+        }
+        if (existingHitArea) {
+          existingHitArea.remove();
+          delete this.shapeMap['collapse-hit-area'];
+        }
+        return;
+      }
+
+      // Depth gate: only show collapse button if node depth <= maxCollapseDepth
+      const maxCollapseDepth = this.context.graph.options.maxCollapseDepth ?? Infinity;
+      if (maxCollapseDepth !== Infinity && this.getNodeDepth() > maxCollapseDepth) {
         const existingButton = this.shapeMap['collapse-button'];
         const existingHitArea = this.shapeMap['collapse-hit-area'];
         if (existingButton) {

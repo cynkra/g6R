@@ -22,7 +22,7 @@
       str(g6_layout(g6(), layout))
     Output
       List of 8
-       $ x            :List of 7
+       $ x            :List of 8
         ..$ data            : list()
         .. ..- attr(*, "class")= chr "g6_data"
         ..$ jsonUrl         : NULL
@@ -30,6 +30,7 @@
         ..$ mode            : chr "prod"
         ..$ preservePosition: logi FALSE
         ..$ directed        : logi TRUE
+        ..$ maxCollapseDepth: num Inf
         ..$ layout          :List of 10
         .. ..$ type          : chr "antv-dagre"
         .. ..$ rankdir       : chr "TB"
@@ -78,7 +79,7 @@
       str(g6_layout(g6(), layout))
     Output
       List of 8
-       $ x            :List of 7
+       $ x            :List of 8
         ..$ data            : list()
         .. ..- attr(*, "class")= chr "g6_data"
         ..$ jsonUrl         : NULL
@@ -86,6 +87,7 @@
         ..$ mode            : chr "prod"
         ..$ preservePosition: logi FALSE
         ..$ directed        : logi TRUE
+        ..$ maxCollapseDepth: num Inf
         ..$ layout          :List of 8
         .. ..$ type       : chr "circular"
         .. ..$ angleRatio : num 1
@@ -132,7 +134,7 @@
       str(g6_layout(g6(), layout))
     Output
       List of 8
-       $ x            :List of 7
+       $ x            :List of 8
         ..$ data            : list()
         .. ..- attr(*, "class")= chr "g6_data"
         ..$ jsonUrl         : NULL
@@ -140,6 +142,7 @@
         ..$ mode            : chr "prod"
         ..$ preservePosition: logi FALSE
         ..$ directed        : logi TRUE
+        ..$ maxCollapseDepth: num Inf
         ..$ layout          :List of 3
         .. ..$ type        : chr "combo-combined"
         .. ..$ comboPadding: num 10
@@ -181,7 +184,7 @@
       str(g6_layout(g6(), layout))
     Output
       List of 8
-       $ x            :List of 7
+       $ x            :List of 8
         ..$ data            : list()
         .. ..- attr(*, "class")= chr "g6_data"
         ..$ jsonUrl         : NULL
@@ -189,6 +192,7 @@
         ..$ mode            : chr "prod"
         ..$ preservePosition: logi FALSE
         ..$ directed        : logi TRUE
+        ..$ maxCollapseDepth: num Inf
         ..$ layout          :List of 8
         .. ..$ type          : chr "concentric"
         .. ..$ clockwise     : logi FALSE
@@ -235,7 +239,7 @@
       str(g6_layout(g6(), layout))
     Output
       List of 8
-       $ x            :List of 7
+       $ x            :List of 8
         ..$ data            : list()
         .. ..- attr(*, "class")= chr "g6_data"
         ..$ jsonUrl         : NULL
@@ -243,6 +247,7 @@
         ..$ mode            : chr "prod"
         ..$ preservePosition: logi FALSE
         ..$ directed        : logi TRUE
+        ..$ maxCollapseDepth: num Inf
         ..$ layout          :List of 3
         .. ..$ type   : chr "d3-force"
         .. ..$ link   :List of 2
@@ -287,7 +292,7 @@
       str(g6_layout(g6(), layout))
     Output
       List of 8
-       $ x            :List of 7
+       $ x            :List of 8
         ..$ data            : list()
         .. ..- attr(*, "class")= chr "g6_data"
         ..$ jsonUrl         : NULL
@@ -295,6 +300,7 @@
         ..$ mode            : chr "prod"
         ..$ preservePosition: logi FALSE
         ..$ directed        : logi TRUE
+        ..$ maxCollapseDepth: num Inf
         ..$ layout          :List of 9
         .. ..$ type          : chr "force-atlas2"
         .. ..$ dissuadeHubs  : logi FALSE
@@ -342,7 +348,7 @@
       str(g6_layout(g6(), layout))
     Output
       List of 8
-       $ x            :List of 7
+       $ x            :List of 8
         ..$ data            : list()
         .. ..- attr(*, "class")= chr "g6_data"
         ..$ jsonUrl         : NULL
@@ -350,6 +356,7 @@
         ..$ mode            : chr "prod"
         ..$ preservePosition: logi FALSE
         ..$ directed        : logi TRUE
+        ..$ maxCollapseDepth: num Inf
         ..$ layout          :List of 3
         .. ..$ type   : chr "fruchterman"
         .. ..$ gravity: num 10
@@ -391,7 +398,7 @@
       str(g6_layout(g6(), layout))
     Output
       List of 8
-       $ x            :List of 7
+       $ x            :List of 8
         ..$ data            : list()
         .. ..- attr(*, "class")= chr "g6_data"
         ..$ jsonUrl         : NULL
@@ -399,6 +406,7 @@
         ..$ mode            : chr "prod"
         ..$ preservePosition: logi FALSE
         ..$ directed        : logi TRUE
+        ..$ maxCollapseDepth: num Inf
         ..$ layout          :List of 9
         .. ..$ type                      : chr "radial"
         .. ..$ nodeSpacing               : num 10
@@ -446,7 +454,7 @@
       str(g6_layout(g6(), layout))
     Output
       List of 8
-       $ x            :List of 7
+       $ x            :List of 8
         ..$ data            : list()
         .. ..- attr(*, "class")= chr "g6_data"
         ..$ jsonUrl         : NULL
@@ -454,6 +462,7 @@
         ..$ mode            : chr "prod"
         ..$ preservePosition: logi FALSE
         ..$ directed        : logi TRUE
+        ..$ maxCollapseDepth: num Inf
         ..$ layout          :List of 3
         .. ..$ type     : chr "compact-box"
         .. ..$ direction: chr "LR"
@@ -495,7 +504,7 @@
       str(g6_layout(g6(), layout))
     Output
       List of 8
-       $ x            :List of 7
+       $ x            :List of 8
         ..$ data            : list()
         .. ..- attr(*, "class")= chr "g6_data"
         ..$ jsonUrl         : NULL
@@ -503,6 +512,7 @@
         ..$ mode            : chr "prod"
         ..$ preservePosition: logi FALSE
         ..$ directed        : logi TRUE
+        ..$ maxCollapseDepth: num Inf
         ..$ layout          :List of 5
         .. ..$ type     : chr "dendrogram"
         .. ..$ direction: chr [1:6] "LR" "RL" "TB" "BT" ...
