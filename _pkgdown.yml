@@ -208,6 +208,11 @@ reference:
       - animation_config
       - g6_set_theme
 
+  - title: R options
+    desc: Custom global options
+    contents:
+      - set_g6_max_collapse_depth
+
   - title: Behaviors
     desc: Container for behavior elements
     contents:
