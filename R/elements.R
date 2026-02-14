@@ -174,7 +174,7 @@ g6_node <- function(
   combo = NULL,
   children = NULL,
   ports = NULL,
-  collapse = g6_collapse_options()
+  collapse = NULL
 ) {
   node <- dropNulls(list(
     id = id,

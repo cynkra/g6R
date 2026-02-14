@@ -20,7 +20,7 @@ g6_node(
   combo = NULL,
   children = NULL,
   ports = NULL,
-  collapse = g6_collapse_options()
+  collapse = NULL
 )
 
 g6_edge(

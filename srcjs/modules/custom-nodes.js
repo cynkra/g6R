@@ -478,10 +478,25 @@ const createCustomNode = (BaseShape) => {
         return;
       }
 
-      // Get collapse configuration from attributes
-      const collapseConfig = attributes.collapse || {};
+      // If no collapse config, don't show collapse button
+      if (!attributes.collapse) {
+        const existingButton = this.shapeMap['collapse-button'];
+        const existingHitArea = this.shapeMap['collapse-hit-area'];
+        if (existingButton) {
+          existingButton.remove();
+          delete this.shapeMap['collapse-button'];
+        }
+        if (existingHitArea) {
+          existingHitArea.remove();
+          delete this.shapeMap['collapse-hit-area'];
+        }
+        return;
+      }
 
-      const collapsed = dagCollapsedNodes.has(this.id) || attributes.collapsed || false;
+      // Get collapse configuration from attributes
+      const collapseConfig = attributes.collapse;
+
+      const collapsed = dagCollapsedNodes.has(this.id) || collapseConfig.collapsed || attributes.collapsed || false;
       const [width, height] = this.getSize(attributes);
 
       // Get position from placement
@@ -638,6 +653,9 @@ const createCustomNode = (BaseShape) => {
         const children = childrenOf[node.id] || [];
         if (children.length === 0) return;
 
+        // Skip nodes without collapse config
+        if (!node.style?.collapse) return;
+
         // Skip hidden nodes
         if (node.style?.visibility === 'hidden') return;
 
@@ -694,6 +712,23 @@ const createCustomNode = (BaseShape) => {
               // Recursive expand: also clear any nested collapsed descendants
               descendants.forEach(dId => dagCollapsedNodes.delete(dId));
 
+              // Update collapsed state in node data so getData() reflects reality
+              // Only update nodes that already have a collapse config
+              const updates = [];
+              const thisCollapse = graph.getNodeData(this.id)?.style?.collapse;
+              if (thisCollapse) {
+                updates.push({ id: this.id, style: { collapse: { ...thisCollapse, collapsed: false } } });
+              }
+              descendants.forEach(dId => {
+                const dc = graph.getNodeData(dId)?.style?.collapse;
+                if (dc) {
+                  updates.push({ id: dId, style: { collapse: { ...dc, collapsed: false } } });
+                }
+              });
+              if (updates.length > 0) {
+                graph.updateNodeData(updates);
+              }
+
               // Show ALL descendants unconditionally (overrides sibling collapses
               // on shared nodes — refreshCollapseStates will fix sibling buttons)
               const elementsToShow = [...descendants];
@@ -729,6 +764,12 @@ const createCustomNode = (BaseShape) => {
             } else {
               // === COLLAPSE ===
               dagCollapsedNodes.add(this.id);
+
+              // Update collapsed state in node data so getData() reflects reality
+              const collapseData = graph.getNodeData(this.id)?.style?.collapse || {};
+              graph.updateNodeData([
+                { id: this.id, style: { collapse: { ...collapseData, collapsed: true } } }
+              ]);
 
               const elementsToHide = [...descendants];
               allEdges.forEach(edge => {
@@ -767,6 +808,7 @@ const createCustomNode = (BaseShape) => {
             if (this._collapseVisibility === 'hover') {
               this.showCollapseButton();
             }
+
           } finally {
             graph._g6rCollapseInProgress = false;
           }

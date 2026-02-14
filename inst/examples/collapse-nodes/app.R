@@ -3,7 +3,7 @@ library(g6R)
 
 options(
   "g6R.mode" = "dev",
-  #"g6R.max_collapse_depth" = Inf,
+  "g6R.max_collapse_depth" = Inf,
   # In theory this is automatically set whenever a g6_node has some children ...
   "g6R.directed_graph" = TRUE
 )
@@ -34,7 +34,7 @@ server <- function(input, output, session) {
           ),
           children = c("b"),
           collapse = g6_collapse_options(
-            collapsed = FALSE,
+            collapsed = TRUE,
             visibility = "hover",
             placement = "right-top"
           )
@@ -60,11 +60,10 @@ server <- function(input, output, session) {
           ),
           children = c("c", "f"),
           collapse = g6_collapse_options(
-            collapsed = FALSE,
             placement = "right-top"
           )
         ),
-        # c = subset_block()
+        # c = subset_block() # This node is not collapsible
         g6_node(
           id = "c",
           type = "custom-rect-node",
@@ -83,11 +82,7 @@ server <- function(input, output, session) {
               label = "data"
             )
           ),
-          children = c("d"),
-          collapse = g6_collapse_options(
-            collapsed = FALSE,
-            placement = "right-top"
-          )
+          children = "d"
         ),
         # d = head_block(n = 5)
         g6_node(
@@ -383,7 +378,7 @@ server <- function(input, output, session) {
       ) |>
       g6_behaviors(
         click_select(multiple = TRUE),
-        drag_element(),
+        drag_element(enable = TRUE),
         drag_canvas(
           enable = JS(
             "(e) => {
@@ -396,6 +391,20 @@ server <- function(input, output, session) {
       ) |>
       # Allow to dynamically remove an edge or node
       g6_plugins(
+        #bubble_sets(
+        #  key = "bubble-set-1",
+        #  members = c("a", "b", "c", "d", "e", "f", "g", "h", "i"),
+        #  label = TRUE,
+        #  labelText = "cluster 1",
+        #  fill = "#F08F56",
+        #  stroke = "#F08F56",
+        #  labelBackground = TRUE,
+        #  labelPlacement = "top",
+        #  labelFill = "#fff",
+        #  labelPadding = 2,
+        #  labelBackgroundFill = "#F08F56",
+        #  labelBackgroundRadius = 5
+        #),
         context_menu(
           enable = JS("(e) => true"),
           getItems = JS(
