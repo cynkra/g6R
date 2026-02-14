@@ -91,3 +91,34 @@ test_that("g6 function handles elementId", {
   g <- g6(elementId = "my-graph")
   expect_equal(g$elementId, "my-graph")
 })
+
+test_that("get_g6_max_collapse_depth returns Inf by default", {
+  withr::local_options(g6R.max_collapse_depth = NULL)
+  expect_equal(get_g6_max_collapse_depth(), Inf)
+})
+
+test_that("set_g6_max_collapse_depth sets and retrieves correctly", {
+  withr::local_options(g6R.max_collapse_depth = NULL)
+  set_g6_max_collapse_depth(0)
+  expect_equal(get_g6_max_collapse_depth(), 0)
+  set_g6_max_collapse_depth(3)
+  expect_equal(get_g6_max_collapse_depth(), 3)
+  set_g6_max_collapse_depth(Inf)
+  expect_equal(get_g6_max_collapse_depth(), Inf)
+})
+
+test_that("set_g6_max_collapse_depth rejects invalid values", {
+  expect_error(set_g6_max_collapse_depth(-1), "non-negative")
+  expect_error(set_g6_max_collapse_depth("a"), "non-negative")
+  expect_error(set_g6_max_collapse_depth(c(1, 2)), "non-negative")
+})
+
+test_that("g6 widget includes maxCollapseDepth in x", {
+  withr::local_options(g6R.max_collapse_depth = NULL)
+  g <- g6()
+  expect_equal(g$x$maxCollapseDepth, Inf)
+
+  withr::local_options(g6R.max_collapse_depth = 0)
+  g2 <- g6()
+  expect_equal(g2$x$maxCollapseDepth, 0)
+})

@@ -25,13 +25,15 @@
       str(g6_behaviors(g6(), behavior))
     Output
       List of 8
-       $ x            :List of 6
+       $ x            :List of 8
         ..$ data            : list()
         .. ..- attr(*, "class")= chr "g6_data"
         ..$ jsonUrl         : NULL
         ..$ iconsUrl        : chr "//at.alicdn.com/t/font_2678727_za4qjydwkkh.js"
         ..$ mode            : chr "prod"
         ..$ preservePosition: logi FALSE
+        ..$ directed        : logi FALSE
+        ..$ maxCollapseDepth: num Inf
         ..$ behaviors       :List of 1
         .. ..$ :List of 6
         .. .. ..$ key     : chr "auto-adapt-label"
@@ -78,13 +80,15 @@
       str(g6_behaviors(g6(), behavior))
     Output
       List of 8
-       $ x            :List of 6
+       $ x            :List of 8
         ..$ data            : list()
         .. ..- attr(*, "class")= chr "g6_data"
         ..$ jsonUrl         : NULL
         ..$ iconsUrl        : chr "//at.alicdn.com/t/font_2678727_za4qjydwkkh.js"
         ..$ mode            : chr "prod"
         ..$ preservePosition: logi FALSE
+        ..$ directed        : logi FALSE
+        ..$ maxCollapseDepth: num Inf
         ..$ behaviors       :List of 1
         .. ..$ :List of 9
         .. .. ..$ key           : chr "brush-select"
@@ -134,13 +138,15 @@
       str(g6_behaviors(g6(), behavior))
     Output
       List of 8
-       $ x            :List of 6
+       $ x            :List of 8
         ..$ data            : list()
         .. ..- attr(*, "class")= chr "g6_data"
         ..$ jsonUrl         : NULL
         ..$ iconsUrl        : chr "//at.alicdn.com/t/font_2678727_za4qjydwkkh.js"
         ..$ mode            : chr "prod"
         ..$ preservePosition: logi FALSE
+        ..$ directed        : logi FALSE
+        ..$ maxCollapseDepth: num Inf
         ..$ behaviors       :List of 1
         .. ..$ :List of 9
         .. .. ..$ key          : chr "click-select"
@@ -190,13 +196,15 @@
       str(g6_behaviors(g6(), behavior))
     Output
       List of 8
-       $ x            :List of 6
+       $ x            :List of 8
         ..$ data            : list()
         .. ..- attr(*, "class")= chr "g6_data"
         ..$ jsonUrl         : NULL
         ..$ iconsUrl        : chr "//at.alicdn.com/t/font_2678727_za4qjydwkkh.js"
         ..$ mode            : chr "prod"
         ..$ preservePosition: logi FALSE
+        ..$ directed        : logi FALSE
+        ..$ maxCollapseDepth: num Inf
         ..$ behaviors       :List of 1
         .. ..$ :List of 6
         .. .. ..$ key      : chr "collapse-expand"
@@ -242,13 +250,15 @@
       str(g6_behaviors(g6(), behavior))
     Output
       List of 8
-       $ x            :List of 6
+       $ x            :List of 8
         ..$ data            : list()
         .. ..- attr(*, "class")= chr "g6_data"
         ..$ jsonUrl         : NULL
         ..$ iconsUrl        : chr "//at.alicdn.com/t/font_2678727_za4qjydwkkh.js"
         ..$ mode            : chr "prod"
         ..$ preservePosition: logi FALSE
+        ..$ directed        : logi FALSE
+        ..$ maxCollapseDepth: num Inf
         ..$ behaviors       :List of 1
         .. ..$ :List of 5
         .. .. ..$ key    : chr "create-edge"
@@ -293,13 +303,15 @@
       str(g6_behaviors(g6(), behavior))
     Output
       List of 8
-       $ x            :List of 6
+       $ x            :List of 8
         ..$ data            : list()
         .. ..- attr(*, "class")= chr "g6_data"
         ..$ jsonUrl         : NULL
         ..$ iconsUrl        : chr "//at.alicdn.com/t/font_2678727_za4qjydwkkh.js"
         ..$ mode            : chr "prod"
         ..$ preservePosition: logi FALSE
+        ..$ directed        : logi FALSE
+        ..$ maxCollapseDepth: num Inf
         ..$ behaviors       :List of 1
         .. ..$ :List of 5
         .. .. ..$ key        : chr "drag-canvas"
@@ -344,13 +356,15 @@
       str(g6_behaviors(g6(), behavior))
     Output
       List of 8
-       $ x            :List of 6
+       $ x            :List of 8
         ..$ data            : list()
         .. ..- attr(*, "class")= chr "g6_data"
         ..$ jsonUrl         : NULL
         ..$ iconsUrl        : chr "//at.alicdn.com/t/font_2678727_za4qjydwkkh.js"
         ..$ mode            : chr "prod"
         ..$ preservePosition: logi FALSE
+        ..$ directed        : logi FALSE
+        ..$ maxCollapseDepth: num Inf
         ..$ behaviors       :List of 1
         .. ..$ :List of 8
         .. .. ..$ key       : chr "drag-element"
@@ -398,13 +412,15 @@
       str(g6_behaviors(g6(), behavior))
     Output
       List of 8
-       $ x            :List of 6
+       $ x            :List of 8
         ..$ data            : list()
         .. ..- attr(*, "class")= chr "g6_data"
         ..$ jsonUrl         : NULL
         ..$ iconsUrl        : chr "//at.alicdn.com/t/font_2678727_za4qjydwkkh.js"
         ..$ mode            : chr "prod"
         ..$ preservePosition: logi FALSE
+        ..$ directed        : logi FALSE
+        ..$ maxCollapseDepth: num Inf
         ..$ behaviors       :List of 1
         .. ..$ :List of 6
         .. .. ..$ key     : chr "drag-element-force"
@@ -450,13 +466,15 @@
       str(g6_behaviors(g6(), behavior))
     Output
       List of 8
-       $ x            :List of 6
+       $ x            :List of 8
         ..$ data            : list()
         .. ..- attr(*, "class")= chr "g6_data"
         ..$ jsonUrl         : NULL
         ..$ iconsUrl        : chr "//at.alicdn.com/t/font_2678727_za4qjydwkkh.js"
         ..$ mode            : chr "prod"
         ..$ preservePosition: logi FALSE
+        ..$ directed        : logi FALSE
+        ..$ maxCollapseDepth: num Inf
         ..$ behaviors       :List of 1
         .. ..$ :List of 9
         .. .. ..$ key        : chr "fix-element-size"
@@ -514,13 +532,15 @@
       str(g6_behaviors(g6(), behavior))
     Output
       List of 8
-       $ x            :List of 6
+       $ x            :List of 8
         ..$ data            : list()
         .. ..- attr(*, "class")= chr "g6_data"
         ..$ jsonUrl         : NULL
         ..$ iconsUrl        : chr "//at.alicdn.com/t/font_2678727_za4qjydwkkh.js"
         ..$ mode            : chr "prod"
         ..$ preservePosition: logi FALSE
+        ..$ directed        : logi FALSE
+        ..$ maxCollapseDepth: num Inf
         ..$ behaviors       :List of 1
         .. ..$ :List of 4
         .. .. ..$ key      : chr "focus-element"
@@ -566,13 +586,15 @@
       str(g6_behaviors(g6(), behavior))
     Output
       List of 8
-       $ x            :List of 6
+       $ x            :List of 8
         ..$ data            : list()
         .. ..- attr(*, "class")= chr "g6_data"
         ..$ jsonUrl         : NULL
         ..$ iconsUrl        : chr "//at.alicdn.com/t/font_2678727_za4qjydwkkh.js"
         ..$ mode            : chr "prod"
         ..$ preservePosition: logi FALSE
+        ..$ directed        : logi FALSE
+        ..$ maxCollapseDepth: num Inf
         ..$ behaviors       :List of 1
         .. ..$ :List of 7
         .. .. ..$ key      : chr "hover-activate"
@@ -619,13 +641,15 @@
       str(g6_behaviors(g6(), behavior))
     Output
       List of 8
-       $ x            :List of 6
+       $ x            :List of 8
         ..$ data            : list()
         .. ..- attr(*, "class")= chr "g6_data"
         ..$ jsonUrl         : NULL
         ..$ iconsUrl        : chr "//at.alicdn.com/t/font_2678727_za4qjydwkkh.js"
         ..$ mode            : chr "prod"
         ..$ preservePosition: logi FALSE
+        ..$ directed        : logi FALSE
+        ..$ maxCollapseDepth: num Inf
         ..$ behaviors       :List of 1
         .. ..$ :List of 9
         .. .. ..$ key           : chr "lasso-select"
@@ -675,13 +699,15 @@
       str(g6_behaviors(g6(), behavior))
     Output
       List of 8
-       $ x            :List of 6
+       $ x            :List of 8
         ..$ data            : list()
         .. ..- attr(*, "class")= chr "g6_data"
         ..$ jsonUrl         : NULL
         ..$ iconsUrl        : chr "//at.alicdn.com/t/font_2678727_za4qjydwkkh.js"
         ..$ mode            : chr "prod"
         ..$ preservePosition: logi FALSE
+        ..$ directed        : logi FALSE
+        ..$ maxCollapseDepth: num Inf
         ..$ behaviors       :List of 1
         .. ..$ :List of 5
         .. .. ..$ key     : chr "optimize-viewport-transform"
@@ -726,13 +752,15 @@
       str(g6_behaviors(g6(), behavior))
     Output
       List of 8
-       $ x            :List of 6
+       $ x            :List of 8
         ..$ data            : list()
         .. ..- attr(*, "class")= chr "g6_data"
         ..$ jsonUrl         : NULL
         ..$ iconsUrl        : chr "//at.alicdn.com/t/font_2678727_za4qjydwkkh.js"
         ..$ mode            : chr "prod"
         ..$ preservePosition: logi FALSE
+        ..$ directed        : logi FALSE
+        ..$ maxCollapseDepth: num Inf
         ..$ behaviors       :List of 1
         .. ..$ :List of 6
         .. .. ..$ key           : chr "scroll-canvas"
@@ -778,13 +806,15 @@
       str(g6_behaviors(g6(), behavior))
     Output
       List of 8
-       $ x            :List of 6
+       $ x            :List of 8
         ..$ data            : list()
         .. ..- attr(*, "class")= chr "g6_data"
         ..$ jsonUrl         : NULL
         ..$ iconsUrl        : chr "//at.alicdn.com/t/font_2678727_za4qjydwkkh.js"
         ..$ mode            : chr "prod"
         ..$ preservePosition: logi FALSE
+        ..$ directed        : logi FALSE
+        ..$ maxCollapseDepth: num Inf
         ..$ behaviors       :List of 1
         .. ..$ :List of 6
         .. .. ..$ key           : chr "zoom-canvas"

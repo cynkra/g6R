@@ -1,6 +1,86 @@
 library(testthat)
 library(g6R)
 
+test_that("g6_collapse_options constructs with defaults", {
+  collapse <- g6_collapse_options()
+  expect_s3_class(collapse, "g6_collapse_options")
+  expect_true(is_g6_collapse_options(collapse))
+  expect_equal(collapse$collapsed, FALSE)
+  expect_equal(collapse$visibility, "visible")
+  expect_equal(collapse$placement, "right-top")
+  expect_equal(collapse$r, 6)
+  expect_equal(collapse$fill, "#fff")
+  expect_equal(collapse$stroke, "#9cabd4")
+  expect_equal(collapse$lineWidth, 1)
+  expect_equal(collapse$iconStroke, "#9cabd4")
+  expect_equal(collapse$iconLineWidth, 1.4)
+  expect_equal(collapse$cursor, "pointer")
+  expect_equal(collapse$zIndex, 999)
+})
+
+test_that("g6_collapse_options accepts visibility = 'hover'", {
+  collapse <- g6_collapse_options(visibility = "hover")
+  expect_equal(collapse$visibility, "hover")
+})
+
+test_that("g6_collapse_options rejects invalid visibility", {
+  expect_snapshot(error = TRUE, {
+    g6_collapse_options(visibility = "invalid")
+  })
+})
+
+test_that("g6_collapse_options validates placement with match.arg", {
+  expect_snapshot(error = TRUE, {
+    g6_collapse_options(placement = "invalid-placement")
+  })
+})
+
+test_that("g6_collapse_options accepts numeric placement", {
+  collapse <- g6_collapse_options(placement = c(0, 0.5))
+  expect_equal(collapse$placement, c(0, 0.5))
+
+  collapse2 <- g6_collapse_options(placement = c(0.3, 1))
+  expect_equal(collapse2$placement, c(0.3, 1))
+})
+
+test_that("g6_collapse_options validates numeric placement length", {
+  expect_snapshot(error = TRUE, {
+    g6_collapse_options(placement = c(0))
+  })
+
+  expect_snapshot(error = TRUE, {
+    g6_collapse_options(placement = c(0, 0.5, 1))
+  })
+})
+
+test_that("g6_collapse_options validates numeric placement has at least one edge coordinate", {
+  expect_snapshot(error = TRUE, {
+    g6_collapse_options(placement = c(0.5, 0.5))
+  })
+
+  expect_snapshot(error = TRUE, {
+    g6_collapse_options(placement = c(0.3, 0.7))
+  })
+})
+
+test_that("g6_collapse_options rejects invalid placement type", {
+  expect_snapshot(error = TRUE, {
+    g6_collapse_options(placement = list(0, 0.5))
+  })
+
+  expect_snapshot(error = TRUE, {
+    g6_collapse_options(placement = NULL)
+  })
+})
+
+test_that("is_g6_collapse_options works correctly", {
+  collapse <- g6_collapse_options()
+  expect_true(is_g6_collapse_options(collapse))
+  expect_false(is_g6_collapse_options(list()))
+  expect_false(is_g6_collapse_options("not a collapse"))
+  expect_false(is_g6_collapse_options(NULL))
+})
+
 test_that("g6_node constructs and validates a node", {
   node <- g6_node(
     id = "n1",
@@ -16,6 +96,38 @@ test_that("g6_node constructs and validates a node", {
   expect_equal(node$id, "n1")
   expect_equal(node$type, "rect")
   expect_equal(node$data$label, "Node 1")
+})
+
+test_that("g6_node with collapse options moves collapse to style", {
+  node <- g6_node(
+    id = "n1",
+    type = "custom-rect-node",
+    children = c("n2"),
+    collapse = g6_collapse_options(collapsed = TRUE, placement = "top")
+  )
+  expect_s3_class(node, "g6_node")
+  expect_null(node$collapse)
+  expect_s3_class(node$style$collapse, "g6_collapse_options")
+  expect_equal(node$style$collapse$collapsed, TRUE)
+  expect_equal(node$style$collapse$placement, "top")
+})
+
+test_that("g6_node validation fails for invalid collapse", {
+  expect_snapshot(error = TRUE, {
+    g6_node(
+      id = "n1",
+      children = c("n2"),
+      collapse = list(collapsed = TRUE, placement = "top")
+    )
+  })
+
+  expect_snapshot(error = TRUE, {
+    g6_node(
+      id = "n1",
+      children = c("n2"),
+      collapse = "invalid"
+    )
+  })
 })
 
 test_that("g6_edge constructs and validates an edge", {

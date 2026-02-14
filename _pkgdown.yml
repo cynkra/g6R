@@ -75,6 +75,7 @@ reference:
       - as_g6_node
       - as_g6_edge
       - as_g6_combo
+      - g6_collapse_options
   - subtitle: Create list of g6 elements
     contents:
       - g6_data
@@ -206,6 +207,11 @@ reference:
       - canvas_config
       - animation_config
       - g6_set_theme
+
+  - title: R options
+    desc: Custom global options
+    contents:
+      - set_g6_max_collapse_depth
 
   - title: Behaviors
     desc: Container for behavior elements
