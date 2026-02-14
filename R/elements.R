@@ -310,6 +310,16 @@ validate_element.g6_element <- function(x, ...) {
   x
 }
 
+#' @keywords internal
+check_custom_node_type <- function(x) {
+  if (length(x[["type"]]) && !grepl("custom", x[["type"]])) {
+    stop(
+      "Node 'ports' are typically used with custom node types. ",
+      "Ensure the node type supports ports like 'custom-<TYPE>-node.'"
+    )
+  }
+}
+
 #' @rdname g6_element
 #' @export
 validate_element.g6_node <- function(x, ...) {
@@ -347,12 +357,7 @@ validate_element.g6_node <- function(x, ...) {
     x$children <- as.list(children_vec)
   }
   if (length(x$ports)) {
-    if (length(x[["type"]]) && !grepl("custom", x[["type"]])) {
-      stop(
-        "Node 'ports' are typically used with custom node types. ",
-        "Ensure the node type supports ports like 'custom-<TYPE>-node.'"
-      )
-    }
+    check_custom_node_type(x)
     if (!is_g6_ports(x$ports)) {
       stop("Node 'ports' must be of class 'g6_ports'.")
     }
@@ -360,6 +365,7 @@ validate_element.g6_node <- function(x, ...) {
     x$ports <- NULL
   }
   if (length(x$collapse)) {
+    check_custom_node_type(x)
     if (!is_g6_collapse_options(x$collapse)) {
       stop("Node 'collapse' must be of class 'g6_collapse_options'.")
     }
