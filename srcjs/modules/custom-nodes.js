@@ -451,7 +451,6 @@ const createCustomNode = (BaseShape) => {
       if (!hasChildren) {
         const existingButton = this.shapeMap['collapse-button'];
         const existingHitArea = this.shapeMap['collapse-hit-area'];
-        const existingCount = this.shapeMap['collapse-count'];
         if (existingButton) {
           existingButton.remove();
           delete this.shapeMap['collapse-button'];
@@ -459,10 +458,6 @@ const createCustomNode = (BaseShape) => {
         if (existingHitArea) {
           existingHitArea.remove();
           delete this.shapeMap['collapse-hit-area'];
-        }
-        if (existingCount) {
-          existingCount.remove();
-          delete this.shapeMap['collapse-count'];
         }
         return;
       }
@@ -472,7 +467,6 @@ const createCustomNode = (BaseShape) => {
       if (maxCollapseDepth !== Infinity && this.getNodeDepth() > maxCollapseDepth) {
         const existingButton = this.shapeMap['collapse-button'];
         const existingHitArea = this.shapeMap['collapse-hit-area'];
-        const existingCount = this.shapeMap['collapse-count'];
         if (existingButton) {
           existingButton.remove();
           delete this.shapeMap['collapse-button'];
@@ -480,10 +474,6 @@ const createCustomNode = (BaseShape) => {
         if (existingHitArea) {
           existingHitArea.remove();
           delete this.shapeMap['collapse-hit-area'];
-        }
-        if (existingCount) {
-          existingCount.remove();
-          delete this.shapeMap['collapse-count'];
         }
         return;
       }
@@ -492,7 +482,6 @@ const createCustomNode = (BaseShape) => {
       if (!attributes.collapse) {
         const existingButton = this.shapeMap['collapse-button'];
         const existingHitArea = this.shapeMap['collapse-hit-area'];
-        const existingCount = this.shapeMap['collapse-count'];
         if (existingButton) {
           existingButton.remove();
           delete this.shapeMap['collapse-button'];
@@ -500,10 +489,6 @@ const createCustomNode = (BaseShape) => {
         if (existingHitArea) {
           existingHitArea.remove();
           delete this.shapeMap['collapse-hit-area'];
-        }
-        if (existingCount) {
-          existingCount.remove();
-          delete this.shapeMap['collapse-count'];
         }
         return;
       }
@@ -589,59 +574,109 @@ const createCustomNode = (BaseShape) => {
         (collapseVisibility === 'hover' && this._isHoveringNode?.());
       this._isCollapsed = collapsed;
 
-      // Clickable area with config options
-      this.upsert('collapse-hit-area', 'circle', {
-        cx: x,
-        cy: y,
-        r: btnR,
-        fill: collapseConfig.fill || '#fff',
-        stroke: collapseConfig.stroke || '#CED4D9',
-        lineWidth: collapseConfig.lineWidth || 1,
-        cursor: collapseConfig.cursor || 'pointer',
-        zIndex: collapseConfig.zIndex || 999,
-        visibility: initiallyVisible ? 'visible' : 'hidden',
-        opacity: initiallyVisible ? 1 : 0
-      }, this);
-
-      // Button graphic with config options
-      this.upsert('collapse-button', 'path', {
-        d: d,
-        stroke: collapseConfig.iconStroke || '#000',
-        lineWidth: collapseConfig.iconLineWidth || 1.4,
-        cursor: collapseConfig.cursor || 'pointer',
-        zIndex: (collapseConfig.zIndex || 999) + 1,
-        visibility: initiallyVisible ? 'visible' : 'hidden',
-        opacity: initiallyVisible ? 1 : 0
-      }, this.shapeMap['collapse-hit-area']);
-
-      // Collapse count label (only shown when collapsed)
+      // When collapsed, compute label text "+ N"
+      let collapseLabel = null;
       if (collapsed) {
         const { descendants } = this.collectDAGDescendants(this.id);
-        const count = descendants.length;
-        // Position text to the right of the circle (or left for left-side placements)
+        collapseLabel = `+ ${descendants.length}`;
+      }
+
+      // Measure width needed: use pill shape for collapsed (wider), circle for expanded
+      const labelPadding = btnR * 0.4;
+      const fontSize = btnR * 1.1;
+      // Estimate text width: each character roughly 0.55 * fontSize
+      const textWidth = collapseLabel ? collapseLabel.length * fontSize * 0.55 : 0;
+      const pillWidth = collapseLabel ? textWidth + labelPadding * 2 : 0;
+
+      if (collapsed) {
+        // Remove circle hit-area if switching from expanded
+        const existingCircle = this.shapeMap['collapse-hit-area'];
+        if (existingCircle) {
+          existingCircle.remove();
+          delete this.shapeMap['collapse-hit-area'];
+        }
+        // Pill-shaped hit area for "+ N"
         const isLeftSide = typeof placement === 'string' && placement.startsWith('left');
-        const countX = isLeftSide ? x - btnR - 4 : x + btnR + 4;
-        this.upsert('collapse-count', 'text', {
-          x: countX,
-          y: y,
-          text: `(${count} hidden)`,
-          fontSize: btnR * 1.2,
-          fontWeight: 'bold',
-          fill: collapseConfig.iconStroke || '#000',
-          textAlign: isLeftSide ? 'right' : 'left',
-          textBaseline: 'middle',
-          cursor: 'default',
-          zIndex: (collapseConfig.zIndex || 999) + 1,
+        const pillX = isLeftSide ? x - pillWidth / 2 : x - pillWidth / 2;
+        this.upsert('collapse-hit-area', 'rect', {
+          x: pillX,
+          y: y - btnR,
+          width: pillWidth,
+          height: btnR * 2,
+          radius: btnR,
+          fill: collapseConfig.fill || '#fff',
+          stroke: collapseConfig.stroke || '#CED4D9',
+          lineWidth: collapseConfig.lineWidth || 1,
+          cursor: collapseConfig.cursor || 'pointer',
+          zIndex: collapseConfig.zIndex || 999,
           visibility: 'visible',
           opacity: 1
         }, this);
-      } else {
-        // Remove count text when not collapsed
-        const existingCount = this.shapeMap['collapse-count'];
-        if (existingCount) {
-          existingCount.remove();
-          delete this.shapeMap['collapse-count'];
+
+        // "+ N" text label replaces the path button
+        const existingPath = this.shapeMap['collapse-button'];
+        if (existingPath) {
+          existingPath.remove();
+          delete this.shapeMap['collapse-button'];
         }
+        this.upsert('collapse-button', 'text', {
+          x: x,
+          y: y,
+          text: collapseLabel,
+          fontSize: fontSize,
+          fontWeight: 'bold',
+          fill: collapseConfig.iconStroke || '#000',
+          textAlign: 'center',
+          textBaseline: 'middle',
+          cursor: collapseConfig.cursor || 'pointer',
+          zIndex: (collapseConfig.zIndex || 999) + 1,
+          visibility: 'visible',
+          opacity: 1
+        }, this.shapeMap['collapse-hit-area']);
+      } else {
+        // Remove rect hit-area if switching from collapsed
+        const existingRect = this.shapeMap['collapse-hit-area'];
+        if (existingRect) {
+          existingRect.remove();
+          delete this.shapeMap['collapse-hit-area'];
+        }
+        // Circle hit area for "-"
+        this.upsert('collapse-hit-area', 'circle', {
+          cx: x,
+          cy: y,
+          r: btnR,
+          fill: collapseConfig.fill || '#fff',
+          stroke: collapseConfig.stroke || '#CED4D9',
+          lineWidth: collapseConfig.lineWidth || 1,
+          cursor: collapseConfig.cursor || 'pointer',
+          zIndex: collapseConfig.zIndex || 999,
+          visibility: initiallyVisible ? 'visible' : 'hidden',
+          opacity: initiallyVisible ? 1 : 0
+        }, this);
+
+        // Remove text button if switching from collapsed
+        const existingText = this.shapeMap['collapse-button'];
+        if (existingText) {
+          existingText.remove();
+          delete this.shapeMap['collapse-button'];
+        }
+        // Minus path button
+        this.upsert('collapse-button', 'path', {
+          d: d,
+          stroke: collapseConfig.iconStroke || '#000',
+          lineWidth: collapseConfig.iconLineWidth || 1.4,
+          cursor: collapseConfig.cursor || 'pointer',
+          zIndex: (collapseConfig.zIndex || 999) + 1,
+          visibility: initiallyVisible ? 'visible' : 'hidden',
+          opacity: initiallyVisible ? 1 : 0
+        }, this.shapeMap['collapse-hit-area']);
+      }
+
+      // Remove separate count label (no longer used)
+      const existingCount = this.shapeMap['collapse-count'];
+      if (existingCount) {
+        existingCount.remove();
+        delete this.shapeMap['collapse-count'];
       }
 
       // Bind click listener (only once)
@@ -1092,7 +1127,6 @@ const createCustomNode = (BaseShape) => {
       if (this._collapseVisibility !== 'hover') return;
       const hitArea = this.shapeMap['collapse-hit-area'];
       const button = this.shapeMap['collapse-button'];
-      const countLabel = this.shapeMap['collapse-count'];
       if (!hitArea) return;
       // Cancel any pending debounced hide
       if (this._collapseHideTimeout) {
@@ -1105,14 +1139,12 @@ const createCustomNode = (BaseShape) => {
       if (this._collapseShowAnimation) return;
       hitArea.attr({ visibility: 'visible', opacity: 0 });
       if (button) button.attr({ visibility: 'visible', opacity: 0 });
-      if (countLabel) countLabel.attr({ visibility: 'visible', opacity: 0 });
       const startTime = performance.now();
       const animate = (currentTime) => {
         const progress = Math.min((currentTime - startTime) / ANIMATION_DURATION_MS, 1);
         const eased = 1 - Math.pow(1 - progress, 2);
         hitArea.attr('opacity', eased);
         if (button) button.attr('opacity', eased);
-        if (countLabel) countLabel.attr('opacity', eased);
         if (progress < 1) {
           this._collapseShowAnimation = requestAnimationFrame(animate);
         } else {
@@ -1141,10 +1173,8 @@ const createCustomNode = (BaseShape) => {
         }
         const hitArea = this.shapeMap['collapse-hit-area'];
         const button = this.shapeMap['collapse-button'];
-        const countLabel = this.shapeMap['collapse-count'];
         if (hitArea) hitArea.attr({ visibility: 'hidden', opacity: 0 });
         if (button) button.attr({ visibility: 'hidden', opacity: 0 });
-        if (countLabel) countLabel.attr({ visibility: 'hidden', opacity: 0 });
       }, 150);
     }
 
@@ -1163,10 +1193,8 @@ const createCustomNode = (BaseShape) => {
       }
       const hitArea = this.shapeMap['collapse-hit-area'];
       const button = this.shapeMap['collapse-button'];
-      const countLabel = this.shapeMap['collapse-count'];
       if (hitArea) hitArea.attr({ visibility: 'hidden', opacity: 0 });
       if (button) button.attr({ visibility: 'hidden', opacity: 0 });
-      if (countLabel) countLabel.attr({ visibility: 'hidden', opacity: 0 });
     }
 
     update(attr) {
