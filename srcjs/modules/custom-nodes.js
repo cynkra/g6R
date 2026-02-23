@@ -451,6 +451,7 @@ const createCustomNode = (BaseShape) => {
       if (!hasChildren) {
         const existingButton = this.shapeMap['collapse-button'];
         const existingHitArea = this.shapeMap['collapse-hit-area'];
+        const existingCount = this.shapeMap['collapse-count'];
         if (existingButton) {
           existingButton.remove();
           delete this.shapeMap['collapse-button'];
@@ -458,6 +459,10 @@ const createCustomNode = (BaseShape) => {
         if (existingHitArea) {
           existingHitArea.remove();
           delete this.shapeMap['collapse-hit-area'];
+        }
+        if (existingCount) {
+          existingCount.remove();
+          delete this.shapeMap['collapse-count'];
         }
         return;
       }
@@ -467,6 +472,7 @@ const createCustomNode = (BaseShape) => {
       if (maxCollapseDepth !== Infinity && this.getNodeDepth() > maxCollapseDepth) {
         const existingButton = this.shapeMap['collapse-button'];
         const existingHitArea = this.shapeMap['collapse-hit-area'];
+        const existingCount = this.shapeMap['collapse-count'];
         if (existingButton) {
           existingButton.remove();
           delete this.shapeMap['collapse-button'];
@@ -474,6 +480,10 @@ const createCustomNode = (BaseShape) => {
         if (existingHitArea) {
           existingHitArea.remove();
           delete this.shapeMap['collapse-hit-area'];
+        }
+        if (existingCount) {
+          existingCount.remove();
+          delete this.shapeMap['collapse-count'];
         }
         return;
       }
@@ -482,6 +492,7 @@ const createCustomNode = (BaseShape) => {
       if (!attributes.collapse) {
         const existingButton = this.shapeMap['collapse-button'];
         const existingHitArea = this.shapeMap['collapse-hit-area'];
+        const existingCount = this.shapeMap['collapse-count'];
         if (existingButton) {
           existingButton.remove();
           delete this.shapeMap['collapse-button'];
@@ -489,6 +500,10 @@ const createCustomNode = (BaseShape) => {
         if (existingHitArea) {
           existingHitArea.remove();
           delete this.shapeMap['collapse-hit-area'];
+        }
+        if (existingCount) {
+          existingCount.remove();
+          delete this.shapeMap['collapse-count'];
         }
         return;
       }
@@ -569,8 +584,10 @@ const createCustomNode = (BaseShape) => {
       // Determine collapse button visibility mode
       const collapseVisibility = collapseConfig.visibility || 'visible';
       this._collapseVisibility = collapseVisibility;
-      const initiallyVisible = collapseVisibility === 'visible' ||
+      // When collapsed, always show the button + count (even in hover mode)
+      const initiallyVisible = collapsed || collapseVisibility === 'visible' ||
         (collapseVisibility === 'hover' && this._isHoveringNode?.());
+      this._isCollapsed = collapsed;
 
       // Clickable area with config options
       this.upsert('collapse-hit-area', 'circle', {
@@ -596,6 +613,36 @@ const createCustomNode = (BaseShape) => {
         visibility: initiallyVisible ? 'visible' : 'hidden',
         opacity: initiallyVisible ? 1 : 0
       }, this.shapeMap['collapse-hit-area']);
+
+      // Collapse count label (only shown when collapsed)
+      if (collapsed) {
+        const { descendants } = this.collectDAGDescendants(this.id);
+        const count = descendants.length;
+        // Position text to the right of the circle (or left for left-side placements)
+        const isLeftSide = typeof placement === 'string' && placement.startsWith('left');
+        const countX = isLeftSide ? x - btnR - 4 : x + btnR + 4;
+        this.upsert('collapse-count', 'text', {
+          x: countX,
+          y: y,
+          text: `(${count} hidden)`,
+          fontSize: btnR * 1.2,
+          fontWeight: 'bold',
+          fill: collapseConfig.iconStroke || '#000',
+          textAlign: isLeftSide ? 'right' : 'left',
+          textBaseline: 'middle',
+          cursor: 'default',
+          zIndex: (collapseConfig.zIndex || 999) + 1,
+          visibility: 'visible',
+          opacity: 1
+        }, this);
+      } else {
+        // Remove count text when not collapsed
+        const existingCount = this.shapeMap['collapse-count'];
+        if (existingCount) {
+          existingCount.remove();
+          delete this.shapeMap['collapse-count'];
+        }
+      }
 
       // Bind click listener (only once)
       this.bindCollapseListener();
@@ -1045,6 +1092,7 @@ const createCustomNode = (BaseShape) => {
       if (this._collapseVisibility !== 'hover') return;
       const hitArea = this.shapeMap['collapse-hit-area'];
       const button = this.shapeMap['collapse-button'];
+      const countLabel = this.shapeMap['collapse-count'];
       if (!hitArea) return;
       // Cancel any pending debounced hide
       if (this._collapseHideTimeout) {
@@ -1057,12 +1105,14 @@ const createCustomNode = (BaseShape) => {
       if (this._collapseShowAnimation) return;
       hitArea.attr({ visibility: 'visible', opacity: 0 });
       if (button) button.attr({ visibility: 'visible', opacity: 0 });
+      if (countLabel) countLabel.attr({ visibility: 'visible', opacity: 0 });
       const startTime = performance.now();
       const animate = (currentTime) => {
         const progress = Math.min((currentTime - startTime) / ANIMATION_DURATION_MS, 1);
         const eased = 1 - Math.pow(1 - progress, 2);
         hitArea.attr('opacity', eased);
         if (button) button.attr('opacity', eased);
+        if (countLabel) countLabel.attr('opacity', eased);
         if (progress < 1) {
           this._collapseShowAnimation = requestAnimationFrame(animate);
         } else {
@@ -1074,6 +1124,8 @@ const createCustomNode = (BaseShape) => {
 
     hideCollapseButton() {
       if (this._collapseVisibility !== 'hover') return;
+      // When collapsed, keep button + count always visible
+      if (this._isCollapsed) return;
       if (!this.shapeMap['collapse-hit-area']) return;
       // Cancel any pending hide to avoid stacking
       if (this._collapseHideTimeout) {
@@ -1089,13 +1141,17 @@ const createCustomNode = (BaseShape) => {
         }
         const hitArea = this.shapeMap['collapse-hit-area'];
         const button = this.shapeMap['collapse-button'];
+        const countLabel = this.shapeMap['collapse-count'];
         if (hitArea) hitArea.attr({ visibility: 'hidden', opacity: 0 });
         if (button) button.attr({ visibility: 'hidden', opacity: 0 });
+        if (countLabel) countLabel.attr({ visibility: 'hidden', opacity: 0 });
       }, 150);
     }
 
     hideCollapseButtonImmediate() {
       if (this._collapseVisibility !== 'hover') return;
+      // When collapsed, keep button + count always visible
+      if (this._isCollapsed) return;
       // Cancel any pending debounced hide
       if (this._collapseHideTimeout) {
         clearTimeout(this._collapseHideTimeout);
@@ -1107,8 +1163,10 @@ const createCustomNode = (BaseShape) => {
       }
       const hitArea = this.shapeMap['collapse-hit-area'];
       const button = this.shapeMap['collapse-button'];
+      const countLabel = this.shapeMap['collapse-count'];
       if (hitArea) hitArea.attr({ visibility: 'hidden', opacity: 0 });
       if (button) button.attr({ visibility: 'hidden', opacity: 0 });
+      if (countLabel) countLabel.attr({ visibility: 'hidden', opacity: 0 });
     }
 
     update(attr) {
