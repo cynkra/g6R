@@ -3,7 +3,7 @@ import {
   ExtensionCategory,
   register
 } from '@antv/g6';
-import { AntLine, FlyMarkerCubic, CircleComboWithExtraButton } from '../modules/extensions';
+import { AntLine, FlyMarkerCubic, CircleComboWithExtraButton, RectComboWithExtraButton } from '../modules/extensions';
 import { setupIcons, loadAndInitGraph, getGraph } from '../modules/utils';
 import { CustomCreateEdge } from '../modules/custom-behaviors';
 import {
@@ -40,8 +40,9 @@ const nodeTypes = [
 register(ExtensionCategory.EDGE, 'ant-line', AntLine);
 // Animated lines
 register(ExtensionCategory.EDGE, 'fly-marker-cubic', FlyMarkerCubic);
-// Circle combo
+// Combos with collapse/expand button
 register(ExtensionCategory.COMBO, 'circle-combo-with-extra-button', CircleComboWithExtraButton);
+register(ExtensionCategory.COMBO, 'rect-combo-with-extra-button', RectComboWithExtraButton);
 // Custom create edge but ovrerrides the default one
 register(ExtensionCategory.BEHAVIOR, 'create-edge', CustomCreateEdge);
 // Register the custom node with G6

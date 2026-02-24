@@ -37,7 +37,8 @@ server <- function(input, output, session) {
             collapsed = TRUE,
             visibility = "hover",
             placement = "right-top"
-          )
+          ),
+          combo = "combo1"
         ),
         # b = head_block(n = 10)
         g6_node(
@@ -58,6 +59,7 @@ server <- function(input, output, session) {
               label = "data"
             )
           ),
+          combo = "combo1",
           children = c("c", "f"),
           collapse = g6_collapse_options(
             placement = "right-top"
@@ -82,6 +84,7 @@ server <- function(input, output, session) {
               label = "data"
             )
           ),
+          combo = "combo1",
           children = "d"
         ),
         # d = head_block(n = 5)
@@ -103,6 +106,7 @@ server <- function(input, output, session) {
               label = "data"
             )
           ),
+          combo = "combo1",
           children = c("e"),
           collapse = g6_collapse_options(
             collapsed = FALSE,
@@ -136,6 +140,7 @@ server <- function(input, output, session) {
               arity = Inf
             )
           ),
+          combo = "combo1",
           children = c("g"),
           collapse = g6_collapse_options(
             collapsed = FALSE,
@@ -161,6 +166,7 @@ server <- function(input, output, session) {
               label = "data"
             )
           ),
+          combo = "combo1",
           children = c("e", "g"),
           collapse = g6_collapse_options(
             collapsed = FALSE,
@@ -194,6 +200,7 @@ server <- function(input, output, session) {
               arity = Inf
             )
           ),
+          combo = "combo1",
           children = c("h"),
           collapse = g6_collapse_options(
             collapsed = FALSE,
@@ -219,6 +226,7 @@ server <- function(input, output, session) {
               label = "data"
             )
           ),
+          combo = "combo1",
           children = c("i"),
           collapse = g6_collapse_options(
             collapsed = FALSE,
@@ -238,7 +246,8 @@ server <- function(input, output, session) {
               placement = "top",
               label = "data"
             )
-          )
+          ),
+          combo = "combo1"
         )
       ),
       edges = g6_edges(
@@ -362,9 +371,12 @@ server <- function(input, output, session) {
             endArrowType = "vee"
           )
         )
+      ),
+      combos = g6_combos(
+        g6_combo("combo1", type = "circle-combo-with-extra-button")
       )
     ) |>
-      g6_layout(antv_dagre_layout()) |>
+      g6_layout(antv_dagre_layout(sortByCombo = TRUE)) |>
       g6_options(
         animation = FALSE,
         node = list(
@@ -377,6 +389,13 @@ server <- function(input, output, session) {
         edge = list(style = list(endArrow = TRUE))
       ) |>
       g6_behaviors(
+        collapse_expand(
+          enable = JS(
+            "(e) => {
+              return e.targetType === 'combo'
+            }"
+          )
+        ),
         click_select(multiple = TRUE),
         drag_element(enable = TRUE),
         drag_canvas(
@@ -387,7 +406,13 @@ server <- function(input, output, session) {
           )
         ),
         zoom_canvas(),
-        create_edge(enable = TRUE)
+        create_edge(
+          enable = JS(
+            "(e) => {
+            return e.targetType === 'node' && e.targetType !== 'combo';
+          }"
+          )
+        )
       ) |>
       # Allow to dynamically remove an edge or node
       g6_plugins(

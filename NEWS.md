@@ -18,6 +18,12 @@ g6_node(
 )
 ```
 
+- `bubble_sets()` and `hull()` now automatically set `pointerEvents = "none"` and `zIndex = -1` by default. This fixes two issues when using the SVG renderer: overlay shapes no longer block pointer events (drag, click) on nodes, and they render behind nodes so they don't visually cover collapse buttons or other node UI. These defaults can be overridden by passing explicit values.
+
+- Overlay plugins (`bubble_sets()`, `hull()`) now resize dynamically when nodes are collapsed or uncollapsed. Hidden members are temporarily removed from the overlay shape and restored when expanded again.
+
+- New `rect-combo-with-extra-button` combo type, the rectangular counterpart of `circle-combo-with-extra-button`.
+
 - Improvements to how `drag_element()` and `drag_element_force()` work with `create_edge()`. Now, the `create_edge()` can be `drag` and work with `drag_element()` as we handle the behavior conflicts/priorities JS side.
 
 - `input[["<graph_ID>-state"]]` now does not return unnamed lists for nodes, edges and combos. Instead, each sublist is named with the corresponding element IDs. This makes it easier to retrieve the state of a specific element when we know the ID.
