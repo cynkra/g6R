@@ -21,6 +21,44 @@ const refreshComboBounds = (graph) => {
   }
 };
 
+// After DAG collapse/expand, update all overlay plugins (BubbleSets, Hull)
+// so that hidden members are temporarily removed from the shape.  We store
+// the full original member list on each plugin instance (_g6rOriginalMembers)
+// so that members can be restored when they become visible again.
+const refreshOverlayPlugins = (graph) => {
+  const pluginMap = graph.context?.plugin?.extensionMap;
+  if (!pluginMap) return;
+
+  for (const instance of Object.values(pluginMap)) {
+    // Duck-type check for overlay plugins (BubbleSets, Hull)
+    if (typeof instance.getMember !== 'function' || typeof instance.updateMember !== 'function') continue;
+
+    // Store the full original member list once
+    if (!instance._g6rOriginalMembers) {
+      instance._g6rOriginalMembers = [...instance.getMember()];
+    }
+
+    // Filter to only include members whose elements are currently visible
+    const visibleMembers = instance._g6rOriginalMembers.filter((id) => {
+      try {
+        const type = graph.getElementType(id);
+        if (type === 'edge') {
+          const data = graph.getEdgeData(id);
+          return data?.style?.visibility !== 'hidden';
+        } else {
+          const data = graph.getNodeData(id);
+          return data?.style?.visibility !== 'hidden';
+        }
+      } catch (_) {
+        // Element may not exist (removed) — exclude it
+        return false;
+      }
+    });
+
+    instance.updateMember(visibleMembers);
+  }
+};
+
 // Track DAG-collapsed nodes independently from G6's tree model
 // (G6's tree model only supports one parent per node, which breaks DAG collapse)
 const dagCollapsedNodes = new Set();
@@ -884,6 +922,9 @@ const createCustomNode = (BaseShape) => {
             // Force combos to recalculate bounds for visible children
             refreshComboBounds(graph);
 
+            // Resize overlay plugins (bubble sets, hull) to only encompass visible members
+            refreshOverlayPlugins(graph);
+
             // Update the button visual (+/-)
             this.drawCollapseButton(this.parsedAttributes);
 
@@ -940,6 +981,7 @@ const createCustomNode = (BaseShape) => {
           if (elementsToHide.length > 0) {
             await graph.hideElement(elementsToHide, false);
             refreshComboBounds(graph);
+            refreshOverlayPlugins(graph);
           }
         }, 0);
       }
