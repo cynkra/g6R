@@ -53,6 +53,14 @@ const expandPath = (x, y, r) => {
   ];
 };
 
+// Track which combos have been collapsed via our custom button.
+// We bypass G6's built-in collapseElement/expandElement (which destroys
+// and recreates child elements, breaking border nodes) and instead use
+// hideElement/showElement, consistent with the DAG collapse approach.
+// Maps comboId → Set of element IDs that were already hidden before combo collapse,
+// so on expand we only restore what the combo itself hid (preserving DAG collapse state).
+const collapsedCombos = new Map();
+
 const createComboWithExtraButton = (BaseCombo) => {
   return class ComboWithExtraButton extends BaseCombo {
     // Override to exclude hidden children from combo bounds calculation
@@ -116,7 +124,8 @@ const createComboWithExtraButton = (BaseCombo) => {
     }
 
     drawButton(attributes) {
-      const { collapsed } = attributes;
+      // Check our custom collapsed state (not G6's built-in one)
+      const collapsed = collapsedCombos.has(this.id);
       const [, height] = this.getKeySize(attributes);
       const btnR = 8;
       const y = height / 2 + btnR;
@@ -127,12 +136,96 @@ const createComboWithExtraButton = (BaseCombo) => {
     }
 
     onCreate() {
-      this.shapeMap['hit-area'].addEventListener('click', () => {
-        const id = this.id;
-        const collapsed = !this.attributes.collapsed;
+      this.shapeMap['hit-area'].addEventListener('click', async () => {
         const { graph } = this.context;
-        if (collapsed) graph.collapseElement(id);
-        else graph.expandElement(id);
+        const comboId = this.id;
+        const isCollapsed = collapsedCombos.has(comboId);
+
+        // Get member nodes (nodes belonging to this combo)
+        const allNodes = graph.getNodeData();
+        const memberIds = allNodes
+          .filter((n) => n.combo === comboId)
+          .map((n) => n.id);
+
+        if (memberIds.length === 0) return;
+
+        const memberSet = new Set(memberIds);
+        const allEdges = graph.getEdgeData();
+
+        // Edges where at least one endpoint is a combo member
+        const connectedEdgeIds = allEdges
+          .filter((e) => e.id && (memberSet.has(e.source) || memberSet.has(e.target)))
+          .map((e) => e.id);
+
+        if (isCollapsed) {
+          // === EXPAND ===
+          // Restore only what the combo collapse itself hid
+          // (preserve DAG collapse state and other prior hidden elements)
+          const previouslyHidden = collapsedCombos.get(comboId) || new Set();
+          collapsedCombos.delete(comboId);
+
+          // Only show members that were NOT already hidden before combo collapse
+          const membersToShow = memberIds.filter((id) => !previouslyHidden.has(id));
+          if (membersToShow.length > 0) {
+            await graph.showElement(membersToShow, false);
+          }
+
+          // Reset port visibility on shown members
+          for (const nid of membersToShow) {
+            try {
+              const el = graph.context.element?.getElement(nid);
+              if (el?._hidePortsImmediately) el._hidePortsImmediately();
+            } catch (_) {}
+          }
+
+          // Show edges that were NOT previously hidden and where BOTH endpoints are now visible
+          const edgesToShow = connectedEdgeIds.filter((eid) => {
+            if (previouslyHidden.has(eid)) return false;
+            const edge = allEdges.find((e) => e.id === eid);
+            if (!edge) return false;
+            const srcData = graph.getNodeData(edge.source);
+            const tgtData = graph.getNodeData(edge.target);
+            return srcData?.style?.visibility !== 'hidden' &&
+                   tgtData?.style?.visibility !== 'hidden';
+          });
+
+          if (edgesToShow.length > 0) {
+            await graph.showElement(edgesToShow, false);
+          }
+        } else {
+          // === COLLAPSE ===
+          // Snapshot elements that are already hidden (e.g. by DAG collapse)
+          // so we don't restore them on expand
+          const alreadyHidden = new Set();
+          for (const id of memberIds) {
+            const data = graph.getNodeData(id);
+            if (data?.style?.visibility === 'hidden') alreadyHidden.add(id);
+          }
+          for (const id of connectedEdgeIds) {
+            try {
+              const data = graph.getEdgeData(id);
+              if (data?.style?.visibility === 'hidden') alreadyHidden.add(id);
+            } catch (_) {}
+          }
+          collapsedCombos.set(comboId, alreadyHidden);
+
+          // Hide member nodes and all their connected edges
+          const toHide = [...memberIds, ...connectedEdgeIds]
+            .filter((id) => !alreadyHidden.has(id));
+          if (toHide.length > 0) {
+            await graph.hideElement(toHide, false);
+          }
+        }
+
+        // Force the combo to recalculate its bounds (shrink or expand)
+        const comboData = graph.getComboData().find((c) => c.id === comboId);
+        if (comboData) {
+          const el = graph.context.element?.getElement(comboId);
+          if (el) {
+            const style = graph.context.element.getElementComputedStyle('combo', comboData);
+            el.update(style);
+          }
+        }
       });
     }
   };

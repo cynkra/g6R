@@ -37,8 +37,7 @@ server <- function(input, output, session) {
             collapsed = TRUE,
             visibility = "hover",
             placement = "right-top"
-          ),
-          combo = "combo1"
+          )
         ),
         # b = head_block(n = 10)
         g6_node(
@@ -246,8 +245,7 @@ server <- function(input, output, session) {
               placement = "top",
               label = "data"
             )
-          ),
-          combo = "combo1"
+          )
         )
       ),
       edges = g6_edges(
@@ -379,6 +377,7 @@ server <- function(input, output, session) {
       g6_layout(antv_dagre_layout(sortByCombo = TRUE)) |>
       g6_options(
         animation = FALSE,
+        autoFit = TRUE,
         node = list(
           style = list(
             #fill = "#CED4D9",

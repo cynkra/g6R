@@ -13,12 +13,52 @@ const nodePortRefreshFunctions = new Map();
 const refreshComboBounds = (graph) => {
   const combos = graph.getComboData();
   for (const combo of combos) {
+    // Skip hidden combos — no need to recalculate their bounds
+    if (combo.style?.visibility === 'hidden') continue;
     const el = graph.context.element?.getElement(combo.id);
     if (el) {
       const style = graph.context.element.getElementComputedStyle('combo', combo);
       el.update(style);
     }
   }
+};
+
+// After DAG collapse/expand, hide combos whose member nodes are ALL hidden,
+// and restore them when at least one member becomes visible again.
+const refreshComboVisibility = async (graph) => {
+  const combos = graph.getComboData();
+  if (!combos || combos.length === 0) return;
+
+  const allNodes = graph.getNodeData();
+
+  // Build combo → member nodes map
+  const comboMembers = {};
+  for (const node of allNodes) {
+    const comboId = node.combo;
+    if (!comboId) continue;
+    if (!comboMembers[comboId]) comboMembers[comboId] = [];
+    comboMembers[comboId].push(node);
+  }
+
+  const toHide = [];
+  const toShow = [];
+
+  for (const combo of combos) {
+    const members = comboMembers[combo.id];
+    if (!members || members.length === 0) continue;
+
+    const allHidden = members.every((n) => n.style?.visibility === 'hidden');
+    const comboIsHidden = combo.style?.visibility === 'hidden';
+
+    if (allHidden && !comboIsHidden) {
+      toHide.push(combo.id);
+    } else if (!allHidden && comboIsHidden) {
+      toShow.push(combo.id);
+    }
+  }
+
+  if (toHide.length > 0) await graph.hideElement(toHide, false);
+  if (toShow.length > 0) await graph.showElement(toShow, false);
 };
 
 // After DAG collapse/expand, update all overlay plugins (BubbleSets, Hull)
@@ -919,7 +959,10 @@ const createCustomNode = (BaseShape) => {
               }
             }
 
-            // Force combos to recalculate bounds for visible children
+            // Hide combos whose members are all hidden, show those with visible members
+            await refreshComboVisibility(graph);
+
+            // Force visible combos to recalculate bounds
             refreshComboBounds(graph);
 
             // Resize overlay plugins (bubble sets, hull) to only encompass visible members
@@ -980,6 +1023,7 @@ const createCustomNode = (BaseShape) => {
 
           if (elementsToHide.length > 0) {
             await graph.hideElement(elementsToHide, false);
+            await refreshComboVisibility(graph);
             refreshComboBounds(graph);
             refreshOverlayPlugins(graph);
           }
@@ -1260,12 +1304,29 @@ const createCustomNode = (BaseShape) => {
 
     update(attr) {
       super.update(attr);
-      // G6's BaseShape.update() calls setVisibility() after render(),
-      // which sets ALL child shapes to the node's visibility ('visible'),
-      // overriding the per-port 'hidden' visibility for hover ports.
-      // Re-hide ports that should only show on hover.
-      if (this._hidePortsImmediately && !this._isHoveringNode?.()) {
-        this._hidePortsImmediately();
+      const nodeHidden = this.attributes?.visibility === 'hidden';
+      if (nodeHidden) {
+        // Node is hidden — force ALL port shapes hidden regardless of their mode.
+        // _hidePortsImmediately would re-show "always visible" ports, so bypass it.
+        if (this._portShapes) {
+          this._portShapes.forEach(({ shape, indicator }) => {
+            shape.attr({ visibility: 'hidden' });
+            if (indicator) {
+              indicator.circle?.attr({ visibility: 'hidden' });
+              indicator.innerCircle?.attr({ visibility: 'hidden' });
+              indicator.plus?.attr({ visibility: 'hidden' });
+              if (indicator.hitArea) indicator.hitArea.attr({ visibility: 'hidden' });
+            }
+          });
+        }
+      } else {
+        // G6's BaseShape.update() calls setVisibility() after render(),
+        // which sets ALL child shapes to the node's visibility ('visible'),
+        // overriding the per-port 'hidden' visibility for hover ports.
+        // Re-hide ports that should only show on hover.
+        if (this._hidePortsImmediately && !this._isHoveringNode?.()) {
+          this._hidePortsImmediately();
+        }
       }
       // Re-hide collapse button that should only show on hover
       if (this._collapseVisibility === 'hover' && !this._isHoveringNode?.()) {
