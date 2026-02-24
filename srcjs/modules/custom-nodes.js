@@ -7,6 +7,20 @@ import { getPortConnections } from './utils';
 // Map to store node port refresh functions for edge creation events
 const nodePortRefreshFunctions = new Map();
 
+// Force all combos to recalculate their bounds based on current child visibility.
+// graph.draw() alone is insufficient because hideElement/showElement only marks
+// child nodes as changed, not the parent combos, so combos never re-render.
+const refreshComboBounds = (graph) => {
+  const combos = graph.getComboData();
+  for (const combo of combos) {
+    const el = graph.context.element?.getElement(combo.id);
+    if (el) {
+      const style = graph.context.element.getElementComputedStyle('combo', combo);
+      el.update(style);
+    }
+  }
+};
+
 // Track DAG-collapsed nodes independently from G6's tree model
 // (G6's tree model only supports one parent per node, which breaks DAG collapse)
 const dagCollapsedNodes = new Set();
@@ -843,6 +857,7 @@ const createCustomNode = (BaseShape) => {
                   } catch (_) { /* element may not exist */ }
                 }
               }
+
             } else {
               // === COLLAPSE ===
               dagCollapsedNodes.add(this.id);
@@ -865,6 +880,9 @@ const createCustomNode = (BaseShape) => {
                 await graph.hideElement(elementsToHide, false);
               }
             }
+
+            // Force combos to recalculate bounds for visible children
+            refreshComboBounds(graph);
 
             // Update the button visual (+/-)
             this.drawCollapseButton(this.parsedAttributes);
@@ -921,6 +939,7 @@ const createCustomNode = (BaseShape) => {
 
           if (elementsToHide.length > 0) {
             await graph.hideElement(elementsToHide, false);
+            refreshComboBounds(graph);
           }
         }, 0);
       }

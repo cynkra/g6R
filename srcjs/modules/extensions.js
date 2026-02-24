@@ -4,7 +4,7 @@ import {
   subStyleProps,
   CircleCombo
 } from '@antv/g6';
-import { Circle, Path } from '@antv/g';
+import { AABB, Circle, Path } from '@antv/g';
 
 class AntLine extends Line {
   onCreate() {
@@ -53,6 +53,61 @@ const expand = (x, y, r) => {
 };
 
 class CircleComboWithExtraButton extends CircleCombo {
+  // Override to exclude hidden children from combo bounds calculation
+  getContentBBox(attributes) {
+    const { childrenNode = [], padding } = attributes;
+    const allElements = childrenNode
+      .map((id) => this.context.element?.getElement(id))
+      .filter(Boolean);
+
+    // Elements not created yet (initial render) — use default behaviour
+    if (allElements.length === 0) {
+      return super.getContentBBox(attributes);
+    }
+
+    const children = allElements.filter((child) => child.style?.visibility !== 'hidden');
+
+    if (children.length === 0) {
+      // All children hidden — fall back to small default size
+      const bbox = new AABB();
+      const { x = 0, y = 0, collapsedSize = 32 } = attributes;
+      const s = typeof collapsedSize === 'number' ? collapsedSize : collapsedSize[0] || 32;
+      bbox.setMinMax([x - s / 2, y - s / 2, 0], [x + s / 2, y + s / 2, 0]);
+      return bbox;
+    }
+
+    // Combine bounds of visible children only
+    const bboxes = children.map((child) => child.getBounds());
+    let minX = Infinity, minY = Infinity, maxX = -Infinity, maxY = -Infinity;
+    for (const b of bboxes) {
+      const lo = b.getMin();
+      const hi = b.getMax();
+      if (lo[0] < minX) minX = lo[0];
+      if (lo[1] < minY) minY = lo[1];
+      if (hi[0] > maxX) maxX = hi[0];
+      if (hi[1] > maxY) maxY = hi[1];
+    }
+    const combined = new AABB();
+    combined.setMinMax([minX, minY, 0], [maxX, maxY, 0]);
+
+    if (!padding) return combined;
+
+    // Expand by padding
+    const p = Array.isArray(padding) ? padding : [padding, padding, padding, padding];
+    const [top, right, bottom, left] = p.length === 1 ? [p[0], p[0], p[0], p[0]]
+      : p.length === 2 ? [p[0], p[1], p[0], p[1]]
+      : p.length === 3 ? [p[0], p[1], p[2], p[1]]
+      : p;
+    const min = combined.getMin();
+    const max = combined.getMax();
+    const expanded = new AABB();
+    expanded.setMinMax(
+      [min[0] - left, min[1] - top, 0],
+      [max[0] + right, max[1] + bottom, 0]
+    );
+    return expanded;
+  }
+
   render(attributes, container) {
     super.render(attributes, container);
     this.drawButton(attributes);
