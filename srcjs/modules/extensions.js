@@ -32,11 +32,9 @@ class FlyMarkerCubic extends CubicHorizontal {
   }
 }
 
+// Line-only paths for combo collapse button (circle border comes from hit-area shape)
 const collapsePath = (x, y, r) => {
   return [
-    ['M', x - r, y],
-    ['a', r, r, 0, 1, 0, r * 2, 0],
-    ['a', r, r, 0, 1, 0, -r * 2, 0],
     ['M', x - r + 4, y],
     ['L', x + r - 4, y],
   ];
@@ -44,12 +42,9 @@ const collapsePath = (x, y, r) => {
 
 const expandPath = (x, y, r) => {
   return [
-    ['M', x - r, y],
-    ['a', r, r, 0, 1, 0, r * 2, 0],
-    ['a', r, r, 0, 1, 0, -r * 2, 0],
     ['M', x - r + 4, y],
-    ['L', x - r + 2 * r - 4, y],
-    ['M', x - r + r, y - r + 4],
+    ['L', x + r - 4, y],
+    ['M', x, y - r + 4],
     ['L', x, y + r - 4],
   ];
 };
@@ -271,8 +266,10 @@ const createComboWithExtraButton = (BaseCombo) => {
         this.upsert('hit-area', Circle, {
           cx: x,
           cy: y,
-          r: btnR + 2,
+          r: btnR,
           fill: fill,
+          stroke: stroke,
+          lineWidth: lineWidth,
           cursor: cursor,
           zIndex: zIndex,
           visibility: initiallyVisible ? 'visible' : 'hidden',
