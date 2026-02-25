@@ -123,8 +123,9 @@ is_g6_collapse_options <- function(x) {
 #' @param children Character vector. Child node IDs (optional, nodes only).
 #' @param ports List. Ports definition (optional, nodes only).
 #' See \link{g6_ports} and \link{g6_port} for details.
-#' @param collapse List. Collapse button configuration (optional, nodes only).
-#' See \link{g6_collapse_options} for details. Only used when node has children.
+#' @param collapse List. Collapse button configuration (optional, nodes and combos).
+#' See \link{g6_collapse_options} for details. For nodes, only used when node has children.
+#' For combos, when provided and `type` is NULL, auto-sets type to `"rect-combo-with-extra-button"`.
 #' @param source Character. Source node ID (required, edges only).
 #' @param target Character. Target node ID (required, edges only).
 #' @param ... Additional arguments (unused).
@@ -232,7 +233,8 @@ g6_combo <- function(
   data = NULL,
   style = NULL,
   states = NULL,
-  combo = NULL
+  combo = NULL,
+  collapse = NULL
 ) {
   combo <- dropNulls(list(
     id = id,
@@ -240,7 +242,8 @@ g6_combo <- function(
     data = data,
     style = style,
     states = states,
-    combo = combo
+    combo = combo,
+    collapse = collapse
   ))
   combo <- structure(combo, class = c("g6_combo", "g6_element"))
   validate_element(combo)
@@ -418,6 +421,20 @@ validate_element.g6_combo <- function(x, ...) {
       !(length(x$combo) == 1 || is.null(x$combo))
   ) {
     stop("Combo 'combo' must be a character string or NULL.")
+  }
+  if (length(x$collapse)) {
+    if (!is_g6_collapse_options(x$collapse)) {
+      stop("Combo 'collapse' must be of class 'g6_collapse_options'.")
+    }
+    if (is.null(x$type)) {
+      x$type <- "rect-combo-with-extra-button"
+    } else {
+      if (!grepl("-combo-with-extra-button", x$type)) {
+        x$type <- paste0(x$type, "-combo-with-extra-button")
+      }
+    }
+    x$style$collapse <- x$collapse
+    x$collapse <- NULL
   }
   NextMethod()
 }

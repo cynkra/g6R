@@ -18,11 +18,30 @@ g6_node(
 )
 ```
 
+- Added new `collapse` parameter to `g6_combo()`. Accepts `g6_collapse_options()` just like nodes. When `collapse` is provided and `type` is NULL, the combo type is automatically set to `"rect-combo-with-extra-button"`. The combo collapse button now supports all the same configuration as nodes: configurable `placement`, `r`, `fill`, `stroke`, `iconStroke`, `visibility` (including `"hover"` mode), etc.
+
+```r
+g6_combo(
+  "combo1",
+  collapse = g6_collapse_options(
+    placement = "bottom",
+    fill = "#f0f0f0",
+    visibility = "hover"
+  )
+)
+```
+
 - `bubble_sets()` and `hull()` now automatically set `pointerEvents = "none"` and `zIndex = -1` by default. This fixes two issues when using the SVG renderer: overlay shapes no longer block pointer events (drag, click) on nodes, and they render behind nodes so they don't visually cover collapse buttons or other node UI. These defaults can be overridden by passing explicit values.
 
 - Overlay plugins (`bubble_sets()`, `hull()`) now resize dynamically when nodes are collapsed or uncollapsed. Hidden members are temporarily removed from the overlay shape and restored when expanded again.
 
 - New `rect-combo-with-extra-button` combo type, the rectangular counterpart of `circle-combo-with-extra-button`.
+
+## Bug fixes
+
+- Fixed `hull()` label not displaying: the default `labelMaxWidth` was `0`, which caused G6 to ellipsize the label to zero width. Changed default to `NULL` (consistent with `bubble_sets()`).
+
+- Fixed port `+` indicators incorrectly showing on at-capacity ports during node selection or drag. G6's internal `setVisibility()` call during update was making all child shapes visible, and the cleanup was skipped when the cursor was hovering the node. Now the capacity-aware port logic is re-applied during updates while hovering.
 
 - Improvements to how `drag_element()` and `drag_element_force()` work with `create_edge()`. Now, the `create_edge()` can be `drag` and work with `drag_element()` as we handle the behavior conflicts/priorities JS side.
 

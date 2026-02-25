@@ -1170,7 +1170,7 @@ history <- function(
 #' closeToPath is true (boolean, default: TRUE).
 #' @param labelOffsetX X-axis offset (number, default: 0).
 #' @param labelOffsetY Y-axis offset (number, default: 0).
-#' @param labelMaxWidth Maximum width of the text, exceeding will be ellipsized (number, default: 0).
+#' @param labelMaxWidth Maximum width of the text, exceeding will be ellipsized (number or NULL, default: NULL).
 #' @param ... Other options.
 #' See \url{https://g6.antv.antgroup.com/en/manual/plugin/hull}.
 #'
@@ -1209,7 +1209,7 @@ hull <- function(
   labelAutoRotate = TRUE,
   labelOffsetX = 0,
   labelOffsetY = 0,
-  labelMaxWidth = 0,
+  labelMaxWidth = NULL,
   ...
 ) {
   # Validate inputs
@@ -1259,8 +1259,8 @@ hull <- function(
     stop("'labelOffsetY' must be a number")
   }
 
-  if (!is.numeric(labelMaxWidth) || labelMaxWidth < 0) {
-    stop("'labelMaxWidth' must be a non-negative number")
+  if (!is.null(labelMaxWidth) && (!is.numeric(labelMaxWidth) || labelMaxWidth < 0)) {
+    stop("'labelMaxWidth' must be a non-negative number or NULL")
   }
 
   arg_names <- names(formals())

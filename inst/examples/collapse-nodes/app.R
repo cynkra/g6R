@@ -18,7 +18,7 @@ server <- function(input, output, session) {
   output$dag <- render_g6(
     g6(
       nodes = g6_nodes(
-        # a = dataset_block("iris")
+        # a = dataset_block("iris") — outside combos
         g6_node(
           id = "a",
           type = "custom-rect-node",
@@ -39,7 +39,7 @@ server <- function(input, output, session) {
             placement = "right-top"
           )
         ),
-        # b = head_block(n = 10)
+        # b = head_block(n = 10) — combo1 (stack1)
         g6_node(
           id = "b",
           type = "custom-rect-node",
@@ -64,7 +64,7 @@ server <- function(input, output, session) {
             placement = "right-top"
           )
         ),
-        # c = subset_block() # This node is not collapsible
+        # c = subset_block() — combo1 (stack1)
         g6_node(
           id = "c",
           type = "custom-rect-node",
@@ -86,7 +86,7 @@ server <- function(input, output, session) {
           combo = "combo1",
           children = "d"
         ),
-        # d = head_block(n = 5)
+        # d = head_block(n = 5) — combo1 (stack1)
         g6_node(
           id = "d",
           type = "custom-rect-node",
@@ -112,7 +112,7 @@ server <- function(input, output, session) {
             placement = "right-top"
           )
         ),
-        # e = rbind_block()
+        # e = rbind_block() — outside combos
         g6_node(
           id = "e",
           type = "custom-rect-node",
@@ -139,14 +139,13 @@ server <- function(input, output, session) {
               arity = Inf
             )
           ),
-          combo = "combo1",
           children = c("g"),
           collapse = g6_collapse_options(
             collapsed = FALSE,
             placement = "right-top"
           )
         ),
-        # f = subset_block()
+        # f = subset_block() — combo2 (stack2)
         g6_node(
           id = "f",
           type = "custom-rect-node",
@@ -165,14 +164,14 @@ server <- function(input, output, session) {
               label = "data"
             )
           ),
-          combo = "combo1",
+          combo = "combo2",
           children = c("e", "g"),
           collapse = g6_collapse_options(
             collapsed = FALSE,
             placement = "right-top"
           )
         ),
-        # g = rbind_block()
+        # g = rbind_block() — combo2 (stack2)
         g6_node(
           id = "g",
           type = "custom-rect-node",
@@ -199,14 +198,14 @@ server <- function(input, output, session) {
               arity = Inf
             )
           ),
-          combo = "combo1",
+          combo = "combo2",
           children = c("h"),
           collapse = g6_collapse_options(
             collapsed = FALSE,
             placement = "right-top"
           )
         ),
-        # h = head_block(n = 3)
+        # h = head_block(n = 3) — outside combos
         g6_node(
           id = "h",
           type = "custom-rect-node",
@@ -225,14 +224,13 @@ server <- function(input, output, session) {
               label = "data"
             )
           ),
-          combo = "combo1",
           children = c("i"),
           collapse = g6_collapse_options(
             collapsed = FALSE,
             placement = "right-top"
           )
         ),
-        # i = scatter_block(x = "Sepal.Length", y = "Sepal.Width")
+        # i = scatter_block(x = "Sepal.Length", y = "Sepal.Width") — outside combos
         g6_node(
           id = "i",
           type = "custom-rect-node",
@@ -244,7 +242,84 @@ server <- function(input, output, session) {
               key = "input-i",
               placement = "top",
               label = "data"
+            ),
+            g6_output_port(
+              key = "output-i",
+              placement = "bottom",
+              label = "data"
             )
+          ),
+          children = c("j"),
+          collapse = g6_collapse_options(
+            placement = "right-top"
+          )
+        ),
+        # --- Bubble set nodes (descendants of i, no combo) ---
+        g6_node(
+          id = "j",
+          type = "custom-rect-node",
+          style = list(labelText = "filter"),
+          ports = g6_ports(
+            g6_input_port(key = "input-j", placement = "top", label = "data"),
+            g6_output_port(
+              key = "output-j",
+              placement = "bottom",
+              label = "data"
+            )
+          ),
+          children = c("k", "l"),
+          collapse = g6_collapse_options(placement = "right-top")
+        ),
+        g6_node(
+          id = "k",
+          type = "custom-rect-node",
+          style = list(labelText = "summarise"),
+          ports = g6_ports(
+            g6_input_port(key = "input-k", placement = "top", label = "data"),
+            g6_output_port(
+              key = "output-k",
+              placement = "bottom",
+              label = "data"
+            )
+          ),
+          children = c("m"),
+          collapse = g6_collapse_options(placement = "right-top")
+        ),
+        # --- Hull nodes (descendants of i, no combo) ---
+        g6_node(
+          id = "l",
+          type = "custom-rect-node",
+          style = list(labelText = "mutate"),
+          ports = g6_ports(
+            g6_input_port(key = "input-l", placement = "top", label = "data"),
+            g6_output_port(
+              key = "output-l",
+              placement = "bottom",
+              label = "data"
+            )
+          ),
+          children = c("n"),
+          collapse = g6_collapse_options(placement = "right-top")
+        ),
+        g6_node(
+          id = "m",
+          type = "custom-rect-node",
+          style = list(labelText = "arrange"),
+          ports = g6_ports(
+            g6_input_port(key = "input-m", placement = "top", label = "data"),
+            g6_output_port(
+              key = "output-m",
+              placement = "bottom",
+              label = "data"
+            )
+          )
+        ),
+        g6_node(
+          id = "n",
+          type = "custom-rect-node",
+          style = list(labelText = "select"),
+          ports = g6_ports(
+            g6_input_port(key = "input-n", placement = "top", label = "data")
           )
         )
       ),
@@ -285,7 +360,7 @@ server <- function(input, output, session) {
             endArrowType = "vee"
           )
         ),
-        # b -> f (data)
+        # b -> f (data) — cross-combo: combo1 -> combo2
         g6_edge(
           source = "b",
           target = "f",
@@ -297,7 +372,7 @@ server <- function(input, output, session) {
             endArrowType = "vee"
           )
         ),
-        # d -> e (input 1)
+        # d -> e (input 1) — combo1 -> outside
         g6_edge(
           source = "d",
           target = "e",
@@ -309,7 +384,7 @@ server <- function(input, output, session) {
             endArrowType = "vee"
           )
         ),
-        # f -> e (input 2)
+        # f -> e (input 2) — combo2 -> outside
         g6_edge(
           source = "f",
           target = "e",
@@ -321,7 +396,7 @@ server <- function(input, output, session) {
             endArrowType = "vee"
           )
         ),
-        # e -> g (input 1)
+        # e -> g (input 1) — outside -> combo2
         g6_edge(
           source = "e",
           target = "g",
@@ -333,7 +408,7 @@ server <- function(input, output, session) {
             endArrowType = "vee"
           )
         ),
-        # f -> g (input 2)
+        # f -> g (input 2) — inside combo2
         g6_edge(
           source = "f",
           target = "g",
@@ -345,7 +420,7 @@ server <- function(input, output, session) {
             endArrowType = "vee"
           )
         ),
-        # g -> h (data)
+        # g -> h (data) — combo2 -> outside
         g6_edge(
           source = "g",
           target = "h",
@@ -357,7 +432,7 @@ server <- function(input, output, session) {
             endArrowType = "vee"
           )
         ),
-        # h -> i (data)
+        # h -> i (data) — outside -> outside
         g6_edge(
           source = "h",
           target = "i",
@@ -368,10 +443,71 @@ server <- function(input, output, session) {
             startArrow = FALSE,
             endArrowType = "vee"
           )
+        ),
+        # i -> j
+        g6_edge(
+          source = "i",
+          target = "j",
+          style = list(
+            sourcePort = "output-i",
+            targetPort = "input-j",
+            endArrow = TRUE,
+            startArrow = FALSE,
+            endArrowType = "vee"
+          )
+        ),
+        # j -> k (bubble set member)
+        g6_edge(
+          source = "j",
+          target = "k",
+          style = list(
+            sourcePort = "output-j",
+            targetPort = "input-k",
+            endArrow = TRUE,
+            startArrow = FALSE,
+            endArrowType = "vee"
+          )
+        ),
+        # j -> l (bubble set member)
+        g6_edge(
+          source = "j",
+          target = "l",
+          style = list(
+            sourcePort = "output-j",
+            targetPort = "input-l",
+            endArrow = TRUE,
+            startArrow = FALSE,
+            endArrowType = "vee"
+          )
+        ),
+        # k -> m (hull member)
+        g6_edge(
+          source = "k",
+          target = "m",
+          style = list(
+            sourcePort = "output-k",
+            targetPort = "input-m",
+            endArrow = TRUE,
+            startArrow = FALSE,
+            endArrowType = "vee"
+          )
+        ),
+        # l -> n (hull member)
+        g6_edge(
+          source = "l",
+          target = "n",
+          style = list(
+            sourcePort = "output-l",
+            targetPort = "input-n",
+            endArrow = TRUE,
+            startArrow = FALSE,
+            endArrowType = "vee"
+          )
         )
       ),
       combos = g6_combos(
-        g6_combo("combo1", type = "circle-combo-with-extra-button")
+        g6_combo("combo1", collapse = g6_collapse_options()),
+        g6_combo("combo2", collapse = g6_collapse_options())
       )
     ) |>
       g6_layout(antv_dagre_layout(sortByCombo = TRUE)) |>
@@ -384,6 +520,7 @@ server <- function(input, output, session) {
             #fillOpacity = 0
           )
         ),
+        combo = list(),
         renderer = JS("() => new SVGRenderer()"),
         edge = list(style = list(endArrow = TRUE))
       ) |>
@@ -396,7 +533,7 @@ server <- function(input, output, session) {
           )
         ),
         click_select(multiple = TRUE),
-        drag_element(enable = TRUE),
+        drag_element(),
         drag_canvas(
           enable = JS(
             "(e) => {
@@ -410,25 +547,41 @@ server <- function(input, output, session) {
             "(e) => {
             return e.targetType === 'node' && e.targetType !== 'combo';
           }"
-          )
+          ),
+          onFinish = NULL
         )
       ) |>
       # Allow to dynamically remove an edge or node
       g6_plugins(
-        #bubble_sets(
-        #  key = "bubble-set-1",
-        #  members = c("a", "b", "c", "d", "e", "f", "g", "h", "i"),
-        #  label = TRUE,
-        #  labelText = "cluster 1",
-        #  fill = "#F08F56",
-        #  stroke = "#F08F56",
-        #  labelBackground = TRUE,
-        #  labelPlacement = "top",
-        #  labelFill = "#fff",
-        #  labelPadding = 2,
-        #  labelBackgroundFill = "#F08F56",
-        #  labelBackgroundRadius = 5
-        #),
+        bubble_sets(
+          key = "bubble-set-1",
+          members = c("j", "k"),
+          label = TRUE,
+          labelText = "bubble set",
+          fill = "#F08F56",
+          stroke = "#F08F56",
+          labelBackground = TRUE,
+          labelPlacement = "top",
+          labelFill = "#fff",
+          labelPadding = 2,
+          labelBackgroundFill = "#F08F56",
+          labelBackgroundRadius = 5
+        ),
+        hull(
+          key = "hull-1",
+          members = c("l", "m", "n"),
+          labelText = "Super hull",
+          labelAutoRotate = FALSE,
+          labelCloseToPath = FALSE,
+          fill = "#7B68EE",
+          stroke = "#7B68EE",
+          labelBackground = TRUE,
+          labelPlacement = "top",
+          labelFill = "#fff",
+          labelPadding = 2,
+          labelBackgroundFill = "#7B68EE",
+          labelBackgroundRadius = 5
+        ),
         context_menu(
           enable = JS("(e) => true"),
           getItems = JS(
@@ -449,13 +602,13 @@ server <- function(input, output, session) {
               if (current.id === undefined) return;
               if (value === 'remove_edge') {
               console.log(target);
-              Shiny.setInputValue(target.closest('.g6').id + '-removed_edge', 
-                  {id: current.id}, 
+              Shiny.setInputValue(target.closest('.g6').id + '-removed_edge',
+                  {id: current.id},
                   {priority: 'event'});
               } else if (value === 'remove_node') {
                 // Send node ID to Shiny before removing
-                Shiny.setInputValue(target.closest('.g6').id + '-removed_node', 
-                  {id: current.id}, 
+                Shiny.setInputValue(target.closest('.g6').id + '-removed_node',
+                  {id: current.id},
                   {priority: 'event'});
               }
             }

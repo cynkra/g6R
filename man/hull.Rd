@@ -19,7 +19,7 @@ hull(
   labelAutoRotate = TRUE,
   labelOffsetX = 0,
   labelOffsetY = 0,
-  labelMaxWidth = 0,
+  labelMaxWidth = NULL,
   ...
 )
 }
@@ -53,7 +53,7 @@ closeToPath is true (boolean, default: TRUE).}
 
 \item{labelOffsetY}{Y-axis offset (number, default: 0).}
 
-\item{labelMaxWidth}{Maximum width of the text, exceeding will be ellipsized (number, default: 0).}
+\item{labelMaxWidth}{Maximum width of the text, exceeding will be ellipsized (number or NULL, default: NULL).}
 
 \item{...}{Other options.
 See \url{https://g6.antv.antgroup.com/en/manual/plugin/hull}.}

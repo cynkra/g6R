@@ -313,8 +313,14 @@ class CustomCreateEdge extends CreateEdge {
   }
 
   async customHandleCreateEdge(event) {
-    // Don't allow if behavior is disabled by end user
-    if (!this.options.enable) return;
+    // Don't allow if behavior is disabled by end user.
+    // enable can be a boolean or a function(event) => boolean.
+    const enable = this.options.enable;
+    if (typeof enable === 'function') {
+      if (!enable(event)) return;
+    } else if (!enable) {
+      return;
+    }
     // Prevent re-entry from event bubbling
     if (this._processingPointerDown) return;
     this._processingPointerDown = true;

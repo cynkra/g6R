@@ -3,6 +3,7 @@ import {
 } from '@antv/g6';
 import { Circle as GCircle, Rect as GRect, Group } from '@antv/g';
 import { getPortConnections } from './utils';
+import { reapplyComboCollapseState, ensureProxyEdges, collapsedCombos, PROXY_EDGE_PREFIX } from './extensions';
 
 // Map to store node port refresh functions for edge creation events
 const nodePortRefreshFunctions = new Map();
@@ -51,8 +52,13 @@ const refreshComboVisibility = async (graph) => {
     const comboIsHidden = combo.style?.visibility === 'hidden';
 
     if (allHidden && !comboIsHidden) {
-      toHide.push(combo.id);
+      // Never auto-hide a combo that is explicitly collapsed via the combo button
+      // (those stay visible with a "+N" badge)
+      if (!collapsedCombos.has(combo.id)) {
+        toHide.push(combo.id);
+      }
     } else if (!allHidden && comboIsHidden) {
+      // Always allow showing a combo when members become visible again
       toShow.push(combo.id);
     }
   }
@@ -789,7 +795,8 @@ const createCustomNode = (BaseShape) => {
       }
     }
 
-    // Collect all DAG descendants of nodeId via outgoing edges
+    // Collect all DAG descendants of nodeId via outgoing REAL edges
+    // (proxy edges are excluded — they point to combos, not real nodes)
     collectDAGDescendants(nodeId) {
       const { graph } = this.context;
       const allEdges = graph.getEdgeData();
@@ -797,7 +804,8 @@ const createCustomNode = (BaseShape) => {
       const visited = new Set();
       const collect = (id) => {
         allEdges.forEach(edge => {
-          if (edge.source === id && !visited.has(edge.target)) {
+          if (edge.source === id && !visited.has(edge.target) &&
+              !edge.id?.startsWith(PROXY_EDGE_PREFIX)) {
             visited.add(edge.target);
             descendants.push(edge.target);
             collect(edge.target);
@@ -816,9 +824,10 @@ const createCustomNode = (BaseShape) => {
       const allNodes = graph.getNodeData();
       const allEdges = graph.getEdgeData();
 
-      // Build parent→children map from edges
+      // Build parent→children map from real edges only (exclude proxy edges)
       const childrenOf = {};
       allEdges.forEach(edge => {
+        if (edge.id?.startsWith(PROXY_EDGE_PREFIX)) return;
         if (!childrenOf[edge.source]) childrenOf[edge.source] = [];
         childrenOf[edge.source].push(edge.target);
       });
@@ -835,7 +844,13 @@ const createCustomNode = (BaseShape) => {
 
         const allChildrenHidden = children.every(childId => {
           const childNode = graph.getNodeData(childId);
-          return childNode?.style?.visibility === 'hidden';
+          if (childNode?.style?.visibility !== 'hidden') return false;
+          // Don't count children as "hidden" if they're hidden because
+          // their combo is collapsed (not because of DAG collapse).
+          // Otherwise the parent node gets auto-collapsed just because
+          // a combo was collapsed, making it impossible to toggle.
+          if (childNode?.combo && collapsedCombos.has(childNode.combo)) return false;
+          return true;
         });
 
         const anyChildVisible = children.some(childId => {
@@ -909,7 +924,7 @@ const createCustomNode = (BaseShape) => {
 
               // Show edges where both endpoints will be visible after expand
               allEdges.forEach(edge => {
-                if (!edge.id) return;
+                if (!edge.id || edge.id.startsWith(PROXY_EDGE_PREFIX)) return;
                 if (descendantSet.has(edge.source) || descendantSet.has(edge.target)) {
                   const srcOk = descendantSet.has(edge.source) ||
                     edge.source === this.id ||
@@ -948,7 +963,7 @@ const createCustomNode = (BaseShape) => {
 
               const elementsToHide = [...descendants];
               allEdges.forEach(edge => {
-                if (!edge.id) return;
+                if (!edge.id || edge.id.startsWith(PROXY_EDGE_PREFIX)) return;
                 if (descendantSet.has(edge.source) || descendantSet.has(edge.target)) {
                   elementsToHide.push(edge.id);
                 }
@@ -962,11 +977,39 @@ const createCustomNode = (BaseShape) => {
             // Hide combos whose members are all hidden, show those with visible members
             await refreshComboVisibility(graph);
 
+            // When collapsing, explicitly hide collapsed combos whose ALL
+            // members are descendants of the just-collapsed node.
+            // refreshComboVisibility skips collapsed combos (they stay
+            // visible when their own button hid members), but when a DAG
+            // ancestor collapses everything, the combo should disappear.
+            if (!isCollapsed && collapsedCombos.size > 0) {
+              const combosToHide = [];
+              for (const [comboId] of collapsedCombos) {
+                try {
+                  const cd = graph.getComboData().find(c => c.id === comboId);
+                  if (!cd || cd.style?.visibility === 'hidden') continue;
+                  const members = graph.getNodeData().filter(n => n.combo === comboId);
+                  if (members.length > 0 && members.every(m => descendantSet.has(m.id))) {
+                    combosToHide.push(comboId);
+                  }
+                } catch (_) {}
+              }
+              if (combosToHide.length > 0) {
+                await graph.hideElement(combosToHide, false);
+              }
+            }
+
+            // Re-enforce collapsed state for combos that were collapsed before DAG expand
+            await reapplyComboCollapseState(graph);
+
             // Force visible combos to recalculate bounds
             refreshComboBounds(graph);
 
             // Resize overlay plugins (bubble sets, hull) to only encompass visible members
             refreshOverlayPlugins(graph);
+
+            // Sync proxy edges AFTER bounds are recalculated so edges point to correct positions
+            await ensureProxyEdges(graph);
 
             // Update the button visual (+/-)
             this.drawCollapseButton(this.parsedAttributes);
@@ -1015,7 +1058,7 @@ const createCustomNode = (BaseShape) => {
           const descendantSet = new Set(descendants);
           const elementsToHide = [...descendants];
           allEdges.forEach(edge => {
-            if (!edge.id) return;
+            if (!edge.id || edge.id.startsWith(PROXY_EDGE_PREFIX)) return;
             if (descendantSet.has(edge.source) || descendantSet.has(edge.target)) {
               elementsToHide.push(edge.id);
             }
@@ -1026,6 +1069,7 @@ const createCustomNode = (BaseShape) => {
             await refreshComboVisibility(graph);
             refreshComboBounds(graph);
             refreshOverlayPlugins(graph);
+            await ensureProxyEdges(graph);
           }
         }, 0);
       }
@@ -1319,12 +1363,17 @@ const createCustomNode = (BaseShape) => {
             }
           });
         }
-      } else {
+      } else if (this._isHoveringNode?.()) {
         // G6's BaseShape.update() calls setVisibility() after render(),
         // which sets ALL child shapes to the node's visibility ('visible'),
-        // overriding the per-port 'hidden' visibility for hover ports.
-        // Re-hide ports that should only show on hover.
-        if (this._hidePortsImmediately && !this._isHoveringNode?.()) {
+        // including indicators for at-capacity ports.
+        // Re-run the capacity-aware showPorts to fix visibility.
+        if (this._showPorts) {
+          this._showPorts();
+        }
+      } else {
+        // Not hovering — hide everything that should be hidden.
+        if (this._hidePortsImmediately) {
           this._hidePortsImmediately();
         }
       }
@@ -1361,5 +1410,6 @@ export {
   CustomStarNode,
   CustomHexagonNode,
   CustomImageNode,
-  CustomDonutNode
+  CustomDonutNode,
+  dagCollapsedNodes
 };
