@@ -506,7 +506,10 @@ server <- function(input, output, session) {
         )
       ),
       combos = g6_combos(
-        g6_combo("combo1", collapse = g6_collapse_options()),
+        g6_combo(
+          "combo1",
+          collapse = g6_collapse_options(visibility = "hover")
+        ),
         g6_combo("combo2", collapse = g6_collapse_options())
       )
     ) |>

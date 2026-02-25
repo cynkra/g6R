@@ -204,7 +204,9 @@ const createComboWithExtraButton = (BaseCombo) => {
       // Handle visibility mode
       const collapseVisibility = collapseConfig.visibility || 'visible';
       this._comboCollapseVisibility = collapseVisibility;
-      const initiallyVisible = collapsed || collapseVisibility === 'visible';
+      // When hovering, keep button visible even in hover mode (same as node)
+      const initiallyVisible = collapsed || collapseVisibility === 'visible' ||
+        (collapseVisibility === 'hover' && this._isHoveringCombo);
 
       // Track the previous hit-area type so we know when to rebind
       const prevType = this._hitAreaType;
@@ -292,31 +294,79 @@ const createComboWithExtraButton = (BaseCombo) => {
       if (needsRebind && this._comboClickHandler) {
         this.shapeMap['hit-area'].addEventListener('click', this._comboClickHandler);
       }
+
+      // Bind hover handlers for hover-mode visibility (re-bind after shape recreation)
+      if (collapseVisibility === 'hover') {
+        this._setupComboHoverHandlers();
+      }
+    }
+
+    _setupComboHoverHandlers() {
+      // Bind on key shape (only once)
+      const keyShape = this.shapeMap?.key;
+      if (keyShape && !keyShape._hasComboCollapseHover) {
+        keyShape._hasComboCollapseHover = true;
+        keyShape.addEventListener('mouseenter', () => this.showComboCollapseButton());
+        keyShape.addEventListener('mouseleave', () => this.hideComboCollapseButton());
+      }
+      // Bind on hit-area (re-bind after shape recreation via needsRebind)
+      const hitArea = this.shapeMap?.['hit-area'];
+      if (hitArea && !hitArea._hasComboCollapseHover) {
+        hitArea._hasComboCollapseHover = true;
+        hitArea.addEventListener('mouseenter', () => this.showComboCollapseButton());
+        hitArea.addEventListener('mouseleave', () => this.hideComboCollapseButton());
+      }
     }
 
     showComboCollapseButton() {
       if (this._comboCollapseVisibility !== 'hover') return;
+      this._isHoveringCombo = true;
       const hitArea = this.shapeMap['hit-area'];
       const button = this.shapeMap['button'];
       if (!hitArea) return;
+      // Cancel any pending hide
       if (this._comboCollapseHideTimeout) {
         clearTimeout(this._comboCollapseHideTimeout);
         this._comboCollapseHideTimeout = null;
       }
-      hitArea.attr({ visibility: 'visible', opacity: 1 });
-      if (button) button.attr({ visibility: 'visible', opacity: 1 });
+      // Already fully visible — nothing to do
+      if (hitArea.attr('visibility') === 'visible' && hitArea.attr('opacity') >= 1) return;
+      // Already animating in — let it continue
+      if (this._comboCollapseShowAnimation) return;
+      hitArea.attr({ visibility: 'visible', opacity: 0 });
+      if (button) button.attr({ visibility: 'visible', opacity: 0 });
+      const startTime = performance.now();
+      const animate = (currentTime) => {
+        const progress = Math.min((currentTime - startTime) / 500, 1);
+        const eased = 1 - Math.pow(1 - progress, 2);
+        hitArea.attr('opacity', eased);
+        if (button) button.attr('opacity', eased);
+        if (progress < 1) {
+          this._comboCollapseShowAnimation = requestAnimationFrame(animate);
+        } else {
+          this._comboCollapseShowAnimation = null;
+        }
+      };
+      this._comboCollapseShowAnimation = requestAnimationFrame(animate);
     }
 
     hideComboCollapseButton() {
       if (this._comboCollapseVisibility !== 'hover') return;
+      this._isHoveringCombo = false;
       // When collapsed, always keep button visible
       if (collapsedCombos.has(this.id)) return;
       if (!this.shapeMap['hit-area']) return;
+      // Cancel any pending hide to avoid stacking
       if (this._comboCollapseHideTimeout) {
         clearTimeout(this._comboCollapseHideTimeout);
       }
+      // Debounce: wait before hiding so cursor can move from key shape to button
       this._comboCollapseHideTimeout = setTimeout(() => {
         this._comboCollapseHideTimeout = null;
+        if (this._comboCollapseShowAnimation) {
+          cancelAnimationFrame(this._comboCollapseShowAnimation);
+          this._comboCollapseShowAnimation = null;
+        }
         const hitArea = this.shapeMap['hit-area'];
         const button = this.shapeMap['button'];
         if (hitArea) hitArea.attr({ visibility: 'hidden', opacity: 0 });
@@ -325,23 +375,6 @@ const createComboWithExtraButton = (BaseCombo) => {
     }
 
     onCreate() {
-      // Set up hover handlers for combo collapse button visibility
-      const collapseConfig = this.attributes?.collapse || {};
-      const collapseVisibility = collapseConfig.visibility || 'visible';
-      if (collapseVisibility === 'hover') {
-        const keyShape = this.shapeMap?.key;
-        if (keyShape) {
-          keyShape.addEventListener('mouseenter', () => this.showComboCollapseButton());
-          keyShape.addEventListener('mouseleave', () => this.hideComboCollapseButton());
-        }
-        // Also keep button visible when hovering the hit-area itself
-        const hitArea = this.shapeMap?.['hit-area'];
-        if (hitArea) {
-          hitArea.addEventListener('mouseenter', () => this.showComboCollapseButton());
-          hitArea.addEventListener('mouseleave', () => this.hideComboCollapseButton());
-        }
-      }
-
       this._comboClickHandler = async () => {
         const { graph } = this.context;
         const comboId = this.id;
