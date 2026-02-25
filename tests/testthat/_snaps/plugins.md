@@ -25,13 +25,15 @@
       str(g6_plugins(g6(), plugin))
     Output
       List of 8
-       $ x            :List of 6
+       $ x            :List of 8
         ..$ data            : list()
         .. ..- attr(*, "class")= chr "g6_data"
         ..$ jsonUrl         : NULL
         ..$ iconsUrl        : chr "//at.alicdn.com/t/font_2678727_za4qjydwkkh.js"
         ..$ mode            : chr "prod"
         ..$ preservePosition: logi FALSE
+        ..$ directed        : logi TRUE
+        ..$ maxCollapseDepth: num Inf
         ..$ plugins         :List of 1
         .. ..$ :List of 6
         .. .. ..$ width         : chr "100%"
@@ -85,13 +87,15 @@
       str(g6_plugins(g6(), plugin))
     Output
       List of 8
-       $ x            :List of 6
+       $ x            :List of 8
         ..$ data            : list()
         .. ..- attr(*, "class")= chr "g6_data"
         ..$ jsonUrl         : NULL
         ..$ iconsUrl        : chr "//at.alicdn.com/t/font_2678727_za4qjydwkkh.js"
         ..$ mode            : chr "prod"
         ..$ preservePosition: logi FALSE
+        ..$ directed        : logi TRUE
+        ..$ maxCollapseDepth: num Inf
         ..$ plugins         :List of 1
         .. ..$ :List of 8
         .. .. ..$ key      : chr "contextmenu"
@@ -139,13 +143,15 @@
       str(g6_plugins(g6(), plugin))
     Output
       List of 8
-       $ x            :List of 6
+       $ x            :List of 8
         ..$ data            : list()
         .. ..- attr(*, "class")= chr "g6_data"
         ..$ jsonUrl         : NULL
         ..$ iconsUrl        : chr "//at.alicdn.com/t/font_2678727_za4qjydwkkh.js"
         ..$ mode            : chr "prod"
         ..$ preservePosition: logi FALSE
+        ..$ directed        : logi TRUE
+        ..$ maxCollapseDepth: num Inf
         ..$ plugins         :List of 1
         .. ..$ :List of 10
         .. .. ..$ key            : chr "edge-bundling"
@@ -195,13 +201,15 @@
       str(g6_plugins(g6(), plugin))
     Output
       List of 8
-       $ x            :List of 6
+       $ x            :List of 8
         ..$ data            : list()
         .. ..- attr(*, "class")= chr "g6_data"
         ..$ jsonUrl         : NULL
         ..$ iconsUrl        : chr "//at.alicdn.com/t/font_2678727_za4qjydwkkh.js"
         ..$ mode            : chr "prod"
         ..$ preservePosition: logi FALSE
+        ..$ directed        : logi TRUE
+        ..$ maxCollapseDepth: num Inf
         ..$ plugins         :List of 1
         .. ..$ :List of 10
         .. .. ..$ key           : chr "edge-filter-lens"
@@ -253,13 +261,15 @@
       str(g6_plugins(g6(), plugin))
     Output
       List of 8
-       $ x            :List of 6
+       $ x            :List of 8
         ..$ data            : list()
         .. ..- attr(*, "class")= chr "g6_data"
         ..$ jsonUrl         : NULL
         ..$ iconsUrl        : chr "//at.alicdn.com/t/font_2678727_za4qjydwkkh.js"
         ..$ mode            : chr "prod"
         ..$ preservePosition: logi FALSE
+        ..$ directed        : logi TRUE
+        ..$ maxCollapseDepth: num Inf
         ..$ plugins         :List of 1
         .. ..$ :List of 11
         .. .. ..$ key           : chr "fish-eye"
@@ -311,13 +321,15 @@
       str(g6_plugins(g6(), plugin))
     Output
       List of 8
-       $ x            :List of 6
+       $ x            :List of 8
         ..$ data            : list()
         .. ..- attr(*, "class")= chr "g6_data"
         ..$ jsonUrl         : NULL
         ..$ iconsUrl        : chr "//at.alicdn.com/t/font_2678727_za4qjydwkkh.js"
         ..$ mode            : chr "prod"
         ..$ preservePosition: logi FALSE
+        ..$ directed        : logi TRUE
+        ..$ maxCollapseDepth: num Inf
         ..$ plugins         :List of 1
         .. ..$ :List of 3
         .. .. ..$ key    : chr "fullscreen"
@@ -360,13 +372,15 @@
       str(g6_plugins(g6(), plugin))
     Output
       List of 8
-       $ x            :List of 6
+       $ x            :List of 8
         ..$ data            : list()
         .. ..- attr(*, "class")= chr "g6_data"
         ..$ jsonUrl         : NULL
         ..$ iconsUrl        : chr "//at.alicdn.com/t/font_2678727_za4qjydwkkh.js"
         ..$ mode            : chr "prod"
         ..$ preservePosition: logi FALSE
+        ..$ directed        : logi TRUE
+        ..$ maxCollapseDepth: num Inf
         ..$ plugins         :List of 1
         .. ..$ :List of 10
         .. .. ..$ key            : chr "grid-line"
@@ -416,13 +430,15 @@
       str(g6_plugins(g6(), plugin))
     Output
       List of 8
-       $ x            :List of 6
+       $ x            :List of 8
         ..$ data            : list()
         .. ..- attr(*, "class")= chr "g6_data"
         ..$ jsonUrl         : NULL
         ..$ iconsUrl        : chr "//at.alicdn.com/t/font_2678727_za4qjydwkkh.js"
         ..$ mode            : chr "prod"
         ..$ preservePosition: logi FALSE
+        ..$ directed        : logi TRUE
+        ..$ maxCollapseDepth: num Inf
         ..$ plugins         :List of 1
         .. ..$ :List of 3
         .. .. ..$ key      : chr "history"
@@ -473,13 +489,15 @@
       str(g6_plugins(g6(), plugin))
     Output
       List of 8
-       $ x            :List of 6
+       $ x            :List of 8
         ..$ data            : list()
         .. ..- attr(*, "class")= chr "g6_data"
         ..$ jsonUrl         : NULL
         ..$ iconsUrl        : chr "//at.alicdn.com/t/font_2678727_za4qjydwkkh.js"
         ..$ mode            : chr "prod"
         ..$ preservePosition: logi FALSE
+        ..$ directed        : logi TRUE
+        ..$ maxCollapseDepth: num Inf
         ..$ plugins         :List of 1
         .. ..$ :List of 15
         .. .. ..$ key              : chr "legend"
@@ -534,13 +552,15 @@
       str(g6_plugins(g6(), plugin))
     Output
       List of 8
-       $ x            :List of 6
+       $ x            :List of 8
         ..$ data            : list()
         .. ..- attr(*, "class")= chr "g6_data"
         ..$ jsonUrl         : NULL
         ..$ iconsUrl        : chr "//at.alicdn.com/t/font_2678727_za4qjydwkkh.js"
         ..$ mode            : chr "prod"
         ..$ preservePosition: logi FALSE
+        ..$ directed        : logi TRUE
+        ..$ maxCollapseDepth: num Inf
         ..$ plugins         :List of 1
         .. ..$ :List of 7
         .. .. ..$ key     : chr "minimap"
@@ -587,13 +607,15 @@
       str(g6_plugins(g6(), plugin))
     Output
       List of 8
-       $ x            :List of 6
+       $ x            :List of 8
         ..$ data            : list()
         .. ..- attr(*, "class")= chr "g6_data"
         ..$ jsonUrl         : NULL
         ..$ iconsUrl        : chr "//at.alicdn.com/t/font_2678727_za4qjydwkkh.js"
         ..$ mode            : chr "prod"
         ..$ preservePosition: logi FALSE
+        ..$ directed        : logi TRUE
+        ..$ maxCollapseDepth: num Inf
         ..$ plugins         :List of 1
         .. ..$ :List of 8
         .. .. ..$ key                : chr "snapline"
@@ -651,13 +673,15 @@
       str(g6_plugins(g6(), plugin))
     Output
       List of 8
-       $ x            :List of 6
+       $ x            :List of 8
         ..$ data            : list()
         .. ..- attr(*, "class")= chr "g6_data"
         ..$ jsonUrl         : NULL
         ..$ iconsUrl        : chr "//at.alicdn.com/t/font_2678727_za4qjydwkkh.js"
         ..$ mode            : chr "prod"
         ..$ preservePosition: logi FALSE
+        ..$ directed        : logi TRUE
+        ..$ maxCollapseDepth: num Inf
         ..$ plugins         :List of 1
         .. ..$ :List of 5
         .. .. ..$ getItems: 'JS_EVAL' chr "( ) => [\n        { id : 'zoom-in' , value : 'zoom-in' },\n        { id : 'zoom-out' , value : 'zoom-out' },\n "| __truncated__
@@ -702,13 +726,15 @@
       str(g6_plugins(g6(), plugin))
     Output
       List of 8
-       $ x            :List of 6
+       $ x            :List of 8
         ..$ data            : list()
         .. ..- attr(*, "class")= chr "g6_data"
         ..$ jsonUrl         : NULL
         ..$ iconsUrl        : chr "//at.alicdn.com/t/font_2678727_za4qjydwkkh.js"
         ..$ mode            : chr "prod"
         ..$ preservePosition: logi FALSE
+        ..$ directed        : logi TRUE
+        ..$ maxCollapseDepth: num Inf
         ..$ plugins         :List of 1
         .. ..$ :List of 7
         .. .. ..$ key      : chr "tooltip"
@@ -758,13 +784,15 @@
       Neither 'imageURL' nor 'text' is provided; watermark may not be visible
     Output
       List of 8
-       $ x            :List of 6
+       $ x            :List of 8
         ..$ data            : list()
         .. ..- attr(*, "class")= chr "g6_data"
         ..$ jsonUrl         : NULL
         ..$ iconsUrl        : chr "//at.alicdn.com/t/font_2678727_za4qjydwkkh.js"
         ..$ mode            : chr "prod"
         ..$ preservePosition: logi FALSE
+        ..$ directed        : logi TRUE
+        ..$ maxCollapseDepth: num Inf
         ..$ plugins         :List of 1
         .. ..$ :List of 11
         .. .. ..$ key             : chr "watermark"

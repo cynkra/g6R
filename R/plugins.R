@@ -311,8 +311,22 @@ bubble_sets <- function(
   config <- mget(arg_names)
   config$type <- "bubble-sets"
 
+  # Overlay plugins (bubble sets, hull) are visual-only. Their Contour
+  # shape is appended to the canvas after nodes (on AFTER_RENDER), so in
+  # SVG mode it sits on top in the DOM. We fix two issues:
+  # - pointerEvents: "none" lets clicks/drags pass through to nodes
+  # - zIndex: -1 renders the overlay behind nodes so it doesn't
+  #   visually cover collapse buttons or other node UI
+  dots <- list(...)
+  if (is.null(dots$pointerEvents)) {
+    dots$pointerEvents <- "none"
+  }
+  if (is.null(dots$zIndex)) {
+    dots$zIndex <- -1L
+  }
+
   # Drop NULL elements
-  dropNulls(c(config, list(...)))
+  dropNulls(c(config, dots))
 }
 
 #' Configure Context Menu Behavior
@@ -1156,7 +1170,7 @@ history <- function(
 #' closeToPath is true (boolean, default: TRUE).
 #' @param labelOffsetX X-axis offset (number, default: 0).
 #' @param labelOffsetY Y-axis offset (number, default: 0).
-#' @param labelMaxWidth Maximum width of the text, exceeding will be ellipsized (number, default: 0).
+#' @param labelMaxWidth Maximum width of the text, exceeding will be ellipsized (number or NULL, default: NULL).
 #' @param ... Other options.
 #' See \url{https://g6.antv.antgroup.com/en/manual/plugin/hull}.
 #'
@@ -1195,7 +1209,7 @@ hull <- function(
   labelAutoRotate = TRUE,
   labelOffsetX = 0,
   labelOffsetY = 0,
-  labelMaxWidth = 0,
+  labelMaxWidth = NULL,
   ...
 ) {
   # Validate inputs
@@ -1245,8 +1259,8 @@ hull <- function(
     stop("'labelOffsetY' must be a number")
   }
 
-  if (!is.numeric(labelMaxWidth) || labelMaxWidth < 0) {
-    stop("'labelMaxWidth' must be a non-negative number")
+  if (!is.null(labelMaxWidth) && (!is.numeric(labelMaxWidth) || labelMaxWidth < 0)) {
+    stop("'labelMaxWidth' must be a non-negative number or NULL")
   }
 
   arg_names <- names(formals())
@@ -1255,8 +1269,21 @@ hull <- function(
   config <- mget(arg_names)
   config$type <- "hull"
 
+  # Hull shapes (like bubble sets) are visual-only overlays appended to the
+  # canvas after nodes, so in SVG mode they sit on top in the DOM.
+  # - pointerEvents: "none" lets clicks/drags pass through to nodes
+  # - zIndex: -1 renders the hull behind nodes so it doesn't visually cover
+  #   collapse buttons or other node UI
+  dots <- list(...)
+  if (is.null(dots$pointerEvents)) {
+    dots$pointerEvents <- "none"
+  }
+  if (is.null(dots$zIndex)) {
+    dots$zIndex <- -1L
+  }
+
   # Drop NULL elements
-  dropNulls(c(config, list(...)))
+  dropNulls(c(config, dots))
 }
 
 #' Configure Legend Plugin

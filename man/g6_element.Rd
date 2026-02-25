@@ -19,7 +19,8 @@ g6_node(
   states = NULL,
   combo = NULL,
   children = NULL,
-  ports = NULL
+  ports = NULL,
+  collapse = NULL
 )
 
 g6_edge(
@@ -38,7 +39,8 @@ g6_combo(
   data = NULL,
   style = NULL,
   states = NULL,
-  combo = NULL
+  combo = NULL,
+  collapse = NULL
 )
 
 validate_element(x, ...)
@@ -69,6 +71,10 @@ For edges, this is optional (id is constructed as source-target if not provided)
 
 \item{ports}{List. Ports definition (optional, nodes only).
 See \link{g6_ports} and \link{g6_port} for details.}
+
+\item{collapse}{List. Collapse button configuration (optional, nodes and combos).
+See \link{g6_collapse_options} for details. For nodes, only used when node has children.
+For combos, when provided and \code{type} is NULL, auto-sets type to \code{"rect-combo-with-extra-button"}.}
 
 \item{source}{Character. Source node ID (required, edges only).}
 

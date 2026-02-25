@@ -1,3 +1,114 @@
+#' Configure collapse button for nodes
+#'
+#' @param collapsed Logical. Whether the node should be collapsed initially. Default is FALSE.
+#' @param visibility Character. Visibility mode of the collapse button.
+#'   Either `"visible"` (always shown when children exist) or `"hover"`
+#'   (shown only on mouse hover). Default is `"visible"`.
+#' @param placement Character or numeric vector. Position of the collapse button.
+#'   Can be one of: "top", "right", "bottom", "left", "right-top", "right-bottom",
+#'   "left-top", "left-bottom", or a numeric vector of length 2 for custom coordinates.
+#' @param r Numeric. Radius of the button. Default is 8.
+#' @param fill Character. Fill color of the button background. Default is "#fff".
+#' @param stroke Character. Stroke color of the button border. Default is "#CED4D9".
+#' @param lineWidth Numeric. Width of the button border. Default is 1.
+#' @param iconStroke Character. Stroke color of the +/- icon. Default is "#000".
+#' @param iconLineWidth Numeric. Width of the +/- icon lines. Default is 1.4.
+#' @param cursor Character. CSS cursor style. Default is "pointer".
+#' @param zIndex Numeric. Z-index for layering. Default is 999.
+#'
+#' @return A list of collapse button configuration options.
+#' @export
+#'
+#' @examples
+#' # Default collapse button
+#' g6_collapse_options()
+#'
+#' # Custom styled collapse button
+#' g6_collapse_options(
+#'   placement = "right-top",
+#'   fill = "#f0f0f0",
+#'   stroke = "#333",
+#'   r = 10
+#' )
+#'
+#' # Collapse button with custom coordinates
+#' g6_collapse_options(placement = c(1, 0.2))
+#' @rdname g6_collapse_options
+g6_collapse_options <- function(
+  collapsed = FALSE,
+  visibility = c("visible", "hover"),
+  placement = "right-top",
+  r = 6,
+  fill = "#fff",
+  stroke = "#9cabd4",
+  lineWidth = 1,
+  iconStroke = "#9cabd4",
+  iconLineWidth = 1.4,
+  cursor = "pointer",
+  zIndex = 999
+) {
+  visibility <- match.arg(visibility)
+
+  # Validate placement
+  if (is.character(placement)) {
+    placement <- match.arg(
+      placement,
+      choices = c(
+        "top",
+        "right",
+        "bottom",
+        "left",
+        "right-top",
+        "right-bottom",
+        "left-top",
+        "left-bottom"
+      )
+    )
+  } else if (is.numeric(placement)) {
+    if (length(placement) != 2) {
+      stop("Numeric placement must be a vector of length 2.")
+    }
+    # At least one coordinate must be 0 or 1 (on the edge)
+    if (!any(placement %in% c(0, 1))) {
+      stop(
+        "Invalid collapse button placement: at least one coordinate must be 0 or 1 (i.e., on the node edge). ",
+        "You supplied: c(",
+        paste(placement, collapse = ", "),
+        ")"
+      )
+    }
+  } else {
+    stop("placement must be a character string or numeric vector of length 2.")
+  }
+
+  structure(
+    list(
+      collapsed = collapsed,
+      visibility = visibility,
+      placement = placement,
+      r = r,
+      fill = fill,
+      stroke = stroke,
+      lineWidth = lineWidth,
+      iconStroke = iconStroke,
+      iconLineWidth = iconLineWidth,
+      cursor = cursor,
+      zIndex = zIndex
+    ),
+    class = "g6_collapse_options"
+  )
+}
+
+#' Check if object is a g6_collapse_options configuration
+#'
+#' @param x An object to check.
+#' @return Logical indicating if x is of class g6_collapse_options.
+#' @export
+#' @rdname g6_collapse_options
+is_g6_collapse_options <- function(x) {
+  inherits(x, "g6_collapse_options")
+}
+
 #' G6 Graph Elements
 #'
 #' Constructors and validators for G6 node, edge, and combo elements.
@@ -12,6 +123,9 @@
 #' @param children Character vector. Child node IDs (optional, nodes only).
 #' @param ports List. Ports definition (optional, nodes only).
 #' See \link{g6_ports} and \link{g6_port} for details.
+#' @param collapse List. Collapse button configuration (optional, nodes and combos).
+#' See \link{g6_collapse_options} for details. For nodes, only used when node has children.
+#' For combos, when provided and `type` is NULL, auto-sets type to `"rect-combo-with-extra-button"`.
 #' @param source Character. Source node ID (required, edges only).
 #' @param target Character. Target node ID (required, edges only).
 #' @param ... Additional arguments (unused).
@@ -60,7 +174,8 @@ g6_node <- function(
   states = NULL,
   combo = NULL,
   children = NULL,
-  ports = NULL
+  ports = NULL,
+  collapse = NULL
 ) {
   node <- dropNulls(list(
     id = id,
@@ -70,7 +185,8 @@ g6_node <- function(
     states = states,
     combo = combo,
     children = children,
-    ports = ports
+    ports = ports,
+    collapse = collapse
   ))
   node <- structure(node, class = c("g6_node", "g6_element"))
   validate_element(node)
@@ -117,7 +233,8 @@ g6_combo <- function(
   data = NULL,
   style = NULL,
   states = NULL,
-  combo = NULL
+  combo = NULL,
+  collapse = NULL
 ) {
   combo <- dropNulls(list(
     id = id,
@@ -125,7 +242,8 @@ g6_combo <- function(
     data = data,
     style = style,
     states = states,
-    combo = combo
+    combo = combo,
+    collapse = collapse
   ))
   combo <- structure(combo, class = c("g6_combo", "g6_element"))
   validate_element(combo)
@@ -195,6 +313,16 @@ validate_element.g6_element <- function(x, ...) {
   x
 }
 
+#' @keywords internal
+check_custom_node_type <- function(x) {
+  if (length(x[["type"]]) && !grepl("custom", x[["type"]])) {
+    stop(
+      "Node 'ports' are typically used with custom node types. ",
+      "Ensure the node type supports ports like 'custom-<TYPE>-node.'"
+    )
+  }
+}
+
 #' @rdname g6_element
 #' @export
 validate_element.g6_node <- function(x, ...) {
@@ -208,21 +336,44 @@ validate_element.g6_node <- function(x, ...) {
   ) {
     stop("Node 'combo' must be a character string or NULL.")
   }
-  if (!is.null(x$children) && !is.character(x$children)) {
-    stop("Node 'children' must be a character vector if provided.")
+  if (!is.null(x$children)) {
+    if (!is.vector(x$children) && !is.list(x$children)) {
+      stop("Node 'children' must be a character vector or list if provided.")
+    }
+
+    # Convert to character vector for validation and processing
+    children_vec <- as.character(unlist(x$children))
+
+    # Check if node includes itself as a child
+    if (as.character(x$id) %in% children_vec) {
+      stop("Node 'children' cannot include the node itself (id: ", x$id, ").")
+    }
+
+    # Auto-enable directed graph mode when children are present
+    if (
+      length(children_vec) > 0 && !("g6R.directed_graph" %in% names(options()))
+    ) {
+      set_g6_directed_graph(TRUE)
+    }
+
+    # Convert to list for JavaScript
+    x$children <- as.list(children_vec)
   }
   if (length(x$ports)) {
-    if (length(x[["type"]]) && !grepl("custom", x[["type"]])) {
-      stop(
-        "Node 'ports' are typically used with custom node types. ",
-        "Ensure the node type supports ports like 'custom-<TYPE>-node.'"
-      )
-    }
+    check_custom_node_type(x)
     if (!is_g6_ports(x$ports)) {
       stop("Node 'ports' must be of class 'g6_ports'.")
     }
     x$style$ports <- x$ports
     x$ports <- NULL
+  }
+  if (length(x$collapse)) {
+    check_custom_node_type(x)
+    if (!is_g6_collapse_options(x$collapse)) {
+      stop("Node 'collapse' must be of class 'g6_collapse_options'.")
+    }
+    x$style$collapse <- x$collapse
+    x$collapse <- NULL
   }
   NextMethod()
 }
@@ -270,6 +421,20 @@ validate_element.g6_combo <- function(x, ...) {
       !(length(x$combo) == 1 || is.null(x$combo))
   ) {
     stop("Combo 'combo' must be a character string or NULL.")
+  }
+  if (length(x$collapse)) {
+    if (!is_g6_collapse_options(x$collapse)) {
+      stop("Combo 'collapse' must be of class 'g6_collapse_options'.")
+    }
+    if (is.null(x$type)) {
+      x$type <- "rect-combo-with-extra-button"
+    } else {
+      if (!grepl("-combo-with-extra-button", x$type)) {
+        x$type <- paste0(x$type, "-combo-with-extra-button")
+      }
+    }
+    x$style$collapse <- x$collapse
+    x$collapse <- NULL
   }
   NextMethod()
 }
@@ -433,8 +598,9 @@ as_g6_nodes.g6_nodes <- function(x, ...) {
 #' @export
 #' @rdname g6_elements
 as_g6_nodes.data.frame <- function(x, ...) {
-  lst <- unname(split(x, seq(nrow(x))))
-  lst <- lapply(lst, as.list)
+  lst <- lapply(seq_len(nrow(x)), function(i) {
+    lapply(x[i, , drop = FALSE], `[[`, 1)
+  })
   as_g6_nodes(lst)
 }
 
@@ -482,8 +648,9 @@ as_g6_edges.g6_edges <- function(x, ...) {
 #' @export
 #' @rdname as_g6_elements
 as_g6_edges.data.frame <- function(x, ...) {
-  lst <- unname(split(x, seq(nrow(x))))
-  lst <- lapply(lst, as.list)
+  lst <- lapply(seq_len(nrow(x)), function(i) {
+    lapply(x[i, , drop = FALSE], `[[`, 1)
+  })
   as_g6_edges(lst)
 }
 
@@ -534,8 +701,9 @@ as_g6_combos.g6_combos <- function(x, ...) {
 #' @export
 #' @rdname as_g6_elements
 as_g6_combos.data.frame <- function(x, ...) {
-  lst <- unname(split(x, seq(nrow(x))))
-  lst <- lapply(lst, as.list)
+  lst <- lapply(seq_len(nrow(x)), function(i) {
+    lapply(x[i, , drop = FALSE], `[[`, 1)
+  })
   as_g6_combos(lst)
 }
 
