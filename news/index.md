@@ -15,6 +15,90 @@
 
 ### New feature
 
+- Added new `collapse` parameter to nodes. This will only work if you
+  use any of the `custom-*-node` node types (see below). Now if a node
+  has `children` (vector of character node IDs), it can be collapsed or
+  uncollapsed. `collapse` accepts a list of options via
+  [`g6_collapse_options()`](https://cynkra.github.io/g6R/reference/g6_collapse_options.md).
+  When a node has `children` set (character vector/list of node IDs
+  expected), an option `g6R.directed_graph` is set to TRUE so that, when
+  a connection is created between 2 nodes, we automatically establish
+  parent/child relation and inversely when an edge or node is removed.
+  You can also manually opt-in for this setup by setting
+  `options(g6R.directed_graph = TRUE)`. Importantly, the parent/child
+  relations are only maintained if you use the g6R proxy functions.
+  Using the direct JS G6 API yourself (like with
+  `graph.removeEdgeData(...)` won’t do anything to keep the tree state
+  in sync! The
+  [`set_g6_max_collapse_depth()`](https://cynkra.github.io/g6R/reference/set_g6_max_collapse_depth.md)
+  option controls which nodes display a collapse button based on their
+  depth in the graph. Only nodes at depth `<= maxCollapseDepth` show
+  collapse buttons. Defaults to `Inf` (all nodes with children are
+  collapsible). Set to `0` to restrict collapsing to root nodes only.
+
+``` r
+g6_node(
+  id = 1,
+  type = "custom-rect-node", # to enable use custom class
+  children = c(2, 3),
+  collapse = g6_collapse_options(collapsed = TRUE)
+)
+```
+
+- Added new `collapse` parameter to
+  [`g6_combo()`](https://cynkra.github.io/g6R/reference/g6_element.md).
+  Accepts
+  [`g6_collapse_options()`](https://cynkra.github.io/g6R/reference/g6_collapse_options.md)
+  just like nodes. When `collapse` is provided and `type` is NULL, the
+  combo type is automatically set to `"rect-combo-with-extra-button"`.
+  The combo collapse button now supports all the same configuration as
+  nodes: configurable `placement`, `r`, `fill`, `stroke`, `iconStroke`,
+  `visibility` (including `"hover"` mode), etc.
+
+``` r
+g6_combo(
+  "combo1",
+  collapse = g6_collapse_options(
+    placement = "bottom",
+    fill = "#f0f0f0",
+    visibility = "hover"
+  )
+)
+```
+
+- [`bubble_sets()`](https://cynkra.github.io/g6R/reference/bubble_sets.md)
+  and [`hull()`](https://cynkra.github.io/g6R/reference/hull.md) now
+  automatically set `pointerEvents = "none"` and `zIndex = -1` by
+  default. This fixes two issues when using the SVG renderer: overlay
+  shapes no longer block pointer events (drag, click) on nodes, and they
+  render behind nodes so they don’t visually cover collapse buttons or
+  other node UI. These defaults can be overridden by passing explicit
+  values.
+
+- Overlay plugins
+  ([`bubble_sets()`](https://cynkra.github.io/g6R/reference/bubble_sets.md),
+  [`hull()`](https://cynkra.github.io/g6R/reference/hull.md)) now resize
+  dynamically when nodes are collapsed or uncollapsed. Hidden members
+  are temporarily removed from the overlay shape and restored when
+  expanded again.
+
+- New `rect-combo-with-extra-button` combo type, the rectangular
+  counterpart of `circle-combo-with-extra-button`.
+
+### Bug fixes
+
+- Fixed [`hull()`](https://cynkra.github.io/g6R/reference/hull.md) label
+  not displaying: the default `labelMaxWidth` was `0`, which caused G6
+  to ellipsize the label to zero width. Changed default to `NULL`
+  (consistent with
+  [`bubble_sets()`](https://cynkra.github.io/g6R/reference/bubble_sets.md)).
+
+- Fixed port `+` indicators incorrectly showing on at-capacity ports
+  during node selection or drag. G6’s internal `setVisibility()` call
+  during update was making all child shapes visible, and the cleanup was
+  skipped when the cursor was hovering the node. Now the capacity-aware
+  port logic is re-applied during updates while hovering.
+
 - Improvements to how
   [`drag_element()`](https://cynkra.github.io/g6R/reference/drag_element.md)
   and

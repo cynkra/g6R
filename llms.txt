@@ -135,6 +135,9 @@ Create g6 data structures and validate them
   [`as_g6_edge()`](https://cynkra.github.io/g6R/reference/as_g6_element.md)
   [`as_g6_combo()`](https://cynkra.github.io/g6R/reference/as_g6_element.md)
   : Coerce to a g6 element object
+- [`g6_collapse_options()`](https://cynkra.github.io/g6R/reference/g6_collapse_options.md)
+  [`is_g6_collapse_options()`](https://cynkra.github.io/g6R/reference/g6_collapse_options.md)
+  : Configure collapse button for nodes
 
 ### Create list of g6 elements
 
@@ -349,6 +352,13 @@ g6 options
   : Create Animation Configuration for G6 Graphs
 - [`g6_set_theme()`](https://cynkra.github.io/g6R/reference/g6_set_theme.md)
   : Set the theme for a g6 graph via proxy
+
+## R options
+
+Custom global options
+
+- [`set_g6_max_collapse_depth()`](https://cynkra.github.io/g6R/reference/set_g6_max_collapse_depth.md)
+  : Set max collapse depth
 
 ## Behaviors
 

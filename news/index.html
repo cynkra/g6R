@@ -67,7 +67,33 @@
 </ul></div>
 <div class="section level3">
 <h3 id="new-feature-0-6-0-9000">New feature<a class="anchor" aria-label="anchor" href="#new-feature-0-6-0-9000"></a></h3>
-<ul><li><p>Improvements to how <code><a href="../reference/drag_element.html">drag_element()</a></code> and <code><a href="../reference/drag_element_force.html">drag_element_force()</a></code> work with <code><a href="../reference/create_edge.html">create_edge()</a></code>. Now, the <code><a href="../reference/create_edge.html">create_edge()</a></code> can be <code>drag</code> and work with <code><a href="../reference/drag_element.html">drag_element()</a></code> as we handle the behavior conflicts/priorities JS side.</p></li>
+<ul><li>Added new <code>collapse</code> parameter to nodes. This will only work if you use any of the <code>custom-*-node</code> node types (see below). Now if a node has <code>children</code> (vector of character node IDs), it can be collapsed or uncollapsed. <code>collapse</code> accepts a list of options via <code><a href="../reference/g6_collapse_options.html">g6_collapse_options()</a></code>. When a node has <code>children</code> set (character vector/list of node IDs expected), an option <code>g6R.directed_graph</code> is set to TRUE so that, when a connection is created between 2 nodes, we automatically establish parent/child relation and inversely when an edge or node is removed. You can also manually opt-in for this setup by setting <code>options(g6R.directed_graph = TRUE)</code>. Importantly, the parent/child relations are only maintained if you use the g6R proxy functions. Using the direct JS G6 API yourself (like with <code>graph.removeEdgeData(...)</code> won’t do anything to keep the tree state in sync! The <code><a href="../reference/set_g6_max_collapse_depth.html">set_g6_max_collapse_depth()</a></code> option controls which nodes display a collapse button based on their depth in the graph. Only nodes at depth <code>&lt;= maxCollapseDepth</code> show collapse buttons. Defaults to <code>Inf</code> (all nodes with children are collapsible). Set to <code>0</code> to restrict collapsing to root nodes only.</li>
+</ul><div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/g6_element.html">g6_node</a></span><span class="op">(</span></span>
+<span>  id <span class="op">=</span> <span class="fl">1</span>,</span>
+<span>  type <span class="op">=</span> <span class="st">"custom-rect-node"</span>, <span class="co"># to enable use custom class</span></span>
+<span>  children <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2</span>, <span class="fl">3</span><span class="op">)</span>,</span>
+<span>  collapse <span class="op">=</span> <span class="fu"><a href="../reference/g6_collapse_options.html">g6_collapse_options</a></span><span class="op">(</span>collapsed <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span><span class="op">)</span></span></code></pre></div>
+<ul><li>Added new <code>collapse</code> parameter to <code><a href="../reference/g6_element.html">g6_combo()</a></code>. Accepts <code><a href="../reference/g6_collapse_options.html">g6_collapse_options()</a></code> just like nodes. When <code>collapse</code> is provided and <code>type</code> is NULL, the combo type is automatically set to <code>"rect-combo-with-extra-button"</code>. The combo collapse button now supports all the same configuration as nodes: configurable <code>placement</code>, <code>r</code>, <code>fill</code>, <code>stroke</code>, <code>iconStroke</code>, <code>visibility</code> (including <code>"hover"</code> mode), etc.</li>
+</ul><div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/g6_element.html">g6_combo</a></span><span class="op">(</span></span>
+<span>  <span class="st">"combo1"</span>,</span>
+<span>  collapse <span class="op">=</span> <span class="fu"><a href="../reference/g6_collapse_options.html">g6_collapse_options</a></span><span class="op">(</span></span>
+<span>    placement <span class="op">=</span> <span class="st">"bottom"</span>,</span>
+<span>    fill <span class="op">=</span> <span class="st">"#f0f0f0"</span>,</span>
+<span>    visibility <span class="op">=</span> <span class="st">"hover"</span></span>
+<span>  <span class="op">)</span></span>
+<span><span class="op">)</span></span></code></pre></div>
+<ul><li><p><code><a href="../reference/bubble_sets.html">bubble_sets()</a></code> and <code><a href="../reference/hull.html">hull()</a></code> now automatically set <code>pointerEvents = "none"</code> and <code>zIndex = -1</code> by default. This fixes two issues when using the SVG renderer: overlay shapes no longer block pointer events (drag, click) on nodes, and they render behind nodes so they don’t visually cover collapse buttons or other node UI. These defaults can be overridden by passing explicit values.</p></li>
+<li><p>Overlay plugins (<code><a href="../reference/bubble_sets.html">bubble_sets()</a></code>, <code><a href="../reference/hull.html">hull()</a></code>) now resize dynamically when nodes are collapsed or uncollapsed. Hidden members are temporarily removed from the overlay shape and restored when expanded again.</p></li>
+<li><p>New <code>rect-combo-with-extra-button</code> combo type, the rectangular counterpart of <code>circle-combo-with-extra-button</code>.</p></li>
+</ul></div>
+<div class="section level3">
+<h3 id="bug-fixes-0-6-0-9000">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-0-6-0-9000"></a></h3>
+<ul><li><p>Fixed <code><a href="../reference/hull.html">hull()</a></code> label not displaying: the default <code>labelMaxWidth</code> was <code>0</code>, which caused G6 to ellipsize the label to zero width. Changed default to <code>NULL</code> (consistent with <code><a href="../reference/bubble_sets.html">bubble_sets()</a></code>).</p></li>
+<li><p>Fixed port <code>+</code> indicators incorrectly showing on at-capacity ports during node selection or drag. G6’s internal <code>setVisibility()</code> call during update was making all child shapes visible, and the cleanup was skipped when the cursor was hovering the node. Now the capacity-aware port logic is re-applied during updates while hovering.</p></li>
+<li><p>Improvements to how <code><a href="../reference/drag_element.html">drag_element()</a></code> and <code><a href="../reference/drag_element_force.html">drag_element_force()</a></code> work with <code><a href="../reference/create_edge.html">create_edge()</a></code>. Now, the <code><a href="../reference/create_edge.html">create_edge()</a></code> can be <code>drag</code> and work with <code><a href="../reference/drag_element.html">drag_element()</a></code> as we handle the behavior conflicts/priorities JS side.</p></li>
 <li><p><code>input[["&lt;graph_ID&gt;-state"]]</code> now does not return unnamed lists for nodes, edges and combos. Instead, each sublist is named with the corresponding element IDs. This makes it easier to retrieve the state of a specific element when we know the ID.</p></li>
 <li>
 <p>Added better port support for nodes <strong>ports</strong>:</p>
@@ -100,7 +126,7 @@
 <div class="section level3">
 <h3 id="new-features-and-fixes-0-5-0">New features and fixes<a class="anchor" aria-label="anchor" href="#new-features-and-fixes-0-5-0"></a></h3>
 <ul><li>Support for svg rendering:</li>
-</ul><div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+</ul><div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/g6_options.html">g6_options</a></span><span class="op">(</span>renderer <span class="op">=</span> <span class="fu"><a href="../reference/JS.html">JS</a></span><span class="op">(</span><span class="st">"() =&gt; new SVGRenderer()"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <ul><li>Fix issue which was preventing from removing a node from a combo.</li>
 <li>Layout is not recomputed when calling data proxy functions, except if <code>options("g6R.layout_on_data_change" = TRUE)</code>. In the later case, the layout is recomputed after drawing.</li>
@@ -108,10 +134,10 @@
 <li>New <code><a href="../reference/g6_update_layout.html">g6_update_layout()</a></code> proxy function to order the layout re-execution and optionally update its parameters.</li>
 <li>New <code>input[["&lt;graph_ID&gt;-mouse_position"]]</code>: any click/right click or drag release event captures the mouse position. <code>input[["&lt;graph_ID&gt;-mouse_position"]]</code> contains the x and y coordinates of the mouse relative to the canvas. This is useful to add a node where the mouse was clicked, a context menu was triggered or the create edge was released on the canvas without a specific target.</li>
 <li>Elements selected via <code><a href="../reference/brush_select.html">brush_select()</a></code> or <code><a href="../reference/lasso_select.html">lasso_select()</a></code> have a custom input handler. This may give:</li>
-</ul><div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a>input[[<span class="st">"&lt;graph_ID&gt;-selected_combo"</span>]]</span>
-<span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a>[<span class="dv">1</span>] <span class="st">"1"</span> <span class="st">"2"</span></span>
-<span id="cb2-3"><a href="#cb2-3" tabindex="-1"></a><span class="fu">attr</span>(,<span class="st">"eventType"</span>)</span>
-<span id="cb2-4"><a href="#cb2-4" tabindex="-1"></a>[<span class="dv">1</span>] <span class="st">"brush_select"</span></span></code></pre></div>
+</ul><div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a>input[[<span class="st">"&lt;graph_ID&gt;-selected_combo"</span>]]</span>
+<span id="cb4-2"><a href="#cb4-2" tabindex="-1"></a>[<span class="dv">1</span>] <span class="st">"1"</span> <span class="st">"2"</span></span>
+<span id="cb4-3"><a href="#cb4-3" tabindex="-1"></a><span class="fu">attr</span>(,<span class="st">"eventType"</span>)</span>
+<span id="cb4-4"><a href="#cb4-4" tabindex="-1"></a>[<span class="dv">1</span>] <span class="st">"brush_select"</span></span></code></pre></div>
 <p>Notice the extra attribute, which allows to make a difference between <code><a href="../reference/click_select.html">click_select()</a></code> and <code><a href="../reference/brush_select.html">brush_select()</a></code> events.</p>
 <ul><li>Get correct element type on click: it was possible that when clicking a combo, it appeared under <code>input$&lt;graph_ID&gt;-selected_node</code> instead of <code>input$&lt;graph_ID&gt;-selected_combo</code>.</li>
 <li>

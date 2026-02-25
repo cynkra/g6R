@@ -13,7 +13,8 @@ g6_node(
   states = NULL,
   combo = NULL,
   children = NULL,
-  ports = NULL
+  ports = NULL,
+  collapse = NULL
 )
 
 g6_edge(
@@ -32,7 +33,8 @@ g6_combo(
   data = NULL,
   style = NULL,
   states = NULL,
-  combo = NULL
+  combo = NULL,
+  collapse = NULL
 )
 
 validate_element(x, ...)
@@ -88,6 +90,14 @@ validate_element(x, ...)
   [g6_ports](https://cynkra.github.io/g6R/reference/g6_ports.md) and
   [g6_port](https://cynkra.github.io/g6R/reference/g6_port.md) for
   details.
+
+- collapse:
+
+  List. Collapse button configuration (optional, nodes and combos). See
+  [g6_collapse_options](https://cynkra.github.io/g6R/reference/g6_collapse_options.md)
+  for details. For nodes, only used when node has children. For combos,
+  when provided and `type` is NULL, auto-sets type to
+  `"rect-combo-with-extra-button"`.
 
 - source:
 
@@ -166,7 +176,12 @@ validate_element(node)
 #> 
 #> 
 #> $children
-#> [1] "n2" "n3"
+#> $children[[1]]
+#> [1] "n2"
+#> 
+#> $children[[2]]
+#> [1] "n3"
+#> 
 #> 
 #> attr(,"class")
 #> [1] "g6_node"    "g6_element"

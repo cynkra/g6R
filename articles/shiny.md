@@ -1017,6 +1017,7 @@ ui <- fluidPage(
         nodes = g6_nodes(
           g6_node(
             id = "A",
+            type = "custom-circle-node",
             ports = g6_ports(
               g6_input_port(key = "in1", label = "in1", placement = "left"),
               g6_output_port(key = "out1", label = "out1", placement = "right"),
@@ -1026,6 +1027,7 @@ ui <- fluidPage(
           ),
           g6_node(
             id = "B",
+            type = "custom-circle-node",
             ports = g6_ports(
               g6_input_port(key = "in2", label = "in2", placement = "left"),
               g6_output_port(key = "out3", label = "out3", placement = "right"),

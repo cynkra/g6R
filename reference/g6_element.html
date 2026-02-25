@@ -74,7 +74,8 @@
 <span>  states <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  combo <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  children <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  ports <span class="op">=</span> <span class="cn">NULL</span></span>
+<span>  ports <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  collapse <span class="op">=</span> <span class="cn">NULL</span></span>
 <span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu">g6_edge</span><span class="op">(</span></span>
@@ -93,7 +94,8 @@
 <span>  data <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  style <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  states <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  combo <span class="op">=</span> <span class="cn">NULL</span></span>
+<span>  combo <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  collapse <span class="op">=</span> <span class="cn">NULL</span></span>
 <span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu">validate_element</span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span><span class="op">)</span></span>
@@ -147,6 +149,12 @@ For edges, this is optional (id is constructed as source-target if not provided)
 <dt id="arg-ports">ports<a class="anchor" aria-label="anchor" href="#arg-ports"></a></dt>
 <dd><p>List. Ports definition (optional, nodes only).
 See <a href="g6_ports.html">g6_ports</a> and <a href="g6_port.html">g6_port</a> for details.</p></dd>
+
+
+<dt id="arg-collapse">collapse<a class="anchor" aria-label="anchor" href="#arg-collapse"></a></dt>
+<dd><p>List. Collapse button configuration (optional, nodes and combos).
+See <a href="g6_collapse_options.html">g6_collapse_options</a> for details. For nodes, only used when node has children.
+For combos, when provided and <code>type</code> is NULL, auto-sets type to <code>"rect-combo-with-extra-button"</code>.</p></dd>
 
 
 <dt id="arg-source">source<a class="anchor" aria-label="anchor" href="#arg-source"></a></dt>
@@ -227,7 +235,12 @@ the checks on source and target.</p></dd>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $children</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "n2" "n3"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $children[[1]]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "n2"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $children[[2]]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "n3"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> attr(,"class")</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "g6_node"    "g6_element"</span>

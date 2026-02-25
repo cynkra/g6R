@@ -22,7 +22,7 @@ hull(
   labelAutoRotate = TRUE,
   labelOffsetX = 0,
   labelOffsetY = 0,
-  labelMaxWidth = 0,
+  labelMaxWidth = NULL,
   ...
 )
 ```
@@ -92,8 +92,8 @@ hull(
 
 - labelMaxWidth:
 
-  Maximum width of the text, exceeding will be ellipsized (number,
-  default: 0).
+  Maximum width of the text, exceeding will be ellipsized (number or
+  NULL, default: NULL).
 
 - ...:
 

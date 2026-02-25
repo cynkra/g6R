@@ -68,6 +68,7 @@
 <url><loc>https://cynkra.github.io/g6R/reference/g6_add_plugin.html</loc></url>
 <url><loc>https://cynkra.github.io/g6R/reference/g6_behaviors.html</loc></url>
 <url><loc>https://cynkra.github.io/g6R/reference/g6_canvas_resize.html</loc></url>
+<url><loc>https://cynkra.github.io/g6R/reference/g6_collapse_options.html</loc></url>
 <url><loc>https://cynkra.github.io/g6R/reference/g6_data.html</loc></url>
 <url><loc>https://cynkra.github.io/g6R/reference/g6_element.html</loc></url>
 <url><loc>https://cynkra.github.io/g6R/reference/g6_elements.html</loc></url>
@@ -106,6 +107,7 @@
 <url><loc>https://cynkra.github.io/g6R/reference/radial.html</loc></url>
 <url><loc>https://cynkra.github.io/g6R/reference/radial_layout.html</loc></url>
 <url><loc>https://cynkra.github.io/g6R/reference/scroll_canvas.html</loc></url>
+<url><loc>https://cynkra.github.io/g6R/reference/set_g6_max_collapse_depth.html</loc></url>
 <url><loc>https://cynkra.github.io/g6R/reference/snapline.html</loc></url>
 <url><loc>https://cynkra.github.io/g6R/reference/timebar.html</loc></url>
 <url><loc>https://cynkra.github.io/g6R/reference/toolbar.html</loc></url>
