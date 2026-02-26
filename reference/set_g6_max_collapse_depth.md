@@ -3,7 +3,8 @@
 Controls which nodes display a collapse button based on their depth in
 the graph. Only nodes at depth `<= maxCollapseDepth` will show collapse
 buttons. Set to `Inf` (the default) to allow all nodes with children to
-be collapsible. Set to `0` to only allow root nodes to collapse.
+be collapsible. Set to `0` to only allow root nodes to collapse. Set to
+`-1` to disable collapsing entirely.
 
 ## Usage
 
@@ -15,7 +16,8 @@ set_g6_max_collapse_depth(val)
 
 - val:
 
-  A single non-negative number. Use `Inf` for no limit.
+  A single number \>= -1. Use `Inf` for no limit, `-1` to disable all
+  collapsing.
 
 ## Value
 

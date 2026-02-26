@@ -3,11 +3,11 @@
 the graph. Only nodes at depth &amp;lt;= maxCollapseDepth will show
 collapse buttons. Set to Inf (the default) to allow all nodes
 with children to be collapsible. Set to 0 to only allow root
-nodes to collapse."><meta property="og:description" content="Controls which nodes display a collapse button based on their depth in
+nodes to collapse. Set to -1 to disable collapsing entirely."><meta property="og:description" content="Controls which nodes display a collapse button based on their depth in
 the graph. Only nodes at depth &amp;lt;= maxCollapseDepth will show
 collapse buttons. Set to Inf (the default) to allow all nodes
 with children to be collapsible. Set to 0 to only allow root
-nodes to collapse."></head><body>
+nodes to collapse. Set to -1 to disable collapsing entirely."></head><body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
 
 
@@ -73,7 +73,7 @@ nodes to collapse."></head><body>
 the graph. Only nodes at depth <code>&lt;= maxCollapseDepth</code> will show
 collapse buttons. Set to <code>Inf</code> (the default) to allow all nodes
 with children to be collapsible. Set to <code>0</code> to only allow root
-nodes to collapse.</p>
+nodes to collapse. Set to <code>-1</code> to disable collapsing entirely.</p>
     </div>
 
     <div class="section level2">
@@ -86,7 +86,8 @@ nodes to collapse.</p>
 
 
 <dl><dt id="arg-val">val<a class="anchor" aria-label="anchor" href="#arg-val"></a></dt>
-<dd><p>A single non-negative number. Use <code>Inf</code> for no limit.</p></dd>
+<dd><p>A single number &gt;= -1. Use <code>Inf</code> for no limit,
+<code>-1</code> to disable all collapsing.</p></dd>
 
 </dl></div>
     <div class="section level2">

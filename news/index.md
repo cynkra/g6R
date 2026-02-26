@@ -35,6 +35,10 @@
   depth in the graph. Only nodes at depth `<= maxCollapseDepth` show
   collapse buttons. Defaults to `Inf` (all nodes with children are
   collapsible). Set to `0` to restrict collapsing to root nodes only.
+  Set to `-1` to disable collapsing entirely (collapse buttons are
+  removed even when
+  [`g6_collapse_options()`](https://cynkra.github.io/g6R/reference/g6_collapse_options.md)
+  is provided and nodes have children).
 
 ``` r
 g6_node(
