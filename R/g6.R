@@ -211,9 +211,9 @@ set_g6_directed_graph <- function(val) {
 
 #' @keywords internal
 validate_g6_max_collapse_depth <- function(val) {
-  if (!is.numeric(val) || length(val) != 1 || val < 0) {
+  if (!is.numeric(val) || length(val) != 1 || val < -1) {
     stop(
-      "`g6R.max_collapse_depth` option must be a single non-negative number."
+      "`g6R.max_collapse_depth` option must be a single number >= -1."
     )
   }
   invisible(val)
@@ -231,9 +231,10 @@ get_g6_max_collapse_depth <- function() {
 #' the graph. Only nodes at depth \code{<= maxCollapseDepth} will show
 #' collapse buttons. Set to \code{Inf} (the default) to allow all nodes
 #' with children to be collapsible. Set to \code{0} to only allow root
-#' nodes to collapse.
+#' nodes to collapse. Set to \code{-1} to disable collapsing entirely.
 #'
-#' @param val A single non-negative number. Use \code{Inf} for no limit.
+#' @param val A single number >= -1. Use \code{Inf} for no limit,
+#' \code{-1} to disable all collapsing.
 #'
 #' @return Invisibly returns \code{val}.
 #' @export

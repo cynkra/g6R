@@ -560,9 +560,9 @@ const createCustomNode = (BaseShape) => {
         return;
       }
 
-      // Depth gate: only show collapse button if node depth <= maxCollapseDepth
+      // Depth gate: -1 disables all collapsing, otherwise only show if depth <= maxCollapseDepth
       const maxCollapseDepth = this.context.graph.options.maxCollapseDepth ?? Infinity;
-      if (maxCollapseDepth !== Infinity && this.getNodeDepth() > maxCollapseDepth) {
+      if (maxCollapseDepth === -1 || (maxCollapseDepth !== Infinity && this.getNodeDepth() > maxCollapseDepth)) {
         const existingButton = this.shapeMap['collapse-button'];
         const existingHitArea = this.shapeMap['collapse-hit-area'];
         if (existingButton) {

@@ -216,7 +216,7 @@ const setupGraph = (graph, widget, config) => {
       preserveElementsPosition(graph);
     }
 
-    registerShinyHandlers(graph, config.mode);
+    registerShinyHandlers(graph, config.mode, config.directed);
   }
 
   graph.render();

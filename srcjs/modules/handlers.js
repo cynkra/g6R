@@ -95,7 +95,7 @@ const updateNodePorts = (graph, ids, ops) => {
   }
 };
 
-const registerShinyHandlers = (graph, mode) => {
+const registerShinyHandlers = (graph, mode, directed = false) => {
   const id = graph.options.container;
 
   // Update/remove/add nodes or combo or edges
@@ -149,8 +149,8 @@ const registerShinyHandlers = (graph, mode) => {
           });
         }
 
-        // Handle parent-child relationships for edges
-        if (m.type === 'Edge') {
+        // Handle parent-child relationships for edges (only in directed mode)
+        if (directed && m.type === 'Edge') {
           if (m.action === 'remove') {
             // When removing edges, clean up parent-child relationships
             m.el.forEach(edgeId => {
@@ -227,8 +227,8 @@ const registerShinyHandlers = (graph, mode) => {
           }
         }
 
-        // Handle parent-child relationships when nodes are removed
-        if (m.type === 'Node' && m.action === 'remove') {
+        // Handle parent-child relationships when nodes are removed (only in directed mode)
+        if (directed && m.type === 'Node' && m.action === 'remove') {
           m.el.forEach(nodeId => {
             // Find the parent of this node
             const parentData = graph.getParentData(nodeId, 'tree');

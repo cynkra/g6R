@@ -294,6 +294,22 @@ class CustomCreateEdge extends CreateEdge {
     const edgeData = typeof onCreate === 'function' ? onCreate(rawEdgeData) : rawEdgeData;
 
     if (edgeData) {
+      // In directed mode, establish parent-child relationships
+      // (same logic as the Shiny handler for edge addition)
+      if (graph.options.directed) {
+        const sourceNode = graph.getNodeData(edgeData.source);
+        if (sourceNode) {
+          if (!sourceNode.children) {
+            sourceNode.children = [];
+          }
+          if (!sourceNode.children.includes(edgeData.target)) {
+            sourceNode.children.push(edgeData.target);
+            graph.updateNodeData([{ id: edgeData.source, children: sourceNode.children }]);
+          }
+          graph.context.model.setParent(edgeData.target, edgeData.source, 'tree');
+        }
+      }
+
       graph.addEdgeData([edgeData]);
 
       if (typeof onFinish === 'function') {

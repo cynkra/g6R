@@ -7,7 +7,8 @@
 set_g6_max_collapse_depth(val)
 }
 \arguments{
-\item{val}{A single non-negative number. Use \code{Inf} for no limit.}
+\item{val}{A single number >= -1. Use \code{Inf} for no limit,
+\code{-1} to disable all collapsing.}
 }
 \value{
 Invisibly returns \code{val}.
@@ -17,5 +18,5 @@ Controls which nodes display a collapse button based on their depth in
 the graph. Only nodes at depth \code{<= maxCollapseDepth} will show
 collapse buttons. Set to \code{Inf} (the default) to allow all nodes
 with children to be collapsible. Set to \code{0} to only allow root
-nodes to collapse.
+nodes to collapse. Set to \code{-1} to disable collapsing entirely.
 }
