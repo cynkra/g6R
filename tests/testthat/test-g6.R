@@ -107,10 +107,16 @@ test_that("set_g6_max_collapse_depth sets and retrieves correctly", {
   expect_equal(get_g6_max_collapse_depth(), Inf)
 })
 
+test_that("set_g6_max_collapse_depth accepts -1 to disable collapsing", {
+  withr::local_options(g6R.max_collapse_depth = NULL)
+  set_g6_max_collapse_depth(-1)
+  expect_equal(get_g6_max_collapse_depth(), -1)
+})
+
 test_that("set_g6_max_collapse_depth rejects invalid values", {
-  expect_error(set_g6_max_collapse_depth(-1), "non-negative")
-  expect_error(set_g6_max_collapse_depth("a"), "non-negative")
-  expect_error(set_g6_max_collapse_depth(c(1, 2)), "non-negative")
+  expect_error(set_g6_max_collapse_depth(-2), ">= -1")
+  expect_error(set_g6_max_collapse_depth("a"), ">= -1")
+  expect_error(set_g6_max_collapse_depth(c(1, 2)), ">= -1")
 })
 
 test_that("g6 widget includes maxCollapseDepth in x", {
