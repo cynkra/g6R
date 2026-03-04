@@ -604,7 +604,6 @@ server <- function(input, output, session) {
                 .getWidget();
               if (current.id === undefined) return;
               if (value === 'remove_edge') {
-              console.log(target);
               Shiny.setInputValue(target.closest('.g6').id + '-removed_edge',
                   {id: current.id},
                   {priority: 'event'});
