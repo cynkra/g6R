@@ -15,7 +15,7 @@
   "license": "ISC",
   "devDependencies": {
     "@antv/g-svg": "^2.0.42",
-    "webpack": "^5.99.8",
+    "webpack": "^5.105.4",
     "webpack-cli": "^6.0.1",
     "webpack-merge": "^6.0.1"
   },
