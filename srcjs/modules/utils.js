@@ -221,6 +221,18 @@ const setupGraph = (graph, widget, config) => {
 
   graph.render();
 
+  // Use ResizeObserver to detect container size changes (e.g. from
+  // DOM reparenting, panel resize, CSS visibility toggles) instead
+  // of relying solely on window resize events.
+  const containerEl = document.getElementById(graph.options.container);
+  if (containerEl) {
+    const ro = new ResizeObserver(() => {
+      widget.resize();
+    });
+    ro.observe(containerEl);
+  }
+  // Keep window resize as fallback for cases where the container
+  // itself doesn't change size but its contents need reflowing.
   window.addEventListener('resize', () => {
     widget.resize();
   })
