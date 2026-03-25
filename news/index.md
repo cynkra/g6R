@@ -145,6 +145,11 @@ g6_combo(
 - New `rect-combo-with-extra-button` combo type, the rectangular
   counterpart of `circle-combo-with-extra-button`.
 
+- Graph now uses `ResizeObserver` to detect container size changes
+  (e.g. from DOM reparenting, panel resize, CSS visibility toggles)
+  instead of relying solely on `window` resize events. The `window`
+  resize listener is kept as a fallback.
+
 ### Bug fixes
 
 - Fixed [`hull()`](https://cynkra.github.io/g6R/reference/hull.md) label

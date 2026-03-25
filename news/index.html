@@ -107,6 +107,7 @@
 <ul><li><p><code><a href="../reference/bubble_sets.html">bubble_sets()</a></code> and <code><a href="../reference/hull.html">hull()</a></code> now automatically set <code>pointerEvents = "none"</code> and <code>zIndex = -1</code> by default. This fixes two issues when using the SVG renderer: overlay shapes no longer block pointer events (drag, click) on nodes, and they render behind nodes so they don’t visually cover collapse buttons or other node UI. These defaults can be overridden by passing explicit values.</p></li>
 <li><p>Overlay plugins (<code><a href="../reference/bubble_sets.html">bubble_sets()</a></code>, <code><a href="../reference/hull.html">hull()</a></code>) now resize dynamically when nodes are collapsed or uncollapsed. Hidden members are temporarily removed from the overlay shape and restored when expanded again.</p></li>
 <li><p>New <code>rect-combo-with-extra-button</code> combo type, the rectangular counterpart of <code>circle-combo-with-extra-button</code>.</p></li>
+<li><p>Graph now uses <code>ResizeObserver</code> to detect container size changes (e.g. from DOM reparenting, panel resize, CSS visibility toggles) instead of relying solely on <code>window</code> resize events. The <code>window</code> resize listener is kept as a fallback.</p></li>
 </ul></div>
 <div class="section level3">
 <h3 id="bug-fixes-0-6-0-9000">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-0-6-0-9000"></a></h3>
