@@ -267,7 +267,6 @@ test_that("g6_update_ports validates and sends correct structure", {
   expect_error(
     g6_update_ports(
       proxy,
-      ids = c("A", "B"),
       ops = list(
         A = list(add = g6_ports(g6_port("out1")), remove = c("in1")),
         B = list(
@@ -279,21 +278,28 @@ test_that("g6_update_ports validates and sends correct structure", {
     NA
   )
 
-  # Error: ids and ops names mismatch
+  # Error: ops not a named list
   expect_error(
     g6_update_ports(
       proxy,
-      ids = c("A", "B"),
-      ops = list(A = list(remove = "x"))
+      ops = list(list(remove = "x"))
     ),
-    "The names of 'ops' must exactly match the 'ids' vector"
+    "'ops' must be a named list"
+  )
+
+  # Error: duplicate node IDs
+  expect_error(
+    g6_update_ports(
+      proxy,
+      ops = list(A = list(remove = "x"), A = list(remove = "y"))
+    ),
+    "Duplicate node IDs"
   )
 
   # Error: remove not character
   expect_error(
     g6_update_ports(
       proxy,
-      ids = "A",
       ops = list(A = list(remove = 123))
     ),
     "remove' must be a character vector"
@@ -303,7 +309,6 @@ test_that("g6_update_ports validates and sends correct structure", {
   expect_error(
     g6_update_ports(
       proxy,
-      ids = "A",
       ops = list(A = list(add = list(list(type = "input")))) # missing key
     ),
     "key"

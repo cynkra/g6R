@@ -1273,6 +1273,12 @@ g6_set_theme <- function(graph, theme) {
   graph
 }
 
+#' @keywords internal
+prefix_port_key <- function(key, nid) {
+  prefix <- paste0(nid, "-")
+  ifelse(startsWith(key, prefix), key, paste0(prefix, key))
+}
+
 #' Update ports for one or more nodes in a g6 graph via proxy
 #'
 #' This function sends a message to the client
@@ -1285,8 +1291,7 @@ g6_set_theme <- function(graph, theme) {
 #' does not remove the ports it was using.
 #'
 #' @param graph A g6_proxy object.
-#' @param ids Character vector of node IDs to update.
-#' @param ops A named list of operations for each node.
+#' @param ops A named list of operations, one entry per node (named by node ID).
 #' Each entry can contain:
 #'   \itemize{
 #'     \item \code{add}: a list of port objects to add.
@@ -1339,7 +1344,6 @@ g6_set_theme <- function(graph, theme) {
 #'     observeEvent(input$update_ports, {
 #'       g6_update_ports(
 #'         g6_proxy("graph"),
-#'         c("A", "B"),
 #'         list(
 #'           A = list(remove = c("out1", "out2")),
 #'           B = list(
@@ -1353,37 +1357,50 @@ g6_set_theme <- function(graph, theme) {
 #'
 #'   shinyApp(ui, server)
 #' }
-g6_update_ports <- function(graph, ids, ops) {
-  if (!is.list(ops) || is.null(names(ops)) || !setequal(names(ops), ids)) {
+g6_update_ports <- function(graph, ops) {
+  if (!is.list(ops) || is.null(names(ops))) {
+    stop("'ops' must be a named list with node IDs as names.")
+  }
+
+  ids <- names(ops)
+
+  if (anyDuplicated(ids)) {
     stop(
-      "The names of 'ops' must exactly match the 'ids' vector.\n",
-      "ids: ",
-      paste(ids, collapse = ", "),
-      "\n",
-      "names(ops): ",
-      paste(names(ops), collapse = ", ")
+      "Duplicate node IDs in 'ops': ",
+      paste(unique(ids[duplicated(ids)]), collapse = ", ")
     )
   }
 
   for (nid in ids) {
     node_ops <- ops[[nid]]
 
-    # Coerce and validate add
+    # Coerce, validate, and prefix add
     if (length(node_ops$add)) {
-      ops[[nid]]$add <- as_g6_ports(node_ops$add)
+      ports <- as_g6_ports(node_ops$add)
+      for (i in seq_along(ports)) {
+        ports[[i]]$key <- prefix_port_key(ports[[i]]$key, nid)
+      }
+      ops[[nid]]$add <- ports
     }
 
-    # Coerce and validate update
+    # Coerce, validate, and prefix update
     if (length(node_ops$update)) {
-      ops[[nid]]$update <- as_g6_ports(node_ops$update)
+      ports <- as_g6_ports(node_ops$update)
+      for (i in seq_along(ports)) {
+        ports[[i]]$key <- prefix_port_key(ports[[i]]$key, nid)
+      }
+      ops[[nid]]$update <- ports
     }
 
-    # Validate remove
-    if (length(node_ops$remove) && !is.character(node_ops$remove)) {
-      stop(sprintf(
-        "For node '%s', 'remove' must be a character vector of port keys",
-        nid
-      ))
+    # Validate and prefix remove
+    if (length(node_ops$remove)) {
+      if (!is.character(node_ops$remove)) {
+        stop(sprintf(
+          "For node '%s', 'remove' must be a character vector of port keys",
+          nid
+        ))
+      }
+      ops[[nid]]$remove <- prefix_port_key(node_ops$remove, nid)
     }
   }
 
