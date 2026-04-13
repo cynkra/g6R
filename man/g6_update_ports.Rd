@@ -49,19 +49,21 @@ if (interactive()) {
         nodes = g6_nodes(
           g6_node(
             id = "A",
+            type = "custom-rect-node",
             ports = g6_ports(
               g6_input_port(key = "in1", label = "in1", placement = "left"),
               g6_output_port(key = "out1", label = "out1", placement = "right"),
-              g6_output_port(key = "out2", label = "out2", placement = c(1, 0.7))
+              g6_output_port(key = "out2", label = "out2", placement = c(1, 1))
             ),
             style = list(x = 100, y = 200, labelText = "Node A")
           ),
           g6_node(
             id = "B",
+            type = "custom-rect-node",
             ports = g6_ports(
               g6_input_port(key = "in2", label = "in2", placement = "left"),
               g6_output_port(key = "out3", label = "out3", placement = "right"),
-              g6_output_port(key = "out4", label = "out4", placement = c(1, 0.3))
+              g6_output_port(key = "out4", label = "out4", placement = c(1, 0))
             ),
             style = list(x = 300, y = 200, labelText = "Node B")
           )

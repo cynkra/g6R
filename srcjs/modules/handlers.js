@@ -36,7 +36,6 @@ const updateNodePorts = (graph, ids, ops) => {
     if (!node) return;
     let style = node.style ? { ...node.style } : {};
     let ports = Array.isArray(style.ports) ? [...style.ports] : [];
-
     const nodeOps = ops[nid] || {};
 
     // Remove ports
@@ -65,7 +64,6 @@ const updateNodePorts = (graph, ids, ops) => {
         }
       });
     }
-
     style.ports = ports;
     updates.push({ id: nid, style });
   });
@@ -82,8 +80,8 @@ const updateNodePorts = (graph, ids, ops) => {
         const srcPort = edge.style?.sourcePort;
         const tgtPort = edge.style?.targetPort;
         return (
-          (srcPort && removedPortKeys.has(srcPort)) ||
-          (tgtPort && removedPortKeys.has(tgtPort))
+          (srcPort && removedPortKeys.has(`${edge.source}-${srcPort}`)) ||
+          (tgtPort && removedPortKeys.has(`${edge.target}-${tgtPort}`))
         );
       })
       .map(edge => edge.id);

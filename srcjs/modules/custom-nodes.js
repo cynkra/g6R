@@ -398,7 +398,8 @@ const handlePortIndicatorClick = (self, portShape, style, indicator, graphId, no
 
 const handlePortIndicatorMouseEnter = (self, portShape, style, indicator) => (e) => {
   if (self._cancelHide) self._cancelHide();
-  if (style.label) showTooltip(e, style);
+  const currentStyle = portShape._style || style;
+  if (currentStyle.label) showTooltip(e, currentStyle);
   const connections = getPortConnections(self.context.graph, self.id)?.[portShape.key] ?? 0;
   const atCapacity = connections >= (portShape.arity === "Infinity" ? Infinity : portShape.arity);
   if (atCapacity) return;
@@ -474,6 +475,7 @@ const createPortShapeForKey = (self, key, style, baseRadius, container, portVisi
   portShape._expandedRadius = baseRadius * INDICATOR_RADIUS_MULTIPLIER;
   portShape._originalFill = style.fill;
   portShape._visibility = portVisibility;
+  portShape._style = style;
   return portShape;
 };
 
@@ -1078,8 +1080,26 @@ const createCustomNode = (BaseShape) => {
     drawPortShapes(attributes, container) {
       const portsStyle = this.getPortsStyle(attributes);
       const graphId = this.context.graph.options.container;
-      this._portShapes = [];
       const portZIndex = getPortZIndex(attributes);
+
+      // Clean up shapes for ports that no longer exist
+      const activeKeys = new Set(
+        Object.entries(portsStyle).filter(([, s]) => s !== false).map(([k]) => k)
+      );
+      if (this._portShapes) {
+        this._portShapes.forEach(({ shape }) => {
+          const key = shape.key;
+          if (!activeKeys.has(key)) {
+            this.upsert(`port-${key}`, GCircle, false, container);
+            this.upsert(`port-hitarea-${key}`, GCircle, false, container);
+            this.upsert(`add-circle-${key}`, GCircle, false, container);
+            this.upsert(`add-inner-${key}`, GCircle, false, container);
+            this.upsert(`add-plus-${key}`, GCircle, false, container);
+          }
+        });
+      }
+
+      this._portShapes = [];
 
       Object.keys(portsStyle).forEach((key) => {
         const style = portsStyle[key];
