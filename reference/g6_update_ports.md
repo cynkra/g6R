@@ -7,7 +7,7 @@ JS side.
 ## Usage
 
 ``` r
-g6_update_ports(graph, ids, ops)
+g6_update_ports(graph, ops)
 ```
 
 ## Arguments
@@ -16,13 +16,10 @@ g6_update_ports(graph, ids, ops)
 
   A g6_proxy object.
 
-- ids:
-
-  Character vector of node IDs to update.
-
 - ops:
 
-  A named list of operations for each node. Each entry can contain:
+  A named list of operations, one entry per node (named by node ID).
+  Each entry can contain:
 
   - `add`: a list of port objects to add.
 
@@ -86,7 +83,6 @@ if (interactive()) {
     observeEvent(input$update_ports, {
       g6_update_ports(
         g6_proxy("graph"),
-        c("A", "B"),
         list(
           A = list(remove = c("out1", "out2")),
           B = list(

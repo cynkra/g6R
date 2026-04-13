@@ -75,7 +75,7 @@ on the JS side.</p>
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">g6_update_ports</span><span class="op">(</span><span class="va">graph</span>, <span class="va">ids</span>, <span class="va">ops</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">g6_update_ports</span><span class="op">(</span><span class="va">graph</span>, <span class="va">ops</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -86,12 +86,8 @@ on the JS side.</p>
 <dd><p>A g6_proxy object.</p></dd>
 
 
-<dt id="arg-ids">ids<a class="anchor" aria-label="anchor" href="#arg-ids"></a></dt>
-<dd><p>Character vector of node IDs to update.</p></dd>
-
-
 <dt id="arg-ops">ops<a class="anchor" aria-label="anchor" href="#arg-ops"></a></dt>
-<dd><p>A named list of operations for each node.
+<dd><p>A named list of operations, one entry per node (named by node ID).
 Each entry can contain:</p><ul><li><p><code>add</code>: a list of port objects to add.</p></li>
 <li><p><code>remove</code>: a character vector of port keys to remove</p></li>
 <li><p><code>update</code>: a list of port objects (with key) to update</p></li>
@@ -154,7 +150,6 @@ does not remove the ports it was using.</p>
 <span class="r-in"><span>    <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/observeEvent.html" class="external-link">observeEvent</a></span><span class="op">(</span><span class="va">input</span><span class="op">$</span><span class="va">update_ports</span>, <span class="op">{</span></span></span>
 <span class="r-in"><span>      <span class="fu">g6_update_ports</span><span class="op">(</span></span></span>
 <span class="r-in"><span>        <span class="fu"><a href="g6_proxy.html">g6_proxy</a></span><span class="op">(</span><span class="st">"graph"</span><span class="op">)</span>,</span></span>
-<span class="r-in"><span>        <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"A"</span>, <span class="st">"B"</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>        <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span></span>
 <span class="r-in"><span>          A <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>remove <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"out1"</span>, <span class="st">"out2"</span><span class="op">)</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>          B <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span></span>

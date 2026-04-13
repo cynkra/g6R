@@ -982,13 +982,12 @@ server <- function(input, output, session) {
 shinyApp(ui, server)
 ```
 
-To update ports dynamically, we leverahe the
+To update ports dynamically, we leverage the
 [`g6_update_ports()`](https://cynkra.github.io/g6R/reference/g6_update_ports.md)
-proxy function. In short, this function accepts three arguments:
+proxy function. In short, this function accepts two arguments:
 
-- A vector of node IDs to update.
-- A list of lists specifying ports to add, remove, or update for each
-  node. Each sub-list can contain:
+- A named list of operations, one entry per node (named by node ID).
+  Each sub-list can contain:
   - `add`: A list of
     [`g6_port()`](https://cynkra.github.io/g6R/reference/g6_port.md)
     objects to add.
@@ -1045,7 +1044,6 @@ ui <- fluidPage(
     observeEvent(input$update_ports, {
       g6_update_ports(
         g6_proxy("graph"),
-        c("A", "B"),
         list(
           A = list(remove = c("out1", "out2")),
           B = list(
