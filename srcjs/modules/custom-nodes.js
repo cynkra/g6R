@@ -1141,7 +1141,18 @@ const createCustomNode = (BaseShape) => {
       addUniqueEventListener(keyShape, 'mouseenter', showPorts);
       addUniqueEventListener(keyShape, 'mouseleave', hidePorts);
 
-      registerNodePortRefresh(this.id, showPorts);
+      // Edge-created refresh: when an edge is added/removed, re-compute
+      // port visuals. While hovering, this updates capacity indicators;
+      // otherwise it just re-applies the per-port visibility mode so
+      // the '+' indicator doesn't leak onto non-hovered nodes.
+      const refreshPorts = () => {
+        if (ctx.isHoveringNode) {
+          showPorts();
+        } else {
+          hidePortsImmediately();
+        }
+      };
+      registerNodePortRefresh(this.id, refreshPorts);
       ensureEdgeCreatedListener(this.context.graph);
     }
 
@@ -1366,37 +1377,35 @@ const createCustomNode = (BaseShape) => {
       if (button) button.attr({ visibility: 'hidden', opacity: 0 });
     }
 
+    setVisibility() {
+      super.setVisibility();
+      // G6's setVisibility cascades the node's visibility to every
+      // descendant shape (via shape.forEach), overriding the per-port
+      // visibility modes we set in drawPortShapes. Re-apply them here
+      // so that 'hover'/'hidden' ports don't leak as visible on the
+      // initial render or after updates.
+      if (!this._portShapes) return;
+      if (this.attributes?.visibility === 'hidden') {
+        this._portShapes.forEach(({ shape, indicator }) => {
+          shape.attr({ visibility: 'hidden' });
+          if (indicator) {
+            indicator.circle?.attr({ visibility: 'hidden' });
+            indicator.innerCircle?.attr({ visibility: 'hidden' });
+            indicator.plus?.attr({ visibility: 'hidden' });
+            if (indicator.hitArea) indicator.hitArea.attr({ visibility: 'hidden' });
+          }
+        });
+        return;
+      }
+      if (this._isHoveringNode?.()) {
+        this._showPorts?.();
+      } else {
+        this._hidePortsImmediately?.();
+      }
+    }
+
     update(attr) {
       super.update(attr);
-      const nodeHidden = this.attributes?.visibility === 'hidden';
-      if (nodeHidden) {
-        // Node is hidden — force ALL port shapes hidden regardless of their mode.
-        // _hidePortsImmediately would re-show "always visible" ports, so bypass it.
-        if (this._portShapes) {
-          this._portShapes.forEach(({ shape, indicator }) => {
-            shape.attr({ visibility: 'hidden' });
-            if (indicator) {
-              indicator.circle?.attr({ visibility: 'hidden' });
-              indicator.innerCircle?.attr({ visibility: 'hidden' });
-              indicator.plus?.attr({ visibility: 'hidden' });
-              if (indicator.hitArea) indicator.hitArea.attr({ visibility: 'hidden' });
-            }
-          });
-        }
-      } else if (this._isHoveringNode?.()) {
-        // G6's BaseShape.update() calls setVisibility() after render(),
-        // which sets ALL child shapes to the node's visibility ('visible'),
-        // including indicators for at-capacity ports.
-        // Re-run the capacity-aware showPorts to fix visibility.
-        if (this._showPorts) {
-          this._showPorts();
-        }
-      } else {
-        // Not hovering — hide everything that should be hidden.
-        if (this._hidePortsImmediately) {
-          this._hidePortsImmediately();
-        }
-      }
       // Re-hide collapse button that should only show on hover
       if (this._collapseVisibility === 'hover' && !this._isHoveringNode?.()) {
         this.hideCollapseButtonImmediate?.();
