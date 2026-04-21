@@ -164,6 +164,17 @@ g6_combo(
   skipped when the cursor was hovering the node. Now the capacity-aware
   port logic is re-applied during updates while hovering.
 
+- Fixed ports with `visibility = "hover"` or `"hidden"` leaking as
+  visible on the initial render. G6’s `BaseShape` constructor calls
+  `setVisibility()` after `render()`, which recursively cascades the
+  node’s visibility to every child shape (including port circles and
+  indicators), overriding the per-port visibility mode. The correction
+  now also runs on initial creation via a `setVisibility()` override,
+  not just on subsequent updates. Additionally, the edge-created
+  listener no longer force-calls `showPorts` on non-hovered nodes, so
+  the `+` indicator no longer leaks onto nodes the user isn’t actually
+  hovering after initial edges load (cynkra/blockr.dag#107).
+
 - Improvements to how
   [`drag_element()`](https://cynkra.github.io/g6R/reference/drag_element.md)
   and
