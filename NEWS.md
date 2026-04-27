@@ -66,6 +66,8 @@ g6_combo(
 
 - `input[["<graph_ID>-state"]]` now does not return unnamed lists for nodes, edges and combos. Instead, each sublist is named with the corresponding element IDs. This makes it easier to retrieve the state of a specific element when we know the ID.
 
+- Fixed `tooltips()` plugin being invisible inside a `{bslib}` / Bootstrap page. G6's tooltip container is rendered with `class="tooltip"`, which collides with Bootstrap's own `.tooltip { opacity: 0 }` rule. The widget now ships a small CSS reset, scoped to `.html-widget.g6 .tooltip`, that restores `opacity: 1` without affecting Bootstrap tooltips elsewhere on the page.
+
 # g6R 0.5.0
 
 ## Potential breaking changes

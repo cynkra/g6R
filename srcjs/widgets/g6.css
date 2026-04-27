@@ -1,0 +1,7 @@
+/* Bootstrap's `.tooltip` rule sets `opacity: 0`, which hides the G6
+   tooltip plugin container (rendered with class="tooltip"). Scope a
+   reset to the g6 widget root so Bootstrap's own tooltips elsewhere
+   on the page remain unaffected. */
+.html-widget.g6 .tooltip {
+  opacity: 1;
+}
