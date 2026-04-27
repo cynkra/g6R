@@ -192,6 +192,16 @@ g6_combo(
   corresponding element IDs. This makes it easier to retrieve the state
   of a specific element when we know the ID.
 
+- Fixed
+  [`tooltips()`](https://cynkra.github.io/g6R/reference/tooltips.md)
+  plugin being invisible inside a
+  [bslib](https://rstudio.github.io/bslib/) / Bootstrap page. G6’s
+  tooltip container is rendered with `class="tooltip"`, which collides
+  with Bootstrap’s own `.tooltip { opacity: 0 }` rule. The widget now
+  ships a small CSS reset, scoped to `.html-widget.g6 .tooltip`, that
+  restores `opacity: 1` without affecting Bootstrap tooltips elsewhere
+  on the page.
+
 ## g6R 0.5.0
 
 CRAN release: 2025-12-09
