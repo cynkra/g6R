@@ -309,8 +309,7 @@ g6(nodes, edges) |>
 ## Tooltip
 
 Displays detailed information about elements on hover for enhanced
-interactivity. Doesn’t work with Shiny yet due to a compatibility issue
-with Bootstrap tooltips class.
+interactivity.
 
 ``` r
 nodes <- data.frame(
