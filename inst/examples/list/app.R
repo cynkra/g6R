@@ -143,7 +143,7 @@ server <- function(input, output, session) {
       g6_plugins(
         minimap(),
         fullscreen(),
-        #tooltips()
+        tooltips(),
         g6R::toolbar(),
         context_menu()
       )

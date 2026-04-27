@@ -1,4 +1,5 @@
 import 'widgets';
+import './g6.css';
 import {
   ExtensionCategory,
   register
