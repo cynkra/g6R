@@ -64,6 +64,8 @@ g6_combo(
 
 - Improvements to how `drag_element()` and `drag_element_force()` work with `create_edge()`. Now, the `create_edge()` can be `drag` and work with `drag_element()` as we handle the behavior conflicts/priorities JS side.
 
+- Fixed `create_edge()` overwriting a consumer-supplied `drag_element()` / `drag_element_force()` `enable` predicate. While drawing an edge from a port, `create_edge()` pauses node dragging and resumes it on drop. It previously resumed by hardcoding `enable: true`, which destroyed any custom `enable` function after the first edge creation (and toggled behaviors via an array, a no-op in current G6 where `updateBehavior()` matches a single `key`). The live `enable` of each drag behavior is now snapshotted (looked up by type, so a custom `key` still works) and restored verbatim on drop (#48).
+
 - `input[["<graph_ID>-state"]]` now does not return unnamed lists for nodes, edges and combos. Instead, each sublist is named with the corresponding element IDs. This makes it easier to retrieve the state of a specific element when we know the ID.
 
 - Fixed `tooltips()` plugin being invisible inside a `{bslib}` / Bootstrap page. G6's tooltip container is rendered with `class="tooltip"`, which collides with Bootstrap's own `.tooltip { opacity: 0 }` rule. The widget now ships a small CSS reset, scoped to `.html-widget.g6 .tooltip`, that restores `opacity: 1` without affecting Bootstrap tooltips elsewhere on the page.
