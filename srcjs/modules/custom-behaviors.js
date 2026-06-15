@@ -5,6 +5,7 @@ import { sendNotification, getPortConnections } from './utils';
 const ASSIST_EDGE_ID = 'g6-create-edge-assist-edge-id';
 const ASSIST_NODE_ID = 'g6-create-edge-assist-node-id';
 const MIN_DRAG_DISTANCE = 10;
+const DRAG_BEHAVIOR_TYPES = ['drag-element', 'drag-element-force'];
 
 class CustomCreateEdge extends CreateEdge {
   isCreatingEdge = false;
@@ -13,9 +14,41 @@ class CustomCreateEdge extends CreateEdge {
   _resetSnappedPortTimeout = null;
   _processingPointerDown = false;
   _processingPointerUp = false;
+  _dragBehaviorSnapshot = null;
 
   validate(event) {
     return true;
+  }
+
+  // Pause node/combo dragging while an edge is being drawn, without destroying
+  // a consumer-supplied `enable` predicate. The live `enable` of every
+  // drag-element behavior is snapshotted (looked up by type, so a custom `key`
+  // still works) and forced to `false`. `resumeDragBehaviors()` restores the
+  // saved values verbatim. `updateBehavior` matches a single `key`, so each
+  // behavior is toggled with its own call rather than an array.
+  pauseDragBehaviors() {
+    if (this._dragBehaviorSnapshot) return;
+    const { graph } = this.context;
+    const snapshot = [];
+    for (const behavior of graph.getBehaviors()) {
+      if (typeof behavior !== 'object' || behavior === null) continue;
+      if (!DRAG_BEHAVIOR_TYPES.includes(behavior.type)) continue;
+      snapshot.push({
+        key: behavior.key,
+        enable: 'enable' in behavior ? behavior.enable : true
+      });
+      graph.updateBehavior({ key: behavior.key, enable: false });
+    }
+    this._dragBehaviorSnapshot = snapshot;
+  }
+
+  resumeDragBehaviors() {
+    if (!this._dragBehaviorSnapshot) return;
+    const { graph } = this.context;
+    for (const { key, enable } of this._dragBehaviorSnapshot) {
+      graph.updateBehavior({ key, enable });
+    }
+    this._dragBehaviorSnapshot = null;
   }
 
   bindEvents() {
@@ -157,13 +190,9 @@ class CustomCreateEdge extends CreateEdge {
     const sourcePort = this.sourcePort;
     const targetPort = event.originalTarget;
 
-    // Re-enable drag-element behavior
-    graph.updateBehavior(
-      [
-        { key: 'drag-element', enable: true },
-        { key: 'drag-element-force', enable: true }
-      ]
-    );
+    // Restore the drag-element behaviors paused on port grab, preserving any
+    // consumer-supplied `enable` predicate.
+    this.resumeDragBehaviors();
 
     if (['node', 'combo', 'canvas'].indexOf(targetType) !== -1 && this.source) {
       const startX = this.startX ?? 0;
@@ -371,15 +400,15 @@ class CustomCreateEdge extends CreateEdge {
         }
         // Only set flag after arity check passes
         this.isCreatingEdge = true;
-        // Disable drag-element to prevent node dragging during edge creation
-        try {
-          graph.updateBehavior(
-            [
-              { key: 'drag-element', enable: false },
-              { key: 'drag-element-force', enable: false }
-            ]
-          );
-        } catch (e) { }
+        // Pause node dragging during edge creation. Only in the pointer
+        // (drag) trigger, where customDrop() on pointer-up guarantees a
+        // matching resumeDragBehaviors(). In click trigger there is no drop
+        // event to resume on, so we leave drag behaviors untouched.
+        if (this.options.trigger !== 'click') {
+          try {
+            this.pauseDragBehaviors();
+          } catch (e) { }
+        }
       } else {
         // User clicked on node body, not on a port - don't start edge creation
         return;
