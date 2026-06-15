@@ -10,6 +10,7 @@ behaviors name as a string, or passing behaviors functions. The latter
 is more convenient to have more control over the specific options:
 
 ``` r
+
 # Defaults
 g6() |>
 g6_behaviors("drag-canvas", "zoom-canvas")
@@ -47,6 +48,7 @@ once. By default, the selection is made by clicking on shift and draging
 the mouse over the canvas.
 
 ``` r
+
 nodes <- data.frame(id = letters[1:5])
 
 g6(nodes) |>
@@ -74,6 +76,7 @@ multiple elements by clicking on them while holding the shift key and
 enabling the option `multiple = TRUE`.
 
 ``` r
+
 nodes <- data.frame(id = letters[1:5])
 
 g6(nodes) |>
@@ -100,6 +103,7 @@ Allows dragging the entire canvas to pan the view. May be incompatible
 with other behaviors such as `create-edge` depending on the trigger key.
 
 ``` r
+
 nodes <- data.frame(id = letters[1:5])
 
 g6(nodes) |>
@@ -127,6 +131,7 @@ incompatible with other behaviors such as `create-edge` depending on the
 trigger key.
 
 ``` r
+
 nodes <- data.frame(id = letters[1:5])
 
 g6(nodes) |>
@@ -153,6 +158,7 @@ Provides focusing capabilities to highlight specific elements. Click on
 a given element and see the canvas focusing on it.
 
 ``` r
+
 nodes <- data.frame(id = letters[1:5])
 
 g6(nodes) |>
@@ -178,6 +184,7 @@ g6(nodes) |>
 Activates interactive features when hovering over elements.
 
 ``` r
+
 nodes <- data.frame(id = letters[1:5])
 
 g6(nodes) |>
@@ -205,6 +212,7 @@ default, the selection is made by clicking on shift and draging the
 mouse over the canvas.
 
 ``` r
+
 nodes <- data.frame(id = letters[1:5])
 
 g6(nodes) |>
@@ -230,6 +238,7 @@ g6(nodes) |>
 Enables scrolling to navigate through large graphs.
 
 ``` r
+
 nodes <- data.frame(id = letters[1:5])
 
 g6(nodes) |>
@@ -255,6 +264,7 @@ g6(nodes) |>
 Provides zooming functionality for the canvas view.
 
 ``` r
+
 nodes <- data.frame(id = letters[1:5])
 
 g6(nodes) |>
@@ -284,6 +294,7 @@ elements. It works well with `zoom-canvas` and `scroll-canvas`
 behaviors.
 
 ``` r
+
 g6(nodes) |>
   g6_options(
     animation = FALSE,
@@ -304,6 +315,7 @@ panning. This is useful for ensuring that elements remain visually
 consistent regardless of the zoom level or canvas position.
 
 ``` r
+
 g6(nodes) |>
   g6_options(
     animation = FALSE,
@@ -324,6 +336,7 @@ well if the graph has many nodes and edges and if the hardware has
 limited resources. Edges are hidden when zooming in and out.
 
 ``` r
+
 g6(jsonUrl = "https://assets.antv.antgroup.com/g6/5000.json") |>
   g6_options(
     animation = FALSE,
@@ -351,6 +364,7 @@ right-click on a node to create an edge.
 ### Manual activation
 
 ``` r
+
 g6(nodes) |>
   g6_options(
     animation = FALSE,
@@ -363,6 +377,7 @@ g6(nodes) |>
 ### With context menu
 
 ``` r
+
 g6(nodes) |>
   g6_options(
     animation = FALSE,
@@ -380,6 +395,7 @@ This works in a combo context when you double click (default) on the
 enclosing combo.
 
 ``` r
+
 nodes$combo <- rep(1, nrow(nodes))
 g6(nodes, combos = data.frame(id = 1)) |>
   g6_options(
@@ -397,6 +413,7 @@ This requires animation to be enabled in
 [`g6_options()`](https://cynkra.github.io/g6R/reference/g6_options.md).
 
 ``` r
+
 nodes <- data.frame(id = letters[1:5])
 
 g6(

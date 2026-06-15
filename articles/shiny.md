@@ -9,6 +9,7 @@ applications using the
 functions:
 
 ``` r
+
 library(shiny)
 library(g6R)
 library(bslib)
@@ -58,6 +59,7 @@ causes the entire graph to be re-rendered. This is inefficient and
 negates the benefits of using proxy functions.
 
 ``` r
+
 # Bad example of adding node the graph
 library(shiny)
 library(g6R)
@@ -94,6 +96,7 @@ shinyApp(ui, server)
 A corrected version would be:
 
 ``` r
+
 library(shiny)
 library(g6R)
 library(bslib)
@@ -134,6 +137,7 @@ offers data validation out of the box. Here are some examples that all
 work:
 
 ``` r
+
 g6_add_nodes(g6_proxy("graph"), data.frame(id = next_id()))
 
 g6_add_nodes(
@@ -168,6 +172,7 @@ To remove a node, you can use the
 proxy function:
 
 ``` r
+
 library(shiny)
 library(g6R)
 library(bslib)
@@ -211,6 +216,7 @@ Similarly, to update node properties, you can use the
 function. Here’s an example where we update the label of a node:
 
 ``` r
+
 library(shiny)
 library(g6R)
 library(bslib)
@@ -301,6 +307,7 @@ You can also change the state of nodes using the
 Here’s an example:
 
 ``` r
+
 library(shiny)
 library(g6R)
 library(bslib)
@@ -346,6 +353,7 @@ initialisation. You can do so by observing the
 once the graph is ready:
 
 ``` r
+
 library(shiny)
 library(g6R)
 library(bslib)
@@ -374,6 +382,7 @@ As an example, this is what would happen if you try to add nodes before
 the graph is initialized (nothing would happen):
 
 ``` r
+
 library(shiny)
 library(g6R)
 library(bslib)
@@ -401,6 +410,7 @@ Now waiting for the graph to be ready before removing the node works as
 expected:
 
 ``` r
+
 library(shiny)
 library(g6R)
 library(bslib)
@@ -435,6 +445,7 @@ can be `node`, `edge`, or `combo`. Here’s an example that demonstrates
 how to capture selected elements in a graph:
 
 ``` r
+
 library(shiny)
 library(g6R)
 library(bslib)
@@ -491,6 +502,7 @@ information about nodes, edges, and combos dynamically, also be able to
 serialise and deserialise the graph state:
 
 ``` r
+
 library(shiny)
 library(g6R)
 library(bslib)
@@ -528,6 +540,7 @@ nodes and edges, and reset the graph to its initial state. The state
 storage is of course not optimal for larger data but you get the idea:
 
 ``` r
+
 library(shiny)
 library(g6R)
 library(bslib)
@@ -593,6 +606,7 @@ id of the node, edge or combo you want to query. Here’s an example
 querying node states:
 
 ``` r
+
 library(shiny)
 library(g6R)
 library(bslib)
@@ -637,6 +651,7 @@ the type and ID of right clicked element, except for the canvas where
 only the `type` is returned. Here’s an example:
 
 ``` r
+
 library(shiny)
 library(g6R)
 library(bslib)
@@ -680,6 +695,7 @@ example that demonstrates how to insert a new node at the mouse click
 position:
 
 ``` r
+
 library(shiny)
 library(g6R)
 library(bslib)
@@ -726,6 +742,7 @@ behavior to create an edge on drag from a node by maintaining the shift
 key:
 
 ``` r
+
 library(shiny)
 library(g6R)
 library(bslib)
@@ -799,6 +816,7 @@ don’t worry if key names collide between nodes, g6R automatically makes
 them unique by prefixing them with the node ID on the JS side.
 
 ``` r
+
 library(shiny)
 library(g6R)
 
@@ -1002,6 +1020,7 @@ by edges will also remove those edges from the graph. Conversely,
 removing an edge does not remove the associated ports.
 
 ``` r
+
 library(shiny)
 library(g6R)
 
@@ -1070,6 +1089,7 @@ you had to use multiple elements, you must pass unique keys. Here’s an
 example:
 
 ``` r
+
 library(shiny)
 library(g6R)
 library(bslib)
@@ -1133,6 +1153,7 @@ You can also dynamically add or remove behaviors using the
 proxy functions. Here’s an example:
 
 ``` r
+
 library(shiny)
 library(g6R)
 library(bslib)

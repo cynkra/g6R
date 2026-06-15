@@ -11,6 +11,7 @@ graph - either by calling plugin names as strings or by passing plugin
 functions with specific configurations:
 
 ``` r
+
 # Defaults
 g6() |>
   g6_plugins("minimap", "tooltip")
@@ -29,6 +30,7 @@ Displays a menu of selectable operations on right-click for
 context-sensitive actions.
 
 ``` r
+
 nodes <- data.frame(
   id = letters[1:8]
 )
@@ -68,6 +70,7 @@ g6(nodes, edges) |>
 Filters and displays edges within a specified area for focused analysis.
 
 ``` r
+
 nodes <- data.frame(
   id = letters[1:8]
 )
@@ -108,6 +111,7 @@ Provides a focus + context exploration experience with distortion
 effects.
 
 ``` r
+
 nodes <- data.frame(
   id = letters[1:8]
 )
@@ -148,6 +152,7 @@ Displays grid reference lines on the canvas to help with element
 alignment and positioning.
 
 ``` r
+
 nodes <- data.frame(
   id = letters[1:8]
 )
@@ -188,6 +193,7 @@ Displays a thumbnail preview of the graph, supporting navigation in
 large graphs.
 
 ``` r
+
 nodes <- data.frame(
   id = letters[1:8]
 )
@@ -228,6 +234,7 @@ Displays alignment reference lines when dragging elements to ensure
 precise positioning.
 
 ``` r
+
 nodes <- data.frame(
   id = letters[1:8]
 )
@@ -272,6 +279,7 @@ parameter. See more
 [here](https://g6.antv.antgroup.com/en/manual/plugin/build-in/toolbar#custom-icons).
 
 ``` r
+
 nodes <- data.frame(
   id = letters[1:8]
 )
@@ -312,6 +320,7 @@ Displays detailed information about elements on hover for enhanced
 interactivity.
 
 ``` r
+
 nodes <- data.frame(
   id = letters[1:8]
 )
@@ -352,6 +361,7 @@ Adds background images or colors to the canvas for visual enhancement
 and branding.
 
 ``` r
+
 # Create and render the G6 plot
 g6(nodes, edges) |>
   g6_layout() |>
@@ -371,6 +381,7 @@ Creates smooth bubble-like element outlines for enhanced visual
 grouping.
 
 ``` r
+
 # Create and render the G6 plot
 g6(nodes, edges) |>
   g6_layout() |>
@@ -417,6 +428,7 @@ Supports full-screen display and exit for charts to maximize viewing
 area.
 
 ``` r
+
 g6(nodes, edges) |>
   g6_layout() |>
   g6_behaviors("drag-element") |>
@@ -436,6 +448,7 @@ Creates an outline for a specified set of nodes to visually group
 related elements.
 
 ``` r
+
 # Create and render the G6 plot
 g6(nodes, edges) |>
   g6_layout() |>
@@ -475,6 +488,7 @@ g6(nodes, edges) |>
 Displays categories and corresponding style descriptions of chart data.
 
 ``` r
+
 custom_nodes <- lapply(1:8, \(i) {
   list(
     id = letters[i],
@@ -507,6 +521,7 @@ does not work yet …
 Provides filtering and playback control for temporal data visualization.
 
 ``` r
+
 start_date <- as.POSIXct("2023-08-01", tz = "UTC")
 dates <- as.character(seq(start_date, by = "1 days", length.out = 3))
 times <- lapply(seq_along(dates), \(i) {
@@ -544,6 +559,7 @@ Adds a watermark to the canvas to protect copyright and brand the
 visualization.
 
 ``` r
+
 g6(nodes, edges) |>
   g6_layout() |>
   g6_behaviors("drag-element") |>
@@ -568,6 +584,7 @@ works well with the `toolbar` plugin to provide a user interface for
 these actions:
 
 ``` r
+
 g6(nodes, edges) |>
   g6_layout() |>
   g6_behaviors("drag-element") |>

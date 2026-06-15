@@ -1,6 +1,7 @@
 # igraph support
 
 ``` r
+
 library(g6R)
 library(igraph)
 ```
@@ -11,6 +12,7 @@ Instead of a nodes and edges data frame, it accepts an igraph object as
 input.
 
 ``` r
+
 kite <- make_graph("Krackhardt kite")
 g6_igraph(kite) |>
   g6_layout(d3_force_layout()) |>
@@ -25,6 +27,7 @@ implements this philosophy so that adding node (or edge) attributes that
 correspond to style arguments in g6 are recognized.
 
 ``` r
+
 set.seed(123)
 V(kite)$fill <- sample(
   c("red", "green", "blue"),

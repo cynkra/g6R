@@ -1,6 +1,7 @@
 # Edges
 
 ``` r
+
 library(shiny)
 library(g6R)
 ```
@@ -11,6 +12,7 @@ Edges belong to the graph data. In [g6R](https://github.com/cynkra/g6R),
 edges can be created from a **dataframe** or a **list** such as:
 
 ``` r
+
 edges <- data.frame(
   source = c(1, 2),
   target = c(2, 3)
@@ -22,6 +24,7 @@ provides more flexibility for advanced customization since some edge
 properties have to be nested lists, for instance **style** properties:
 
 ``` r
+
 edges <- list(
   list(
     source = "1",
@@ -55,6 +58,7 @@ can generate multiple edges from various input formats (data.frame,
 list):
 
 ``` r
+
 as.list(methods("as_g6_edge"))
 #> [[1]]
 #> [1] "as_g6_edge.g6_edge"
@@ -79,6 +83,7 @@ method for edge creation.
 For example:
 
 ``` r
+
 # Create a single edge
 edge <- g6_edge(source = "A", target = "B", type = "line", style = list(stroke = "blue"))
 
@@ -157,6 +162,7 @@ following properties:
 Builtin types are `line`, `polyline`, `quadratic`, `cubic`:
 
 ``` r
+
 types <- c(
   "line",
   "polyline",
@@ -184,6 +190,7 @@ used for vertical and horizontal
 [layouts](https://cynkra.github.io/g6R/articles/layouts.html#tree-layouts):
 
 ``` r
+
 tree$nodes$label <- NULL
 g6(tree$nodes, tree$edges) |>
   g6_layout(dendrogram_layout(nodeSep = 36, rankSep = 250, direction = "LR")) |>
@@ -198,6 +205,7 @@ with JavaScript code and registered in the `g6R` package. You may do the
 same for your own custom types.
 
 ``` r
+
 nodes <- data.frame(id = 1:2)
 edges <- list(
   list(
@@ -230,6 +238,7 @@ individual edge level. Here is an example of how to set the color for a
 given edge:
 
 ``` r
+
 nodes <- data.frame(id = 1:2)
 edges <- list(
   list(
@@ -251,6 +260,7 @@ Some common properties include label
 [styling](https://g6.antv.antgroup.com/en/manual/element/edge/build-in/base-edge#label-style):
 
 ``` r
+
 nodes <- data.frame(id = 1:2)
 edges <- list(
   list(
@@ -280,6 +290,7 @@ small indicators that can display additional information, such as counts
 or statuses:
 
 ``` r
+
 nodes <- data.frame(id = 1:2)
 edges <- list(
   list(
@@ -308,6 +319,7 @@ g6(nodes, edges, height = "200px") |>
 End and start arrows can be styled too:
 
 ``` r
+
 nodes <- data.frame(id = 1:2)
 edges <- list(
   list(
@@ -335,6 +347,7 @@ that can be used to indicate different conditions or interactions.
 States can be set in the `states` property of the edge data:
 
 ``` r
+
 states <- c(
   "default",
   "selected",
@@ -368,6 +381,7 @@ and a `value` column, for which we set a color palette. There are
 `length(unique(lesmis$edges$value))` color choices:
 
 ``` r
+
 edges <- unname(split(lesmis$edges, seq(nrow(lesmis$edges))))
 edges <- lapply(edges, function(edge) {
     list(

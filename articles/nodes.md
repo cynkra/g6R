@@ -1,6 +1,7 @@
 # Nodes
 
 ``` r
+
 library(shiny)
 library(g6R)
 ```
@@ -11,6 +12,7 @@ Nodes belong to the graph data. In [g6R](https://github.com/cynkra/g6R),
 nodes can be created from a **dataframe** or a **list** such as:
 
 ``` r
+
 nodes <- data.frame(id = 1:2)
 
 # or
@@ -26,6 +28,7 @@ some node properties have to be nested lists, for instance **style**
 properties:
 
 ``` r
+
 nodes <- list(
   list(
     id = 1,
@@ -49,6 +52,7 @@ can generate multiple nodes from various input format (data.frame,
 list):
 
 ``` r
+
 as.list(methods("as_g6_node"))
 #> [[1]]
 #> [1] "as_g6_node.g6_node"
@@ -73,6 +77,7 @@ method for node creation.
 For example:
 
 ``` r
+
 # Create a single node
 node <- g6_node(id = "A", type = "circle", style = list(fill = "#FFB6C1"))
 
@@ -145,6 +150,7 @@ Builtin types are `circle`, `rect`, `ellipse`, `diamond`, `triangle`,
 `hexagon`, `star`, `donut`:
 
 ``` r
+
 types <- c(
   "circle",
   "rect",
@@ -182,6 +188,7 @@ providing a `src` property in the `style`. The image will be displayed
 as the node content:
 
 ``` r
+
 nodes <- list(
   list(
     id = 1,
@@ -216,6 +223,7 @@ The node structure is created with the `innerHTML` property which has to
 be a JavaScript callback taking node data as parameter:
 
 ``` r
+
 nodes <- data.frame(id = 1:3)
 g6(nodes, height = "200px") |>
   g6_layout(d3_force_layout()) |>
@@ -251,6 +259,7 @@ if you want to customize the segments of the donut. You may give an
 donuts and customize the output, as shown in the example below.
 
 ``` r
+
 nodes <- list(
   list(
     id = 1,
@@ -311,6 +320,7 @@ the global node option level or at the individual node level. Here is an
 example of how to set the color for all nodes of the same graph:
 
 ``` r
+
 nodes <- data.frame(id = 1:2)
 g6(nodes, height = "200px") |>
   g6_layout(d3_force_layout()) |>
@@ -333,6 +343,7 @@ Some common properties include label
 [styling](https://g6.antv.antgroup.com/en/manual/element/node/build-in/base-node#label-style):
 
 ``` r
+
 nodes <- list(
   list(
     id = 1,
@@ -360,6 +371,7 @@ small indicators that can display additional information, such as counts
 or statuses:
 
 ``` r
+
 nodes <- list(
   list(
     id = 1,
@@ -388,6 +400,7 @@ can be defined in the `style` property of the node data. You can specify
 the position and other properties of each port:
 
 ``` r
+
 nodes <- list(
   list(
     id = 1,
@@ -469,6 +482,7 @@ a node if it has ports (drag from the ports instead). For instance, you
 can also do:
 
 ``` r
+
 g6(
   nodes = g6_nodes(
     g6_node(
@@ -604,6 +618,7 @@ remove edges or nodes, you have to use the proxy functions as shown in
 the Shiny example below.
 
 ``` r
+
 library(shiny)
 library(g6R)
 
@@ -824,6 +839,7 @@ that can be used to indicate different conditions or interactions.
 States can be set in the `states` property of the node data:
 
 ``` r
+
 states <- c(
   "default",
   "selected",

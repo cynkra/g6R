@@ -97,6 +97,7 @@
   is provided and nodes have children).
 
 ``` r
+
 g6_node(
   id = 1,
   type = "custom-rect-node", # to enable use custom class
@@ -116,6 +117,7 @@ g6_node(
   `visibility` (including `"hover"` mode), etc.
 
 ``` r
+
 g6_combo(
   "combo1",
   collapse = g6_collapse_options(
@@ -187,6 +189,22 @@ g6_combo(
   [`drag_element()`](https://cynkra.github.io/g6R/reference/drag_element.md)
   as we handle the behavior conflicts/priorities JS side.
 
+- Fixed
+  [`create_edge()`](https://cynkra.github.io/g6R/reference/create_edge.md)
+  overwriting a consumer-supplied
+  [`drag_element()`](https://cynkra.github.io/g6R/reference/drag_element.md)
+  /
+  [`drag_element_force()`](https://cynkra.github.io/g6R/reference/drag_element_force.md)
+  `enable` predicate. While drawing an edge from a port,
+  [`create_edge()`](https://cynkra.github.io/g6R/reference/create_edge.md)
+  pauses node dragging and resumes it on drop. It previously resumed by
+  hardcoding `enable: true`, which destroyed any custom `enable`
+  function after the first edge creation (and toggled behaviors via an
+  array, a no-op in current G6 where `updateBehavior()` matches a single
+  `key`). The live `enable` of each drag behavior is now snapshotted
+  (looked up by type, so a custom `key` still works) and restored
+  verbatim on drop ([\#48](https://github.com/cynkra/g6R/issues/48)).
+
 - `input[["<graph_ID>-state"]]` now does not return unnamed lists for
   nodes, edges and combos. Instead, each sublist is named with the
   corresponding element IDs. This makes it easier to retrieve the state
@@ -220,6 +238,7 @@ slot.
 - Support for svg rendering:
 
 ``` r
+
 g6_options(renderer = JS("() => new SVGRenderer()"))
 ```
 

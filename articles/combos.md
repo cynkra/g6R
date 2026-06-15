@@ -1,6 +1,7 @@
 # Combos
 
 ``` r
+
 library(shiny)
 library(g6R)
 ```
@@ -13,6 +14,7 @@ represent hierarchical structures or to visually organize nodes. In
 **dataframe** or a **list** such as:
 
 ``` r
+
 combos <- data.frame(id = 1:2)
 
 # or
@@ -37,6 +39,7 @@ can generate multiple combos from various input formats (data.frame,
 list):
 
 ``` r
+
 as.list(methods("as_g6_combo"))
 #> [[1]]
 #> [1] "as_g6_combo.g6_combo"
@@ -61,6 +64,7 @@ method for combo creation.
 For example:
 
 ``` r
+
 # Create a single combo
 combo <- g6_combo(id = "combo1", type = "rect", style = list(fill = "#FFD700"))
 
@@ -148,6 +152,7 @@ following properties:
 There are 2 main combo types, `circle` and `rect`:
 
 ``` r
+
 combos <- data.frame(
   id = c("combo1", "combo2", "combo3"),
   type = c("circle", "rect", "circle"),
@@ -204,6 +209,7 @@ Like for the edges, we implemented a custom combo type
 combo. This button can be used to collapse or expand the combo:
 
 ``` r
+
 combos <- data.frame(
   id = c("combo1"),
   type = "circle-combo-with-extra-button"
@@ -265,6 +271,7 @@ level or at the individual combo level. Here is an example of how to set
 the color for all combo of the same graph:
 
 ``` r
+
 combos <- data.frame(id = c("combo1"))
 nodes <- data.frame(
   id = 1,
@@ -297,6 +304,7 @@ Some common properties include label
 [styling](https://g6.antv.antgroup.com/en/manual/element/combo/build-in/base-combo#label-style):
 
 ``` r
+
 combos <- data.frame(id = c("combo1"))
 nodes <- data.frame(
   id = 1,
@@ -334,6 +342,7 @@ that can be used to indicate different conditions or interactions.
 States can be set in the `states` property of the node data:
 
 ``` r
+
 states <- c(
   "default",
   "selected",
@@ -374,6 +383,7 @@ g6(nodes, combos = combos) |>
 ### Color palette
 
 ``` r
+
 g6(poke$nodes, poke$edges, poke$combos) |>
   g6_layout(combo_combined_layout(spacing = 50)) |>
   g6_options(

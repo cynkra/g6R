@@ -1,6 +1,7 @@
 # Layouts
 
 ``` r
+
 library(g6R)
 #> 
 #> Attaching package: 'g6R'
@@ -30,6 +31,7 @@ G6](https://g6.antv.antgroup.com/en/manual/layout/overview). `g6R`
 currently does not expose all of them but the most commonly used ones.
 
 ``` r
+
 grep("_layout$", ls("package:g6R"), value = TRUE)
 #>  [1] "antv_dagre_layout"     "circular_layout"       "combo_combined_layout"
 #>  [4] "compact_box_layout"    "concentric_layout"     "d3_force_layout"      
@@ -53,6 +55,7 @@ is particularly suited for large networks.
 The D3 force layout has quite sensible defaults.
 
 ``` r
+
 g6(lesmis$nodes, lesmis$edges) |>
   g6_layout(d3_force_layout()) |>
   g6_options(autoFit = "view", autoResize = TRUE)
@@ -62,6 +65,7 @@ The Force Atlas2 layout might need some parameter tweaking to get the
 best results.
 
 ``` r
+
 g6(lesmis$nodes, lesmis$edges) |>
   g6_layout(force_atlas2_layout(preventOverlap = TRUE, kr = 20)) |>
   g6_options(autoFit = "view", autoResize = TRUE)
@@ -79,6 +83,7 @@ graphs. It positions nodes based on attractive and repulsive forces,
 creating a balanced distribution.
 
 ``` r
+
 g6(radial$nodes, radial$edges) |>
   g6_layout(fruchterman_layout()) |>
   g6_options(autoFit = "view", autoResize = TRUE)
@@ -100,6 +105,7 @@ function arranges nodes in a circle. This has a very limited use case
 but can be useful for small graphs.
 
 ``` r
+
 g6(radial$nodes, radial$edges) |>
   g6_layout(circular_layout()) |>
   g6_options(autoFit = "view", autoResize = TRUE)
@@ -112,6 +118,7 @@ hierarchical structures. It positions nodes around a central node,
 making it easier to visualize hierarchical relationships.
 
 ``` r
+
 g6(radial$nodes, radial$edges) |>
   g6_layout(radial_layout()) |>
   g6_options(
@@ -139,6 +146,7 @@ parameter is used to specify the central node around which the radial
 layout is arranged.
 
 ``` r
+
 g6(radial$nodes, radial$edges) |>
   g6_layout(radial_layout(focusNode = "22")) |>
   g6_options(
@@ -167,6 +175,7 @@ parameter can be used to sort nodes by degree, or any other existing
 node attribute.
 
 ``` r
+
 g6(lesmis$nodes, lesmis$edges) |>
   g6_layout(concentric_layout(sortBy = "degree", preventOverlap = TRUE)) |>
   g6_options(autoFit = "view", autoResize = TRUE)
@@ -180,6 +189,7 @@ function is a wrapper around the [Dendrogram layout
 algorithm](https://g6.antv.antgroup.com/en/manual/layout/build-in/dendrogram-layout).
 
 ``` r
+
 g6(tree$nodes, tree$edges) |>
   g6_layout(dendrogram_layout(nodeSep = 36, rankSep = 250, direction = "LR")) |>
   g6_options(edge = list(type = "cubic-horizontal"), autoFit = "view")
@@ -193,6 +203,7 @@ parameter. The default is “LR” (left to right), but it can for example
 also be set to “TB” (top to bottom).
 
 ``` r
+
 g6(tree$nodes, tree$edges) |>
   g6_layout(dendrogram_layout(nodeSep = 36, rankSep = 250, direction = "TB")) |>
   g6_options(edge = list(type = "cubic-horizontal"), autoFit = "view")
@@ -205,6 +216,7 @@ algorithm](https://g6.antv.antgroup.com/en/manual/layout/build-in/compact-box-la
 It can be used to create compact visualizations of trees.
 
 ``` r
+
 g6(tree$nodes, tree$edges) |>
   g6_layout(compact_box_layout(
     getHeight = JS(
@@ -240,6 +252,7 @@ coordinates to the nodes data frame and use the
 function to set the node styles accordingly.
 
 ``` r
+
 g6(lesmis$nodes, lesmis$edges) |>
   g6_options(
     autoFit = "view",

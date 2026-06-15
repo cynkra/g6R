@@ -21,6 +21,7 @@ interactive network in R, with stunning set of features, including:
 ![g6R layers example](./reference/figures/g6-layers.png)
 
 ``` r
+
 shinyAppDir(system.file("examples", "demo", package = "g6R"))
 ```
 
@@ -31,6 +32,7 @@ You can install the development version of
 with:
 
 ``` r
+
 # install.packages("pak")
 pak::pak("cynkra/g6R")
 ```
@@ -40,6 +42,7 @@ pak::pak("cynkra/g6R")
 To create a [g6R](https://github.com/cynkra/g6R) graph:
 
 ``` r
+
 library(g6R)
 nodes <- data.frame(id = 1:10)
 

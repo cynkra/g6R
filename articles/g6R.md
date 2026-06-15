@@ -1,6 +1,7 @@
 # g6R
 
 ``` r
+
 library(g6R)
 library(shiny)
 ```
@@ -14,6 +15,7 @@ define **node**, **edges** and **combos** (collection of nodes), like
 so:
 
 ``` r
+
 nodes <- data.frame(id = 1:10)
 ```
 
@@ -22,6 +24,7 @@ than the dataframe approach since under the hood,
 [g6R](https://github.com/cynkra/g6R) has to send list to JavaScript:
 
 ``` r
+
 nodes <- lapply(seq_len(10), function(i) {
   list(id = i)
 })
@@ -30,6 +33,7 @@ nodes <- lapply(seq_len(10), function(i) {
 We then define some random edges:
 
 ``` r
+
 # Set a seed for reproducibility
 set.seed(123)
 
@@ -65,6 +69,7 @@ object.
 You can list available methods for `as_g6_data` with:
 
 ``` r
+
 as.list(methods("as_g6_data"))
 #> [[1]]
 #> [1] "as_g6_data.g6_data"
@@ -80,6 +85,7 @@ method for graph data creation.
 For example:
 
 ``` r
+
 # Create nodes and edges
 my_nodes <- data.frame(id = c("A", "B"))
 my_edges <- data.frame(source = "A", target = "B")
@@ -154,6 +160,7 @@ which can be slow for large graphs. That’s done in the
 `shinyAppDir(system.file("examples", "json", package = "g6R"))` example.
 
 ``` r
+
 shinyAppDir(system.file("examples", "json", package = "g6R"))
 ```
 
@@ -162,6 +169,7 @@ shinyAppDir(system.file("examples", "json", package = "g6R"))
 We leverage `g6` to create an **instance** of our network:
 
 ``` r
+
 g6(nodes, edges, width = 200, height = 200)
 ```
 
@@ -177,6 +185,7 @@ this example, we select the
 [`d3_force_layout()`](https://cynkra.github.io/g6R/reference/d3_force_layout.md):
 
 ``` r
+
 g <- g6(nodes, edges) |>
   g6_layout(d3_force_layout())
 g
@@ -192,6 +201,7 @@ element such as nodes. Properties are selected from the
 [documentation](https://g6.antv.antgroup.com/en/manual/element/node/build-in/base-node#main-graphic-style):
 
 ``` r
+
 g <- g |>
   g6_options(
     node = list(
@@ -221,6 +231,7 @@ reference to the plugin name or using the correponding function to pass
 more configuration options:
 
 ``` r
+
 # Use defaults
 g6_plugins("minimap")
 
@@ -231,6 +242,7 @@ g6_plugins(
 ```
 
 ``` r
+
 g <- g |>
   g6_plugins(
     minimap(size = c(100, 100))
@@ -248,6 +260,7 @@ With [g6R](https://github.com/cynkra/g6R) behaviors can be added with
 `g6_behaviors`, like plugins:
 
 ``` r
+
 g <- g |>
   g6_behaviors(
     "zoom-canvas",
