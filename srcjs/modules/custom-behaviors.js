@@ -6,6 +6,10 @@ const ASSIST_EDGE_ID = 'g6-create-edge-assist-edge-id';
 const ASSIST_NODE_ID = 'g6-create-edge-assist-node-id';
 const MIN_DRAG_DISTANCE = 10;
 const DRAG_BEHAVIOR_TYPES = ['drag-element', 'drag-element-force'];
+// Port-grab tolerance: a pointer-down within this multiple of a port's expanded
+// (indicator) radius snaps to the nearest port instead of falling through to a
+// node drag. Port glyphs are small, so an exact hit is hard to land.
+const PORT_SNAP_TOLERANCE_FACTOR = 1.6;
 
 class CustomCreateEdge extends CreateEdge {
   isCreatingEdge = false;
@@ -49,6 +53,47 @@ class CustomCreateEdge extends CreateEdge {
       graph.updateBehavior({ key, enable });
     }
     this._dragBehaviorSnapshot = null;
+  }
+
+  // Find the grabbable port of `nodeId` nearest to `point` (canvas coords),
+  // within a tolerance proportional to the port radius. Returns the port hit
+  // shape (carrying key/type/arity/class, like event.originalTarget on an exact
+  // hit) or null when the press is too far from any port. Lets a near-miss on
+  // the node body still start an edge instead of dragging the node.
+  findNearestPort(nodeId, point) {
+    if (!point) return null;
+    const { graph } = this.context;
+    const el = graph.context?.element?.getElement?.(nodeId);
+    const portShapes = el?._portShapes;
+    if (!portShapes || !portShapes.length) return null;
+
+    const portConnections = getPortConnections(graph, nodeId) || {};
+    let nearest = null;
+    let nearestDist = Infinity;
+
+    for (const { shape, indicator } of portShapes) {
+      if (!shape || !shape.key) continue;
+      // Skip ports that are never shown or already at capacity.
+      if (shape._visibility === 'hidden') continue;
+      const arity = shape.arity === 'Infinity' ? Infinity : (shape.arity || 1);
+      if ((portConnections[shape.key] ?? 0) >= arity) continue;
+
+      const hit = indicator?.hitArea || shape;
+      const bounds = hit.getBounds?.() || shape.getBounds?.();
+      if (!bounds) continue;
+      const cx = (bounds.min[0] + bounds.max[0]) / 2;
+      const cy = (bounds.min[1] + bounds.max[1]) / 2;
+      const dist = Math.sqrt((point.x - cx) ** 2 + (point.y - cy) ** 2);
+
+      const radius = shape._expandedRadius || shape._baseRadius || 6;
+      const tolerance = radius * PORT_SNAP_TOLERANCE_FACTOR;
+      if (dist <= tolerance && dist < nearestDist) {
+        nearest = hit;
+        nearestDist = dist;
+      }
+    }
+
+    return nearest;
   }
 
   bindEvents() {
@@ -385,8 +430,14 @@ class CustomCreateEdge extends CreateEdge {
 
     let hasPorts = node?.style?.ports?.length > 0;
     if (hasPorts) {
-      const clickedPort = event.originalTarget;
-      // Check if user clicked on a port (has key property)
+      let clickedPort = event.originalTarget;
+      // Near-miss tolerance: if the press did not land exactly on a port glyph,
+      // snap to the nearest port within a small radius so a slight miss still
+      // starts an edge instead of falling through to a node drag.
+      if (!clickedPort || !clickedPort.key) {
+        clickedPort = this.findNearestPort(node.id, event.canvas);
+      }
+      // Check if user clicked on (or near) a port (has key property)
       if (clickedPort && clickedPort.key) {
         this.sourcePort = clickedPort;
         const portConnections = getPortConnections(graph, node.id);
