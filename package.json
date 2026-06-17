@@ -22,7 +22,7 @@
     "webpack-merge": "^6.0.1"
   },
   "dependencies": {
-    "@antv/g": "^6.1.24",
-    "@antv/g6": "^5.0.49"
+    "@antv/g": "^6.1.28",
+    "@antv/g6": "^5.1.1"
   }
 }

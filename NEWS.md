@@ -6,6 +6,8 @@
 
 ## New feature
 
+- Bumped the bundled AntV G6 engine from 5.0.49 to 5.1.1 (and `@antv/g` to 6.x). This improves create-edge assist-line tracking under zoom/pan (G6 now derives the cursor position via `getCanvasByClient()`) and pulls in upstream fixes and APIs (`hasNode()`/`hasEdge()`/`hasCombo()`, nested self-loop edges, `drag-element` trigger config). The widget bundle is now a single self-contained `g6.js` (the split `185.js` chunk was removed).
+
 - Added better port support for nodes __ports__:
   - To enable it, you must pass a custom type to `g6_node()` such as `custom-circle-node`, `custom-rect-node` (We support 9 [shapes](https://g6.antv.antgroup.com/en/manual/element/node/overview#built-in-nodes), except HTML which does not handle port in the g6 library)
   - `g6_node()` get a new `ports` argument to define ports for each node. In the g6 JS library, ports are normally defined inside `style` but we consider they are too important to be hidden there. Now you can define ports directly in the node data, g6R automatically moves them to `style.ports` when rendering the graph.
