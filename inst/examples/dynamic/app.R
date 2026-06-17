@@ -140,7 +140,7 @@ server <- function(input, output, session) {
           ),
           trigger = "click"
         ),
-        toolbar(
+        g6R::toolbar(
           style = list(
             backgroundColor = "#f5f5f5",
             padding = "8px",
