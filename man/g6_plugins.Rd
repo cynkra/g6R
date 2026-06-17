@@ -104,7 +104,7 @@ plugins <- g6_plugins(
         // do stuff
     }")
   ),
-  toolbar(
+  g6R::toolbar(
     position = "top-right",
     getItems = JS("() => [
       { id: 'zoom-in', value: 'zoom-in' },

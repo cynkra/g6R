@@ -40,7 +40,7 @@ This plugin adds a customizable toolbar with items for graph operations.
 }
 \examples{
 # Basic toolbar with zoom controls
-config <- toolbar(
+config <- g6R::toolbar(
   position = "top-right",
   getItems = JS("() => [
     { id: 'zoom-in', value: 'zoom-in' },

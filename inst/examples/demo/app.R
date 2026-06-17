@@ -171,7 +171,7 @@ server <- function(input, output, session) {
         "brush-select"
       ) |>
       g6_plugins(
-        toolbar(
+        g6R::toolbar(
           style = list(
             backgroundColor = "#f5f5f5",
             padding = "8px",
