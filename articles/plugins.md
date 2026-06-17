@@ -437,7 +437,7 @@ g6(nodes, edges) |>
     nodes = nodes_options
   ) |>
   g6_plugins(
-    toolbar(),
+    g6R::toolbar(),
     fullscreen()
   )
 ```
@@ -593,7 +593,7 @@ g6(nodes, edges) |>
     node = nodes_options
   ) |>
   g6_plugins(
-    toolbar(
+    g6R::toolbar(
       getItems = JS(
         "() => [
           { id: 'undo', value: 'undo' },
