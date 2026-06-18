@@ -1,0 +1,31 @@
+---
+title: "g6R, deconstructed"
+format:
+  revealjs:
+    theme: [default, css/demos.css]
+    width: 1280
+    height: 720
+    margin: 0
+    include-in-header:
+      text: |
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.2/anime.min.js"></script>
+    include-after-body:
+      - js/infra.html
+      - js/g6-deconstructed.html
+---
+
+## {.g6d-slide}
+
+::: {.g6d-stage-wrap}
+<div id="g6d-stage"></div>
+:::
+
+[]{.fragment .g6d-frag id="g6d-lay"}
+[]{.fragment .g6d-frag id="g6d-explode"}
+[]{.fragment .g6d-frag id="g6d-focus-data"}
+[]{.fragment .g6d-frag id="g6d-focus-layout"}
+[]{.fragment .g6d-frag id="g6d-focus-options"}
+[]{.fragment .g6d-frag id="g6d-focus-behaviors"}
+[]{.fragment .g6d-frag id="g6d-focus-plugins"}
+[]{.fragment .g6d-frag id="g6d-collapse"}
+[]{.fragment .g6d-frag id="g6d-unrotate"}

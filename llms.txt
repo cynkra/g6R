@@ -18,7 +18,9 @@ interactive network in R, with stunning set of features, including:
 - Support for **combos** allowing for **nested** nodes.
 - High **performance** rendering (\>20000 nodes).
 
-![g6R layers example](./reference/figures/g6-layers.png)
+![A g6 graph deconstructed into its data, layout, options, behaviors and
+plugins
+layers](https://raw.githubusercontent.com/cynkra/g6R/main/man/figures/g6R-deconstructed.gif)
 
 ``` r
 
