@@ -45,7 +45,7 @@ validate_port(g6_port("input-1", type = "input"))
 #> [1] "input-1"
 #> 
 #> $r
-#> [1] 4
+#> [1] 6
 #> 
 #> attr(,"class")
 #> [1] "g6_port"

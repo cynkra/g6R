@@ -2,6 +2,73 @@
 
 ## g6R 0.6.0.9000
 
+### New features
+
+- New `placement = "label-bottom"` for ports. When a node has a bottom
+  label (e.g. `labelPlacement = "bottom"`), an output port with this
+  placement snaps to the bottom-centre of the label background instead
+  of the node body; it falls back to a normal bottom-of-node port when
+  there is no label.
+
+- Default port radius increased from 4 to 6 so ports are easier to see
+  and target.
+
+- Calmer port hover. Hovering a port no longer grows it ~2.5x into a
+  rotating dashed `+` glyph (which read as flickering noise). Ports now
+  keep their size and show a soft expanding ripple ring (in the port
+  colour) only while the cursor is over them; the ripple stops when the
+  cursor leaves. Disable it per port with `ripple = FALSE`. Ports also
+  gain a background-coloured ring so they read as set into a small hole
+  punched through the node / label surface (override with the `haloFill`
+  port style), and the default fill adapts to the graph theme. The large
+  invisible hit-area is kept, so ports remain easy to grab.
+
+- Port hover cursor is now a crosshair instead of a pointer, matching
+  G6’s native create-edge affordance (“draw an edge from here”). The
+  crosshair and the hover ripple only appear when the graph actually has
+  the
+  [`create_edge()`](https://cynkra.github.io/g6R/reference/create_edge.md)
+  behavior, so ports don’t advertise an interaction that isn’t wired up.
+
+- [`create_edge()`](https://cynkra.github.io/g6R/reference/create_edge.md)
+  now tolerates a small miss when grabbing a port. Previously an edge
+  only started when pointer-down landed exactly on the (small) port
+  glyph; a near-miss on the node body fell through to
+  [`drag_element()`](https://cynkra.github.io/g6R/reference/drag_element.md)
+  and moved the node instead. Pointer-down now snaps to the nearest
+  grabbable port within a tolerance proportional to the port radius, so
+  a slight miss still starts an edge
+  ([\#50](https://github.com/cynkra/g6R/issues/50)).
+
+### Bug fixes
+
+- Fixed
+  [`create_edge()`](https://cynkra.github.io/g6R/reference/create_edge.md)
+  overwriting a consumer-supplied
+  [`drag_element()`](https://cynkra.github.io/g6R/reference/drag_element.md)
+  /
+  [`drag_element_force()`](https://cynkra.github.io/g6R/reference/drag_element_force.md)
+  `enable` predicate. While drawing an edge from a port,
+  [`create_edge()`](https://cynkra.github.io/g6R/reference/create_edge.md)
+  pauses node dragging and resumes it on drop. It previously resumed by
+  hardcoding `enable: true`, which destroyed any custom `enable`
+  function after the first edge creation (and toggled behaviors via an
+  array, a no-op in current G6 where `updateBehavior()` matches a single
+  `key`). The live `enable` of each drag behavior is now snapshotted
+  (looked up by type, so a custom `key` still works) and restored
+  verbatim on drop ([\#48](https://github.com/cynkra/g6R/issues/48)).
+
+- Fixed the
+  [`create_edge()`](https://cynkra.github.io/g6R/reference/create_edge.md)
+  rubber-band (assist) edge not appearing while dragging when the graph
+  had no `edge` options configured. The assist edge style read
+  `graph.options.edge.style.zIndex`, which threw and aborted assist-edge
+  creation; it is now read defensively and falls back to G6’s default.
+
+## g6R 0.6.0
+
+CRAN release: 2026-04-27
+
 ### Breaking changes
 
 - Not a g6R change but [bslib](https://rstudio.github.io/bslib/)
@@ -188,22 +255,6 @@ g6_combo(
   can be `drag` and work with
   [`drag_element()`](https://cynkra.github.io/g6R/reference/drag_element.md)
   as we handle the behavior conflicts/priorities JS side.
-
-- Fixed
-  [`create_edge()`](https://cynkra.github.io/g6R/reference/create_edge.md)
-  overwriting a consumer-supplied
-  [`drag_element()`](https://cynkra.github.io/g6R/reference/drag_element.md)
-  /
-  [`drag_element_force()`](https://cynkra.github.io/g6R/reference/drag_element_force.md)
-  `enable` predicate. While drawing an edge from a port,
-  [`create_edge()`](https://cynkra.github.io/g6R/reference/create_edge.md)
-  pauses node dragging and resumes it on drop. It previously resumed by
-  hardcoding `enable: true`, which destroyed any custom `enable`
-  function after the first edge creation (and toggled behaviors via an
-  array, a no-op in current G6 where `updateBehavior()` matches a single
-  `key`). The live `enable` of each drag behavior is now snapshotted
-  (looked up by type, so a custom `key` still works) and restored
-  verbatim on drop ([\#48](https://github.com/cynkra/g6R/issues/48)).
 
 - `input[["<graph_ID>-state"]]` now does not return unnamed lists for
   nodes, edges and combos. Instead, each sublist is named with the

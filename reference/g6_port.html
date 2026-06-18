@@ -130,8 +130,16 @@ Use 0, Inf, or any non-negative integer.</p></dd>
 
 
 <dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>
-<dd><p>Additional port style parameters. See
-<a href="https://g6.antv.antgroup.com/en/manual/element/node/base-node#portstyleprops" class="external-link">https://g6.antv.antgroup.com/en/manual/element/node/base-node#portstyleprops</a>.</p></dd>
+<dd><p>Additional port style parameters, e.g. <code>placement</code> and
+<code>r</code> (radius, default 6). See
+<a href="https://g6.antv.antgroup.com/en/manual/element/node/base-node#portstyleprops" class="external-link">https://g6.antv.antgroup.com/en/manual/element/node/base-node#portstyleprops</a>.
+In addition to G6's native placements (<code>"left"</code>, <code>"right"</code>,
+<code>"top"</code>, <code>"bottom"</code>, or a <code>c(x, y)</code> pair), g6R adds
+<code>placement = "label-bottom"</code>: the port snaps to the bottom-centre of the
+node's label background when the node has a bottom label, falling back to a
+normal bottom-of-node port otherwise. Pass <code>ripple = FALSE</code> to disable
+the hover ripple for a port, or <code>haloFill</code> to override the colour of the
+ring that makes the port look set into the node surface.</p></dd>
 
 
 <dt id="arg-fill">fill<a class="anchor" aria-label="anchor" href="#arg-fill"></a></dt>
@@ -172,7 +180,7 @@ simply set the arity to <code>Inf</code> or any positive integer.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "left"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $r</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 4</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 6</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> attr(,"class")</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "g6_port"</span>
@@ -196,7 +204,7 @@ simply set the arity to <code>Inf</code> or any positive integer.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "right"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $r</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 4</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 6</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> attr(,"class")</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "g6_port"</span>
@@ -217,7 +225,7 @@ simply set the arity to <code>Inf</code> or any positive integer.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "input-2"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $r</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 4</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 6</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> attr(,"class")</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "g6_port"</span>

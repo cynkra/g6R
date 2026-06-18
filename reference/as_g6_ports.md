@@ -58,7 +58,7 @@ as_g6_ports(list(
 #> [1] "left"
 #> 
 #> $r
-#> [1] 4
+#> [1] 6
 #> 
 #> attr(,"class")
 #> [1] "g6_port"
@@ -86,7 +86,7 @@ as_g6_ports(list(
 #> [1] "right"
 #> 
 #> $r
-#> [1] 4
+#> [1] 6
 #> 
 #> attr(,"class")
 #> [1] "g6_port"
@@ -114,7 +114,7 @@ as_g6_ports(g6_ports(
 #> [1] "input-1"
 #> 
 #> $r
-#> [1] 4
+#> [1] 6
 #> 
 #> attr(,"class")
 #> [1] "g6_port"
@@ -136,7 +136,7 @@ as_g6_ports(g6_ports(
 #> [1] "output-1"
 #> 
 #> $r
-#> [1] 4
+#> [1] 6
 #> 
 #> attr(,"class")
 #> [1] "g6_port"

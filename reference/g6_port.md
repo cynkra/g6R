@@ -68,8 +68,16 @@ g6_output_port(
 
 - ...:
 
-  Additional port style parameters. See
+  Additional port style parameters, e.g. `placement` and `r` (radius,
+  default 6). See
   <https://g6.antv.antgroup.com/en/manual/element/node/base-node#portstyleprops>.
+  In addition to G6's native placements (`"left"`, `"right"`, `"top"`,
+  `"bottom"`, or a `c(x, y)` pair), g6R adds
+  `placement = "label-bottom"`: the port snaps to the bottom-centre of
+  the node's label background when the node has a bottom label, falling
+  back to a normal bottom-of-node port otherwise. Pass `ripple = FALSE`
+  to disable the hover ripple for a port, or `haloFill` to override the
+  colour of the ring that makes the port look set into the node surface.
 
 - fill:
 
@@ -108,7 +116,7 @@ g6_port("input-1", label = "port 1", type = "input", arity = 2, placement = "lef
 #> [1] "left"
 #> 
 #> $r
-#> [1] 4
+#> [1] 6
 #> 
 #> attr(,"class")
 #> [1] "g6_port"
@@ -132,7 +140,7 @@ g6_port("output-1", label = "port 2", type = "output", placement = "right")
 #> [1] "right"
 #> 
 #> $r
-#> [1] 4
+#> [1] 6
 #> 
 #> attr(,"class")
 #> [1] "g6_port"
@@ -153,7 +161,7 @@ g6_port("input-2", type = "input", visibility = "hover")
 #> [1] "input-2"
 #> 
 #> $r
-#> [1] 4
+#> [1] 6
 #> 
 #> attr(,"class")
 #> [1] "g6_port"
