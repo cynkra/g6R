@@ -38,8 +38,16 @@ is_g6_ports <- function(x) {
 #'   \item \code{"hover"}: Ports appear only when hovering over the node.
 #'   \item \code{"hidden"}: Ports are never visible.
 #' }
-#' @param ... Additional port style parameters. See
+#' @param ... Additional port style parameters, e.g. \code{placement} and
+#' \code{r} (radius, default 6). See
 #' \url{https://g6.antv.antgroup.com/en/manual/element/node/base-node#portstyleprops}.
+#' In addition to G6's native placements (\code{"left"}, \code{"right"},
+#' \code{"top"}, \code{"bottom"}, or a \code{c(x, y)} pair), g6R adds
+#' \code{placement = "label-bottom"}: the port snaps to the bottom-centre of the
+#' node's label background when the node has a bottom label, falling back to a
+#' normal bottom-of-node port otherwise. Pass \code{ripple = FALSE} to disable
+#' the hover ripple for a port, or \code{haloFill} to override the colour of the
+#' ring that makes the port look set into the node surface.
 #' @return An S3 object of class 'g6_port'.
 #' @examples
 #' g6_port("input-1", label = "port 1", type = "input", arity = 2, placement = "left")
@@ -165,9 +173,9 @@ validate_port.g6_port <- function(x, ...) {
 
   # Ensure ports are displayed: doc says
   # If set to undefined, the port is treated as a point,
-  # not displayed on canvas. Default is set to 4.
+  # not displayed on canvas. Default is set to 6.
   if (is.null(x[["r"]])) {
-    x[["r"]] <- 4
+    x[["r"]] <- 6
   } else {
     if (
       !is.numeric(x[["r"]]) ||
