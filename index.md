@@ -35,8 +35,10 @@ interactive network in R, with stunning set of features, including:
 -   High **performance** rendering (\>20000 nodes).
 
 <p style="text-align: center;">
-<img src="./man/figures/g6-layers.png" style="width:50.0%"
-alt="g6R layers example" />
+<img
+src="https://raw.githubusercontent.com/cynkra/g6R/main/man/figures/g6R-deconstructed.gif"
+style="width:92.0%"
+alt="A g6 graph deconstructed into its data, layout, options, behaviors and plugins layers" />
 </p>
 
 ``` r

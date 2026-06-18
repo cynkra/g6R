@@ -1,0 +1,355 @@
+<script>
+/* ---- g6R, deconstructed ----
+ * Marker slide: .g6d-slide   Stage container: #g6d-stage
+ * Left: the g6R pipe. Right: a small graph built as five stacked SVG "planes",
+ * one per pipe call. Unlike a ggplot, g6's layers are not all additive geometry
+ * (layout is a transform, not an overlay) — so each plane is a *cumulative
+ * snapshot* of the pipeline after that call. The top plane (plugins) is the
+ * finished graph; the explode fans the snapshots apart so you can walk the pipe.
+ *   data       -> bare nodes + edges at grid positions
+ *   layout     -> same nodes pushed into the force arrangement
+ *   options    -> styling: node fill, arrows, pink label backgrounds
+ *   behaviors  -> + interaction affordances (selection, brush, ghost edge)
+ *   plugins    -> + chrome (minimap, tooltip, context menu)
+ * render(stage) is idempotent.
+ */
+(function () {
+  const SVGNS = "http://www.w3.org/2000/svg";
+
+  // ---- graph geometry (local coords inside the 600x380 #g6d-plot box) -----
+  const W = 600, H = 380;
+
+  // force-layout positions (baked: what d3_force_layout() settles to)
+  const NODES = [
+    { id: 1,  fx: 300, fy: 190, gx: 120, gy: 80  },
+    { id: 2,  fx: 178, fy: 108, gx: 240, gy: 80  },
+    { id: 3,  fx: 205, fy: 268, gx: 360, gy: 80  },
+    { id: 4,  fx: 418, fy: 120, gx: 480, gy: 80  },
+    { id: 5,  fx: 446, fy: 252, gx: 120, gy: 190 },
+    { id: 6,  fx: 104, fy: 198, gx: 240, gy: 190 },
+    { id: 7,  fx: 300, fy: 64,  gx: 360, gy: 190 },
+    { id: 8,  fx: 296, fy: 320, gx: 480, gy: 190 },
+    { id: 9,  fx: 512, fy: 178, gx: 120, gy: 300 },
+    { id: 10, fx: 120, fy: 312, gx: 240, gy: 300 },
+    { id: 11, fx: 470, fy: 332, gx: 360, gy: 300 },
+    { id: 12, fx: 86,  fy: 92,  gx: 480, gy: 300 },
+  ];
+  const byId = {};
+  NODES.forEach(n => (byId[n.id] = n));
+
+  const EDGES = [
+    [1, 2], [1, 3], [1, 4], [1, 5], [2, 6], [2, 7], [3, 8],
+    [3, 10], [4, 9], [5, 11], [5, 9], [7, 12], [6, 12], [8, 11],
+  ];
+
+  const R = 16;                      // node radius
+  const NEUTRAL = "#c8ccd4", NODE = "#5b8ff9", EDGE = "#99add1";
+  const LABEL_BG = "#ffb6c1", ACCENT = "#f8766d";
+
+  function el(name, attrs, parent) {
+    const e = document.createElementNS(SVGNS, name);
+    for (const k in attrs) e.setAttribute(k, attrs[k]);
+    if (parent) parent.appendChild(e);
+    return e;
+  }
+  function txt(svg, x, y, s, attrs) {
+    const t = el("text", Object.assign({ x, y, "font-family": "sans-serif" }, attrs), svg);
+    t.textContent = s;
+    return t;
+  }
+
+  // one arrowhead marker per svg (styled edges only)
+  function defsArrow(svg, id, color) {
+    const defs = el("defs", {}, svg);
+    const m = el("marker", {
+      id, viewBox: "0 0 10 10", refX: 9, refY: 5,
+      markerWidth: 7, markerHeight: 7, orient: "auto-start-reverse",
+    }, defs);
+    el("path", { d: "M0,0 L10,5 L0,10 z", fill: color }, m);
+  }
+
+  // ---- shared drawing helpers -------------------------------------------
+  function pos(n, key) { return key === "g" ? [n.gx, n.gy] : [n.fx, n.fy]; }
+
+  function drawEdges(svg, key, styled) {
+    const markerId = `g6d-arrow-${key}-${styled}`;
+    if (styled) defsArrow(svg, markerId, EDGE);
+    EDGES.forEach(([s, t]) => {
+      const a = byId[s], b = byId[t];
+      const [ax, ay] = pos(a, key), [bx, by] = pos(b, key);
+      // shorten to node edge so the arrowhead sits on the rim
+      const dx = bx - ax, dy = by - ay, len = Math.hypot(dx, dy) || 1;
+      const ux = dx / len, uy = dy / len;
+      const x2 = bx - ux * (R + (styled ? 6 : 1));
+      const y2 = by - uy * (R + 1);
+      el("line", Object.assign({
+        x1: ax + ux * R, y1: ay + uy * R, x2, y2,
+        stroke: styled ? EDGE : NEUTRAL, "stroke-width": styled ? 2 : 1.5,
+      }, styled ? { "marker-end": `url(#${markerId})` } : {}), svg);
+    });
+  }
+
+  function drawNodes(svg, key, { styled, labels }) {
+    NODES.forEach(n => {
+      const [x, y] = pos(n, key);
+      el("circle", {
+        cx: x, cy: y, r: R,
+        fill: styled ? NODE : NEUTRAL,
+        stroke: styled ? "#fff" : "#9aa1ad",
+        "stroke-width": styled ? 2 : 1.5,
+      }, svg);
+      if (labels) {
+        // pink labelBackground from g6_options(), centered below the node
+        const lw = 20, lh = 18, lx = x - lw / 2, ly = y + R + 3;
+        el("rect", { x: lx, y: ly, width: lw, height: lh, rx: 4, fill: LABEL_BG }, svg);
+        txt(svg, x, ly + 13, n.id,
+            { "text-anchor": "middle", "font-size": 13, "font-weight": 700, fill: "#1d2433",
+              "font-family": "Arial" });
+      } else {
+        txt(svg, x, y + 4, n.id,
+            { "text-anchor": "middle", "font-size": 12, fill: "#5c636e" });
+      }
+    });
+  }
+
+  // behaviors: interaction affordances drawn as overlay annotations
+  const SELECTED = [1, 6];
+  function drawBehaviors(svg) {
+    // click_select() — g6's real selected state: light-blue halo + thick black ring
+    SELECTED.forEach(id => {
+      const n = byId[id];
+      el("circle", { cx: n.fx, cy: n.fy, r: R + 11, fill: "rgba(91,143,249,0.22)" }, svg);
+      el("circle", { cx: n.fx, cy: n.fy, r: R + 2, fill: "none", stroke: "#000", "stroke-width": 5 }, svg);
+    });
+    // brush_select() — a marquee rectangle over a region
+    el("rect", { x: 78, y: 230, width: 168, height: 120, rx: 3,
+                 fill: "rgba(91,143,249,0.10)", stroke: NODE,
+                 "stroke-width": 1.6, "stroke-dasharray": "6 5" }, svg);
+    // create_edge() — ghost edge being dragged from a node toward the cursor
+    const from = byId[9], cx = 562, cy = 300;
+    el("line", { x1: from.fx, y1: from.fy, x2: cx, y2: cy,
+                 stroke: NODE, "stroke-width": 2, "stroke-dasharray": "4 4" }, svg);
+    el("circle", { cx, cy, r: 4, fill: NODE }, svg);
+  }
+
+  // bubble_sets(): two metaball hulls behind clustered nodes, with rotated labels
+  const CLUSTERS = [
+    { ids: [12, 2, 7, 4], fill: "#e8853a", label: "cluster 1", lx: 250, ly: 52, rot: -8 },
+    { ids: [10, 3, 8, 11], fill: "#a58aff", label: "cluster 2", lx: 322, ly: 300, rot: -8 },
+  ];
+  function drawBubbleSets(svg) {
+    const defs = el("defs", {}, svg);
+    CLUSTERS.forEach((c, ci) => {
+      const fid = `g6d-mb-${ci}`;
+      const f = el("filter", { id: fid, x: "-50%", y: "-50%", width: "200%", height: "200%" }, defs);
+      el("feGaussianBlur", { in: "SourceGraphic", stdDeviation: 14, result: "b" }, f);
+      // alpha threshold -> the blurred circles fuse into one smooth blob
+      el("feColorMatrix", { in: "b", mode: "matrix",
+        values: "1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 22 -9" }, f);
+      const g = el("g", { filter: `url(#${fid})`, opacity: 0.22 }, svg);
+      c.ids.forEach(id => el("circle", { cx: byId[id].fx, cy: byId[id].fy, r: 40, fill: c.fill }, g));
+    });
+  }
+  function drawBubbleSetLabels(svg) {
+    CLUSTERS.forEach(c => {
+      const w = 64, h = 20;
+      const r = el("rect", { x: c.lx - w / 2, y: c.ly - h / 2, width: w, height: h, rx: 5, fill: c.fill, opacity: 0.92 }, svg);
+      r.setAttribute("transform", `rotate(${c.rot} ${c.lx} ${c.ly})`);
+      const t = txt(svg, c.lx, c.ly + 4, c.label,
+                    { "text-anchor": "middle", "font-size": 12, "font-weight": 700, fill: "#fff" });
+      t.setAttribute("transform", `rotate(${c.rot} ${c.lx} ${c.ly})`);
+    });
+  }
+
+  // toolbar(): rounded icon bar, top-left (zoom in/out, locate, delete, expand, collapse)
+  function drawToolbar(svg) {
+    const x = 8, y = 8, h = 32, n = 6, gap = 30, pad = 15;
+    const w = pad * 2 + (n - 1) * gap;
+    el("rect", { x, y, width: w, height: h, rx: 8, fill: "#fff", stroke: "#e8eaee", "stroke-width": 1,
+                 filter: "drop-shadow(0 3px 8px rgba(20,28,45,0.12))" }, svg);
+    const cy = y + h / 2, ix = i => x + pad + i * gap;
+    const st = { fill: "none", stroke: "#4b5563", "stroke-width": 1.6, "stroke-linecap": "round" };
+    const line = (a, b, c, d) => el("line", Object.assign({ x1: a, y1: b, x2: c, y2: d }, st), svg);
+    // zoom in
+    el("circle", Object.assign({ cx: ix(0), cy, r: 6 }, st), svg);
+    line(ix(0) - 3, cy, ix(0) + 3, cy); line(ix(0), cy - 3, ix(0), cy + 3);
+    // zoom out
+    el("circle", Object.assign({ cx: ix(1), cy, r: 6 }, st), svg);
+    line(ix(1) - 3, cy, ix(1) + 3, cy);
+    // locate / target
+    el("circle", Object.assign({ cx: ix(2), cy, r: 5 }, st), svg);
+    el("circle", { cx: ix(2), cy, r: 1.6, fill: "#4b5563" }, svg);
+    // delete (trash)
+    el("rect", Object.assign({ x: ix(3) - 4, y: cy - 2, width: 8, height: 9, rx: 1 }, st), svg);
+    line(ix(3) - 6, cy - 3, ix(3) + 6, cy - 3);
+    // expand / collapse corner brackets
+    corners(ix(4), cy, 1, st, svg); corners(ix(5), cy, -1, st, svg);
+  }
+  function corners(cx, cy, dir, st, svg) {
+    const o = 5, l = 3;
+    [[-1, -1], [1, -1], [-1, 1], [1, 1]].forEach(([sx, sy]) => {
+      const px = cx + sx * o, py = cy + sy * o;
+      el("line", Object.assign({ x1: px, y1: py, x2: px - sx * l * dir, y2: py }, st), svg);
+      el("line", Object.assign({ x1: px, y1: py, x2: px, y2: py - sy * l * dir }, st), svg);
+    });
+  }
+
+  // minimap(): framed mini view bottom-right, gray current-viewport rect + scaled graph
+  function drawMinimap(svg) {
+    const mm = { x: 450, y: 258, w: 142, h: 108 };
+    el("rect", { x: mm.x, y: mm.y, width: mm.w, height: mm.h, rx: 4, fill: "#fff", stroke: "#d1d5db", "stroke-width": 1.2 }, svg);
+    const vp = { x: mm.x + 12, y: mm.y + 16, w: 118, h: 76 };
+    el("rect", { x: vp.x, y: vp.y, width: vp.w, height: vp.h, fill: "#e5e7eb" }, svg);
+    const kx = vp.w / W, ky = vp.h / H;
+    const mx = v => vp.x + v * kx, my = v => vp.y + v * ky;
+    EDGES.forEach(([s, t]) => el("line", { x1: mx(byId[s].fx), y1: my(byId[s].fy),
+      x2: mx(byId[t].fx), y2: my(byId[t].fy), stroke: "#b6c0d6", "stroke-width": 0.8 }, svg));
+    NODES.forEach(n => el("circle", { cx: mx(n.fx), cy: my(n.fy), r: 2.6, fill: NODE,
+      stroke: SELECTED.includes(n.id) ? "#000" : "none", "stroke-width": 1 }, svg));
+  }
+
+  // ---- planes ------------------------------------------------------------
+  function svgPlane(id, tagHtml) {
+    const d = document.createElement("div");
+    d.className = "g6d-plane";
+    d.id = id;
+    d.style.cssText = "position:absolute;left:0;top:0;width:100%;height:100%;";
+    const tilt = document.createElement("div");
+    tilt.className = "g6d-tilt";
+    const card = document.createElement("div");
+    card.className = "g6d-card";
+    tilt.appendChild(card);
+    const s = el("svg", { viewBox: `0 0 ${W} ${H}`, width: W, height: H });
+    s.style.cssText = "position:absolute;left:0;top:0;";
+    tilt.appendChild(s);
+    const tag = document.createElement("div");
+    tag.className = "g6d-tag";
+    tag.innerHTML = tagHtml;
+    tilt.appendChild(tag);
+    d.appendChild(tilt);
+    return { div: d, tilt, svg: s, card, tag };
+  }
+
+  // each plane is the cumulative pipeline state after its call
+  function buildData(svg)      { drawEdges(svg, "g", false); drawNodes(svg, "g", { styled: false, labels: false }); }
+  function buildLayout(svg)    { drawEdges(svg, "f", false); drawNodes(svg, "f", { styled: false, labels: false }); }
+  function buildOptions(svg)   { drawEdges(svg, "f", true);  drawNodes(svg, "f", { styled: true,  labels: true }); }
+  function buildBehaviors(svg) { buildOptions(svg); drawBehaviors(svg); }
+  // plugins card: hulls behind, styled graph, then chrome on top (no transient
+  // behavior affordances — this card doubles as the finished, head-on app view)
+  function buildPlugins(svg) {
+    drawBubbleSets(svg);
+    buildOptions(svg);
+    drawBubbleSetLabels(svg);
+    drawToolbar(svg);
+    drawMinimap(svg);
+  }
+
+  // ---- left-hand code listing (the g6R pipe) -----------------------------
+  const CODE = `<span data-blk="data"><span class="g6d-fn">g6</span>(nodes, edges) |></span>
+<span data-blk="layout">  <span class="g6d-fn">g6_layout</span>(<span class="g6d-fn">d3_force_layout</span>()) |></span>
+<span data-blk="options">  <span class="g6d-fn">g6_options</span>(
+    <span class="g6d-arg">node</span> = <span class="g6d-fn">list</span>(<span class="g6d-arg">style</span> = <span class="g6d-fn">list</span>(<span class="g6d-arg">labelBackground</span> = <span class="g6d-num">TRUE</span>))
+  ) |></span>
+<span data-blk="behaviors">  <span class="g6d-fn">g6_behaviors</span>(
+    <span class="g6d-str">"zoom-canvas"</span>,
+    <span class="g6d-fn">drag_element_force</span>(),
+    <span class="g6d-fn">click_select</span>(),
+    <span class="g6d-fn">brush_select</span>(),
+    <span class="g6d-fn">create_edge</span>()
+  ) |></span>
+<span data-blk="plugins">  <span class="g6d-fn">g6_plugins</span>(
+    <span class="g6d-fn">minimap</span>(),
+    <span class="g6d-fn">toolbar</span>(),
+    <span class="g6d-fn">bubble_sets</span>(<span class="g6d-arg">members</span> = clusters)
+  )</span>`;
+
+  let built = false;
+  let planes = [];                                   // bottom -> top
+  let codeBlocks = [];
+  const BLK = ["data", "layout", "options", "behaviors", "plugins"];
+  const TAGS = {
+    data:      'g6()<br><small>nodes &amp; edges</small>',
+    layout:    'g6_layout()<br><small>positions</small>',
+    options:   'g6_options()<br><small>style &amp; labels</small>',
+    behaviors: 'g6_behaviors()<br><small>interactions</small>',
+    plugins:   'g6_plugins()<br><small>minimap, toolbar, bubble sets</small>',
+  };
+
+  function build() {
+    const stage = document.getElementById("g6d-stage");
+    if (!stage || built) return !!stage;
+    built = true;
+
+    const code = document.createElement("div");
+    code.className = "g6d-code";
+    code.innerHTML = CODE;
+    stage.appendChild(code);
+    codeBlocks = Array.from(code.querySelectorAll("[data-blk]"));
+
+    const plot = document.createElement("div");
+    plot.id = "g6d-plot";
+    const builders = [buildData, buildLayout, buildOptions, buildBehaviors, buildPlugins];
+    planes = BLK.map((blk, i) => {
+      const p = svgPlane(`g6d-plane-${blk}`, TAGS[blk]);
+      builders[i](p.svg);
+      plot.appendChild(p.div);
+      return p;
+    });
+    stage.appendChild(plot);
+    return true;
+  }
+
+  function render(stage) {
+    if (!build()) return;
+
+    // stage 0: flat, head-on finished graph (top plane only).
+    // stage 1: the graph "lays down" — tilts into 3D, ready to explode.
+    // stage 2: explode into the fanned snapshot stack.
+    // stage 3..7: focus each plane bottom -> top (data -> plugins).
+    // stage 8: collapse back together (still tilted).
+    // stage 9: un-rotate flat to the finished graph.
+    const flat = stage >= 9;
+    const collapsed = stage >= 8;
+    const laid = stage >= 1 && !flat;
+    const exploded = stage >= 2 && !collapsed;
+    const focusIdx = (stage >= 3 && !collapsed) ? stage - 3 : -1;
+    const focusBlk = focusIdx >= 0 ? BLK[focusIdx] : null;
+
+    const N = planes.length;
+    const SPREAD = 70;
+    planes.forEach((p, i) => {
+      const fan = exploded ? 18 + ((N - 1) / 2 - i) * SPREAD : 0;
+      const isFocusActive = focusIdx >= 0;
+      const dim = isFocusActive && i !== focusIdx;
+      // when not exploded only the top (finished) plane shows; on explode all
+      // snapshots reveal, with the non-focused ones dimmed during the walk.
+      const vis = exploded ? (dim ? 0.16 : 1) : (i === N - 1 ? 1 : 0);
+
+      TM.anime({ targets: p.div, translateY: fan, duration: 850, easing: "easeInOutCubic" });
+      TM.anime({
+        targets: p.tilt,
+        rotateX: laid ? 56 : 0,
+        rotateZ: laid ? 20 : 0,
+        scale: exploded ? 0.82 : 1,
+        opacity: vis,
+        duration: 850,
+        easing: "easeInOutCubic",
+      });
+      TM.anime({ targets: p.card, opacity: exploded ? 1 : 0, duration: 600, easing: "easeInOutQuad" });
+      TM.anime({ targets: p.tag, opacity: exploded && !dim ? 1 : 0, duration: 500, easing: "easeInOutQuad" });
+    });
+
+    codeBlocks.forEach(b => b.classList.toggle("g6d-hot", b.dataset.blk === focusBlk));
+  }
+
+  TM.gate({
+    markerClass: "g6d-slide",
+    fragmentIds: ["g6d-lay", "g6d-explode",
+                  "g6d-focus-data", "g6d-focus-layout", "g6d-focus-options",
+                  "g6d-focus-behaviors", "g6d-focus-plugins",
+                  "g6d-collapse", "g6d-unrotate"],
+    render,
+  });
+})();
+</script>

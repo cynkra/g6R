@@ -15,7 +15,6 @@ coverage](https://codecov.io/gh/cynkra/g6R/graph/badge.svg)](https://app.codecov
 <!-- badges: end -->
 
 <p style="text-align: center;">
-
 <img src="./man/figures/hex.png" style="width:50.0%"
 alt="g6R hex logo" />
 </p>
@@ -37,9 +36,11 @@ interactive network in R, with stunning set of features, including:
 - High **performance** rendering (\>20000 nodes).
 
 <p style="text-align: center;">
-
-<img src="./man/figures/g6-layers.png" style="width:50.0%"
-alt="g6R layers example" />
+<!-- Served from GitHub (build-ignored) to keep the package tarball under CRAN's 5 MB limit. -->
+<img
+src="https://raw.githubusercontent.com/cynkra/g6R/main/man/figures/g6R-deconstructed.gif"
+style="width:92.0%"
+alt="A g6 graph deconstructed into its data, layout, options, behaviors and plugins layers" />
 </p>
 
 ## Installation

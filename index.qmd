@@ -38,7 +38,7 @@ CRAN.R-project.org/package=g6R)
 - High __performance__ rendering (>20000 nodes).
 
 <p style="text-align: center;">
-![](./man/figures/g6-layers.png){width="50%" alt="g6R layers example"}
+![](https://raw.githubusercontent.com/cynkra/g6R/main/man/figures/g6R-deconstructed.gif){width="92%" alt="A g6 graph deconstructed into its data, layout, options, behaviors and plugins layers"}
 </p>
 
 ```{r g6R-demo, eval=FALSE, echo = TRUE}

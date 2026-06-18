@@ -1,0 +1,111 @@
+/* ---- g6R, deconstructed ----
+ * Adapted from EmilHvitfeldt/tidy-animations (ggplot2-deconstructed). Only the
+ * classes this animation needs, namespaced g6d-. Pulls one card per pipe call
+ * out of a live-looking g6 graph and walks up the stack.
+ */
+
+/*-- scss:rules --*/
+
+:root {
+  --tm-ink: #1d2433;
+  --g6d-node: #5b8ff9;       /* styled node fill (AntV blue) */
+  --g6d-edge: #99add1;       /* styled edge */
+  --g6d-bare: #c8ccd4;       /* unstyled node / edge (gray) */
+  --g6d-label: #ffb6c1;      /* label background from g6_options() */
+  --g6d-accent: #f8766d;     /* behavior affordance (selection, brush) */
+}
+
+section:has(.g6d-slide) { overflow: hidden; }
+
+.g6d-stage-wrap { position: relative; margin-top: 10px; }
+
+/* fixed-size coordinate box; JS positions children in this same space */
+#g6d-stage {
+  position: relative;
+  width: 1200px;
+  height: 600px;
+  margin: 0 auto;
+}
+
+/* invisible markers — they only exist to advance Reveal fragments */
+.g6d-frag {
+  position: absolute;
+  pointer-events: none;
+  opacity: 0 !important;
+}
+
+/* left-hand code listing */
+.g6d-code {
+  position: absolute;
+  left: 0;
+  top: 120px;
+  width: 590px;
+  font-family: "Source Code Pro", "SFMono-Regular", Menlo, Consolas, monospace;
+  font-size: 17px;
+  line-height: 1.6;
+  color: var(--tm-ink);
+  white-space: pre;
+}
+.g6d-code [data-blk] { border-radius: 4px; transition: background-color 0.3s ease; }
+.g6d-code [data-blk].g6d-hot {
+  background: rgba(255, 214, 84, 0.32);
+  box-shadow: 0 0 0 4px rgba(255, 214, 84, 0.32);
+}
+
+.g6d-code .g6d-fn  { color: #2563c9; }   /* function names */
+.g6d-code .g6d-str { color: #2e8b57; }   /* strings */
+.g6d-code .g6d-arg { color: #8a6d00; }   /* argument names */
+.g6d-code .g6d-num { color: #b5651d; }   /* numbers */
+.g6d-code .g6d-mut { color: #9aa1ad; }   /* punctuation / muted */
+
+/* right-hand graph lives in its own coordinate sub-box, built from SVG planes */
+#g6d-plot {
+  position: absolute;
+  left: 600px;
+  top: 110px;
+  width: 600px;
+  height: 380px;
+}
+
+/* outer plane: only moved vertically (screen space) for the explode fan.
+   Each carries its own perspective so the tilt projects through a vanishing
+   point centered on this card — keeping every card's edges aligned. */
+.g6d-plane { perspective: 1600px; }
+
+/* inner: the element that actually tilts */
+.g6d-tilt {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+}
+
+/* card backing — hidden while flat, fades in as the planes explode */
+.g6d-card {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(255, 255, 255, 0.78);
+  border: 1px solid rgba(160, 168, 184, 0.6);
+  border-radius: 6px;
+  box-shadow: 0 14px 34px rgba(20, 28, 45, 0.14);
+  opacity: 0;
+}
+
+/* per-card layer label, fades in on explode (positioned by JS) */
+.g6d-tag {
+  position: absolute;
+  right: -8px;
+  top: 8px;
+  transform: translateX(100%);
+  font-family: "Source Code Pro", "SFMono-Regular", Menlo, Consolas, monospace;
+  font-size: 17px;
+  font-weight: 700;
+  color: var(--tm-ink);
+  white-space: nowrap;
+  opacity: 0;
+}
+.g6d-tag small { font-weight: 400; color: #6b7280; }

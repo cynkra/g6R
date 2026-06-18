@@ -24,3 +24,5 @@
 ^CRAN-SUBMISSION$
 ^codecov\.yml$
 ^revdep$
+^man/figures/g6-deconstructed$
+^man/figures/g6R-deconstructed\.gif$
