@@ -20,6 +20,8 @@
 
 - Fixed `create_edge()` drops being silently canceled below 100% browser zoom. The minimum drag-distance threshold was measured in canvas units, which scale with browser/graph zoom; below 100% a real drag shrank under the threshold and the drop was treated as a click. Drag intent is now measured in client (screen) pixels, which are zoom-stable (#52).
 
+- Fixed the old `+` port indicator reappearing on node selection. The legacy indicator was replaced by the hover ripple, but its shapes were still created and G6's `setVisibility()` cascade (fired on selection/update) flipped them back to visible. The dead indicator shapes (`add-inner`, `add-plus`) and their animation helpers are now removed entirely, leaving only the ripple ring.
+
 # g6R 0.6.0
 
 ## Breaking changes

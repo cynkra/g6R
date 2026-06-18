@@ -111,7 +111,6 @@ const dagCollapsedNodes = new Set();
 
 // Animation constants
 const ANIMATION_DURATION_MS = 500;
-const HIDE_DELAY_MS = 0;
 // The node body and each port hit-area are separate hover regions. Moving the
 // cursor between them fires mouseleave/mouseenter pairs; without a debounce the
 // ports hide and immediately re-fade in, which reads as flickering. A short
@@ -124,8 +123,6 @@ const INDICATOR_RADIUS_MULTIPLIER = 2.5;
 // are still caught by create_edge's findNearestPort (which is node-centre
 // aware), so grabbing stays forgiving without stealing the node's drag area.
 const HITAREA_RADIUS_MULTIPLIER = 1.4;
-const INNER_CIRCLE_RATIO = 0.75;
-const PLUS_FONT_RATIO = 1.6;
 
 // To add event listener only once because of re-renders
 const addUniqueEventListener = (element, type, listener) => {
@@ -185,6 +182,13 @@ const createShowPortsHandler = (ctx) => () => {
         cursor: graphHasCreateEdge(ctx.self.context.graph) ? 'crosshair' : 'default'
       });
     }
+    // The legacy `+` indicator is replaced by the ripple. G6's setVisibility
+    // cascade (e.g. on node selection or update) flips every child shape
+    // visible, so keep these hidden here or the old `+` leaks back. The ripple
+    // ring (circle) is left alone while it is actively animating.
+    if (indicator && indicator.circle && !indicator.circle._pulseLoop) {
+      indicator.circle.attr({ visibility: 'hidden' });
+    }
   });
   if (needsAnimation) {
     ctx.self.animateAllIn();
@@ -222,8 +226,6 @@ const createHidePortsHandler = (ctx) => () => {
         ctx.self.stopRotationAnimation(indicator.circle);
         ctx.self.stopPortPulse(indicator);
         indicator.circle.attr({ visibility: 'hidden', opacity: 1 });
-        indicator.innerCircle.attr({ visibility: 'hidden', opacity: 1 });
-        indicator.plus.attr({ visibility: 'hidden', opacity: 1 });
       }
     });
     ctx.self._rippleShape = null;
@@ -253,9 +255,8 @@ const createHidePortsImmediateHandler = (ctx) => () => {
     }
     if (indicator) {
       ctx.self.stopRotationAnimation(indicator.circle);
+      ctx.self.stopPortPulse(indicator);
       indicator.circle.attr({ visibility: 'hidden', opacity: 1 });
-      indicator.innerCircle.attr({ visibility: 'hidden', opacity: 1 });
-      indicator.plus.attr({ visibility: 'hidden', opacity: 1 });
     }
   });
   ctx.self._rippleShape = null;
@@ -356,43 +357,6 @@ const createIndicatorCircle = (self, key, x, y, radius, accentColor, container, 
     container
   );
 
-const createIndicatorInnerCircle = (self, key, x, y, innerRadius, accentColor, container, portZIndex) =>
-  self.upsert(
-    `add-inner-${key}`,
-    GCircle,
-    {
-      cx: x,
-      cy: y,
-      r: innerRadius,
-      fill: accentColor,
-      stroke: 'transparent',
-      zIndex: portZIndex + 3,
-      cursor: 'pointer',
-      visibility: 'hidden',
-      pointerEvents: 'none'
-    },
-    container
-  );
-
-const createIndicatorPlus = (self, key, x, y, innerRadius, container, portZIndex) =>
-  self.upsert(
-    `add-plus-${key}`,
-    'text',
-    {
-      x: x - 0.5,
-      y: y - 0.5,
-      text: '+',
-      fontSize: innerRadius * PLUS_FONT_RATIO,
-      fill: '#fff',
-      fontWeight: '400',
-      textAlign: 'center',
-      textBaseline: 'middle',
-      zIndex: portZIndex + 4,
-      pointerEvents: 'none',
-      visibility: 'hidden'
-    },
-    container
-  );
 
 // --- Port events helpers ---
 
@@ -1198,8 +1162,6 @@ const createCustomNode = (BaseShape) => {
             this.upsert(`port-${key}`, GCircle, false, container);
             this.upsert(`port-hitarea-${key}`, GCircle, false, container);
             this.upsert(`add-circle-${key}`, GCircle, false, container);
-            this.upsert(`add-inner-${key}`, GCircle, false, container);
-            this.upsert(`add-plus-${key}`, GCircle, false, container);
           }
         });
       }
@@ -1296,17 +1258,14 @@ const createCustomNode = (BaseShape) => {
     }
 
     createAddIndicator(key, x, y, radius, accentColor, container, portStyle = {}, portZIndex = 10) {
-      const innerRadius = radius * INNER_CIRCLE_RATIO;
       const hitArea = createIndicatorHitArea(this, key, x, y, radius, container, portStyle, portZIndex);
       hitArea.key = key;
       hitArea.arity = portStyle.arity === "Infinity" ? Infinity : (portStyle.arity || 1);
 
+      // `circle` is reused as the hover ripple ring (see startPortPulse).
       const circle = createIndicatorCircle(this, key, x, y, radius, accentColor, container, portZIndex);
-      const innerCircle = createIndicatorInnerCircle(this, key, x, y, innerRadius, accentColor, container, portZIndex);
-      const plus = createIndicatorPlus(this, key, x, y, innerRadius, container, portZIndex);
-
       circle._rotationAnimation = null;
-      return { circle, innerCircle, plus, hitArea };
+      return { circle, hitArea };
     }
 
     startRotationAnimation(circle) {
@@ -1372,61 +1331,6 @@ const createCustomNode = (BaseShape) => {
       ring.attr({ visibility: 'hidden', opacity: 1, r: ring._baseRadius || ring.attr('r') });
     }
 
-    showIndicatorWithAnimation(indicator) {
-      const { circle, innerCircle, plus } = indicator;
-      if (indicator._hideAnimation) {
-        cancelAnimationFrame(indicator._hideAnimation);
-        indicator._hideAnimation = null;
-      }
-      if (circle.attr('visibility') === 'visible' && circle.attr('opacity') >= 0.9) {
-        return;
-      }
-      circle.attr({ visibility: 'visible', opacity: 0 });
-      innerCircle.attr({ visibility: 'visible', opacity: 0 });
-      plus.attr({ visibility: 'visible', opacity: 0 });
-      const duration = ANIMATION_DURATION_MS;
-      const startTime = performance.now();
-      const animate = (currentTime) => {
-        const progress = Math.min((currentTime - startTime) / duration, 1);
-        const eased = 1 - Math.pow(1 - progress, 2);
-        circle.attr('opacity', eased);
-        innerCircle.attr('opacity', eased);
-        plus.attr('opacity', eased);
-        if (progress < 1) {
-          indicator._showAnimation = requestAnimationFrame(animate);
-        } else {
-          indicator._showAnimation = null;
-        }
-      };
-      indicator._showAnimation = requestAnimationFrame(animate);
-    }
-
-    hideIndicatorWithAnimation(indicator, callback) {
-      const { circle, innerCircle, plus } = indicator;
-      if (indicator._showAnimation) {
-        cancelAnimationFrame(indicator._showAnimation);
-        indicator._showAnimation = null;
-      }
-      const duration = HIDE_DELAY_MS;
-      const startTime = performance.now();
-      const animate = (currentTime) => {
-        const progress = Math.min((currentTime - startTime) / duration, 1);
-        const opacity = 1 - progress;
-        circle.attr('opacity', opacity);
-        innerCircle.attr('opacity', opacity);
-        plus.attr('opacity', opacity);
-        if (progress < 1) {
-          indicator._hideAnimation = requestAnimationFrame(animate);
-        } else {
-          indicator._hideAnimation = null;
-          circle.attr({ visibility: 'hidden', opacity: 1 });
-          innerCircle.attr({ visibility: 'hidden', opacity: 1 });
-          plus.attr({ visibility: 'hidden', opacity: 1 });
-          if (callback) callback();
-        }
-      };
-      indicator._hideAnimation = requestAnimationFrame(animate);
-    }
 
     animateAllIn() {
       if (!this._portShapes) return;
@@ -1438,14 +1342,9 @@ const createCustomNode = (BaseShape) => {
       const animate = (currentTime) => {
         const progress = Math.min((currentTime - startTime) / duration, 1);
         const eased = 1 - Math.pow(1 - progress, 2);
-        this._portShapes.forEach(({ shape, indicator }) => {
+        this._portShapes.forEach(({ shape }) => {
           if (shape.attr('visibility') === 'visible') {
             shape.attr('opacity', eased);
-          }
-          if (indicator && indicator.circle.attr('visibility') === 'visible') {
-            indicator.circle.attr('opacity', eased);
-            indicator.innerCircle.attr('opacity', eased);
-            indicator.plus.attr('opacity', eased);
           }
         });
         if (progress < 1) {
@@ -1544,8 +1443,6 @@ const createCustomNode = (BaseShape) => {
           shape.attr({ visibility: 'hidden' });
           if (indicator) {
             indicator.circle?.attr({ visibility: 'hidden' });
-            indicator.innerCircle?.attr({ visibility: 'hidden' });
-            indicator.plus?.attr({ visibility: 'hidden' });
             if (indicator.hitArea) indicator.hitArea.attr({ visibility: 'hidden' });
           }
         });
