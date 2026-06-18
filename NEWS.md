@@ -68,9 +68,11 @@ g6_combo(
 
 - `create_edge()` now tolerates a small miss when grabbing a port. Previously an edge only started when pointer-down landed exactly on the (small) port glyph; a near-miss on the node body fell through to `drag_element()` and moved the node instead. Pointer-down now snaps to the nearest grabbable port within a tolerance proportional to the port radius, so a slight miss still starts an edge (#50).
 
+- Fixed the `create_edge()` rubber-band (assist) edge not appearing while dragging when the graph had no `edge` options configured. The assist edge style read `graph.options.edge.style.zIndex`, which threw and aborted assist-edge creation; it is now read defensively and falls back to G6's default.
+
 - Calmer port hover. Hovering a port no longer grows it ~2.5x into a rotating dashed `+` glyph (which read as flickering noise). Ports now keep their size and show a soft expanding ripple ring (in the port colour) only while the cursor is over them; the ripple stops when the cursor leaves. Disable it per port with `ripple = FALSE`. Ports also gain a background-coloured ring so they read as set into a small hole punched through the node / label surface (override with the `haloFill` port style), and the default fill adapts to the graph theme. The large invisible hit-area is kept, so ports remain easy to grab.
 
-- Port hover cursor is now a crosshair instead of a pointer, matching G6's native create-edge affordance ("draw an edge from here").
+- Port hover cursor is now a crosshair instead of a pointer, matching G6's native create-edge affordance ("draw an edge from here"). The crosshair and the hover ripple only appear when the graph actually has the `create_edge()` behavior, so ports don't advertise an interaction that isn't wired up.
 
 - Default port radius increased from 4 to 6 so ports are easier to see and target.
 

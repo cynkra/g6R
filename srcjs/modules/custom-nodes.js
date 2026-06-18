@@ -176,9 +176,14 @@ const createShowPortsHandler = (ctx) => () => {
     } else {
       shape.attr({ opacity: 1 });
     }
-    // Only ports with remaining capacity are grabbable.
+    // Only ports with remaining capacity are grabbable. Set the cursor here
+    // (not at creation) because behaviors may not be registered yet when the
+    // port is first drawn; on hover the create-edge behavior is known.
     if (indicator?.hitArea) {
-      indicator.hitArea.attr({ visibility: atCapacity ? 'hidden' : 'visible' });
+      indicator.hitArea.attr({
+        visibility: atCapacity ? 'hidden' : 'visible',
+        cursor: graphHasCreateEdge(ctx.self.context.graph) ? 'crosshair' : 'default'
+      });
     }
   });
   if (needsAnimation) {
@@ -298,6 +303,14 @@ const getPortZIndex = (attributes) => {
   return typeof attributes.portZIndex === 'number' ? attributes.portZIndex : 10;
 }
 
+// Whether the graph has the create-edge behavior. Port affordances (crosshair
+// cursor, hover ripple) signal "draw an edge from here", so they should only
+// show when that behavior is actually present, otherwise they are misleading.
+const graphHasCreateEdge = (graph) =>
+  (graph?.getBehaviors?.() || []).some(
+    (b) => (typeof b === 'object' ? b.type : b) === 'create-edge'
+  );
+
 const createIndicatorHitArea = (self, key, x, y, radius, container, portStyle, portZIndex) =>
   self.upsert(
     `port-hitarea-${key}`,
@@ -309,9 +322,11 @@ const createIndicatorHitArea = (self, key, x, y, radius, container, portStyle, p
       fill: 'transparent',
       stroke: 'transparent',
       zIndex: portZIndex + 1,
-      // Crosshair signals "draw an edge from here", matching G6's native
-      // create-edge affordance (a pointer/hand reads as a generic click).
-      cursor: 'crosshair',
+      // Crosshair signals "draw an edge from here" (G6's create-edge
+      // affordance), but only when create_edge is actually active; otherwise a
+      // default cursor, so the port doesn't advertise an interaction that isn't
+      // wired up.
+      cursor: graphHasCreateEdge(self.context.graph) ? 'crosshair' : 'default',
       visibility: 'hidden',
       class: 'port',
       type: portStyle.type || 'input',
@@ -416,6 +431,9 @@ const handlePortIndicatorMouseEnter = (self, portShape, style, indicator) => (e)
 const createPortRippleMoveHandler = (ctx) => (event) => {
   const self = ctx.self;
   if (!self._portShapes) return;
+  // The ripple is an "you can draw an edge here" hover cue; skip it when the
+  // graph has no create-edge behavior so idle ports don't react.
+  if (!graphHasCreateEdge(self.context.graph)) return;
   const p = event.canvas;
   if (!p) return;
 

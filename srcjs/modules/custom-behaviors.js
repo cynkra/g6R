@@ -539,7 +539,11 @@ class CustomCreateEdge extends CreateEdge {
     }]);
 
     const assistEdgeStyle = Object.assign(
-      { pointerEvents: 'none', zIndex: graph.options.edge.style.zIndex },
+      // Optional chaining: graph.options.edge may be unset when the consumer
+      // didn't configure edge options. A missing zIndex falls back to G6's
+      // default; without the guard this threw and the assist edge was never
+      // created (so no rubber-band edge was shown while dragging).
+      { pointerEvents: 'none', zIndex: graph.options.edge?.style?.zIndex },
       hasPorts && this.sourcePort ? { sourcePort: this.sourcePort.key } : {},
       style || {},
       // Hidden until the drag actually starts (see customUpdateAssistEdge).
