@@ -5,11 +5,17 @@ import { sendNotification, getPortConnections } from './utils';
 const ASSIST_EDGE_ID = 'g6-create-edge-assist-edge-id';
 const ASSIST_NODE_ID = 'g6-create-edge-assist-node-id';
 const MIN_DRAG_DISTANCE = 10;
+// The assist (rubber-band) edge stays hidden until the pointer has moved this
+// far from the source port, so a click-and-hold doesn't show a zero-length edge
+// with a misoriented arrow before the drag actually starts.
+const ASSIST_EDGE_SHOW_DISTANCE = 6;
 const DRAG_BEHAVIOR_TYPES = ['drag-element', 'drag-element-force'];
 // Port-grab tolerance: a pointer-down within this multiple of a port's expanded
 // (indicator) radius snaps to the nearest port instead of falling through to a
-// node drag. Port glyphs are small, so an exact hit is hard to land.
-const PORT_SNAP_TOLERANCE_FACTOR = 1.6;
+// node drag. Port glyphs are small, so an exact hit is hard to land. This needs
+// to be meaningfully larger than the port's own hit-area (~the expanded radius)
+// for the tolerance to add reach beyond an exact hit.
+const PORT_SNAP_TOLERANCE_FACTOR = 2.5;
 
 class CustomCreateEdge extends CreateEdge {
   isCreatingEdge = false;
@@ -19,6 +25,7 @@ class CustomCreateEdge extends CreateEdge {
   _processingPointerDown = false;
   _processingPointerUp = false;
   _dragBehaviorSnapshot = null;
+  _assistEdgeShown = false;
 
   validate(event) {
     return true;
@@ -93,6 +100,24 @@ class CustomCreateEdge extends CreateEdge {
       }
     }
 
+    // Don't hijack a node-body drag: only snap when the press is closer to the
+    // port than to the node centre (i.e. on the port's side, near the rim).
+    // Without this, small nodes whose body fits inside the tolerance would
+    // start an edge on every press and could never be dragged.
+    if (nearest) {
+      let center = null;
+      try {
+        const pos = graph.getElementPosition(nodeId);
+        if (pos) center = { x: pos[0], y: pos[1] };
+      } catch (e) { }
+      if (center) {
+        const distToCenter = Math.sqrt(
+          (point.x - center.x) ** 2 + (point.y - center.y) ** 2
+        );
+        if (nearestDist >= distToCenter) return null;
+      }
+    }
+
     return nearest;
   }
 
@@ -153,6 +178,22 @@ class CustomCreateEdge extends CreateEdge {
     if (!this.source) return;
 
     const { graph } = this.context;
+
+    // Reveal the assist edge only once the pointer has moved away from the
+    // source port (drag started). Before that it would be a zero-length edge
+    // sitting on the port with a misoriented arrow.
+    if (!this._assistEdgeShown) {
+      const dx = (event.canvas?.x ?? 0) - (this.startX ?? 0);
+      const dy = (event.canvas?.y ?? 0) - (this.startY ?? 0);
+      if (Math.sqrt(dx * dx + dy * dy) < ASSIST_EDGE_SHOW_DISTANCE) return;
+      this._assistEdgeShown = true;
+      try {
+        graph.updateEdgeData([
+          { id: ASSIST_EDGE_ID, style: { visibility: 'visible' } }
+        ]);
+      } catch (e) { }
+    }
+
     const targetPort = event.originalTarget;
     const targetNodeId = event.target?.id;
     const isValidPort = this.isValidTargetPort(targetPort, targetNodeId);
@@ -500,9 +541,12 @@ class CustomCreateEdge extends CreateEdge {
     const assistEdgeStyle = Object.assign(
       { pointerEvents: 'none', zIndex: graph.options.edge.style.zIndex },
       hasPorts && this.sourcePort ? { sourcePort: this.sourcePort.key } : {},
-      style || {}
+      style || {},
+      // Hidden until the drag actually starts (see customUpdateAssistEdge).
+      { visibility: 'hidden' }
     );
 
+    this._assistEdgeShown = false;
     graph.addEdgeData([{
       id: ASSIST_EDGE_ID,
       source: this.source,

@@ -112,7 +112,18 @@ const dagCollapsedNodes = new Set();
 // Animation constants
 const ANIMATION_DURATION_MS = 500;
 const HIDE_DELAY_MS = 0;
+// The node body and each port hit-area are separate hover regions. Moving the
+// cursor between them fires mouseleave/mouseenter pairs; without a debounce the
+// ports hide and immediately re-fade in, which reads as flickering. A short
+// delay lets the matching mouseenter cancel the pending hide first.
+const HIDE_DEBOUNCE_MS = 120;
 const INDICATOR_RADIUS_MULTIPLIER = 2.5;
+// Pointer hit-area radius as a multiple of the port radius. Kept small so it
+// does not blanket the body of a small node (which would make the whole node
+// read as a port: crosshair cursor, no room to drag). Near-misses beyond this
+// are still caught by create_edge's findNearestPort (which is node-centre
+// aware), so grabbing stays forgiving without stealing the node's drag area.
+const HITAREA_RADIUS_MULTIPLIER = 1.4;
 const INNER_CIRCLE_RATIO = 0.75;
 const PLUS_FONT_RATIO = 1.6;
 
@@ -137,6 +148,22 @@ const getContrastColor = (bg) => {
   return luminance > 0.5 ? '#000' : '#fff';
 };
 
+// Shift a hex colour toward black (amount < 0) or white (amount > 0), amount in
+// [-1, 1]. Returns the input unchanged if it cannot be parsed (e.g. rgba()).
+const adjustColor = (hex, amount) => {
+  let c = (hex || '').replace('#', '');
+  if (c.length === 3) c = c.split('').map(x => x + x).join('');
+  if (c.length !== 6 || /[^0-9a-f]/i.test(c)) return hex;
+  const num = parseInt(c, 16);
+  const target = amount < 0 ? 0 : 255;
+  const p = Math.abs(amount);
+  const mix = (channel) => Math.round(channel + (target - channel) * p);
+  const r = mix((num >> 16) & 255);
+  const g = mix((num >> 8) & 255);
+  const b = mix(num & 255);
+  return `#${((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1)}`;
+};
+
 const createShowPortsHandler = (ctx) => () => {
   ctx.isHoveringNode = true;
   if (ctx.hideTimeout) {
@@ -156,33 +183,18 @@ const createShowPortsHandler = (ctx) => () => {
     const connections = portConnections[shape.key] ?? 0;
     const arity = shape.arity === "Infinity" ? Infinity : (shape.arity || 1);
     const atCapacity = connections >= arity;
-    if (!atCapacity && indicator) {
-      shape.attr({ visibility: 'hidden' });
-      if (indicator.circle.attr('visibility') !== 'visible') {
-        if (indicator.hitArea) indicator.hitArea.attr({ visibility: 'visible' });
-        indicator.circle.attr({ visibility: 'visible', opacity: 0 });
-        indicator.innerCircle.attr({ visibility: 'visible', opacity: 0 });
-        indicator.plus.attr({ visibility: 'visible', opacity: 0 });
-        needsAnimation = true;
-      }
-      ctx.self.startRotationAnimation(indicator.circle);
+    // Show the plain port dot (no '+' indicator, no diameter change). The large
+    // invisible hit-area is the grab/hover target; touching a port triggers a
+    // single pulse (see handlePortIndicatorMouseEnter).
+    if (shape.attr('visibility') !== 'visible') {
+      shape.attr({ visibility: 'visible', zIndex: 10, opacity: 0 });
+      needsAnimation = true;
     } else {
-      if (indicator) {
-        ctx.self.stopRotationAnimation(indicator.circle);
-        indicator.circle.attr({ visibility: 'hidden' });
-        indicator.innerCircle.attr({ visibility: 'hidden' });
-        indicator.plus.attr({ visibility: 'hidden' });
-      }
-      if (shape.attr('visibility') !== 'visible') {
-        shape.attr({
-          visibility: 'visible',
-          zIndex: 10,
-          opacity: 0
-        });
-        needsAnimation = true;
-      } else {
-        shape.attr({ opacity: 1 });
-      }
+      shape.attr({ opacity: 1 });
+    }
+    // Only ports with remaining capacity are grabbable.
+    if (indicator?.hitArea) {
+      indicator.hitArea.attr({ visibility: atCapacity ? 'hidden' : 'visible' });
     }
   });
   if (needsAnimation) {
@@ -219,13 +231,16 @@ const createHidePortsHandler = (ctx) => () => {
       }
       if (indicator) {
         ctx.self.stopRotationAnimation(indicator.circle);
+        ctx.self.stopPortPulse(indicator);
         indicator.circle.attr({ visibility: 'hidden', opacity: 1 });
         indicator.innerCircle.attr({ visibility: 'hidden', opacity: 1 });
         indicator.plus.attr({ visibility: 'hidden', opacity: 1 });
       }
     });
+    ctx.self._rippleShape = null;
+    ctx.self._rippleIndicator = null;
     ctx.self.hideCollapseButton?.();
-  }, HIDE_DELAY_MS);
+  }, HIDE_DEBOUNCE_MS);
 };
 
 const createHidePortsImmediateHandler = (ctx) => () => {
@@ -254,6 +269,8 @@ const createHidePortsImmediateHandler = (ctx) => () => {
       indicator.plus.attr({ visibility: 'hidden', opacity: 1 });
     }
   });
+  ctx.self._rippleShape = null;
+  ctx.self._rippleIndicator = null;
   ctx.self.hideCollapseButtonImmediate?.();
 };
 
@@ -308,7 +325,9 @@ const createIndicatorHitArea = (self, key, x, y, radius, container, portStyle, p
       fill: 'transparent',
       stroke: 'transparent',
       zIndex: portZIndex + 1,
-      cursor: 'pointer',
+      // Crosshair signals "draw an edge from here", matching G6's native
+      // create-edge affordance (a pointer/hand reads as a generic click).
+      cursor: 'crosshair',
       visibility: 'hidden',
       class: 'port',
       type: portStyle.type || 'input',
@@ -400,16 +419,63 @@ const handlePortIndicatorMouseEnter = (self, portShape, style, indicator) => (e)
   if (self._cancelHide) self._cancelHide();
   const currentStyle = portShape._style || style;
   if (currentStyle.label) showTooltip(e, currentStyle);
-  const connections = getPortConnections(self.context.graph, self.id)?.[portShape.key] ?? 0;
-  const atCapacity = connections >= (portShape.arity === "Infinity" ? Infinity : portShape.arity);
-  if (atCapacity) return;
-  portShape.attr({ visibility: 'hidden' });
-  self.showIndicatorWithAnimation(indicator);
-  self.startRotationAnimation(indicator.circle);
+  // The ripple is driven by the node-level pointermove (see
+  // createPortRippleMoveHandler), not here, so it tracks the actual cursor
+  // distance to the dot with hysteresis instead of flickering on the hit-area's
+  // synthetic enter/leave.
+};
+
+// Start/stop the ripple from the real cursor position. A port ripples once the
+// cursor is within `startR` of its centre (about on the dot) and keeps rippling
+// until the cursor moves past `stopR` (hysteresis), so small jitter near the
+// edge does not flicker it on and off.
+const createPortRippleMoveHandler = (ctx) => (event) => {
+  const self = ctx.self;
+  if (!self._portShapes) return;
+  const p = event.canvas;
+  if (!p) return;
+
+  // If a port is already rippling, keep it until the cursor clearly leaves.
+  if (self._rippleShape) {
+    const b = self._rippleShape.getBounds?.();
+    if (b) {
+      const cx = (b.min[0] + b.max[0]) / 2;
+      const cy = (b.min[1] + b.max[1]) / 2;
+      const stopR = (self._rippleShape._baseRadius || 6) + 8;
+      if (Math.hypot(p.x - cx, p.y - cy) <= stopR) return;
+    }
+    self.stopPortPulse(self._rippleIndicator);
+    self._rippleShape = null;
+    self._rippleIndicator = null;
+  }
+
+  // Otherwise look for a grabbable port the cursor is sitting on.
+  const conns = getPortConnections(self.context.graph, self.id) || {};
+  for (const { shape, indicator } of self._portShapes) {
+    if (!shape || !shape.key || shape._visibility === 'hidden') continue;
+    const arity = shape.arity === 'Infinity' ? Infinity : (shape.arity || 1);
+    if ((conns[shape.key] ?? 0) >= arity) continue;
+    const b = shape.getBounds?.();
+    if (!b) continue;
+    const cx = (b.min[0] + b.max[0]) / 2;
+    const cy = (b.min[1] + b.max[1]) / 2;
+    const startR = (shape._baseRadius || 6) + 1;
+    if (Math.hypot(p.x - cx, p.y - cy) <= startR) {
+      self.startPortPulse(indicator, shape._baseRadius, shape._originalFill || '#1783FF');
+      self._rippleShape = shape;
+      self._rippleIndicator = indicator;
+      break;
+    }
+  }
 };
 
 const handlePortIndicatorMouseLeave = (self) => (e) => {
   hideTooltip();
+  // Ports are siblings of the keyShape, so its mouseleave already fired when the
+  // cursor moved onto this port. Leaving the port to the outside is therefore
+  // the only signal that the node is no longer hovered: schedule the (debounced)
+  // hide, which also stops the ripple. A move back onto the node body re-fires
+  // keyShape mouseenter, which cancels this hide.
   if (self._hidePorts) self._hidePorts();
 };
 
@@ -459,13 +525,18 @@ const makeIsHoveringNode = (ctx) => () => ctx.isHoveringNode;
 // --- Port shape helpers ---
 
 const createPortShapeForKey = (self, key, style, baseRadius, container, portVisibility, portZIndex) => {
+  // Theme-aware default fill when the port has no explicit colour.
+  const isDark = self.context.graph.options?.theme === 'dark';
+  const fill = style.fill || (isDark ? '#9ca3af' : '#1783FF');
+  // Border a touch darker than the fill so the dot reads as a solid disc.
+  const stroke = adjustColor(fill, -0.35);
   const portStyle = {
     ...style,
     zIndex: portZIndex,
     r: baseRadius,
-    fill: style.fill,
-    stroke: 'transparent',
-    lineWidth: 0,
+    fill,
+    stroke,
+    lineWidth: Math.max(1, baseRadius * 0.3),
     visibility: portVisibility === 'visible' ? 'visible' : 'hidden',
     pointerEvents: 'none',
     class: 'port'
@@ -473,7 +544,7 @@ const createPortShapeForKey = (self, key, style, baseRadius, container, portVisi
   const portShape = self.createPortShape(`port-${key}`, portStyle, container, key);
   portShape._baseRadius = baseRadius;
   portShape._expandedRadius = baseRadius * INDICATOR_RADIUS_MULTIPLIER;
-  portShape._originalFill = style.fill;
+  portShape._originalFill = fill;
   portShape._visibility = portVisibility;
   portShape._style = style;
   return portShape;
@@ -484,7 +555,7 @@ const createIndicatorForKey = (self, key, x, y, baseRadius, style, container, po
     key,
     x,
     y,
-    baseRadius * INDICATOR_RADIUS_MULTIPLIER,
+    baseRadius * HITAREA_RADIUS_MULTIPLIER,
     style.fill,
     container,
     style,
@@ -1077,6 +1148,31 @@ const createCustomNode = (BaseShape) => {
       }
     }
 
+    // Position a port. Adds the opt-in `placement: "label-bottom"`, which snaps
+    // the port to the bottom-centre of the node's label background (G6 draws the
+    // label before ports, so its bounds are available here). Falls back to a
+    // normal bottom-of-node port when there is no label. All other placements
+    // defer to G6's built-in positioning.
+    getPortXY(attributes, style) {
+      if (style && style.placement === 'label-bottom') {
+        const base = super.getPortXY(attributes, { ...style, placement: 'bottom' });
+        const key = this.shapeMap && this.shapeMap['key'];
+        const label = this.shapeMap && this.shapeMap['label'];
+        if (key && label && key.getLocalBounds && label.getLocalBounds) {
+          const lk = key.getLocalBounds();
+          const ll = label.getLocalBounds();
+          // Only when the label actually has extent (i.e. there is a label).
+          if (ll && lk && ll.max[1] > ll.min[1]) {
+            const dx = (ll.min[0] + ll.max[0]) / 2 - (lk.min[0] + lk.max[0]) / 2;
+            const dy = ll.max[1] - lk.max[1];
+            return [base[0] + dx, base[1] + dy];
+          }
+        }
+        return base;
+      }
+      return super.getPortXY(attributes, style);
+    }
+
     drawPortShapes(attributes, container) {
       const portsStyle = this.getPortsStyle(attributes);
       const graphId = this.context.graph.options.container;
@@ -1105,7 +1201,7 @@ const createCustomNode = (BaseShape) => {
         const style = portsStyle[key];
         if (!style) return;
         const [x, y] = this.getPortXY(attributes, style);
-        const baseRadius = style.r || 4;
+        const baseRadius = style.r || 6;
         const portVisibility = style.visibility || 'visible';
         const initiallyVisible = portVisibility === 'visible';
 
@@ -1141,6 +1237,11 @@ const createCustomNode = (BaseShape) => {
       addUniqueEventListener(keyShape, 'mouseenter', showPorts);
       addUniqueEventListener(keyShape, 'mouseleave', hidePorts);
 
+      // Drive the port ripple from the real cursor position (bubbles up from
+      // any child shape), so it tracks the dot with hysteresis instead of
+      // flickering on the hit-area's synthetic enter/leave.
+      addUniqueEventListener(container, 'pointermove', createPortRippleMoveHandler(ctx));
+
       // Edge-created refresh: when an edge is added/removed, re-compute
       // port visuals. While hovering, this updates capacity indicators;
       // otherwise it just re-applies the per-port visibility mode so
@@ -1171,7 +1272,7 @@ const createCustomNode = (BaseShape) => {
         addUniqueEventListener(
           indicator.hitArea,
           'mouseleave',
-          handlePortIndicatorMouseLeave(this)
+          handlePortIndicatorMouseLeave(this, indicator)
         );
       }
     }
@@ -1216,6 +1317,50 @@ const createCustomNode = (BaseShape) => {
         circle._rotationAnimation = null;
         circle.attr('transform', 'rotate(0deg)');
       }
+    }
+
+    // Looping ripple: an expanding, fading ring around the port dot while the
+    // cursor hovers it. The port dot itself does not move; only the ring (the
+    // repurposed `add-circle` shape) animates. Call stopPortPulse() to end it.
+    startPortPulse(indicator, baseRadius, color) {
+      const ring = indicator && indicator.circle;
+      if (!ring || ring._pulseLoop) return;
+      const minR = baseRadius;
+      const maxR = baseRadius * 2.6;
+      const periodMs = 1100;
+      const startT = performance.now();
+      ring.attr({
+        visibility: 'visible',
+        fill: 'transparent',
+        stroke: color,
+        lineWidth: 2,
+        lineDash: [],
+        transform: 'rotate(0deg)',
+        r: minR,
+        opacity: 0
+      });
+      const loop = (now) => {
+        const p = ((now - startT) % periodMs) / periodMs;
+        // The ring emanates from the dot: small at p=0, expanding outward.
+        ring.attr('r', minR + (maxR - minR) * p);
+        // Opacity ramps in over the first ~12% (so it is already visible while
+        // the ring is still small, with no instant flash) then fades to 0 as it
+        // expands. 0 at both p=0 and p=1, so the loop restart is invisible.
+        const fadeIn = Math.min(p / 0.12, 1);
+        ring.attr('opacity', 0.5 * fadeIn * (1 - p));
+        ring._pulseLoop = requestAnimationFrame(loop);
+      };
+      ring._pulseLoop = requestAnimationFrame(loop);
+    }
+
+    stopPortPulse(indicator) {
+      const ring = indicator && indicator.circle;
+      if (!ring) return;
+      if (ring._pulseLoop) {
+        cancelAnimationFrame(ring._pulseLoop);
+        ring._pulseLoop = null;
+      }
+      ring.attr({ visibility: 'hidden', opacity: 1, r: ring._baseRadius || ring.attr('r') });
     }
 
     showIndicatorWithAnimation(indicator) {
