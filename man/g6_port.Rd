@@ -58,7 +58,9 @@ In addition to G6's native placements (\code{"left"}, \code{"right"},
 \code{"top"}, \code{"bottom"}, or a \code{c(x, y)} pair), g6R adds
 \code{placement = "label-bottom"}: the port snaps to the bottom-centre of the
 node's label background when the node has a bottom label, falling back to a
-normal bottom-of-node port otherwise.}
+normal bottom-of-node port otherwise. Pass \code{ripple = FALSE} to disable
+the hover ripple for a port, or \code{haloFill} to override the colour of the
+ring that makes the port look set into the node surface.}
 
 \item{fill}{Character. Color of the port
 (default: "#52C41A" for input ports,

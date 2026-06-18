@@ -45,7 +45,9 @@ is_g6_ports <- function(x) {
 #' \code{"top"}, \code{"bottom"}, or a \code{c(x, y)} pair), g6R adds
 #' \code{placement = "label-bottom"}: the port snaps to the bottom-centre of the
 #' node's label background when the node has a bottom label, falling back to a
-#' normal bottom-of-node port otherwise.
+#' normal bottom-of-node port otherwise. Pass \code{ripple = FALSE} to disable
+#' the hover ripple for a port, or \code{haloFill} to override the colour of the
+#' ring that makes the port look set into the node surface.
 #' @return An S3 object of class 'g6_port'.
 #' @examples
 #' g6_port("input-1", label = "port 1", type = "input", arity = 2, placement = "left")

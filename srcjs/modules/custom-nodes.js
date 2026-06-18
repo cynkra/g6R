@@ -148,22 +148,6 @@ const getContrastColor = (bg) => {
   return luminance > 0.5 ? '#000' : '#fff';
 };
 
-// Shift a hex colour toward black (amount < 0) or white (amount > 0), amount in
-// [-1, 1]. Returns the input unchanged if it cannot be parsed (e.g. rgba()).
-const adjustColor = (hex, amount) => {
-  let c = (hex || '').replace('#', '');
-  if (c.length === 3) c = c.split('').map(x => x + x).join('');
-  if (c.length !== 6 || /[^0-9a-f]/i.test(c)) return hex;
-  const num = parseInt(c, 16);
-  const target = amount < 0 ? 0 : 255;
-  const p = Math.abs(amount);
-  const mix = (channel) => Math.round(channel + (target - channel) * p);
-  const r = mix((num >> 16) & 255);
-  const g = mix((num >> 8) & 255);
-  const b = mix(num & 255);
-  return `#${((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1)}`;
-};
-
 const createShowPortsHandler = (ctx) => () => {
   ctx.isHoveringNode = true;
   if (ctx.hideTimeout) {
@@ -453,6 +437,8 @@ const createPortRippleMoveHandler = (ctx) => (event) => {
   const conns = getPortConnections(self.context.graph, self.id) || {};
   for (const { shape, indicator } of self._portShapes) {
     if (!shape || !shape.key || shape._visibility === 'hidden') continue;
+    // Opt out per port with `ripple = FALSE`.
+    if (shape._style?.ripple === false) continue;
     const arity = shape.arity === 'Infinity' ? Infinity : (shape.arity || 1);
     if ((conns[shape.key] ?? 0) >= arity) continue;
     const b = shape.getBounds?.();
@@ -528,15 +514,20 @@ const createPortShapeForKey = (self, key, style, baseRadius, container, portVisi
   // Theme-aware default fill when the port has no explicit colour.
   const isDark = self.context.graph.options?.theme === 'dark';
   const fill = style.fill || (isDark ? '#9ca3af' : '#1783FF');
-  // Border a touch darker than the fill so the dot reads as a solid disc.
-  const stroke = adjustColor(fill, -0.35);
+  // A background-coloured ring around the dot so the port reads as set into a
+  // little hole punched through the node / label surface, rather than sitting
+  // flat on top. The stroke is centred on the dot edge: its outer half covers
+  // the node with the background colour (the "hole"), its inner half trims the
+  // dot. Falls back to white / near-black when no background is set.
+  const bg = style.haloFill || self.context.graph.options?.background ||
+    (isDark ? '#1b1b1b' : '#ffffff');
   const portStyle = {
     ...style,
     zIndex: portZIndex,
     r: baseRadius,
     fill,
-    stroke,
-    lineWidth: Math.max(1, baseRadius * 0.3),
+    stroke: bg,
+    lineWidth: Math.max(2, baseRadius * 0.6),
     visibility: portVisibility === 'visible' ? 'visible' : 'hidden',
     pointerEvents: 'none',
     class: 'port'
