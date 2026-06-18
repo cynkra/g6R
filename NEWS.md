@@ -18,6 +18,8 @@
 
 - Fixed the `create_edge()` rubber-band (assist) edge not appearing while dragging when the graph had no `edge` options configured. The assist edge style read `graph.options.edge.style.zIndex`, which threw and aborted assist-edge creation; it is now read defensively and falls back to G6's default.
 
+- Fixed `create_edge()` drops being silently canceled below 100% browser zoom. The minimum drag-distance threshold was measured in canvas units, which scale with browser/graph zoom; below 100% a real drag shrank under the threshold and the drop was treated as a click. Drag intent is now measured in client (screen) pixels, which are zoom-stable (#52).
+
 # g6R 0.6.0
 
 ## Breaking changes

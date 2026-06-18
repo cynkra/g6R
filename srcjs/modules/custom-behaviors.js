@@ -62,6 +62,21 @@ class CustomCreateEdge extends CreateEdge {
     this._dragBehaviorSnapshot = null;
   }
 
+  // Distance from the pointer-down position, in client (screen) pixels when
+  // available. Canvas units scale with browser zoom (and graph zoom), so below
+  // 100% zoom a real drag measured in canvas units shrinks under the drag
+  // thresholds and the gesture is wrongly treated as a click (issue #52).
+  dragDistanceFromStart(event) {
+    if (this.startClientX != null && event.client) {
+      const dx = event.client.x - this.startClientX;
+      const dy = event.client.y - this.startClientY;
+      return Math.sqrt(dx * dx + dy * dy);
+    }
+    const dx = (event.canvas?.x ?? 0) - (this.startX ?? 0);
+    const dy = (event.canvas?.y ?? 0) - (this.startY ?? 0);
+    return Math.sqrt(dx * dx + dy * dy);
+  }
+
   // Find the grabbable port of `nodeId` nearest to `point` (canvas coords),
   // within a tolerance proportional to the port radius. Returns the port hit
   // shape (carrying key/type/arity/class, like event.originalTarget on an exact
@@ -183,9 +198,7 @@ class CustomCreateEdge extends CreateEdge {
     // source port (drag started). Before that it would be a zero-length edge
     // sitting on the port with a misoriented arrow.
     if (!this._assistEdgeShown) {
-      const dx = (event.canvas?.x ?? 0) - (this.startX ?? 0);
-      const dy = (event.canvas?.y ?? 0) - (this.startY ?? 0);
-      if (Math.sqrt(dx * dx + dy * dy) < ASSIST_EDGE_SHOW_DISTANCE) return;
+      if (this.dragDistanceFromStart(event) < ASSIST_EDGE_SHOW_DISTANCE) return;
       this._assistEdgeShown = true;
       try {
         graph.updateEdgeData([
@@ -281,13 +294,7 @@ class CustomCreateEdge extends CreateEdge {
     this.resumeDragBehaviors();
 
     if (['node', 'combo', 'canvas'].indexOf(targetType) !== -1 && this.source) {
-      const startX = this.startX ?? 0;
-      const startY = this.startY ?? 0;
-      const endX = event.canvas?.x ?? event.client?.x ?? 0;
-      const endY = event.canvas?.y ?? event.client?.y ?? 0;
-      const dx = endX - startX;
-      const dy = endY - startY;
-      const distance = Math.sqrt(dx * dx + dy * dy);
+      const distance = this.dragDistanceFromStart(event);
 
       if (distance < MIN_DRAG_DISTANCE) {
         this.isCreatingEdge = false;
@@ -464,6 +471,10 @@ class CustomCreateEdge extends CreateEdge {
 
     this.startX = event.canvas.x;
     this.startY = event.canvas.y;
+    // Client (screen) pixels too: drag-intent thresholds are measured against
+    // these because canvas units scale with browser/graph zoom (issue #52).
+    this.startClientX = event.client?.x ?? null;
+    this.startClientY = event.client?.y ?? null;
 
     const { graph, canvas, batch } = this.context;
     const mode = graph.options.mode;
