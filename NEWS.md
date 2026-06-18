@@ -1,5 +1,25 @@
 # g6R 0.6.0.9000
 
+## New features
+
+- New `placement = "label-bottom"` for ports. When a node has a bottom label (e.g. `labelPlacement = "bottom"`), an output port with this placement snaps to the bottom-centre of the label background instead of the node body; it falls back to a normal bottom-of-node port when there is no label.
+
+- Default port radius increased from 4 to 6 so ports are easier to see and target.
+
+- Calmer port hover. Hovering a port no longer grows it ~2.5x into a rotating dashed `+` glyph (which read as flickering noise). Ports now keep their size and show a soft expanding ripple ring (in the port colour) only while the cursor is over them; the ripple stops when the cursor leaves. Disable it per port with `ripple = FALSE`. Ports also gain a background-coloured ring so they read as set into a small hole punched through the node / label surface (override with the `haloFill` port style), and the default fill adapts to the graph theme. The large invisible hit-area is kept, so ports remain easy to grab.
+
+- Port hover cursor is now a crosshair instead of a pointer, matching G6's native create-edge affordance ("draw an edge from here"). The crosshair and the hover ripple only appear when the graph actually has the `create_edge()` behavior, so ports don't advertise an interaction that isn't wired up.
+
+- `create_edge()` now tolerates a small miss when grabbing a port. Previously an edge only started when pointer-down landed exactly on the (small) port glyph; a near-miss on the node body fell through to `drag_element()` and moved the node instead. Pointer-down now snaps to the nearest grabbable port within a tolerance proportional to the port radius, so a slight miss still starts an edge (#50).
+
+## Bug fixes
+
+- Fixed `create_edge()` overwriting a consumer-supplied `drag_element()` / `drag_element_force()` `enable` predicate. While drawing an edge from a port, `create_edge()` pauses node dragging and resumes it on drop. It previously resumed by hardcoding `enable: true`, which destroyed any custom `enable` function after the first edge creation (and toggled behaviors via an array, a no-op in current G6 where `updateBehavior()` matches a single `key`). The live `enable` of each drag behavior is now snapshotted (looked up by type, so a custom `key` still works) and restored verbatim on drop (#48).
+
+- Fixed the `create_edge()` rubber-band (assist) edge not appearing while dragging when the graph had no `edge` options configured. The assist edge style read `graph.options.edge.style.zIndex`, which threw and aborted assist-edge creation; it is now read defensively and falls back to G6's default.
+
+# g6R 0.6.0
+
 ## Breaking changes
 
 - Not a g6R change but `{bslib}` recently introduced the `toolbar()` function which unfortunately overlaps with the `{g6R}` one. From now, you'll have to use `g6R::toolbar()` to avoid conflicts. In later releases, we'll provide more prefixed functions like `g6_toolbar`.
@@ -63,20 +83,6 @@ g6_combo(
 - Fixed ports with `visibility = "hover"` or `"hidden"` leaking as visible on the initial render. G6's `BaseShape` constructor calls `setVisibility()` after `render()`, which recursively cascades the node's visibility to every child shape (including port circles and indicators), overriding the per-port visibility mode. The correction now also runs on initial creation via a `setVisibility()` override, not just on subsequent updates. Additionally, the edge-created listener no longer force-calls `showPorts` on non-hovered nodes, so the `+` indicator no longer leaks onto nodes the user isn't actually hovering after initial edges load (cynkra/blockr.dag#107).
 
 - Improvements to how `drag_element()` and `drag_element_force()` work with `create_edge()`. Now, the `create_edge()` can be `drag` and work with `drag_element()` as we handle the behavior conflicts/priorities JS side.
-
-- Fixed `create_edge()` overwriting a consumer-supplied `drag_element()` / `drag_element_force()` `enable` predicate. While drawing an edge from a port, `create_edge()` pauses node dragging and resumes it on drop. It previously resumed by hardcoding `enable: true`, which destroyed any custom `enable` function after the first edge creation (and toggled behaviors via an array, a no-op in current G6 where `updateBehavior()` matches a single `key`). The live `enable` of each drag behavior is now snapshotted (looked up by type, so a custom `key` still works) and restored verbatim on drop (#48).
-
-- `create_edge()` now tolerates a small miss when grabbing a port. Previously an edge only started when pointer-down landed exactly on the (small) port glyph; a near-miss on the node body fell through to `drag_element()` and moved the node instead. Pointer-down now snaps to the nearest grabbable port within a tolerance proportional to the port radius, so a slight miss still starts an edge (#50).
-
-- Fixed the `create_edge()` rubber-band (assist) edge not appearing while dragging when the graph had no `edge` options configured. The assist edge style read `graph.options.edge.style.zIndex`, which threw and aborted assist-edge creation; it is now read defensively and falls back to G6's default.
-
-- Calmer port hover. Hovering a port no longer grows it ~2.5x into a rotating dashed `+` glyph (which read as flickering noise). Ports now keep their size and show a soft expanding ripple ring (in the port colour) only while the cursor is over them; the ripple stops when the cursor leaves. Disable it per port with `ripple = FALSE`. Ports also gain a background-coloured ring so they read as set into a small hole punched through the node / label surface (override with the `haloFill` port style), and the default fill adapts to the graph theme. The large invisible hit-area is kept, so ports remain easy to grab.
-
-- Port hover cursor is now a crosshair instead of a pointer, matching G6's native create-edge affordance ("draw an edge from here"). The crosshair and the hover ripple only appear when the graph actually has the `create_edge()` behavior, so ports don't advertise an interaction that isn't wired up.
-
-- Default port radius increased from 4 to 6 so ports are easier to see and target.
-
-- New `placement = "label-bottom"` for ports. When a node has a bottom label (e.g. `labelPlacement = "bottom"`), an output port with this placement snaps to the bottom-centre of the label background instead of the node body; it falls back to a normal bottom-of-node port when there is no label.
 
 - `input[["<graph_ID>-state"]]` now does not return unnamed lists for nodes, edges and combos. Instead, each sublist is named with the corresponding element IDs. This makes it easier to retrieve the state of a specific element when we know the ID.
 
