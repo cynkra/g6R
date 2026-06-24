@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">g6R</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.6.0.9000</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.6.0.9001</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -60,9 +60,14 @@
     </div>
 
     <div class="section level2">
-<h2 class="pkg-version" data-toc-text="0.6.0.9000" id="g6r-0609000">g6R 0.6.0.9000<a class="anchor" aria-label="anchor" href="#g6r-0609000"></a></h2>
+<h2 class="pkg-version" data-toc-text="0.6.0.9001" id="g6r-0609001">g6R 0.6.0.9001<a class="anchor" aria-label="anchor" href="#g6r-0609001"></a></h2>
 <div class="section level3">
-<h3 id="new-features-0-6-0-9000">New features<a class="anchor" aria-label="anchor" href="#new-features-0-6-0-9000"></a></h3>
+<h3 id="bug-fixes-0-6-0-9001">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-0-6-0-9001"></a></h3>
+<ul><li>
+<code><a href="../reference/create_edge.html">create_edge()</a></code>: the hidden rubber-band assist node now carries a transparent <code>src</code>, so it no longer crashes the canvas renderer with <code>Cannot read properties of undefined (reading 'src')</code> when the consumer maps every node to an image node via a fixed <code>node</code> type. The node stays hidden, so the pixel is never shown. The SVG renderer is unaffected.</li>
+</ul></div>
+<div class="section level3">
+<h3 id="new-features-0-6-0-9001">New features<a class="anchor" aria-label="anchor" href="#new-features-0-6-0-9001"></a></h3>
 <ul><li><p>New <code>placement = "label-bottom"</code> for ports. When a node has a bottom label (e.g. <code>labelPlacement = "bottom"</code>), an output port with this placement snaps to the bottom-centre of the label background instead of the node body; it falls back to a normal bottom-of-node port when there is no label.</p></li>
 <li><p>Default port radius increased from 4 to 6 so ports are easier to see and target.</p></li>
 <li><p>Calmer port hover. Hovering a port no longer grows it ~2.5x into a rotating dashed <code>+</code> glyph (which read as flickering noise). Ports now keep their size and show a soft expanding ripple ring (in the port colour) only while the cursor is over them; the ripple stops when the cursor leaves. Disable it per port with <code>ripple = FALSE</code>. Ports also gain a background-coloured ring so they read as set into a small hole punched through the node / label surface (override with the <code>haloFill</code> port style), and the default fill adapts to the graph theme. The large invisible hit-area is kept, so ports remain easy to grab.</p></li>
@@ -70,7 +75,7 @@
 <li><p><code><a href="../reference/create_edge.html">create_edge()</a></code> now tolerates a small miss when grabbing a port. Previously an edge only started when pointer-down landed exactly on the (small) port glyph; a near-miss on the node body fell through to <code><a href="../reference/drag_element.html">drag_element()</a></code> and moved the node instead. Pointer-down now snaps to the nearest grabbable port within a tolerance proportional to the port radius, so a slight miss still starts an edge (<a href="https://github.com/cynkra/g6R/issues/50" class="external-link">#50</a>).</p></li>
 </ul></div>
 <div class="section level3">
-<h3 id="bug-fixes-0-6-0-9000">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-0-6-0-9000"></a></h3>
+<h3 id="bug-fixes-0-6-0-9001-1">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-0-6-0-9001-1"></a></h3>
 <ul><li><p>Fixed <code><a href="../reference/create_edge.html">create_edge()</a></code> overwriting a consumer-supplied <code><a href="../reference/drag_element.html">drag_element()</a></code> / <code><a href="../reference/drag_element_force.html">drag_element_force()</a></code> <code>enable</code> predicate. While drawing an edge from a port, <code><a href="../reference/create_edge.html">create_edge()</a></code> pauses node dragging and resumes it on drop. It previously resumed by hardcoding <code>enable: true</code>, which destroyed any custom <code>enable</code> function after the first edge creation (and toggled behaviors via an array, a no-op in current G6 where <code>updateBehavior()</code> matches a single <code>key</code>). The live <code>enable</code> of each drag behavior is now snapshotted (looked up by type, so a custom <code>key</code> still works) and restored verbatim on drop (<a href="https://github.com/cynkra/g6R/issues/48" class="external-link">#48</a>).</p></li>
 <li><p>Fixed the <code><a href="../reference/create_edge.html">create_edge()</a></code> rubber-band (assist) edge not appearing while dragging when the graph had no <code>edge</code> options configured. The assist edge style read <code>graph.options.edge.style.zIndex</code>, which threw and aborted assist-edge creation; it is now read defensively and falls back to G6’s default.</p></li>
 <li><p>Fixed <code><a href="../reference/create_edge.html">create_edge()</a></code> drops being silently canceled below 100% browser zoom. The minimum drag-distance threshold was measured in canvas units, which scale with browser/graph zoom; below 100% a real drag shrank under the threshold and the drop was treated as a click. Drag intent is now measured in client (screen) pixels, which are zoom-stable (<a href="https://github.com/cynkra/g6R/issues/52" class="external-link">#52</a>).</p></li>
