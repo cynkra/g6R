@@ -4,6 +4,13 @@ import { sendNotification, getPortConnections } from './utils';
 
 const ASSIST_EDGE_ID = 'g6-create-edge-assist-edge-id';
 const ASSIST_NODE_ID = 'g6-create-edge-assist-node-id';
+// 1x1 transparent PNG. The assist node inherits the consumer's default node
+// type; when that is an image node (e.g. a fixed `node.type` mapping every node
+// to an image), the canvas renderer's image loader throws on a missing `src`
+// ("Cannot read properties of undefined (reading 'src')"). The node is hidden,
+// so the pixel is never visible; this just keeps the loader happy.
+const ASSIST_NODE_SRC =
+  'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYPhfDwAChwGA60e6kgAAAABJRU5ErkJggg==';
 const MIN_DRAG_DISTANCE = 10;
 // The assist (rubber-band) edge stays hidden until the pointer has moved this
 // far from the source port, so a click-and-hold doesn't show a zero-length edge
@@ -543,6 +550,8 @@ class CustomCreateEdge extends CreateEdge {
       id: ASSIST_NODE_ID,
       style: {
         visibility: 'hidden',
+        // Guards image-node defaults under the canvas renderer (see ASSIST_NODE_SRC).
+        src: ASSIST_NODE_SRC,
         ports: [{ key: 'port-1', placement: [0.5, 0.5] }],
         x: cursorX,
         y: cursorY,

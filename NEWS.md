@@ -1,4 +1,8 @@
-# g6R 0.6.0.9000
+# g6R 0.6.0.9001
+
+## Bug fixes
+
+- `create_edge()`: the hidden rubber-band assist node now carries a transparent `src`, so it no longer crashes the canvas renderer with `Cannot read properties of undefined (reading 'src')` when the consumer maps every node to an image node via a fixed `node` type. The node stays hidden, so the pixel is never shown. The SVG renderer is unaffected.
 
 ## New features
 
