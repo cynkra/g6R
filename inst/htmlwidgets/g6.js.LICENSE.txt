@@ -19,15 +19,6 @@
 /*!
  * @antv/g-math
  * @description Geometry util
- * @version 3.0.1
- * @date 5/9/2025, 8:18:51 AM
- * @author AntVis
- * @docs https://g.antv.antgroup.com/
- */
-
-/*!
- * @antv/g-math
- * @description Geometry util
  * @version 3.1.0
  * @date 12/22/2025, 3:02:36 AM
  * @author AntVis
@@ -39,6 +30,15 @@
  * @description A G plugin for Drag n Drop implemented with PointerEvents
  * @version 2.1.1
  * @date 12/24/2025, 11:56:44 AM
+ * @author AntVis
+ * @docs https://g.antv.antgroup.com/
+ */
+
+/*!
+ * @antv/g-svg
+ * @description A renderer implemented by SVG
+ * @version 2.1.1
+ * @date 12/24/2025, 11:57:09 AM
  * @author AntVis
  * @docs https://g.antv.antgroup.com/
  */

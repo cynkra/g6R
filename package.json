@@ -14,7 +14,7 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "@antv/g-svg": "^2.0.42",
+    "@antv/g-svg": "^2.1.1",
     "css-loader": "^7.1.4",
     "style-loader": "^4.0.0",
     "webpack": "^5.105.4",
