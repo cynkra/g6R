@@ -60,6 +60,57 @@ server <- function(input, output, session) {
               arity = Inf
             )
           )
+        ),
+        # Nodes 3 and 4 reproduce the blockr.dag styling: a bottom label with a
+        # background, and an output port placed at the label surface via
+        # placement = "label-bottom". The input port stays at the node top.
+        g6_node(
+          id = 3,
+          type = "custom-image-node",
+          style = list(
+            src = "https://gw.alipayobjects.com/mdn/rms_6ae20b/afts/img/A*N4ZMS7gHsUIAAAAAAAAAAABkARQnAQ",
+            labelText = "Dataset",
+            labelFill = "#6b7280",
+            labelBackground = TRUE,
+            labelBackgroundFill = "#f3f4f6",
+            labelBackgroundStroke = "#e5e7eb",
+            labelBackgroundRadius = 4,
+            labelPlacement = "bottom",
+            labelOffsetY = 8,
+            labelBackgroundLineWidth = 1,
+            labelBackgroundOpacity = 1,
+            labelPadding = c(1, 6, 1, 6),
+            labelFontSize = 11,
+            labelFontFamily = "Open Sans, system-ui, sans-serif"
+          ),
+          ports = g6_ports(
+            g6_input_port(key = "input-3", placement = "top"),
+            g6_output_port(key = "output-3", placement = "label-bottom")
+          )
+        ),
+        g6_node(
+          id = 4,
+          type = "custom-image-node",
+          style = list(
+            src = "https://gw.alipayobjects.com/mdn/rms_6ae20b/afts/img/A*N4ZMS7gHsUIAAAAAAAAAAABkARQnAQ",
+            labelText = "Scatter",
+            labelFill = "#6b7280",
+            labelBackground = TRUE,
+            labelBackgroundFill = "#f3f4f6",
+            labelBackgroundStroke = "#e5e7eb",
+            labelBackgroundRadius = 4,
+            labelPlacement = "bottom",
+            labelOffsetY = 8,
+            labelBackgroundLineWidth = 1,
+            labelBackgroundOpacity = 1,
+            labelPadding = c(1, 6, 1, 6),
+            labelFontSize = 11,
+            labelFontFamily = "Open Sans, system-ui, sans-serif"
+          ),
+          ports = g6_ports(
+            g6_input_port(key = "input-4", placement = "top"),
+            g6_output_port(key = "output-4", placement = "label-bottom")
+          )
         )
       ),
       edges = g6_edges(
@@ -71,6 +122,17 @@ server <- function(input, output, session) {
             targetPort = "input-2",
             endArrow = TRUE,
             startArrow = FALSE,
+            endArrowType = "vee"
+          )
+        ),
+        # Connects the label-bottom output of node 3 to the top input of node 4.
+        g6_edge(
+          source = 3,
+          target = 4,
+          style = list(
+            sourcePort = "output-3",
+            targetPort = "input-4",
+            endArrow = TRUE,
             endArrowType = "vee"
           )
         )

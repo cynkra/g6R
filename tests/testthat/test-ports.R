@@ -31,10 +31,10 @@ test_that("g6_port validation fails for missing or invalid key/type/multiple", {
 })
 
 test_that("validate_port.g6_port handles 'r' (radius) correctly", {
-  # Default: r is NULL, should be set to 4
+  # Default: r is NULL, should be set to 6
   p <- structure(list(key = "x", type = "input", arity = 1), class = "g6_port")
   res <- validate_port.g6_port(p)
-  expect_equal(res$r, 4)
+  expect_equal(res$r, 6)
 
   # Valid: r is a positive number
   p <- structure(
