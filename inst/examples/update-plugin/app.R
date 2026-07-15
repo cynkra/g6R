@@ -14,7 +14,8 @@ ui <- page_fluid(
   actionButton("update", "Update plugin"),
   h6(
     class = "my-2",
-    "Right click on an edge. Then, click on update and right click on an edge again."
+    "Right click on a node (the default context_menu target). Then, click on
+    update and right click on a node again."
   ),
   g6_output("graph")
 )
