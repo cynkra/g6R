@@ -1,10 +1,8 @@
-# g6R 0.6.0.9001
-
-## Bug fixes
-
-- `create_edge()`: the hidden rubber-band assist node now carries a transparent `src`, so it no longer crashes the canvas renderer with `Cannot read properties of undefined (reading 'src')` when the consumer maps every node to an image node via a fixed `node` type. The node stays hidden, so the pixel is never shown. The SVG renderer is unaffected.
+# g6R 0.6.5
 
 ## New features
+
+- Bumped the bundled AntV G6 engine from 5.0.49 to 5.1.1 (with `@antv/g` 6.x and `@antv/g-svg` 2.1.1, deduplicating `g-lite` so the SVG renderer works again instead of throwing `Cannot read properties of undefined (reading 'fill')` on a blank canvas). The bump improves create-edge assist-line tracking under zoom/pan (G6 now derives the cursor position via `getCanvasByClient()`), fixes a combo/layout element-type confusion that crashed the canvas renderer when a combo was added at runtime under `g6R.layout_on_data_change` (`Cannot read properties of undefined (reading 'src')`), and pulls in upstream APIs (`hasNode()`/`hasEdge()`/`hasCombo()`, nested self-loop edges, `drag-element` trigger config). The widget bundle is now a single self-contained `g6.js` (the split `185.js` chunk was removed).
 
 - New `placement = "label-bottom"` for ports. When a node has a bottom label (e.g. `labelPlacement = "bottom"`), an output port with this placement snaps to the bottom-centre of the label background instead of the node body; it falls back to a normal bottom-of-node port when there is no label.
 
@@ -17,6 +15,8 @@
 - `create_edge()` now tolerates a small miss when grabbing a port. Previously an edge only started when pointer-down landed exactly on the (small) port glyph; a near-miss on the node body fell through to `drag_element()` and moved the node instead. Pointer-down now snaps to the nearest grabbable port within a tolerance proportional to the port radius, so a slight miss still starts an edge (#50).
 
 ## Bug fixes
+
+- `create_edge()`: the hidden rubber-band assist node now carries a transparent `src`, so it no longer crashes the canvas renderer with `Cannot read properties of undefined (reading 'src')` when the consumer maps every node to an image node via a fixed `node` type. The node stays hidden, so the pixel is never shown. The SVG renderer is unaffected.
 
 - Fixed `create_edge()` overwriting a consumer-supplied `drag_element()` / `drag_element_force()` `enable` predicate. While drawing an edge from a port, `create_edge()` pauses node dragging and resumes it on drop. It previously resumed by hardcoding `enable: true`, which destroyed any custom `enable` function after the first edge creation (and toggled behaviors via an array, a no-op in current G6 where `updateBehavior()` matches a single `key`). The live `enable` of each drag behavior is now snapshotted (looked up by type, so a custom `key` still works) and restored verbatim on drop (#48).
 
@@ -33,8 +33,6 @@
 - Not a g6R change but `{bslib}` recently introduced the `toolbar()` function which unfortunately overlaps with the `{g6R}` one. From now, you'll have to use `g6R::toolbar()` to avoid conflicts. In later releases, we'll provide more prefixed functions like `g6_toolbar`.
 
 ## New feature
-
-- Bumped the bundled AntV G6 engine from 5.0.49 to 5.1.1 (and `@antv/g` to 6.x). This improves create-edge assist-line tracking under zoom/pan (G6 now derives the cursor position via `getCanvasByClient()`) and pulls in upstream fixes and APIs (`hasNode()`/`hasEdge()`/`hasCombo()`, nested self-loop edges, `drag-element` trigger config). The widget bundle is now a single self-contained `g6.js` (the split `185.js` chunk was removed).
 
 - Added better port support for nodes __ports__:
   - To enable it, you must pass a custom type to `g6_node()` such as `custom-circle-node`, `custom-rect-node` (We support 9 [shapes](https://g6.antv.antgroup.com/en/manual/element/node/overview#built-in-nodes), except HTML which does not handle port in the g6 library)
