@@ -108,7 +108,16 @@ CRAN release: 2026-04-27
 
 ### New feature
 
+- Bumped the bundled AntV G6 engine from 5.0.49 to 5.1.1 (and `@antv/g`
+  to 6.x). This improves create-edge assist-line tracking under zoom/pan
+  (G6 now derives the cursor position via `getCanvasByClient()`) and
+  pulls in upstream fixes and APIs
+  (`hasNode()`/`hasEdge()`/`hasCombo()`, nested self-loop edges,
+  `drag-element` trigger config). The widget bundle is now a single
+  self-contained `g6.js` (the split `185.js` chunk was removed).
+
 - Added better port support for nodes **ports**:
+
   - To enable it, you must pass a custom type to
     [`g6_node()`](https://cynkra.github.io/g6R/reference/g6_element.md)
     such as `custom-circle-node`, `custom-rect-node` (We support 9
@@ -164,6 +173,7 @@ CRAN release: 2026-04-27
     [`g6_get_output_ports()`](https://cynkra.github.io/g6R/reference/get-ports.md)
     to get only input or output ports respectively. This are only
     convenience functions.
+
 - Added new `collapse` parameter to nodes. This will only work if you
   use any of the `custom-*-node` node types (see below). Now if a node
   has `children` (vector of character node IDs), it can be collapsed or
