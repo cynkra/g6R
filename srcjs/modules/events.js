@@ -111,6 +111,8 @@ const setClickEvents = (events, graph) => {
       const clickSelect = getBehavior(graph.getBehaviors(), "click-select");
       if (!clickSelect.length) return;
       const isMultiple = clickSelect[0].multiple;
+      const selectedState = clickSelect[0].state || "selected";
+      const alreadySelected = graph.getElementState(target.id).includes(selectedState);
 
       if (!e.shiftKey) {
         resetOtherElementTypes(id, target.type);
@@ -143,7 +145,7 @@ const setClickEvents = (events, graph) => {
           Shiny.setInputValue(inputName, [target.id]);
         } else {
           // add new element if never clicked
-          if (graph.getElementState(target.id).length === 0 || graph.getElementState(target.id)[0] === undefined) {
+          if (!alreadySelected) {
             Shiny.shinyapp.$inputValues[inputName].push(target.id)
             Shiny.setInputValue(inputName, Shiny.shinyapp.$inputValues[inputName]);
           } else {
@@ -156,7 +158,7 @@ const setClickEvents = (events, graph) => {
         }
       } else {
         // No multiclick, this is simple
-        if (graph.getElementState(target.id).length === 0) {
+        if (!alreadySelected) {
           Shiny.setInputValue(inputName, [target.id]);
         } else {
           Shiny.setInputValue(inputName, null);

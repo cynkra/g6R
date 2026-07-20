@@ -16,6 +16,8 @@
 
 ## Bug fixes
 
+- Fixed `click_select()` reporting `selected_node` / `selected_edge` as `null` when the pointer had hovered the clicked element. The emit gate keyed off whether the element carried *any* state (`getElementState().length`) rather than its selection state, so with `hover_activate()` the hover's `active` state made a plain click read as a deselect. It now gates on the behavior's configured selection `state`, robust to coexisting states like `active` (#57).
+
 - `create_edge()`: the hidden rubber-band assist node now carries a transparent `src`, so it no longer crashes the canvas renderer with `Cannot read properties of undefined (reading 'src')` when the consumer maps every node to an image node via a fixed `node` type. The node stays hidden, so the pixel is never shown. The SVG renderer is unaffected.
 
 - Fixed `create_edge()` overwriting a consumer-supplied `drag_element()` / `drag_element_force()` `enable` predicate. While drawing an edge from a port, `create_edge()` pauses node dragging and resumes it on drop. It previously resumed by hardcoding `enable: true`, which destroyed any custom `enable` function after the first edge creation (and toggled behaviors via an array, a no-op in current G6 where `updateBehavior()` matches a single `key`). The live `enable` of each drag behavior is now snapshotted (looked up by type, so a custom `key` still works) and restored verbatim on drop (#48).
