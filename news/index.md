@@ -58,6 +58,18 @@ CRAN release: 2026-07-17
 
 ### Bug fixes
 
+- Fixed
+  [`click_select()`](https://cynkra.github.io/g6R/reference/click_select.md)
+  reporting `selected_node` / `selected_edge` as `null` when the pointer
+  had hovered the clicked element. The emit gate keyed off whether the
+  element carried *any* state (`getElementState().length`) rather than
+  its selection state, so with
+  [`hover_activate()`](https://cynkra.github.io/g6R/reference/hover_activate.md)
+  the hover’s `active` state made a plain click read as a deselect. It
+  now gates on the behavior’s configured selection `state`, robust to
+  coexisting states like `active`
+  ([\#57](https://github.com/cynkra/g6R/issues/57)).
+
 - [`create_edge()`](https://cynkra.github.io/g6R/reference/create_edge.md):
   the hidden rubber-band assist node now carries a transparent `src`, so
   it no longer crashes the canvas renderer with
