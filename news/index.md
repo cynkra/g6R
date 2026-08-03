@@ -2,6 +2,8 @@
 
 ## g6R 0.6.5
 
+CRAN release: 2026-07-17
+
 ### New features
 
 - Bumped the bundled AntV G6 engine from 5.0.49 to 5.1.1 (with `@antv/g`
