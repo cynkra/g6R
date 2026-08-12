@@ -133,6 +133,9 @@ test_that("layout validation works correctly", {
   # Test combo_combined layout validation
   expect_error(combo_combined_layout(center = c(100)))
   expect_error(combo_combined_layout(comboPadding = -10))
+  expect_error(combo_combined_layout(comboSpacing = -1))
+  expect_error(combo_combined_layout(layout = list(rankdir = "TB")))
+  expect_error(combo_combined_layout(layout = 1))
   cc1 <- combo_combined_layout()
   expect_type(cc1, "list")
 })
@@ -285,8 +288,7 @@ test_that("layout complex configurations work", {
     center = c(200, 200),
     comboPadding = 25,
     nodeSize = 18,
-    spacing = 8,
-    treeKey = "parentId"
+    comboSpacing = 8
   )
   expect_type(combo_combined_complex, "list")
 })
@@ -369,4 +371,74 @@ test_that("dagre layout validation works correctly", {
     ranker = "longest-path"
   )
   expect_type(dagre_complex, "list")
+})
+
+test_that("combo_combined_layout forwards its options", {
+  res <- combo_combined_layout(
+    center = c(100, 200),
+    comboPadding = 20,
+    comboSpacing = 8,
+    nodeSize = 15
+  )
+
+  expect_identical(res$type, "combo-combined")
+  expect_identical(res$center, c(100, 200))
+  expect_identical(res$comboPadding, 20)
+  expect_identical(res$comboSpacing, 8)
+  expect_identical(res$nodeSize, 15)
+})
+
+test_that("combo_combined_layout takes one layout for every level", {
+  res <- combo_combined_layout(
+    layout = antv_dagre_layout(rankdir = "LR", nodesep = 20)
+  )
+
+  expect_identical(res$layout$type, "antv-dagre")
+  expect_identical(res$layout$rankdir, "LR")
+  expect_identical(res$layout$nodesep, 20)
+
+  # A single configuration stays a plain nested list, carrying no JS() value
+  # anywhere, so the layout survives serialisation (a callback would not).
+  expect_false(has_js_value(res))
+  expect_type(res$layout, "list")
+})
+
+test_that("combo_combined_layout takes a per-level layout callback", {
+  res <- combo_combined_layout(
+    layout = JS("(comboId) => comboId ? {type: 'concentric'} : {type: 'grid'}")
+  )
+
+  expect_true(is_js(res$layout))
+})
+
+test_that("combo_combined_layout rejects the pre-2.0 option names", {
+  # Silently ignored by @antv/layout >= 2.0.0 (bundled since @antv/g6 5.1.1),
+  # which laid out with the defaults instead of the requested layouts.
+  expect_error(
+    combo_combined_layout(innerLayout = list(type = "concentric")),
+    "innerLayout"
+  )
+  expect_error(
+    combo_combined_layout(outerLayout = list(type = "antv-dagre")),
+    "layout"
+  )
+  expect_error(combo_combined_layout(spacing = 8), "comboSpacing")
+  expect_error(combo_combined_layout(treeKey = "parentId"), "treeKey")
+
+  # Unrelated extras still pass through to the configuration.
+  expect_identical(combo_combined_layout(foo = 1)$foo, 1)
+})
+
+test_that("combo_combined_layout forwards and validates nodeSpacing", {
+  res <- combo_combined_layout(nodeSize = 32, nodeSpacing = 20)
+
+  expect_identical(res$nodeSize, 32)
+  expect_identical(res$nodeSpacing, 20)
+
+  # Omitted by default, so G6's own default (edge to edge) still applies.
+  expect_null(combo_combined_layout()$nodeSpacing)
+
+  expect_error(combo_combined_layout(nodeSpacing = -1), "non-negative")
+  expect_error(combo_combined_layout(nodeSpacing = c(1, 2)), "single")
+  expect_error(combo_combined_layout(nodeSpacing = "wide"), "number or JS")
 })

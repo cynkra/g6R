@@ -1210,9 +1210,11 @@ dendrogram_layout <- function(
 
 #' Create an AntV Combo Combined Layout
 #'
-#' Creates a combo combined layout configuration for G6 graphs. This layout
-#' algorithm combines different layout strategies for elements inside combos
-#' and the outermost layer, providing hierarchical organization of graph elements.
+#' Creates a combo combined layout configuration for G6 graphs. The graph is
+#' laid out one hierarchy level at a time: each combo's children are arranged
+#' first, the combo is sized to fit them, and the resulting boxes are then
+#' arranged among themselves. A graph with combos is therefore packed in two
+#' dimensions instead of a single row.
 #'
 #' @param center Layout center coordinates. A numeric vector of length 2 \code{[x, y]}.
 #'   If NULL, uses the graph center. Default is NULL.
@@ -1220,37 +1222,66 @@ dendrogram_layout <- function(
 #'   calculation, not for rendering. It is recommended to set the same value
 #'   as the visual padding. Can be a number, numeric vector, function, or
 #'   JS function. Default is 10.
-#' @param innerLayout Layout algorithm for elements inside the combo. Should be
-#'   a Layout object or function. If NULL, uses ConcentricLayout as default.
-#' @param nodeSize Node size (diameter), used for collision detection. If not
-#'   specified, it is calculated from the node's size property. Can be a number,
-#'   numeric vector, function, or JS function. Default is 10.
-#' @param outerLayout Layout algorithm for the outermost layer. Should be a
-#'   Layout object or function. If NULL, uses ForceLayout as default.
-#' @param spacing Minimum spacing between node/combo edges when preventNodeOverlap
-#'   or preventOverlap is true. Can be a number, function, or JS function for
-#'   different nodes. Default is NULL.
-#' @param treeKey Tree key identifier as a character string. Default is NULL.
+#' @param comboSpacing Spacing between combos. Can be a number or a JS
+#'   function of the combo. Default is NULL (G6's own default of 0).
+#' @param layout Layout applied at each level of the hierarchy. Either a single
+#'   layout configuration (as returned by [antv_dagre_layout()] and friends),
+#'   used at every level, or a [JS()] callback `(comboId) => config` receiving
+#'   the combo id, or `null` for the outermost level, so each level can use a
+#'   different layout. `NULL` (default) leaves G6's own defaults: a `force`
+#'   layout on the outermost level and `concentric` inside each combo.
+#'   A single configuration is a plain list and stays JSON-serialisable; a
+#'   [JS()] callback does not survive serialisation.
+#' @param nodeSize Node size (diameter), used for collision detection and to
+#'   size the nodes the layout lays out. Can be a number, numeric vector,
+#'   function, or JS function. Default is 10, which is smaller than most
+#'   rendered nodes: set it to roughly the drawn node size, or nodes end up
+#'   touching.
+#' @param nodeSpacing Gap to leave around each node, on top of `nodeSize`. A
+#'   number or a JS function of the node. `NULL` (default) leaves G6's own
+#'   default of 0, which places nodes exactly edge to edge.
 #' @param ... Additional parameters passed to the layout configuration.
 #' See \url{https://g6.antv.antgroup.com/en/manual/layout/combo-combined-layout}.
 #'
 #' @return A layout configuration object for use with G6 graphs.
 #'
 #' @details
-#' The combo combined layout is particularly useful for graphs with hierarchical
-#' structures where you want different layout algorithms for different levels
-#' of the hierarchy. The inner layout handles elements within combos, while
-#' the outer layout manages the overall arrangement.
+#' Edges are lifted to the level being laid out: an edge between two combo
+#' members is resolved to the nearest enclosing element on that level and
+#' dropped when both ends resolve to the same one. The outermost pass therefore
+#' sees the combo-to-combo graph, so a layered `layout` keeps the flow between
+#' combos readable.
+#'
+#' A graph without combos is not a special case: every node is a child of the
+#' (implicit) root, so only the outermost level runs and the result is whatever
+#' `layout` describes, applied to the whole graph.
 #'
 #' @examples
 #' # Basic combo combined layout
 #' layout <- combo_combined_layout()
 #'
-#' # Custom configuration with specific center and padding
+#' # Custom configuration. `nodeSize` should be about the drawn node size and
+#' # `nodeSpacing` is the gap left around each one.
 #' layout <- combo_combined_layout(
 #'   comboPadding = 20,
-#'   nodeSize = 15,
-#'   spacing = 10
+#'   comboSpacing = 8,
+#'   nodeSize = 32,
+#'   nodeSpacing = 20
+#' )
+#'
+#' # Layered layout at every level: combo members and the combos themselves are
+#' # both arranged top-to-bottom. Serialisable, unlike a JS() callback.
+#' layout <- combo_combined_layout(
+#'   layout = antv_dagre_layout(rankdir = "TB", nodesep = 20)
+#' )
+#'
+#' # Per-level layouts: dagre between combos, concentric inside each of them.
+#' layout <- combo_combined_layout(
+#'   layout = JS(
+#'     "(comboId) => comboId ?
+#'        { type: 'concentric' } :
+#'        { type: 'antv-dagre', rankdir: 'TB' }"
+#'   )
 #' )
 #'
 #' @seealso \code{\link{antv_dagre_layout}} for dagre layout configuration
@@ -1259,13 +1290,14 @@ dendrogram_layout <- function(
 combo_combined_layout <- function(
   center = NULL,
   comboPadding = 10,
-  innerLayout = NULL,
+  comboSpacing = NULL,
+  layout = NULL,
   nodeSize = 10,
-  outerLayout = NULL,
-  spacing = NULL,
-  treeKey = NULL,
+  nodeSpacing = NULL,
   ...
 ) {
+  check_removed_combo_args(...)
+
   # Validate center
   if (!is.null(center)) {
     if (!is.numeric(center) || length(center) != 2) {
@@ -1288,10 +1320,27 @@ combo_combined_layout <- function(
     }
   }
 
-  # Validate innerLayout
-  if (!is.null(innerLayout)) {
-    if (!is.list(innerLayout) && !is_js(innerLayout)) {
-      stop("innerLayout must be a Layout object or JS function")
+  # Validate comboSpacing
+  if (!is.null(comboSpacing)) {
+    if (is.numeric(comboSpacing)) {
+      if (length(comboSpacing) != 1 || comboSpacing < 0) {
+        stop("comboSpacing must be a single non-negative number")
+      }
+    } else if (!is_js(comboSpacing)) {
+      stop("comboSpacing must be a number or JS function")
+    }
+  }
+
+  # Validate layout: one configuration for every level, or a JS callback
+  # `(comboId) => config` picking a layout per level.
+  if (!is.null(layout)) {
+    if (is.list(layout)) {
+      type <- layout[["type"]]
+      if (!is.character(type) || length(type) != 1) {
+        stop("layout must be a layout configuration carrying a 'type'")
+      }
+    } else if (!is_js(layout)) {
+      stop("layout must be a layout configuration or JS function")
     }
   }
 
@@ -1310,34 +1359,63 @@ combo_combined_layout <- function(
     }
   }
 
-  # Validate outerLayout
-  if (!is.null(outerLayout)) {
-    if (!is.list(outerLayout) && !is_js(outerLayout)) {
-      stop("outerLayout must be a Layout object or JS function")
-    }
-  }
-
-  # Validate spacing
-  if (!is.null(spacing)) {
-    if (is.numeric(spacing)) {
-      if (spacing < 0) {
-        stop("spacing must be a non-negative number")
+  # Validate nodeSpacing
+  if (!is.null(nodeSpacing)) {
+    if (is.numeric(nodeSpacing)) {
+      if (length(nodeSpacing) != 1 || nodeSpacing < 0) {
+        stop("nodeSpacing must be a single non-negative number")
       }
-    } else if (is.function(spacing)) {
-      # Allow function
-    } else if (!is_js(spacing)) {
-      stop("spacing must be a number, function, or JS function")
-    }
-  }
-
-  # Validate treeKey
-  if (!is.null(treeKey)) {
-    if (!is.character(treeKey) || length(treeKey) != 1) {
-      stop("treeKey must be a single character string")
+    } else if (!is_js(nodeSpacing)) {
+      stop("nodeSpacing must be a number or JS function")
     }
   }
 
   build_layout("combo-combined", ...)
+}
+
+# `combo-combined` options dropped by @antv/layout 2.0.0 (bundled since
+# @antv/g6 5.1.1), mapped to what replaces them. They were silently ignored
+# rather than erroring, so fail loudly instead of laying out with the defaults.
+removed_combo_args <- c(
+  innerLayout = "layout",
+  outerLayout = "layout",
+  spacing = "comboSpacing",
+  treeKey = NA_character_
+)
+
+check_removed_combo_args <- function(...) {
+  hit <- intersect(names(list(...)), names(removed_combo_args))
+
+  if (!length(hit)) {
+    return(invisible(NULL))
+  }
+
+  repl <- removed_combo_args[hit]
+  gone <- hit[is.na(repl)]
+  moved <- hit[!is.na(repl)]
+
+  stop(
+    paste0(
+      "combo_combined_layout(): ",
+      paste0("`", hit, "`", collapse = ", "),
+      if (length(hit) == 1L) " is " else " are ",
+      "no longer supported by the bundled G6 layout engine ",
+      "(@antv/layout 2.0.0).",
+      if (length(moved)) {
+        paste0(
+          " Use ",
+          paste0("`", unique(repl[moved]), "`", collapse = " / "),
+          " instead of ",
+          paste0("`", moved, "`", collapse = ", "),
+          "."
+        )
+      },
+      if (length(gone)) {
+        paste0(" Drop ", paste0("`", gone, "`", collapse = ", "), ".")
+      }
+    ),
+    call. = FALSE
+  )
 }
 
 #' @keywords internal

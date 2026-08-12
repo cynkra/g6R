@@ -290,7 +290,15 @@ g6(nodes, combos = combos) |>
 
 ```{r}
 g6(poke$nodes, poke$edges, poke$combos) |>
-  g6_layout(combo_combined_layout(spacing = 50)) |>
+  g6_layout(
+    combo_combined_layout(
+      comboSpacing = 50,
+      # The layout sizes nodes from `nodeSize`, so leave it at the wrapper
+      # default and the sprites are laid out (and drawn) as 10px specks.
+      nodeSize = 32,
+      nodeSpacing = 20
+    )
+  ) |>
   g6_options(
     animation = FALSE,
     node = list(
