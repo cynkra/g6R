@@ -70,6 +70,19 @@ CRAN release: 2026-07-17
   coexisting states like `active`
   ([\#57](https://github.com/cynkra/g6R/issues/57)).
 
+- [`combo_combined_layout()`](https://cynkra.github.io/g6R/reference/combo_combined_layout.md)
+  can configure the layout again. `@antv/layout` 2.0.0, bundled since
+  the `@antv/g6` 5.1.1 bump, replaced the `innerLayout` / `outerLayout`
+  pair with a single `layout` option (one configuration for every level,
+  or a `(comboId) => config` callback where `comboId` is `null` for the
+  outermost level) and renamed `spacing` to `comboSpacing`. The wrapper
+  still sent the old names, which the engine ignored silently, so every
+  call laid out with G6’s defaults (`force` between combos, `concentric`
+  inside them) no matter what was passed. `layout` and `comboSpacing`
+  are now forwarded; the removed `innerLayout`, `outerLayout`, `spacing`
+  and `treeKey` raise an error pointing at the replacement instead of
+  being dropped on the floor.
+
 - [`create_edge()`](https://cynkra.github.io/g6R/reference/create_edge.md):
   the hidden rubber-band assist node now carries a transparent `src`, so
   it no longer crashes the canvas renderer with
