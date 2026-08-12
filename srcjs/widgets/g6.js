@@ -6,7 +6,7 @@ import {
 } from '@antv/g6';
 import { AntLine, FlyMarkerCubic, CircleComboWithExtraButton, RectComboWithExtraButton } from '../modules/extensions';
 import { setupIcons, loadAndInitGraph, getGraph } from '../modules/utils';
-import { CustomCreateEdge } from '../modules/custom-behaviors';
+import { CustomCreateEdge, CustomDragElement } from '../modules/custom-behaviors';
 import {
   CustomCircleNode,
   CustomRectNode,
@@ -46,6 +46,8 @@ register(ExtensionCategory.COMBO, 'circle-combo-with-extra-button', CircleComboW
 register(ExtensionCategory.COMBO, 'rect-combo-with-extra-button', RectComboWithExtraButton);
 // Custom create edge but ovrerrides the default one
 register(ExtensionCategory.BEHAVIOR, 'create-edge', CustomCreateEdge);
+// Same, for dragging: keeps a combo drag from following its members' children
+register(ExtensionCategory.BEHAVIOR, 'drag-element', CustomDragElement);
 // Register the custom node with G6
 nodeTypes.forEach(({ name, cls }) => {
   register(ExtensionCategory.NODE, `custom-${name}-node`, cls);
