@@ -40,6 +40,11 @@ jobs:
         run: pkgdown::build_site_github_pages(new_process = FALSE, install = FALSE)
         shell: Rscript {0}
 
+      # pkgdown only warns about a figure it cannot find, so a broken image
+      # would otherwise ship. Fail the build before deploying instead.
+      - name: Check images resolve in the built site
+        run: Rscript tools/check-site-images.R docs
+
       - name: Deploy to GitHub pages 🚀
         if: github.event_name != 'pull_request'
         uses: JamesIves/github-pages-deploy-action@v4.5.0
