@@ -58,6 +58,25 @@ CRAN release: 2026-07-17
 
 ### Bug fixes
 
+- Dragging a combo no longer drags nodes out of *other* combos
+  ([\#63](https://github.com/cynkra/g6R/issues/63)). G6 translates a
+  dragged combo by walking its descendants through `getChildrenData()`,
+  which selects the hierarchy from the element’s type: the first hop
+  follows the combo hierarchy, but every hop after that starts at a node
+  and switches to the tree hierarchy, so the walk escaped the combo and
+  dragged the transitive `children` closure of its members. Any node in
+  that closure belonging to another combo was pulled out of it, leaving
+  that combo’s box behind and apparently empty. `drag-element` is now
+  overridden to expand the dragged combo through the combo hierarchy
+  itself and translate the member nodes, which walk no hierarchy at all;
+  a combo’s bounds derive from its members, so the box still follows.
+  Combo, node, multi-selection, nested-combo, empty-combo and
+  `dropEffect = "link"` drags are unchanged. This is an upstream
+  `@antv/g6` 5.1.1 bug (`src/runtime/data.ts:203`), so the override can
+  go once G6 keeps the traversal on the combo hierarchy;
+  `drag-element-force` needs no equivalent, as it moves per-node fixed
+  layout positions and never takes the combo path.
+
 - Fixed
   [`click_select()`](https://cynkra.github.io/g6R/reference/click_select.md)
   reporting `selected_node` / `selected_edge` as `null` when the pointer
