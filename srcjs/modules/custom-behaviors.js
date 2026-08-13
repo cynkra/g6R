@@ -1,4 +1,4 @@
-import { CreateEdge, CanvasEvent, ComboEvent, CommonEvent, EdgeEvent, NodeEvent } from '@antv/g6';
+import { CreateEdge, DragElement, CanvasEvent, ComboEvent, CommonEvent, EdgeEvent, NodeEvent } from '@antv/g6';
 import { uniqueId } from '@antv/util';
 import { sendNotification, getPortConnections } from './utils';
 
@@ -582,4 +582,57 @@ class CustomCreateEdge extends CreateEdge {
   }
 }
 
-export { CustomCreateEdge };
+// Keep a combo drag inside the combo hierarchy.
+//
+// G6 translates a dragged combo by walking its descendants through
+// `getChildrenData()`, which picks the hierarchy from the element's *type*: the
+// first hop leaves the combo on the combo hierarchy, but every hop after that
+// starts at a node and switches to the tree hierarchy (`children`). The walk
+// therefore escapes the combo and drags each member's `children` closure along,
+// including nodes parented to *other* combos, which end up outside their box
+// while the box stays put (cynkra/g6R#63; @antv/g6 5.1.1,
+// src/runtime/data.ts:203 and :749).
+//
+// Translating a node walks nothing (`translateNodeTo()` wraps its update in
+// `preventUpdateNodeLikeHierarchy()`), so expanding the combo ourselves through
+// the combo hierarchy and translating the member nodes keeps the move
+// contained; a combo's bounds derive from its members, so the box follows them.
+// `drag-element-force` needs no equivalent: it moves fixed layout positions per
+// node and never takes the combo path.
+//
+// Remove this once G6 keeps the traversal on the combo hierarchy.
+class CustomDragElement extends DragElement {
+  // Leaf-most node ids of a combo, via the combo hierarchy only. A combo with
+  // nothing in it is returned as itself: there is no member to move, and no
+  // hierarchy for the walk to escape through either.
+  comboMemberIds(id) {
+    const { graph, model } = this.context;
+
+    if (graph.getElementType(id) !== 'combo') return [id];
+
+    const children = model.getChildrenData(id) || [];
+    if (!children.length) return [id];
+
+    return children.flatMap((child) => this.comboMemberIds(child.id));
+  }
+
+  async moveElement(ids, offset) {
+    const { graph, model } = this.context;
+    const { dropEffect } = this.options;
+
+    const targets = Array.from(
+      new Set(ids.flatMap((id) => this.comboMemberIds(id)))
+    );
+
+    if (dropEffect === 'move') ids.forEach((id) => model.refreshComboData(id));
+
+    graph.translateElementBy(
+      Object.fromEntries(
+        targets.map((id) => [id, this.clampByRotation(offset)])
+      ),
+      false
+    );
+  }
+}
+
+export { CustomCreateEdge, CustomDragElement };
