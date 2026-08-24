@@ -8,7 +8,8 @@ library(g6R)
 # by eye at fit-to-view.
 #
 # Type a label ("Filter 07-03") or an id ("g07_b03") in the box, top-left of the
-# canvas, and the viewport moves to that block and selects it.
+# canvas, and the viewport moves to that block and selects it. The outline on the
+# right lists the whole workflow: fold a stage to skim, click a row to go there.
 #
 # Double-click a group to collapse it, then search for a block inside it: the
 # search opens the group on the way. That pairing is what keeps a big workflow
@@ -152,13 +153,22 @@ server <- function(input, output, session) {
           # "combo" is g6 jargon; this workflow calls them stages.
           labels = c(node = "block", combo = "stage")
         ),
+        # The outline answers "what is in here", the search "take me to this".
+        g6_outline(
+          outputId = "graph",
+          title = "Workflow",
+          labels = c(node = "block", combo = "stage")
+        ),
         minimap()
       )
   )
 
-  # `outputId` reports the pick, so the app can react to it as well.
+  # Both panels report their pick, so the app can react to either.
   output$picked <- renderPrint({
-    input[["graph-searched_element"]]
+    list(
+      searched = input[["graph-searched_element"]],
+      outlined = input[["graph-outlined_element"]]
+    )
   })
 }
 

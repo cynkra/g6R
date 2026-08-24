@@ -265,6 +265,7 @@ reference:
     desc: Navigation and Overview
     contents:
       - fullscreen
+      - g6_outline
       - g6_search
       - minimap
       - timebar

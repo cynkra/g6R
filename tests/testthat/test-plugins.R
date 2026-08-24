@@ -387,3 +387,72 @@ test_that("g6_search names the element types", {
     "named character vector"
   )
 })
+
+test_that("g6_outline builds an outline plugin config", {
+  cfg <- g6_outline()
+
+  expect_type(cfg, "list")
+  expect_identical(cfg$type, "outline")
+  expect_identical(cfg$key, "outline")
+  expect_identical(cfg$title, "Outline")
+  expect_identical(cfg$position, "top-right")
+  expect_true(cfg$open)
+  expect_true(cfg$groupsOpen)
+  expect_true(cfg$expandAncestors)
+  expect_true(cfg$select)
+  expect_identical(cfg$labels, list(node = "node", combo = "combo", edge = "edge"))
+  expect_false("outputId" %in% names(cfg))
+})
+
+test_that("g6_outline forwards its options", {
+  cfg <- g6_outline(
+    key = "tree",
+    title = "Workflow",
+    position = "bottom-left",
+    width = 320,
+    open = FALSE,
+    groupsOpen = FALSE,
+    expandAncestors = FALSE,
+    select = FALSE,
+    labels = c(node = "block", combo = "stage"),
+    animation = list(duration = 300),
+    outputId = "graph"
+  )
+
+  expect_identical(cfg$key, "tree")
+  expect_identical(cfg$title, "Workflow")
+  expect_identical(cfg$position, "bottom-left")
+  expect_identical(cfg$width, 320)
+  expect_false(cfg$open)
+  expect_false(cfg$groupsOpen)
+  expect_false(cfg$expandAncestors)
+  expect_false(cfg$select)
+  expect_identical(cfg$labels, list(node = "block", combo = "stage"))
+  expect_identical(cfg$animation, list(duration = 300))
+  expect_identical(cfg$outputId, "graph")
+})
+
+test_that("g6_outline validates its options", {
+  expect_error(g6_outline(position = "middle"))
+  expect_error(g6_outline(width = 0))
+  expect_error(g6_outline(title = c("a", "b")))
+  expect_error(g6_outline(open = "yes"), "'open'")
+  expect_error(g6_outline(groupsOpen = NA_character_), "'groupsOpen'")
+  expect_error(g6_outline(expandAncestors = 1), "'expandAncestors'")
+  expect_error(g6_outline(select = c(TRUE, FALSE)), "'select'")
+  expect_error(g6_outline(labels = "block"), "named character vector")
+  expect_error(g6_outline(animation = "fast"))
+  expect_error(g6_outline(outputId = 1))
+})
+
+test_that("the outline plugin is accepted by g6_plugins()", {
+  expect_true("outline" %in% names(valid_plugins))
+
+  g <- g6(nodes = data.frame(id = c("a", "b"))) |>
+    g6_plugins(g6_outline(), g6_search())
+
+  expect_setequal(
+    vapply(g$x$plugins, function(p) p$type, character(1)),
+    c("outline", "search")
+  )
+})

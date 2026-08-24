@@ -7,7 +7,7 @@ import {
 import { AntLine, FlyMarkerCubic, CircleComboWithExtraButton, RectComboWithExtraButton } from '../modules/extensions';
 import { setupIcons, loadAndInitGraph, getGraph } from '../modules/utils';
 import { CustomCreateEdge, CustomDragElement } from '../modules/custom-behaviors';
-import { Search } from '../modules/custom-plugins';
+import { Search, Outline } from '../modules/custom-plugins';
 import {
   CustomCircleNode,
   CustomRectNode,
@@ -51,6 +51,8 @@ register(ExtensionCategory.BEHAVIOR, 'create-edge', CustomCreateEdge);
 register(ExtensionCategory.BEHAVIOR, 'drag-element', CustomDragElement);
 // G6 has no search UI; this one focuses the element you pick
 register(ExtensionCategory.PLUGIN, 'search', Search);
+// A list view of the graph, for when the drawing is too big to read
+register(ExtensionCategory.PLUGIN, 'outline', Outline);
 // Register the custom node with G6
 nodeTypes.forEach(({ name, cls }) => {
   register(ExtensionCategory.NODE, `custom-${name}-node`, cls);

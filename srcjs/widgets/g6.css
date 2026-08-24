@@ -64,12 +64,14 @@
   background: #eef2ff;
 }
 
+.g6-panel-label,
 .g6-search-label {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
 
+.g6-panel-kind,
 .g6-search-kind {
   flex: none;
   color: #6b7280;
@@ -79,7 +81,7 @@
 /* Type glyph: a filled square for a node, an outlined box for a combo, so the
    two kinds are told apart by shape rather than by reading the label on the
    right. */
-.g6-search-glyph {
+.g6-panel-glyph {
   flex: none;
   width: 10px;
   height: 10px;
@@ -87,19 +89,92 @@
   border-radius: 2px;
 }
 
-.g6-search-glyph[data-type="node"] {
+.g6-panel-glyph[data-type="node"] {
   background: #1783ff;
 }
 
-.g6-search-glyph[data-type="combo"] {
+.g6-panel-glyph[data-type="combo"] {
   background: rgb(23 131 255 / 12%);
   border: 1px solid #1783ff;
   border-radius: 3px;
 }
 
-.g6-search-glyph[data-type="edge"] {
+.g6-panel-glyph[data-type="edge"] {
   height: 2px;
   margin-top: 7px;
   background: #9ca3af;
   border-radius: 0;
+}
+
+/* Outline panel: a list view of the graph over the canvas. */
+.g6-outline {
+  position: absolute;
+  z-index: 10;
+  font-family: inherit;
+  font-size: 13px;
+  background: #fff;
+  border: 1px solid #d1d5db;
+  border-radius: 4px;
+  box-shadow: 0 2px 6px rgb(0 0 0 / 10%);
+  overflow: hidden;
+}
+
+.g6-outline[data-position="top-left"] { top: 8px; left: 8px; }
+.g6-outline[data-position="top-right"] { top: 8px; right: 8px; }
+.g6-outline[data-position="bottom-left"] { bottom: 8px; left: 8px; }
+.g6-outline[data-position="bottom-right"] { bottom: 8px; right: 8px; }
+
+.g6-outline-toggle {
+  display: block;
+  width: 100%;
+  padding: 6px 8px;
+  border: 0;
+  border-bottom: 1px solid #e5e7eb;
+  background: #f9fafb;
+  color: #111827;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.g6-outline-toggle:hover {
+  background: #f3f4f6;
+}
+
+.g6-outline-body {
+  max-height: 320px;
+  overflow-y: auto;
+}
+
+.g6-outline-list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.g6-outline-row {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+  padding: 3px 8px 3px 0;
+  cursor: pointer;
+}
+
+.g6-outline-row:hover {
+  background: #f3f4f6;
+}
+
+.g6-outline-row[data-current="true"] {
+  background: #eef2ff;
+  font-weight: 600;
+}
+
+.g6-outline-caret {
+  flex: none;
+  width: 12px;
+  color: #6b7280;
+  font-size: 10px;
+  line-height: 1.4;
+  text-align: center;
+  cursor: pointer;
 }

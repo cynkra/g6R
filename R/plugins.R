@@ -1840,6 +1840,118 @@ g6_search <- function(
   dropNulls(c(config, list(...)))
 }
 
+#' Outline panel listing the graph
+#'
+#' Renders a panel over the canvas listing the graph as a tree: each combo is an
+#' accordion holding its members, and clicking a row moves the viewport to that
+#' element. Where [g6_search()] answers "take me to the thing I am looking for",
+#' an outline answers "show me what is in here", which is the question a large
+#' graph usually raises.
+#'
+#' It also makes collapsing the canvas safe: with everything listed, the drawing
+#' no longer has to be legible at fit-to-view, so groups can stay collapsed and
+#' any element is still two clicks away.
+#'
+#' Folding a group in the panel is independent of collapsing it on the canvas, so
+#' the list can be explored without redrawing the graph. Selecting an element on
+#' the canvas marks and scrolls to its row, so the panel follows where you are.
+#'
+#' @param key Unique identifier for the plugin (string).
+#' @param title Text on the panel's toggle button.
+#' @param position Corner to render in: `"top-right"` (default), `"top-left"`,
+#' `"bottom-left"` or `"bottom-right"`.
+#' @param width Width of the panel, in px.
+#' @param open Start with the panel open.
+#' @param groupsOpen Start with the groups unfolded.
+#' @param expandAncestors Expand collapsed combos on the way to a clicked
+#' element, as [g6_search()] does.
+#' @param select Also select the clicked element, so anything driven by selection
+#' follows the panel.
+#' @param labels How to name each element type, as a named character vector over
+#' `"node"`, `"combo"` and `"edge"`. Only shown where a row has no group to show
+#' instead.
+#' @param animation Viewport animation passed to `focusElement()`.
+#' @param outputId Graph output id. When set (and running under Shiny), clicking
+#' a row sets `input$<outputId>-outlined_element` to a list with `id`, `type` and
+#' `label`.
+#' @param ... Additional parameters passed to the plugin configuration.
+#'
+#' @return A list with the configuration for the outline plugin.
+#' @seealso [g6_search()] to jump straight to a named element.
+#' @export
+#'
+#' @examples
+#' config <- g6_outline()
+#'
+#' # Start folded, and name the types the way the app does
+#' config <- g6_outline(
+#'   groupsOpen = FALSE,
+#'   labels = c(node = "block", combo = "stack"),
+#'   outputId = "graph"
+#' )
+g6_outline <- function(
+  key = "outline",
+  title = "Outline",
+  position = c("top-right", "top-left", "bottom-left", "bottom-right"),
+  width = 260,
+  open = TRUE,
+  groupsOpen = TRUE,
+  expandAncestors = TRUE,
+  select = TRUE,
+  labels = c(node = "node", combo = "combo", edge = "edge"),
+  animation = NULL,
+  outputId = NULL,
+  ...
+) {
+  position <- match.arg(position)
+
+  if (!is.character(key) || length(key) != 1) {
+    stop("'key' must be a single string")
+  }
+
+  if (!is.character(title) || length(title) != 1) {
+    stop("'title' must be a single string")
+  }
+
+  if (!is.numeric(width) || length(width) != 1 || width <= 0) {
+    stop("'width' must be a single positive number")
+  }
+
+  for (flag in c("open", "groupsOpen", "expandAncestors", "select")) {
+    value <- get(flag)
+    if (!is.logical(value) || length(value) != 1) {
+      stop("'", flag, "' must be a single logical value")
+    }
+  }
+
+  if (
+    !is.character(labels) ||
+      is.null(names(labels)) ||
+      !all(names(labels) %in% c("node", "combo", "edge")) ||
+      anyDuplicated(names(labels))
+  ) {
+    stop(
+      "'labels' must be a named character vector over 'node', 'combo' and 'edge'"
+    )
+  }
+
+  if (!is.null(animation) && !is.list(animation) && !is_js(animation)) {
+    stop("'animation' must be a list or a JS() object")
+  }
+
+  if (!is.null(outputId) && (!is.character(outputId) || length(outputId) != 1)) {
+    stop("'outputId' must be a single string")
+  }
+
+  arg_names <- names(formals())
+  arg_names <- arg_names[arg_names != "..."]
+  config <- mget(arg_names)
+  config$labels <- as.list(labels)
+  config$type <- "outline"
+
+  dropNulls(c(config, list(...)))
+}
+
 #' Configure Snapline Plugin
 #'
 #' Creates a configuration object for the snapline plugin in G6.
@@ -2642,6 +2754,7 @@ valid_plugins <- c(
   "hull" = hull,
   "legend" = legend,
   "minimap" = minimap,
+  "outline" = g6_outline,
   "search" = g6_search,
   "snapline" = snapline,
   "timebar" = timebar,
