@@ -7,6 +7,7 @@ import {
 import { AntLine, FlyMarkerCubic, CircleComboWithExtraButton, RectComboWithExtraButton } from '../modules/extensions';
 import { setupIcons, loadAndInitGraph, getGraph } from '../modules/utils';
 import { CustomCreateEdge, CustomDragElement } from '../modules/custom-behaviors';
+import { Search } from '../modules/custom-plugins';
 import {
   CustomCircleNode,
   CustomRectNode,
@@ -48,6 +49,8 @@ register(ExtensionCategory.COMBO, 'rect-combo-with-extra-button', RectComboWithE
 register(ExtensionCategory.BEHAVIOR, 'create-edge', CustomCreateEdge);
 // Same, for dragging: keeps a combo drag from following its members' children
 register(ExtensionCategory.BEHAVIOR, 'drag-element', CustomDragElement);
+// G6 has no search UI; this one focuses the element you pick
+register(ExtensionCategory.PLUGIN, 'search', Search);
 // Register the custom node with G6
 nodeTypes.forEach(({ name, cls }) => {
   register(ExtensionCategory.NODE, `custom-${name}-node`, cls);

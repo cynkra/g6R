@@ -5,3 +5,101 @@
 .html-widget.g6 .tooltip {
   opacity: 1;
 }
+
+/* Search plugin. The box sits over the canvas, so it opts out of the canvas's
+   own cursor and pointer handling and keeps a z-index above the graph. */
+.g6-search {
+  position: absolute;
+  z-index: 10;
+  font-family: inherit;
+  font-size: 13px;
+}
+
+.g6-search[data-position="top-left"] { top: 8px; left: 8px; }
+.g6-search[data-position="top-right"] { top: 8px; right: 8px; }
+.g6-search[data-position="bottom-left"] { bottom: 8px; left: 8px; }
+.g6-search[data-position="bottom-right"] { bottom: 8px; right: 8px; }
+
+.g6-search-input {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 5px 8px;
+  border: 1px solid #d1d5db;
+  border-radius: 4px;
+  background: #fff;
+  color: #111827;
+  box-shadow: 0 1px 2px rgb(0 0 0 / 8%);
+}
+
+.g6-search-input:focus {
+  outline: none;
+  border-color: #9cabd4;
+  box-shadow: 0 0 0 2px rgb(156 171 212 / 35%);
+}
+
+.g6-search-results {
+  display: none;
+  margin: 4px 0 0;
+  padding: 0;
+  list-style: none;
+  max-height: 220px;
+  overflow-y: auto;
+  border: 1px solid #d1d5db;
+  border-radius: 4px;
+  background: #fff;
+  box-shadow: 0 2px 6px rgb(0 0 0 / 10%);
+}
+
+.g6-search-result {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 5px 8px;
+  cursor: pointer;
+}
+
+.g6-search-result:hover,
+.g6-search-result[data-active="true"] {
+  background: #eef2ff;
+}
+
+.g6-search-label {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.g6-search-kind {
+  flex: none;
+  color: #6b7280;
+  font-size: 11px;
+}
+
+/* Type glyph: a filled square for a node, an outlined box for a combo, so the
+   two kinds are told apart by shape rather than by reading the label on the
+   right. */
+.g6-search-glyph {
+  flex: none;
+  width: 10px;
+  height: 10px;
+  margin-top: 3px;
+  border-radius: 2px;
+}
+
+.g6-search-glyph[data-type="node"] {
+  background: #1783ff;
+}
+
+.g6-search-glyph[data-type="combo"] {
+  background: rgb(23 131 255 / 12%);
+  border: 1px solid #1783ff;
+  border-radius: 3px;
+}
+
+.g6-search-glyph[data-type="edge"] {
+  height: 2px;
+  margin-top: 7px;
+  background: #9ca3af;
+  border-radius: 0;
+}

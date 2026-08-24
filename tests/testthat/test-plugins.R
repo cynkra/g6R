@@ -295,3 +295,95 @@ test_that("plugin complex configurations work", {
   )
   expect_type(watermark_complex, "list")
 })
+
+test_that("g6_search builds a search plugin config", {
+  cfg <- g6_search()
+
+  expect_type(cfg, "list")
+  expect_identical(cfg$type, "search")
+  expect_identical(cfg$key, "search")
+  expect_identical(cfg$position, "top-left")
+  expect_identical(cfg$elements, c("node", "combo"))
+  expect_true(cfg$expandAncestors)
+  expect_true(cfg$select)
+
+  # NULLs are dropped, so an unset callback carries nothing.
+  expect_false("onSelect" %in% names(cfg))
+  expect_false("outputId" %in% names(cfg))
+})
+
+test_that("g6_search forwards its options", {
+  cfg <- g6_search(
+    key = "find",
+    placeholder = "Find a block",
+    limit = 20,
+    elements = "combo",
+    expandAncestors = FALSE,
+    select = FALSE,
+    position = "bottom-right",
+    width = 320,
+    animation = list(duration = 200),
+    outputId = "graph",
+    onSelect = JS("(hit) => console.log(hit)")
+  )
+
+  expect_identical(cfg$key, "find")
+  expect_identical(cfg$placeholder, "Find a block")
+  expect_identical(cfg$limit, 20)
+  expect_identical(cfg$elements, "combo")
+  expect_false(cfg$expandAncestors)
+  expect_false(cfg$select)
+  expect_identical(cfg$position, "bottom-right")
+  expect_identical(cfg$width, 320)
+  expect_identical(cfg$animation, list(duration = 200))
+  expect_identical(cfg$outputId, "graph")
+  expect_s3_class(cfg$onSelect, "JS_EVAL")
+})
+
+test_that("g6_search validates its options", {
+  expect_error(g6_search(position = "middle"))
+  expect_error(g6_search(limit = 0))
+  expect_error(g6_search(limit = c(1, 2)))
+  expect_error(g6_search(elements = "block"), "node")
+  expect_error(g6_search(elements = character()))
+  expect_error(g6_search(expandAncestors = "yes"))
+  expect_error(g6_search(select = NA_character_))
+  expect_error(g6_search(width = -1))
+  expect_error(g6_search(placeholder = c("a", "b")))
+  expect_error(g6_search(outputId = 1))
+  expect_error(g6_search(onSelect = "not js"))
+  expect_error(g6_search(animation = "fast"))
+})
+
+test_that("the search plugin is accepted by g6_plugins()", {
+  # It has to be in the registry, or `validate_component()` rejects it.
+  expect_true("search" %in% names(valid_plugins))
+
+  g <- g6(nodes = data.frame(id = c("a", "b"))) |>
+    g6_plugins(g6_search())
+
+  expect_identical(g$x$plugins[[1]]$type, "search")
+
+  # The string form resolves through the registry too.
+  expect_identical(
+    (g6(nodes = data.frame(id = "a")) |> g6_plugins("search"))$x$plugins[[1]]$type,
+    "search"
+  )
+})
+
+test_that("g6_search names the element types", {
+  cfg <- g6_search()
+  expect_identical(cfg$labels, list(node = "node", combo = "combo", edge = "edge"))
+
+  # A named vector must reach the client as an object, not an array.
+  cfg <- g6_search(labels = c(node = "block", combo = "stack"))
+  expect_identical(cfg$labels, list(node = "block", combo = "stack"))
+
+  expect_error(g6_search(labels = "block"), "named character vector")
+  expect_error(g6_search(labels = c(block = "block")), "named character vector")
+  expect_error(g6_search(labels = c(node = 1)), "named character vector")
+  expect_error(
+    g6_search(labels = c(node = "a", node = "b")),
+    "named character vector"
+  )
+})
