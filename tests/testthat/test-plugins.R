@@ -456,3 +456,17 @@ test_that("the outline plugin is accepted by g6_plugins()", {
     c("outline", "search")
   )
 })
+
+test_that("g6_outline can anchor under the search box", {
+  expect_identical(g6_outline()$anchor, "canvas")
+  expect_identical(g6_outline(anchor = "search")$anchor, "search")
+  expect_error(g6_outline(anchor = "sidebar"))
+
+  # Anchoring needs the search box built first, so order matters.
+  g <- g6(nodes = data.frame(id = "a")) |>
+    g6_plugins(g6_search(), g6_outline(anchor = "search"))
+  expect_identical(
+    vapply(g$x$plugins, function(p) p$type, character(1)),
+    c("search", "outline")
+  )
+})

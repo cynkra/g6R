@@ -8,7 +8,8 @@ g6_outline(
   key = "outline",
   title = "Outline",
   position = c("top-right", "top-left", "bottom-left", "bottom-right"),
-  width = 260,
+  width = 240,
+  anchor = c("canvas", "search"),
   open = TRUE,
   groupsOpen = TRUE,
   expandAncestors = TRUE,
@@ -27,7 +28,14 @@ g6_outline(
 \item{position}{Corner to render in: \code{"top-right"} (default), \code{"top-left"},
 \code{"bottom-left"} or \code{"bottom-right"}.}
 
-\item{width}{Width of the panel, in px.}
+\item{width}{Width of the panel, in px. Ignored when anchored to the search
+box, where the width comes from that box.}
+
+\item{anchor}{Where the panel lives: \code{"canvas"} (default) puts it in the
+corner named by \code{position}; \code{"search"} hangs it under \code{\link[=g6_search]{g6_search()}}'s box as a
+dropdown, so the two read as one control. Anchoring needs a \code{g6_search()}
+listed \emph{before} this plugin, since they are built in order; without one the
+panel falls back to its own corner.}
 
 \item{open}{Start with the panel open.}
 
@@ -72,6 +80,9 @@ the canvas marks and scrolls to its row, so the panel follows where you are.
 }
 \examples{
 config <- g6_outline()
+
+# As a dropdown under the search box, closed until asked for
+config <- g6_outline(anchor = "search", open = FALSE, title = "Contents")
 
 # Start folded, and name the types the way the app does
 config <- g6_outline(

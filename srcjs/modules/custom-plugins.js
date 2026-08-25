@@ -277,11 +277,14 @@ class Outline extends BasePlugin {
   static defaultOptions = {
     title: 'Outline',
     position: 'top-right',
-    width: 260,
+    width: 240,
     open: true,
     groupsOpen: true,
     expandAncestors: true,
     select: true,
+    // Where the panel lives: its own corner of the canvas, or hanging under the
+    // search box as a dropdown, so the two read as one control.
+    anchor: 'canvas',
     labels: { node: 'node', combo: 'combo', edge: 'edge' }
   };
 
@@ -401,10 +404,25 @@ class Outline extends BasePlugin {
     const container = canvas.getContainer();
     if (!container) return;
 
+    // Anchoring to the search box only works if that box exists: plugins are
+    // built in the order given, so fall back to a floating panel rather than
+    // not rendering at all.
+    const host =
+      this.options.anchor === 'search'
+        ? container.querySelector('.g6-search')
+        : null;
+
     const box = document.createElement('div');
     box.className = OUTLINE_CLASS;
-    box.dataset.position = this.options.position;
-    box.style.width = `${this.options.width}px`;
+    box.dataset.anchor = host ? 'search' : 'canvas';
+
+    if (host) {
+      // Width and placement come from the search box it hangs under.
+      box.style.width = '100%';
+    } else {
+      box.dataset.position = this.options.position;
+      box.style.width = `${this.options.width}px`;
+    }
 
     this.$toggle = document.createElement('button');
     this.$toggle.type = 'button';
@@ -417,7 +435,7 @@ class Outline extends BasePlugin {
 
     box.appendChild(this.$toggle);
     box.appendChild(this.$body);
-    container.appendChild(box);
+    (host || container).appendChild(box);
     this.$element = box;
 
     ['pointerdown', 'click', 'wheel', 'dblclick'].forEach((type) => {
@@ -495,6 +513,8 @@ class Outline extends BasePlugin {
         row.appendChild(spacer);
       }
 
+      // No context column: the indentation already shows which group a row
+      // belongs to, and the glyph shows what kind it is.
       const { glyph, name, typeName } = elementRow(entry, this.options.labels);
       row.appendChild(glyph);
       row.appendChild(name);

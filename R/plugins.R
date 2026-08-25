@@ -1860,7 +1860,13 @@ g6_search <- function(
 #' @param title Text on the panel's toggle button.
 #' @param position Corner to render in: `"top-right"` (default), `"top-left"`,
 #' `"bottom-left"` or `"bottom-right"`.
-#' @param width Width of the panel, in px.
+#' @param width Width of the panel, in px. Ignored when anchored to the search
+#' box, where the width comes from that box.
+#' @param anchor Where the panel lives: `"canvas"` (default) puts it in the
+#' corner named by `position`; `"search"` hangs it under [g6_search()]'s box as a
+#' dropdown, so the two read as one control. Anchoring needs a `g6_search()`
+#' listed *before* this plugin, since they are built in order; without one the
+#' panel falls back to its own corner.
 #' @param open Start with the panel open.
 #' @param groupsOpen Start with the groups unfolded.
 #' @param expandAncestors Expand collapsed combos on the way to a clicked
@@ -1883,6 +1889,9 @@ g6_search <- function(
 #' @examples
 #' config <- g6_outline()
 #'
+#' # As a dropdown under the search box, closed until asked for
+#' config <- g6_outline(anchor = "search", open = FALSE, title = "Contents")
+#'
 #' # Start folded, and name the types the way the app does
 #' config <- g6_outline(
 #'   groupsOpen = FALSE,
@@ -1893,7 +1902,8 @@ g6_outline <- function(
   key = "outline",
   title = "Outline",
   position = c("top-right", "top-left", "bottom-left", "bottom-right"),
-  width = 260,
+  width = 240,
+  anchor = c("canvas", "search"),
   open = TRUE,
   groupsOpen = TRUE,
   expandAncestors = TRUE,
@@ -1904,6 +1914,7 @@ g6_outline <- function(
   ...
 ) {
   position <- match.arg(position)
+  anchor <- match.arg(anchor)
 
   if (!is.character(key) || length(key) != 1) {
     stop("'key' must be a single string")

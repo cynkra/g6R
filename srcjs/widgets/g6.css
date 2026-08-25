@@ -119,6 +119,12 @@
   overflow: hidden;
 }
 
+.g6-outline[data-anchor="search"] {
+  position: static;
+  margin-top: 4px;
+  border-radius: 4px;
+}
+
 .g6-outline[data-position="top-left"] { top: 8px; left: 8px; }
 .g6-outline[data-position="top-right"] { top: 8px; right: 8px; }
 .g6-outline[data-position="bottom-left"] { bottom: 8px; left: 8px; }
@@ -127,7 +133,8 @@
 .g6-outline-toggle {
   display: block;
   width: 100%;
-  padding: 6px 8px;
+  padding: 4px 8px;
+  font-size: 12px;
   border: 0;
   border-bottom: 1px solid #e5e7eb;
   background: #f9fafb;
@@ -142,7 +149,7 @@
 }
 
 .g6-outline-body {
-  max-height: 320px;
+  max-height: 280px;
   overflow-y: auto;
 }
 
@@ -155,8 +162,9 @@
 .g6-outline-row {
   display: flex;
   align-items: baseline;
-  gap: 6px;
-  padding: 3px 8px 3px 0;
+  gap: 5px;
+  padding: 2px 8px 2px 0;
+  line-height: 1.35;
   cursor: pointer;
 }
 

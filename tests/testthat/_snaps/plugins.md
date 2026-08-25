@@ -617,11 +617,12 @@
         ..$ directed        : logi TRUE
         ..$ maxCollapseDepth: num Inf
         ..$ plugins         :List of 1
-        .. ..$ :List of 10
+        .. ..$ :List of 11
         .. .. ..$ key            : chr "outline"
         .. .. ..$ title          : chr "Outline"
         .. .. ..$ position       : chr "top-right"
-        .. .. ..$ width          : num 260
+        .. .. ..$ width          : num 240
+        .. .. ..$ anchor         : chr "canvas"
         .. .. ..$ open           : logi TRUE
         .. .. ..$ groupsOpen     : logi TRUE
         .. .. ..$ expandAncestors: logi TRUE
