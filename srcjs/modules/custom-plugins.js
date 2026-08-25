@@ -449,6 +449,9 @@ class Outline extends BasePlugin {
   toggle() {
     this.open = !this.open;
     this.paint();
+    // Opening catches up with whatever is selected now: a search made while the
+    // panel was shut still lands on the right row.
+    if (this.open) this.syncSelection();
   }
 
   isGroupOpen(id) {
@@ -564,56 +567,69 @@ class Outline extends BasePlugin {
     });
   }
 
-  // A selection made on the canvas marks and scrolls to its row, so the panel
-  // tracks where you are instead of drifting out of step.
-  watchGraph() {
+  // The one element selected on the canvas, if exactly one is. With several
+  // selected there is nothing sensible to scroll to.
+  selectedId() {
     const { graph } = this.context;
-
-    const follow = () => {
-      if (!this.open) return;
-      let selected = [];
-      try {
-        selected = (graph.getElementDataByState('node', SELECTED_STATE) || [])
-          .concat(graph.getElementDataByState('combo', SELECTED_STATE) || [])
-          .map((d) => d.id);
-      } catch (e) {
-        return;
-      }
-      if (selected.length !== 1) return;
-
-      const id = selected[0];
-      this.reveal(id);
-      const row = this.rowsById.get(id);
-      if (row) {
-        this.mark(id);
-        row.scrollIntoView({ block: 'nearest' });
-      }
-    };
-
-    // No dedicated selection event, so watch the redraw that follows one.
-    this.followHandler = () => window.setTimeout(follow, 0);
+    let selected = [];
     try {
-      graph.on('afterdraw', this.followHandler);
+      selected = (graph.getElementDataByState('node', SELECTED_STATE) || [])
+        .concat(graph.getElementDataByState('combo', SELECTED_STATE) || [])
+        .map((d) => d.id);
     } catch (e) {
-      // Without the hook the panel simply does not follow the canvas.
+      return null;
+    }
+    return selected.length === 1 ? selected[0] : null;
+  }
+
+  // Bring the panel in line with the canvas: unfold the groups above the
+  // selected element so its row exists, then mark it and scroll to it. Called
+  // both when the canvas redraws and when the panel is opened, so a selection
+  // made while it was shut is not missed.
+  syncSelection() {
+    if (!this.open) return;
+
+    const id = this.selectedId();
+    if (!id) return;
+
+    if (this.openAncestors(id)) this.paint();
+
+    const row = this.rowsById.get(id);
+    if (row) {
+      this.mark(id);
+      row.scrollIntoView({ block: 'nearest' });
     }
   }
 
-  // Open the groups between the root and an element, so its row exists to be
-  // scrolled to.
-  reveal(id) {
+  // Unfold every group between the root and an element. Returns whether
+  // anything changed, so the caller repaints only when it must -- repainting
+  // from inside here would recurse through syncSelection().
+  openAncestors(id) {
     const { graph } = this.context;
-    const chain = ancestorsOf(graph, id);
     let changed = false;
 
-    chain.forEach((combo) => {
+    ancestorsOf(graph, id).forEach((combo) => {
       if (!this.isGroupOpen(combo)) {
         this.toggleGroupSilently(combo);
         changed = true;
       }
     });
 
-    if (changed) this.paint();
+    return changed;
+  }
+
+  // A selection made on the canvas marks and scrolls to its row, so the panel
+  // tracks where you are instead of drifting out of step.
+  watchGraph() {
+    const { graph } = this.context;
+
+    // No dedicated selection event, so watch the redraw that follows one.
+    this.followHandler = () => window.setTimeout(() => this.syncSelection(), 0);
+    try {
+      graph.on('afterdraw', this.followHandler);
+    } catch (e) {
+      // Without the hook the panel simply does not follow the canvas.
+    }
   }
 
   toggleGroupSilently(id) {
