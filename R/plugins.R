@@ -1868,7 +1868,12 @@ g6_search <- function(
 #' listed *before* this plugin, since they are built in order; without one the
 #' panel falls back to its own corner.
 #' @param open Start with the panel open.
-#' @param groupsOpen Start with the groups unfolded.
+#' @param groupsOpen Start with the groups unfolded. A group already collapsed on
+#' the canvas starts folded regardless, when `followCollapse` is on.
+#' @param followCollapse Follow the canvas: collapsing or expanding a group there
+#' folds or unfolds its rows here. One-way, so folding a group in the panel leaves
+#' the canvas alone and a group can be skimmed without redrawing the graph; the
+#' next collapse or expand on the canvas takes that fold back over.
 #' @param expandAncestors Expand collapsed combos on the way to a clicked
 #' element, as [g6_search()] does.
 #' @param select Also select the clicked element, so anything driven by selection
@@ -1906,6 +1911,7 @@ g6_outline <- function(
   anchor = c("canvas", "search"),
   open = TRUE,
   groupsOpen = TRUE,
+  followCollapse = TRUE,
   expandAncestors = TRUE,
   select = TRUE,
   labels = c(node = "node", combo = "combo", edge = "edge"),
@@ -1928,7 +1934,8 @@ g6_outline <- function(
     stop("'width' must be a single positive number")
   }
 
-  for (flag in c("open", "groupsOpen", "expandAncestors", "select")) {
+  flags <- c("open", "groupsOpen", "followCollapse", "expandAncestors", "select")
+  for (flag in flags) {
     value <- get(flag)
     if (!is.logical(value) || length(value) != 1) {
       stop("'", flag, "' must be a single logical value")

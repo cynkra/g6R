@@ -65,8 +65,6 @@ class Search extends BasePlugin {
 
     this.hits = [];
     this.active = -1;
-    // The element this box last selected, so the next pick can deselect it.
-    this.lastPick = null;
 
     // A pointerdown on the box must not reach the canvas, or the graph's own
     // behaviors (drag-canvas, click-select) treat it as a canvas interaction.
@@ -231,11 +229,10 @@ class Search extends BasePlugin {
 
     const { graph } = this.context;
 
-    this.lastPick = await goTo(graph, hit.id, {
+    await goTo(graph, hit.id, {
       expandAncestors: this.options.expandAncestors,
       select: this.options.select,
-      animation: this.options.animation,
-      previous: this.lastPick
+      animation: this.options.animation
     });
 
     // Report the pick so a Shiny app can react (reveal a panel, open an editor).
@@ -285,14 +282,20 @@ class Outline extends BasePlugin {
     // Where the panel lives: its own corner of the canvas, or hanging under the
     // search box as a dropdown, so the two read as one control.
     anchor: 'canvas',
+    // Mirror the canvas: collapsing a group there folds its rows here. A fold
+    // made in the panel still does not touch the canvas, so a group can be
+    // skimmed without redrawing the graph.
+    followCollapse: true,
     labels: { node: 'node', combo: 'combo', edge: 'edge' }
   };
 
   constructor(context, options) {
     super(context, Object.assign({}, Outline.defaultOptions, options));
-    this.openGroups = new Set();
+    // Folded state per group, filled in on first use from `groupsOpen` and the
+    // canvas. Explicit rather than a deviation-from-baseline set, so both the
+    // option and the canvas can drive it without one silently winning.
+    this.folded = new Map();
     this.rowsById = new Map();
-    this.lastPick = null;
     this.render();
     this.watchGraph();
   }
@@ -454,14 +457,69 @@ class Outline extends BasePlugin {
     if (this.open) this.syncSelection();
   }
 
+  isCollapsedOnCanvas(id) {
+    try {
+      return !!this.context.graph.getComboData(id)?.style?.collapsed;
+    } catch (e) {
+      return false;
+    }
+  }
+
+  // Folded or not, remembered per group. First asked, it starts from
+  // `groupsOpen` and from whether the canvas already has the group collapsed.
+  isFolded(id) {
+    if (!this.folded.has(id)) {
+      this.folded.set(
+        id,
+        this.options.groupsOpen === false ||
+          (this.options.followCollapse !== false && this.isCollapsedOnCanvas(id))
+      );
+    }
+    return this.folded.get(id);
+  }
+
   isGroupOpen(id) {
-    // `groupsOpen` is the starting state; `openGroups` records every deviation.
-    return this.openGroups.has(id) !== (this.options.groupsOpen !== false);
+    return !this.isFolded(id);
+  }
+
+  // Collapse state of every group on the canvas, to spot a change.
+  collapseKey() {
+    const { graph } = this.context;
+    try {
+      return (graph.getComboData() || [])
+        .map((d) => `${d.id}\u0001${d.style?.collapsed ? 1 : 0}`)
+        .sort()
+        .join('\u0002');
+    } catch (e) {
+      return this.lastCollapseKey ?? '';
+    }
+  }
+
+  // A group collapsed or expanded on the canvas takes the panel's fold with it,
+  // overriding whatever was folded here.
+  followCanvasCollapse(previous) {
+    const now = new Map(
+      this.collapseKey()
+        .split('\u0002')
+        .filter(Boolean)
+        .map((entry) => entry.split('\u0001'))
+    );
+    const before = new Map(
+      (previous || '')
+        .split('\u0002')
+        .filter(Boolean)
+        .map((entry) => entry.split('\u0001'))
+    );
+
+    now.forEach((state, id) => {
+      if (before.has(id) && before.get(id) !== state) {
+        this.folded.set(id, state === '1');
+      }
+    });
   }
 
   toggleGroup(id) {
-    if (this.openGroups.has(id)) this.openGroups.delete(id);
-    else this.openGroups.add(id);
+    this.folded.set(id, !this.isFolded(id));
     this.paint();
   }
 
@@ -542,11 +600,10 @@ class Outline extends BasePlugin {
   async go(entry) {
     const { graph } = this.context;
 
-    this.lastPick = await goTo(graph, entry.id, {
+    await goTo(graph, entry.id, {
       expandAncestors: this.options.expandAncestors,
       select: this.options.select,
-      animation: this.options.animation,
-      previous: this.lastPick
+      animation: this.options.animation
     });
 
     this.mark(entry.id);
@@ -609,8 +666,8 @@ class Outline extends BasePlugin {
     let changed = false;
 
     ancestorsOf(graph, id).forEach((combo) => {
-      if (!this.isGroupOpen(combo)) {
-        this.toggleGroupSilently(combo);
+      if (this.isFolded(combo)) {
+        this.unfoldSilently(combo);
         changed = true;
       }
     });
@@ -648,13 +705,27 @@ class Outline extends BasePlugin {
     const { graph } = this.context;
 
     this.lastKey = this.structureKey();
+    this.lastCollapseKey = this.collapseKey();
 
     const onDraw = () => {
       const key = this.structureKey();
+      const collapseKey = this.collapseKey();
+      let repaint = false;
+
       if (key !== this.lastKey) {
         this.lastKey = key;
-        this.paint();
+        repaint = true;
       }
+
+      if (collapseKey !== this.lastCollapseKey) {
+        if (this.options.followCollapse !== false) {
+          this.followCanvasCollapse(this.lastCollapseKey);
+        }
+        this.lastCollapseKey = collapseKey;
+        repaint = true;
+      }
+
+      if (repaint) this.paint();
       this.syncSelection();
     };
 
@@ -667,9 +738,8 @@ class Outline extends BasePlugin {
     }
   }
 
-  toggleGroupSilently(id) {
-    if (this.openGroups.has(id)) this.openGroups.delete(id);
-    else this.openGroups.add(id);
+  unfoldSilently(id) {
+    this.folded.set(id, false);
   }
 
   destroy() {

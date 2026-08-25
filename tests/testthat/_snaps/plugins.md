@@ -617,7 +617,7 @@
         ..$ directed        : logi TRUE
         ..$ maxCollapseDepth: num Inf
         ..$ plugins         :List of 1
-        .. ..$ :List of 11
+        .. ..$ :List of 12
         .. .. ..$ key            : chr "outline"
         .. .. ..$ title          : chr "Outline"
         .. .. ..$ position       : chr "top-right"
@@ -625,6 +625,7 @@
         .. .. ..$ anchor         : chr "canvas"
         .. .. ..$ open           : logi TRUE
         .. .. ..$ groupsOpen     : logi TRUE
+        .. .. ..$ followCollapse : logi TRUE
         .. .. ..$ expandAncestors: logi TRUE
         .. .. ..$ select         : logi TRUE
         .. .. ..$ labels         :List of 3

@@ -470,3 +470,9 @@ test_that("g6_outline can anchor under the search box", {
     c("search", "outline")
   )
 })
+
+test_that("g6_outline mirrors canvas collapse by default", {
+  expect_true(g6_outline()$followCollapse)
+  expect_false(g6_outline(followCollapse = FALSE)$followCollapse)
+  expect_error(g6_outline(followCollapse = "yes"), "'followCollapse'")
+})

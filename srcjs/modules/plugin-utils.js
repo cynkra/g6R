@@ -73,12 +73,17 @@ const deselect = (graph, id) => {
   }
 };
 
+// The element a panel last sent us to, per graph. Shared, not per plugin: with
+// a search box and an outline over the same graph, picking in one must clear
+// what the other selected, or selections accumulate across the two.
+const lastPickByGraph = new WeakMap();
+
 // Go to an element: open its collapsed ancestors, move the viewport, and select
-// it. `previous` is the element this panel selected last time, deselected first
-// so repeated picks do not pile up selections. Returns the id it selected, for
-// the caller to remember.
+// it. Whatever a panel selected last is deselected first, so repeated picks --
+// from either panel -- do not pile up selections.
 const goTo = async (graph, id, options = {}) => {
-  const { expandAncestors = true, select = true, animation, previous } = options;
+  const { expandAncestors = true, select = true, animation } = options;
+  const previous = lastPickByGraph.get(graph) ?? null;
 
   if (expandAncestors) await revealAncestors(graph, id);
 
@@ -88,16 +93,17 @@ const goTo = async (graph, id, options = {}) => {
     return previous ?? null;
   }
 
-  if (!select) return previous ?? null;
+  if (!select) return previous;
 
   if (previous && previous !== id) deselect(graph, previous);
 
   try {
     graph.setElementState({ [id]: SELECTED_STATE });
+    lastPickByGraph.set(graph, id);
     return id;
   } catch (e) {
     // Selection is a nicety; a failed state must not break navigation.
-    return previous ?? null;
+    return previous;
   }
 };
 

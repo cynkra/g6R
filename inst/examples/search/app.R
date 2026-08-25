@@ -15,7 +15,8 @@ library(g6R)
 # Hover a stage to get its collapse control (or double-click it), then search for
 # a block inside it: the search opens the stage on the way. That pairing is what
 # keeps a big workflow navigable, since collapsing is what makes it readable in
-# the first place. A collapsed stage still lists its blocks in the outline.
+# the first place. The outline follows: a stage collapsed on the canvas folds in
+# the panel too, while folding it in the panel alone leaves the canvas as it is.
 #
 # The groups start expanded because a combo collapsed before the first layout run
 # has no member positions to size itself from, and lands beside the source
@@ -104,9 +105,8 @@ for (g in seq_len(n_group)) {
       type = "rect",
       style = list(labelText = sprintf("%s stage", verbs[g])),
       # A collapse control on hover, so a stage can be shut without hunting for
-      # the double-click. Collapsing the canvas does not empty the outline: the
-      # panel lists the workflow either way, and searching into a shut stage
-      # opens it.
+      # the double-click. The outline folds with it, and searching into a shut
+      # stage opens both.
       collapse = g6_collapse_options(visibility = "hover")
     ))
   )

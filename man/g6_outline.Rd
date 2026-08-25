@@ -12,6 +12,7 @@ g6_outline(
   anchor = c("canvas", "search"),
   open = TRUE,
   groupsOpen = TRUE,
+  followCollapse = TRUE,
   expandAncestors = TRUE,
   select = TRUE,
   labels = c(node = "node", combo = "combo", edge = "edge"),
@@ -39,7 +40,13 @@ panel falls back to its own corner.}
 
 \item{open}{Start with the panel open.}
 
-\item{groupsOpen}{Start with the groups unfolded.}
+\item{groupsOpen}{Start with the groups unfolded. A group already collapsed on
+the canvas starts folded regardless, when \code{followCollapse} is on.}
+
+\item{followCollapse}{Follow the canvas: collapsing or expanding a group there
+folds or unfolds its rows here. One-way, so folding a group in the panel leaves
+the canvas alone and a group can be skimmed without redrawing the graph; the
+next collapse or expand on the canvas takes that fold back over.}
 
 \item{expandAncestors}{Expand collapsed combos on the way to a clicked
 element, as \code{\link[=g6_search]{g6_search()}} does.}
