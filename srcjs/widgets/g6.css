@@ -89,14 +89,24 @@
   border-radius: 2px;
 }
 
+/* Different shape, not just a different fill: a filled dot for a single
+   element against an open frame for a container. Telling those apart does not
+   depend on noticing a 1px border or a colour. */
 .g6-panel-glyph[data-type="node"] {
+  width: 8px;
+  height: 8px;
+  margin-top: 4px;
   background: #1783ff;
+  border-radius: 50%;
 }
 
 .g6-panel-glyph[data-type="combo"] {
-  background: rgb(23 131 255 / 12%);
-  border: 1px solid #1783ff;
-  border-radius: 3px;
+  width: 11px;
+  height: 9px;
+  margin-top: 3px;
+  background: transparent;
+  border: 1.5px solid #64748b;
+  border-radius: 2px;
 }
 
 .g6-panel-glyph[data-type="edge"] {

@@ -618,13 +618,48 @@ class Outline extends BasePlugin {
     return changed;
   }
 
-  // A selection made on the canvas marks and scrolls to its row, so the panel
-  // tracks where you are instead of drifting out of step.
+  // What the panel is a picture of: which elements exist, what each is called,
+  // and which group it sits in. Compared after every redraw so the list is
+  // rebuilt when the graph gains, loses or reparents something -- and only
+  // then, since repainting on every draw would fight scrolling and cost work on
+  // a large graph.
+  structureKey() {
+    const { graph } = this.context;
+
+    const describe = (data) =>
+      (data || [])
+        .map((d) => `${d.id}\u0001${parentOf(d) || ''}\u0001${labelOf(d)}`)
+        .sort()
+        .join('\u0002');
+
+    try {
+      return [describe(graph.getNodeData()), describe(graph.getComboData())].join(
+        '\u0003'
+      );
+    } catch (e) {
+      return this.lastKey ?? '';
+    }
+  }
+
+  // A redraw follows any change worth reacting to: a selection, or the graph
+  // itself gaining or losing elements. Both are handled here, so the panel
+  // tracks the canvas instead of drifting out of step.
   watchGraph() {
     const { graph } = this.context;
 
-    // No dedicated selection event, so watch the redraw that follows one.
-    this.followHandler = () => window.setTimeout(() => this.syncSelection(), 0);
+    this.lastKey = this.structureKey();
+
+    const onDraw = () => {
+      const key = this.structureKey();
+      if (key !== this.lastKey) {
+        this.lastKey = key;
+        this.paint();
+      }
+      this.syncSelection();
+    };
+
+    // No dedicated event for either, so watch the redraw that follows.
+    this.followHandler = () => window.setTimeout(onDraw, 0);
     try {
       graph.on('afterdraw', this.followHandler);
     } catch (e) {
