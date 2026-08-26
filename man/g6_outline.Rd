@@ -55,8 +55,8 @@ element, as \code{\link[=g6_search]{g6_search()}} does.}
 follows the panel.}
 
 \item{labels}{How to name each element type, as a named character vector over
-\code{"node"}, \code{"combo"} and \code{"edge"}. Only shown where a row has no group to show
-instead.}
+\code{"node"}, \code{"combo"} and \code{"edge"}. Names the unit in a group's count and in the
+accessible name of every row.}
 
 \item{animation}{Viewport animation passed to \code{focusElement()}.}
 
@@ -84,6 +84,10 @@ any element is still two clicks away.
 Folding a group in the panel is independent of collapsing it on the canvas, so
 the list can be explored without redrawing the graph. Selecting an element on
 the canvas marks and scrolls to its row, so the panel follows where you are.
+
+Each group row also reports how many elements it holds, counted through nested
+groups so the number means the same thing at every level, and reported for a
+folded group too: the count describes the graph, not the panel.
 }
 \examples{
 config <- g6_outline()

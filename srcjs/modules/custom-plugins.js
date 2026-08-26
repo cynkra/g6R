@@ -328,6 +328,17 @@ class Outline extends BasePlugin {
     return roots;
   }
 
+  // Elements a group holds, counted through nested groups so the number means
+  // the same thing at every level. Folded groups still report their contents:
+  // the count is about the graph, not about what the panel happens to show.
+  contentCount(id) {
+    return this.childrenOf(id).reduce(
+      (total, child) =>
+        total + (child.type === 'combo' ? this.contentCount(child.id) : 1),
+      0
+    );
+  }
+
   entry(id) {
     const { graph } = this.context;
     let type = 'node';
@@ -541,6 +552,9 @@ class Outline extends BasePlugin {
     const ul = document.createElement('ul');
     ul.className = `${OUTLINE_CLASS}-list`;
 
+    // Every row reserves the caret column, foldable or not: dropping it on
+    // leaf rows would pull them left of the parent they belong to, and buying
+    // that back with a wider indent costs exactly what the column did.
     this.inFlowOrder(this.childrenOf(parentId), parentId).forEach((entry) => {
       const li = document.createElement('li');
       li.className = `${OUTLINE_CLASS}-item`;
@@ -548,7 +562,7 @@ class Outline extends BasePlugin {
 
       const row = document.createElement('div');
       row.className = `${OUTLINE_CLASS}-row`;
-      row.style.paddingLeft = `${8 + depth * 14}px`;
+      row.style.setProperty(`--${OUTLINE_CLASS}-depth`, String(depth));
       row.dataset.id = entry.id;
 
       const isGroup = entry.type === 'combo';
@@ -579,7 +593,21 @@ class Outline extends BasePlugin {
       const { glyph, name, typeName } = elementRow(entry, this.options.labels);
       row.appendChild(glyph);
       row.appendChild(name);
-      row.setAttribute('aria-label', `${entry.label}, ${typeName}`);
+
+      let described = `${entry.label}, ${typeName}`;
+
+      if (isGroup) {
+        const total = this.contentCount(entry.id);
+        const count = document.createElement('span');
+        count.className = `${OUTLINE_CLASS}-count`;
+        count.textContent = String(total);
+        count.setAttribute('aria-hidden', 'true');
+        row.appendChild(count);
+        const unit = this.options.labels.node || 'node';
+        described += `, ${total} ${unit}${total === 1 ? '' : 's'}`;
+      }
+
+      row.setAttribute('aria-label', described);
       row.addEventListener('click', () => this.go(entry));
 
       li.appendChild(row);

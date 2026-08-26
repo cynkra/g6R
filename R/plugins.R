@@ -1856,6 +1856,10 @@ g6_search <- function(
 #' the list can be explored without redrawing the graph. Selecting an element on
 #' the canvas marks and scrolls to its row, so the panel follows where you are.
 #'
+#' Each group row also reports how many elements it holds, counted through nested
+#' groups so the number means the same thing at every level, and reported for a
+#' folded group too: the count describes the graph, not the panel.
+#'
 #' @param key Unique identifier for the plugin (string).
 #' @param title Text on the panel's toggle button.
 #' @param position Corner to render in: `"top-right"` (default), `"top-left"`,
@@ -1879,8 +1883,8 @@ g6_search <- function(
 #' @param select Also select the clicked element, so anything driven by selection
 #' follows the panel.
 #' @param labels How to name each element type, as a named character vector over
-#' `"node"`, `"combo"` and `"edge"`. Only shown where a row has no group to show
-#' instead.
+#' `"node"`, `"combo"` and `"edge"`. Names the unit in a group's count and in the
+#' accessible name of every row.
 #' @param animation Viewport animation passed to `focusElement()`.
 #' @param outputId Graph output id. When set (and running under Shiny), clicking
 #' a row sets `input$<outputId>-outlined_element` to a list with `id`, `type` and

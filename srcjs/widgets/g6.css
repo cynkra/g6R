@@ -52,7 +52,7 @@
 
 .g6-search-result {
   display: flex;
-  align-items: baseline;
+  align-items: center;
   justify-content: space-between;
   gap: 8px;
   padding: 5px 8px;
@@ -78,46 +78,40 @@
   font-size: 11px;
 }
 
-/* Type glyph: a filled square for a node, an outlined box for a combo, so the
-   two kinds are told apart by shape rather than by reading the label on the
-   right. */
+/* Type glyph: a drawn shape carrying the type, so the kinds are told apart
+   without reading the label on the right. One fixed column whatever the shape,
+   so labels line up down a list holding any mix of types. */
 .g6-panel-glyph {
   flex: none;
-  width: 10px;
-  height: 10px;
-  margin-top: 3px;
-  border-radius: 2px;
-}
-
-/* Different shape, not just a different fill: a filled dot for a single
-   element against an open frame for a container. Telling those apart does not
-   depend on noticing a 1px border or a colour. */
-.g6-panel-glyph[data-type="node"] {
-  width: 8px;
-  height: 8px;
-  margin-top: 4px;
-  background: #1783ff;
-  border-radius: 50%;
-}
-
-.g6-panel-glyph[data-type="combo"] {
   width: 11px;
-  height: 9px;
-  margin-top: 3px;
-  background: transparent;
-  border: 1.5px solid #64748b;
-  border-radius: 2px;
+  height: 11px;
+  color: #64748b;
+}
+
+.g6-panel-glyph svg {
+  display: block;
+  width: 11px;
+  height: 11px;
+  fill: currentcolor;
+}
+
+.g6-panel-glyph[data-type="node"] {
+  color: #1783ff;
 }
 
 .g6-panel-glyph[data-type="edge"] {
-  height: 2px;
-  margin-top: 7px;
-  background: #9ca3af;
-  border-radius: 0;
+  color: #9ca3af;
 }
 
 /* Outline panel: a list view of the graph over the canvas. */
 .g6-outline {
+  /* Row geometry in one place: the gutter before the first column, the caret
+     column, and the indent per level. The panel is narrow, so every pixel
+     spent here is width the labels do not get. */
+  --g6-outline-gutter: 4px;
+  --g6-outline-caret: 9px;
+  --g6-outline-indent: 10px;
+
   position: absolute;
   z-index: 10;
   font-family: inherit;
@@ -171,9 +165,13 @@
 
 .g6-outline-row {
   display: flex;
-  align-items: baseline;
-  gap: 5px;
-  padding: 2px 8px 2px 0;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 6px 2px
+    calc(
+      var(--g6-outline-gutter) +
+      var(--g6-outline-depth, 0) * var(--g6-outline-indent)
+    );
   line-height: 1.35;
   cursor: pointer;
 }
@@ -189,10 +187,21 @@
 
 .g6-outline-caret {
   flex: none;
-  width: 12px;
+  width: var(--g6-outline-caret);
   color: #6b7280;
-  font-size: 10px;
-  line-height: 1.4;
+  font-size: 9px;
+  line-height: 1.55;
   text-align: center;
   cursor: pointer;
+}
+
+/* How many elements a group holds, parked in the empty right-hand space so it
+   costs the label nothing. Tabular figures keep the column steady. */
+.g6-outline-count {
+  flex: none;
+  margin-left: auto;
+  padding-left: 6px;
+  color: #6b7280;
+  font-size: 11px;
+  font-variant-numeric: tabular-nums;
 }

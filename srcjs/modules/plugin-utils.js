@@ -107,14 +107,35 @@ const goTo = async (graph, id, options = {}) => {
   }
 };
 
+// Glyph shapes, drawn rather than approximated with a styled box: a dot for a
+// single element, a folder for a container, a rule for a connection. At this
+// size a bordered box just reads as another node, so a container needs an
+// outline nobody has to decode. Static markup, no interpolation.
+const GLYPH_SHAPES = {
+  node: '<circle cx="8" cy="8" r="4"/>',
+  combo:
+    '<path d="M2 13.2V4.8c0-.44.36-.8.8-.8h3.05c.27 0 .52.13.67.36' +
+    'l.83 1.24H13.2c.44 0 .8.36.8.8v6.8c0 .44-.36.8-.8.8H2.8' +
+    'a.8.8 0 0 1-.8-.8Z"/>',
+  edge: '<rect x="1.5" y="7.25" width="13" height="1.5" rx=".75"/>'
+};
+
+const glyphFor = (type) => {
+  const glyph = document.createElement('span');
+  glyph.className = 'g6-panel-glyph';
+  glyph.dataset.type = type;
+  glyph.setAttribute('aria-hidden', 'true');
+  glyph.innerHTML = `<svg viewBox="0 0 16 16" focusable="false">${
+    GLYPH_SHAPES[type] || GLYPH_SHAPES.node
+  }</svg>`;
+  return glyph;
+};
+
 // One row of a list of elements: a glyph carrying the type by shape, the label,
 // and context on the right (the group it lives in, or failing that the kind of
 // thing it is, named as the consumer chose).
 const elementRow = (hit, labels = {}) => {
-  const glyph = document.createElement('span');
-  glyph.className = 'g6-panel-glyph';
-  glyph.dataset.type = hit.type;
-  glyph.setAttribute('aria-hidden', 'true');
+  const glyph = glyphFor(hit.type);
 
   const name = document.createElement('span');
   name.className = 'g6-panel-label';
