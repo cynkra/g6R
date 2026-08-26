@@ -1701,6 +1701,279 @@ minimap <- function(
   dropNulls(c(config, list(...)))
 }
 
+#' Search box to navigate a large graph
+#'
+#' Renders a search box over the canvas: type to match nodes and combos by
+#' label or id, pick one, and the viewport moves to it. G6 ships no search UI,
+#' so `g6_search()` adds one on top of [g6_focus_nodes()]'s underlying
+#' `focusElement()`.
+#'
+#' Matching runs in the browser, so the box works in a plain widget (a Quarto
+#' document, a pkgdown page, a vignette) and not only in a Shiny app, and it does
+#' not wait on the server between keystrokes. Under Shiny the pick is also
+#' reported as an input when `outputId` is given.
+#'
+#' @param key Unique identifier for the plugin (string).
+#' @param placeholder Placeholder shown in the empty box.
+#' @param limit Maximum number of matches listed.
+#' @param elements Element types to search, any of `"node"`, `"combo"` and
+#' `"edge"`. Edges are rarely worth searching, so they are off by default.
+#' @param expandAncestors Expand collapsed combos on the way to a match. A node
+#' inside a collapsed combo has nowhere on screen to focus, so leaving this on
+#' is what makes search useful on a board whose groups are collapsed.
+#' @param select Also select the picked element, so anything driven by selection
+#' (a sidebar, a details panel) follows the search.
+#' @param position Corner to render in: `"top-left"` (default), `"top-right"`,
+#' `"bottom-left"` or `"bottom-right"`.
+#' @param labels How to name each element type in the results, as a named
+#' character vector over `"node"`, `"combo"` and `"edge"`. `"combo"` is g6
+#' jargon, so an app that calls them something else ("stack", "stage", "group")
+#' should say so here. Only used where a match has no group to show instead.
+#' @param width Width of the box, in px.
+#' @param animation Viewport animation passed to `focusElement()`, e.g.
+#' `list(duration = 500, easing = "ease-in")`. `NULL` uses G6's default.
+#' @param outputId Graph output id. When set (and running under Shiny), picking a
+#' match sets `input$<outputId>-searched_element` to a list with `id`, `type` and
+#' `label`.
+#' @param onSelect Optional [JS()] callback `(hit, graph) => {}` run after the
+#' viewport has moved, for anything beyond focus and select.
+#' @param ... Additional parameters passed to the plugin configuration.
+#'
+#' @return A list with the configuration for the search plugin.
+#' @export
+#'
+#' @examples
+#' # Nodes and combos, focusing the pick
+#' config <- g6_search()
+#'
+#' # Report the pick to Shiny, and keep collapsed groups closed
+#' config <- g6_search(
+#'   outputId = "graph",
+#'   expandAncestors = FALSE,
+#'   position = "top-right"
+#' )
+#'
+#' # Name the element types the way the app does
+#' config <- g6_search(labels = c(node = "block", combo = "stack"))
+g6_search <- function(
+  key = "search",
+  placeholder = "Search",
+  limit = 8,
+  elements = c("node", "combo"),
+  expandAncestors = TRUE,
+  select = TRUE,
+  position = c("top-left", "top-right", "bottom-left", "bottom-right"),
+  labels = c(node = "node", combo = "combo", edge = "edge"),
+  width = 220,
+  animation = NULL,
+  outputId = NULL,
+  onSelect = NULL,
+  ...
+) {
+  position <- match.arg(position)
+
+  if (!is.character(key) || length(key) != 1) {
+    stop("'key' must be a single string")
+  }
+
+  if (!is.character(placeholder) || length(placeholder) != 1) {
+    stop("'placeholder' must be a single string")
+  }
+
+  if (!is.numeric(limit) || length(limit) != 1 || limit < 1) {
+    stop("'limit' must be a single positive number")
+  }
+
+  if (!is.character(elements) || !length(elements)) {
+    stop("'elements' must be a character vector")
+  }
+
+  unknown <- setdiff(elements, c("node", "combo", "edge"))
+  if (length(unknown)) {
+    stop(
+      "'elements' must only contain 'node', 'combo' or 'edge', not ",
+      paste0("'", unknown, "'", collapse = ", ")
+    )
+  }
+
+  if (!is.logical(expandAncestors) || length(expandAncestors) != 1) {
+    stop("'expandAncestors' must be a single logical value")
+  }
+
+  if (!is.logical(select) || length(select) != 1) {
+    stop("'select' must be a single logical value")
+  }
+
+  if (!is.numeric(width) || length(width) != 1 || width <= 0) {
+    stop("'width' must be a single positive number")
+  }
+
+  if (
+    !is.character(labels) ||
+      is.null(names(labels)) ||
+      !all(names(labels) %in% c("node", "combo", "edge")) ||
+      anyDuplicated(names(labels))
+  ) {
+    stop(
+      "'labels' must be a named character vector over 'node', 'combo' and 'edge'"
+    )
+  }
+
+  if (!is.null(animation) && !is.list(animation) && !is_js(animation)) {
+    stop("'animation' must be a list or a JS() object")
+  }
+
+  if (!is.null(outputId) && (!is.character(outputId) || length(outputId) != 1)) {
+    stop("'outputId' must be a single string")
+  }
+
+  if (!is.null(onSelect) && !is_js(onSelect)) {
+    stop("'onSelect' must be a JavaScript function wrapped with JS()")
+  }
+
+  arg_names <- names(formals())
+  arg_names <- arg_names[arg_names != "..."]
+  config <- mget(arg_names)
+  config$labels <- as.list(labels)
+  config$type <- "search"
+
+  dropNulls(c(config, list(...)))
+}
+
+#' Outline panel listing the graph
+#'
+#' Renders a panel over the canvas listing the graph as a tree: each combo is an
+#' accordion holding its members, and clicking a row moves the viewport to that
+#' element. Where [g6_search()] answers "take me to the thing I am looking for",
+#' an outline answers "show me what is in here", which is the question a large
+#' graph usually raises.
+#'
+#' It also makes collapsing the canvas safe: with everything listed, the drawing
+#' no longer has to be legible at fit-to-view, so groups can stay collapsed and
+#' any element is still two clicks away.
+#'
+#' Folding a group in the panel is independent of collapsing it on the canvas, so
+#' the list can be explored without redrawing the graph. Selecting an element on
+#' the canvas marks and scrolls to its row, so the panel follows where you are.
+#'
+#' Each group row also reports how many elements it holds, counted through nested
+#' groups so the number means the same thing at every level, and reported for a
+#' folded group too: the count describes the graph, not the panel.
+#'
+#' @param key Unique identifier for the plugin (string).
+#' @param title Text on the panel's toggle button.
+#' @param position Corner to render in: `"top-right"` (default), `"top-left"`,
+#' `"bottom-left"` or `"bottom-right"`.
+#' @param width Width of the panel, in px. Ignored when anchored to the search
+#' box, where the width comes from that box.
+#' @param anchor Where the panel lives: `"canvas"` (default) puts it in the
+#' corner named by `position`; `"search"` hangs it under [g6_search()]'s box as a
+#' dropdown, so the two read as one control. Anchoring needs a `g6_search()`
+#' listed *before* this plugin, since they are built in order; without one the
+#' panel falls back to its own corner.
+#' @param open Start with the panel open.
+#' @param groupsOpen Start with the groups unfolded. A group already collapsed on
+#' the canvas starts folded regardless, when `followCollapse` is on.
+#' @param followCollapse Follow the canvas: collapsing or expanding a group there
+#' folds or unfolds its rows here. One-way, so folding a group in the panel leaves
+#' the canvas alone and a group can be skimmed without redrawing the graph; the
+#' next collapse or expand on the canvas takes that fold back over.
+#' @param expandAncestors Expand collapsed combos on the way to a clicked
+#' element, as [g6_search()] does.
+#' @param select Also select the clicked element, so anything driven by selection
+#' follows the panel.
+#' @param labels How to name each element type, as a named character vector over
+#' `"node"`, `"combo"` and `"edge"`. Names the unit in a group's count and in the
+#' accessible name of every row.
+#' @param animation Viewport animation passed to `focusElement()`.
+#' @param outputId Graph output id. When set (and running under Shiny), clicking
+#' a row sets `input$<outputId>-outlined_element` to a list with `id`, `type` and
+#' `label`.
+#' @param ... Additional parameters passed to the plugin configuration.
+#'
+#' @return A list with the configuration for the outline plugin.
+#' @seealso [g6_search()] to jump straight to a named element.
+#' @export
+#'
+#' @examples
+#' config <- g6_outline()
+#'
+#' # As a dropdown under the search box, closed until asked for
+#' config <- g6_outline(anchor = "search", open = FALSE, title = "Contents")
+#'
+#' # Start folded, and name the types the way the app does
+#' config <- g6_outline(
+#'   groupsOpen = FALSE,
+#'   labels = c(node = "block", combo = "stack"),
+#'   outputId = "graph"
+#' )
+g6_outline <- function(
+  key = "outline",
+  title = "Outline",
+  position = c("top-right", "top-left", "bottom-left", "bottom-right"),
+  width = 240,
+  anchor = c("canvas", "search"),
+  open = TRUE,
+  groupsOpen = TRUE,
+  followCollapse = TRUE,
+  expandAncestors = TRUE,
+  select = TRUE,
+  labels = c(node = "node", combo = "combo", edge = "edge"),
+  animation = NULL,
+  outputId = NULL,
+  ...
+) {
+  position <- match.arg(position)
+  anchor <- match.arg(anchor)
+
+  if (!is.character(key) || length(key) != 1) {
+    stop("'key' must be a single string")
+  }
+
+  if (!is.character(title) || length(title) != 1) {
+    stop("'title' must be a single string")
+  }
+
+  if (!is.numeric(width) || length(width) != 1 || width <= 0) {
+    stop("'width' must be a single positive number")
+  }
+
+  flags <- c("open", "groupsOpen", "followCollapse", "expandAncestors", "select")
+  for (flag in flags) {
+    value <- get(flag)
+    if (!is.logical(value) || length(value) != 1) {
+      stop("'", flag, "' must be a single logical value")
+    }
+  }
+
+  if (
+    !is.character(labels) ||
+      is.null(names(labels)) ||
+      !all(names(labels) %in% c("node", "combo", "edge")) ||
+      anyDuplicated(names(labels))
+  ) {
+    stop(
+      "'labels' must be a named character vector over 'node', 'combo' and 'edge'"
+    )
+  }
+
+  if (!is.null(animation) && !is.list(animation) && !is_js(animation)) {
+    stop("'animation' must be a list or a JS() object")
+  }
+
+  if (!is.null(outputId) && (!is.character(outputId) || length(outputId) != 1)) {
+    stop("'outputId' must be a single string")
+  }
+
+  arg_names <- names(formals())
+  arg_names <- arg_names[arg_names != "..."]
+  config <- mget(arg_names)
+  config$labels <- as.list(labels)
+  config$type <- "outline"
+
+  dropNulls(c(config, list(...)))
+}
+
 #' Configure Snapline Plugin
 #'
 #' Creates a configuration object for the snapline plugin in G6.
@@ -2503,6 +2776,8 @@ valid_plugins <- c(
   "hull" = hull,
   "legend" = legend,
   "minimap" = minimap,
+  "outline" = g6_outline,
+  "search" = g6_search,
   "snapline" = snapline,
   "timebar" = timebar,
   "toolbar" = toolbar,

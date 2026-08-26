@@ -295,3 +295,184 @@ test_that("plugin complex configurations work", {
   )
   expect_type(watermark_complex, "list")
 })
+
+test_that("g6_search builds a search plugin config", {
+  cfg <- g6_search()
+
+  expect_type(cfg, "list")
+  expect_identical(cfg$type, "search")
+  expect_identical(cfg$key, "search")
+  expect_identical(cfg$position, "top-left")
+  expect_identical(cfg$elements, c("node", "combo"))
+  expect_true(cfg$expandAncestors)
+  expect_true(cfg$select)
+
+  # NULLs are dropped, so an unset callback carries nothing.
+  expect_false("onSelect" %in% names(cfg))
+  expect_false("outputId" %in% names(cfg))
+})
+
+test_that("g6_search forwards its options", {
+  cfg <- g6_search(
+    key = "find",
+    placeholder = "Find a block",
+    limit = 20,
+    elements = "combo",
+    expandAncestors = FALSE,
+    select = FALSE,
+    position = "bottom-right",
+    width = 320,
+    animation = list(duration = 200),
+    outputId = "graph",
+    onSelect = JS("(hit) => console.log(hit)")
+  )
+
+  expect_identical(cfg$key, "find")
+  expect_identical(cfg$placeholder, "Find a block")
+  expect_identical(cfg$limit, 20)
+  expect_identical(cfg$elements, "combo")
+  expect_false(cfg$expandAncestors)
+  expect_false(cfg$select)
+  expect_identical(cfg$position, "bottom-right")
+  expect_identical(cfg$width, 320)
+  expect_identical(cfg$animation, list(duration = 200))
+  expect_identical(cfg$outputId, "graph")
+  expect_s3_class(cfg$onSelect, "JS_EVAL")
+})
+
+test_that("g6_search validates its options", {
+  expect_error(g6_search(position = "middle"))
+  expect_error(g6_search(limit = 0))
+  expect_error(g6_search(limit = c(1, 2)))
+  expect_error(g6_search(elements = "block"), "node")
+  expect_error(g6_search(elements = character()))
+  expect_error(g6_search(expandAncestors = "yes"))
+  expect_error(g6_search(select = NA_character_))
+  expect_error(g6_search(width = -1))
+  expect_error(g6_search(placeholder = c("a", "b")))
+  expect_error(g6_search(outputId = 1))
+  expect_error(g6_search(onSelect = "not js"))
+  expect_error(g6_search(animation = "fast"))
+})
+
+test_that("the search plugin is accepted by g6_plugins()", {
+  # It has to be in the registry, or `validate_component()` rejects it.
+  expect_true("search" %in% names(valid_plugins))
+
+  g <- g6(nodes = data.frame(id = c("a", "b"))) |>
+    g6_plugins(g6_search())
+
+  expect_identical(g$x$plugins[[1]]$type, "search")
+
+  # The string form resolves through the registry too.
+  expect_identical(
+    (g6(nodes = data.frame(id = "a")) |> g6_plugins("search"))$x$plugins[[1]]$type,
+    "search"
+  )
+})
+
+test_that("g6_search names the element types", {
+  cfg <- g6_search()
+  expect_identical(cfg$labels, list(node = "node", combo = "combo", edge = "edge"))
+
+  # A named vector must reach the client as an object, not an array.
+  cfg <- g6_search(labels = c(node = "block", combo = "stack"))
+  expect_identical(cfg$labels, list(node = "block", combo = "stack"))
+
+  expect_error(g6_search(labels = "block"), "named character vector")
+  expect_error(g6_search(labels = c(block = "block")), "named character vector")
+  expect_error(g6_search(labels = c(node = 1)), "named character vector")
+  expect_error(
+    g6_search(labels = c(node = "a", node = "b")),
+    "named character vector"
+  )
+})
+
+test_that("g6_outline builds an outline plugin config", {
+  cfg <- g6_outline()
+
+  expect_type(cfg, "list")
+  expect_identical(cfg$type, "outline")
+  expect_identical(cfg$key, "outline")
+  expect_identical(cfg$title, "Outline")
+  expect_identical(cfg$position, "top-right")
+  expect_true(cfg$open)
+  expect_true(cfg$groupsOpen)
+  expect_true(cfg$expandAncestors)
+  expect_true(cfg$select)
+  expect_identical(cfg$labels, list(node = "node", combo = "combo", edge = "edge"))
+  expect_false("outputId" %in% names(cfg))
+})
+
+test_that("g6_outline forwards its options", {
+  cfg <- g6_outline(
+    key = "tree",
+    title = "Workflow",
+    position = "bottom-left",
+    width = 320,
+    open = FALSE,
+    groupsOpen = FALSE,
+    expandAncestors = FALSE,
+    select = FALSE,
+    labels = c(node = "block", combo = "stage"),
+    animation = list(duration = 300),
+    outputId = "graph"
+  )
+
+  expect_identical(cfg$key, "tree")
+  expect_identical(cfg$title, "Workflow")
+  expect_identical(cfg$position, "bottom-left")
+  expect_identical(cfg$width, 320)
+  expect_false(cfg$open)
+  expect_false(cfg$groupsOpen)
+  expect_false(cfg$expandAncestors)
+  expect_false(cfg$select)
+  expect_identical(cfg$labels, list(node = "block", combo = "stage"))
+  expect_identical(cfg$animation, list(duration = 300))
+  expect_identical(cfg$outputId, "graph")
+})
+
+test_that("g6_outline validates its options", {
+  expect_error(g6_outline(position = "middle"))
+  expect_error(g6_outline(width = 0))
+  expect_error(g6_outline(title = c("a", "b")))
+  expect_error(g6_outline(open = "yes"), "'open'")
+  expect_error(g6_outline(groupsOpen = NA_character_), "'groupsOpen'")
+  expect_error(g6_outline(expandAncestors = 1), "'expandAncestors'")
+  expect_error(g6_outline(select = c(TRUE, FALSE)), "'select'")
+  expect_error(g6_outline(labels = "block"), "named character vector")
+  expect_error(g6_outline(animation = "fast"))
+  expect_error(g6_outline(outputId = 1))
+})
+
+test_that("the outline plugin is accepted by g6_plugins()", {
+  expect_true("outline" %in% names(valid_plugins))
+
+  g <- g6(nodes = data.frame(id = c("a", "b"))) |>
+    g6_plugins(g6_outline(), g6_search())
+
+  expect_setequal(
+    vapply(g$x$plugins, function(p) p$type, character(1)),
+    c("outline", "search")
+  )
+})
+
+test_that("g6_outline can anchor under the search box", {
+  expect_identical(g6_outline()$anchor, "canvas")
+  expect_identical(g6_outline(anchor = "search")$anchor, "search")
+  expect_error(g6_outline(anchor = "sidebar"))
+
+  # Anchoring needs the search box built first, so order matters.
+  g <- g6(nodes = data.frame(id = "a")) |>
+    g6_plugins(g6_search(), g6_outline(anchor = "search"))
+  expect_identical(
+    vapply(g$x$plugins, function(p) p$type, character(1)),
+    c("search", "outline")
+  )
+})
+
+test_that("g6_outline mirrors canvas collapse by default", {
+  expect_true(g6_outline()$followCollapse)
+  expect_false(g6_outline(followCollapse = FALSE)$followCollapse)
+  expect_error(g6_outline(followCollapse = "yes"), "'followCollapse'")
+})

@@ -12,12 +12,12 @@
       g6_plugins(g6(), "blabla")
     Condition
       Error in `validate_component()`:
-      ! 'blabla' is not a valid plugin. Valid choices are: background, bubble-sets, contextmenu, edge-bundling, edge-filter-lens, fisheye, fullscreen, grid-line, history, hull, legend, minimap, snapline, timebar, toolbar, tooltip, watermark.
+      ! 'blabla' is not a valid plugin. Valid choices are: background, bubble-sets, contextmenu, edge-bundling, edge-filter-lens, fisheye, fullscreen, grid-line, history, hull, legend, minimap, outline, search, snapline, timebar, toolbar, tooltip, watermark.
     Code
       g6_plugins(g6(), list(test = 1))
     Condition
       Error in `validate_component()`:
-      ! 'unknown' is not a valid plugin. Valid choices are: background, bubble-sets, contextmenu, edge-bundling, edge-filter-lens, fisheye, fullscreen, grid-line, history, hull, legend, minimap, snapline, timebar, toolbar, tooltip, watermark.
+      ! 'unknown' is not a valid plugin. Valid choices are: background, bubble-sets, contextmenu, edge-bundling, edge-filter-lens, fisheye, fullscreen, grid-line, history, hull, legend, minimap, outline, search, snapline, timebar, toolbar, tooltip, watermark.
 
 # individual plugin functions work correctly
 
@@ -570,6 +570,130 @@
         .. .. ..$ shape   : chr "key"
         .. .. ..$ size    : num [1:2] 240 160
         .. .. ..$ type    : chr "minimap"
+       $ width        : chr "100%"
+       $ height       : NULL
+       $ sizingPolicy :List of 7
+        ..$ defaultWidth : NULL
+        ..$ defaultHeight: NULL
+        ..$ padding      : NULL
+        ..$ fill         : NULL
+        ..$ viewer       :List of 6
+        .. ..$ defaultWidth : NULL
+        .. ..$ defaultHeight: NULL
+        .. ..$ padding      : NULL
+        .. ..$ fill         : logi TRUE
+        .. ..$ suppress     : logi FALSE
+        .. ..$ paneHeight   : NULL
+        ..$ browser      :List of 5
+        .. ..$ defaultWidth : NULL
+        .. ..$ defaultHeight: NULL
+        .. ..$ padding      : NULL
+        .. ..$ fill         : logi FALSE
+        .. ..$ external     : logi FALSE
+        ..$ knitr        :List of 3
+        .. ..$ defaultWidth : NULL
+        .. ..$ defaultHeight: NULL
+        .. ..$ figure       : logi TRUE
+       $ dependencies : NULL
+       $ elementId    : NULL
+       $ preRenderHook: NULL
+       $ jsHooks      : list()
+       - attr(*, "class")= chr [1:2] "g6" "htmlwidget"
+       - attr(*, "package")= chr "g6R"
+
+---
+
+    Code
+      str(g6_plugins(g6(), plugin))
+    Output
+      List of 8
+       $ x            :List of 8
+        ..$ data            : list()
+        .. ..- attr(*, "class")= chr "g6_data"
+        ..$ jsonUrl         : NULL
+        ..$ iconsUrl        : chr "//at.alicdn.com/t/font_2678727_za4qjydwkkh.js"
+        ..$ mode            : chr "prod"
+        ..$ preservePosition: logi FALSE
+        ..$ directed        : logi TRUE
+        ..$ maxCollapseDepth: num Inf
+        ..$ plugins         :List of 1
+        .. ..$ :List of 12
+        .. .. ..$ key            : chr "outline"
+        .. .. ..$ title          : chr "Outline"
+        .. .. ..$ position       : chr "top-right"
+        .. .. ..$ width          : num 240
+        .. .. ..$ anchor         : chr "canvas"
+        .. .. ..$ open           : logi TRUE
+        .. .. ..$ groupsOpen     : logi TRUE
+        .. .. ..$ followCollapse : logi TRUE
+        .. .. ..$ expandAncestors: logi TRUE
+        .. .. ..$ select         : logi TRUE
+        .. .. ..$ labels         :List of 3
+        .. .. .. ..$ node : chr "node"
+        .. .. .. ..$ combo: chr "combo"
+        .. .. .. ..$ edge : chr "edge"
+        .. .. ..$ type           : chr "outline"
+       $ width        : chr "100%"
+       $ height       : NULL
+       $ sizingPolicy :List of 7
+        ..$ defaultWidth : NULL
+        ..$ defaultHeight: NULL
+        ..$ padding      : NULL
+        ..$ fill         : NULL
+        ..$ viewer       :List of 6
+        .. ..$ defaultWidth : NULL
+        .. ..$ defaultHeight: NULL
+        .. ..$ padding      : NULL
+        .. ..$ fill         : logi TRUE
+        .. ..$ suppress     : logi FALSE
+        .. ..$ paneHeight   : NULL
+        ..$ browser      :List of 5
+        .. ..$ defaultWidth : NULL
+        .. ..$ defaultHeight: NULL
+        .. ..$ padding      : NULL
+        .. ..$ fill         : logi FALSE
+        .. ..$ external     : logi FALSE
+        ..$ knitr        :List of 3
+        .. ..$ defaultWidth : NULL
+        .. ..$ defaultHeight: NULL
+        .. ..$ figure       : logi TRUE
+       $ dependencies : NULL
+       $ elementId    : NULL
+       $ preRenderHook: NULL
+       $ jsHooks      : list()
+       - attr(*, "class")= chr [1:2] "g6" "htmlwidget"
+       - attr(*, "package")= chr "g6R"
+
+---
+
+    Code
+      str(g6_plugins(g6(), plugin))
+    Output
+      List of 8
+       $ x            :List of 8
+        ..$ data            : list()
+        .. ..- attr(*, "class")= chr "g6_data"
+        ..$ jsonUrl         : NULL
+        ..$ iconsUrl        : chr "//at.alicdn.com/t/font_2678727_za4qjydwkkh.js"
+        ..$ mode            : chr "prod"
+        ..$ preservePosition: logi FALSE
+        ..$ directed        : logi TRUE
+        ..$ maxCollapseDepth: num Inf
+        ..$ plugins         :List of 1
+        .. ..$ :List of 10
+        .. .. ..$ key            : chr "search"
+        .. .. ..$ placeholder    : chr "Search"
+        .. .. ..$ limit          : num 8
+        .. .. ..$ elements       : chr [1:2] "node" "combo"
+        .. .. ..$ expandAncestors: logi TRUE
+        .. .. ..$ select         : logi TRUE
+        .. .. ..$ position       : chr "top-left"
+        .. .. ..$ labels         :List of 3
+        .. .. .. ..$ node : chr "node"
+        .. .. .. ..$ combo: chr "combo"
+        .. .. .. ..$ edge : chr "edge"
+        .. .. ..$ width          : num 220
+        .. .. ..$ type           : chr "search"
        $ width        : chr "100%"
        $ height       : NULL
        $ sizingPolicy :List of 7

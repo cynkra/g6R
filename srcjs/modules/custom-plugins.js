@@ -1,0 +1,787 @@
+import { BasePlugin } from '@antv/g6';
+import {
+  SELECTED_STATE,
+  labelOf,
+  parentOf,
+  elementDatum,
+  ancestorsOf,
+  goTo,
+  elementRow
+} from './plugin-utils';
+
+// Search box for navigating a large graph.
+//
+// G6 ships no search UI, but it does expose everything one needs: element data
+// to match against and `focusElement()` to move the viewport. This renders a
+// small input over the canvas, filters elements client-side as you type, and
+// focuses the pick. Client-side on purpose: it works in a plain widget (Quarto,
+// pkgdown, a vignette) and not only under Shiny, and it does not wait on a
+// server round-trip per keystroke.
+const CONTAINER_CLASS = 'g6-search';
+
+class Search extends BasePlugin {
+  static defaultOptions = {
+    placeholder: 'Search',
+    limit: 8,
+    elements: ['node', 'combo'],
+    expandAncestors: true,
+    select: true,
+    position: 'top-left',
+    width: 220,
+    labels: { node: 'node', combo: 'combo', edge: 'edge' }
+  };
+
+  constructor(context, options) {
+    super(context, Object.assign({}, Search.defaultOptions, options));
+    this.render();
+  }
+
+  // --- DOM ------------------------------------------------------------------
+
+  render() {
+    const { canvas } = this.context;
+    const container = canvas.getContainer();
+    if (!container) return;
+
+    const box = document.createElement('div');
+    box.className = CONTAINER_CLASS;
+    box.dataset.position = this.options.position;
+    box.style.width = `${this.options.width}px`;
+
+    this.$input = document.createElement('input');
+    this.$input.type = 'search';
+    this.$input.className = `${CONTAINER_CLASS}-input`;
+    this.$input.placeholder = this.options.placeholder;
+    this.$input.setAttribute('aria-label', this.options.placeholder);
+
+    this.$results = document.createElement('ul');
+    this.$results.className = `${CONTAINER_CLASS}-results`;
+    this.$results.setAttribute('role', 'listbox');
+
+    box.appendChild(this.$input);
+    box.appendChild(this.$results);
+    container.appendChild(box);
+    this.$element = box;
+
+    this.hits = [];
+    this.active = -1;
+
+    // A pointerdown on the box must not reach the canvas, or the graph's own
+    // behaviors (drag-canvas, click-select) treat it as a canvas interaction.
+    ['pointerdown', 'click', 'wheel'].forEach((type) => {
+      box.addEventListener(type, (e) => e.stopPropagation());
+    });
+
+    this.$input.addEventListener('input', () => this.update());
+    this.$input.addEventListener('keydown', (e) => this.onKeyDown(e));
+    this.$input.addEventListener('blur', () => {
+      // Deferred: a click on a result fires after blur and needs the list.
+      setTimeout(() => this.close(), 150);
+    });
+  }
+
+  // --- matching -------------------------------------------------------------
+
+  candidates() {
+    const { graph } = this.context;
+    const want = this.options.elements;
+    const out = [];
+
+    // Combo labels, so a node can show the group it lives in. On a graph where
+    // many blocks share a name, that context is what tells two matches apart.
+    const comboLabel = {};
+    (graph.getComboData() || []).forEach((d) => {
+      comboLabel[d.id] = labelOf(d);
+    });
+
+    if (want.includes('node')) {
+      (graph.getNodeData() || []).forEach((d) => {
+        const parent = parentOf(d);
+        out.push({
+          id: d.id,
+          label: labelOf(d),
+          type: 'node',
+          context: parent ? comboLabel[parent] || parent : null
+        });
+      });
+    }
+    if (want.includes('combo')) {
+      (graph.getComboData() || []).forEach((d) =>
+        out.push({ id: d.id, label: labelOf(d), type: 'combo', context: null })
+      );
+    }
+    if (want.includes('edge')) {
+      (graph.getEdgeData() || []).forEach((d) =>
+        out.push({ id: d.id, label: labelOf(d), type: 'edge', context: null })
+      );
+    }
+
+    return out;
+  }
+
+  // Groups before blocks, so the two kinds never interleave in the list.
+  typeRank(type) {
+    return { combo: 0, node: 1, edge: 2 }[type] ?? 3;
+  }
+
+  search(term) {
+    const needle = term.trim().toLowerCase();
+    if (!needle) return [];
+
+    const scored = [];
+    this.candidates().forEach((c) => {
+      const label = String(c.label).toLowerCase();
+      const id = String(c.id).toLowerCase();
+      // Prefer a label hit over an id hit, and a prefix over a substring, so
+      // typing the start of a name puts it first.
+      let rank = -1;
+      if (label.startsWith(needle)) rank = 0;
+      else if (label.includes(needle)) rank = 1;
+      else if (id.startsWith(needle)) rank = 2;
+      else if (id.includes(needle)) rank = 3;
+      if (rank >= 0) scored.push(Object.assign({ rank }, c));
+    });
+
+    scored.sort(
+      (a, b) =>
+        this.typeRank(a.type) - this.typeRank(b.type) ||
+        a.rank - b.rank ||
+        a.label.localeCompare(b.label)
+    );
+    return scored.slice(0, this.options.limit);
+  }
+
+  update() {
+    this.hits = this.search(this.$input.value);
+    this.active = this.hits.length ? 0 : -1;
+    this.paint();
+  }
+
+  paint() {
+    this.$results.innerHTML = '';
+    this.$results.style.display = this.hits.length ? 'block' : 'none';
+
+    this.hits.forEach((hit, i) => {
+      const li = document.createElement('li');
+      li.className = `${CONTAINER_CLASS}-result`;
+      li.setAttribute('role', 'option');
+      li.setAttribute('aria-selected', String(i === this.active));
+      if (i === this.active) li.dataset.active = 'true';
+
+      const { glyph, name, kind, typeName } = elementRow(hit, this.options.labels);
+
+      // Screen readers get the type in words; sighted users get the glyph.
+      li.setAttribute('aria-label', `${hit.label}, ${typeName}`);
+
+      li.appendChild(glyph);
+      li.appendChild(name);
+      li.appendChild(kind);
+      li.addEventListener('mousedown', (e) => {
+        e.preventDefault();
+        this.pick(i);
+      });
+      this.$results.appendChild(li);
+    });
+  }
+
+  onKeyDown(event) {
+    if (!this.hits.length) {
+      if (event.key === 'Escape') this.close();
+      return;
+    }
+    switch (event.key) {
+      case 'ArrowDown':
+        event.preventDefault();
+        this.active = (this.active + 1) % this.hits.length;
+        this.paint();
+        break;
+      case 'ArrowUp':
+        event.preventDefault();
+        this.active = (this.active - 1 + this.hits.length) % this.hits.length;
+        this.paint();
+        break;
+      case 'Enter':
+        event.preventDefault();
+        this.pick(this.active);
+        break;
+      case 'Escape':
+        this.close();
+        break;
+      default:
+        break;
+    }
+  }
+
+  close() {
+    this.hits = [];
+    this.active = -1;
+    if (this.$results) {
+      this.$results.innerHTML = '';
+      this.$results.style.display = 'none';
+    }
+  }
+
+  // --- acting on a pick -----------------------------------------------------
+
+  async pick(index) {
+    const hit = this.hits[index];
+    if (!hit) return;
+
+    const { graph } = this.context;
+
+    await goTo(graph, hit.id, {
+      expandAncestors: this.options.expandAncestors,
+      select: this.options.select,
+      animation: this.options.animation
+    });
+
+    // Report the pick so a Shiny app can react (reveal a panel, open an editor).
+    if (this.options.outputId && typeof Shiny !== 'undefined') {
+      Shiny.setInputValue(
+        `${this.options.outputId}-searched_element`,
+        { id: hit.id, type: hit.type, label: hit.label },
+        { priority: 'event' }
+      );
+    }
+
+    if (typeof this.options.onSelect === 'function') {
+      this.options.onSelect(hit, graph);
+    }
+
+    this.$input.value = hit.label;
+    this.close();
+  }
+
+  destroy() {
+    if (this.$element && this.$element.parentNode) {
+      this.$element.parentNode.removeChild(this.$element);
+    }
+    this.$element = null;
+    super.destroy();
+  }
+}
+
+
+// Outline: a list view of the graph, so a drawing too big to read stays
+// navigable. Groups are accordions holding their members; clicking a row goes to
+// that element on the canvas. Collapsing a group here is independent of
+// collapsing it on the canvas -- this is for looking inside a group without
+// redrawing anything -- and a selection on the canvas scrolls the matching row
+// into view, so the two stay in step.
+const OUTLINE_CLASS = 'g6-outline';
+
+class Outline extends BasePlugin {
+  static defaultOptions = {
+    title: 'Outline',
+    position: 'top-right',
+    width: 240,
+    open: true,
+    groupsOpen: true,
+    expandAncestors: true,
+    select: true,
+    // Where the panel lives: its own corner of the canvas, or hanging under the
+    // search box as a dropdown, so the two read as one control.
+    anchor: 'canvas',
+    // Mirror the canvas: collapsing a group there folds its rows here. A fold
+    // made in the panel still does not touch the canvas, so a group can be
+    // skimmed without redrawing the graph.
+    followCollapse: true,
+    labels: { node: 'node', combo: 'combo', edge: 'edge' }
+  };
+
+  constructor(context, options) {
+    super(context, Object.assign({}, Outline.defaultOptions, options));
+    // Folded state per group, filled in on first use from `groupsOpen` and the
+    // canvas. Explicit rather than a deviation-from-baseline set, so both the
+    // option and the canvas can drive it without one silently winning.
+    this.folded = new Map();
+    this.rowsById = new Map();
+    this.render();
+    this.watchGraph();
+  }
+
+  // --- the tree -------------------------------------------------------------
+
+  // Children of a combo, or the roots when `id` is null: combos with no parent
+  // plus nodes belonging to no combo. Uses the combo hierarchy, not the node
+  // `children` tree, so the outline matches the boxes drawn on the canvas.
+  childrenOf(id) {
+    const { graph, model } = this.context;
+
+    if (id) {
+      let kids = [];
+      try {
+        kids = model.getChildrenData(id) || [];
+      } catch (e) {
+        kids = [];
+      }
+      return kids.map((d) => this.entry(d.id));
+    }
+
+    const roots = [];
+    (graph.getComboData() || []).forEach((d) => {
+      if (!parentOf(d)) roots.push(this.entry(d.id));
+    });
+    (graph.getNodeData() || []).forEach((d) => {
+      if (!parentOf(d)) roots.push(this.entry(d.id));
+    });
+    return roots;
+  }
+
+  // Elements a group holds, counted through nested groups so the number means
+  // the same thing at every level. Folded groups still report their contents:
+  // the count is about the graph, not about what the panel happens to show.
+  contentCount(id) {
+    return this.childrenOf(id).reduce(
+      (total, child) =>
+        total + (child.type === 'combo' ? this.contentCount(child.id) : 1),
+      0
+    );
+  }
+
+  entry(id) {
+    const { graph } = this.context;
+    let type = 'node';
+    try {
+      type = graph.getElementType(id);
+    } catch (e) {
+      type = 'node';
+    }
+    const datum =
+      type === 'combo' ? graph.getComboData(id) : graph.getNodeData(id);
+    return { id, type, label: labelOf(datum), context: null };
+  }
+
+  // Flow order, so the list reads like the pipeline rather than in insertion
+  // order. Edges are lifted to the level being sorted: an edge from a member of
+  // one group to a member of another orders those two groups. A cycle between
+  // siblings is possible, so fall back to leaving them as they came.
+  inFlowOrder(entries, parentId) {
+    if (entries.length < 2) return entries;
+
+    const { graph } = this.context;
+    const index = new Map(entries.map((e, i) => [e.id, i]));
+
+    // Which sibling, if any, an element belongs to.
+    const owner = (id) => {
+      if (index.has(id)) return id;
+      let current = id;
+      const seen = new Set();
+      while (current && !seen.has(current)) {
+        seen.add(current);
+        const next = parentOf(elementDatum(graph, current));
+        if (!next) return null;
+        if (index.has(next)) return next;
+        current = next;
+      }
+      return null;
+    };
+
+    const incoming = new Map(entries.map((e) => [e.id, 0]));
+    const outgoing = new Map(entries.map((e) => [e.id, []]));
+
+    (graph.getEdgeData() || []).forEach((e) => {
+      const from = owner(e.source);
+      const to = owner(e.target);
+      if (!from || !to || from === to) return;
+      outgoing.get(from).push(to);
+      incoming.set(to, incoming.get(to) + 1);
+    });
+
+    const queue = entries.filter((e) => incoming.get(e.id) === 0).map((e) => e.id);
+    const order = [];
+    const done = new Set();
+
+    while (queue.length) {
+      const id = queue.shift();
+      if (done.has(id)) continue;
+      done.add(id);
+      order.push(id);
+      (outgoing.get(id) || []).forEach((next) => {
+        incoming.set(next, incoming.get(next) - 1);
+        if (incoming.get(next) === 0) queue.push(next);
+      });
+    }
+
+    // Anything left sat in a cycle; keep its original position.
+    entries.forEach((e) => {
+      if (!done.has(e.id)) order.push(e.id);
+    });
+
+    return order.map((id) => entries[index.get(id)]);
+  }
+
+  // --- DOM ------------------------------------------------------------------
+
+  render() {
+    const { canvas } = this.context;
+    const container = canvas.getContainer();
+    if (!container) return;
+
+    // Anchoring to the search box only works if that box exists: plugins are
+    // built in the order given, so fall back to a floating panel rather than
+    // not rendering at all.
+    const host =
+      this.options.anchor === 'search'
+        ? container.querySelector('.g6-search')
+        : null;
+
+    const box = document.createElement('div');
+    box.className = OUTLINE_CLASS;
+    box.dataset.anchor = host ? 'search' : 'canvas';
+
+    if (host) {
+      // Width and placement come from the search box it hangs under.
+      box.style.width = '100%';
+    } else {
+      box.dataset.position = this.options.position;
+      box.style.width = `${this.options.width}px`;
+    }
+
+    this.$toggle = document.createElement('button');
+    this.$toggle.type = 'button';
+    this.$toggle.className = `${OUTLINE_CLASS}-toggle`;
+    this.$toggle.addEventListener('click', () => this.toggle());
+
+    this.$body = document.createElement('div');
+    this.$body.className = `${OUTLINE_CLASS}-body`;
+    this.$body.setAttribute('role', 'tree');
+
+    box.appendChild(this.$toggle);
+    box.appendChild(this.$body);
+    (host || container).appendChild(box);
+    this.$element = box;
+
+    ['pointerdown', 'click', 'wheel', 'dblclick'].forEach((type) => {
+      box.addEventListener(type, (e) => e.stopPropagation());
+    });
+
+    this.open = this.options.open !== false;
+    this.paint();
+  }
+
+  toggle() {
+    this.open = !this.open;
+    this.paint();
+    // Opening catches up with whatever is selected now: a search made while the
+    // panel was shut still lands on the right row.
+    if (this.open) this.syncSelection();
+  }
+
+  isCollapsedOnCanvas(id) {
+    try {
+      return !!this.context.graph.getComboData(id)?.style?.collapsed;
+    } catch (e) {
+      return false;
+    }
+  }
+
+  // Folded or not, remembered per group. First asked, it starts from
+  // `groupsOpen` and from whether the canvas already has the group collapsed.
+  isFolded(id) {
+    if (!this.folded.has(id)) {
+      this.folded.set(
+        id,
+        this.options.groupsOpen === false ||
+          (this.options.followCollapse !== false && this.isCollapsedOnCanvas(id))
+      );
+    }
+    return this.folded.get(id);
+  }
+
+  isGroupOpen(id) {
+    return !this.isFolded(id);
+  }
+
+  // Collapse state of every group on the canvas, to spot a change.
+  collapseKey() {
+    const { graph } = this.context;
+    try {
+      return (graph.getComboData() || [])
+        .map((d) => `${d.id}\u0001${d.style?.collapsed ? 1 : 0}`)
+        .sort()
+        .join('\u0002');
+    } catch (e) {
+      return this.lastCollapseKey ?? '';
+    }
+  }
+
+  // A group collapsed or expanded on the canvas takes the panel's fold with it,
+  // overriding whatever was folded here.
+  followCanvasCollapse(previous) {
+    const now = new Map(
+      this.collapseKey()
+        .split('\u0002')
+        .filter(Boolean)
+        .map((entry) => entry.split('\u0001'))
+    );
+    const before = new Map(
+      (previous || '')
+        .split('\u0002')
+        .filter(Boolean)
+        .map((entry) => entry.split('\u0001'))
+    );
+
+    now.forEach((state, id) => {
+      if (before.has(id) && before.get(id) !== state) {
+        this.folded.set(id, state === '1');
+      }
+    });
+  }
+
+  toggleGroup(id) {
+    this.folded.set(id, !this.isFolded(id));
+    this.paint();
+  }
+
+  paint() {
+    if (!this.$element) return;
+
+    this.$toggle.textContent = `${this.open ? '▾' : '▸'} ${this.options.title}`;
+    this.$toggle.setAttribute('aria-expanded', String(this.open));
+    this.$body.style.display = this.open ? 'block' : 'none';
+    this.$body.innerHTML = '';
+    this.rowsById.clear();
+
+    if (!this.open) return;
+
+    this.$body.appendChild(this.list(null, 0));
+  }
+
+  list(parentId, depth) {
+    const ul = document.createElement('ul');
+    ul.className = `${OUTLINE_CLASS}-list`;
+
+    // Every row reserves the caret column, foldable or not: dropping it on
+    // leaf rows would pull them left of the parent they belong to, and buying
+    // that back with a wider indent costs exactly what the column did.
+    this.inFlowOrder(this.childrenOf(parentId), parentId).forEach((entry) => {
+      const li = document.createElement('li');
+      li.className = `${OUTLINE_CLASS}-item`;
+      li.setAttribute('role', 'treeitem');
+
+      const row = document.createElement('div');
+      row.className = `${OUTLINE_CLASS}-row`;
+      row.style.setProperty(`--${OUTLINE_CLASS}-depth`, String(depth));
+      row.dataset.id = entry.id;
+
+      const isGroup = entry.type === 'combo';
+      const openHere = isGroup && this.isGroupOpen(entry.id);
+
+      if (isGroup) {
+        const caret = document.createElement('span');
+        caret.className = `${OUTLINE_CLASS}-caret`;
+        caret.textContent = openHere ? '▾' : '▸';
+        caret.setAttribute('role', 'button');
+        caret.setAttribute('aria-label', openHere ? 'Collapse' : 'Expand');
+        caret.addEventListener('click', (e) => {
+          // Only the caret folds the list; the row itself navigates.
+          e.stopPropagation();
+          this.toggleGroup(entry.id);
+        });
+        row.appendChild(caret);
+        li.setAttribute('aria-expanded', String(openHere));
+      } else {
+        const spacer = document.createElement('span');
+        spacer.className = `${OUTLINE_CLASS}-caret`;
+        spacer.setAttribute('aria-hidden', 'true');
+        row.appendChild(spacer);
+      }
+
+      // No context column: the indentation already shows which group a row
+      // belongs to, and the glyph shows what kind it is.
+      const { glyph, name, typeName } = elementRow(entry, this.options.labels);
+      row.appendChild(glyph);
+      row.appendChild(name);
+
+      let described = `${entry.label}, ${typeName}`;
+
+      if (isGroup) {
+        const total = this.contentCount(entry.id);
+        const count = document.createElement('span');
+        count.className = `${OUTLINE_CLASS}-count`;
+        count.textContent = String(total);
+        count.setAttribute('aria-hidden', 'true');
+        row.appendChild(count);
+        const unit = this.options.labels.node || 'node';
+        described += `, ${total} ${unit}${total === 1 ? '' : 's'}`;
+      }
+
+      row.setAttribute('aria-label', described);
+      row.addEventListener('click', () => this.go(entry));
+
+      li.appendChild(row);
+      this.rowsById.set(entry.id, row);
+
+      if (isGroup && openHere) {
+        li.appendChild(this.list(entry.id, depth + 1));
+      }
+
+      ul.appendChild(li);
+    });
+
+    return ul;
+  }
+
+  // --- acting ---------------------------------------------------------------
+
+  async go(entry) {
+    const { graph } = this.context;
+
+    await goTo(graph, entry.id, {
+      expandAncestors: this.options.expandAncestors,
+      select: this.options.select,
+      animation: this.options.animation
+    });
+
+    this.mark(entry.id);
+
+    if (this.options.outputId && typeof Shiny !== 'undefined') {
+      Shiny.setInputValue(
+        `${this.options.outputId}-outlined_element`,
+        { id: entry.id, type: entry.type, label: entry.label },
+        { priority: 'event' }
+      );
+    }
+  }
+
+  mark(id) {
+    this.rowsById.forEach((row, rowId) => {
+      if (rowId === id) row.dataset.current = 'true';
+      else delete row.dataset.current;
+    });
+  }
+
+  // The one element selected on the canvas, if exactly one is. With several
+  // selected there is nothing sensible to scroll to.
+  selectedId() {
+    const { graph } = this.context;
+    let selected = [];
+    try {
+      selected = (graph.getElementDataByState('node', SELECTED_STATE) || [])
+        .concat(graph.getElementDataByState('combo', SELECTED_STATE) || [])
+        .map((d) => d.id);
+    } catch (e) {
+      return null;
+    }
+    return selected.length === 1 ? selected[0] : null;
+  }
+
+  // Bring the panel in line with the canvas: unfold the groups above the
+  // selected element so its row exists, then mark it and scroll to it. Called
+  // both when the canvas redraws and when the panel is opened, so a selection
+  // made while it was shut is not missed.
+  syncSelection() {
+    if (!this.open) return;
+
+    const id = this.selectedId();
+    if (!id) return;
+
+    if (this.openAncestors(id)) this.paint();
+
+    const row = this.rowsById.get(id);
+    if (row) {
+      this.mark(id);
+      row.scrollIntoView({ block: 'nearest' });
+    }
+  }
+
+  // Unfold every group between the root and an element. Returns whether
+  // anything changed, so the caller repaints only when it must -- repainting
+  // from inside here would recurse through syncSelection().
+  openAncestors(id) {
+    const { graph } = this.context;
+    let changed = false;
+
+    ancestorsOf(graph, id).forEach((combo) => {
+      if (this.isFolded(combo)) {
+        this.unfoldSilently(combo);
+        changed = true;
+      }
+    });
+
+    return changed;
+  }
+
+  // What the panel is a picture of: which elements exist, what each is called,
+  // and which group it sits in. Compared after every redraw so the list is
+  // rebuilt when the graph gains, loses or reparents something -- and only
+  // then, since repainting on every draw would fight scrolling and cost work on
+  // a large graph.
+  structureKey() {
+    const { graph } = this.context;
+
+    const describe = (data) =>
+      (data || [])
+        .map((d) => `${d.id}\u0001${parentOf(d) || ''}\u0001${labelOf(d)}`)
+        .sort()
+        .join('\u0002');
+
+    try {
+      return [describe(graph.getNodeData()), describe(graph.getComboData())].join(
+        '\u0003'
+      );
+    } catch (e) {
+      return this.lastKey ?? '';
+    }
+  }
+
+  // A redraw follows any change worth reacting to: a selection, or the graph
+  // itself gaining or losing elements. Both are handled here, so the panel
+  // tracks the canvas instead of drifting out of step.
+  watchGraph() {
+    const { graph } = this.context;
+
+    this.lastKey = this.structureKey();
+    this.lastCollapseKey = this.collapseKey();
+
+    const onDraw = () => {
+      const key = this.structureKey();
+      const collapseKey = this.collapseKey();
+      let repaint = false;
+
+      if (key !== this.lastKey) {
+        this.lastKey = key;
+        repaint = true;
+      }
+
+      if (collapseKey !== this.lastCollapseKey) {
+        if (this.options.followCollapse !== false) {
+          this.followCanvasCollapse(this.lastCollapseKey);
+        }
+        this.lastCollapseKey = collapseKey;
+        repaint = true;
+      }
+
+      if (repaint) this.paint();
+      this.syncSelection();
+    };
+
+    // No dedicated event for either, so watch the redraw that follows.
+    this.followHandler = () => window.setTimeout(onDraw, 0);
+    try {
+      graph.on('afterdraw', this.followHandler);
+    } catch (e) {
+      // Without the hook the panel simply does not follow the canvas.
+    }
+  }
+
+  unfoldSilently(id) {
+    this.folded.set(id, false);
+  }
+
+  destroy() {
+    try {
+      if (this.followHandler) this.context.graph.off('afterdraw', this.followHandler);
+    } catch (e) {
+      // Graph already gone.
+    }
+    if (this.$element && this.$element.parentNode) {
+      this.$element.parentNode.removeChild(this.$element);
+    }
+    this.$element = null;
+    super.destroy();
+  }
+}
+
+export { Search, Outline };

@@ -5,3 +5,203 @@
 .html-widget.g6 .tooltip {
   opacity: 1;
 }
+
+/* Search plugin. The box sits over the canvas, so it opts out of the canvas's
+   own cursor and pointer handling and keeps a z-index above the graph. */
+.g6-search {
+  position: absolute;
+  z-index: 10;
+  font-family: inherit;
+  font-size: 13px;
+}
+
+.g6-search[data-position="top-left"] { top: 8px; left: 8px; }
+.g6-search[data-position="top-right"] { top: 8px; right: 8px; }
+.g6-search[data-position="bottom-left"] { bottom: 8px; left: 8px; }
+.g6-search[data-position="bottom-right"] { bottom: 8px; right: 8px; }
+
+.g6-search-input {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 5px 8px;
+  border: 1px solid #d1d5db;
+  border-radius: 4px;
+  background: #fff;
+  color: #111827;
+  box-shadow: 0 1px 2px rgb(0 0 0 / 8%);
+}
+
+.g6-search-input:focus {
+  outline: none;
+  border-color: #9cabd4;
+  box-shadow: 0 0 0 2px rgb(156 171 212 / 35%);
+}
+
+.g6-search-results {
+  display: none;
+  margin: 4px 0 0;
+  padding: 0;
+  list-style: none;
+  max-height: 220px;
+  overflow-y: auto;
+  border: 1px solid #d1d5db;
+  border-radius: 4px;
+  background: #fff;
+  box-shadow: 0 2px 6px rgb(0 0 0 / 10%);
+}
+
+.g6-search-result {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 5px 8px;
+  cursor: pointer;
+}
+
+.g6-search-result:hover,
+.g6-search-result[data-active="true"] {
+  background: #eef2ff;
+}
+
+.g6-panel-label,
+.g6-search-label {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.g6-panel-kind,
+.g6-search-kind {
+  flex: none;
+  color: #6b7280;
+  font-size: 11px;
+}
+
+/* Type glyph: a drawn shape carrying the type, so the kinds are told apart
+   without reading the label on the right. One fixed column whatever the shape,
+   so labels line up down a list holding any mix of types. */
+.g6-panel-glyph {
+  flex: none;
+  width: 11px;
+  height: 11px;
+  color: #64748b;
+}
+
+.g6-panel-glyph svg {
+  display: block;
+  width: 11px;
+  height: 11px;
+  fill: currentcolor;
+}
+
+.g6-panel-glyph[data-type="node"] {
+  color: #1783ff;
+}
+
+.g6-panel-glyph[data-type="edge"] {
+  color: #9ca3af;
+}
+
+/* Outline panel: a list view of the graph over the canvas. */
+.g6-outline {
+  /* Row geometry in one place: the gutter before the first column, the caret
+     column, and the indent per level. The panel is narrow, so every pixel
+     spent here is width the labels do not get. */
+  --g6-outline-gutter: 4px;
+  --g6-outline-caret: 9px;
+  --g6-outline-indent: 10px;
+
+  position: absolute;
+  z-index: 10;
+  font-family: inherit;
+  font-size: 13px;
+  background: #fff;
+  border: 1px solid #d1d5db;
+  border-radius: 4px;
+  box-shadow: 0 2px 6px rgb(0 0 0 / 10%);
+  overflow: hidden;
+}
+
+.g6-outline[data-anchor="search"] {
+  position: static;
+  margin-top: 4px;
+  border-radius: 4px;
+}
+
+.g6-outline[data-position="top-left"] { top: 8px; left: 8px; }
+.g6-outline[data-position="top-right"] { top: 8px; right: 8px; }
+.g6-outline[data-position="bottom-left"] { bottom: 8px; left: 8px; }
+.g6-outline[data-position="bottom-right"] { bottom: 8px; right: 8px; }
+
+.g6-outline-toggle {
+  display: block;
+  width: 100%;
+  padding: 4px 8px;
+  font-size: 12px;
+  border: 0;
+  border-bottom: 1px solid #e5e7eb;
+  background: #f9fafb;
+  color: #111827;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.g6-outline-toggle:hover {
+  background: #f3f4f6;
+}
+
+.g6-outline-body {
+  max-height: 280px;
+  overflow-y: auto;
+}
+
+.g6-outline-list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.g6-outline-row {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 6px 2px
+    calc(
+      var(--g6-outline-gutter) +
+      var(--g6-outline-depth, 0) * var(--g6-outline-indent)
+    );
+  line-height: 1.35;
+  cursor: pointer;
+}
+
+.g6-outline-row:hover {
+  background: #f3f4f6;
+}
+
+.g6-outline-row[data-current="true"] {
+  background: #eef2ff;
+  font-weight: 600;
+}
+
+.g6-outline-caret {
+  flex: none;
+  width: var(--g6-outline-caret);
+  color: #6b7280;
+  font-size: 9px;
+  line-height: 1.55;
+  text-align: center;
+  cursor: pointer;
+}
+
+/* How many elements a group holds, parked in the empty right-hand space so it
+   costs the label nothing. Tabular figures keep the column steady. */
+.g6-outline-count {
+  flex: none;
+  margin-left: auto;
+  padding-left: 6px;
+  color: #6b7280;
+  font-size: 11px;
+  font-variant-numeric: tabular-nums;
+}
