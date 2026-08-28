@@ -87,7 +87,9 @@ the canvas marks and scrolls to its row, so the panel follows where you are.
 
 Each group row also reports how many elements it holds, counted through nested
 groups so the number means the same thing at every level, and reported for a
-folded group too: the count describes the graph, not the panel.
+folded group too: the count describes the graph, not the panel. The toggle
+carries the same figure for the graph as a whole, so the size of it is legible
+while the panel is shut. \code{labels} names both in the accessible text.
 }
 \examples{
 config <- g6_outline()

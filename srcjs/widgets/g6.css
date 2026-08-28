@@ -95,10 +95,6 @@
   fill: currentcolor;
 }
 
-.g6-panel-glyph[data-type="node"] {
-  color: #1783ff;
-}
-
 .g6-panel-glyph[data-type="edge"] {
   color: #9ca3af;
 }
@@ -135,7 +131,9 @@
 .g6-outline[data-position="bottom-right"] { bottom: 8px; right: 8px; }
 
 .g6-outline-toggle {
-  display: block;
+  display: flex;
+  align-items: center;
+  gap: 4px;
   width: 100%;
   padding: 4px 8px;
   font-size: 12px;
@@ -150,6 +148,31 @@
 
 .g6-outline-toggle:hover {
   background: #f3f4f6;
+}
+
+/* The title yields first: a long one ellipsizes rather than pushing the totals
+   off the end of a narrow panel. */
+.g6-outline-title {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* What the whole graph holds, one glyph and number per kind. */
+.g6-outline-total {
+  flex: none;
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  color: #6b7280;
+  font-size: 11px;
+  font-variant-numeric: tabular-nums;
+}
+
+.g6-outline-total .g6-panel-glyph + .g6-outline-tally {
+  margin-right: 2px;
 }
 
 .g6-outline-body {
