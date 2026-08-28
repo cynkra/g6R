@@ -150,6 +150,7 @@ const elementRow = (hit, labels = {}) => {
 
 export {
   SELECTED_STATE,
+  glyphFor,
   labelOf,
   parentOf,
   elementDatum,

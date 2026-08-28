@@ -1858,7 +1858,9 @@ g6_search <- function(
 #'
 #' Each group row also reports how many elements it holds, counted through nested
 #' groups so the number means the same thing at every level, and reported for a
-#' folded group too: the count describes the graph, not the panel.
+#' folded group too: the count describes the graph, not the panel. The toggle
+#' carries the same figure for the graph as a whole, so the size of it is legible
+#' while the panel is shut. `labels` names both in the accessible text.
 #'
 #' @param key Unique identifier for the plugin (string).
 #' @param title Text on the panel's toggle button.

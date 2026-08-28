@@ -6,7 +6,8 @@ import {
   elementDatum,
   ancestorsOf,
   goTo,
-  elementRow
+  elementRow,
+  glyphFor
 } from './plugin-utils';
 
 // Search box for navigating a large graph.
@@ -534,10 +535,73 @@ class Outline extends BasePlugin {
     this.paint();
   }
 
+  // What the graph holds, whatever the panel is currently showing: folded
+  // groups and collapsed combos still count, and the figure is worth having
+  // while the panel is shut, which is the point of putting it on the toggle.
+  totals() {
+    const { graph } = this.context;
+    const size = (read) => {
+      try {
+        return (read() || []).length;
+      } catch (e) {
+        return 0;
+      }
+    };
+
+    return {
+      node: size(() => graph.getNodeData()),
+      combo: size(() => graph.getComboData())
+    };
+  }
+
+  // Caret, title, then the totals as a glyph and a number per kind, in the
+  // same shapes the rows use so the pair reads without a legend. The words go
+  // in the accessible name, where they cost no width: a title long enough to
+  // crowd the number is likelier than a spare 80px.
+  toggleContent() {
+    const caret = document.createElement('span');
+    caret.className = `${OUTLINE_CLASS}-caret`;
+    caret.textContent = this.open ? '▾' : '▸';
+    caret.setAttribute('aria-hidden', 'true');
+
+    const title = document.createElement('span');
+    title.className = `${OUTLINE_CLASS}-title`;
+    title.textContent = this.options.title;
+
+    const total = document.createElement('span');
+    total.className = `${OUTLINE_CLASS}-total`;
+    total.setAttribute('aria-hidden', 'true');
+
+    const totals = this.totals();
+    const spoken = [];
+
+    // A kind the graph does not have is left out rather than shown as a zero.
+    ['node', 'combo'].forEach((type) => {
+      const n = totals[type];
+      if (!n) return;
+
+      const tally = document.createElement('span');
+      tally.className = `${OUTLINE_CLASS}-tally`;
+      tally.textContent = String(n);
+      total.append(glyphFor(type), tally);
+
+      const unit = this.options.labels?.[type] || type;
+      spoken.push(`${n} ${unit}${n === 1 ? '' : 's'}`);
+    });
+
+    this.$toggle.setAttribute(
+      'aria-label',
+      [this.options.title, ...spoken].join(', ')
+    );
+
+    return spoken.length ? [caret, title, total] : [caret, title];
+  }
+
   paint() {
     if (!this.$element) return;
 
-    this.$toggle.textContent = `${this.open ? '▾' : '▸'} ${this.options.title}`;
+    this.$toggle.textContent = '';
+    this.$toggle.append(...this.toggleContent());
     this.$toggle.setAttribute('aria-expanded', String(this.open));
     this.$body.style.display = this.open ? 'block' : 'none';
     this.$body.innerHTML = '';
