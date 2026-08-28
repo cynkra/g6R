@@ -457,6 +457,10 @@ Navigation and Overview
 
 - [`fullscreen()`](https://cynkra.github.io/g6R/reference/fullscreen.md)
   : Configure Fullscreen Plugin
+- [`g6_outline()`](https://cynkra.github.io/g6R/reference/g6_outline.md)
+  : Outline panel listing the graph
+- [`g6_search()`](https://cynkra.github.io/g6R/reference/g6_search.md) :
+  Search box to navigate a large graph
 - [`minimap()`](https://cynkra.github.io/g6R/reference/minimap.md) :
   Configure Minimap Plugin
 - [`timebar()`](https://cynkra.github.io/g6R/reference/timebar.md) :
