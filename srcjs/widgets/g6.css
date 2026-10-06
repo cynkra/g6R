@@ -95,6 +95,12 @@
   fill: currentcolor;
 }
 
+/* A node drawn as an image shows that image instead of the dot. */
+img.g6-panel-glyph {
+  width: 16px;
+  height: 16px;
+}
+
 .g6-panel-glyph[data-type="edge"] {
   color: #9ca3af;
 }
@@ -210,12 +216,27 @@
 
 .g6-outline-caret {
   flex: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   width: var(--g6-outline-caret);
   color: #6b7280;
-  font-size: 9px;
-  line-height: 1.55;
-  text-align: center;
   cursor: pointer;
+}
+
+.g6-outline-caret svg {
+  width: 9px;
+  height: 9px;
+  fill: none;
+  stroke: currentcolor;
+  stroke-width: 1.4;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  transition: transform 0.15s ease;
+}
+
+.g6-outline-caret[data-open="false"] svg {
+  transform: rotate(-90deg);
 }
 
 /* How many elements a group holds, parked in the empty right-hand space so it

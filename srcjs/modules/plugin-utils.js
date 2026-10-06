@@ -14,6 +14,13 @@ const labelOf = (datum) =>
   datum?.label ??
   String(datum?.id ?? '');
 
+// How an element looks on the canvas, so a panel row can look the same: a node
+// drawn as an image shows that image, and a combo carries its fill colour for
+// the consumer's stylesheet (as `--g6-element-color`).
+const imageOf = (datum) => datum?.style?.src ?? null;
+
+const colorOf = (datum) => datum?.style?.fill ?? null;
+
 const parentOf = (datum) => datum?.combo ?? datum?.data?.combo ?? null;
 
 const elementDatum = (graph, id) => {
@@ -120,7 +127,17 @@ const GLYPH_SHAPES = {
   edge: '<rect x="1.5" y="7.25" width="13" height="1.5" rx=".75"/>'
 };
 
-const glyphFor = (type) => {
+const glyphFor = (type, image = null) => {
+  if (image) {
+    const img = document.createElement('img');
+    img.className = 'g6-panel-glyph';
+    img.dataset.type = type;
+    img.dataset.image = 'true';
+    img.alt = '';
+    img.src = image;
+    return img;
+  }
+
   const glyph = document.createElement('span');
   glyph.className = 'g6-panel-glyph';
   glyph.dataset.type = type;
@@ -135,7 +152,7 @@ const glyphFor = (type) => {
 // and context on the right (the group it lives in, or failing that the kind of
 // thing it is, named as the consumer chose).
 const elementRow = (hit, labels = {}) => {
-  const glyph = glyphFor(hit.type);
+  const glyph = glyphFor(hit.type, hit.image);
 
   const name = document.createElement('span');
   name.className = 'g6-panel-label';
@@ -148,9 +165,25 @@ const elementRow = (hit, labels = {}) => {
   return { glyph, name, kind, typeName: labels[hit.type] || hit.type };
 };
 
+// A disclosure chevron, drawn rather than typed (a typed triangle sits on the
+// text baseline and changes with the font). It points down; a closed fold
+// turns it right through `data-open="false"` in the stylesheet.
+const caretFor = (open) => {
+  const caret = document.createElement('span');
+  caret.className = 'g6-outline-caret';
+  caret.dataset.open = String(!!open);
+  caret.innerHTML =
+    '<svg viewBox="0 0 12 12" focusable="false" aria-hidden="true">' +
+    '<path d="M3 4.5l3 3 3-3"/></svg>';
+  return caret;
+};
+
 export {
   SELECTED_STATE,
   glyphFor,
+  caretFor,
+  imageOf,
+  colorOf,
   labelOf,
   parentOf,
   elementDatum,
