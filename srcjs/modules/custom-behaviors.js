@@ -608,6 +608,34 @@ class CustomCreateEdge extends CreateEdge {
 //
 // Remove this once G6 keeps the traversal on the combo hierarchy.
 class CustomDragElement extends DragElement {
+  constructor(context, options) {
+    super(context, options);
+    // The element a drag starts on, recorded before G6 sees the event: drags
+    // starting in HTML node content are vetted against its drag handle.
+    this.onPointerDownCapture = (event) => {
+      this.pressTarget = event.target;
+    };
+    document.addEventListener('pointerdown', this.onPointerDownCapture, true);
+  }
+
+  destroy() {
+    document.removeEventListener('pointerdown', this.onPointerDownCapture, true);
+    super.destroy();
+  }
+
+  // HTML node content may mark a drag handle with `data-g6-drag-handle`. If it
+  // does, the node only drags from the handle, so sliders, brushes or text
+  // selection inside the content don't move the node. Content without a
+  // handle drags from anywhere, as before.
+  validate(event) {
+    if (!super.validate(event)) return false;
+    const target = this.pressTarget;
+    if (!(target instanceof Element)) return true;
+    const content = target.closest('.g6-html-node');
+    if (!content || !content.querySelector('[data-g6-drag-handle]')) return true;
+    return target.closest('[data-g6-drag-handle]') !== null;
+  }
+
   // Leaf-most node ids of a combo, via the combo hierarchy only. A combo with
   // nothing in it is returned as itself: there is no member to move, and no
   // hierarchy for the walk to escape through either.

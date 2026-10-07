@@ -1,5 +1,6 @@
 import { sendNotification, getPortConnections } from './utils';
 import { scopeGraph } from './graph-scope';
+import { registerNodeContent } from './custom-nodes';
 
 const tryCatchDev = (expr, mode = "prod") => {
   try {
@@ -100,6 +101,10 @@ const registerShinyHandlers = (graph, mode, directed = false) => {
   // Update/remove/add nodes or combo or edges
   Shiny.addCustomMessageHandler(id + '_g6-data', (m) => {
     tryCatchDev(() => {
+      // Content of HTML nodes given as g6_node(ui = ), before the nodes using it
+      if (m.deps) Shiny.renderDependencies(m.deps);
+      if (m.content) registerNodeContent(id, m.content);
+
       // TBD: this became a bit ugly with the different actions and types
       // Maybe we can create separate handler for each action type for easier
       // maintenance.

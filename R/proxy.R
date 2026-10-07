@@ -51,14 +51,24 @@ g6_data_proxy <- function(graph, el, action, type) {
     }
   }
 
+  # Node content given as g6_node(ui = ): its markup and dependencies travel
+  # beside the elements (see extract_node_ui())
+  content <- extract_node_ui(NULL)
+  if (type == "Node" && action %in% c("add", "update")) {
+    content <- extract_node_ui(el)
+    el <- content$nodes
+  }
+
   graph$session$sendCustomMessage(
     sprintf("%s_g6-data", graph$id),
-    list(
+    dropNulls(list(
       el = el,
       action = action,
       type = type,
-      layout = get_g6_layout_on_data_change()
-    )
+      layout = get_g6_layout_on_data_change(),
+      content = content$html,
+      deps = lapply(content$deps, shiny::createWebDependency)
+    ))
   )
   graph
 }
