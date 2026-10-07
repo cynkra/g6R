@@ -1,4 +1,4 @@
-import { CreateEdge, DragElement, CanvasEvent, ComboEvent, CommonEvent, EdgeEvent, NodeEvent } from '@antv/g6';
+import { CreateEdge, DragElement, CollapseExpand, CanvasEvent, ComboEvent, CommonEvent, EdgeEvent, NodeEvent } from '@antv/g6';
 import { uniqueId } from '@antv/util';
 import { sendNotification, getPortConnections } from './utils';
 
@@ -601,29 +601,27 @@ class CustomCreateEdge extends CreateEdge {
 // node and never takes the combo path.
 //
 // Remove this once G6 keeps the traversal on the combo hierarchy.
+// Where the current pointer press started, recorded before G6 sees it: G6's
+// events for HTML nodes are forwarded from their content, and a gesture that
+// starts inside the content belongs to the content first.
+let pressTarget = null;
+if (typeof document !== 'undefined') {
+  document.addEventListener('pointerdown', (event) => {
+    pressTarget = event.target;
+  }, true);
+}
+
+const pressedInHTMLContent = () =>
+  pressTarget instanceof Element && pressTarget.closest('.g6-html-node') !== null;
+
 class CustomDragElement extends DragElement {
-  constructor(context, options) {
-    super(context, options);
-    // The element a drag starts on, recorded before G6 sees the event: drags
-    // starting in HTML node content are vetted against its drag handle.
-    this.onPointerDownCapture = (event) => {
-      this.pressTarget = event.target;
-    };
-    document.addEventListener('pointerdown', this.onPointerDownCapture, true);
-  }
-
-  destroy() {
-    document.removeEventListener('pointerdown', this.onPointerDownCapture, true);
-    super.destroy();
-  }
-
   // HTML node content may mark a drag handle with `data-g6-drag-handle`. If it
   // does, the node only drags from the handle, so sliders, brushes or text
   // selection inside the content don't move the node. Content without a
   // handle drags from anywhere, as before.
   validate(event) {
     if (!super.validate(event)) return false;
-    const target = this.pressTarget;
+    const target = pressTarget;
     if (!(target instanceof Element)) return true;
     const content = target.closest('.g6-html-node');
     if (!content || !content.querySelector('[data-g6-drag-handle]')) return true;
@@ -663,4 +661,14 @@ class CustomDragElement extends DragElement {
   }
 }
 
-export { CustomCreateEdge, CustomDragElement };
+// A double-click inside an HTML node's content belongs to the content
+// (renaming a title, selecting a word in a table), so it neither collapses
+// nor expands the node: such nodes collapse from their collapse button.
+class CustomCollapseExpand extends CollapseExpand {
+  validate(event) {
+    if (!super.validate(event)) return false;
+    return !pressedInHTMLContent();
+  }
+}
+
+export { CustomCreateEdge, CustomDragElement, CustomCollapseExpand };
