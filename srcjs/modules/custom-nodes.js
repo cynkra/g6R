@@ -1607,6 +1607,8 @@ const createCustomNode = (BaseShape) => {
       const el = this.getDomElement();
       if (!el) return;
       el.classList.add('g6-html-node');
+      // the node's states (selected, active...), for the content's styles
+      el.dataset.g6States = (this.context.graph.getElementState(this.id) || []).join(' ');
       const insets = htmlPortInsets(this.getPortsStyle(attributes));
       Object.entries(insets).forEach(([side, px]) => {
         el.style.setProperty(`--g6-html-inset-${side}`, `${px}px`);
