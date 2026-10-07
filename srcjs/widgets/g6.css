@@ -284,3 +284,8 @@ img.g6-panel-glyph {
   height: 100%;
   box-sizing: border-box;
 }
+
+/* With autoHeight, content takes its natural height and the node follows. */
+.g6-html-node > .g6-node-content.g6-node-content-auto {
+  height: auto;
+}

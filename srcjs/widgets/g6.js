@@ -6,7 +6,7 @@ import {
 } from '@antv/g6';
 import { AntLine, FlyMarkerCubic, CircleComboWithExtraButton, RectComboWithExtraButton } from '../modules/extensions';
 import { setupIcons, loadAndInitGraph } from '../modules/utils';
-import { CustomCreateEdge, CustomDragElement } from '../modules/custom-behaviors';
+import { CustomCreateEdge, CustomDragElement, CustomCollapseExpand } from '../modules/custom-behaviors';
 import { Search, Outline } from '../modules/custom-plugins';
 import {
   CustomCircleNode,
@@ -52,6 +52,8 @@ register(ExtensionCategory.COMBO, 'rect-combo-with-extra-button', RectComboWithE
 register(ExtensionCategory.BEHAVIOR, 'create-edge', CustomCreateEdge);
 // Same, for dragging: keeps a combo drag from following its members' children
 register(ExtensionCategory.BEHAVIOR, 'drag-element', CustomDragElement);
+// Same, so double-clicks inside HTML node content do not collapse the node
+register(ExtensionCategory.BEHAVIOR, 'collapse-expand', CustomCollapseExpand);
 // G6 has no search UI; this one focuses the element you pick
 register(ExtensionCategory.PLUGIN, 'search', Search);
 // A list view of the graph, for when the drawing is too big to read

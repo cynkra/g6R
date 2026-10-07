@@ -588,6 +588,7 @@ const nodeContent = new Map();
 
 const releaseContentElement = (el) => {
   if (!el) return;
+  if (el.g6HeightObserver) el.g6HeightObserver.disconnect();
   if (window.Shiny && window.Shiny.unbindAll) window.Shiny.unbindAll(el);
   el.remove();
 };
@@ -1613,6 +1614,23 @@ const createCustomNode = (BaseShape) => {
       // Content from g6_node(ui = ) is bound once it is in the page and sized,
       // so its outputs render at the node's size.
       const content = el.querySelector(':scope > .g6-node-content');
+      // With autoHeight, the node's height follows its content's, which is laid
+      // out at its natural height rather than the node's
+      if (content) {
+        content.classList.toggle('g6-node-content-auto', !!attributes.autoHeight);
+        if (attributes.autoHeight && !content.g6HeightObserver) {
+          // The content outlives node instances: collapsing a parent destroys
+          // its descendants' nodes and expanding builds new ones around the
+          // same content. So the observer finds the node's current instance.
+          const graph = this.context.graph;
+          const id = this.id;
+          content.g6HeightObserver = new ResizeObserver(() => {
+            const node = graph.context.element?.getElement(id);
+            if (node && !node.destroyed && node.fitHeight) node.fitHeight(content);
+          });
+          content.g6HeightObserver.observe(content);
+        }
+      }
       if (content && content.isConnected && !content.dataset.g6Bound) {
         content.dataset.g6Bound = 'true';
         // as Shiny's renderUI() does: initialise inputs (sliders...), then bind
@@ -1638,6 +1656,25 @@ const createCustomNode = (BaseShape) => {
     // stop it before it gets here. Without this the graph container cancels
     // every wheel, so content could not scroll, and the canvas, which sits
     // under the content, never saw it either.
+    // Resize the node to its content's height (layout pixels, so the canvas
+    // zoom does not enter), keeping the node's top edge where it is: content
+    // that grows or shrinks extends or retracts the node's bottom.
+    fitHeight(content) {
+      if (!content.isConnected) return;
+      const graph = this.context.graph;
+      const datum = graph.getNodeData(this.id);
+      if (!datum) return;
+      const insets = htmlPortInsets(this.getPortsStyle(this.parsedAttributes));
+      const height = Math.ceil(content.offsetHeight + insets.top + insets.bottom);
+      const size = datum.style?.size ?? this.parsedAttributes.size;
+      const [width, current] = Array.isArray(size) ? size : [size, size];
+      if (!height || Math.abs(height - current) < 1) return;
+      const style = { size: [width, height] };
+      if (datum.style?.y != null) style.y = datum.style.y + (height - current) / 2;
+      graph.updateNodeData([{ id: this.id, style }]);
+      graph.draw();
+    }
+
     routeWheel(event, root) {
       if (canScrollWithin(event.target, root, event.deltaX, event.deltaY)) {
         event.stopPropagation();
