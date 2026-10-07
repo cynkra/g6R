@@ -20,7 +20,8 @@ g6_node(
   combo = NULL,
   children = NULL,
   ports = NULL,
-  collapse = NULL
+  collapse = NULL,
+  ui = NULL
 )
 
 g6_edge(
@@ -72,7 +73,15 @@ For edges, this is optional (id is constructed as source-target if not provided)
 \item{ports}{List. Ports definition (optional, nodes only).
 See \link{g6_ports} and \link{g6_port} for details.}
 
-\item{collapse}{List. Collapse button configuration (optional, nodes and combos).
+\item{collapse}{List. Collapse button configuration (optional, nodes and combos).}
+
+\item{ui}{Content of the node: Shiny UI or other HTML tags (optional, nodes
+only). Implies \code{type = "custom-html-node"}. The content is built once per
+node and kept through redraws, moves and zooming, so Shiny inputs and
+outputs in it are bound once and keep their values. Mark an element of it
+with a \code{data-g6-drag-handle} attribute to drag the node from that element
+only, so that sliders, maps or text selection inside it do not move the
+node.
 See \link{g6_collapse_options} for details. For nodes, only used when node has children.
 For combos, when provided and \code{type} is NULL, auto-sets type to \code{"rect-combo-with-extra-button"}.}
 

@@ -129,6 +129,13 @@ is_g6_collapse_options <- function(x) {
 #' @param ports List. Ports definition (optional, nodes only).
 #' See \link{g6_ports} and \link{g6_port} for details.
 #' @param collapse List. Collapse button configuration (optional, nodes and combos).
+#' @param ui Content of the node: Shiny UI or other HTML tags (optional, nodes
+#'   only). Implies `type = "custom-html-node"`. The content is built once per
+#'   node and kept through redraws, moves and zooming, so Shiny inputs and
+#'   outputs in it are bound once and keep their values. Mark an element of it
+#'   with a `data-g6-drag-handle` attribute to drag the node from that element
+#'   only, so that sliders, maps or text selection inside it do not move the
+#'   node.
 #' See \link{g6_collapse_options} for details. For nodes, only used when node has children.
 #' For combos, when provided and `type` is NULL, auto-sets type to `"rect-combo-with-extra-button"`.
 #' @param source Character. Source node ID (required, edges only).
@@ -180,8 +187,17 @@ g6_node <- function(
   combo = NULL,
   children = NULL,
   ports = NULL,
-  collapse = NULL
+  collapse = NULL,
+  ui = NULL
 ) {
+  if (!is.null(ui)) {
+    if (is.null(type)) {
+      type <- "custom-html-node"
+    }
+    if (type != "custom-html-node") {
+      stop("Node 'ui' needs type = 'custom-html-node'.")
+    }
+  }
   node <- dropNulls(list(
     id = id,
     type = type,
@@ -191,7 +207,8 @@ g6_node <- function(
     combo = combo,
     children = children,
     ports = ports,
-    collapse = collapse
+    collapse = collapse,
+    ui = ui
   ))
   node <- structure(node, class = c("g6_node", "g6_element"))
   validate_element(node)

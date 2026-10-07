@@ -1,5 +1,5 @@
 import {
-  Circle, Rect, Ellipse, Diamond, Triangle, Star, Hexagon, Image, Donut, GraphEvent, Badge, CommonEvent
+  Circle, Rect, Ellipse, Diamond, Triangle, Star, Hexagon, Image, Donut, HTML, GraphEvent, Badge, CommonEvent
 } from '@antv/g6';
 import { Circle as GCircle, Rect as GRect, Group } from '@antv/g';
 import { getPortConnections } from './utils';
@@ -537,6 +537,127 @@ const createIndicatorForKey = (self, key, x, y, baseRadius, style, container, po
   );
   indicator._visibility = portVisibility;
   return indicator;
+};
+
+// --- HTML node container ---
+
+// Space each side of an HTML node must leave free for its ports. The node's
+// DOM content sits above the canvas, so wherever it covers a port's hit area
+// the canvas never sees the pointer: a link dragged onto an input port
+// would be dropped on the content instead of the port.
+const htmlPortInsets = (portsStyle) => {
+  const insets = { top: 0, right: 0, bottom: 0, left: 0 };
+  Object.values(portsStyle || {}).forEach((style) => {
+    if (!style) return;
+    // the hit area drawn by createPortShapeForKey()
+    const r = (style.r || 6) * HITAREA_RADIUS_MULTIPLIER + 2;
+    const p = style.placement;
+    const sides = Array.isArray(p)
+      ? [p[0] <= 0 && 'left', p[0] >= 1 && 'right', p[1] <= 0 && 'top', p[1] >= 1 && 'bottom']
+      : ['left', 'right', 'top', 'bottom'].filter((side) => String(p).includes(side));
+    sides.filter(Boolean).forEach((side) => {
+      insets[side] = Math.max(insets[side], r);
+    });
+  });
+  return insets;
+};
+
+// Whether `target`, or an ancestor up to `root`, can scroll further in the
+// direction of a wheel event.
+const canScrollWithin = (target, root, dx, dy) => {
+  for (let el = target; el && el !== root; el = el.parentElement) {
+    const style = getComputedStyle(el);
+    if (dy && /(auto|scroll)/.test(style.overflowY) && el.scrollHeight > el.clientHeight) {
+      if (dy < 0 ? el.scrollTop > 0 : el.scrollTop + el.clientHeight < el.scrollHeight) return true;
+    }
+    if (dx && /(auto|scroll)/.test(style.overflowX) && el.scrollWidth > el.clientWidth) {
+      if (dx < 0 ? el.scrollLeft > 0 : el.scrollLeft + el.clientWidth < el.scrollWidth) return true;
+    }
+  }
+  return false;
+};
+
+// --- HTML node content from R (g6_node(ui = )) ---
+
+// Per graph container, the markup R rendered for each node and the element
+// built from it. A node's element is built once and kept, so redrawing,
+// moving or zooming the node never rebuilds its content, and Shiny inputs and
+// outputs in it are bound once. Kept by container rather than by graph, so a
+// re-rendered graph with unchanged content keeps its elements and bindings.
+const nodeContent = new Map();
+
+const releaseContentElement = (el) => {
+  if (!el) return;
+  if (window.Shiny && window.Shiny.unbindAll) window.Shiny.unbindAll(el);
+  el.remove();
+};
+
+// `content` maps node ids to markup. With `prune`, entries for nodes no longer
+// listed are released, as when the whole graph is rendered again.
+const registerNodeContent = (containerId, content, { prune = false } = {}) => {
+  if (!nodeContent.has(containerId)) nodeContent.set(containerId, new Map());
+  const store = nodeContent.get(containerId);
+  const incoming = content || {};
+  if (prune) {
+    for (const [id, entry] of store) {
+      if (!(id in incoming)) {
+        releaseContentElement(entry.el);
+        store.delete(id);
+      }
+    }
+  }
+  Object.entries(incoming).forEach(([id, html]) => {
+    const prev = store.get(id);
+    if (prev && prev.html === html) return;
+    if (prev) releaseContentElement(prev.el);
+    store.set(id, { html, el: null });
+  });
+};
+
+const nodeContentElement = (containerId, nodeId) => {
+  const entry = nodeContent.get(containerId)?.get(nodeId);
+  if (!entry) return null;
+  if (!entry.el) {
+    const el = document.createElement('div');
+    el.id = `${containerId}-node-${nodeId}`;
+    el.className = 'g6-node-content';
+    // jQuery runs the markup's inline scripts, as Shiny's renderUI() does
+    if (window.jQuery) window.jQuery(el).html(entry.html);
+    else el.innerHTML = entry.html;
+    entry.el = el;
+  }
+  return entry.el;
+};
+
+// Shiny measures outputs with getBoundingClientRect(), which includes the
+// canvas zoom (a CSS transform on the nodes), and passes that size to output
+// bindings' resize(). Widgets that apply it, such as plotly, then draw at the
+// zoomed size inside an unzoomed node: half the node at zoom 0.5. Outputs in
+// node content are given their layout size instead. Bindings are wrapped as
+// content is bound, which covers widget types loaded later.
+const fixOutputResize = () => {
+  const registry = window.Shiny && window.Shiny.outputBindings;
+  if (!registry) return;
+  registry.getBindings().forEach(({ binding }) => {
+    if (!binding || binding.g6LayoutResize || typeof binding.resize !== 'function') return;
+    const resize = binding.resize;
+    binding.resize = function (el, width, height) {
+      if (el && el.closest && el.closest('.g6-node-content')) {
+        width = el.offsetWidth;
+        height = el.offsetHeight;
+      }
+      return resize.call(this, el, width, height);
+    };
+    binding.g6LayoutResize = true;
+  });
+};
+
+const dropNodeContent = (containerId, nodeId) => {
+  const store = nodeContent.get(containerId);
+  const entry = store?.get(nodeId);
+  if (!entry) return;
+  releaseContentElement(entry.el);
+  store.delete(nodeId);
 };
 
 // --- Main class ---
@@ -1465,10 +1586,102 @@ const createCustomNode = (BaseShape) => {
       }
     }
 
+    // HTML nodes only: the wrapper G creates for the content lets the pointer
+    // through to the canvas, its content takes it back (see g6.css), and the
+    // content is inset clear of the ports' hit areas. G writes the key style's
+    // pointerEvents inline, so it is set there rather than in the stylesheet.
+    getKeyStyle(attributes) {
+      const style = super.getKeyStyle(attributes);
+      if (typeof this.getDomElement !== 'function') return style;
+      // Without its own innerHTML, a node shows the content R gave it as
+      // g6_node(ui = ), by reference.
+      if (style.innerHTML == null) {
+        const el = nodeContentElement(this.context.graph.options.container, this.id);
+        if (el) style.innerHTML = el;
+      }
+      return { ...style, pointerEvents: 'none' };
+    }
+
+    syncHTMLContainer(attributes) {
+      const el = this.getDomElement();
+      if (!el) return;
+      el.classList.add('g6-html-node');
+      const insets = htmlPortInsets(this.getPortsStyle(attributes));
+      Object.entries(insets).forEach(([side, px]) => {
+        el.style.setProperty(`--g6-html-inset-${side}`, `${px}px`);
+      });
+      // Content from g6_node(ui = ) is bound once it is in the page and sized,
+      // so its outputs render at the node's size.
+      const content = el.querySelector(':scope > .g6-node-content');
+      if (content && content.isConnected && !content.dataset.g6Bound) {
+        content.dataset.g6Bound = 'true';
+        // as Shiny's renderUI() does: initialise inputs (sliders...), then bind
+        if (window.Shiny && window.Shiny.bindAll) {
+          fixOutputResize();
+          if (window.Shiny.initializeInputs) window.Shiny.initializeInputs(content);
+          Promise.resolve(window.Shiny.bindAll(content)).catch((e) => {
+            console.error(`g6R: binding the content of node ${this.id} failed`, e);
+          });
+        }
+        if (window.HTMLWidgets && window.HTMLWidgets.staticRender) window.HTMLWidgets.staticRender();
+        requestAnimationFrame(() => window.dispatchEvent(new Event('resize')));
+      }
+      if (!el._g6WheelRouting) {
+        el._g6WheelRouting = true;
+        el.addEventListener('wheel', (event) => this.routeWheel(event, el), { passive: false });
+      }
+    }
+
+    // A wheel over the content scrolls whatever in it can still scroll that
+    // way (a table, a long list) and otherwise zooms the canvas, as it would
+    // over empty canvas. Widgets that handle the wheel themselves (a map)
+    // stop it before it gets here. Without this the graph container cancels
+    // every wheel, so content could not scroll, and the canvas, which sits
+    // under the content, never saw it either.
+    routeWheel(event, root) {
+      if (canScrollWithin(event.target, root, event.deltaX, event.deltaY)) {
+        event.stopPropagation();
+        return;
+      }
+      const canvasEl = this.context.canvas.getContextService().getDomElement();
+      if (!canvasEl) return;
+      event.preventDefault();
+      event.stopPropagation();
+      canvasEl.dispatchEvent(new WheelEvent('wheel', event));
+    }
+
     render(attributes = this.parsedAttributes, container) {
       super.render(attributes, container);
       this._renderContainer = container;
       this.drawCollapseButton(attributes);
+      if (typeof this.getDomElement === 'function') {
+        this.syncHTMLContainer(attributes);
+      }
+    }
+
+    // A node removed from the graph releases its content; a node destroyed
+    // with the whole graph keeps it, for the graph rendered in its place.
+    destroy() {
+      if (typeof this.getDomElement === 'function') {
+        const graph = this.context.graph;
+        let removed = false;
+        try {
+          removed = !graph.destroyed && !graph.getNodeData(this.id);
+        } catch (e) {
+          removed = true;
+        }
+        if (removed) dropNodeContent(graph.options.container, this.id);
+      }
+      super.destroy();
+    }
+
+    // G creates an HTML node's DOM element when the node is mounted, after its
+    // first render, so the container is set up again once it exists.
+    connectedCallback() {
+      super.connectedCallback?.();
+      if (typeof this.getDomElement === 'function') {
+        this.syncHTMLContainer(this.parsedAttributes);
+      }
     }
   };
 };
@@ -1482,6 +1695,7 @@ const CustomStarNode = createCustomNode(Star);
 const CustomHexagonNode = createCustomNode(Hexagon);
 const CustomImageNode = createCustomNode(Image);
 const CustomDonutNode = createCustomNode(Donut);
+const CustomHTMLNode = createCustomNode(HTML);
 
 export {
   CustomCircleNode,
@@ -1493,5 +1707,7 @@ export {
   CustomHexagonNode,
   CustomImageNode,
   CustomDonutNode,
+  CustomHTMLNode,
+  registerNodeContent,
   dagCollapsedNodes
 };
