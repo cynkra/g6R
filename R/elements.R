@@ -7,11 +7,16 @@
 #' @param placement Character or numeric vector. Position of the collapse button.
 #'   Can be one of: "top", "right", "bottom", "left", "right-top", "right-bottom",
 #'   "left-top", "left-bottom", or a numeric vector of length 2 for custom coordinates.
-#' @param r Numeric. Radius of the button. Default is 8.
-#' @param fill Character. Fill color of the button background. Default is "#fff".
-#' @param stroke Character. Stroke color of the button border. Default is "#CED4D9".
+#' @param r Numeric. Radius of the button. Default is 6.
+#' @param fill Character. Fill color of the button background. `NULL` (the
+#'   default) follows the graph theme: white, or the canvas background with
+#'   `theme = "dark"`.
+#' @param stroke Character. Stroke color of the button border. `NULL` (the
+#'   default) follows the graph theme.
 #' @param lineWidth Numeric. Width of the button border. Default is 1.
-#' @param iconStroke Character. Stroke color of the +/- icon. Default is "#000".
+#' @param iconStroke Character. Color of the +/- icon and of the "+ N" count
+#'   shown when collapsed. `NULL` (the default) picks a grey that contrasts
+#'   with `fill`, so a themed fill keeps a legible icon.
 #' @param iconLineWidth Numeric. Width of the +/- icon lines. Default is 1.4.
 #' @param cursor Character. CSS cursor style. Default is "pointer".
 #' @param zIndex Numeric. Z-index for layering. Default is 999.
@@ -39,10 +44,10 @@ g6_collapse_options <- function(
   visibility = c("visible", "hover"),
   placement = "right-top",
   r = 6,
-  fill = "#fff",
-  stroke = "#9cabd4",
+  fill = NULL,
+  stroke = NULL,
   lineWidth = 1,
-  iconStroke = "#9cabd4",
+  iconStroke = NULL,
   iconLineWidth = 1.4,
   cursor = "pointer",
   zIndex = 999
@@ -82,7 +87,7 @@ g6_collapse_options <- function(
   }
 
   structure(
-    list(
+    dropNulls(list(
       collapsed = collapsed,
       visibility = visibility,
       placement = placement,
@@ -94,7 +99,7 @@ g6_collapse_options <- function(
       iconLineWidth = iconLineWidth,
       cursor = cursor,
       zIndex = zIndex
-    ),
+    )),
     class = "g6_collapse_options"
   )
 }

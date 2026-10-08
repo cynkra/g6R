@@ -10,10 +10,10 @@ g6_collapse_options(
   visibility = c("visible", "hover"),
   placement = "right-top",
   r = 6,
-  fill = "#fff",
-  stroke = "#9cabd4",
+  fill = NULL,
+  stroke = NULL,
   lineWidth = 1,
-  iconStroke = "#9cabd4",
+  iconStroke = NULL,
   iconLineWidth = 1.4,
   cursor = "pointer",
   zIndex = 999
@@ -32,15 +32,20 @@ Either \code{"visible"} (always shown when children exist) or \code{"hover"}
 Can be one of: "top", "right", "bottom", "left", "right-top", "right-bottom",
 "left-top", "left-bottom", or a numeric vector of length 2 for custom coordinates.}
 
-\item{r}{Numeric. Radius of the button. Default is 8.}
+\item{r}{Numeric. Radius of the button. Default is 6.}
 
-\item{fill}{Character. Fill color of the button background. Default is "#fff".}
+\item{fill}{Character. Fill color of the button background. \code{NULL} (the
+default) follows the graph theme: white, or the canvas background with
+\code{theme = "dark"}.}
 
-\item{stroke}{Character. Stroke color of the button border. Default is "#CED4D9".}
+\item{stroke}{Character. Stroke color of the button border. \code{NULL} (the
+default) follows the graph theme.}
 
 \item{lineWidth}{Numeric. Width of the button border. Default is 1.}
 
-\item{iconStroke}{Character. Stroke color of the +/- icon. Default is "#000".}
+\item{iconStroke}{Character. Color of the +/- icon and of the "+ N" count
+shown when collapsed. \code{NULL} (the default) picks a grey that contrasts
+with \code{fill}, so a themed fill keeps a legible icon.}
 
 \item{iconLineWidth}{Numeric. Width of the +/- icon lines. Default is 1.4.}
 
