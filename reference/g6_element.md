@@ -14,7 +14,8 @@ g6_node(
   combo = NULL,
   children = NULL,
   ports = NULL,
-  collapse = NULL
+  collapse = NULL,
+  ui = NULL
 )
 
 g6_edge(
@@ -93,7 +94,21 @@ validate_element(x, ...)
 
 - collapse:
 
-  List. Collapse button configuration (optional, nodes and combos). See
+  List. Collapse button configuration (optional, nodes and combos).
+
+- ui:
+
+  Content of the node: Shiny UI or other HTML tags (optional, nodes
+  only). Implies `type = "custom-html-node"`. The content is built once
+  per node and kept through redraws, moves and zooming, so Shiny inputs
+  and outputs in it are bound once and keep their values. Mark an
+  element of it with a `data-g6-drag-handle` attribute to drag the node
+  from that element only, so that sliders, maps or text selection inside
+  it do not move the node. Ports that set no `r` are sized to the node,
+  a fiftieth of its width between 6 and 12, so they stay in proportion
+  to a large card when the graph is zoomed out to fit; `r` on a port, or
+  `portR` on the node or in the graph's node options, sets the radius
+  instead. See
   [g6_collapse_options](https://cynkra.github.io/g6R/reference/g6_collapse_options.md)
   for details. For nodes, only used when node has children. For combos,
   when provided and `type` is NULL, auto-sets type to

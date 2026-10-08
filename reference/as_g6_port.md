@@ -56,6 +56,9 @@ as_g6_port(list(key = "input-1", type = "input", placement = "left"))
 #> $r
 #> [1] 6
 #> 
+#> $rAuto
+#> [1] TRUE
+#> 
 #> attr(,"class")
 #> [1] "g6_port"
 as_g6_port(g6_port("input-1", type = "input"))
@@ -76,6 +79,9 @@ as_g6_port(g6_port("input-1", type = "input"))
 #> 
 #> $r
 #> [1] 6
+#> 
+#> $rAuto
+#> [1] TRUE
 #> 
 #> attr(,"class")
 #> [1] "g6_port"

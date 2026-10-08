@@ -247,6 +247,77 @@ g6(nodes, height = "200px") |>
   )
 ```
 
+HTML nodes can have ports too, with the `custom-html-node` type. g6R
+insets the content on each side that has ports, so the ports’ hit areas
+stay on the canvas and links can be dropped on them, and lets the
+pointer through everywhere the content does not cover.
+
+The content of an HTML node can also be Shiny UI, or any other HTML
+tags, given as the node’s `ui`, which makes it a `custom-html-node`. The
+content is built once per node and kept through redraws, moves and
+zooming, so inputs stay bound and keep their values, and outputs render
+at the node’s size. Mark an element with a `data-g6-drag-handle`
+attribute to make the node draggable from it only, so dragging a slider
+or panning a map inside the node does not move it. A wheel over the
+content scrolls it where it can scroll and otherwise zooms the canvas.
+With `style = list(autoHeight = TRUE)`, the node’s height follows its
+content, so content whose height changes is never cut off or scrolled as
+a whole. A double-click inside the content is left to the content:
+[`collapse_expand()`](https://cynkra.github.io/g6R/reference/collapse_expand.md)
+does not act on it, and HTML nodes collapse from their collapse button
+instead.
+
+``` r
+
+library(shiny)
+library(bslib)
+
+ui <- page_fluid(g6Output("graph"))
+
+server <- function(input, output, session) {
+  output$plot <- renderPlot(hist(rnorm(input$n)))
+  output$graph <- renderG6({
+    g6(
+      nodes = g6_nodes(
+        g6_node(
+          "a",
+          style = list(size = c(260, 160)),
+          ports = g6_ports(g6_output_port(key = "a-out", placement = "right")),
+          ui = card(
+            card_header("Points", `data-g6-drag-handle` = NA),
+            sliderInput("n", NULL, 10, 100, 50)
+          )
+        ),
+        g6_node(
+          "b",
+          style = list(size = c(320, 280)),
+          ports = g6_ports(g6_input_port(key = "b-in", placement = "left")),
+          ui = card(
+            card_header("Plot", `data-g6-drag-handle` = NA),
+            plotOutput("plot")
+          )
+        )
+      ),
+      edges = g6_edges(
+        g6_edge("a", "b", style = list(sourcePort = "a-out", targetPort = "b-in"))
+      )
+    ) |>
+      g6_layout(antv_dagre_layout(rankdir = "LR")) |>
+      g6_behaviors(
+        "zoom-canvas",
+        drag_canvas(enable = JS("(e) => e.targetType === 'canvas'")),
+        drag_element()
+      )
+  })
+}
+
+shinyApp(ui, server)
+```
+
+A larger app, a pipeline whose nodes hold sliders, a leaflet map, a DT
+table, a plotly chart and an echarts chart, is in
+`inst/examples/html-widgets`.
+
 #### Donut
 
 You can create donut nodes by setting the `type` to `donut`. The `style`
@@ -442,9 +513,9 @@ g6(nodes, height = "200px") |>
 Since, [g6R](https://github.com/cynkra/g6R) 0.6.0, we offer a better
 support for ports. To enable it, you must pass a custom type to
 [`g6_node()`](https://cynkra.github.io/g6R/reference/g6_element.md) such
-as `custom-circle-node`, `custom-rect-node` (We support 9
-[shapes](https://g6.antv.antgroup.com/en/manual/element/node/overview#built-in-nodes),
-except HTML which does not handle port in the g6 library).
+as `custom-circle-node`, `custom-rect-node` (We support the 9
+[shapes](https://g6.antv.antgroup.com/en/manual/element/node/overview#built-in-nodes)
+and HTML nodes, see below).
 [`g6_node()`](https://cynkra.github.io/g6R/reference/g6_element.md) get
 a new `ports` argument to define ports for each node. In the g6 JS
 library, ports are normally defined inside `style` but we consider they

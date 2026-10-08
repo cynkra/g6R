@@ -118,6 +118,9 @@ g6_port("input-1", label = "port 1", type = "input", arity = 2, placement = "lef
 #> $r
 #> [1] 6
 #> 
+#> $rAuto
+#> [1] TRUE
+#> 
 #> attr(,"class")
 #> [1] "g6_port"
 g6_port("output-1", label = "port 2", type = "output", placement = "right")
@@ -142,6 +145,9 @@ g6_port("output-1", label = "port 2", type = "output", placement = "right")
 #> $r
 #> [1] 6
 #> 
+#> $rAuto
+#> [1] TRUE
+#> 
 #> attr(,"class")
 #> [1] "g6_port"
 g6_port("input-2", type = "input", visibility = "hover")
@@ -162,6 +168,9 @@ g6_port("input-2", type = "input", visibility = "hover")
 #> 
 #> $r
 #> [1] 6
+#> 
+#> $rAuto
+#> [1] TRUE
 #> 
 #> attr(,"class")
 #> [1] "g6_port"

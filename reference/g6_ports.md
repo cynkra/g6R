@@ -47,6 +47,9 @@ g6_ports(
 #> $r
 #> [1] 6
 #> 
+#> $rAuto
+#> [1] TRUE
+#> 
 #> attr(,"class")
 #> [1] "g6_port"
 #> 
@@ -71,6 +74,9 @@ g6_ports(
 #> 
 #> $r
 #> [1] 6
+#> 
+#> $rAuto
+#> [1] TRUE
 #> 
 #> attr(,"class")
 #> [1] "g6_port"

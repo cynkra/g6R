@@ -20,7 +20,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">g6R</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.6.5.9007</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.6.5.9008</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -85,7 +85,7 @@
 
 
 
-<script src="nodes_files/htmlwidgets-1.6.4/htmlwidgets.js"></script><script src="nodes_files/g6-binding-0.6.5.9007/g6.js"></script><div class="row">
+<script src="nodes_files/htmlwidgets-1.6.4/htmlwidgets.js"></script><script src="nodes_files/g6-binding-0.6.5.9008/g6.js"></script><div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
 
       <h1>Nodes</h1>
@@ -330,7 +330,71 @@ parameter:</p>
 <span>    <span class="op">)</span></span>
 <span>  <span class="op">)</span></span></code></pre></div>
 <div id="htmlwidget-36aa3d2a04d42bbc2145" style="width:100%;height:200px;" class="g6 html-widget"></div>
-<script type="application/json" data-for="htmlwidget-36aa3d2a04d42bbc2145">{"x":{"data":{"nodes":[{"id":1},{"id":2},{"id":3}]},"jsonUrl":null,"iconsUrl":"//at.alicdn.com/t/font_2678727_za4qjydwkkh.js","mode":"prod","preservePosition":false,"directed":false,"maxCollapseDepth":null,"layout":{"type":"d3-force","link":{"distance":100,"strength":2},"collide":{"radius":40}},"node":{"type":"html","style":{"innerHTML":"(d) => {\n            return `\n              <div class=\"card\" style=\"width: 13rem;\">\n                <div class=\"card-body\">\n                  This is node: ${d.id}\n                <\/div>\n              <\/div>`;\n            }"}},"animation":false,"autoResize":false,"cursor":"default","rotation":0,"zoom":1,"zoomRange":[0.01,10],"theme":"light"},"evals":["node.style.innerHTML"],"jsHooks":[]}</script>
+<script type="application/json" data-for="htmlwidget-36aa3d2a04d42bbc2145">{"x":{"data":{"nodes":[{"id":1},{"id":2},{"id":3}]},"jsonUrl":null,"iconsUrl":"//at.alicdn.com/t/font_2678727_za4qjydwkkh.js","mode":"prod","preservePosition":false,"directed":false,"maxCollapseDepth":null,"layout":{"type":"d3-force","link":{"distance":100,"strength":2},"collide":{"radius":40}},"node":{"type":"html","style":{"innerHTML":"(d) => {\n            return `\n              <div class=\"card\" style=\"width: 13rem;\">\n                <div class=\"card-body\">\n                  This is node: ${d.id}\n                <\/div>\n              <\/div>`;\n            }"}},"animation":false,"autoResize":false,"cursor":"default","rotation":0,"zoom":1,"zoomRange":[0.01,10],"theme":"light"},"evals":["node.style.innerHTML"],"jsHooks":[]}</script><p>HTML nodes can have ports too, with the <code>custom-html-node</code>
+type. g6R insets the content on each side that has ports, so the ports’
+hit areas stay on the canvas and links can be dropped on them, and lets
+the pointer through everywhere the content does not cover.</p>
+<p>The content of an HTML node can also be Shiny UI, or any other HTML
+tags, given as the node’s <code>ui</code>, which makes it a
+<code>custom-html-node</code>. The content is built once per node and
+kept through redraws, moves and zooming, so inputs stay bound and keep
+their values, and outputs render at the node’s size. Mark an element
+with a <code>data-g6-drag-handle</code> attribute to make the node
+draggable from it only, so dragging a slider or panning a map inside the
+node does not move it. A wheel over the content scrolls it where it can
+scroll and otherwise zooms the canvas. With
+<code>style = list(autoHeight = TRUE)</code>, the node’s height follows
+its content, so content whose height changes is never cut off or
+scrolled as a whole. A double-click inside the content is left to the
+content: <code><a href="../reference/collapse_expand.html">collapse_expand()</a></code> does not act on it, and HTML
+nodes collapse from their collapse button instead.</p>
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://shiny.posit.co/" class="external-link">shiny</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://rstudio.github.io/bslib/" class="external-link">bslib</a></span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">ui</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rstudio.github.io/bslib/reference/page.html" class="external-link">page_fluid</a></span><span class="op">(</span><span class="fu"><a href="../reference/g6-shiny.html">g6Output</a></span><span class="op">(</span><span class="st">"graph"</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">server</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">input</span>, <span class="va">output</span>, <span class="va">session</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="va">output</span><span class="op">$</span><span class="va">plot</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/renderPlot.html" class="external-link">renderPlot</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/graphics/hist.html" class="external-link">hist</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="va">input</span><span class="op">$</span><span class="va">n</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
+<span>  <span class="va">output</span><span class="op">$</span><span class="va">graph</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/g6-shiny.html">renderG6</a></span><span class="op">(</span><span class="op">{</span></span>
+<span>    <span class="fu"><a href="../reference/g6.html">g6</a></span><span class="op">(</span></span>
+<span>      nodes <span class="op">=</span> <span class="fu"><a href="../reference/g6_elements.html">g6_nodes</a></span><span class="op">(</span></span>
+<span>        <span class="fu"><a href="../reference/g6_element.html">g6_node</a></span><span class="op">(</span></span>
+<span>          <span class="st">"a"</span>,</span>
+<span>          style <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>size <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">260</span>, <span class="fl">160</span><span class="op">)</span><span class="op">)</span>,</span>
+<span>          ports <span class="op">=</span> <span class="fu"><a href="../reference/g6_ports.html">g6_ports</a></span><span class="op">(</span><span class="fu"><a href="../reference/g6_port.html">g6_output_port</a></span><span class="op">(</span>key <span class="op">=</span> <span class="st">"a-out"</span>, placement <span class="op">=</span> <span class="st">"right"</span><span class="op">)</span><span class="op">)</span>,</span>
+<span>          ui <span class="op">=</span> <span class="fu"><a href="https://rstudio.github.io/bslib/reference/card.html" class="external-link">card</a></span><span class="op">(</span></span>
+<span>            <span class="fu"><a href="https://rstudio.github.io/bslib/reference/card_body.html" class="external-link">card_header</a></span><span class="op">(</span><span class="st">"Points"</span>, `data-g6-drag-handle` <span class="op">=</span> <span class="cn">NA</span><span class="op">)</span>,</span>
+<span>            <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/sliderInput.html" class="external-link">sliderInput</a></span><span class="op">(</span><span class="st">"n"</span>, <span class="cn">NULL</span>, <span class="fl">10</span>, <span class="fl">100</span>, <span class="fl">50</span><span class="op">)</span></span>
+<span>          <span class="op">)</span></span>
+<span>        <span class="op">)</span>,</span>
+<span>        <span class="fu"><a href="../reference/g6_element.html">g6_node</a></span><span class="op">(</span></span>
+<span>          <span class="st">"b"</span>,</span>
+<span>          style <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>size <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">320</span>, <span class="fl">280</span><span class="op">)</span><span class="op">)</span>,</span>
+<span>          ports <span class="op">=</span> <span class="fu"><a href="../reference/g6_ports.html">g6_ports</a></span><span class="op">(</span><span class="fu"><a href="../reference/g6_port.html">g6_input_port</a></span><span class="op">(</span>key <span class="op">=</span> <span class="st">"b-in"</span>, placement <span class="op">=</span> <span class="st">"left"</span><span class="op">)</span><span class="op">)</span>,</span>
+<span>          ui <span class="op">=</span> <span class="fu"><a href="https://rstudio.github.io/bslib/reference/card.html" class="external-link">card</a></span><span class="op">(</span></span>
+<span>            <span class="fu"><a href="https://rstudio.github.io/bslib/reference/card_body.html" class="external-link">card_header</a></span><span class="op">(</span><span class="st">"Plot"</span>, `data-g6-drag-handle` <span class="op">=</span> <span class="cn">NA</span><span class="op">)</span>,</span>
+<span>            <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/plotOutput.html" class="external-link">plotOutput</a></span><span class="op">(</span><span class="st">"plot"</span><span class="op">)</span></span>
+<span>          <span class="op">)</span></span>
+<span>        <span class="op">)</span></span>
+<span>      <span class="op">)</span>,</span>
+<span>      edges <span class="op">=</span> <span class="fu"><a href="../reference/g6_elements.html">g6_edges</a></span><span class="op">(</span></span>
+<span>        <span class="fu"><a href="../reference/g6_element.html">g6_edge</a></span><span class="op">(</span><span class="st">"a"</span>, <span class="st">"b"</span>, style <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>sourcePort <span class="op">=</span> <span class="st">"a-out"</span>, targetPort <span class="op">=</span> <span class="st">"b-in"</span><span class="op">)</span><span class="op">)</span></span>
+<span>      <span class="op">)</span></span>
+<span>    <span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>      <span class="fu"><a href="../reference/g6_layout.html">g6_layout</a></span><span class="op">(</span><span class="fu"><a href="../reference/antv_dagre_layout.html">antv_dagre_layout</a></span><span class="op">(</span>rankdir <span class="op">=</span> <span class="st">"LR"</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>      <span class="fu"><a href="../reference/g6_behaviors.html">g6_behaviors</a></span><span class="op">(</span></span>
+<span>        <span class="st">"zoom-canvas"</span>,</span>
+<span>        <span class="fu"><a href="../reference/drag_canvas.html">drag_canvas</a></span><span class="op">(</span>enable <span class="op">=</span> <span class="fu"><a href="../reference/JS.html">JS</a></span><span class="op">(</span><span class="st">"(e) =&gt; e.targetType === 'canvas'"</span><span class="op">)</span><span class="op">)</span>,</span>
+<span>        <span class="fu"><a href="../reference/drag_element.html">drag_element</a></span><span class="op">(</span><span class="op">)</span></span>
+<span>      <span class="op">)</span></span>
+<span>  <span class="op">}</span><span class="op">)</span></span>
+<span><span class="op">}</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/pkg/shiny/man/shinyApp.html" class="external-link">shinyApp</a></span><span class="op">(</span><span class="va">ui</span>, <span class="va">server</span><span class="op">)</span></span></code></pre></div>
+<p>A larger app, a pipeline whose nodes hold sliders, a leaflet map, a
+DT table, a plotly chart and an echarts chart, is in
+<code>inst/examples/html-widgets</code>.</p>
 </div>
 <div class="section level4">
 <h4 id="donut">Donut<a class="anchor" aria-label="anchor" href="#donut"></a>
@@ -344,7 +408,7 @@ if you want to customize the segments of the donut. You may give an
 <code>data.index</code> property to the node to distinguish between
 different donuts and customize the output, as shown in the example
 below.</p>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">nodes</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
 <span>    id <span class="op">=</span> <span class="fl">1</span>,</span>
@@ -403,7 +467,7 @@ properties, but you can find a comprehensive list in the <a href="https://g6.ant
 of the node, such as color, width, and line type. They can be applied at
 the global node option level or at the individual node level. Here is an
 example of how to set the color for all nodes of the same graph:</p>
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">nodes</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>id <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">2</span><span class="op">)</span></span>
 <span><span class="fu"><a href="../reference/g6.html">g6</a></span><span class="op">(</span><span class="va">nodes</span>, height <span class="op">=</span> <span class="st">"200px"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="../reference/g6_layout.html">g6_layout</a></span><span class="op">(</span><span class="fu"><a href="../reference/d3_force_layout.html">d3_force_layout</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
@@ -425,7 +489,7 @@ example of how to set the color for all nodes of the same graph:</p>
 <h4 id="label-styling">Label styling<a class="anchor" aria-label="anchor" href="#label-styling"></a>
 </h4>
 <p>Some common properties include label <a href="https://g6.antv.antgroup.com/en/manual/element/node/build-in/base-node#label-style" class="external-link">styling</a>:</p>
-<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">nodes</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
 <span>    id <span class="op">=</span> <span class="fl">1</span>,</span>
@@ -452,7 +516,7 @@ example of how to set the color for all nodes of the same graph:</p>
 to nodes using the <code>badge</code> property in the <code>style</code>
 list. Badges are small indicators that can display additional
 information, such as counts or statuses:</p>
-<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">nodes</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
 <span>    id <span class="op">=</span> <span class="fl">1</span>,</span>
@@ -481,7 +545,7 @@ information, such as counts or statuses:</p>
 are special points on nodes that can be used for connecting edges. They
 can be defined in the <code>style</code> property of the node data. You
 can specify the position and other properties of each port:</p>
-<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">nodes</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
 <span>    id <span class="op">=</span> <span class="fl">1</span>,</span>
@@ -519,18 +583,18 @@ can specify the position and other properties of each port:</p>
 <span><span class="fu"><a href="../reference/g6.html">g6</a></span><span class="op">(</span><span class="va">nodes</span>, height <span class="op">=</span> <span class="st">"200px"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="../reference/g6_layout.html">g6_layout</a></span><span class="op">(</span><span class="fu"><a href="../reference/d3_force_layout.html">d3_force_layout</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <div id="htmlwidget-5b1b2f4ad92281566982" style="width:100%;height:200px;" class="g6 html-widget"></div>
-<script type="application/json" data-for="htmlwidget-5b1b2f4ad92281566982">{"x":{"data":{"nodes":[{"id":1,"style":{"port":true,"ports":[{"key":"bottom","type":"input","arity":1,"visibility":"visible","label":"bottom","placement":[0.5,1],"fill":"#7E92B5","r":6},{"key":"right","type":"input","arity":1,"visibility":"visible","label":"right","placement":[1,0.5],"fill":"#F4664A","r":6},{"key":"top","type":"input","arity":1,"visibility":"visible","label":"top","placement":[0.5,0],"fill":"#FFBE3A","r":6},{"key":"left","type":"input","arity":1,"visibility":"visible","label":"left","placement":[0,0.5],"fill":"#D580FF","r":6}],"portR":3,"portLineWidth":1,"portStroke":"#fff"}}]},"jsonUrl":null,"iconsUrl":"//at.alicdn.com/t/font_2678727_za4qjydwkkh.js","mode":"prod","preservePosition":false,"directed":false,"maxCollapseDepth":null,"layout":{"type":"d3-force","link":{"distance":100,"strength":2},"collide":{"radius":40}}},"evals":[],"jsHooks":[]}</script><p>Since, <a href="https://github.com/cynkra/g6R" class="external-link">g6R</a> 0.6.0, we offer a better support for ports.
+<script type="application/json" data-for="htmlwidget-5b1b2f4ad92281566982">{"x":{"data":{"nodes":[{"id":1,"style":{"port":true,"ports":[{"key":"bottom","type":"input","arity":1,"visibility":"visible","label":"bottom","placement":[0.5,1],"fill":"#7E92B5","r":6,"rAuto":true},{"key":"right","type":"input","arity":1,"visibility":"visible","label":"right","placement":[1,0.5],"fill":"#F4664A","r":6,"rAuto":true},{"key":"top","type":"input","arity":1,"visibility":"visible","label":"top","placement":[0.5,0],"fill":"#FFBE3A","r":6,"rAuto":true},{"key":"left","type":"input","arity":1,"visibility":"visible","label":"left","placement":[0,0.5],"fill":"#D580FF","r":6,"rAuto":true}],"portR":3,"portLineWidth":1,"portStroke":"#fff"}}]},"jsonUrl":null,"iconsUrl":"//at.alicdn.com/t/font_2678727_za4qjydwkkh.js","mode":"prod","preservePosition":false,"directed":false,"maxCollapseDepth":null,"layout":{"type":"d3-force","link":{"distance":100,"strength":2},"collide":{"radius":40}}},"evals":[],"jsHooks":[]}</script><p>Since, <a href="https://github.com/cynkra/g6R" class="external-link">g6R</a> 0.6.0, we offer a better support for ports.
 To enable it, you must pass a custom type to <code><a href="../reference/g6_element.html">g6_node()</a></code> such
 as <code>custom-circle-node</code>, <code>custom-rect-node</code> (We
-support 9 <a href="https://g6.antv.antgroup.com/en/manual/element/node/overview#built-in-nodes" class="external-link">shapes</a>,
-except HTML which does not handle port in the g6 library).
-<code><a href="../reference/g6_element.html">g6_node()</a></code> get a new <code>ports</code> argument to define
-ports for each node. In the g6 JS library, ports are normally defined
-inside <code>style</code> but we consider they are too important to be
-hidden there. Now you can define ports directly in the node data, g6R
-automatically moves them to <code>style.ports</code> when rendering the
-graph. We expose a new <code><a href="../reference/g6_port.html">g6_port()</a></code> function to create ports
-easily and wrap them inside <code><a href="../reference/g6_ports.html">g6_ports()</a></code>. A port has a unique
+support the 9 <a href="https://g6.antv.antgroup.com/en/manual/element/node/overview#built-in-nodes" class="external-link">shapes</a>
+and HTML nodes, see below). <code><a href="../reference/g6_element.html">g6_node()</a></code> get a new
+<code>ports</code> argument to define ports for each node. In the g6 JS
+library, ports are normally defined inside <code>style</code> but we
+consider they are too important to be hidden there. Now you can define
+ports directly in the node data, g6R automatically moves them to
+<code>style.ports</code> when rendering the graph. We expose a new
+<code><a href="../reference/g6_port.html">g6_port()</a></code> function to create ports easily and wrap them
+inside <code><a href="../reference/g6_ports.html">g6_ports()</a></code>. A port has a unique
 <strong>key</strong>, an <strong>arity</strong> that is the number of
 connections it can make or take and other style parameters inherited
 from <a href="https://g6.antv.antgroup.com/en/manual/element/node/base-node#portstyleprops" class="external-link">g6</a>.
@@ -558,7 +622,7 @@ another output port) or connecting a port to itself. Finally
 ports. For instance, you can’t drag from a port that is already at its
 arity limit. You can’t drag from a node if it has ports (drag from the
 ports instead). For instance, you can also do:</p>
-<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/g6.html">g6</a></span><span class="op">(</span></span>
 <span>  nodes <span class="op">=</span> <span class="fu"><a href="../reference/g6_elements.html">g6_nodes</a></span><span class="op">(</span></span>
 <span>    <span class="fu"><a href="../reference/g6_element.html">g6_node</a></span><span class="op">(</span></span>
@@ -669,7 +733,7 @@ ports instead). For instance, you can also do:</p>
 <span>    <span class="op">)</span></span>
 <span>  <span class="op">)</span></span></code></pre></div>
 <div id="htmlwidget-25c3e940e6859592f801" style="width:100%;height:432.632880098888px;" class="g6 html-widget"></div>
-<script type="application/json" data-for="htmlwidget-25c3e940e6859592f801">{"x":{"data":{"nodes":[{"id":1,"type":"custom-circle-node","style":{"labelText":"Node 1","ports":[{"key":"input-1","type":"input","arity":1,"visibility":"visible","label":"input-1","fill":"#52C41A","placement":"left","r":6},{"key":"output-1","type":"output","arity":1,"visibility":"visible","label":"output-1","fill":"#FF4D4F","placement":"right","r":6},{"key":"input-12","type":"input","arity":1,"visibility":"visible","label":"input-12","fill":"#52C41A","placement":"top","r":6}]}},{"id":2,"type":"custom-circle-node","style":{"labelText":"Node 2","ports":[{"key":"input-2","type":"input","arity":1,"visibility":"visible","label":"input-2","fill":"#52C41A","placement":"left","r":6},{"key":"output-2","type":"output","arity":1,"visibility":"visible","label":"output-2","fill":"#FF4D4F","placement":"right","r":6}]}}],"edges":[{"source":1,"target":2,"id":"1-2","style":{"sourcePort":"output-1","targetPort":"input-2","endArrow":true}}]},"jsonUrl":null,"iconsUrl":"//at.alicdn.com/t/font_2678727_za4qjydwkkh.js","mode":"prod","preservePosition":false,"directed":false,"maxCollapseDepth":null,"layout":{"type":"d3-force","link":{"distance":100,"strength":2},"collide":{"radius":40}},"edge":{"style":{"endArrow":true}},"animation":false,"autoResize":false,"cursor":"default","rotation":0,"zoom":1,"zoomRange":[0.01,10],"theme":"light","behaviors":[{"key":"click-select","animation":true,"degree":0,"enable":true,"multiple":false,"state":"selected","neighborState":"selected","trigger":["shift"],"type":"click-select"},{"key":"drag-element","enable":"(e) => {\n          return !e.shiftKey && !e.altKey;\n        }","animation":true,"state":"selected","dropEffect":"move","hideEdge":"none","shadow":false,"type":"drag-element"},{"key":"drag-canvas","enable":"(e) => {\n          return e.targetType === 'canvas' && !e.shiftKey && !e.altKey;\n        }","direction":"both","sensitivity":10,"type":"drag-canvas"},{"key":"zoom-canvas","animation":{"duration":200},"enable":true,"preventDefault":true,"sensitivity":1,"type":"zoom-canvas"},{"key":"create-edge","trigger":"drag","enable":"(e) => {\n        return e.shiftKey}","notify":false,"type":"create-edge"}],"plugins":[{"key":"contextmenu","className":"g6-contextmenu","trigger":"contextmenu","offset":[4,4],"onClick":"(value, target, current) => {\n              const graph = HTMLWidgets\n                .find(`#${target.closest('.g6').id}`)\n                .getWidget();\n              console.log(current.id);\n              if (current.id === undefined) return;\n              if (value === 'remove_edge') {\n                graph.removeEdgeData([current.id]);\n                graph.draw();\n              }\n            }\n          ","getItems":"() => {\n              return [\n                { name: 'Remove edge', value: 'remove_edge' }\n              ];\n            }","enable":"(e) => e.targetType === 'edge'","type":"contextmenu"}]},"evals":["behaviors.1.enable","behaviors.2.enable","behaviors.4.enable","plugins.0.onClick","plugins.0.getItems","plugins.0.enable"],"jsHooks":[]}</script>
+<script type="application/json" data-for="htmlwidget-25c3e940e6859592f801">{"x":{"data":{"nodes":[{"id":1,"type":"custom-circle-node","style":{"labelText":"Node 1","ports":[{"key":"input-1","type":"input","arity":1,"visibility":"visible","label":"input-1","fill":"#52C41A","placement":"left","r":6,"rAuto":true},{"key":"output-1","type":"output","arity":1,"visibility":"visible","label":"output-1","fill":"#FF4D4F","placement":"right","r":6,"rAuto":true},{"key":"input-12","type":"input","arity":1,"visibility":"visible","label":"input-12","fill":"#52C41A","placement":"top","r":6,"rAuto":true}]}},{"id":2,"type":"custom-circle-node","style":{"labelText":"Node 2","ports":[{"key":"input-2","type":"input","arity":1,"visibility":"visible","label":"input-2","fill":"#52C41A","placement":"left","r":6,"rAuto":true},{"key":"output-2","type":"output","arity":1,"visibility":"visible","label":"output-2","fill":"#FF4D4F","placement":"right","r":6,"rAuto":true}]}}],"edges":[{"source":1,"target":2,"id":"1-2","style":{"sourcePort":"output-1","targetPort":"input-2","endArrow":true}}]},"jsonUrl":null,"iconsUrl":"//at.alicdn.com/t/font_2678727_za4qjydwkkh.js","mode":"prod","preservePosition":false,"directed":false,"maxCollapseDepth":null,"layout":{"type":"d3-force","link":{"distance":100,"strength":2},"collide":{"radius":40}},"edge":{"style":{"endArrow":true}},"animation":false,"autoResize":false,"cursor":"default","rotation":0,"zoom":1,"zoomRange":[0.01,10],"theme":"light","behaviors":[{"key":"click-select","animation":true,"degree":0,"enable":true,"multiple":false,"state":"selected","neighborState":"selected","trigger":["shift"],"type":"click-select"},{"key":"drag-element","enable":"(e) => {\n          return !e.shiftKey && !e.altKey;\n        }","animation":true,"state":"selected","dropEffect":"move","hideEdge":"none","shadow":false,"type":"drag-element"},{"key":"drag-canvas","enable":"(e) => {\n          return e.targetType === 'canvas' && !e.shiftKey && !e.altKey;\n        }","direction":"both","sensitivity":10,"type":"drag-canvas"},{"key":"zoom-canvas","animation":{"duration":200},"enable":true,"preventDefault":true,"sensitivity":1,"type":"zoom-canvas"},{"key":"create-edge","trigger":"drag","enable":"(e) => {\n        return e.shiftKey}","notify":false,"type":"create-edge"}],"plugins":[{"key":"contextmenu","className":"g6-contextmenu","trigger":"contextmenu","offset":[4,4],"onClick":"(value, target, current) => {\n              const graph = HTMLWidgets\n                .find(`#${target.closest('.g6').id}`)\n                .getWidget();\n              console.log(current.id);\n              if (current.id === undefined) return;\n              if (value === 'remove_edge') {\n                graph.removeEdgeData([current.id]);\n                graph.draw();\n              }\n            }\n          ","getItems":"() => {\n              return [\n                { name: 'Remove edge', value: 'remove_edge' }\n              ];\n            }","enable":"(e) => e.targetType === 'edge'","type":"contextmenu"}]},"evals":["behaviors.1.enable","behaviors.2.enable","behaviors.4.enable","plugins.0.onClick","plugins.0.getItems","plugins.0.enable"],"jsHooks":[]}</script>
 </div>
 <div class="section level4">
 <h4 id="collapsible-nodes">Collapsible nodes<a class="anchor" aria-label="anchor" href="#collapsible-nodes"></a>
@@ -691,7 +755,7 @@ tree state in sync, which will lead to incorrect UI experience!
 Therefore, when you create a <code><a href="../reference/context_menu.html">context_menu()</a></code> (or any plugin
 like the <code><a href="../reference/toolbar.html">toolbar()</a></code>) to remove edges or nodes, you have to
 use the proxy functions as shown in the Shiny example below.</p>
-<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://shiny.posit.co/" class="external-link">shiny</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/cynkra/g6R" class="external-link">g6R</a></span><span class="op">)</span></span>
 <span></span>
@@ -911,7 +975,7 @@ use the proxy functions as shown in the Shiny example below.</p>
 that can be used to indicate different conditions or interactions.
 States can be set in the <code>states</code> property of the node
 data:</p>
-<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">states</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span>
 <span>  <span class="st">"default"</span>,</span>
 <span>  <span class="st">"selected"</span>,</span>
