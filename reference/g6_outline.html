@@ -15,7 +15,7 @@ graph usually raises.'></head><body>
 
     <a class="navbar-brand me-2" href="../index.html">g6R</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.6.5.9003</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.6.5.9004</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -92,6 +92,8 @@ graph usually raises.</p>
 <span>  labels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span>node <span class="op">=</span> <span class="st">"node"</span>, combo <span class="op">=</span> <span class="st">"combo"</span>, edge <span class="op">=</span> <span class="st">"edge"</span><span class="op">)</span>,</span>
 <span>  animation <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  outputId <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  header <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  onSelect <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  <span class="va">...</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
@@ -168,6 +170,18 @@ a row sets <code>input$&lt;outputId&gt;-outlined_element</code> to a list with <
 <code>label</code>.</p></dd>
 
 
+<dt id="arg-header">header<a class="anchor" aria-label="anchor" href="#arg-header"></a></dt>
+<dd><p>Show the toggle row with the title and the totals. <code>FALSE</code>
+drops it and keeps the list open, which suits an outline anchored under a
+collapsible <code><a href="g6_search.html">g6_search()</a></code>: the search box already opens and closes the pair.
+<code>open</code> is ignored then.</p></dd>
+
+
+<dt id="arg-onselect">onSelect<a class="anchor" aria-label="anchor" href="#arg-onselect"></a></dt>
+<dd><p>Optional <code><a href="JS.html">JS()</a></code> callback <code>(entry, graph) =&gt; {}</code> run after a
+row is clicked and the viewport has moved, as <code><a href="g6_search.html">g6_search()</a></code>'s.</p></dd>
+
+
 <dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>
 <dd><p>Additional parameters passed to the plugin configuration.</p></dd>
 
@@ -189,6 +203,9 @@ groups so the number means the same thing at every level, and reported for a
 folded group too: the count describes the graph, not the panel. The toggle
 carries the same figure for the graph as a whole, so the size of it is legible
 while the panel is shut. <code>labels</code> names both in the accessible text.</p>
+<p>With <code>anchor = "search"</code>, the outline steps aside while the search
+box has a query, so the matches take its place. A row clicked in an outline
+anchored under a collapsible search closes the search.</p>
     </div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>

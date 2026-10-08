@@ -13,7 +13,7 @@ focusElement()."></head><body>
 
     <a class="navbar-brand me-2" href="../index.html">g6R</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.6.5.9003</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.6.5.9004</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -88,6 +88,7 @@ so <code>g6_search()</code> adds one on top of <code><a href="g6-focus.html">g6_
 <span>  animation <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  outputId <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  onSelect <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  collapsed <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  <span class="va">...</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
@@ -156,6 +157,11 @@ match sets <code>input$&lt;outputId&gt;-searched_element</code> to a list with <
 viewport has moved, for anything beyond focus and select.</p></dd>
 
 
+<dt id="arg-collapsed">collapsed<a class="anchor" aria-label="anchor" href="#arg-collapsed"></a></dt>
+<dd><p>Start with the box hidden, for an app that opens it from its
+own control (a toolbar tool, a shortcut). See "Collapsed search" below.</p></dd>
+
+
 <dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>
 <dd><p>Additional parameters passed to the plugin configuration.</p></dd>
 
@@ -170,6 +176,18 @@ viewport has moved, for anything beyond focus and select.</p></dd>
 document, a pkgdown page, a vignette) and not only in a Shiny app, and it does
 not wait on the server between keystrokes. Under Shiny the pick is also
 reported as an input when <code>outputId</code> is given.</p>
+    </div>
+    <div class="section level2">
+    <h2 id="collapsed-search">Collapsed search<a class="anchor" aria-label="anchor" href="#collapsed-search"></a></h2>
+
+
+<p>With <code>collapsed = TRUE</code> the box starts hidden, and the plugin instance,
+reachable in JavaScript as <code>graph.getPluginInstance(key)</code>, has <code><a href="https://rdrr.io/r/methods/show.html" class="external-link">show()</a></code>,
+<code>hide()</code> and <code>toggle()</code>. <code><a href="https://rdrr.io/r/methods/show.html" class="external-link">show()</a></code> empties the query and puts the focus in the
+box. Escape, a click outside the box and a pick (from the matches, or from a
+<code><a href="g6_outline.html">g6_outline()</a></code> anchored under the box) hide it again. A control outside the
+box can call <code>toggle()</code> from its click handler: pressing it while the box is
+open closes the box rather than reopening it.</p>
     </div>
 
     <div class="section level2">
@@ -186,6 +204,21 @@ reported as an input when <code>outputId</code> is given.</p>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Name the element types the way the app does</span></span></span>
 <span class="r-in"><span><span class="va">config</span> <span class="op">&lt;-</span> <span class="fu">g6_search</span><span class="op">(</span>labels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span>node <span class="op">=</span> <span class="st">"block"</span>, combo <span class="op">=</span> <span class="st">"stack"</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Hidden until a toolbar tool opens it, with the outline under it</span></span></span>
+<span class="r-in"><span><span class="va">plugins</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>  <span class="fu">g6_search</span><span class="op">(</span>collapsed <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>  <span class="fu"><a href="g6_outline.html">g6_outline</a></span><span class="op">(</span>anchor <span class="op">=</span> <span class="st">"search"</span>, header <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>  <span class="fu"><a href="toolbar.html">toolbar</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>    getItems <span class="op">=</span> <span class="fu"><a href="JS.html">JS</a></span><span class="op">(</span><span class="st">"() =&gt; [{ id: 'search', value: 'search' }]"</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>    onClick <span class="op">=</span> <span class="fu"><a href="JS.html">JS</a></span><span class="op">(</span><span class="st">"(value, target) =&gt; {</span></span></span>
+<span class="r-in"><span><span class="st">      if (value !== 'search') return;</span></span></span>
+<span class="r-in"><span><span class="st">      const el = target.closest('.html-widget');</span></span></span>
+<span class="r-in"><span><span class="st">      HTMLWidgets.find('#' + el.id).getWidget()</span></span></span>
+<span class="r-in"><span><span class="st">        .getPluginInstance('search').toggle();</span></span></span>
+<span class="r-in"><span><span class="st">    }"</span><span class="op">)</span></span></span>
+<span class="r-in"><span>  <span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>

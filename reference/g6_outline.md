@@ -25,6 +25,8 @@ g6_outline(
   labels = c(node = "node", combo = "combo", edge = "edge"),
   animation = NULL,
   outputId = NULL,
+  header = TRUE,
+  onSelect = NULL,
   ...
 )
 ```
@@ -103,6 +105,22 @@ g6_outline(
   sets `input$<outputId>-outlined_element` to a list with `id`, `type`
   and `label`.
 
+- header:
+
+  Show the toggle row with the title and the totals. `FALSE` drops it
+  and keeps the list open, which suits an outline anchored under a
+  collapsible
+  [`g6_search()`](https://cynkra.github.io/g6R/reference/g6_search.md):
+  the search box already opens and closes the pair. `open` is ignored
+  then.
+
+- onSelect:
+
+  Optional [`JS()`](https://cynkra.github.io/g6R/reference/JS.md)
+  callback `(entry, graph) => {}` run after a row is clicked and the
+  viewport has moved, as
+  [`g6_search()`](https://cynkra.github.io/g6R/reference/g6_search.md)'s.
+
 - ...:
 
   Additional parameters passed to the plugin configuration.
@@ -128,6 +146,10 @@ reported for a folded group too: the count describes the graph, not the
 panel. The toggle carries the same figure for the graph as a whole, so
 the size of it is legible while the panel is shut. `labels` names both
 in the accessible text.
+
+With `anchor = "search"`, the outline steps aside while the search box
+has a query, so the matches take its place. A row clicked in an outline
+anchored under a collapsible search closes the search.
 
 ## See also
 

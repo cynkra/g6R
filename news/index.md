@@ -4,6 +4,25 @@
 
 ### New features
 
+- `g6_search(collapsed = TRUE)` starts the box hidden, for an app that
+  opens it from its own control
+  ([\#73](https://github.com/cynkra/g6R/issues/73)). The plugin
+  instance, `graph.getPluginInstance(key)`, has
+  [`show()`](https://rdrr.io/r/methods/show.html), `hide()` and
+  `toggle()`: [`show()`](https://rdrr.io/r/methods/show.html) empties
+  the query and focuses the box without scrolling the page, and Escape,
+  a click outside the box and a pick hide it again. A control that calls
+  `toggle()` from its click handler closes an open box rather than
+  reopening it, although its press counts as a click outside.
+  [`g6_outline()`](https://cynkra.github.io/g6R/reference/g6_outline.md)
+  gains `header = FALSE`, which drops the toggle row and keeps the list
+  open, and `onSelect`, matching
+  [`g6_search()`](https://cynkra.github.io/g6R/reference/g6_search.md)’s.
+  A pick from either list is announced as a bubbling `g6:pick` event, so
+  a row clicked in an outline anchored under a collapsible search closes
+  the search. With `anchor = "search"` the outline steps aside while the
+  box has a query, so the matches take its place.
+
 - A row in the search results and the outline shows the element as the
   canvas draws it: a node drawn as an image shows that image in place of
   the dot, and a combo’s row carries its fill colour as
