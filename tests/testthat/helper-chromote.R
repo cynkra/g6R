@@ -34,11 +34,14 @@ eval_js <- function(session, js) {
   res$result$value
 }
 
-# Poll a JavaScript condition until it holds, for up to `timeout` seconds.
-wait_for_js <- function(session, js, timeout = 5) {
+# Poll a JavaScript condition until it holds, for up to `timeout` seconds. An
+# exception counts as "not yet": the page's scripts (htmlwidgets, the widget
+# bundle) may still be loading, more slowly under covr.
+wait_for_js <- function(session, js, timeout = 15) {
   end <- Sys.time() + timeout
   while (Sys.time() < end) {
-    if (isTRUE(eval_js(session, js))) return(TRUE)
+    ok <- tryCatch(isTRUE(eval_js(session, js)), error = function(e) FALSE)
+    if (ok) return(TRUE)
     Sys.sleep(0.1)
   }
   FALSE
