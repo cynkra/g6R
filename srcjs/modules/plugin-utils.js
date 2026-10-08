@@ -1,3 +1,5 @@
+import { ExtensionCategory, Image, getExtension } from '@antv/g6';
+
 // Shared between the DOM plugins that navigate a graph (search, outline): how
 // to read an element's label, how to draw a row for it, and what "go to this
 // element" means. Kept in one place so the two never drift apart.
@@ -13,6 +15,116 @@ const labelOf = (datum) =>
   datum?.data?.label ??
   datum?.label ??
   String(datum?.id ?? '');
+
+// A graph-level option that may be a value or a callback on the datum, called
+// the way G6 calls it (`this` is the graph).
+const callOption = (graph, value, datum) =>
+  typeof value === 'function' ? value.call(graph, datum) : value;
+
+// The `node` / `combo` block of the graph options, read through the public API.
+const elementOptions = (graph, elementType) => {
+  try {
+    return graph.getOptions()?.[elementType] || {};
+  } catch (e) {
+    return {};
+  }
+};
+
+// The style G6 resolved for an element (theme, palette, graph-level options,
+// datum, state), so a panel row reads what the canvas drew rather than only
+// what the datum spells out. An element not on the canvas (inside a collapsed
+// combo) has no render style; for it, merge the datum's style with the
+// graph-level one as G6 does (options win), which covers all but theme and
+// palette.
+const resolvedStyle = (graph, elementType, datum) => {
+  try {
+    return graph.getElementRenderStyle(datum.id);
+  } catch (e) {
+    // Not drawn: resolve from the data and options below.
+  }
+  const option = elementOptions(graph, elementType).style || {};
+  let fromOptions = {};
+  try {
+    fromOptions =
+      typeof option === 'function'
+        ? option.call(graph, datum) || {}
+        : Object.fromEntries(
+            Object.entries(option).map(([key, value]) => [
+              key,
+              callOption(graph, value, datum)
+            ])
+          );
+  } catch (e) {
+    fromOptions = {};
+  }
+  return { ...(datum?.style || {}), ...fromOptions };
+};
+
+// Which shape G6 draws for an element. As on the canvas, a graph-level `type`
+// (string or callback) wins over the datum's own, and a node or combo with
+// neither is a circle.
+const shapeOf = (graph, elementType, datum) => {
+  try {
+    const option = elementOptions(graph, elementType).type;
+    return callOption(graph, option, datum) || datum?.type || 'circle';
+  } catch (e) {
+    return datum?.type || 'circle';
+  }
+};
+
+// Whether a node type draws its `src`: G6's own `image`, or anything built on
+// it (g6R's `custom-image-node`, or a consumer's own subclass), checked on the
+// registered class rather than the name.
+const drawsImage = (type) => {
+  try {
+    const cls = getExtension(ExtensionCategory.NODE, type);
+    return !!cls && (cls === Image || cls.prototype instanceof Image);
+  } catch (e) {
+    return type === 'image';
+  }
+};
+
+// How an element looks on the canvas, so a panel row can look the same: a node
+// drawn as an image shows that image, and a combo carries its fill colour for
+// the consumer's stylesheet (as `--g6-element-color`). `style.src` on a node
+// drawn as anything else is ignored, since the canvas ignores it too.
+const imageOf = (graph, datum) => {
+  if (!datum || !drawsImage(shapeOf(graph, 'node', datum))) return null;
+  const src = resolvedStyle(graph, 'node', datum).src;
+  if (typeof src === 'string') return src || null;
+  return src?.src || null;
+};
+
+const colorOf = (graph, datum) => {
+  if (!datum) return null;
+  const fill = resolvedStyle(graph, 'combo', datum).fill;
+  return typeof fill === 'string' ? fill : null;
+};
+
+// A short stand-in for a long string, for change detection: an image source is
+// often an inline data URI, and a key built from hundreds of those would be
+// rebuilt and sorted on every draw. Hashing a long URI costs more than
+// carrying it, so each source is hashed once and looked up after that (the
+// render style hands back the same string, so the lookup is cheap). Bounded,
+// since sources come and go. Collisions only cost a missed repaint.
+const FINGERPRINTS = new Map();
+
+const fingerprint = (str) => {
+  if (!str) return '';
+  let print = FINGERPRINTS.get(str);
+  if (print !== undefined) return print;
+
+  let h = 0x811c9dc5;
+  for (let i = 0; i < str.length; i++) {
+    h ^= str.charCodeAt(i);
+    h = Math.imul(h, 0x01000193);
+  }
+  print = `${str.length}:${(h >>> 0).toString(36)}`;
+
+  if (FINGERPRINTS.size >= 2000) FINGERPRINTS.clear();
+  FINGERPRINTS.set(str, print);
+  return print;
+};
 
 const parentOf = (datum) => datum?.combo ?? datum?.data?.combo ?? null;
 
@@ -120,7 +232,17 @@ const GLYPH_SHAPES = {
   edge: '<rect x="1.5" y="7.25" width="13" height="1.5" rx=".75"/>'
 };
 
-const glyphFor = (type) => {
+const glyphFor = (type, image = null) => {
+  if (image) {
+    const img = document.createElement('img');
+    img.className = 'g6-panel-glyph';
+    img.dataset.type = type;
+    img.dataset.image = 'true';
+    img.alt = '';
+    img.src = image;
+    return img;
+  }
+
   const glyph = document.createElement('span');
   glyph.className = 'g6-panel-glyph';
   glyph.dataset.type = type;
@@ -135,7 +257,7 @@ const glyphFor = (type) => {
 // and context on the right (the group it lives in, or failing that the kind of
 // thing it is, named as the consumer chose).
 const elementRow = (hit, labels = {}) => {
-  const glyph = glyphFor(hit.type);
+  const glyph = glyphFor(hit.type, hit.image);
 
   const name = document.createElement('span');
   name.className = 'g6-panel-label';
@@ -148,9 +270,26 @@ const elementRow = (hit, labels = {}) => {
   return { glyph, name, kind, typeName: labels[hit.type] || hit.type };
 };
 
+// A disclosure chevron, drawn rather than typed (a typed triangle sits on the
+// text baseline and changes with the font). It points down; a closed fold
+// turns it right through `data-open="false"` in the stylesheet.
+const caretFor = (open) => {
+  const caret = document.createElement('span');
+  caret.className = 'g6-outline-caret';
+  caret.dataset.open = String(!!open);
+  caret.innerHTML =
+    '<svg viewBox="0 0 12 12" focusable="false" aria-hidden="true">' +
+    '<path d="M3 4.5l3 3 3-3"/></svg>';
+  return caret;
+};
+
 export {
   SELECTED_STATE,
   glyphFor,
+  caretFor,
+  imageOf,
+  colorOf,
+  fingerprint,
   labelOf,
   parentOf,
   elementDatum,

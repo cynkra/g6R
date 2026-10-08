@@ -7,7 +7,11 @@ import {
   ancestorsOf,
   goTo,
   elementRow,
-  glyphFor
+  glyphFor,
+  caretFor,
+  imageOf,
+  colorOf,
+  fingerprint
 } from './plugin-utils';
 
 // Search box for navigating a large graph.
@@ -102,13 +106,20 @@ class Search extends BasePlugin {
           id: d.id,
           label: labelOf(d),
           type: 'node',
+          image: imageOf(graph, d),
           context: parent ? comboLabel[parent] || parent : null
         });
       });
     }
     if (want.includes('combo')) {
       (graph.getComboData() || []).forEach((d) =>
-        out.push({ id: d.id, label: labelOf(d), type: 'combo', context: null })
+        out.push({
+          id: d.id,
+          label: labelOf(d),
+          type: 'combo',
+          color: colorOf(graph, d),
+          context: null
+        })
       );
     }
     if (want.includes('edge')) {
@@ -167,6 +178,8 @@ class Search extends BasePlugin {
       li.className = `${CONTAINER_CLASS}-result`;
       li.setAttribute('role', 'option');
       li.setAttribute('aria-selected', String(i === this.active));
+      li.dataset.type = hit.type;
+      if (hit.color) li.style.setProperty('--g6-element-color', hit.color);
       if (i === this.active) li.dataset.active = 'true';
 
       const { glyph, name, kind, typeName } = elementRow(hit, this.options.labels);
@@ -350,7 +363,14 @@ class Outline extends BasePlugin {
     }
     const datum =
       type === 'combo' ? graph.getComboData(id) : graph.getNodeData(id);
-    return { id, type, label: labelOf(datum), context: null };
+    return {
+      id,
+      type,
+      label: labelOf(datum),
+      image: type === 'combo' ? null : imageOf(graph, datum),
+      color: type === 'combo' ? colorOf(graph, datum) : null,
+      context: null
+    };
   }
 
   // Flow order, so the list reads like the pipeline rather than in insertion
@@ -559,9 +579,7 @@ class Outline extends BasePlugin {
   // in the accessible name, where they cost no width: a title long enough to
   // crowd the number is likelier than a spare 80px.
   toggleContent() {
-    const caret = document.createElement('span');
-    caret.className = `${OUTLINE_CLASS}-caret`;
-    caret.textContent = this.open ? '▾' : '▸';
+    const caret = caretFor(this.open);
     caret.setAttribute('aria-hidden', 'true');
 
     const title = document.createElement('span');
@@ -623,6 +641,8 @@ class Outline extends BasePlugin {
       const li = document.createElement('li');
       li.className = `${OUTLINE_CLASS}-item`;
       li.setAttribute('role', 'treeitem');
+      li.dataset.type = entry.type;
+      if (entry.color) li.style.setProperty('--g6-element-color', entry.color);
 
       const row = document.createElement('div');
       row.className = `${OUTLINE_CLASS}-row`;
@@ -633,9 +653,7 @@ class Outline extends BasePlugin {
       const openHere = isGroup && this.isGroupOpen(entry.id);
 
       if (isGroup) {
-        const caret = document.createElement('span');
-        caret.className = `${OUTLINE_CLASS}-caret`;
-        caret.textContent = openHere ? '▾' : '▸';
+        const caret = caretFor(openHere);
         caret.setAttribute('role', 'button');
         caret.setAttribute('aria-label', openHere ? 'Collapse' : 'Expand');
         caret.addEventListener('click', (e) => {
@@ -775,16 +793,23 @@ class Outline extends BasePlugin {
   structureKey() {
     const { graph } = this.context;
 
-    const describe = (data) =>
+    // The image is keyed by a fingerprint: its source can be a long data URI,
+    // and this runs on every draw, hover and selection included.
+    const describe = (data, look) =>
       (data || [])
-        .map((d) => `${d.id}\u0001${parentOf(d) || ''}\u0001${labelOf(d)}`)
+        .map(
+          (d) =>
+            `${d.id}\u0001${parentOf(d) || ''}\u0001${labelOf(d)}` +
+            `\u0001${look(d)}`
+        )
         .sort()
         .join('\u0002');
 
     try {
-      return [describe(graph.getNodeData()), describe(graph.getComboData())].join(
-        '\u0003'
-      );
+      return [
+        describe(graph.getNodeData(), (d) => fingerprint(imageOf(graph, d))),
+        describe(graph.getComboData(), (d) => colorOf(graph, d) || '')
+      ].join('\u0003');
     } catch (e) {
       return this.lastKey ?? '';
     }
