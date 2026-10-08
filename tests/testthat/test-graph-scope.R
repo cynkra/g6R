@@ -1,10 +1,5 @@
 test_that("plugin callbacks reach their own widget's graph", {
-  skip_on_cran()
-  skip_if_not_installed("chromote")
-  skip_if(
-    is.null(tryCatch(chromote::find_chrome(), error = function(e) NULL)),
-    "Chrome is not available"
-  )
+  session <- local_chrome_session()
 
   widget <- function(first) {
     g6(
@@ -29,29 +24,15 @@ test_that("plugin callbacks reach their own widget's graph", {
   path <- file.path(dir, "index.html")
   htmltools::save_html(htmltools::tagList(widget("first"), widget("second")), path)
 
-  session <- chromote::ChromoteSession$new()
-  withr::defer(session$close())
-
   session$Page$navigate(paste0("file://", path), wait_ = TRUE)
 
-  eval_js <- function(js) {
-    res <- session$Runtime$evaluate(js, awaitPromise = TRUE, returnByValue = TRUE)
-    if (!is.null(res$exceptionDetails)) {
-      stop(res$exceptionDetails$exception$description)
-    }
-    res$result$value
-  }
-
   # The toolbars are drawn once each graph has rendered.
-  ready <- FALSE
-  for (i in seq_len(50)) {
-    ready <- eval_js("document.querySelectorAll('.g6-toolbar-item').length === 2")
-    if (isTRUE(ready)) break
-    Sys.sleep(0.1)
-  }
-  expect_true(ready)
+  expect_true(
+    wait_for_js(session, "document.querySelectorAll('.g6-toolbar-item').length === 2")
+  )
 
   hits <- eval_js(
+    session,
     "(() => {
       window.__hits = [];
       document.querySelectorAll('.g6-toolbar-item').forEach((item) =>
