@@ -114,6 +114,13 @@
 
 ### Bug fixes
 
+- Each widget on a page keeps its own graph
+  ([\#78](https://github.com/cynkra/g6R/issues/78)). The graph lived in
+  a variable shared by every g6 widget, so
+  `HTMLWidgets.find('#id').getWidget()` returned whichever graph was
+  built last, and a widget’s container resize (a dock panel, a tab, an
+  accordion) resized that last graph instead of its own.
+
 - A [`JS()`](https://cynkra.github.io/g6R/reference/JS.md) callback in a
   plugin’s or behavior’s options can refer to the graph as `graph`, as
   the examples always did
