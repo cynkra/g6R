@@ -12,10 +12,10 @@ g6_collapse_options(
   visibility = c("visible", "hover"),
   placement = "right-top",
   r = 6,
-  fill = "#fff",
-  stroke = "#9cabd4",
+  fill = NULL,
+  stroke = NULL,
   lineWidth = 1,
-  iconStroke = "#9cabd4",
+  iconStroke = NULL,
   iconLineWidth = 1.4,
   cursor = "pointer",
   zIndex = 999
@@ -46,15 +46,18 @@ is_g6_collapse_options(x)
 
 - r:
 
-  Numeric. Radius of the button. Default is 8.
+  Numeric. Radius of the button. Default is 6.
 
 - fill:
 
-  Character. Fill color of the button background. Default is "#fff".
+  Character. Fill color of the button background. `NULL` (the default)
+  follows the graph theme: white, or the canvas background with
+  `theme = "dark"`.
 
 - stroke:
 
-  Character. Stroke color of the button border. Default is "#CED4D9".
+  Character. Stroke color of the button border. `NULL` (the default)
+  follows the graph theme.
 
 - lineWidth:
 
@@ -62,7 +65,9 @@ is_g6_collapse_options(x)
 
 - iconStroke:
 
-  Character. Stroke color of the +/- icon. Default is "#000".
+  Character. Color of the +/- icon and of the "+ N" count shown when
+  collapsed. `NULL` (the default) picks a grey that contrasts with
+  `fill`, so a themed fill keeps a legible icon.
 
 - iconLineWidth:
 
@@ -103,17 +108,8 @@ g6_collapse_options()
 #> $r
 #> [1] 6
 #> 
-#> $fill
-#> [1] "#fff"
-#> 
-#> $stroke
-#> [1] "#9cabd4"
-#> 
 #> $lineWidth
 #> [1] 1
-#> 
-#> $iconStroke
-#> [1] "#9cabd4"
 #> 
 #> $iconLineWidth
 #> [1] 1.4
@@ -155,9 +151,6 @@ g6_collapse_options(
 #> $lineWidth
 #> [1] 1
 #> 
-#> $iconStroke
-#> [1] "#9cabd4"
-#> 
 #> $iconLineWidth
 #> [1] 1.4
 #> 
@@ -184,17 +177,8 @@ g6_collapse_options(placement = c(1, 0.2))
 #> $r
 #> [1] 6
 #> 
-#> $fill
-#> [1] "#fff"
-#> 
-#> $stroke
-#> [1] "#9cabd4"
-#> 
 #> $lineWidth
 #> [1] 1
-#> 
-#> $iconStroke
-#> [1] "#9cabd4"
 #> 
 #> $iconLineWidth
 #> [1] 1.4

@@ -9,7 +9,7 @@ Check if object is a g6_collapse_options configuration"></head><body>
 
     <a class="navbar-brand me-2" href="../index.html">g6R</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.6.5.9002</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.6.5.9003</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -74,10 +74,10 @@ Check if object is a g6_collapse_options configuration"></head><body>
 <span>  visibility <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"visible"</span>, <span class="st">"hover"</span><span class="op">)</span>,</span>
 <span>  placement <span class="op">=</span> <span class="st">"right-top"</span>,</span>
 <span>  r <span class="op">=</span> <span class="fl">6</span>,</span>
-<span>  fill <span class="op">=</span> <span class="st">"#fff"</span>,</span>
-<span>  stroke <span class="op">=</span> <span class="st">"#9cabd4"</span>,</span>
+<span>  fill <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  stroke <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  lineWidth <span class="op">=</span> <span class="fl">1</span>,</span>
-<span>  iconStroke <span class="op">=</span> <span class="st">"#9cabd4"</span>,</span>
+<span>  iconStroke <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  iconLineWidth <span class="op">=</span> <span class="fl">1.4</span>,</span>
 <span>  cursor <span class="op">=</span> <span class="st">"pointer"</span>,</span>
 <span>  zIndex <span class="op">=</span> <span class="fl">999</span></span>
@@ -107,15 +107,18 @@ Can be one of: "top", "right", "bottom", "left", "right-top", "right-bottom",
 
 
 <dt id="arg-r">r<a class="anchor" aria-label="anchor" href="#arg-r"></a></dt>
-<dd><p>Numeric. Radius of the button. Default is 8.</p></dd>
+<dd><p>Numeric. Radius of the button. Default is 6.</p></dd>
 
 
 <dt id="arg-fill">fill<a class="anchor" aria-label="anchor" href="#arg-fill"></a></dt>
-<dd><p>Character. Fill color of the button background. Default is "#fff".</p></dd>
+<dd><p>Character. Fill color of the button background. <code>NULL</code> (the
+default) follows the graph theme: white, or the canvas background with
+<code>theme = "dark"</code>.</p></dd>
 
 
 <dt id="arg-stroke">stroke<a class="anchor" aria-label="anchor" href="#arg-stroke"></a></dt>
-<dd><p>Character. Stroke color of the button border. Default is "#CED4D9".</p></dd>
+<dd><p>Character. Stroke color of the button border. <code>NULL</code> (the
+default) follows the graph theme.</p></dd>
 
 
 <dt id="arg-linewidth">lineWidth<a class="anchor" aria-label="anchor" href="#arg-linewidth"></a></dt>
@@ -123,7 +126,9 @@ Can be one of: "top", "right", "bottom", "left", "right-top", "right-bottom",
 
 
 <dt id="arg-iconstroke">iconStroke<a class="anchor" aria-label="anchor" href="#arg-iconstroke"></a></dt>
-<dd><p>Character. Stroke color of the +/- icon. Default is "#000".</p></dd>
+<dd><p>Character. Color of the +/- icon and of the "+ N" count
+shown when collapsed. <code>NULL</code> (the default) picks a grey that contrasts
+with <code>fill</code>, so a themed fill keeps a legible icon.</p></dd>
 
 
 <dt id="arg-iconlinewidth">iconLineWidth<a class="anchor" aria-label="anchor" href="#arg-iconlinewidth"></a></dt>
@@ -164,17 +169,8 @@ Can be one of: "top", "right", "bottom", "left", "right-top", "right-bottom",
 <span class="r-out co"><span class="r-pr">#&gt;</span> $r</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] 6</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $fill</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "#fff"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $stroke</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "#9cabd4"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $lineWidth</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] 1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $iconStroke</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "#9cabd4"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $iconLineWidth</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] 1.4</span>
@@ -216,9 +212,6 @@ Can be one of: "top", "right", "bottom", "left", "right-top", "right-bottom",
 <span class="r-out co"><span class="r-pr">#&gt;</span> $lineWidth</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] 1</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $iconStroke</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "#9cabd4"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $iconLineWidth</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] 1.4</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
@@ -245,17 +238,8 @@ Can be one of: "top", "right", "bottom", "left", "right-top", "right-bottom",
 <span class="r-out co"><span class="r-pr">#&gt;</span> $r</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] 6</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $fill</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "#fff"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $stroke</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "#9cabd4"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $lineWidth</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] 1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $iconStroke</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "#9cabd4"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $iconLineWidth</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] 1.4</span>

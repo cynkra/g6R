@@ -95,6 +95,19 @@
 
 ### Bug fixes
 
+- The collapse button on nodes and combos is legible in dark mode
+  ([\#71](https://github.com/cynkra/g6R/issues/71)).
+  [`g6_collapse_options()`](https://cynkra.github.io/g6R/reference/g6_collapse_options.md)
+  no longer hard-codes `fill`, `stroke` and `iconStroke`: left unset,
+  they follow the graph `theme` (with `theme = "dark"` the disc takes
+  the canvas background), and the +/- icon and the “+ N” count are drawn
+  in a grey that contrasts with whatever fill the button ends up with,
+  so an app that themes only the disc (as blockr.dag does from its
+  tokens) keeps a readable icon. In light mode the icon is darker than
+  before (`#4b5563` instead of `#9cabd4`, which was about 2.1:1 on
+  white). Colours you pass are used as given. The documented defaults
+  now match the code.
+
 - Dragging a combo no longer drags nodes out of *other* combos
   ([\#63](https://github.com/cynkra/g6R/issues/63)). G6 translates a
   dragged combo by walking its descendants through `getChildrenData()`,
