@@ -13,7 +13,7 @@ focusElement()."></head><body>
 
     <a class="navbar-brand me-2" href="../index.html">g6R</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.6.5.9004</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.6.5.9005</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -211,11 +211,8 @@ open closes the box rather than reopening it.</p>
 <span class="r-in"><span>  <span class="fu"><a href="g6_outline.html">g6_outline</a></span><span class="op">(</span>anchor <span class="op">=</span> <span class="st">"search"</span>, header <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>  <span class="fu"><a href="toolbar.html">toolbar</a></span><span class="op">(</span></span></span>
 <span class="r-in"><span>    getItems <span class="op">=</span> <span class="fu"><a href="JS.html">JS</a></span><span class="op">(</span><span class="st">"() =&gt; [{ id: 'search', value: 'search' }]"</span><span class="op">)</span>,</span></span>
-<span class="r-in"><span>    onClick <span class="op">=</span> <span class="fu"><a href="JS.html">JS</a></span><span class="op">(</span><span class="st">"(value, target) =&gt; {</span></span></span>
-<span class="r-in"><span><span class="st">      if (value !== 'search') return;</span></span></span>
-<span class="r-in"><span><span class="st">      const el = target.closest('.html-widget');</span></span></span>
-<span class="r-in"><span><span class="st">      HTMLWidgets.find('#' + el.id).getWidget()</span></span></span>
-<span class="r-in"><span><span class="st">        .getPluginInstance('search').toggle();</span></span></span>
+<span class="r-in"><span>    onClick <span class="op">=</span> <span class="fu"><a href="JS.html">JS</a></span><span class="op">(</span><span class="st">"(value) =&gt; {</span></span></span>
+<span class="r-in"><span><span class="st">      if (value === 'search') graph.getPluginInstance('search').toggle();</span></span></span>
 <span class="r-in"><span><span class="st">    }"</span><span class="op">)</span></span></span>
 <span class="r-in"><span>  <span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>

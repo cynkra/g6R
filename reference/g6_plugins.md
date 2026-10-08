@@ -95,6 +95,20 @@ visualization capabilities. Plugins are divided into several categories:
 You can also build your own plugins as described at
 <https://g6.antv.antgroup.com/en/manual/plugin/custom-plugin>.
 
+## Callbacks
+
+A [`JS()`](https://cynkra.github.io/g6R/reference/JS.md) callback in a
+plugin's options (a toolbar's `onClick`, a lens's `filter`, a context
+menu's `getItems`) can refer to the widget's graph as `graph`, as in
+`JS("(value) => graph.zoomTo(1.1)")`. Each widget's callbacks see that
+widget's graph, so several graphs on one page do not mix. The same holds
+for behavior options
+([`g6_behaviors()`](https://cynkra.github.io/g6R/reference/g6_behaviors.md))
+and for options passed later through
+[`g6_update_plugin()`](https://cynkra.github.io/g6R/reference/g6_update_plugin.md)
+and
+[`g6_update_behavior()`](https://cynkra.github.io/g6R/reference/g6_update_behavior.md).
+
 ## Examples
 
 ``` r

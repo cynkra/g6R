@@ -9,7 +9,7 @@ G6 plugins extend the functionality of the base graph visualization with additio
 
     <a class="navbar-brand me-2" href="../index.html">g6R</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.6.5.9004</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.6.5.9005</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -140,6 +140,17 @@ Plugins are divided into several categories:</p>
     <h2 id="note">Note<a class="anchor" aria-label="anchor" href="#note"></a></h2>
     <p>You can also build your own plugins as described at
 <a href="https://g6.antv.antgroup.com/en/manual/plugin/custom-plugin" class="external-link">https://g6.antv.antgroup.com/en/manual/plugin/custom-plugin</a>.</p>
+    </div>
+    <div class="section level2">
+    <h2 id="callbacks">Callbacks<a class="anchor" aria-label="anchor" href="#callbacks"></a></h2>
+
+
+<p>A <code><a href="JS.html">JS()</a></code> callback in a plugin's options (a toolbar's <code>onClick</code>, a lens's
+<code>filter</code>, a context menu's <code>getItems</code>) can refer to the widget's graph as
+<code>graph</code>, as in <code>JS("(value) =&gt; graph.zoomTo(1.1)")</code>. Each widget's callbacks
+see that widget's graph, so several graphs on one page do not mix. The same
+holds for behavior options (<code><a href="g6_behaviors.html">g6_behaviors()</a></code>) and for options passed later
+through <code><a href="g6_update_plugin.html">g6_update_plugin()</a></code> and <code><a href="g6_update_behavior.html">g6_update_behavior()</a></code>.</p>
     </div>
 
     <div class="section level2">
