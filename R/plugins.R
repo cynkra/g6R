@@ -50,6 +50,14 @@
 #'   }
 #' }
 #'
+#' @section Callbacks:
+#' A [JS()] callback in a plugin's options (a toolbar's `onClick`, a lens's
+#' `filter`, a context menu's `getItems`) can refer to the widget's graph as
+#' `graph`, as in `JS("(value) => graph.zoomTo(1.1)")`. Each widget's callbacks
+#' see that widget's graph, so several graphs on one page do not mix. The same
+#' holds for behavior options ([g6_behaviors()]) and for options passed later
+#' through [g6_update_plugin()] and [g6_update_behavior()].
+#'
 #' @param graph G6 graph instance.
 #' @param ... G6 plugin configuration objects created with plugin-specific functions
 #' @note You can also build your own plugins as described at
@@ -1773,11 +1781,8 @@ minimap <- function(
 #'   g6_outline(anchor = "search", header = FALSE),
 #'   toolbar(
 #'     getItems = JS("() => [{ id: 'search', value: 'search' }]"),
-#'     onClick = JS("(value, target) => {
-#'       if (value !== 'search') return;
-#'       const el = target.closest('.html-widget');
-#'       HTMLWidgets.find('#' + el.id).getWidget()
-#'         .getPluginInstance('search').toggle();
+#'     onClick = JS("(value) => {
+#'       if (value === 'search') graph.getPluginInstance('search').toggle();
 #'     }")
 #'   )
 #' )

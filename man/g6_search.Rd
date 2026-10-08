@@ -109,11 +109,8 @@ plugins <- list(
   g6_outline(anchor = "search", header = FALSE),
   toolbar(
     getItems = JS("() => [{ id: 'search', value: 'search' }]"),
-    onClick = JS("(value, target) => {
-      if (value !== 'search') return;
-      const el = target.closest('.html-widget');
-      HTMLWidgets.find('#' + el.id).getWidget()
-        .getPluginInstance('search').toggle();
+    onClick = JS("(value) => {
+      if (value === 'search') graph.getPluginInstance('search').toggle();
     }")
   )
 )

@@ -69,6 +69,16 @@ Plugins are divided into several categories:
 You can also build your own plugins as described at
 \url{https://g6.antv.antgroup.com/en/manual/plugin/custom-plugin}.
 }
+\section{Callbacks}{
+
+A \code{\link[=JS]{JS()}} callback in a plugin's options (a toolbar's \code{onClick}, a lens's
+\code{filter}, a context menu's \code{getItems}) can refer to the widget's graph as
+\code{graph}, as in \code{JS("(value) => graph.zoomTo(1.1)")}. Each widget's callbacks
+see that widget's graph, so several graphs on one page do not mix. The same
+holds for behavior options (\code{\link[=g6_behaviors]{g6_behaviors()}}) and for options passed later
+through \code{\link[=g6_update_plugin]{g6_update_plugin()}} and \code{\link[=g6_update_behavior]{g6_update_behavior()}}.
+}
+
 \examples{
 # Create a configuration with multiple plugins
 plugins <- g6_plugins(
