@@ -18,6 +18,8 @@ g6_outline(
   labels = c(node = "node", combo = "combo", edge = "edge"),
   animation = NULL,
   outputId = NULL,
+  header = TRUE,
+  onSelect = NULL,
   ...
 )
 }
@@ -64,6 +66,14 @@ accessible name of every row.}
 a row sets \verb{input$<outputId>-outlined_element} to a list with \code{id}, \code{type} and
 \code{label}.}
 
+\item{header}{Show the toggle row with the title and the totals. \code{FALSE}
+drops it and keeps the list open, which suits an outline anchored under a
+collapsible \code{\link[=g6_search]{g6_search()}}: the search box already opens and closes the pair.
+\code{open} is ignored then.}
+
+\item{onSelect}{Optional \code{\link[=JS]{JS()}} callback \verb{(entry, graph) => \{\}} run after a
+row is clicked and the viewport has moved, as \code{\link[=g6_search]{g6_search()}}'s.}
+
 \item{...}{Additional parameters passed to the plugin configuration.}
 }
 \value{
@@ -90,6 +100,10 @@ groups so the number means the same thing at every level, and reported for a
 folded group too: the count describes the graph, not the panel. The toggle
 carries the same figure for the graph as a whole, so the size of it is legible
 while the panel is shut. \code{labels} names both in the accessible text.
+
+With \code{anchor = "search"}, the outline steps aside while the search
+box has a query, so the matches take its place. A row clicked in an outline
+anchored under a collapsible search closes the search.
 }
 \examples{
 config <- g6_outline()

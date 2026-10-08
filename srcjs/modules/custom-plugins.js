@@ -24,6 +24,14 @@ import {
 // server round-trip per keystroke.
 const CONTAINER_CLASS = 'g6-search';
 
+// Announced, bubbling, from whichever list a pick came from, so one handler on
+// the search box reacts to a pick from its results and from an outline hung
+// under it alike.
+const PICK_EVENT = 'g6:pick';
+
+// Announced on the search box when it is shown, for whatever hangs under it.
+const SHOW_EVENT = 'g6:show';
+
 class Search extends BasePlugin {
   static defaultOptions = {
     placeholder: 'Search',
@@ -33,12 +41,19 @@ class Search extends BasePlugin {
     select: true,
     position: 'top-left',
     width: 220,
-    labels: { node: 'node', combo: 'combo', edge: 'edge' }
+    labels: { node: 'node', combo: 'combo', edge: 'edge' },
+    // Start hidden, to be opened by the app (a toolbar tool, a shortcut) with
+    // `show()` or `toggle()`, and dismissed by Escape, a click outside or a pick.
+    collapsed: false
   };
 
   constructor(context, options) {
     super(context, Object.assign({}, Search.defaultOptions, options));
     this.render();
+  }
+
+  get collapsible() {
+    return this.options.collapsed === true;
   }
 
   // --- DOM ------------------------------------------------------------------
@@ -70,6 +85,8 @@ class Search extends BasePlugin {
 
     this.hits = [];
     this.active = -1;
+    this.visible = !this.collapsible;
+    box.hidden = !this.visible;
 
     // A pointerdown on the box must not reach the canvas, or the graph's own
     // behaviors (drag-canvas, click-select) treat it as a canvas interaction.
@@ -79,6 +96,23 @@ class Search extends BasePlugin {
 
     this.$input.addEventListener('input', () => this.update());
     this.$input.addEventListener('keydown', (e) => this.onKeyDown(e));
+
+    // Escape anywhere in the box, so it also works from an outline under it.
+    box.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && this.collapsible) this.hide();
+    });
+
+    // A pick from either list closes a collapsible box.
+    box.addEventListener(PICK_EVENT, () => {
+      if (this.collapsible) this.hide();
+    });
+
+    // A click outside closes it too. Capture phase on the document, since the
+    // canvas and the panels stop the events they handle from bubbling.
+    if (this.collapsible) {
+      this.onOutside = (e) => this.dismissFrom(e);
+      document.addEventListener('pointerdown', this.onOutside, true);
+    }
     this.$input.addEventListener('blur', () => {
       // Deferred: a click on a result fires after blur and needs the list.
       setTimeout(() => this.close(), 150);
@@ -166,6 +200,9 @@ class Search extends BasePlugin {
   update() {
     this.hits = this.search(this.$input.value);
     this.active = this.hits.length ? 0 : -1;
+    // While there is a query, an outline hung under the box makes way for the
+    // matches (see g6.css).
+    this.$element.toggleAttribute('data-searching', this.$input.value !== '');
     this.paint();
   }
 
@@ -200,7 +237,7 @@ class Search extends BasePlugin {
 
   onKeyDown(event) {
     if (!this.hits.length) {
-      if (event.key === 'Escape') this.close();
+      if (event.key === 'Escape' && !this.collapsible) this.close();
       return;
     }
     switch (event.key) {
@@ -219,7 +256,8 @@ class Search extends BasePlugin {
         this.pick(this.active);
         break;
       case 'Escape':
-        this.close();
+        // A collapsible box hides on Escape, from the box's own handler.
+        if (!this.collapsible) this.close();
         break;
       default:
         break;
@@ -233,6 +271,63 @@ class Search extends BasePlugin {
       this.$results.innerHTML = '';
       this.$results.style.display = 'none';
     }
+  }
+
+  // --- showing and hiding ---------------------------------------------------
+  //
+  // Reachable as `graph.getPluginInstance(key)`, for an app that opens the box
+  // from its own control. Each opening starts from an empty query, with the
+  // focus in the box.
+
+  show() {
+    if (!this.$element) return;
+    this.visible = true;
+    this.$element.hidden = false;
+    this.$input.value = '';
+    this.update();
+    // A plain focus() scrolls a narrow canvas to bring the box into view,
+    // sliding whatever sits around it out of place.
+    this.$input.focus({ preventScroll: true });
+    this.$element.dispatchEvent(new CustomEvent(SHOW_EVENT));
+  }
+
+  hide() {
+    if (!this.$element) return;
+    this.visible = false;
+    this.$element.hidden = true;
+    this.close();
+    if (this.$element.contains(document.activeElement)) {
+      document.activeElement.blur();
+    }
+  }
+
+  // A control that toggles the box sits outside it, so pressing it while the
+  // box is open first dismisses the box (pointerdown) and then toggles
+  // (click), which would open it straight back. The dismissal is remembered
+  // until that click has run, and a toggle within the same press leaves the
+  // box closed.
+  toggle() {
+    if (this.dismissing) return;
+    if (this.visible) this.hide();
+    else this.show();
+  }
+
+  dismissFrom(event) {
+    if (!this.visible || !this.$element) return;
+    if (this.$element.contains(event.target)) return;
+
+    this.hide();
+    this.dismissing = true;
+    const settle = () => {
+      document.removeEventListener('pointerup', settle, true);
+      document.removeEventListener('pointercancel', settle, true);
+      // After the click that follows this pointerup.
+      setTimeout(() => {
+        this.dismissing = false;
+      }, 0);
+    };
+    document.addEventListener('pointerup', settle, true);
+    document.addEventListener('pointercancel', settle, true);
   }
 
   // --- acting on a pick -----------------------------------------------------
@@ -264,9 +359,19 @@ class Search extends BasePlugin {
 
     this.$input.value = hit.label;
     this.close();
+
+    this.$element.dispatchEvent(
+      new CustomEvent(PICK_EVENT, {
+        bubbles: true,
+        detail: { id: hit.id, type: hit.type, label: hit.label }
+      })
+    );
   }
 
   destroy() {
+    if (this.onOutside) {
+      document.removeEventListener('pointerdown', this.onOutside, true);
+    }
     if (this.$element && this.$element.parentNode) {
       this.$element.parentNode.removeChild(this.$element);
     }
@@ -300,7 +405,11 @@ class Outline extends BasePlugin {
     // made in the panel still does not touch the canvas, so a group can be
     // skimmed without redrawing the graph.
     followCollapse: true,
-    labels: { node: 'node', combo: 'combo', edge: 'edge' }
+    labels: { node: 'node', combo: 'combo', edge: 'edge' },
+    // The toggle row with the title and totals. Without it the list is always
+    // open: what an outline hung under a collapsible search wants, since the
+    // search box already opens and closes the pair.
+    header: true
   };
 
   constructor(context, options) {
@@ -459,16 +568,23 @@ class Outline extends BasePlugin {
       box.style.width = `${this.options.width}px`;
     }
 
-    this.$toggle = document.createElement('button');
-    this.$toggle.type = 'button';
-    this.$toggle.className = `${OUTLINE_CLASS}-toggle`;
-    this.$toggle.addEventListener('click', () => this.toggle());
+    const header = this.options.header !== false;
+
+    if (header) {
+      this.$toggle = document.createElement('button');
+      this.$toggle.type = 'button';
+      this.$toggle.className = `${OUTLINE_CLASS}-toggle`;
+      this.$toggle.addEventListener('click', () => this.toggle());
+      box.appendChild(this.$toggle);
+    } else {
+      box.dataset.header = 'false';
+    }
 
     this.$body = document.createElement('div');
     this.$body.className = `${OUTLINE_CLASS}-body`;
     this.$body.setAttribute('role', 'tree');
+    this.$body.setAttribute('aria-label', this.options.title);
 
-    box.appendChild(this.$toggle);
     box.appendChild(this.$body);
     (host || container).appendChild(box);
     this.$element = box;
@@ -477,11 +593,20 @@ class Outline extends BasePlugin {
       box.addEventListener(type, (e) => e.stopPropagation());
     });
 
-    this.open = this.options.open !== false;
+    this.open = !header || this.options.open !== false;
     this.paint();
+
+    // Hidden while the search box was shut, the list could not scroll to a
+    // selection made in the meantime: catch up when the box opens.
+    if (host) {
+      this.onHostShow = () => this.syncSelection();
+      host.addEventListener(SHOW_EVENT, this.onHostShow);
+      this.$host = host;
+    }
   }
 
   toggle() {
+    if (!this.$toggle) return;
     this.open = !this.open;
     this.paint();
     // Opening catches up with whatever is selected now: a search made while the
@@ -618,9 +743,11 @@ class Outline extends BasePlugin {
   paint() {
     if (!this.$element) return;
 
-    this.$toggle.textContent = '';
-    this.$toggle.append(...this.toggleContent());
-    this.$toggle.setAttribute('aria-expanded', String(this.open));
+    if (this.$toggle) {
+      this.$toggle.textContent = '';
+      this.$toggle.append(...this.toggleContent());
+      this.$toggle.setAttribute('aria-expanded', String(this.open));
+    }
     this.$body.style.display = this.open ? 'block' : 'none';
     this.$body.innerHTML = '';
     this.rowsById.clear();
@@ -725,6 +852,18 @@ class Outline extends BasePlugin {
         { priority: 'event' }
       );
     }
+
+    if (typeof this.options.onSelect === 'function') {
+      this.options.onSelect(entry, graph);
+    }
+
+    // Bubbles to a search box this panel hangs under, which closes on a pick.
+    this.$element?.dispatchEvent(
+      new CustomEvent(PICK_EVENT, {
+        bubbles: true,
+        detail: { id: entry.id, type: entry.type, label: entry.label }
+      })
+    );
   }
 
   mark(id) {
@@ -864,6 +1003,9 @@ class Outline extends BasePlugin {
       if (this.followHandler) this.context.graph.off('afterdraw', this.followHandler);
     } catch (e) {
       // Graph already gone.
+    }
+    if (this.$host && this.onHostShow) {
+      this.$host.removeEventListener(SHOW_EVENT, this.onHostShow);
     }
     if (this.$element && this.$element.parentNode) {
       this.$element.parentNode.removeChild(this.$element);

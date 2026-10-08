@@ -617,7 +617,7 @@
         ..$ directed        : logi TRUE
         ..$ maxCollapseDepth: num Inf
         ..$ plugins         :List of 1
-        .. ..$ :List of 12
+        .. ..$ :List of 13
         .. .. ..$ key            : chr "outline"
         .. .. ..$ title          : chr "Outline"
         .. .. ..$ position       : chr "top-right"
@@ -632,6 +632,7 @@
         .. .. .. ..$ node : chr "node"
         .. .. .. ..$ combo: chr "combo"
         .. .. .. ..$ edge : chr "edge"
+        .. .. ..$ header         : logi TRUE
         .. .. ..$ type           : chr "outline"
        $ width        : chr "100%"
        $ height       : NULL
@@ -680,7 +681,7 @@
         ..$ directed        : logi TRUE
         ..$ maxCollapseDepth: num Inf
         ..$ plugins         :List of 1
-        .. ..$ :List of 10
+        .. ..$ :List of 11
         .. .. ..$ key            : chr "search"
         .. .. ..$ placeholder    : chr "Search"
         .. .. ..$ limit          : num 8
@@ -693,6 +694,7 @@
         .. .. .. ..$ combo: chr "combo"
         .. .. .. ..$ edge : chr "edge"
         .. .. ..$ width          : num 220
+        .. .. ..$ collapsed      : logi FALSE
         .. .. ..$ type           : chr "search"
        $ width        : chr "100%"
        $ height       : NULL

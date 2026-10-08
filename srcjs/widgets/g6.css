@@ -15,6 +15,11 @@
   font-size: 13px;
 }
 
+/* A collapsible search (`collapsed = TRUE`) while it is shut. */
+.g6-search[hidden] {
+  display: none;
+}
+
 .g6-search[data-position="top-left"] { top: 8px; left: 8px; }
 .g6-search[data-position="top-right"] { top: 8px; right: 8px; }
 .g6-search[data-position="bottom-left"] { bottom: 8px; left: 8px; }
@@ -129,6 +134,12 @@ img.g6-panel-glyph {
   position: static;
   margin-top: 4px;
   border-radius: 4px;
+}
+
+/* While the search box has a query, its matches take the place of the
+   outline hung under it. */
+.g6-search[data-searching] > .g6-outline[data-anchor="search"] {
+  display: none;
 }
 
 .g6-outline[data-position="top-left"] { top: 8px; left: 8px; }

@@ -306,6 +306,7 @@ test_that("g6_search builds a search plugin config", {
   expect_identical(cfg$elements, c("node", "combo"))
   expect_true(cfg$expandAncestors)
   expect_true(cfg$select)
+  expect_false(cfg$collapsed)
 
   # NULLs are dropped, so an unset callback carries nothing.
   expect_false("onSelect" %in% names(cfg))
@@ -324,7 +325,8 @@ test_that("g6_search forwards its options", {
     width = 320,
     animation = list(duration = 200),
     outputId = "graph",
-    onSelect = JS("(hit) => console.log(hit)")
+    onSelect = JS("(hit) => console.log(hit)"),
+    collapsed = TRUE
   )
 
   expect_identical(cfg$key, "find")
@@ -338,6 +340,7 @@ test_that("g6_search forwards its options", {
   expect_identical(cfg$animation, list(duration = 200))
   expect_identical(cfg$outputId, "graph")
   expect_s3_class(cfg$onSelect, "JS_EVAL")
+  expect_true(cfg$collapsed)
 })
 
 test_that("g6_search validates its options", {
@@ -353,6 +356,9 @@ test_that("g6_search validates its options", {
   expect_error(g6_search(outputId = 1))
   expect_error(g6_search(onSelect = "not js"))
   expect_error(g6_search(animation = "fast"))
+  expect_error(g6_search(collapsed = "yes"), "'collapsed'")
+  expect_error(g6_search(collapsed = NA), "'collapsed'")
+  expect_error(g6_search(collapsed = c(TRUE, FALSE)), "'collapsed'")
 })
 
 test_that("the search plugin is accepted by g6_plugins()", {
@@ -401,7 +407,9 @@ test_that("g6_outline builds an outline plugin config", {
   expect_true(cfg$expandAncestors)
   expect_true(cfg$select)
   expect_identical(cfg$labels, list(node = "node", combo = "combo", edge = "edge"))
+  expect_true(cfg$header)
   expect_false("outputId" %in% names(cfg))
+  expect_false("onSelect" %in% names(cfg))
 })
 
 test_that("g6_outline forwards its options", {
@@ -416,7 +424,9 @@ test_that("g6_outline forwards its options", {
     select = FALSE,
     labels = c(node = "block", combo = "stage"),
     animation = list(duration = 300),
-    outputId = "graph"
+    outputId = "graph",
+    header = FALSE,
+    onSelect = JS("(entry) => console.log(entry)")
   )
 
   expect_identical(cfg$key, "tree")
@@ -430,6 +440,8 @@ test_that("g6_outline forwards its options", {
   expect_identical(cfg$labels, list(node = "block", combo = "stage"))
   expect_identical(cfg$animation, list(duration = 300))
   expect_identical(cfg$outputId, "graph")
+  expect_false(cfg$header)
+  expect_s3_class(cfg$onSelect, "JS_EVAL")
 })
 
 test_that("g6_outline validates its options", {
@@ -443,6 +455,8 @@ test_that("g6_outline validates its options", {
   expect_error(g6_outline(labels = "block"), "named character vector")
   expect_error(g6_outline(animation = "fast"))
   expect_error(g6_outline(outputId = 1))
+  expect_error(g6_outline(header = "no"), "'header'")
+  expect_error(g6_outline(onSelect = "not js"), "'onSelect'")
 })
 
 test_that("the outline plugin is accepted by g6_plugins()", {

@@ -17,6 +17,7 @@ g6_search(
   animation = NULL,
   outputId = NULL,
   onSelect = NULL,
+  collapsed = FALSE,
   ...
 )
 }
@@ -57,6 +58,9 @@ match sets \verb{input$<outputId>-searched_element} to a list with \code{id}, \c
 \item{onSelect}{Optional \code{\link[=JS]{JS()}} callback \verb{(hit, graph) => \{\}} run after the
 viewport has moved, for anything beyond focus and select.}
 
+\item{collapsed}{Start with the box hidden, for an app that opens it from its
+own control (a toolbar tool, a shortcut). See "Collapsed search" below.}
+
 \item{...}{Additional parameters passed to the plugin configuration.}
 }
 \value{
@@ -74,6 +78,17 @@ document, a pkgdown page, a vignette) and not only in a Shiny app, and it does
 not wait on the server between keystrokes. Under Shiny the pick is also
 reported as an input when \code{outputId} is given.
 }
+\section{Collapsed search}{
+
+With \code{collapsed = TRUE} the box starts hidden, and the plugin instance,
+reachable in JavaScript as \code{graph.getPluginInstance(key)}, has \code{show()},
+\code{hide()} and \code{toggle()}. \code{show()} empties the query and puts the focus in the
+box. Escape, a click outside the box and a pick (from the matches, or from a
+\code{\link[=g6_outline]{g6_outline()}} anchored under the box) hide it again. A control outside the
+box can call \code{toggle()} from its click handler: pressing it while the box is
+open closes the box rather than reopening it.
+}
+
 \examples{
 # Nodes and combos, focusing the pick
 config <- g6_search()
@@ -87,4 +102,19 @@ config <- g6_search(
 
 # Name the element types the way the app does
 config <- g6_search(labels = c(node = "block", combo = "stack"))
+
+# Hidden until a toolbar tool opens it, with the outline under it
+plugins <- list(
+  g6_search(collapsed = TRUE),
+  g6_outline(anchor = "search", header = FALSE),
+  toolbar(
+    getItems = JS("() => [{ id: 'search', value: 'search' }]"),
+    onClick = JS("(value, target) => {
+      if (value !== 'search') return;
+      const el = target.closest('.html-widget');
+      HTMLWidgets.find('#' + el.id).getWidget()
+        .getPluginInstance('search').toggle();
+    }")
+  )
+)
 }
