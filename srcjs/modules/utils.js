@@ -10,6 +10,7 @@ import {
 
 import { setClickEvents, setGraphEvents, captureMousePosition, preserveElementsPosition } from './events';
 import { tryCatchDev, registerShinyHandlers } from './handlers';
+import { scopeGraphConfig } from './graph-scope';
 
 const sendNotification = (message, type = "error", duration = null) => {
   if (HTMLWidgets.shinyMode) {
@@ -244,7 +245,10 @@ const loadAndInitGraph = (config, widget) => {
   tryCatchDev(() => {
     const initialize = (data) => {
       config.data = checkIds(normalizeGraphState(data));
+      // Plugin and behavior callbacks may name `graph`; give them this one.
+      const provideGraph = scopeGraphConfig(config);
       graph = new Graph(config);
+      provideGraph(graph);
       setupGraph(graph, widget, config);
     };
 

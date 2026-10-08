@@ -1,4 +1,5 @@
 import { sendNotification, getPortConnections } from './utils';
+import { scopeGraph } from './graph-scope';
 
 const tryCatchDev = (expr, mode = "prod") => {
   try {
@@ -343,7 +344,7 @@ const registerShinyHandlers = (graph, mode, directed = false) => {
       for (var i = 0; m.evals && i < m.evals.length; i++) {
         window.HTMLWidgets.evaluateStringMember(m.opts, m.evals[i]);
       }
-      graph.updatePlugin(m.opts);
+      graph.updatePlugin(scopeGraph(m.opts, graph));
       graph.render();
     }, mode);
   })
@@ -375,7 +376,7 @@ const registerShinyHandlers = (graph, mode, directed = false) => {
       for (var i = 0; m.evals && i < m.evals.length; i++) {
         window.HTMLWidgets.evaluateStringMember(m.opts, m.evals[i]);
       }
-      graph.updateBehavior(m.opts);
+      graph.updateBehavior(scopeGraph(m.opts, graph));
     }, mode);
   })
 }
