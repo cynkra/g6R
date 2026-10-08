@@ -49,7 +49,11 @@ create_edge(
   Callback function for successfully creating an edge (function). By
   default, we provide an internal implementation that disables the edge
   mode when the edge creation is succesful so that it does not conflict
-  with other drag behaviors.
+  with other drag behaviors. When the edge is dropped on the canvas
+  (`target` includes `"canvas"`), the edge data passed to `onCreate` and
+  `onFinish` has `targetType = "canvas"` and a `dropPoint` with the
+  drop's `canvas` and `client` coordinates, each an object with `x` and
+  `y`.
 
 - style:
 

@@ -9,7 +9,7 @@ This allows users to create edges between nodes by clicking or dragging."></head
 
     <a class="navbar-brand me-2" href="../index.html">g6R</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.6.5.9006</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.6.5.9007</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -107,7 +107,11 @@ responsible for activating the edge behavior when edge creation is selected.</p>
 <dt id="arg-onfinish">onFinish<a class="anchor" aria-label="anchor" href="#arg-onfinish"></a></dt>
 <dd><p>Callback function for successfully creating an edge (function).
 By default, we provide an internal implementation that disables the edge mode when the edge
-creation is succesful so that it does not conflict with other drag behaviors.</p></dd>
+creation is succesful so that it does not conflict with other drag behaviors.
+When the edge is dropped on the canvas (<code>target</code> includes <code>"canvas"</code>), the
+edge data passed to <code>onCreate</code> and <code>onFinish</code> has <code>targetType = "canvas"</code> and
+a <code>dropPoint</code> with the drop's <code>canvas</code> and <code>client</code> coordinates, each an
+object with <code>x</code> and <code>y</code>.</p></dd>
 
 
 <dt id="arg-style">style<a class="anchor" aria-label="anchor" href="#arg-style"></a></dt>

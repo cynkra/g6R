@@ -112,6 +112,15 @@
   `inst/examples/search` for a 151-node workflow of 10 branching groups,
   the shape that makes a graph hard to navigate.
 
+- [`create_edge()`](https://cynkra.github.io/g6R/reference/create_edge.md):
+  an edge dropped on the canvas reports where it was dropped
+  ([\#75](https://github.com/cynkra/g6R/issues/75)). The edge data
+  passed to `onCreate` and `onFinish` carries `dropPoint`, with the
+  drop’s `canvas` and `client` coordinates, so an app that opens
+  something at the drop point no longer reads the internal assist node’s
+  position back, which only worked because `onFinish` runs before the
+  assist node is removed.
+
 ### Bug fixes
 
 - Each widget on a page keeps its own graph
