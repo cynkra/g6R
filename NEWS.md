@@ -16,6 +16,8 @@
 
 - `create_edge()`: an edge dropped on the canvas reports where it was dropped (#75). The edge data passed to `onCreate` and `onFinish` carries `dropPoint`, with the drop's `canvas` and `client` coordinates, so an app that opens something at the drop point no longer reads the internal assist node's position back, which only worked because `onFinish` runs before the assist node is removed.
 
+- An HTML node whose height follows its content (`style = list(autoHeight = TRUE)`) announces each new height with a bubbling `g6:node-resize` event, once the node is drawn at that height (#82). Its `detail` holds the node's `id`, its new `size` and its `previous` one, so an app whose nodes sit in a layout can make room for a node that grew, for instance by moving the nodes below it.
+
 ## Bug fixes
 
 - Each widget on a page keeps its own graph (#78). The graph lived in a variable shared by every g6 widget, so `HTMLWidgets.find('#id').getWidget()` returned whichever graph was built last, and a widget's container resize (a dock panel, a tab, an accordion) resized that last graph instead of its own.

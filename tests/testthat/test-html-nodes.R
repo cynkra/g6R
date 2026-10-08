@@ -49,3 +49,48 @@ test_that("proxy additions carry node ui beside the nodes", {
   g6_add_nodes(proxy, g6_node("b"))
   expect_null(sent$content)
 })
+
+test_that("an autoHeight node announces its new height", {
+  session <- local_chrome_session()
+
+  widget <- g6(
+    nodes = g6_nodes(
+      g6_node(
+        id = "a",
+        style = list(x = 150, y = 150, size = c(200, 80), autoHeight = TRUE),
+        ui = htmltools::div(id = "grow", style = "height: 60px;")
+      )
+    ),
+    width = 500,
+    height = 400
+  ) |>
+    g6_options(animation = FALSE)
+
+  dir <- withr::local_tempdir()
+  path <- file.path(dir, "index.html")
+  htmlwidgets::saveWidget(widget, path, selfcontained = FALSE)
+  session$Page$navigate(paste0("file://", path), wait_ = TRUE)
+
+  graph <- "HTMLWidgets.find('#' + document.querySelector('.g6').id).getWidget()"
+  expect_true(wait_for_js(session, sprintf("!!%s?.rendered", graph)))
+  expect_true(wait_for_js(session, "!!document.getElementById('grow')"))
+
+  # whatever the first fit announced, collect only what growing announces
+  Sys.sleep(0.5)
+  eval_js(
+    session,
+    "window.__resized = [];
+    document.addEventListener('g6:node-resize', (e) => window.__resized.push(e.detail));
+    document.getElementById('grow').style.height = '200px';"
+  )
+  expect_true(wait_for_js(session, "window.__resized.length > 0"))
+
+  detail <- eval_js(session, "window.__resized.at(-1)")
+  expect_identical(detail$id, "a")
+  expect_equal(detail$size[[1]], 200)
+  expect_equal(detail$previous[[1]], 200)
+  expect_gt(detail$size[[2]], detail$previous[[2]] + 100)
+  # the node is drawn at the announced size by then
+  size <- eval_js(session, sprintf("%s.getNodeData('a').style.size", graph))
+  expect_equal(unlist(size), unlist(detail$size))
+})
