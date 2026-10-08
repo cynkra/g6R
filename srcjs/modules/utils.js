@@ -239,16 +239,17 @@ const setupGraph = (graph, widget, config) => {
   })
 }
 
-let graph = null;
-
-const loadAndInitGraph = (config, widget) => {
+// `onGraph` hands the graph back to the widget instance that asked for it:
+// several widgets can share a page, and each must keep its own.
+const loadAndInitGraph = (config, widget, onGraph) => {
   tryCatchDev(() => {
     const initialize = (data) => {
       config.data = checkIds(normalizeGraphState(data));
       // Plugin and behavior callbacks may name `graph`; give them this one.
       const provideGraph = scopeGraphConfig(config);
-      graph = new Graph(config);
+      const graph = new Graph(config);
       provideGraph(graph);
+      if (onGraph) onGraph(graph);
       setupGraph(graph, widget, config);
     };
 
@@ -270,9 +271,6 @@ const loadAndInitGraph = (config, widget) => {
   }, config.mode);
 }
 
-// Getter for graph
-const getGraph = () => graph;
-
 const setupIcons = (url) => {
   // https://at.alicdn.com/t/project/2678727/caef142c-804a-4a2f-a914-ae82666a31ee.html?spm=a313x.7781069.1998910419.35
   const iconURLs = [];
@@ -285,4 +283,4 @@ const setupIcons = (url) => {
   })
 }
 
-export { getBehavior, setupIcons, sendNotification, resetOtherElementTypes, loadAndInitGraph, getGraph, getPortConnections };
+export { getBehavior, setupIcons, sendNotification, resetOtherElementTypes, loadAndInitGraph, getPortConnections };

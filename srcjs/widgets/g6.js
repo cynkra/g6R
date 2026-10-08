@@ -5,7 +5,7 @@ import {
   register
 } from '@antv/g6';
 import { AntLine, FlyMarkerCubic, CircleComboWithExtraButton, RectComboWithExtraButton } from '../modules/extensions';
-import { setupIcons, loadAndInitGraph, getGraph } from '../modules/utils';
+import { setupIcons, loadAndInitGraph } from '../modules/utils';
 import { CustomCreateEdge, CustomDragElement } from '../modules/custom-behaviors';
 import { Search, Outline } from '../modules/custom-plugins';
 import {
@@ -66,8 +66,8 @@ HTMLWidgets.widget({
 
   factory: function (el, width, height) {
 
-    // Define shared variables for this instance
-    let graph;
+    // This instance's graph, set once it is built.
+    let graph = null;
 
     return {
 
@@ -81,15 +81,16 @@ HTMLWidgets.widget({
         // This is to be able to use custom icons.
         setupIcons(config.iconsUrl);
 
-        loadAndInitGraph(config, this);
+        loadAndInitGraph(config, this, (g) => {
+          graph = g;
+        });
       },
       getWidget: function () {
-        return getGraph()
+        return graph;
       },
       resize: function (width, height) {
-        // code to re-render the widget with a new size
-        if (getGraph()) {
-          getGraph().resize();
+        if (graph && !graph.destroyed) {
+          graph.resize();
         }
       }
 
