@@ -119,10 +119,13 @@ g6 <- function(
   }
 
   dat <- NULL
+  content <- extract_node_ui(NULL)
   if (is.null(jsonUrl)) {
     # Convert data frames to lists of records
     dat <- g6_data(nodes, edges, combos)
     validate_edges_ports(dat[["edges"]], dat[["nodes"]])
+    content <- extract_node_ui(dat[["nodes"]])
+    dat[["nodes"]] <- content$nodes
   }
 
   # Build properly named list of parameters to pass to widget
@@ -135,6 +138,8 @@ g6 <- function(
     directed = get_g6_directed_graph(),
     maxCollapseDepth = get_g6_max_collapse_depth()
   )
+  # assigning NULL adds nothing, so graphs without node ui are unchanged
+  x$nodeContent <- content$html
 
   # In case we need it ...
   hookFunc <- function(widget) {
@@ -149,7 +154,8 @@ g6 <- function(
     height = height,
     package = "g6R",
     elementId = elementId,
-    preRenderHook = NULL
+    preRenderHook = NULL,
+    dependencies = content$deps
   )
 }
 

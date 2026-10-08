@@ -260,3 +260,32 @@ img.g6-panel-glyph {
   font-size: 11px;
   font-variant-numeric: tabular-nums;
 }
+
+/* HTML nodes (custom-html-node). The wrapper G draws the content into lets the
+   pointer through (set as the node's key style, since G writes it inline), so
+   ports keep working where the content would cover them; the content itself
+   stays interactive. The insets are set per node from its ports' hit areas. */
+.g6-html-node {
+  box-sizing: border-box;
+  padding:
+    var(--g6-html-inset-top, 0px)
+    var(--g6-html-inset-right, 0px)
+    var(--g6-html-inset-bottom, 0px)
+    var(--g6-html-inset-left, 0px);
+}
+
+.g6-html-node > * {
+  pointer-events: auto;
+}
+
+/* Content given as g6_node(ui = ) fills its node. */
+.g6-html-node > .g6-node-content {
+  width: 100%;
+  height: 100%;
+  box-sizing: border-box;
+}
+
+/* With autoHeight, content takes its natural height and the node follows. */
+.g6-html-node > .g6-node-content.g6-node-content-auto {
+  height: auto;
+}

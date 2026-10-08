@@ -1,4 +1,4 @@
-import { CreateEdge, DragElement, CanvasEvent, ComboEvent, CommonEvent, EdgeEvent, NodeEvent } from '@antv/g6';
+import { CreateEdge, DragElement, CollapseExpand, CanvasEvent, ComboEvent, CommonEvent, EdgeEvent, NodeEvent } from '@antv/g6';
 import { uniqueId } from '@antv/util';
 import { sendNotification, getPortConnections } from './utils';
 
@@ -607,7 +607,33 @@ class CustomCreateEdge extends CreateEdge {
 // node and never takes the combo path.
 //
 // Remove this once G6 keeps the traversal on the combo hierarchy.
+// Where the current pointer press started, recorded before G6 sees it: G6's
+// events for HTML nodes are forwarded from their content, and a gesture that
+// starts inside the content belongs to the content first.
+let pressTarget = null;
+if (typeof document !== 'undefined') {
+  document.addEventListener('pointerdown', (event) => {
+    pressTarget = event.target;
+  }, true);
+}
+
+const pressedInHTMLContent = () =>
+  pressTarget instanceof Element && pressTarget.closest('.g6-html-node') !== null;
+
 class CustomDragElement extends DragElement {
+  // HTML node content may mark a drag handle with `data-g6-drag-handle`. If it
+  // does, the node only drags from the handle, so sliders, brushes or text
+  // selection inside the content don't move the node. Content without a
+  // handle drags from anywhere, as before.
+  validate(event) {
+    if (!super.validate(event)) return false;
+    const target = pressTarget;
+    if (!(target instanceof Element)) return true;
+    const content = target.closest('.g6-html-node');
+    if (!content || !content.querySelector('[data-g6-drag-handle]')) return true;
+    return target.closest('[data-g6-drag-handle]') !== null;
+  }
+
   // Leaf-most node ids of a combo, via the combo hierarchy only. A combo with
   // nothing in it is returned as itself: there is no member to move, and no
   // hierarchy for the walk to escape through either.
@@ -641,4 +667,14 @@ class CustomDragElement extends DragElement {
   }
 }
 
-export { CustomCreateEdge, CustomDragElement };
+// A double-click inside an HTML node's content belongs to the content
+// (renaming a title, selecting a word in a table), so it neither collapses
+// nor expands the node: such nodes collapse from their collapse button.
+class CustomCollapseExpand extends CollapseExpand {
+  validate(event) {
+    if (!super.validate(event)) return false;
+    return !pressedInHTMLContent();
+  }
+}
+
+export { CustomCreateEdge, CustomDragElement, CustomCollapseExpand };

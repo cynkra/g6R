@@ -6,7 +6,7 @@ import {
 } from '@antv/g6';
 import { AntLine, FlyMarkerCubic, CircleComboWithExtraButton, RectComboWithExtraButton } from '../modules/extensions';
 import { setupIcons, loadAndInitGraph } from '../modules/utils';
-import { CustomCreateEdge, CustomDragElement } from '../modules/custom-behaviors';
+import { CustomCreateEdge, CustomDragElement, CustomCollapseExpand } from '../modules/custom-behaviors';
 import { Search, Outline } from '../modules/custom-plugins';
 import {
   CustomCircleNode,
@@ -17,7 +17,9 @@ import {
   CustomStarNode,
   CustomHexagonNode,
   CustomImageNode,
-  CustomDonutNode
+  CustomDonutNode,
+  CustomHTMLNode,
+  registerNodeContent
 } from '../modules/custom-nodes';
 
 import { Renderer as SVGRenderer } from '@antv/g-svg';
@@ -35,7 +37,8 @@ const nodeTypes = [
   { name: 'star', cls: CustomStarNode },
   { name: 'hexagon', cls: CustomHexagonNode },
   { name: 'image', cls: CustomImageNode },
-  { name: 'donut', cls: CustomDonutNode }
+  { name: 'donut', cls: CustomDonutNode },
+  { name: 'html', cls: CustomHTMLNode }
 ];
 
 // Ant lines
@@ -49,6 +52,8 @@ register(ExtensionCategory.COMBO, 'rect-combo-with-extra-button', RectComboWithE
 register(ExtensionCategory.BEHAVIOR, 'create-edge', CustomCreateEdge);
 // Same, for dragging: keeps a combo drag from following its members' children
 register(ExtensionCategory.BEHAVIOR, 'drag-element', CustomDragElement);
+// Same, so double-clicks inside HTML node content do not collapse the node
+register(ExtensionCategory.BEHAVIOR, 'collapse-expand', CustomCollapseExpand);
 // G6 has no search UI; this one focuses the element you pick
 register(ExtensionCategory.PLUGIN, 'search', Search);
 // A list view of the graph, for when the drawing is too big to read
@@ -69,6 +74,22 @@ HTMLWidgets.widget({
     // This instance's graph, set once it is built.
     let graph = null;
 
+    // A press on the canvas or on an HTML node's drag handle starts a drag,
+    // not a text selection: without this, panning across HTML nodes, or
+    // dragging one by its handle, selects the text it passes over. Presses
+    // inside node content keep selecting text as usual.
+    let pressOrigin = null;
+    el.addEventListener('pointerdown', (event) => {
+      pressOrigin = event.target;
+    }, true);
+    el.addEventListener('selectstart', (event) => {
+      const origin = pressOrigin;
+      if (!(origin instanceof Element)) return;
+      if (origin.tagName === 'CANVAS' || origin.closest('[data-g6-drag-handle]')) {
+        event.preventDefault();
+      }
+    });
+
     return {
 
       renderValue: function (x) {
@@ -80,6 +101,9 @@ HTMLWidgets.widget({
 
         // This is to be able to use custom icons.
         setupIcons(config.iconsUrl);
+
+        // Content of HTML nodes given as g6_node(ui = )
+        registerNodeContent(el.id, config.nodeContent, { prune: true });
 
         loadAndInitGraph(config, this, (g) => {
           graph = g;
