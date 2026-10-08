@@ -10,7 +10,8 @@ import {
   glyphFor,
   caretFor,
   imageOf,
-  colorOf
+  colorOf,
+  fingerprint
 } from './plugin-utils';
 
 // Search box for navigating a large graph.
@@ -105,7 +106,7 @@ class Search extends BasePlugin {
           id: d.id,
           label: labelOf(d),
           type: 'node',
-          image: imageOf(d),
+          image: imageOf(graph, d),
           context: parent ? comboLabel[parent] || parent : null
         });
       });
@@ -116,7 +117,7 @@ class Search extends BasePlugin {
           id: d.id,
           label: labelOf(d),
           type: 'combo',
-          color: colorOf(d),
+          color: colorOf(graph, d),
           context: null
         })
       );
@@ -366,8 +367,8 @@ class Outline extends BasePlugin {
       id,
       type,
       label: labelOf(datum),
-      image: type === 'combo' ? null : imageOf(datum),
-      color: type === 'combo' ? colorOf(datum) : null,
+      image: type === 'combo' ? null : imageOf(graph, datum),
+      color: type === 'combo' ? colorOf(graph, datum) : null,
       context: null
     };
   }
@@ -792,20 +793,23 @@ class Outline extends BasePlugin {
   structureKey() {
     const { graph } = this.context;
 
-    const describe = (data) =>
+    // The image is keyed by a fingerprint: its source can be a long data URI,
+    // and this runs on every draw, hover and selection included.
+    const describe = (data, look) =>
       (data || [])
         .map(
           (d) =>
             `${d.id}\u0001${parentOf(d) || ''}\u0001${labelOf(d)}` +
-            `\u0001${imageOf(d) || ''}\u0001${colorOf(d) || ''}`
+            `\u0001${look(d)}`
         )
         .sort()
         .join('\u0002');
 
     try {
-      return [describe(graph.getNodeData()), describe(graph.getComboData())].join(
-        '\u0003'
-      );
+      return [
+        describe(graph.getNodeData(), (d) => fingerprint(imageOf(graph, d))),
+        describe(graph.getComboData(), (d) => colorOf(graph, d) || '')
+      ].join('\u0003');
     } catch (e) {
       return this.lastKey ?? '';
     }

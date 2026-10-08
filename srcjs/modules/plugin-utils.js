@@ -14,12 +14,62 @@ const labelOf = (datum) =>
   datum?.label ??
   String(datum?.id ?? '');
 
+// The style G6 resolved for an element (theme, palette, graph-level options,
+// datum, state), so a panel row reads what the canvas drew rather than only
+// what the datum spells out. An element not on the canvas (inside a collapsed
+// combo) has no render style; G6 computes the same merge for it from the data.
+const resolvedStyle = (graph, elementType, datum) => {
+  try {
+    return graph.getElementRenderStyle(datum.id);
+  } catch (e) {
+    // Not drawn: fall through to the computed style.
+  }
+  try {
+    return graph.context.element.getElementComputedStyle(elementType, datum);
+  } catch (e) {
+    return datum?.style || {};
+  }
+};
+
+// Which shape G6 draws for an element, with `node.type` from the graph options
+// (string or callback) applied the way the canvas applies it.
+const shapeOf = (graph, elementType, datum) => {
+  try {
+    return graph.context.element.getElementType(elementType, datum);
+  } catch (e) {
+    return datum?.type ?? null;
+  }
+};
+
 // How an element looks on the canvas, so a panel row can look the same: a node
 // drawn as an image shows that image, and a combo carries its fill colour for
-// the consumer's stylesheet (as `--g6-element-color`).
-const imageOf = (datum) => datum?.style?.src ?? null;
+// the consumer's stylesheet (as `--g6-element-color`). `style.src` on a node
+// drawn as anything else is ignored, since the canvas ignores it too.
+const imageOf = (graph, datum) => {
+  if (!datum || shapeOf(graph, 'node', datum) !== 'image') return null;
+  const src = resolvedStyle(graph, 'node', datum).src;
+  if (typeof src === 'string') return src || null;
+  return src?.src || null;
+};
 
-const colorOf = (datum) => datum?.style?.fill ?? null;
+const colorOf = (graph, datum) => {
+  if (!datum) return null;
+  const fill = resolvedStyle(graph, 'combo', datum).fill;
+  return typeof fill === 'string' ? fill : null;
+};
+
+// A short stand-in for a long string, for change detection: an image source is
+// often an inline data URI, and a key built from hundreds of those would be
+// rebuilt and sorted on every draw. Collisions only cost a missed repaint.
+const fingerprint = (str) => {
+  if (!str) return '';
+  let h = 0x811c9dc5;
+  for (let i = 0; i < str.length; i++) {
+    h ^= str.charCodeAt(i);
+    h = Math.imul(h, 0x01000193);
+  }
+  return `${str.length}:${(h >>> 0).toString(36)}`;
+};
 
 const parentOf = (datum) => datum?.combo ?? datum?.data?.combo ?? null;
 
@@ -184,6 +234,7 @@ export {
   caretFor,
   imageOf,
   colorOf,
+  fingerprint,
   labelOf,
   parentOf,
   elementDatum,
