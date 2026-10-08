@@ -12,6 +12,8 @@
 
 ## Bug fixes
 
+- Each widget on a page keeps its own graph (#78). The graph lived in a variable shared by every g6 widget, so `HTMLWidgets.find('#id').getWidget()` returned whichever graph was built last, and a widget's container resize (a dock panel, a tab, an accordion) resized that last graph instead of its own.
+
 - A `JS()` callback in a plugin's or behavior's options can refer to the graph as `graph`, as the examples always did (#76). htmlwidgets evaluates `JS()` strings where no `graph` exists, and G6 calls most plugin callbacks without binding `this`, so a toolbar `onClick` such as `(value) => graph.zoomTo(1.1)` threw `ReferenceError: graph is not defined` when clicked. Functions in plugin and behavior options that mention `graph` are now rebuilt with that widget's graph in scope, at render and in `g6_update_plugin()` / `g6_update_behavior()`, so several graphs on one page each get their own. Element style callbacks are unchanged: G6 already calls them with `this` set to the graph.
 
 - The collapse button on nodes and combos is legible in dark mode (#71). `g6_collapse_options()` no longer hard-codes `fill`, `stroke` and `iconStroke`: left unset, they follow the graph `theme` (with `theme = "dark"` the disc takes the canvas background), and the +/- icon and the "+ N" count are drawn in a grey that contrasts with whatever fill the button ends up with, so an app that themes only the disc (as blockr.dag does from its tokens) keeps a readable icon. In light mode the icon is darker than before (`#4b5563` instead of `#9cabd4`, which was about 2.1:1 on white). Colours you pass are used as given. The documented defaults now match the code.
