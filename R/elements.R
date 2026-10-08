@@ -135,7 +135,10 @@ is_g6_collapse_options <- function(x) {
 #'   outputs in it are bound once and keep their values. Mark an element of it
 #'   with a `data-g6-drag-handle` attribute to drag the node from that element
 #'   only, so that sliders, maps or text selection inside it do not move the
-#'   node.
+#'   node. Ports that set no `r` are sized to the node, a fiftieth of its width
+#'   between 6 and 12, so they stay in proportion to a large card when the
+#'   graph is zoomed out to fit; `r` on a port, or `portR` on the node or in
+#'   the graph's node options, sets the radius instead.
 #' See \link{g6_collapse_options} for details. For nodes, only used when node has children.
 #' For combos, when provided and `type` is NULL, auto-sets type to `"rect-combo-with-extra-button"`.
 #' @param source Character. Source node ID (required, edges only).

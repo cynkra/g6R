@@ -541,6 +541,20 @@ const createIndicatorForKey = (self, key, x, y, baseRadius, style, container, po
 
 // --- HTML node container ---
 
+// A card is far larger than an icon node, so a graph of cards is shown zoomed
+// out and a port sized for an icon shrinks to a speck. Ports on an HTML node
+// that set no radius of their own scale with the node's width instead, so they
+// stay in proportion to the card's text at any zoom. Width only: with
+// autoHeight the height follows the content, which the port radius insets.
+const HTML_PORT_R_MIN = 6;
+const HTML_PORT_R_MAX = 12;
+const HTML_PORT_R_PER_WIDTH = 1 / 50;
+
+const htmlPortRadius = (width) =>
+  Math.round(
+    Math.min(HTML_PORT_R_MAX, Math.max(HTML_PORT_R_MIN, width * HTML_PORT_R_PER_WIDTH))
+  );
+
 // Space each side of an HTML node must leave free for its ports. The node's
 // DOM content sits above the canvas, so wherever it covers a port's hit area
 // the canvas never sees the pointer: a link dragged onto an input port
@@ -1601,6 +1615,43 @@ const createCustomNode = (BaseShape) => {
         if (el) style.innerHTML = el;
       }
       return { ...style, pointerEvents: 'none' };
+    }
+
+    // Ports with no radius of their own on an HTML node take `portR` when the
+    // node or the graph's node options set it, and otherwise scale with the
+    // node's width (see htmlPortRadius()). A radius set on the port is kept.
+    // G6 fills in a default `portR` on every node, so the attributes cannot
+    // tell whether one was chosen.
+    getPortsStyle(attributes) {
+      const styles = super.getPortsStyle(attributes);
+      if (typeof this.getDomElement !== 'function') return styles;
+      // A port's `r` is its own unless R filled in the default (`rAuto`).
+      const explicit = new Set();
+      (attributes.ports || []).forEach((port, index) => {
+        if (port && port.r != null && !port.rAuto) explicit.add(String(port.key || index));
+      });
+      const r = this.ownPortR() ?? htmlPortRadius(this.getSize(attributes)[0]);
+      Object.keys(styles).forEach((key) => {
+        if (styles[key] && !explicit.has(String(key))) {
+          styles[key] = { ...styles[key], r };
+        }
+      });
+      return styles;
+    }
+
+    // `portR` as set on the node or in the graph's node options, if at all.
+    ownPortR() {
+      const graph = this.context.graph;
+      let datum = null;
+      try {
+        datum = graph.getNodeData(this.id);
+      } catch (e) {
+        // not in the data (yet): only the graph options can say
+      }
+      if (datum?.style?.portR != null) return datum.style.portR;
+      const option = graph.options?.node?.style?.portR;
+      if (typeof option === 'function') return datum ? option.call(graph, datum) ?? null : null;
+      return option ?? null;
     }
 
     syncHTMLContainer(attributes) {

@@ -178,3 +178,13 @@ test_that("numeric placement must be on node edge", {
     "at least one value must be 0 or 1"
   )
 })
+
+test_that("a defaulted port radius is marked as such", {
+  port <- g6_input_port(key = "in")
+  expect_identical(port$r, 6)
+  expect_true(port$rAuto)
+
+  port <- g6_input_port(key = "in", r = 6)
+  expect_identical(port$r, 6)
+  expect_null(port$rAuto)
+})
