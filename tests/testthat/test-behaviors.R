@@ -497,3 +497,66 @@ test_that("behavior functions handle invalid parameters correctly", {
   expect_error(zoom_canvas(sensitivity = 0), "should be a positive number")
   expect_error(zoom_canvas(trigger = "invalid"), "should be a list")
 })
+
+test_that("an edge dropped on the canvas reports where it was dropped", {
+  session <- local_chrome_session()
+
+  widget <- g6(
+    nodes = g6_nodes(
+      g6_node(
+        id = "a",
+        type = "custom-circle-node",
+        style = list(x = 100, y = 150),
+        ports = g6_ports(g6_output_port(key = "a-out", placement = "right"))
+      )
+    ),
+    width = 500,
+    height = 300
+  ) |>
+    g6_options(animation = FALSE) |>
+    g6_behaviors(
+      create_edge(
+        target = c("node", "canvas"),
+        enable = TRUE,
+        onFinish = JS("(edge) => { window.__edge = edge; }")
+      )
+    )
+
+  dir <- withr::local_tempdir()
+  path <- file.path(dir, "index.html")
+  htmlwidgets::saveWidget(widget, path, selfcontained = FALSE)
+  session$Page$navigate(paste0("file://", path), wait_ = TRUE)
+
+  graph <- "HTMLWidgets.find('#' + document.querySelector('.g6').id).getWidget()"
+  expect_true(wait_for_js(session, sprintf("!!%s?.rendered", graph)))
+
+  mouse <- function(type, at, buttons = 1) {
+    session$Input$dispatchMouseEvent(
+      type = type, x = at$x, y = at$y, button = "left", buttons = buttons,
+      clickCount = 1
+    )
+  }
+
+  # press on the output port, then drag to empty canvas
+  from <- eval_js(
+    session,
+    sprintf("(([x, y]) => ({ x, y }))(%s.getClientByCanvas([116, 150]))", graph)
+  )
+  to <- list(x = from$x + 200, y = from$y + 50)
+  mouse("mousePressed", from)
+  for (i in 1:10) {
+    mouse("mouseMoved", list(x = from$x + i * 20, y = from$y + i * 5))
+  }
+  mouse("mouseReleased", to, buttons = 0)
+
+  expect_true(wait_for_js(session, "!!window.__edge"))
+  edge <- eval_js(session, "window.__edge")
+  expect_identical(edge$targetType, "canvas")
+  # the browser rounds dispatched mouse coordinates
+  expect_equal(edge$dropPoint$client, to, tolerance = 1e-6)
+  canvas <- eval_js(
+    session,
+    sprintf("%s.getCanvasByClient([%s, %s])", graph, to$x, to$y)
+  )
+  expect_equal(edge$dropPoint$canvas, list(x = canvas[[1]], y = canvas[[2]]))
+})
