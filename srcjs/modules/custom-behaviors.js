@@ -325,6 +325,12 @@ class CustomCreateEdge extends CreateEdge {
           source: savedSource,
           target: ASSIST_NODE_ID,
           targetType: 'canvas',
+          // Where the edge was dropped, so a consumer need not read it back from
+          // the assist node, which is removed right after (#75).
+          dropPoint: {
+            canvas: { x: event.canvas.x, y: event.canvas.y },
+            client: { x: event.client.x, y: event.client.y }
+          },
           style: Object.assign({}, style, { sourcePort: savedSourcePort, portType: sourcePort?.attributes.type })
         };
         const edgeData = typeof onCreate === 'function' ? onCreate(rawEdgeData) : rawEdgeData;

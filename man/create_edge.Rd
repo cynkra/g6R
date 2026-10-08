@@ -29,7 +29,11 @@ responsible for activating the edge behavior when edge creation is selected.}
 
 \item{onFinish}{Callback function for successfully creating an edge (function).
 By default, we provide an internal implementation that disables the edge mode when the edge
-creation is succesful so that it does not conflict with other drag behaviors.}
+creation is succesful so that it does not conflict with other drag behaviors.
+When the edge is dropped on the canvas (\code{target} includes \code{"canvas"}), the
+edge data passed to \code{onCreate} and \code{onFinish} has \code{targetType = "canvas"} and
+a \code{dropPoint} with the drop's \code{canvas} and \code{client} coordinates, each an
+object with \code{x} and \code{y}.}
 
 \item{style}{Style of the newly created edge (list, default: NULL).}
 

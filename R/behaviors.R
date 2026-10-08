@@ -570,6 +570,10 @@ collapse_expand <- function(
 #' @param onFinish Callback function for successfully creating an edge (function).
 #' By default, we provide an internal implementation that disables the edge mode when the edge
 #' creation is succesful so that it does not conflict with other drag behaviors.
+#' When the edge is dropped on the canvas (`target` includes `"canvas"`), the
+#' edge data passed to `onCreate` and `onFinish` has `targetType = "canvas"` and
+#' a `dropPoint` with the drop's `canvas` and `client` coordinates, each an
+#' object with `x` and `y`.
 #' @param style Style of the newly created edge (list, default: NULL).
 #' @param notify Whether to show a feedback message in the ui.
 #' @param outputId Manually pass the Shiny output ID. This is useful when the graph
