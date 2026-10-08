@@ -4,6 +4,20 @@
 
 ### New features
 
+- A row in the search results and the outline shows the element as the
+  canvas draws it: a node drawn as an image shows that image in place of
+  the dot, and a combo’s row carries its fill colour as
+  `--g6-element-color` for the stylesheet to use. Both are read from the
+  style G6 resolved, so an image or fill set through
+  [`g6_options()`](https://cynkra.github.io/g6R/reference/g6_options.md),
+  a palette or a theme shows up too, and `style.src` on a node not drawn
+  as an image (G6’s `image` or a type built on it, such as
+  `custom-image-node`) is ignored as it is on the canvas. The outline’s
+  change check keys images by a short fingerprint, so data-URI icons do
+  not make every redraw rebuild a large string. Rows carry their type as
+  `data-type`. The outline’s fold arrows are a drawn chevron rather than
+  the `▾`/`▸` characters.
+
 - New
   [`g6_outline()`](https://cynkra.github.io/g6R/reference/g6_outline.md)
   plugin: a panel listing the graph as a tree, for when the drawing is
