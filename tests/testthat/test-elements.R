@@ -9,13 +9,22 @@ test_that("g6_collapse_options constructs with defaults", {
   expect_equal(collapse$visibility, "visible")
   expect_equal(collapse$placement, "right-top")
   expect_equal(collapse$r, 6)
-  expect_equal(collapse$fill, "#fff")
-  expect_equal(collapse$stroke, "#9cabd4")
+  expect_false(any(c("fill", "stroke", "iconStroke") %in% names(collapse)))
   expect_equal(collapse$lineWidth, 1)
-  expect_equal(collapse$iconStroke, "#9cabd4")
   expect_equal(collapse$iconLineWidth, 1.4)
   expect_equal(collapse$cursor, "pointer")
   expect_equal(collapse$zIndex, 999)
+})
+
+test_that("g6_collapse_options keeps colours that are given", {
+  collapse <- g6_collapse_options(
+    fill = "#111",
+    stroke = "#222",
+    iconStroke = "#eee"
+  )
+  expect_equal(collapse$fill, "#111")
+  expect_equal(collapse$stroke, "#222")
+  expect_equal(collapse$iconStroke, "#eee")
 })
 
 test_that("g6_collapse_options accepts visibility = 'hover'", {

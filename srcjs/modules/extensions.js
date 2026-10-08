@@ -7,6 +7,7 @@ import {
 } from '@antv/g6';
 import { AABB, Circle, Path, Text, Rect as GRect } from '@antv/g';
 import { dagCollapsedNodes } from './custom-nodes';
+import { collapseColors } from './collapse-colors';
 
 class AntLine extends Line {
   onCreate() {
@@ -188,10 +189,8 @@ const createComboWithExtraButton = (BaseCombo) => {
       }
 
       // Read styling from config with defaults
-      const fill = collapseConfig.fill || '#fff';
-      const stroke = collapseConfig.stroke || '#CED4D9';
+      const { fill, stroke, iconStroke } = collapseColors(collapseConfig, this.context.graph);
       const lineWidth = collapseConfig.lineWidth || 1;
-      const iconStroke = collapseConfig.iconStroke || '#CED4D9';
       const iconLineWidth = collapseConfig.iconLineWidth || 1.4;
       const cursor = collapseConfig.cursor || 'pointer';
       const zIndex = collapseConfig.zIndex || 999;

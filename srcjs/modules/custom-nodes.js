@@ -3,6 +3,7 @@ import {
 } from '@antv/g6';
 import { Circle as GCircle, Rect as GRect, Group } from '@antv/g';
 import { getPortConnections } from './utils';
+import { collapseColors } from './collapse-colors';
 import { reapplyComboCollapseState, ensureProxyEdges, collapsedCombos, PROXY_EDGE_PREFIX } from './extensions';
 
 // Map to store node port refresh functions for edge creation events
@@ -693,6 +694,7 @@ const createCustomNode = (BaseShape) => {
       }
 
       const btnR = collapseConfig.r || 8;
+      const colors = collapseColors(collapseConfig, this.context.graph);
 
       // Path for minus sign
       const collapsePath = [
@@ -748,8 +750,8 @@ const createCustomNode = (BaseShape) => {
           width: pillWidth,
           height: btnR * 2,
           radius: btnR,
-          fill: collapseConfig.fill || '#fff',
-          stroke: collapseConfig.stroke || '#CED4D9',
+          fill: colors.fill,
+          stroke: colors.stroke,
           lineWidth: collapseConfig.lineWidth || 1,
           cursor: collapseConfig.cursor || 'pointer',
           zIndex: collapseConfig.zIndex || 999,
@@ -769,7 +771,7 @@ const createCustomNode = (BaseShape) => {
           text: collapseLabel,
           fontSize: fontSize,
           fontWeight: 'bold',
-          fill: collapseConfig.iconStroke || '#000',
+          fill: colors.iconStroke,
           textAlign: 'center',
           textBaseline: 'middle',
           cursor: collapseConfig.cursor || 'pointer',
@@ -789,8 +791,8 @@ const createCustomNode = (BaseShape) => {
           cx: x,
           cy: y,
           r: btnR,
-          fill: collapseConfig.fill || '#fff',
-          stroke: collapseConfig.stroke || '#CED4D9',
+          fill: colors.fill,
+          stroke: colors.stroke,
           lineWidth: collapseConfig.lineWidth || 1,
           cursor: collapseConfig.cursor || 'pointer',
           zIndex: collapseConfig.zIndex || 999,
@@ -807,7 +809,7 @@ const createCustomNode = (BaseShape) => {
         // Minus path button
         this.upsert('collapse-button', 'path', {
           d: d,
-          stroke: collapseConfig.iconStroke || '#000',
+          stroke: colors.iconStroke,
           lineWidth: collapseConfig.iconLineWidth || 1.4,
           cursor: collapseConfig.cursor || 'pointer',
           zIndex: (collapseConfig.zIndex || 999) + 1,
