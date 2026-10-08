@@ -81,7 +81,10 @@ node and kept through redraws, moves and zooming, so Shiny inputs and
 outputs in it are bound once and keep their values. Mark an element of it
 with a \code{data-g6-drag-handle} attribute to drag the node from that element
 only, so that sliders, maps or text selection inside it do not move the
-node.
+node. Ports that set no \code{r} are sized to the node, a fiftieth of its width
+between 6 and 12, so they stay in proportion to a large card when the
+graph is zoomed out to fit; \code{r} on a port, or \code{portR} on the node or in
+the graph's node options, sets the radius instead.
 See \link{g6_collapse_options} for details. For nodes, only used when node has children.
 For combos, when provided and \code{type} is NULL, auto-sets type to \code{"rect-combo-with-extra-button"}.}
 

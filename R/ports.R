@@ -173,9 +173,11 @@ validate_port.g6_port <- function(x, ...) {
 
   # Ensure ports are displayed: doc says
   # If set to undefined, the port is treated as a point,
-  # not displayed on canvas. Default is set to 6.
+  # not displayed on canvas. Default is set to 6, marked as a default so an
+  # HTML node can size the port to itself instead.
   if (is.null(x[["r"]])) {
     x[["r"]] <- 6
+    x[["rAuto"]] <- TRUE
   } else {
     if (
       !is.numeric(x[["r"]]) ||
