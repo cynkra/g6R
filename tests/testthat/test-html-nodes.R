@@ -94,3 +94,47 @@ test_that("an autoHeight node announces its new height", {
   size <- eval_js(session, sprintf("%s.getNodeData('a').style.size", graph))
   expect_equal(unlist(size), unlist(detail$size))
 })
+
+test_that("an HTML node is centred on its position, as other nodes are", {
+  session <- local_chrome_session()
+
+  widget <- g6(
+    nodes = g6_nodes(
+      g6_node(
+        id = "h",
+        style = list(x = 300, y = 200, size = c(200, 100)),
+        ui = htmltools::div()
+      ),
+      g6_node(
+        id = "c",
+        type = "custom-circle-node",
+        style = list(x = 600, y = 200, size = 100)
+      )
+    ),
+    width = 800,
+    height = 400
+  ) |>
+    g6_options(animation = FALSE)
+
+  dir <- withr::local_tempdir()
+  path <- file.path(dir, "index.html")
+  htmlwidgets::saveWidget(widget, path, selfcontained = FALSE)
+  session$Page$navigate(paste0("file://", path), wait_ = TRUE)
+
+  graph <- "HTMLWidgets.find('#' + document.querySelector('.g6').id).getWidget()"
+  expect_true(wait_for_js(session, sprintf("!!%s?.rendered", graph)))
+
+  bounds <- function(id) {
+    eval_js(
+      session,
+      sprintf(
+        "(({ min, max }) => [min[0], min[1], max[0], max[1]])(
+          %s.context.element.getElement('%s').getShape('key').getRenderBounds()
+        )",
+        graph, id
+      )
+    )
+  }
+  expect_equal(unlist(bounds("h")), c(200, 150, 400, 250))
+  expect_equal(unlist(bounds("c"))[c(2, 4)], c(150, 250))
+})

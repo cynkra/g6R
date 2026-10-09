@@ -1605,9 +1605,15 @@ const createCustomNode = (BaseShape) => {
     // through to the canvas, its content takes it back (see g6.css), and the
     // content is inset clear of the ports' hit areas. G writes the key style's
     // pointerEvents inline, so it is set there rather than in the stylesheet.
+    // G6's HTML node puts its top-left corner on the node's position (`dx`,
+    // `dy` default to 0); it is centred on it instead, as every other node,
+    // layout and position is (#84). A `dx` or `dy` the node sets still wins.
     getKeyStyle(attributes) {
       const style = super.getKeyStyle(attributes);
       if (typeof this.getDomElement !== 'function') return style;
+      const [width, height] = this.getSize(attributes);
+      if (attributes.dx == null) style.x = -width / 2;
+      if (attributes.dy == null) style.y = -height / 2;
       // Without its own innerHTML, a node shows the content R gave it as
       // g6_node(ui = ), by reference.
       if (style.innerHTML == null) {
