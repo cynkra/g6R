@@ -178,3 +178,27 @@ test_that("every exposed layout runs in the browser", {
     expect_true(all(is.finite(unlist(pos))), info = type)
   }
 })
+
+test_that("nodes of different sizes line up on their centres", {
+  # A small parent over a large child, top to bottom: their centres share x.
+  widget <- g6(
+    nodes = g6_nodes(
+      g6_node("p", style = list(size = 20)),
+      g6_node("c", style = list(size = 120))
+    ),
+    edges = data.frame(source = "p", target = "c"),
+    width = 600,
+    height = 600,
+    elementId = "sizes"
+  ) |>
+    g6_options(animation = FALSE) |>
+    g6_layout(spanning_tree_layout("compact-box", direction = "TB"))
+
+  session <- local_widgets_page(list(widget))
+  expect_true(wait_for_js(session, sprintf("!!%s?.rendered", graph_js("sizes"))))
+
+  pos <- eval_js(session, positions_js("sizes"))
+  expect_equal(pos$p[[1]], pos$c[[1]])
+  # And the child sits below the parent, clear of it.
+  expect_gt(pos$c[[2]] - 60, pos$p[[2]] + 10)
+})
