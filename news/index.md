@@ -178,6 +178,14 @@
   position back, which only worked because `onFinish` runs before the
   assist node is removed.
 
+- An HTML node whose height follows its content
+  (`style = list(autoHeight = TRUE)`) announces each new height with a
+  bubbling `g6:node-resize` event, once the node is drawn at that height
+  ([\#82](https://github.com/cynkra/g6R/issues/82)). Its `detail` holds
+  the node’s `id`, its new `size` and its `previous` one, so an app
+  whose nodes sit in a layout can make room for a node that grew, for
+  instance by moving the nodes below it.
+
 ### Bug fixes
 
 - Each widget on a page keeps its own graph

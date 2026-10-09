@@ -262,7 +262,11 @@ or panning a map inside the node does not move it. A wheel over the
 content scrolls it where it can scroll and otherwise zooms the canvas.
 With `style = list(autoHeight = TRUE)`, the node’s height follows its
 content, so content whose height changes is never cut off or scrolled as
-a whole. A double-click inside the content is left to the content:
+a whole. Each time it does, the node dispatches a bubbling
+`g6:node-resize` event whose `detail` holds the node’s `id`, its new
+`size` and its `previous` one, so an app can make room for it, for
+instance by moving the nodes below it. A double-click inside the content
+is left to the content:
 [`collapse_expand()`](https://cynkra.github.io/g6R/reference/collapse_expand.md)
 does not act on it, and HTML nodes collapse from their collapse button
 instead.
