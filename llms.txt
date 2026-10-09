@@ -324,12 +324,30 @@ Graph layout
   : Generate G6 AntV Dagre layout configuration
 - [`dendrogram_layout()`](https://cynkra.github.io/g6R/reference/dendrogram_layout.md)
   : Generate G6 Dendrogram layout configuration
+- [`fishbone_layout()`](https://cynkra.github.io/g6R/reference/fishbone_layout.md)
+  : Generate G6 Fishbone layout configuration
+- [`force_layout()`](https://cynkra.github.io/g6R/reference/force_layout.md)
+  : Generate G6 Force layout configuration
 - [`force_atlas2_layout()`](https://cynkra.github.io/g6R/reference/force_atlas2_layout.md)
   : Generate G6 Force Atlas2 layout configuration
 - [`fruchterman_layout()`](https://cynkra.github.io/g6R/reference/fruchterman_layout.md)
   : Generate G6 Fruchterman layout configuration
+- [`grid_layout()`](https://cynkra.github.io/g6R/reference/grid_layout.md)
+  : Generate G6 Grid layout configuration
+- [`indented_layout()`](https://cynkra.github.io/g6R/reference/indented_layout.md)
+  : Generate G6 Indented layout configuration
+- [`mds_layout()`](https://cynkra.github.io/g6R/reference/mds_layout.md)
+  : Generate G6 MDS layout configuration
+- [`mindmap_layout()`](https://cynkra.github.io/g6R/reference/mindmap_layout.md)
+  : Generate G6 Mindmap layout configuration
 - [`radial_layout()`](https://cynkra.github.io/g6R/reference/radial_layout.md)
   : Generate G6 Radial layout configuration
+- [`random_layout()`](https://cynkra.github.io/g6R/reference/random_layout.md)
+  : Generate G6 Random layout configuration
+- [`snake_layout()`](https://cynkra.github.io/g6R/reference/snake_layout.md)
+  : Generate G6 Snake layout configuration
+- [`spanning_tree_layout()`](https://cynkra.github.io/g6R/reference/spanning_tree_layout.md)
+  : Generate a spanning tree layout configuration
 - [`combo_combined_layout()`](https://cynkra.github.io/g6R/reference/combo_combined_layout.md)
   : Create an AntV Combo Combined Layout
 

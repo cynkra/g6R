@@ -4,6 +4,49 @@
 
 ### New features
 
+- Every layout G6 5 bundles can be used from R
+  ([\#86](https://github.com/cynkra/g6R/issues/86)). New wrappers
+  [`indented_layout()`](https://cynkra.github.io/g6R/reference/indented_layout.md),
+  [`mindmap_layout()`](https://cynkra.github.io/g6R/reference/mindmap_layout.md),
+  [`fishbone_layout()`](https://cynkra.github.io/g6R/reference/fishbone_layout.md),
+  [`force_layout()`](https://cynkra.github.io/g6R/reference/force_layout.md),
+  [`grid_layout()`](https://cynkra.github.io/g6R/reference/grid_layout.md),
+  [`mds_layout()`](https://cynkra.github.io/g6R/reference/mds_layout.md),
+  [`random_layout()`](https://cynkra.github.io/g6R/reference/random_layout.md)
+  and
+  [`snake_layout()`](https://cynkra.github.io/g6R/reference/snake_layout.md),
+  and
+  [`g6_layout()`](https://cynkra.github.io/g6R/reference/g6_layout.md)
+  now accepts
+  [`dagre_layout()`](https://cynkra.github.io/g6R/reference/dagre_layout.md),
+  which it rejected. `d3-force-3d` stays out: it needs
+  `@antv/g6-extension-3d`, which is not bundled. Nodes that carry
+  `children` get their tree `depth` filled in, which
+  [`fishbone_layout()`](https://cynkra.github.io/g6R/reference/fishbone_layout.md)
+  reads.
+
+- New `spanning_tree_layout(base = )` runs a tree layout (`indented`,
+  `compact-box`, `dendrogram` or `mindmap`) on any graph
+  ([\#86](https://github.com/cynkra/g6R/issues/86)). G6’s tree layouts
+  take a node’s children from its successors and lay out every root from
+  the same origin, so on a graph that is not a forest a node with
+  several parents is placed under one of them, leaving an empty slot
+  under the others, and separate roots are drawn on top of each other.
+  [`spanning_tree_layout()`](https://cynkra.github.io/g6R/reference/spanning_tree_layout.md)
+  keeps one parent per node (its `data$treeParent` when that is one of
+  its sources, otherwise the source of its first incoming edge), hangs
+  the roots side by side under a hidden root and breaks cycles, so any
+  graph lays out; the other edges are still drawn.
+
+- A layout run that throws or leaves unusable positions (a non-finite
+  coordinate, or every node on one point) puts the last layout that
+  worked back and runs it, and `input$<outputId>-layout_fallback`
+  reports `type`, `reason` and the `restored` layout type
+  ([\#86](https://github.com/cynkra/g6R/issues/86)). This covers every
+  `graph.layout()` call:
+  [`g6_update_layout()`](https://cynkra.github.io/g6R/reference/g6_update_layout.md),
+  a client-side `setLayout()`, and re-layouts on data change.
+
 - New `custom-html-node` type: HTML nodes with ports. Like every other
   node, it is centred on its position
   ([\#84](https://github.com/cynkra/g6R/issues/84); G6’s `HTML` node,
@@ -190,6 +233,9 @@
   instance by moving the nodes below it.
 
 ### Bug fixes
+
+- [`dendrogram_layout()`](https://cynkra.github.io/g6R/reference/dendrogram_layout.md)
+  sent every allowed `direction` instead of the chosen one.
 
 - Each widget on a page keeps its own graph
   ([\#78](https://github.com/cynkra/g6R/issues/78)). The graph lived in

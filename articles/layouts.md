@@ -35,9 +35,12 @@ currently does not expose all of them but the most commonly used ones.
 grep("_layout$", ls("package:g6R"), value = TRUE)
 #>  [1] "antv_dagre_layout"     "circular_layout"       "combo_combined_layout"
 #>  [4] "compact_box_layout"    "concentric_layout"     "d3_force_layout"      
-#>  [7] "dagre_layout"          "dendrogram_layout"     "force_atlas2_layout"  
-#> [10] "fruchterman_layout"    "g6_layout"             "g6_update_layout"     
-#> [13] "radial_layout"
+#>  [7] "dagre_layout"          "dendrogram_layout"     "fishbone_layout"      
+#> [10] "force_atlas2_layout"   "force_layout"          "fruchterman_layout"   
+#> [13] "g6_layout"             "g6_update_layout"      "grid_layout"          
+#> [16] "indented_layout"       "mds_layout"            "mindmap_layout"       
+#> [19] "radial_layout"         "random_layout"         "snake_layout"         
+#> [22] "spanning_tree_layout"
 ```
 
 ## Force directed layouts
