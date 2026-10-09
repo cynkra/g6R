@@ -26,6 +26,8 @@
 
 ## Bug fixes
 
+- `spanning_tree_layout()` placed each node by the top-left corner of its box rather than its centre. With nodes of one size that was only a shift; with nodes of different sizes, a node and its children no longer lined up.
+
 - `dendrogram_layout()` sent every allowed `direction` instead of the chosen one.
 
 - Each widget on a page keeps its own graph (#78). The graph lived in a variable shared by every g6 widget, so `HTMLWidgets.find('#id').getWidget()` returned whichever graph was built last, and a widget's container resize (a dock panel, a tab, an accordion) resized that last graph instead of its own.
