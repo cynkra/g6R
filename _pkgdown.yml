@@ -189,9 +189,18 @@ reference:
       - d3_force_layout
       - dagre_layout
       - dendrogram_layout
+      - fishbone_layout
+      - force_layout
       - force_atlas2_layout
       - fruchterman_layout
+      - grid_layout
+      - indented_layout
+      - mds_layout
+      - mindmap_layout
       - radial_layout
+      - random_layout
+      - snake_layout
+      - spanning_tree_layout
       - combo_combined_layout
 
   - title: Options

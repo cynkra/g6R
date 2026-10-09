@@ -8,6 +8,7 @@ import { AntLine, FlyMarkerCubic, CircleComboWithExtraButton, RectComboWithExtra
 import { setupIcons, loadAndInitGraph } from '../modules/utils';
 import { CustomCreateEdge, CustomDragElement, CustomCollapseExpand } from '../modules/custom-behaviors';
 import { Search, Outline } from '../modules/custom-plugins';
+import { SpanningTreeLayout } from '../modules/spanning-tree-layout';
 import {
   CustomCircleNode,
   CustomRectNode,
@@ -56,6 +57,8 @@ register(ExtensionCategory.BEHAVIOR, 'drag-element', CustomDragElement);
 register(ExtensionCategory.BEHAVIOR, 'collapse-expand', CustomCollapseExpand);
 // G6 has no search UI; this one focuses the element you pick
 register(ExtensionCategory.PLUGIN, 'search', Search);
+// Tree layouts that lay out any graph, not only a forest (see the module).
+register(ExtensionCategory.LAYOUT, 'spanning-tree', SpanningTreeLayout);
 // A list view of the graph, for when the drawing is too big to read
 register(ExtensionCategory.PLUGIN, 'outline', Outline);
 // Register the custom node with G6

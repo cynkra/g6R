@@ -442,3 +442,45 @@ test_that("combo_combined_layout forwards and validates nodeSpacing", {
   expect_error(combo_combined_layout(nodeSpacing = c(1, 2)), "single")
   expect_error(combo_combined_layout(nodeSpacing = "wide"), "number or JS")
 })
+
+test_that("dendrogram_layout() sends the chosen direction only", {
+  expect_identical(dendrogram_layout()$direction, "LR")
+  expect_identical(dendrogram_layout(direction = "TB")$direction, "TB")
+})
+
+test_that("g6_layout() accepts dagre", {
+  expect_identical(
+    (g6() |> g6_layout(dagre_layout()))$x$layout$type,
+    "dagre"
+  )
+})
+
+test_that("the layouts G6 bundles have wrappers that validate", {
+  expect_identical(indented_layout()$direction, "LR")
+  expect_error(indented_layout(direction = "TB"))
+  expect_error(indented_layout(indent = -1))
+  expect_error(indented_layout(getSide = "left"))
+
+  expect_identical(mindmap_layout()$direction, "H")
+  expect_error(mindmap_layout(getHGap = 10))
+
+  expect_identical(fishbone_layout()$direction, "RL")
+  expect_error(fishbone_layout(hGap = -1))
+
+  expect_error(force_layout(preventOverlap = "yes"))
+  expect_error(force_layout(linkDistance = -1))
+
+  expect_identical(grid_layout(cols = 3)$cols, 3)
+  expect_error(grid_layout(cols = 0))
+  expect_error(grid_layout(sortBy = "name"))
+  expect_identical(grid_layout(sortBy = "degree")$sortBy, "degree")
+
+  expect_error(mds_layout(center = 1))
+  expect_error(random_layout(width = -1))
+  expect_error(snake_layout(clockwise = "no"))
+
+  for (type in c("dagre", "fishbone", "force", "grid", "indented", "mds",
+                 "mindmap", "random", "snake", "spanning-tree")) {
+    expect_identical(valid_layouts[[type]]()$type, type, info = type)
+  }
+})
