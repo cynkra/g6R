@@ -9,12 +9,12 @@
       g6_layout(g6(), "blabla")
     Condition
       Error in `validate_component()`:
-      ! 'blabla' is not a valid layout. Valid choices are: antv-dagre, circular, combo-combined, concentric, d3-force, force-atlas2, fruchterman, radial, compact-box, dendrogram.
+      ! 'blabla' is not a valid layout. Valid choices are: antv-dagre, circular, combo-combined, compact-box, concentric, d3-force, dagre, dendrogram, fishbone, force, force-atlas2, fruchterman, grid, indented, mds, mindmap, radial, random, snake, spanning-tree.
     Code
       g6_layout(g6(), list(test = 1))
     Condition
       Error in `validate_component()`:
-      ! 'unknown' is not a valid layout. Valid choices are: antv-dagre, circular, combo-combined, concentric, d3-force, force-atlas2, fruchterman, radial, compact-box, dendrogram.
+      ! 'unknown' is not a valid layout. Valid choices are: antv-dagre, circular, combo-combined, compact-box, concentric, d3-force, dagre, dendrogram, fishbone, force, force-atlas2, fruchterman, grid, indented, mds, mindmap, radial, random, snake, spanning-tree.
 
 # individual layout functions work correctly
 
@@ -193,6 +193,56 @@
         ..$ preservePosition: logi FALSE
         ..$ directed        : logi TRUE
         ..$ maxCollapseDepth: num Inf
+        ..$ layout          :List of 3
+        .. ..$ type     : chr "compact-box"
+        .. ..$ direction: chr "LR"
+        .. ..$ radial   : logi FALSE
+       $ width        : chr "100%"
+       $ height       : NULL
+       $ sizingPolicy :List of 7
+        ..$ defaultWidth : NULL
+        ..$ defaultHeight: NULL
+        ..$ padding      : NULL
+        ..$ fill         : NULL
+        ..$ viewer       :List of 6
+        .. ..$ defaultWidth : NULL
+        .. ..$ defaultHeight: NULL
+        .. ..$ padding      : NULL
+        .. ..$ fill         : logi TRUE
+        .. ..$ suppress     : logi FALSE
+        .. ..$ paneHeight   : NULL
+        ..$ browser      :List of 5
+        .. ..$ defaultWidth : NULL
+        .. ..$ defaultHeight: NULL
+        .. ..$ padding      : NULL
+        .. ..$ fill         : logi FALSE
+        .. ..$ external     : logi FALSE
+        ..$ knitr        :List of 3
+        .. ..$ defaultWidth : NULL
+        .. ..$ defaultHeight: NULL
+        .. ..$ figure       : logi TRUE
+       $ dependencies : NULL
+       $ elementId    : NULL
+       $ preRenderHook: NULL
+       $ jsHooks      : list()
+       - attr(*, "class")= chr [1:2] "g6" "htmlwidget"
+       - attr(*, "package")= chr "g6R"
+
+---
+
+    Code
+      str(g6_layout(g6(), layout))
+    Output
+      List of 8
+       $ x            :List of 8
+        ..$ data            : list()
+        .. ..- attr(*, "class")= chr "g6_data"
+        ..$ jsonUrl         : NULL
+        ..$ iconsUrl        : chr "//at.alicdn.com/t/font_2678727_za4qjydwkkh.js"
+        ..$ mode            : chr "prod"
+        ..$ preservePosition: logi FALSE
+        ..$ directed        : logi TRUE
+        ..$ maxCollapseDepth: num Inf
         ..$ layout          :List of 8
         .. ..$ type          : chr "concentric"
         .. ..$ clockwise     : logi FALSE
@@ -255,6 +305,209 @@
         .. .. ..$ strength: num 2
         .. ..$ collide:List of 1
         .. .. ..$ radius: num 40
+       $ width        : chr "100%"
+       $ height       : NULL
+       $ sizingPolicy :List of 7
+        ..$ defaultWidth : NULL
+        ..$ defaultHeight: NULL
+        ..$ padding      : NULL
+        ..$ fill         : NULL
+        ..$ viewer       :List of 6
+        .. ..$ defaultWidth : NULL
+        .. ..$ defaultHeight: NULL
+        .. ..$ padding      : NULL
+        .. ..$ fill         : logi TRUE
+        .. ..$ suppress     : logi FALSE
+        .. ..$ paneHeight   : NULL
+        ..$ browser      :List of 5
+        .. ..$ defaultWidth : NULL
+        .. ..$ defaultHeight: NULL
+        .. ..$ padding      : NULL
+        .. ..$ fill         : logi FALSE
+        .. ..$ external     : logi FALSE
+        ..$ knitr        :List of 3
+        .. ..$ defaultWidth : NULL
+        .. ..$ defaultHeight: NULL
+        .. ..$ figure       : logi TRUE
+       $ dependencies : NULL
+       $ elementId    : NULL
+       $ preRenderHook: NULL
+       $ jsHooks      : list()
+       - attr(*, "class")= chr [1:2] "g6" "htmlwidget"
+       - attr(*, "package")= chr "g6R"
+
+---
+
+    Code
+      str(g6_layout(g6(), layout))
+    Output
+      List of 8
+       $ x            :List of 8
+        ..$ data            : list()
+        .. ..- attr(*, "class")= chr "g6_data"
+        ..$ jsonUrl         : NULL
+        ..$ iconsUrl        : chr "//at.alicdn.com/t/font_2678727_za4qjydwkkh.js"
+        ..$ mode            : chr "prod"
+        ..$ preservePosition: logi FALSE
+        ..$ directed        : logi TRUE
+        ..$ maxCollapseDepth: num Inf
+        ..$ layout          :List of 7
+        .. ..$ type         : chr "dagre"
+        .. ..$ rankdir      : chr "TB"
+        .. ..$ align        : chr "UL"
+        .. ..$ nodesep      : num 50
+        .. ..$ ranksep      : num 100
+        .. ..$ ranker       : chr "network-simplex"
+        .. ..$ controlPoints: logi FALSE
+       $ width        : chr "100%"
+       $ height       : NULL
+       $ sizingPolicy :List of 7
+        ..$ defaultWidth : NULL
+        ..$ defaultHeight: NULL
+        ..$ padding      : NULL
+        ..$ fill         : NULL
+        ..$ viewer       :List of 6
+        .. ..$ defaultWidth : NULL
+        .. ..$ defaultHeight: NULL
+        .. ..$ padding      : NULL
+        .. ..$ fill         : logi TRUE
+        .. ..$ suppress     : logi FALSE
+        .. ..$ paneHeight   : NULL
+        ..$ browser      :List of 5
+        .. ..$ defaultWidth : NULL
+        .. ..$ defaultHeight: NULL
+        .. ..$ padding      : NULL
+        .. ..$ fill         : logi FALSE
+        .. ..$ external     : logi FALSE
+        ..$ knitr        :List of 3
+        .. ..$ defaultWidth : NULL
+        .. ..$ defaultHeight: NULL
+        .. ..$ figure       : logi TRUE
+       $ dependencies : NULL
+       $ elementId    : NULL
+       $ preRenderHook: NULL
+       $ jsHooks      : list()
+       - attr(*, "class")= chr [1:2] "g6" "htmlwidget"
+       - attr(*, "package")= chr "g6R"
+
+---
+
+    Code
+      str(g6_layout(g6(), layout))
+    Output
+      List of 8
+       $ x            :List of 8
+        ..$ data            : list()
+        .. ..- attr(*, "class")= chr "g6_data"
+        ..$ jsonUrl         : NULL
+        ..$ iconsUrl        : chr "//at.alicdn.com/t/font_2678727_za4qjydwkkh.js"
+        ..$ mode            : chr "prod"
+        ..$ preservePosition: logi FALSE
+        ..$ directed        : logi TRUE
+        ..$ maxCollapseDepth: num Inf
+        ..$ layout          :List of 5
+        .. ..$ type     : chr "dendrogram"
+        .. ..$ direction: chr "LR"
+        .. ..$ nodeSep  : num 20
+        .. ..$ rankSep  : num 200
+        .. ..$ radial   : logi FALSE
+       $ width        : chr "100%"
+       $ height       : NULL
+       $ sizingPolicy :List of 7
+        ..$ defaultWidth : NULL
+        ..$ defaultHeight: NULL
+        ..$ padding      : NULL
+        ..$ fill         : NULL
+        ..$ viewer       :List of 6
+        .. ..$ defaultWidth : NULL
+        .. ..$ defaultHeight: NULL
+        .. ..$ padding      : NULL
+        .. ..$ fill         : logi TRUE
+        .. ..$ suppress     : logi FALSE
+        .. ..$ paneHeight   : NULL
+        ..$ browser      :List of 5
+        .. ..$ defaultWidth : NULL
+        .. ..$ defaultHeight: NULL
+        .. ..$ padding      : NULL
+        .. ..$ fill         : logi FALSE
+        .. ..$ external     : logi FALSE
+        ..$ knitr        :List of 3
+        .. ..$ defaultWidth : NULL
+        .. ..$ defaultHeight: NULL
+        .. ..$ figure       : logi TRUE
+       $ dependencies : NULL
+       $ elementId    : NULL
+       $ preRenderHook: NULL
+       $ jsHooks      : list()
+       - attr(*, "class")= chr [1:2] "g6" "htmlwidget"
+       - attr(*, "package")= chr "g6R"
+
+---
+
+    Code
+      str(g6_layout(g6(), layout))
+    Output
+      List of 8
+       $ x            :List of 8
+        ..$ data            : list()
+        .. ..- attr(*, "class")= chr "g6_data"
+        ..$ jsonUrl         : NULL
+        ..$ iconsUrl        : chr "//at.alicdn.com/t/font_2678727_za4qjydwkkh.js"
+        ..$ mode            : chr "prod"
+        ..$ preservePosition: logi FALSE
+        ..$ directed        : logi TRUE
+        ..$ maxCollapseDepth: num Inf
+        ..$ layout          :List of 2
+        .. ..$ type     : chr "fishbone"
+        .. ..$ direction: chr "RL"
+       $ width        : chr "100%"
+       $ height       : NULL
+       $ sizingPolicy :List of 7
+        ..$ defaultWidth : NULL
+        ..$ defaultHeight: NULL
+        ..$ padding      : NULL
+        ..$ fill         : NULL
+        ..$ viewer       :List of 6
+        .. ..$ defaultWidth : NULL
+        .. ..$ defaultHeight: NULL
+        .. ..$ padding      : NULL
+        .. ..$ fill         : logi TRUE
+        .. ..$ suppress     : logi FALSE
+        .. ..$ paneHeight   : NULL
+        ..$ browser      :List of 5
+        .. ..$ defaultWidth : NULL
+        .. ..$ defaultHeight: NULL
+        .. ..$ padding      : NULL
+        .. ..$ fill         : logi FALSE
+        .. ..$ external     : logi FALSE
+        ..$ knitr        :List of 3
+        .. ..$ defaultWidth : NULL
+        .. ..$ defaultHeight: NULL
+        .. ..$ figure       : logi TRUE
+       $ dependencies : NULL
+       $ elementId    : NULL
+       $ preRenderHook: NULL
+       $ jsHooks      : list()
+       - attr(*, "class")= chr [1:2] "g6" "htmlwidget"
+       - attr(*, "package")= chr "g6R"
+
+---
+
+    Code
+      str(g6_layout(g6(), layout))
+    Output
+      List of 8
+       $ x            :List of 8
+        ..$ data            : list()
+        .. ..- attr(*, "class")= chr "g6_data"
+        ..$ jsonUrl         : NULL
+        ..$ iconsUrl        : chr "//at.alicdn.com/t/font_2678727_za4qjydwkkh.js"
+        ..$ mode            : chr "prod"
+        ..$ preservePosition: logi FALSE
+        ..$ directed        : logi TRUE
+        ..$ maxCollapseDepth: num Inf
+        ..$ layout          :List of 1
+        .. ..$ type: chr "force"
        $ width        : chr "100%"
        $ height       : NULL
        $ sizingPolicy :List of 7
@@ -407,6 +660,201 @@
         ..$ preservePosition: logi FALSE
         ..$ directed        : logi TRUE
         ..$ maxCollapseDepth: num Inf
+        ..$ layout          :List of 1
+        .. ..$ type: chr "grid"
+       $ width        : chr "100%"
+       $ height       : NULL
+       $ sizingPolicy :List of 7
+        ..$ defaultWidth : NULL
+        ..$ defaultHeight: NULL
+        ..$ padding      : NULL
+        ..$ fill         : NULL
+        ..$ viewer       :List of 6
+        .. ..$ defaultWidth : NULL
+        .. ..$ defaultHeight: NULL
+        .. ..$ padding      : NULL
+        .. ..$ fill         : logi TRUE
+        .. ..$ suppress     : logi FALSE
+        .. ..$ paneHeight   : NULL
+        ..$ browser      :List of 5
+        .. ..$ defaultWidth : NULL
+        .. ..$ defaultHeight: NULL
+        .. ..$ padding      : NULL
+        .. ..$ fill         : logi FALSE
+        .. ..$ external     : logi FALSE
+        ..$ knitr        :List of 3
+        .. ..$ defaultWidth : NULL
+        .. ..$ defaultHeight: NULL
+        .. ..$ figure       : logi TRUE
+       $ dependencies : NULL
+       $ elementId    : NULL
+       $ preRenderHook: NULL
+       $ jsHooks      : list()
+       - attr(*, "class")= chr [1:2] "g6" "htmlwidget"
+       - attr(*, "package")= chr "g6R"
+
+---
+
+    Code
+      str(g6_layout(g6(), layout))
+    Output
+      List of 8
+       $ x            :List of 8
+        ..$ data            : list()
+        .. ..- attr(*, "class")= chr "g6_data"
+        ..$ jsonUrl         : NULL
+        ..$ iconsUrl        : chr "//at.alicdn.com/t/font_2678727_za4qjydwkkh.js"
+        ..$ mode            : chr "prod"
+        ..$ preservePosition: logi FALSE
+        ..$ directed        : logi TRUE
+        ..$ maxCollapseDepth: num Inf
+        ..$ layout          :List of 3
+        .. ..$ type     : chr "indented"
+        .. ..$ direction: chr "LR"
+        .. ..$ indent   : num 20
+       $ width        : chr "100%"
+       $ height       : NULL
+       $ sizingPolicy :List of 7
+        ..$ defaultWidth : NULL
+        ..$ defaultHeight: NULL
+        ..$ padding      : NULL
+        ..$ fill         : NULL
+        ..$ viewer       :List of 6
+        .. ..$ defaultWidth : NULL
+        .. ..$ defaultHeight: NULL
+        .. ..$ padding      : NULL
+        .. ..$ fill         : logi TRUE
+        .. ..$ suppress     : logi FALSE
+        .. ..$ paneHeight   : NULL
+        ..$ browser      :List of 5
+        .. ..$ defaultWidth : NULL
+        .. ..$ defaultHeight: NULL
+        .. ..$ padding      : NULL
+        .. ..$ fill         : logi FALSE
+        .. ..$ external     : logi FALSE
+        ..$ knitr        :List of 3
+        .. ..$ defaultWidth : NULL
+        .. ..$ defaultHeight: NULL
+        .. ..$ figure       : logi TRUE
+       $ dependencies : NULL
+       $ elementId    : NULL
+       $ preRenderHook: NULL
+       $ jsHooks      : list()
+       - attr(*, "class")= chr [1:2] "g6" "htmlwidget"
+       - attr(*, "package")= chr "g6R"
+
+---
+
+    Code
+      str(g6_layout(g6(), layout))
+    Output
+      List of 8
+       $ x            :List of 8
+        ..$ data            : list()
+        .. ..- attr(*, "class")= chr "g6_data"
+        ..$ jsonUrl         : NULL
+        ..$ iconsUrl        : chr "//at.alicdn.com/t/font_2678727_za4qjydwkkh.js"
+        ..$ mode            : chr "prod"
+        ..$ preservePosition: logi FALSE
+        ..$ directed        : logi TRUE
+        ..$ maxCollapseDepth: num Inf
+        ..$ layout          :List of 1
+        .. ..$ type: chr "mds"
+       $ width        : chr "100%"
+       $ height       : NULL
+       $ sizingPolicy :List of 7
+        ..$ defaultWidth : NULL
+        ..$ defaultHeight: NULL
+        ..$ padding      : NULL
+        ..$ fill         : NULL
+        ..$ viewer       :List of 6
+        .. ..$ defaultWidth : NULL
+        .. ..$ defaultHeight: NULL
+        .. ..$ padding      : NULL
+        .. ..$ fill         : logi TRUE
+        .. ..$ suppress     : logi FALSE
+        .. ..$ paneHeight   : NULL
+        ..$ browser      :List of 5
+        .. ..$ defaultWidth : NULL
+        .. ..$ defaultHeight: NULL
+        .. ..$ padding      : NULL
+        .. ..$ fill         : logi FALSE
+        .. ..$ external     : logi FALSE
+        ..$ knitr        :List of 3
+        .. ..$ defaultWidth : NULL
+        .. ..$ defaultHeight: NULL
+        .. ..$ figure       : logi TRUE
+       $ dependencies : NULL
+       $ elementId    : NULL
+       $ preRenderHook: NULL
+       $ jsHooks      : list()
+       - attr(*, "class")= chr [1:2] "g6" "htmlwidget"
+       - attr(*, "package")= chr "g6R"
+
+---
+
+    Code
+      str(g6_layout(g6(), layout))
+    Output
+      List of 8
+       $ x            :List of 8
+        ..$ data            : list()
+        .. ..- attr(*, "class")= chr "g6_data"
+        ..$ jsonUrl         : NULL
+        ..$ iconsUrl        : chr "//at.alicdn.com/t/font_2678727_za4qjydwkkh.js"
+        ..$ mode            : chr "prod"
+        ..$ preservePosition: logi FALSE
+        ..$ directed        : logi TRUE
+        ..$ maxCollapseDepth: num Inf
+        ..$ layout          :List of 2
+        .. ..$ type     : chr "mindmap"
+        .. ..$ direction: chr "H"
+       $ width        : chr "100%"
+       $ height       : NULL
+       $ sizingPolicy :List of 7
+        ..$ defaultWidth : NULL
+        ..$ defaultHeight: NULL
+        ..$ padding      : NULL
+        ..$ fill         : NULL
+        ..$ viewer       :List of 6
+        .. ..$ defaultWidth : NULL
+        .. ..$ defaultHeight: NULL
+        .. ..$ padding      : NULL
+        .. ..$ fill         : logi TRUE
+        .. ..$ suppress     : logi FALSE
+        .. ..$ paneHeight   : NULL
+        ..$ browser      :List of 5
+        .. ..$ defaultWidth : NULL
+        .. ..$ defaultHeight: NULL
+        .. ..$ padding      : NULL
+        .. ..$ fill         : logi FALSE
+        .. ..$ external     : logi FALSE
+        ..$ knitr        :List of 3
+        .. ..$ defaultWidth : NULL
+        .. ..$ defaultHeight: NULL
+        .. ..$ figure       : logi TRUE
+       $ dependencies : NULL
+       $ elementId    : NULL
+       $ preRenderHook: NULL
+       $ jsHooks      : list()
+       - attr(*, "class")= chr [1:2] "g6" "htmlwidget"
+       - attr(*, "package")= chr "g6R"
+
+---
+
+    Code
+      str(g6_layout(g6(), layout))
+    Output
+      List of 8
+       $ x            :List of 8
+        ..$ data            : list()
+        .. ..- attr(*, "class")= chr "g6_data"
+        ..$ jsonUrl         : NULL
+        ..$ iconsUrl        : chr "//at.alicdn.com/t/font_2678727_za4qjydwkkh.js"
+        ..$ mode            : chr "prod"
+        ..$ preservePosition: logi FALSE
+        ..$ directed        : logi TRUE
+        ..$ maxCollapseDepth: num Inf
         ..$ layout          :List of 9
         .. ..$ type                      : chr "radial"
         .. ..$ nodeSpacing               : num 10
@@ -463,10 +911,8 @@
         ..$ preservePosition: logi FALSE
         ..$ directed        : logi TRUE
         ..$ maxCollapseDepth: num Inf
-        ..$ layout          :List of 3
-        .. ..$ type     : chr "compact-box"
-        .. ..$ direction: chr "LR"
-        .. ..$ radial   : logi FALSE
+        ..$ layout          :List of 1
+        .. ..$ type: chr "random"
        $ width        : chr "100%"
        $ height       : NULL
        $ sizingPolicy :List of 7
@@ -513,12 +959,57 @@
         ..$ preservePosition: logi FALSE
         ..$ directed        : logi TRUE
         ..$ maxCollapseDepth: num Inf
-        ..$ layout          :List of 5
-        .. ..$ type     : chr "dendrogram"
-        .. ..$ direction: chr [1:6] "LR" "RL" "TB" "BT" ...
-        .. ..$ nodeSep  : num 20
-        .. ..$ rankSep  : num 200
-        .. ..$ radial   : logi FALSE
+        ..$ layout          :List of 1
+        .. ..$ type: chr "snake"
+       $ width        : chr "100%"
+       $ height       : NULL
+       $ sizingPolicy :List of 7
+        ..$ defaultWidth : NULL
+        ..$ defaultHeight: NULL
+        ..$ padding      : NULL
+        ..$ fill         : NULL
+        ..$ viewer       :List of 6
+        .. ..$ defaultWidth : NULL
+        .. ..$ defaultHeight: NULL
+        .. ..$ padding      : NULL
+        .. ..$ fill         : logi TRUE
+        .. ..$ suppress     : logi FALSE
+        .. ..$ paneHeight   : NULL
+        ..$ browser      :List of 5
+        .. ..$ defaultWidth : NULL
+        .. ..$ defaultHeight: NULL
+        .. ..$ padding      : NULL
+        .. ..$ fill         : logi FALSE
+        .. ..$ external     : logi FALSE
+        ..$ knitr        :List of 3
+        .. ..$ defaultWidth : NULL
+        .. ..$ defaultHeight: NULL
+        .. ..$ figure       : logi TRUE
+       $ dependencies : NULL
+       $ elementId    : NULL
+       $ preRenderHook: NULL
+       $ jsHooks      : list()
+       - attr(*, "class")= chr [1:2] "g6" "htmlwidget"
+       - attr(*, "package")= chr "g6R"
+
+---
+
+    Code
+      str(g6_layout(g6(), layout))
+    Output
+      List of 8
+       $ x            :List of 8
+        ..$ data            : list()
+        .. ..- attr(*, "class")= chr "g6_data"
+        ..$ jsonUrl         : NULL
+        ..$ iconsUrl        : chr "//at.alicdn.com/t/font_2678727_za4qjydwkkh.js"
+        ..$ mode            : chr "prod"
+        ..$ preservePosition: logi FALSE
+        ..$ directed        : logi TRUE
+        ..$ maxCollapseDepth: num Inf
+        ..$ layout          :List of 2
+        .. ..$ type: chr "spanning-tree"
+        .. ..$ base: chr "indented"
        $ width        : chr "100%"
        $ height       : NULL
        $ sizingPolicy :List of 7

@@ -1,3 +1,4 @@
+import { guardLayout } from './spanning-tree-layout';
 import {
   CanvasEvent,
   ComboEvent,
@@ -77,7 +78,31 @@ const normalizeGraphState = (state) => {
   } else if (state.combos) {
     result.combos = state.combos;
   }
+  if (result.nodes) result.nodes = withTreeDepth(result.nodes);
   return result;
+};
+
+// Nodes that carry `children` form a tree, and some tree layouts (fishbone)
+// read each node's `depth`, which G6's own treeToGraphData() would have set.
+// Fill it in from the tree when it is missing.
+const withTreeDepth = (nodes) => {
+  const hasTree = nodes.some((n) => Array.isArray(n.children) && n.children.length);
+  if (!hasTree) return nodes;
+
+  const byId = new Map(nodes.map((n) => [String(n.id), n]));
+  const isChild = new Set();
+  nodes.forEach((n) => (n.children || []).forEach((c) => isChild.add(String(c))));
+
+  const depth = new Map();
+  const queue = nodes.filter((n) => !isChild.has(String(n.id))).map((n) => [String(n.id), 0]);
+  while (queue.length) {
+    const [id, d] = queue.shift();
+    if (depth.has(id)) continue;
+    depth.set(id, d);
+    ((byId.get(id) || {}).children || []).forEach((c) => queue.push([String(c), d + 1]));
+  }
+
+  return nodes.map((n) => (n.depth == null && depth.has(String(n.id)) ? { ...n, depth: depth.get(String(n.id)) } : n));
 };
 
 const checkIds = (data) => {
@@ -249,6 +274,7 @@ const loadAndInitGraph = (config, widget, onGraph) => {
       const provideGraph = scopeGraphConfig(config);
       const graph = new Graph(config);
       provideGraph(graph);
+      guardLayout(graph, config.container);
       if (onGraph) onGraph(graph);
       setupGraph(graph, widget, config);
     };

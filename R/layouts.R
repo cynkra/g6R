@@ -1192,7 +1192,7 @@ dendrogram_layout <- function(
   radial = FALSE,
   ...
 ) {
-  directions <- match.arg(direction)
+  direction <- match.arg(direction)
 
   if (!is.numeric(nodeSep) || length(nodeSep) != 1 || nodeSep < 0) {
     stop("'nodeSep' must be a single non-negative number")
@@ -1418,27 +1418,310 @@ check_removed_combo_args <- function(...) {
   )
 }
 
+check_number <- function(x, name, min = 0) {
+  if (!is.null(x) && (!is.numeric(x) || length(x) != 1 || x < min)) {
+    stop(sprintf("'%s' must be a single number >= %s", name, min))
+  }
+}
+
+check_js <- function(x, name) {
+  if (!is.null(x) && !is_js(x)) {
+    stop(sprintf("'%s' must be a JS function wrapped with JS()", name))
+  }
+}
+
+#' Generate G6 Indented layout configuration
+#'
+#' A tree layout that places each level one indent further than its parent,
+#' with siblings stacked, so the drawing grows in height rather than width.
+#' Like G6's other tree layouts, it expects a forest; for any graph, see
+#' [spanning_tree_layout()].
+#'
+#' @param direction "LR" (children to the right), "RL" or "H" (both sides).
+#' @param indent Indent of a level relative to its parent (px).
+#' @param getWidth,getHeight,getSide Optional JS callbacks, see
+#'   [compact_box_layout()].
+#' @param dropCap Whether the first child sits on the parent's row.
+#' @param ... Additional parameters passed to the layout.
+#'   See \url{https://g6.antv.antgroup.com/en/manual/layout/indented-layout}.
+#'
+#' @return A list containing the layout configuration.
+#' @export
+#' @examples
+#' indented_layout(indent = 40)
+indented_layout <- function(
+  direction = c("LR", "RL", "H"),
+  indent = 20,
+  getWidth = NULL,
+  getHeight = NULL,
+  getSide = NULL,
+  dropCap = NULL,
+  ...
+) {
+  direction <- match.arg(direction)
+  check_number(indent, "indent")
+  check_js(getWidth, "getWidth")
+  check_js(getHeight, "getHeight")
+  check_js(getSide, "getSide")
+  if (!is.null(dropCap) && !is.logical(dropCap)) {
+    stop("'dropCap' must be a logical value")
+  }
+  build_layout("indented", ...)
+}
+
+#' Generate G6 Mindmap layout configuration
+#'
+#' A tree layout that spreads children to both sides of their parent. Like
+#' G6's other tree layouts, it expects a forest; for any graph, see
+#' [spanning_tree_layout()].
+#'
+#' @param direction "H" (both sides), "LR" or "RL".
+#' @param getWidth,getHeight,getHGap,getVGap,getSide Optional JS callbacks,
+#'   see [compact_box_layout()].
+#' @param ... Additional parameters passed to the layout.
+#'   See \url{https://g6.antv.antgroup.com/en/manual/layout/mindmap-layout}.
+#'
+#' @return A list containing the layout configuration.
+#' @export
+#' @examples
+#' mindmap_layout()
+mindmap_layout <- function(
+  direction = c("H", "LR", "RL"),
+  getWidth = NULL,
+  getHeight = NULL,
+  getHGap = NULL,
+  getVGap = NULL,
+  getSide = NULL,
+  ...
+) {
+  direction <- match.arg(direction)
+  check_js(getWidth, "getWidth")
+  check_js(getHeight, "getHeight")
+  check_js(getHGap, "getHGap")
+  check_js(getVGap, "getVGap")
+  check_js(getSide, "getSide")
+  build_layout("mindmap", ...)
+}
+
+#' Generate G6 Fishbone layout configuration
+#'
+#' A cause-and-effect (Ishikawa) layout. It reads tree-shaped data: nodes
+#' carrying `children`, as G6's `treeToGraphData()` builds them.
+#'
+#' @param direction "RL" (head on the right) or "LR".
+#' @param hGap,vGap Horizontal and vertical gaps (px).
+#' @param getRibSep Optional JS callback giving the gap between ribs.
+#' @param nodeSize Node size, a number or a vector of width and height.
+#' @param ... Additional parameters passed to the layout.
+#'   See \url{https://g6.antv.antgroup.com/en/manual/layout/fishbone}.
+#'
+#' @return A list containing the layout configuration.
+#' @export
+#' @examples
+#' fishbone_layout(hGap = 40)
+fishbone_layout <- function(
+  direction = c("RL", "LR"),
+  hGap = NULL,
+  vGap = NULL,
+  getRibSep = NULL,
+  nodeSize = NULL,
+  ...
+) {
+  direction <- match.arg(direction)
+  check_number(hGap, "hGap")
+  check_number(vGap, "vGap")
+  check_js(getRibSep, "getRibSep")
+  build_layout("fishbone", ...)
+}
+
+#' Generate G6 Force layout configuration
+#'
+#' G6's own force-directed layout, as opposed to [d3_force_layout()].
+#'
+#' @param linkDistance Ideal edge length (px).
+#' @param nodeStrength Node repulsion strength.
+#' @param edgeStrength Edge attraction strength.
+#' @param preventOverlap Whether nodes are kept from overlapping.
+#' @param gravity Strength of the pull towards the centre.
+#' @param ... Additional parameters passed to the layout.
+#'   See \url{https://g6.antv.antgroup.com/en/manual/layout/force-layout}.
+#'
+#' @return A list containing the layout configuration.
+#' @export
+#' @examples
+#' force_layout(linkDistance = 100, preventOverlap = TRUE)
+force_layout <- function(
+  linkDistance = NULL,
+  nodeStrength = NULL,
+  edgeStrength = NULL,
+  preventOverlap = NULL,
+  gravity = NULL,
+  ...
+) {
+  check_number(linkDistance, "linkDistance")
+  if (!is.null(preventOverlap) && !is.logical(preventOverlap)) {
+    stop("'preventOverlap' must be a logical value")
+  }
+  build_layout("force", ...)
+}
+
+#' Generate G6 Grid layout configuration
+#'
+#' @param rows,cols Number of rows and columns; derived from the node count
+#'   when not given.
+#' @param sortBy Node order: "id", "degree" or a JS comparator.
+#' @param preventOverlap Whether nodes are kept from overlapping.
+#' @param condense Whether the grid takes the least space it can.
+#' @param ... Additional parameters passed to the layout.
+#'   See \url{https://g6.antv.antgroup.com/en/manual/layout/grid-layout}.
+#'
+#' @return A list containing the layout configuration.
+#' @export
+#' @examples
+#' grid_layout(cols = 4)
+grid_layout <- function(
+  rows = NULL,
+  cols = NULL,
+  sortBy = NULL,
+  preventOverlap = NULL,
+  condense = NULL,
+  ...
+) {
+  check_number(rows, "rows", min = 1)
+  check_number(cols, "cols", min = 1)
+  if (!is.null(sortBy) && !is_js(sortBy) && !isTRUE(sortBy %in% c("id", "degree"))) {
+    stop("'sortBy' must be \"id\", \"degree\" or a JS comparator")
+  }
+  build_layout("grid", ...)
+}
+
+#' Generate G6 MDS layout configuration
+#'
+#' Multidimensional scaling: places nodes so that drawn distances follow
+#' graph distances.
+#'
+#' @param linkDistance Ideal edge length (px).
+#' @param center Centre of the layout, a vector of x and y.
+#' @param ... Additional parameters passed to the layout.
+#'   See \url{https://g6.antv.antgroup.com/en/manual/layout/mds-layout}.
+#'
+#' @return A list containing the layout configuration.
+#' @export
+#' @examples
+#' mds_layout(linkDistance = 80)
+mds_layout <- function(linkDistance = NULL, center = NULL, ...) {
+  check_number(linkDistance, "linkDistance")
+  if (!is.null(center) && (!is.numeric(center) || length(center) != 2)) {
+    stop("'center' must be a numeric vector of length 2")
+  }
+  build_layout("mds", ...)
+}
+
+#' Generate G6 Random layout configuration
+#'
+#' @param width,height Size of the area nodes are placed in (px).
+#' @param ... Additional parameters passed to the layout.
+#'   See \url{https://g6.antv.antgroup.com/en/manual/layout/random-layout}.
+#'
+#' @return A list containing the layout configuration.
+#' @export
+#' @examples
+#' random_layout()
+random_layout <- function(width = NULL, height = NULL, ...) {
+  check_number(width, "width")
+  check_number(height, "height")
+  build_layout("random", ...)
+}
+
+#' Generate G6 Snake layout configuration
+#'
+#' Lays a chain out in rows that turn back on themselves. It only applies to
+#' a single path (one source, one sink, every other node with one input and
+#' one output); any other graph is left as it is.
+#'
+#' @param cols Nodes per row.
+#' @param rowGap,colGap Gaps between rows and columns (px).
+#' @param clockwise Whether the first row runs left to right.
+#' @param ... Additional parameters passed to the layout.
+#'   See \url{https://g6.antv.antgroup.com/en/manual/layout/snake}.
+#'
+#' @return A list containing the layout configuration.
+#' @export
+#' @examples
+#' snake_layout(cols = 4)
+snake_layout <- function(
+  cols = NULL,
+  rowGap = NULL,
+  colGap = NULL,
+  clockwise = NULL,
+  ...
+) {
+  check_number(cols, "cols", min = 1)
+  check_number(rowGap, "rowGap")
+  check_number(colGap, "colGap")
+  if (!is.null(clockwise) && !is.logical(clockwise)) {
+    stop("'clockwise' must be a logical value")
+  }
+  build_layout("snake", ...)
+}
+
+#' Generate a spanning tree layout configuration
+#'
+#' Runs one of G6's tree layouts on any graph. G6's tree layouts take a
+#' node's children from its successors and lay out every root from the same
+#' origin. On a graph that is not a forest, a node with several parents lands
+#' under one of them and leaves an empty slot under the others, and separate
+#' roots are drawn on top of each other. This layout first keeps one parent
+#' per node and hangs the roots side by side under a hidden root. The other
+#' edges are still drawn; they just don't place anything. On a forest it gives
+#' the base layout's arrangement, spaced by the drawn nodes' sizes rather than
+#' the base layout's defaults. Cycles are broken where found, so any graph
+#' lays out.
+#'
+#' A node's parent is its `data$treeParent` when that names one of its
+#' sources, otherwise the source of its first incoming edge.
+#'
+#' @param base The tree layout to run: "indented", "compact-box",
+#'   "dendrogram" or "mindmap".
+#' @param ... Options of the base layout, e.g. `direction`, `indent`,
+#'   `getHGap`, `getVGap` (see [indented_layout()], [compact_box_layout()],
+#'   [dendrogram_layout()] and [mindmap_layout()]). Node sizes default to the
+#'   drawn nodes' sizes.
+#'
+#' @return A list containing the layout configuration.
+#' @export
+#' @examples
+#' spanning_tree_layout("indented", indent = 40)
+#' spanning_tree_layout("compact-box", direction = "TB")
+spanning_tree_layout <- function(
+  base = c("indented", "compact-box", "dendrogram", "mindmap"),
+  ...
+) {
+  base <- match.arg(base)
+  build_layout("spanning-tree", ...)
+}
+
 #' @keywords internal
 valid_layouts <- c(
-  # N = 20
   "antv-dagre" = antv_dagre_layout,
   "circular" = circular_layout,
   "combo-combined" = combo_combined_layout,
+  "compact-box" = compact_box_layout,
   "concentric" = concentric_layout,
   "d3-force" = d3_force_layout,
-  #"d3-force-3d" = d3_force_3d_layout,
-  #"dagre" = dagre_layout,
-  #"fishbone" = fishbone_layout,
-  #"force",
+  # "d3-force-3d" needs @antv/g6-extension-3d, which is not bundled.
+  "dagre" = dagre_layout,
+  "dendrogram" = dendrogram_layout,
+  "fishbone" = fishbone_layout,
+  "force" = force_layout,
   "force-atlas2" = force_atlas2_layout,
   "fruchterman" = fruchterman_layout,
-  #"grid" = grid_layout,
-  #"mds" = mds_layout,
+  "grid" = grid_layout,
+  "indented" = indented_layout,
+  "mds" = mds_layout,
+  "mindmap" = mindmap_layout,
   "radial" = radial_layout,
-  #"random",
-  #"snake",
-  "compact-box" = compact_box_layout,
-  "dendrogram" = dendrogram_layout #,
-  #"mindmap",
-  #"indented"
+  "random" = random_layout,
+  "snake" = snake_layout,
+  "spanning-tree" = spanning_tree_layout
 )
