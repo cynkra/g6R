@@ -4,7 +4,10 @@
 
 ### New features
 
-- New `custom-html-node` type: HTML nodes with ports. It joins the nine
+- New `custom-html-node` type: HTML nodes with ports. Like every other
+  node, it is centred on its position
+  ([\#84](https://github.com/cynkra/g6R/issues/84); G6’s `HTML` node,
+  which it extends, puts its top-left corner there). It joins the nine
   `custom-<shape>-node` types, so
   `g6_node(type = "custom-html-node", ports = g6_ports(...))` gets the
   same input and output ports, arity limits and port-to-port
