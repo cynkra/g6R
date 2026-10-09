@@ -1007,9 +1007,10 @@
         ..$ preservePosition: logi FALSE
         ..$ directed        : logi TRUE
         ..$ maxCollapseDepth: num Inf
-        ..$ layout          :List of 2
-        .. ..$ type: chr "spanning-tree"
-        .. ..$ base: chr "indented"
+        ..$ layout          :List of 3
+        .. ..$ type  : chr "spanning-tree"
+        .. ..$ base  : chr "indented"
+        .. ..$ combos: logi FALSE
        $ width        : chr "100%"
        $ height       : NULL
        $ sizingPolicy :List of 7
