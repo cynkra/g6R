@@ -2,6 +2,8 @@
 
 ## New features
 
+- `spanning_tree_layout(combos = TRUE)` lays each top-level combo out as a unit: its members as a tree of their own, then the combos and the nodes outside them as one tree, each combo taking the space of its box. A combo's members stay together and boxes no longer overlap, which they did whenever a parent's children sat in different combos. `comboPadding` matches the combos' own padding.
+
 - Every layout G6 5 bundles can be used from R (#86). New wrappers `indented_layout()`, `mindmap_layout()`, `fishbone_layout()`, `force_layout()`, `grid_layout()`, `mds_layout()`, `random_layout()` and `snake_layout()`, and `g6_layout()` now accepts `dagre_layout()`, which it rejected. `d3-force-3d` stays out: it needs `@antv/g6-extension-3d`, which is not bundled. Nodes that carry `children` get their tree `depth` filled in, which `fishbone_layout()` reads.
 
 - New `spanning_tree_layout(base = )` runs a tree layout (`indented`, `compact-box`, `dendrogram` or `mindmap`) on any graph (#86). G6's tree layouts take a node's children from its successors and lay out every root from the same origin, so on a graph that is not a forest a node with several parents is placed under one of them, leaving an empty slot under the others, and separate roots are drawn on top of each other. `spanning_tree_layout()` keeps one parent per node (its `data$treeParent` when that is one of its sources, otherwise the source of its first incoming edge), hangs the roots side by side under a hidden root and breaks cycles, so any graph lays out; the other edges are still drawn.

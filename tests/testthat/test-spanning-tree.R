@@ -1,11 +1,11 @@
 test_that("spanning_tree_layout() builds a spanning-tree layout", {
   expect_identical(
     spanning_tree_layout(),
-    list(type = "spanning-tree", base = "indented")
+    list(type = "spanning-tree", base = "indented", combos = FALSE)
   )
   expect_identical(
     spanning_tree_layout("compact-box", direction = "TB"),
-    list(type = "spanning-tree", base = "compact-box", direction = "TB")
+    list(type = "spanning-tree", base = "compact-box", combos = FALSE, direction = "TB")
   )
   expect_error(spanning_tree_layout("fishbone"))
 })
@@ -177,4 +177,85 @@ test_that("every exposed layout runs in the browser", {
     pos <- eval_js(session, positions_js(id))
     expect_true(all(is.finite(unlist(pos))), info = type)
   }
+})
+
+test_that("combos = TRUE keeps each combo together, without overlaps", {
+  stacked <- function(id, combos) {
+    g6(
+      nodes = g6_nodes(
+        g6_node("a"), g6_node("b", combo = "s1"), g6_node("c", combo = "s1"),
+        g6_node("d", combo = "s1"), g6_node("e"), g6_node("f", combo = "s2"),
+        g6_node("g", combo = "s2"), g6_node("h"), g6_node("i")
+      ),
+      edges = data.frame(
+        source = c("a", "b", "c", "b", "d", "f", "e", "f", "g", "h"),
+        target = c("b", "c", "d", "f", "e", "e", "g", "g", "h", "i")
+      ),
+      combos = g6_combos(g6_combo("s1"), g6_combo("s2")),
+      width = 800,
+      height = 800,
+      elementId = id
+    ) |>
+      g6_options(
+        animation = FALSE,
+        combo = list(type = "rect", style = list(padding = c(20, 20, 40, 20)))
+      ) |>
+      g6_layout(
+        spanning_tree_layout(
+          "compact-box",
+          direction = "TB",
+          combos = combos,
+          comboPadding = c(20, 20, 40, 20)
+        )
+      )
+  }
+
+  session <- local_widgets_page(list(stacked("plain", FALSE), stacked("units", TRUE)))
+
+  overlap_js <- function(id) {
+    sprintf(
+      "(() => {
+        const g = %s;
+        const a = g.getElementRenderBounds('s1'), b = g.getElementRenderBounds('s2');
+        return !(a.max[0] <= b.min[0] || b.max[0] <= a.min[0] ||
+                 a.max[1] <= b.min[1] || b.max[1] <= a.min[1]);
+      })()",
+      graph_js(id)
+    )
+  }
+
+  for (id in c("plain", "units")) {
+    expect_true(wait_for_js(session, sprintf("!!%s?.rendered", graph_js(id))))
+  }
+
+  # Laid out node by node, the two combos' boxes overlap.
+  expect_true(eval_js(session, overlap_js("plain")))
+  expect_false(eval_js(session, overlap_js("units")))
+
+  # No node outside a combo lands inside a box.
+  inside <- eval_js(session, sprintf(
+    "(() => {
+      const g = %s;
+      const isIn = (id, c) => {
+        const [x, y] = g.getElementPosition(id), b = g.getElementRenderBounds(c);
+        return x >= b.min[0] && x <= b.max[0] && y >= b.min[1] && y <= b.max[1];
+      };
+      return ['a', 'e', 'h', 'i'].filter((id) => isIn(id, 's1') || isIn(id, 's2'));
+    })()",
+    graph_js("units")
+  ))
+  expect_length(inside, 0L)
+
+  pos <- eval_js(session, positions_js("units"))
+  expect_true(all(is.finite(unlist(pos))))
+  # The combo's members keep their own tree: c below b, d below c.
+  expect_gt(pos$c[[2]], pos$b[[2]])
+  expect_gt(pos$d[[2]], pos$c[[2]])
+})
+
+test_that("spanning_tree_layout() validates its combo options", {
+  expect_identical(spanning_tree_layout(combos = TRUE)$combos, TRUE)
+  expect_error(spanning_tree_layout(combos = "yes"))
+  expect_error(spanning_tree_layout(comboPadding = c(1, 2, 3)))
+  expect_error(spanning_tree_layout(comboPadding = -1))
 })

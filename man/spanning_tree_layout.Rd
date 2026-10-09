@@ -6,12 +6,20 @@
 \usage{
 spanning_tree_layout(
   base = c("indented", "compact-box", "dendrogram", "mindmap"),
+  combos = FALSE,
+  comboPadding = NULL,
   ...
 )
 }
 \arguments{
 \item{base}{The tree layout to run: "indented", "compact-box",
 "dendrogram" or "mindmap".}
+
+\item{combos}{Whether combos are laid out as units.}
+
+\item{comboPadding}{Space between a combo's members and its edge, as one
+number or \code{c(top, right, bottom, left)}; match the combos' own \code{padding}
+style. Only used with \code{combos = TRUE}.}
 
 \item{...}{Options of the base layout, e.g. \code{direction}, \code{indent},
 \code{getHGap}, \code{getVGap} (see \code{\link[=indented_layout]{indented_layout()}}, \code{\link[=compact_box_layout]{compact_box_layout()}},
@@ -36,6 +44,14 @@ lays out.
 \details{
 A node's parent is its \code{data$treeParent} when that names one of its
 sources, otherwise the source of its first incoming edge.
+
+With \code{combos = TRUE}, each top-level combo is laid out as a unit: its
+members first, as a tree of their own, which fixes the combo's box; then
+the combos and the nodes outside them, as one tree, each combo taking the
+space of its box. A combo's members stay together and boxes don't overlap.
+A combo hangs under the parent its first member with an outside
+\code{treeParent} names, otherwise under the source of its first incoming link.
+Nested combos are laid out with their top-level combo.
 }
 \examples{
 spanning_tree_layout("indented", indent = 40)
