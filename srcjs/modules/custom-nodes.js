@@ -1725,7 +1725,13 @@ const createCustomNode = (BaseShape) => {
       const style = { size: [width, height] };
       if (datum.style?.y != null) style.y = datum.style.y + (height - current) / 2;
       graph.updateNodeData([{ id: this.id, style }]);
-      graph.draw();
+      // Once drawn, the node announces its new size, so an app can make room
+      // for it, such as by moving the nodes below it (#82).
+      const el = this.getDomElement() ?? content;
+      const detail = { id: this.id, size: [width, height], previous: [width, current] };
+      Promise.resolve(graph.draw()).then(() => {
+        el.dispatchEvent(new CustomEvent('g6:node-resize', { bubbles: true, detail }));
+      });
     }
 
     routeWheel(event, root) {
