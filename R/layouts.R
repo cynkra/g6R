@@ -1681,8 +1681,20 @@ snake_layout <- function(
 #' A node's parent is its `data$treeParent` when that names one of its
 #' sources, otherwise the source of its first incoming edge.
 #'
+#' With `combos = TRUE`, each top-level combo is laid out as a unit: its
+#' members first, as a tree of their own, which fixes the combo's box; then
+#' the combos and the nodes outside them, as one tree, each combo taking the
+#' space of its box. A combo's members stay together and boxes don't overlap.
+#' A combo hangs under the parent its first member with an outside
+#' `treeParent` names, otherwise under the source of its first incoming link.
+#' Nested combos are laid out with their top-level combo.
+#'
 #' @param base The tree layout to run: "indented", "compact-box",
 #'   "dendrogram" or "mindmap".
+#' @param combos Whether combos are laid out as units.
+#' @param comboPadding Space between a combo's members and its edge, as one
+#'   number or `c(top, right, bottom, left)`; match the combos' own `padding`
+#'   style. Only used with `combos = TRUE`.
 #' @param ... Options of the base layout, e.g. `direction`, `indent`,
 #'   `getHGap`, `getVGap` (see [indented_layout()], [compact_box_layout()],
 #'   [dendrogram_layout()] and [mindmap_layout()]). Node sizes default to the
@@ -1695,9 +1707,19 @@ snake_layout <- function(
 #' spanning_tree_layout("compact-box", direction = "TB")
 spanning_tree_layout <- function(
   base = c("indented", "compact-box", "dendrogram", "mindmap"),
+  combos = FALSE,
+  comboPadding = NULL,
   ...
 ) {
   base <- match.arg(base)
+  if (!is.logical(combos) || length(combos) != 1 || is.na(combos)) {
+    stop("'combos' must be TRUE or FALSE")
+  }
+  if (!is.null(comboPadding) &&
+      (!is.numeric(comboPadding) || !length(comboPadding) %in% c(1, 2, 4) ||
+         any(comboPadding < 0))) {
+    stop("'comboPadding' must be 1, 2 or 4 non-negative numbers")
+  }
   build_layout("spanning-tree", ...)
 }
 
