@@ -146,10 +146,16 @@ export class SpanningTreeLayout extends BaseLayout {
       rest
     ));
 
+    // A hierarchy node's x and y are its box's top-left corner, gaps included
+    // on both sides, so its centre is half its box further. Read as the
+    // centre, nodes of different sizes came out misaligned.
     const out = [];
     const walk = (node) => {
       if (node.id !== VIRTUAL_ROOT) {
-        out.push({ id: node.id, style: { x: node.x, y: node.y } });
+        out.push({
+          id: node.id,
+          style: { x: node.x + node.width / 2, y: node.y + node.height / 2 }
+        });
       }
       (node.children || []).forEach(walk);
     };
