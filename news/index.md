@@ -234,6 +234,11 @@
 
 ### Bug fixes
 
+- [`spanning_tree_layout()`](https://cynkra.github.io/g6R/reference/spanning_tree_layout.md)
+  placed each node by the top-left corner of its box rather than its
+  centre. With nodes of one size that was only a shift; with nodes of
+  different sizes, a node and its children no longer lined up.
+
 - [`dendrogram_layout()`](https://cynkra.github.io/g6R/reference/dendrogram_layout.md)
   sent every allowed `direction` instead of the chosen one.
 
